@@ -5,7 +5,7 @@ A folder used by Fossil.  Contains settings for Fossil.
 See also: http://www.fossil-scm.org/fossil/doc/trunk/www/settings.wiki
 
 Assets:
-A folder required by Unity.  Contains assets used for the game.
+A folder required by Unity.  Contains assets used for the game.  See the README.txt in the folder for more details.
 
 ProjectSettings:
 A folder required by Unity.  Contains settings for Unity.
@@ -24,7 +24,3 @@ Temp:
 A folder used by Unity.  Unity creates it when an editor opens.  I wouldn't recommend touching it.
 Ignored by Fossil.
 
-
-
-As a reminder, I put a README.txt in each folder to describe it's purpose (except for Library and Temp, because that would be dangerous).
-Also, it makes it easier to check those folders into Fossil.
