@@ -1,0 +1,1 @@
+Omiya Games' own personal editor folder
