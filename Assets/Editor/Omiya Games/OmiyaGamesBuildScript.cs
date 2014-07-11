@@ -18,6 +18,11 @@ public class OmiyaGamesBuildScript
 		PerformMac64Build();
 		PerformLinux32Build();
 		PerformLinux64Build();
+		
+		//PerformIosBuild();
+		//PerformAndroidBuild();
+		//PerformWp8Build();
+		
 	}
 	
 	[MenuItem ("Omiya Games/Build Web")]
