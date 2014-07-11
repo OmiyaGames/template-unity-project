@@ -8,11 +8,10 @@ public class OmiyaGamesBuildScript
 	private static readonly string[] AllScenes = FindEnabledEditorScenes();
 	private const BuildOptions Options = BuildOptions.None;
 	private const string BuildDirectory = "Builds";
-
+	
 	[MenuItem ("Omiya Games/Build All")]
 	public static void BuildAllPlatforms()
 	{
-		PerformWebBuild();
 		PerformWindows32Build();
 		PerformWindows64Build();
 		PerformMac32Build();
@@ -26,7 +25,7 @@ public class OmiyaGamesBuildScript
 	{
 		GenericBuild(BuildDirectory + "\\Web\\" + PlayerSettings.productName, BuildTarget.WebPlayer);
 	}
-
+	
 	[MenuItem ("Omiya Games/Build Windows 32")]
 	public static void PerformWindows32Build()
 	{
@@ -38,7 +37,7 @@ public class OmiyaGamesBuildScript
 	{
 		GenericBuild(BuildDirectory + "\\Windows 64-bit\\" + PlayerSettings.productName + ".exe", BuildTarget.StandaloneWindows64);
 	}
-
+	
 	[MenuItem ("Omiya Games/Build Mac 32")]
 	public static void PerformMac32Build()
 	{
@@ -50,7 +49,7 @@ public class OmiyaGamesBuildScript
 	{
 		GenericBuild(BuildDirectory + "\\Mac 64-bit\\" + PlayerSettings.productName + ".app", BuildTarget.StandaloneOSXIntel64);
 	}
-
+	
 	[MenuItem ("Omiya Games/Build Linux 32")]
 	public static void PerformLinux32Build()
 	{
@@ -62,7 +61,25 @@ public class OmiyaGamesBuildScript
 	{
 		GenericBuild(BuildDirectory + "\\Linux 64-bit\\" + PlayerSettings.productName, BuildTarget.StandaloneLinux64);
 	}
-
+	
+	[MenuItem ("Omiya Games/Build iOS")]
+	public static void PerformIosBuild()
+	{
+		GenericBuild(BuildDirectory + "\\iOS\\" + PlayerSettings.productName, BuildTarget.iPhone);
+	}
+	
+	[MenuItem ("Omiya Games/Build Android")]
+	public static void PerformAndroidBuild()
+	{
+		GenericBuild(BuildDirectory + "\\Android\\" + PlayerSettings.productName, BuildTarget.Android);
+	}
+	
+	[MenuItem ("Omiya Games/Build Windows 8")]
+	public static void PerformWp8Build()
+	{
+		GenericBuild(BuildDirectory + "\\Windows 8\\" + PlayerSettings.productName, BuildTarget.WP8Player);
+	}
+	
 	private static void GenericBuild(string targetDirectory, BuildTarget buildTarget)
 	{
 		EditorUserBuildSettings.SwitchActiveBuildTarget(buildTarget);
@@ -72,7 +89,7 @@ public class OmiyaGamesBuildScript
 			throw new Exception("Failed to build to " + targetDirectory + ":\n" + res);
 		}
 	}
-
+	
 	private static string[] FindEnabledEditorScenes()
 	{
 		List<string> EditorScenes = new List<string>();
