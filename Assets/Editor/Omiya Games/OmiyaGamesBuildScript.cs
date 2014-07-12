@@ -12,6 +12,7 @@ public class OmiyaGamesBuildScript
 	[MenuItem ("Omiya Games/Build All")]
 	public static void BuildAllPlatforms()
 	{
+		PerformWebBuild();
 		PerformWindows32Build();
 		PerformWindows64Build();
 		PerformMac32Build();
@@ -22,7 +23,6 @@ public class OmiyaGamesBuildScript
 		//PerformIosBuild();
 		//PerformAndroidBuild();
 		//PerformWp8Build();
-		
 	}
 	
 	[MenuItem ("Omiya Games/Build Web")]
