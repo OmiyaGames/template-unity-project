@@ -25,61 +25,61 @@ public class OmiyaGamesBuildScript
 		//PerformWp8Build();
 	}
 	
-	[MenuItem ("Omiya Games/Build Web")]
+	[MenuItem ("Omiya Games/Build For/Web")]
 	public static void PerformWebBuild()
 	{
 		GenericBuild(BuildDirectory + "\\Web\\" + PlayerSettings.productName, BuildTarget.WebPlayer);
 	}
 	
-	[MenuItem ("Omiya Games/Build Windows 32")]
+	[MenuItem ("Omiya Games/Build For/Windows 32")]
 	public static void PerformWindows32Build()
 	{
 		GenericBuild(BuildDirectory + "\\Windows 32-bit\\" + PlayerSettings.productName + ".exe", BuildTarget.StandaloneWindows);
 	}
 	
-	[MenuItem ("Omiya Games/Build Windows 64")]
+	[MenuItem ("Omiya Games/Build For/Windows 64")]
 	public static void PerformWindows64Build()
 	{
 		GenericBuild(BuildDirectory + "\\Windows 64-bit\\" + PlayerSettings.productName + ".exe", BuildTarget.StandaloneWindows64);
 	}
 	
-	[MenuItem ("Omiya Games/Build Mac 32")]
+	[MenuItem ("Omiya Games/Build For/Mac 32")]
 	public static void PerformMac32Build()
 	{
 		GenericBuild(BuildDirectory + "\\Mac 32-bit\\" + PlayerSettings.productName + ".app", BuildTarget.StandaloneOSXIntel);
 	}
 	
-	[MenuItem ("Omiya Games/Build Mac 64")]
+	[MenuItem ("Omiya Games/Build For/Mac 64")]
 	public static void PerformMac64Build()
 	{
 		GenericBuild(BuildDirectory + "\\Mac 64-bit\\" + PlayerSettings.productName + ".app", BuildTarget.StandaloneOSXIntel64);
 	}
 	
-	[MenuItem ("Omiya Games/Build Linux 32")]
+	[MenuItem ("Omiya Games/Build For/Linux 32")]
 	public static void PerformLinux32Build()
 	{
 		GenericBuild(BuildDirectory + "\\Linux 32-bit\\" + PlayerSettings.productName, BuildTarget.StandaloneLinux);
 	}
 	
-	[MenuItem ("Omiya Games/Build Linux 64")]
+	[MenuItem ("Omiya Games/Build For/Linux 64")]
 	public static void PerformLinux64Build()
 	{
 		GenericBuild(BuildDirectory + "\\Linux 64-bit\\" + PlayerSettings.productName, BuildTarget.StandaloneLinux64);
 	}
 	
-	[MenuItem ("Omiya Games/Build iOS")]
+	[MenuItem ("Omiya Games/Build For/iOS")]
 	public static void PerformIosBuild()
 	{
 		GenericBuild(BuildDirectory + "\\iOS\\" + PlayerSettings.productName, BuildTarget.iPhone);
 	}
 	
-	[MenuItem ("Omiya Games/Build Android")]
+	[MenuItem ("Omiya Games/Build For/Android")]
 	public static void PerformAndroidBuild()
 	{
 		GenericBuild(BuildDirectory + "\\Android\\" + PlayerSettings.productName, BuildTarget.Android);
 	}
 	
-	[MenuItem ("Omiya Games/Build Windows 8")]
+	[MenuItem ("Omiya Games/Build For/Windows 8")]
 	public static void PerformWp8Build()
 	{
 		GenericBuild(BuildDirectory + "\\Windows 8\\" + PlayerSettings.productName, BuildTarget.WP8Player);
