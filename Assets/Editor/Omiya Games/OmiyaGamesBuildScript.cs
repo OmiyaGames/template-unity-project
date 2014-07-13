@@ -1,94 +1,169 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 public class OmiyaGamesBuildScript
 {
+	/// <summary>
+	/// Cached string builder, useful for generating file names.	
+	/// </summary>
+	private static readonly StringBuilder FileNameGenerator = new StringBuilder();
+	/// <summary>
+	/// Regular expression to detect /, \, :, *, ?, ", <, >, and |.
+	/// </summary>
+	private static readonly Regex InvalidFileNameCharacters = new Regex("[.\\\\/:*?\"<>|]");
+	/// <summary>
+	/// All scenes enabled in the build settings, in order.
+	/// </summary>
 	private static readonly string[] AllScenes = FindEnabledEditorScenes();
-	private const BuildOptions Options = BuildOptions.None;
+	/// <summary>
+	/// The build option for every platform.
+	/// </summary>
+	private const BuildOptions OptionsAll = BuildOptions.None;
+	/// <summary>
+	/// The build option for every platform.
+	/// </summary>
+	private const BuildOptions OptionsWeb = BuildOptions.BuildAdditionalStreamedScenes;
+	/// <summary>
+	/// The folder where the game will be built to.
+	/// </summary>
 	private const string BuildDirectory = "Builds";
 	
 	[MenuItem ("Omiya Games/Build All")]
 	public static void BuildAllPlatforms()
 	{
 		PerformWebBuild();
+
 		PerformWindows32Build();
 		PerformWindows64Build();
+
 		PerformMac32Build();
 		PerformMac64Build();
+
 		PerformLinux32Build();
 		PerformLinux64Build();
 		
 		//PerformIosBuild();
+
 		//PerformAndroidBuild();
+
 		//PerformWp8Build();
 	}
 	
 	[MenuItem ("Omiya Games/Build For/Web")]
 	public static void PerformWebBuild()
 	{
-		GenericBuild(BuildDirectory + "\\Web\\" + PlayerSettings.productName, BuildTarget.WebPlayer);
+		GenericBuild("Web", "", BuildTarget.WebPlayer);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Windows 32")]
+	[MenuItem ("Omiya Games/Build For/Windows 32-bit")]
 	public static void PerformWindows32Build()
 	{
-		GenericBuild(BuildDirectory + "\\Windows 32-bit\\" + PlayerSettings.productName + ".exe", BuildTarget.StandaloneWindows);
+		GenericBuild("Windows 32-bit", ".exe", BuildTarget.StandaloneWindows);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Windows 64")]
+	[MenuItem ("Omiya Games/Build For/Windows 64-bit")]
 	public static void PerformWindows64Build()
 	{
-		GenericBuild(BuildDirectory + "\\Windows 64-bit\\" + PlayerSettings.productName + ".exe", BuildTarget.StandaloneWindows64);
+		GenericBuild("Windows 64-bit", ".exe", BuildTarget.StandaloneWindows64);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Mac 32")]
+	[MenuItem ("Omiya Games/Build For/Mac 32-bit")]
 	public static void PerformMac32Build()
 	{
-		GenericBuild(BuildDirectory + "\\Mac 32-bit\\" + PlayerSettings.productName + ".app", BuildTarget.StandaloneOSXIntel);
+		GenericBuild("Mac 32-bit", ".app", BuildTarget.StandaloneOSXIntel);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Mac 64")]
+	[MenuItem ("Omiya Games/Build For/Mac 64-bit")]
 	public static void PerformMac64Build()
 	{
-		GenericBuild(BuildDirectory + "\\Mac 64-bit\\" + PlayerSettings.productName + ".app", BuildTarget.StandaloneOSXIntel64);
+		GenericBuild("Mac 64-bit", ".app", BuildTarget.StandaloneOSXIntel64);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Linux 32")]
+	[MenuItem ("Omiya Games/Build For/Linux 32-bit")]
 	public static void PerformLinux32Build()
 	{
-		GenericBuild(BuildDirectory + "\\Linux 32-bit\\" + PlayerSettings.productName, BuildTarget.StandaloneLinux);
+		GenericBuild("Linux 32-bit", "", BuildTarget.StandaloneLinux);
 	}
 	
-	[MenuItem ("Omiya Games/Build For/Linux 64")]
+	[MenuItem ("Omiya Games/Build For/Linux 64-bit")]
 	public static void PerformLinux64Build()
 	{
-		GenericBuild(BuildDirectory + "\\Linux 64-bit\\" + PlayerSettings.productName, BuildTarget.StandaloneLinux64);
+		GenericBuild("Linux 64-bit", "", BuildTarget.StandaloneLinux64);
 	}
 	
 	[MenuItem ("Omiya Games/Build For/iOS")]
 	public static void PerformIosBuild()
 	{
-		GenericBuild(BuildDirectory + "\\iOS\\" + PlayerSettings.productName, BuildTarget.iPhone);
+		GenericBuild("iOS", "", BuildTarget.iPhone);
 	}
 	
 	[MenuItem ("Omiya Games/Build For/Android")]
 	public static void PerformAndroidBuild()
 	{
-		GenericBuild(BuildDirectory + "\\Android\\" + PlayerSettings.productName, BuildTarget.Android);
+		GenericBuild("Android", ".apk", BuildTarget.Android);
 	}
 	
 	[MenuItem ("Omiya Games/Build For/Windows 8")]
 	public static void PerformWp8Build()
 	{
-		GenericBuild(BuildDirectory + "\\Windows 8\\" + PlayerSettings.productName, BuildTarget.WP8Player);
+		GenericBuild("Windows 8", "", BuildTarget.WP8Player);
 	}
 	
+	private static void GenericBuild(string platformName, string fileExtension, BuildTarget buildTarget)
+	{
+		// Sanitize the product name
+		string sanitizedProductName = InvalidFileNameCharacters.Replace(PlayerSettings.productName, "_");
+		if(string.IsNullOrEmpty(sanitizedProductName) == true)
+		{
+			throw new Exception("Product name is not available!");
+		}
+
+		// Reset the file name
+		FileNameGenerator.Length = 0;
+
+		// Append the build directory
+		FileNameGenerator.Append(BuildDirectory);
+		FileNameGenerator.Append('\\');
+
+		// Append the sanitized product name
+		FileNameGenerator.Append(sanitizedProductName);
+
+		// Append the platform name
+		FileNameGenerator.Append(" (");
+		FileNameGenerator.Append(platformName);
+		FileNameGenerator.Append(")\\");
+
+		// Append the sanitized product name
+		FileNameGenerator.Append(sanitizedProductName);
+
+		// Append the file extension, if available
+		if(string.IsNullOrEmpty(fileExtension) == false)
+		{
+			FileNameGenerator.Append(fileExtension);
+		}
+
+		// Generate the build
+		GenericBuild(FileNameGenerator.ToString(), buildTarget);
+	}
+
 	private static void GenericBuild(string targetDirectory, BuildTarget buildTarget)
 	{
+		// Import assets to this platform
 		EditorUserBuildSettings.SwitchActiveBuildTarget(buildTarget);
-		string res = BuildPipeline.BuildPlayer(AllScenes, targetDirectory, buildTarget, Options);
+
+		// Determine the best build option
+		BuildOptions buildOption = OptionsAll;
+		if(buildTarget == BuildTarget.WebPlayer)
+		{
+			buildOption |= OptionsWeb;
+		}
+
+		// Build everything based on the options
+		string res = BuildPipeline.BuildPlayer(AllScenes, targetDirectory, buildTarget, buildOption);
 		if (res.Length > 0)
 		{
 			throw new Exception("Failed to build to " + targetDirectory + ":\n" + res);
@@ -97,6 +172,7 @@ public class OmiyaGamesBuildScript
 	
 	private static string[] FindEnabledEditorScenes()
 	{
+		// Grab all enabled scenes
 		List<string> EditorScenes = new List<string>();
 		foreach(EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
 		{
