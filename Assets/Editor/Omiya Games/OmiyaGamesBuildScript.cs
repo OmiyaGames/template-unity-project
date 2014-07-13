@@ -45,12 +45,20 @@ public class OmiyaGamesBuildScript
 
 		PerformLinux32Build();
 		PerformLinux64Build();
-		
-		//PerformIosBuild();
+
+		// Check the editor's platform
+		if(Application.platform == RuntimePlatform.OSXEditor)
+		{
+			// If on a Mac, build an iOS XCode project
+			//PerformIosBuild();
+		}
+		else if(Application.platform == RuntimePlatform.WindowsEditor)
+		{
+			// If on Windows 8, build a Windows 8 Visual Studio 2012 project
+			//PerformWp8Build();
+		}
 
 		//PerformAndroidBuild();
-
-		//PerformWp8Build();
 	}
 	
 	[MenuItem ("Omiya Games/Build For/Web")]
