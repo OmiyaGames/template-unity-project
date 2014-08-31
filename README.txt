@@ -1,3 +1,4 @@
+This is a template Unity project Omiya Games uses to start their game project.
 In this Unity project, the following folders has the following roles:
 
 Assets:
@@ -19,5 +20,3 @@ Ignored by Mercurial.
 Temp:
 A folder used by Unity.  Unity creates it when an editor opens.  I wouldn't recommend touching it.
 Ignored by Mercurial.
-
-All binary files, including images and sound effects, are © Omiya Games (unless noted otherwise).
