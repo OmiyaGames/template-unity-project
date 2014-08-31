@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿
+// This code requires Unity Pro license.
+#if UNITY_PRO_LICENSE
+
+using UnityEngine;
 using UnityEditor;
 using System;
 using System.Text;
@@ -6,8 +10,11 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 /// <summary>
-/// Script that builds for a specific platform.  Requires Unity Pro license.
+/// Script that builds for a specific platform.
 /// Useful for continuous integration, like Jenkins.
+/// 
+/// This code is under the MIT license.
+/// For more details, see LICENSE.txt at the root of this project.
 /// </summary>
 public class OmiyaGamesBuildScript
 {
@@ -244,3 +251,4 @@ public class OmiyaGamesBuildScript
 		return EditorScenes.ToArray();
 	}
 }
+#endif
