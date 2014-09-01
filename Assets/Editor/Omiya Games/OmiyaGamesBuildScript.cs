@@ -12,6 +12,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Script that builds for a specific platform.
 /// Useful for continuous integration, like Jenkins.
+/// Use the Unity command feature to run this script, such as:
+/// <code>unity -batchmode -quit -executeMethod OmiyaGamesBuildScript.BuildAllPlatforms</code>
 /// 
 /// This code is under the MIT license.
 /// For more details, see LICENSE.txt at the root of this project.
