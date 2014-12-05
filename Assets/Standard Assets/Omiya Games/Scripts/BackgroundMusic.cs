@@ -14,6 +14,7 @@ public class BackgroundMusic : ISingletonScript
     public AudioClip startingClip = null;
     [Tooltip("The transition length (in seconds) between 2 background musics. Set to -1 if you want no transition.")]
     public float transitionDuration = 1;
+    public bool loopMusic = true;
     [Tooltip("The default background volume. This value is overridden if a volume is already stored in PlayerPrefs.")]
     [Range(0f, 1f)]
     public float defaultVolume = 1;
@@ -196,15 +197,19 @@ public class BackgroundMusic : ISingletonScript
             allAudioSources[index].mute = IsMuted;
             allAudioSources[index].volume = Volume;
             allAudioSources[index].priority = audioPriority;
+            allAudioSources[index].loop = loopMusic;
 
             // Check if we should play this audio
             if(index == currentAudioSourceIndex)
             {
-                allAudioSources[currentAudioSourceIndex].Play();
+                allAudioSources[index].playOnAwake = true;
+                allAudioSources[index].clip = startingClip;
+                allAudioSources[index].Play();
             }
             else
             {
-                allAudioSources[currentAudioSourceIndex].Stop();
+                allAudioSources[index].playOnAwake = false;
+                allAudioSources[index].Stop();
             }
         }
 
