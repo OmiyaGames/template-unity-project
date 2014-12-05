@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GameSettings : ISingletonScript
 {
-	public const int MenuLevel = 0;
-    public const int CreditsLevel = 7;
-	public const int NumLevels = 7;
+    public const int NumLevels = 7;
+    public const int MenuLevel = 0;
+    public const int CreditsLevel = NumLevels;
 	
 	public bool simulateWebplayer = false;
 
