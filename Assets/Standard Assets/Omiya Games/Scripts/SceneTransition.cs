@@ -1,7 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-[RequireComponent(typeof(GUITexture))]
 [RequireComponent(typeof(AudioSource))]
 public class SceneTransition : ISingletonScript
 {
@@ -17,7 +17,8 @@ public class SceneTransition : ISingletonScript
 	public float fadeInSpeed = 1f;
 	public float fadeOutDuration = 1f;
 	public float fadeOutSpeed = 5f;
-    public GUIText text = null;
+    public Image fullScreenImage;
+    public Text fullScreenText;
     public string[] levelNames;
 	
 	private int mNextLevel = 1;
@@ -44,8 +45,8 @@ public class SceneTransition : ISingletonScript
 
 	public override void SingletonStart(Singleton instance)
 	{
-		mTargetColor = guiTexture.color;
-        mTargetTextColor = text.color;
+        mTargetColor = fullScreenImage.color;
+        mTargetTextColor = fullScreenText.color;
 
 		mTargetAlpha = 0;
 		mCurrentAlpha = 0;
@@ -53,11 +54,11 @@ public class SceneTransition : ISingletonScript
         mTargetColor.a = mTargetAlpha;
         mTargetTextColor.a = mTargetAlpha;
 		
-        guiTexture.color = mTargetColor;
-        text.color = mTargetTextColor;
+        fullScreenImage.color = mTargetColor;
+        fullScreenText.color = mTargetTextColor;
 
-        guiTexture.enabled = false;
-        text.enabled = false;
+        fullScreenImage.gameObject.SetActive(false);
+        fullScreenText.gameObject.SetActive(false);
     }
 	
     public override void SceneStart(Singleton instance)
@@ -72,11 +73,28 @@ public class SceneTransition : ISingletonScript
 			mTransitionState = Transition.NotTransitioning; 
 		}
 	}
+
+    public string GetLevelName(int levelIndex)
+    {
+        string returnString = "Menu";
+        if (levelIndex > 0)
+        {
+            if (levelIndex <= levelNames.Length)
+            {
+                returnString = levelNames[levelIndex - 1];
+            }
+            else
+            {
+                returnString = "Level " + levelIndex;
+            }
+        }
+        return returnString;
+    }
 	
 	public bool LoadLevel(int levelIndex)
 	{
         bool returnFlag = false;
-		if(/*(State == Transition.NotTransitioning) && */(levelIndex >= 0) && (levelIndex <= GameSettings.NumLevels))
+		if((levelIndex >= 0) && (levelIndex <= GameSettings.NumLevels))
 		{
 			// Play sound
 			audio.Play();
@@ -88,34 +106,23 @@ public class SceneTransition : ISingletonScript
 			StartCoroutine(FadeIn());
 
             // Check what level we're loading to
-            text.text = "Menu";
-            if (levelIndex > 0)
-            {
-                if (levelIndex <= levelNames.Length)
-                {
-                    text.text = levelNames[levelIndex - 1];
-                }
-                else
-                {
-                    text.text = "Level " + levelIndex;
-                }
-            }
+            fullScreenText.text = GetLevelName(levelIndex);
             returnFlag = true;
 		}
         return returnFlag;
 	}
 	
-	void FixedUpdate()
+	void Update()
 	{
 		// Do the transitioning here
 		switch(State)
 		{
 			case Transition.FadingIn:
 			{
-                if(guiTexture.enabled == false)
+                if(fullScreenImage.enabled == false)
 				{
-					mTargetColor = guiTexture.color;
-                    mTargetTextColor = text.color;
+					mTargetColor = fullScreenImage.color;
+                    mTargetTextColor = fullScreenText.color;
 
 					mTargetAlpha = 1;
 					mCurrentAlpha = 0;
@@ -123,11 +130,11 @@ public class SceneTransition : ISingletonScript
                     mTargetColor.a = mTargetAlpha;
                     mTargetTextColor.a = mTargetAlpha;
 
-                    guiTexture.color = mTargetColor;
-                    text.color = mTargetTextColor;
+                    fullScreenImage.color = mTargetColor;
+                    fullScreenText.color = mTargetTextColor;
 
-					guiTexture.enabled = true;
-                    text.enabled = true;
+					fullScreenImage.gameObject.SetActive(true);
+                    fullScreenText.gameObject.SetActive(true);
 				}
 				else
 				{
@@ -136,8 +143,8 @@ public class SceneTransition : ISingletonScript
                     mTargetColor.a = mCurrentAlpha;
                     mTargetTextColor.a = mCurrentAlpha;
 
-					guiTexture.color = mTargetColor;
-                    text.color = mTargetTextColor;
+					fullScreenImage.color = mTargetColor;
+                    fullScreenText.color = mTargetTextColor;
 				}
 				break;
 			}
@@ -148,14 +155,14 @@ public class SceneTransition : ISingletonScript
                 mTargetColor.a = mCurrentAlpha;
                 mTargetTextColor.a = mCurrentAlpha;
 
-				guiTexture.color = mTargetColor;
-                text.color = mTargetTextColor;
+				fullScreenImage.color = mTargetColor;
+                fullScreenText.color = mTargetTextColor;
 				break;
 			}
 			case Transition.CompletelyFaded:
 			{
-				mTargetColor = guiTexture.color;
-                mTargetTextColor = text.color;
+				mTargetColor = fullScreenImage.color;
+                mTargetTextColor = fullScreenText.color;
 
 				mTargetAlpha = 0;
 				mCurrentAlpha = 1;
@@ -163,22 +170,22 @@ public class SceneTransition : ISingletonScript
                 mTargetColor.a = mCurrentAlpha;
                 mTargetTextColor.a = mCurrentAlpha;
 
-                guiTexture.color = mTargetColor;
-                text.color = mTargetTextColor;
+                fullScreenImage.color = mTargetColor;
+                fullScreenText.color = mTargetTextColor;
 
-                guiTexture.enabled = true;
-                text.enabled = true;
+                fullScreenImage.gameObject.SetActive(true);
+                fullScreenText.gameObject.SetActive(true);
 				break;
 			}
 			default:
 			{
-				if(guiTexture.enabled == true)
+				if(fullScreenImage.enabled == true)
 				{
-					guiTexture.enabled = false;
+					fullScreenImage.gameObject.SetActive(false);
 				}
-                if(text.enabled == true)
+                if(fullScreenText.enabled == true)
                 {
-                    text.enabled = false;
+                    fullScreenText.gameObject.SetActive(false);
                 }
 				break;
 			}
