@@ -3,10 +3,11 @@ using System.Collections;
 
 public class GameSettings : ISingletonScript
 {
-    public const int NumLevels = 7;
+    public const int NumLevels = 0;
     public const int MenuLevel = 0;
     public const int CreditsLevel = NumLevels;
     public const string NumLevelsUnlockedKey = "numLevelsUnlocked";
+    public const int DefaultNumLevelsUnlocked = 1;
 
 	public bool simulateWebplayer = false;
     
@@ -43,7 +44,7 @@ public class GameSettings : ISingletonScript
 
     public void RetrieveFromSettings()
     {
-        NumLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, 1);
+        NumLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
     }
 
     public void SaveSettings()

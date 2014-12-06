@@ -57,8 +57,8 @@ public class SceneTransition : ISingletonScript
         fullScreenImage.color = mTargetColor;
         fullScreenText.color = mTargetTextColor;
 
-        fullScreenImage.enabled = false;
-        fullScreenText.enabled = false;
+        fullScreenImage.gameObject.SetActive(false);
+        fullScreenText.gameObject.SetActive(false);
     }
 	
     public override void SceneStart(Singleton instance)
@@ -73,6 +73,23 @@ public class SceneTransition : ISingletonScript
 			mTransitionState = Transition.NotTransitioning; 
 		}
 	}
+
+    public string GetLevelName(int levelIndex)
+    {
+        string returnString = "Menu";
+        if (levelIndex > 0)
+        {
+            if (levelIndex <= levelNames.Length)
+            {
+                returnString = levelNames[levelIndex - 1];
+            }
+            else
+            {
+                returnString = "Level " + levelIndex;
+            }
+        }
+        return returnString;
+    }
 	
 	public bool LoadLevel(int levelIndex)
 	{
@@ -89,18 +106,7 @@ public class SceneTransition : ISingletonScript
 			StartCoroutine(FadeIn());
 
             // Check what level we're loading to
-            fullScreenText.text = "Menu";
-            if (levelIndex > 0)
-            {
-                if (levelIndex <= levelNames.Length)
-                {
-                    fullScreenText.text = levelNames[levelIndex - 1];
-                }
-                else
-                {
-                    fullScreenText.text = "Level " + levelIndex;
-                }
-            }
+            fullScreenText.text = GetLevelName(levelIndex);
             returnFlag = true;
 		}
         return returnFlag;
@@ -127,8 +133,8 @@ public class SceneTransition : ISingletonScript
                     fullScreenImage.color = mTargetColor;
                     fullScreenText.color = mTargetTextColor;
 
-					fullScreenImage.enabled = true;
-                    fullScreenText.enabled = true;
+					fullScreenImage.gameObject.SetActive(true);
+                    fullScreenText.gameObject.SetActive(true);
 				}
 				else
 				{
@@ -167,19 +173,19 @@ public class SceneTransition : ISingletonScript
                 fullScreenImage.color = mTargetColor;
                 fullScreenText.color = mTargetTextColor;
 
-                fullScreenImage.enabled = true;
-                fullScreenText.enabled = true;
+                fullScreenImage.gameObject.SetActive(true);
+                fullScreenText.gameObject.SetActive(true);
 				break;
 			}
 			default:
 			{
 				if(fullScreenImage.enabled == true)
 				{
-					fullScreenImage.enabled = false;
+					fullScreenImage.gameObject.SetActive(false);
 				}
                 if(fullScreenText.enabled == true)
                 {
-                    fullScreenText.enabled = false;
+                    fullScreenText.gameObject.SetActive(false);
                 }
 				break;
 			}

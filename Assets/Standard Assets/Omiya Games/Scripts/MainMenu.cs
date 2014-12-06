@@ -27,14 +27,7 @@ public class MainMenu : MonoBehaviour
 
             // Setup the first level button label
             buttonLabel = levelButton.GetComponentInChildren<Text>();
-            if(transition.levelNames.Length >= 1)
-            {
-                buttonLabel.text = transition.levelNames[0];
-            }
-            else
-            {
-                buttonLabel.text = "Level 1";
-            }
+            buttonLabel.text = transition.GetLevelName(1);
             levelButton.name = buttonLabel.text;
 
             // Setup the rest of the buttons
@@ -46,19 +39,12 @@ public class MainMenu : MonoBehaviour
 
                 // Setup the level button behavior
                 newButton = clone.GetComponent<Button>();
-                UnityEngine.Events.UnityAction action = new UnityEngine.Events.UnityAction(() => { OnLevelClicked(i); });
-                newButton.onClick.AddListener(action);
+                int levelIndex = i;
+                newButton.onClick.AddListener(() => { OnLevelClicked(levelIndex); });
 
                 // Setup the level button labels
                 buttonLabel = newButton.GetComponentInChildren<Text>();
-                if (transition.levelNames.Length > (i - 1))
-                {
-                    buttonLabel.text = transition.levelNames[(i - 1)];
-                }
-                else
-                {
-                    buttonLabel.text = "Level " + i;
-                }
+                buttonLabel.text = transition.GetLevelName(i);
                 clone.name = buttonLabel.text;
             }
         }
@@ -67,9 +53,9 @@ public class MainMenu : MonoBehaviour
     public void OnLevelClicked(int buttonNumber)
     {
         Debug.Log("clicked " + buttonNumber);
-        if ((isClicked == false) && (Singleton.Get<SceneTransition>().LoadLevel(buttonNumber) == true))
+        //if ((isClicked == false) && (Singleton.Get<SceneTransition>().LoadLevel(buttonNumber) == true))
         {
-            isClicked = true;
+            //isClicked = true;
         }
     }
 
