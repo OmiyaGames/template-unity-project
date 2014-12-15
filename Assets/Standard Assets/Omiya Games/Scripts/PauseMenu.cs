@@ -12,7 +12,7 @@ public class PauseMenu : ISingletonScript
     }
 
     public GameObject pausePanel;
-    public bool lockCursor = false;
+    public bool lockCursorOnResume = false;
     System.Action<ClickedAction> onVisibleChanged;
 
     public override void SingletonStart(Singleton instance)
@@ -67,7 +67,7 @@ public class PauseMenu : ISingletonScript
         Time.timeScale = 1;
 
         // Lock the cursor
-        Screen.lockCursor = lockCursor;
+        Screen.lockCursor = lockCursorOnResume;
 
         // Hide the panel
         pausePanel.SetActive(false);
