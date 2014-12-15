@@ -30,6 +30,7 @@ public class GameSettings : ISingletonScript
         set
         {
             mNumLevelsUnlocked = Mathf.Clamp(value, 1, NumLevels);
+            PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
         }
     }
 	
@@ -44,7 +45,8 @@ public class GameSettings : ISingletonScript
 
     public void RetrieveFromSettings()
     {
-        NumLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
+        mNumLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
+        mNumLevelsUnlocked = Mathf.Clamp(mNumLevelsUnlocked, 1, NumLevels);
     }
 
     public void SaveSettings()

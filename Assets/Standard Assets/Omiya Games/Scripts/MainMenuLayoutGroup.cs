@@ -25,7 +25,20 @@ namespace UnityEngine.UI
             }
         }
 
+        public RectTransform CachedRectTransform
+        {
+            get
+            {
+                if(rectTransformCache == null)
+                {
+                    rectTransformCache = rectTransform;
+                }
+                return rectTransformCache;
+            }
+        }
+
         Vector2 tempCellSize = Vector2.one;
+        RectTransform rectTransformCache = null;
 
         protected MainMenuLayoutGroup()
         { }
@@ -88,7 +101,7 @@ namespace UnityEngine.UI
             }
 
             // Calculate how much space all the buttons cumulatively takes
-            tempCellSize = rectTransform.rect.size;
+            tempCellSize = CachedRectTransform.rect.size;
 
             // Take out all the padding
             tempCellSize.x -= padding.left;

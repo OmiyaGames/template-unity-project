@@ -199,7 +199,6 @@ public class SceneTransition : ISingletonScript
 		mTransitionState = Transition.CompletelyFaded;
 
 		// Check if we're in a webplayer
-		GameSettings settings = Singleton.Get<GameSettings>();
 		Application.LoadLevelAsync(mNextLevel);
 	}
 	
