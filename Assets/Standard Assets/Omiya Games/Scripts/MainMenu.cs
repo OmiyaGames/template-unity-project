@@ -4,11 +4,11 @@ using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
-	[SerializeField]
+    [SerializeField]
     MainMenuLayoutGroup levelLayoutGroup;
-	[SerializeField]
+    [SerializeField]
     Button levelButton;
-	[SerializeField]
+    [SerializeField]
     Button quitButton;
 
     bool isClicked = false;
@@ -16,23 +16,23 @@ public class MainMenu : MonoBehaviour
     SceneTransition.Transition lastTransitionState = SceneTransition.Transition.NotTransitioning;
     Button[] allLevelButtons = null;
 
-	#region Properties
-	public Button[] AllLevelButtons
-	{
-		get
-		{
-			return allLevelButtons;
-		}
-	}
+    #region Properties
+    public Button[] AllLevelButtons
+    {
+        get
+        {
+            return allLevelButtons;
+        }
+    }
 
-	public Button QuitButton
-	{
-		get
-		{
-			return quitButton;
-		}
-	}
-	#endregion
+    public Button QuitButton
+    {
+        get
+        {
+            return quitButton;
+        }
+    }
+    #endregion
 
     void Awake()
     {
@@ -106,7 +106,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-	#region Helper Methods
+    #region Helper Methods
     Button[] SetupLevelButtons(Transform buttonParent, SceneTransition transition)
     {
         // Check how many levels there are
@@ -185,5 +185,5 @@ public class MainMenu : MonoBehaviour
             }
         }
     }
-	#endregion
+    #endregion
 }

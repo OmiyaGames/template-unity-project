@@ -19,19 +19,19 @@ public class RandomList<T> : List<T>
                 if(randomizedIndexes == null)
                 {
                     SetupList();
-                    ShuffleList();
+                    OmiyaGamesUtility.ShuffleList<int>(randomizedIndexes);
                     index = 0;
                 }
                 else if(randomizedIndexes.Length != Count)
                 {
                     SetupList();
-                    ShuffleList();
+                    OmiyaGamesUtility.ShuffleList<int>(randomizedIndexes);
                     index = 0;
                 }
                 else if((index >= randomizedIndexes.Length) || (index < 0))
                 {
                     // Shuffle the list if we got to the last element
-                    ShuffleList();
+                    OmiyaGamesUtility.ShuffleList<int>(randomizedIndexes);
                     index = 0;
                 }
 
@@ -72,22 +72,6 @@ public class RandomList<T> : List<T>
             randomizedIndexes[index] = index;
 		}
     }
-    
-    void ShuffleList()
-	{
-        int randomIndex = 0, swapIndex = 0;
-        for(index = 0; index < randomizedIndexes.Length; ++index)
-		{
-			// Swap a random element
-			randomIndex = Random.Range(0, randomizedIndexes.Length);
-			if(index != randomIndex)
-			{
-				swapIndex = randomizedIndexes[index];
-				randomizedIndexes[index] = randomizedIndexes[randomIndex];
-				randomizedIndexes[randomIndex] = swapIndex;
-			}
-		}
-	}
 
 	#endregion
 }

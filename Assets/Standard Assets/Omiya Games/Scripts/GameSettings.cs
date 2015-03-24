@@ -9,18 +9,18 @@ public class GameSettings : ISingletonScript
     public const string NumLevelsUnlockedKey = "numLevelsUnlocked";
     public const int DefaultNumLevelsUnlocked = 1;
 
-	[SerializeField]
-	bool simulateWebplayer = false;
+    [SerializeField]
+    bool simulateWebplayer = false;
     
     int mNumLevelsUnlocked = 1;
 
-	public bool IsWebplayer
-	{
-		get
-		{
-			return (simulateWebplayer == true) || (Application.isWebPlayer == true);
-		}
-	}
+    public bool IsWebplayer
+    {
+        get
+        {
+            return (simulateWebplayer == true) || (Application.isWebPlayer == true);
+        }
+    }
 
     public int NumLevelsUnlocked
     {
@@ -34,15 +34,15 @@ public class GameSettings : ISingletonScript
             PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
         }
     }
-	
-	public override void SingletonStart(Singleton instance)
-	{
-		RetrieveFromSettings();
-	}
-	
+    
+    public override void SingletonStart(Singleton instance)
+    {
+        RetrieveFromSettings();
+    }
+    
     public override void SceneStart(Singleton instance)
-	{
-	}
+    {
+    }
 
     public void RetrieveFromSettings()
     {
