@@ -1,5 +1,15 @@
-﻿// This code requires Unity Pro license.
-#if UNITY_PRO_LICENSE
+﻿/*
+ * Comment or uncomment the preprocessor directives below
+ * to adjust what "Build All" context menu will build
+*/
+#define BUILD_TO_MAJOR_DESKTOP_OS
+//#define BUILD_32_BIT_AND_64_BIT_SEPARATELY
+
+//#define BUILD_TO_MAJOR_MOBILE_OS
+
+#define BUILD_TO_WEBGL
+//#define BUILD_TO_WEBPLAYER
+//#define BUILD_TO_STREAMED_WEBPLAYER
 
 using UnityEngine;
 using UnityEditor;
@@ -40,10 +50,6 @@ public class OmiyaGamesBuildScript
     /// </summary>
     private const BuildOptions OptionsWeb = BuildOptions.None;
     /// <summary>
-    /// Flag whether to build a streamed webplayer, or just a normal webplayer
-    /// </summary>
-    private const bool StreamWebplayer = false;
-    /// <summary>
     /// The folder where the game will be built to.
     /// </summary>
     private const string BuildDirectory = "Builds";
@@ -55,51 +61,106 @@ public class OmiyaGamesBuildScript
     [MenuItem ("Omiya Games/Build All")]
     public static void BuildAllPlatforms()
     {
+#if BUILD_TO_MAJOR_DESKTOP_OS
+        // Build for Desktop platforms
+		PerformDesktopBuilds();
+#endif
+
+#if BUILD_TO_MAJOR_MOBILE_OS
+		// Build for Mobile platforms
+		PerformMobileBuilds();
+#endif
+
+#if BUILD_TO_WEBGL
         // Build for the Web platform
-        PerformWebBuild();
+        PerformWebGLBuild();
+#endif
 
-        // Build for the Windows platform
-        PerformWindows32Build();
-        PerformWindows64Build();
+#if BUILD_TO_WEBPLAYER
+        // Build for the Web platform
+        PerformWebplayerBuild();
+#endif
+        
+#if BUILD_TO_STREAMED_WEBPLAYER
+        // Build for the Web platform
+        PerformStreamedWebplayerBuild();
+#endif
+    }
 
-        // Build for the Mac platform
-        PerformMac32Build();
-        PerformMac64Build();
+	/// <summary>
+	/// Function that builds for Desktop OSs.
+	/// </summary>
+	[MenuItem ("Omiya Games/Build Set/Major Desktop OSs")]
+	public static void PerformDesktopBuilds()
+	{
+		// Build for the Windows platform
+		PerformWindows32Build();
+		PerformWindows64Build();
 
-        // Build for the Linux platform
-        PerformLinux32Build();
-        PerformLinux64Build();
+#if BUILD_32_BIT_AND_64_BIT_SEPARATELY
+		// Build for the Mac platform
+		PerformMac32Build();
+		PerformMac64Build();
+		
+		// Build for the Linux platform
+		PerformLinux32Build();
+		PerformLinux64Build();
+#else
+		// Build for the Mac platform
+		PerformMacUniversalBuild();
+		
+		// Build for the Linux platform
+		PerformLinuxUniversalBuild();
+#endif
+	}
 
-        // Check the editor's platform
-        if(Application.platform == RuntimePlatform.OSXEditor)
-        {
-            // If on a Mac, build an iOS XCode project
-            //PerformIosBuild();
-        }
-        else if(Application.platform == RuntimePlatform.WindowsEditor)
-        {
-            // If on Windows 8, build a Windows 8 Visual Studio 2012 project
-            //PerformWp8Build();
-        }
-
-        // Build for the Android platform
-        //PerformAndroidBuild();
+	/// <summary>
+	/// Function that builds for Mobile OSs.
+	/// </summary>
+	[MenuItem ("Omiya Games/Build Set/Major Mobile OSs")]
+	public static void PerformMobileBuilds()
+	{
+		// Check the editor's platform
+		if(Application.platform == RuntimePlatform.OSXEditor)
+		{
+			// If on a Mac, build an iOS XCode project
+			PerformIosBuild();
+		}
+		else if(Application.platform == RuntimePlatform.WindowsEditor)
+		{
+			// If on Windows 8, build a Windows 8 Visual Studio 2012 project
+			PerformWp8Build();
+		}
+		
+		// Build for the Android platform
+		PerformAndroidBuild();
+	}
+    
+    /// <summary>
+    /// Function that builds for Web.
+    /// </summary>
+    [MenuItem ("Omiya Games/Build For/WebGL")]
+    public static void PerformWebGLBuild()
+    {
+        GenericBuild("WebGL", "", BuildTarget.WebGL);
     }
     
     /// <summary>
-    /// Function that builds for Web.  HTML page not included.
+    /// Function that builds for Web.
     /// </summary>
-    [MenuItem ("Omiya Games/Build For/Web")]
-    public static void PerformWebBuild()
+    [MenuItem ("Omiya Games/Build For/Streamed Webplayer")]
+    public static void PerformStreamedWebplayerBuild()
     {
-        if(StreamWebplayer == true)
-        {
-            GenericBuild("Web", "", BuildTarget.WebPlayerStreamed);
-        }
-        else
-        {
-            GenericBuild("Web", "", BuildTarget.WebPlayer);
-        }
+        GenericBuild("Streamed Webplayer", "", BuildTarget.WebPlayerStreamed);
+    }
+
+    /// <summary>
+    /// Function that builds for Web.
+    /// </summary>
+    [MenuItem ("Omiya Games/Build For/Webplayer")]
+    public static void PerformWebplayerBuild()
+    {
+        GenericBuild("Webplayer", "", BuildTarget.WebPlayer);
     }
     
     /// <summary>
@@ -121,12 +182,21 @@ public class OmiyaGamesBuildScript
     }
     
     /// <summary>
+    /// Function that builds for Mac.
+    /// </summary>
+    [MenuItem ("Omiya Games/Build For/Mac (Universal)")]
+    public static void PerformMacUniversalBuild()
+    {
+        GenericBuild("Mac", ".app", BuildTarget.StandaloneOSXIntel);
+    }
+
+    /// <summary>
     /// Function that builds for Mac, 32-bit.
     /// </summary>
     [MenuItem ("Omiya Games/Build For/Mac 32-bit")]
     public static void PerformMac32Build()
     {
-        GenericBuild("Mac 32-bit", ".app", BuildTarget.StandaloneOSXIntel);
+        GenericBuild("Mac 32-bit", ".app", BuildTarget.StandaloneOSXUniversal);
     }
     
     /// <summary>
@@ -136,6 +206,15 @@ public class OmiyaGamesBuildScript
     public static void PerformMac64Build()
     {
         GenericBuild("Mac 64-bit", ".app", BuildTarget.StandaloneOSXIntel64);
+    }
+    
+    /// <summary>
+    /// Function that builds for Linux.
+    /// </summary>
+    [MenuItem ("Omiya Games/Build For/Linux (Universal)")]
+    public static void PerformLinuxUniversalBuild()
+    {
+        GenericBuild("Linux", "", BuildTarget.StandaloneLinuxUniversal);
     }
     
     /// <summary>
@@ -162,7 +241,7 @@ public class OmiyaGamesBuildScript
     [MenuItem ("Omiya Games/Build For/iOS")]
     public static void PerformIosBuild()
     {
-        GenericBuild("iOS", "", BuildTarget.iPhone);
+        GenericBuild("iOS", "", BuildTarget.iOS);
     }
     
     /// <summary>
@@ -277,4 +356,3 @@ public class OmiyaGamesBuildScript
         return EditorScenes.ToArray();
     }
 }
-#endif
