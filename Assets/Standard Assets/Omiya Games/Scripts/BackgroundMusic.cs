@@ -11,19 +11,19 @@ public class BackgroundMusic : ISingletonScript
     public const string IsMutedSettingsKey = "Background Music Is Muted";
 
     [Tooltip("The background music's clip. 2D AudioClip is recommended.")]
-	[SerializeField]
+    [SerializeField]
     AudioClip startingClip = null;
     [Tooltip("The transition length (in seconds) between 2 background musics. Set to -1 if you want no transition.")]
-	[SerializeField]
+    [SerializeField]
     float transitionDuration = 1;
-	[SerializeField]
+    [SerializeField]
     bool loopMusic = true;
     [Tooltip("The default background volume. This value is overridden if a volume is already stored in PlayerPrefs.")]
     [Range(0f, 1f)]
-	[SerializeField]
+    [SerializeField]
     float defaultVolume = 1;
     [Tooltip("The priority of the audio sources when they're created.")]
-	[SerializeField]
+    [SerializeField]
     int audioPriority = 128;
 
     float volume = 0, timePassedInTransition = float.NaN, volumeChangeSpeed = 1;
