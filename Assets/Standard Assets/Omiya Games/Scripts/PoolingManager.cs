@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class PoolingManager : ISingletonScript
 {
-	public GameObject[] objectsToPreload = null;
+	[SerializeField]
+	GameObject[] objectsToPreload = null;
 
 	struct PoolSet
 	{

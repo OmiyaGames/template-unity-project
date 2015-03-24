@@ -8,11 +8,13 @@ public class AudioMutator : MonoBehaviour
     /// The center pitch of this audio.
     /// </summary>
     [Range(-3, 3)]
-    public float centerPitch = 1;
+	[SerializeField]
+    float centerPitch = 1;
     /// <summary>
     /// The allowed range the pitch can mutate from the center pitch
     /// </summary>
-    public Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
+	[SerializeField]
+    Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
 
     AudioSource audioCache = null;
 
@@ -22,7 +24,7 @@ public class AudioMutator : MonoBehaviour
         {
             if(audioCache == null)
             {
-                audioCache = audio;
+                audioCache = GetComponent<AudioSource>();
             }
             return audioCache;
         }

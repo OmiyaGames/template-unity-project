@@ -6,13 +6,20 @@ public class PauseMenu : ISingletonScript
 {
     public enum ClickedAction
     {
+		Paused,
         Continue,
         Restart,
         ReturnToMenu
     }
 
-    public GameObject pausePanel;
-    public bool lockCursorOnResume = false;
+	[SerializeField]
+    GameObject pausePanel;
+	[SerializeField]
+	CursorLockMode lockModeOnResume = CursorLockMode.None;
+
+	/// <summary>
+	/// The action to take when the visibility of the dialog changes
+	/// </summary>
     System.Action<ClickedAction> onVisibleChanged;
 
     public override void SingletonStart(Singleton instance)
@@ -30,13 +37,20 @@ public class PauseMenu : ISingletonScript
         onVisibleChanged = visibleChanged;
 
         // Unlock the cursor
-        Screen.lockCursor = false;
+		Cursor.lockState = CursorLockMode.None;
 
         // Make the game object active
         pausePanel.SetActive(true);
 
         // Stop time
         Time.timeScale = 0;
+
+		// Indicate change
+		if (onVisibleChanged != null)
+		{
+			onVisibleChanged(ClickedAction.Paused);
+			onVisibleChanged = null;
+		}
     }
 
     public void Hide()
@@ -67,7 +81,7 @@ public class PauseMenu : ISingletonScript
         Time.timeScale = 1;
 
         // Lock the cursor
-        Screen.lockCursor = lockCursorOnResume;
+		Cursor.lockState = lockModeOnResume;
 
         // Hide the panel
         pausePanel.SetActive(false);

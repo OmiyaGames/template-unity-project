@@ -9,7 +9,8 @@ public class GameSettings : ISingletonScript
     public const string NumLevelsUnlockedKey = "numLevelsUnlocked";
     public const int DefaultNumLevelsUnlocked = 1;
 
-	public bool simulateWebplayer = false;
+	[SerializeField]
+	bool simulateWebplayer = false;
     
     int mNumLevelsUnlocked = 1;
 

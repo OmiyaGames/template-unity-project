@@ -12,26 +12,35 @@ public class SceneTransition : ISingletonScript
 		FadingIn,
 		CompletelyFaded
 	}
-	
-	public float fadeInDuration = 0.6f;
-	public float fadeInSpeed = 1f;
-	public float fadeOutDuration = 1f;
-	public float fadeOutSpeed = 5f;
-    public Image fullScreenImage;
-    public Text fullScreenText;
-    public string[] levelNames;
-	
-	private int mNextLevel = 1;
-	private Transition mTransitionState = Transition.NotTransitioning;
-	private float mTargetAlpha = 0;
-	private float mCurrentAlpha = 0;
-	private Color mTargetColor, mTargetTextColor;
+
+	[Header("Fade Information")]
+	[SerializeField]
+	string[] levelNames;
+	[Header("Fade Duration and Speed")]
+	[SerializeField]
+	float fadeInDuration = 0.6f;
+	[SerializeField]
+	float fadeInSpeed = 1f;
+	[SerializeField]
+	float fadeOutDuration = 1f;
+	[SerializeField]
+	float fadeOutSpeed = 5f;
+	[Header("Fade Components")]
+	[SerializeField]
+    Image fullScreenImage;
+	[SerializeField]
+    Text fullScreenText;
+
+	int nextLevel = 1;
+	Transition transitionState = Transition.NotTransitioning;
+	float targetAlpha = 0, currentAlpha = 0;
+	Color targetColor, targetTextColor;
 	
 	public Transition State
 	{
 		get
 		{
-			return mTransitionState;
+			return transitionState;
 		}
 	}
 
@@ -39,23 +48,23 @@ public class SceneTransition : ISingletonScript
 	{
 		get
 		{
-			return mNextLevel;
+			return nextLevel;
 		}
 	}
 
 	public override void SingletonStart(Singleton instance)
 	{
-        mTargetColor = fullScreenImage.color;
-        mTargetTextColor = fullScreenText.color;
+        targetColor = fullScreenImage.color;
+        targetTextColor = fullScreenText.color;
 
-		mTargetAlpha = 0;
-		mCurrentAlpha = 0;
+		targetAlpha = 0;
+		currentAlpha = 0;
 		
-        mTargetColor.a = mTargetAlpha;
-        mTargetTextColor.a = mTargetAlpha;
+        targetColor.a = targetAlpha;
+        targetTextColor.a = targetAlpha;
 		
-        fullScreenImage.color = mTargetColor;
-        fullScreenText.color = mTargetTextColor;
+        fullScreenImage.color = targetColor;
+        fullScreenText.color = targetTextColor;
 
         fullScreenImage.gameObject.SetActive(false);
         fullScreenText.gameObject.SetActive(false);
@@ -63,14 +72,14 @@ public class SceneTransition : ISingletonScript
 	
     public override void SceneStart(Singleton instance)
 	{
-		if(Application.loadedLevel == mNextLevel)
+		if(Application.loadedLevel == nextLevel)
 		{
 			// Loaded the correct scene, display fade-out transition
 			StartCoroutine(FadeOut());
 		}
 		else if(Application.loadedLevel == 0)
 		{
-			mTransitionState = Transition.NotTransitioning; 
+			transitionState = Transition.NotTransitioning; 
 		}
 	}
 
@@ -97,10 +106,10 @@ public class SceneTransition : ISingletonScript
 		if((levelIndex >= 0) && (levelIndex <= GameSettings.NumLevels))
 		{
 			// Play sound
-			audio.Play();
+			GetComponent<AudioSource>().Play();
 
 			// Set the next level
-			mNextLevel = levelIndex;
+			nextLevel = levelIndex;
 			
 			// Start fading in
 			StartCoroutine(FadeIn());
@@ -121,57 +130,57 @@ public class SceneTransition : ISingletonScript
 			{
                 if(fullScreenImage.enabled == false)
 				{
-					mTargetColor = fullScreenImage.color;
-                    mTargetTextColor = fullScreenText.color;
+					targetColor = fullScreenImage.color;
+                    targetTextColor = fullScreenText.color;
 
-					mTargetAlpha = 1;
-					mCurrentAlpha = 0;
+					targetAlpha = 1;
+					currentAlpha = 0;
 					
-                    mTargetColor.a = mTargetAlpha;
-                    mTargetTextColor.a = mTargetAlpha;
+                    targetColor.a = targetAlpha;
+                    targetTextColor.a = targetAlpha;
 
-                    fullScreenImage.color = mTargetColor;
-                    fullScreenText.color = mTargetTextColor;
+                    fullScreenImage.color = targetColor;
+                    fullScreenText.color = targetTextColor;
 
 					fullScreenImage.gameObject.SetActive(true);
                     fullScreenText.gameObject.SetActive(true);
 				}
 				else
 				{
-					mCurrentAlpha = Mathf.Lerp(mCurrentAlpha, mTargetAlpha, (Time.deltaTime * fadeInSpeed));
+					currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, (Time.deltaTime * fadeInSpeed));
 					
-                    mTargetColor.a = mCurrentAlpha;
-                    mTargetTextColor.a = mCurrentAlpha;
+                    targetColor.a = currentAlpha;
+                    targetTextColor.a = currentAlpha;
 
-					fullScreenImage.color = mTargetColor;
-                    fullScreenText.color = mTargetTextColor;
+					fullScreenImage.color = targetColor;
+                    fullScreenText.color = targetTextColor;
 				}
 				break;
 			}
 			case Transition.FadingOut:
 			{
-				mCurrentAlpha = Mathf.Lerp(mCurrentAlpha, mTargetAlpha, (Time.deltaTime * fadeOutSpeed));
+				currentAlpha = Mathf.Lerp(currentAlpha, targetAlpha, (Time.deltaTime * fadeOutSpeed));
 				
-                mTargetColor.a = mCurrentAlpha;
-                mTargetTextColor.a = mCurrentAlpha;
+                targetColor.a = currentAlpha;
+                targetTextColor.a = currentAlpha;
 
-				fullScreenImage.color = mTargetColor;
-                fullScreenText.color = mTargetTextColor;
+				fullScreenImage.color = targetColor;
+                fullScreenText.color = targetTextColor;
 				break;
 			}
 			case Transition.CompletelyFaded:
 			{
-				mTargetColor = fullScreenImage.color;
-                mTargetTextColor = fullScreenText.color;
+				targetColor = fullScreenImage.color;
+                targetTextColor = fullScreenText.color;
 
-				mTargetAlpha = 0;
-				mCurrentAlpha = 1;
+				targetAlpha = 0;
+				currentAlpha = 1;
 				
-                mTargetColor.a = mCurrentAlpha;
-                mTargetTextColor.a = mCurrentAlpha;
+                targetColor.a = currentAlpha;
+                targetTextColor.a = currentAlpha;
 
-                fullScreenImage.color = mTargetColor;
-                fullScreenText.color = mTargetTextColor;
+                fullScreenImage.color = targetColor;
+                fullScreenText.color = targetTextColor;
 
                 fullScreenImage.gameObject.SetActive(true);
                 fullScreenText.gameObject.SetActive(true);
@@ -194,18 +203,18 @@ public class SceneTransition : ISingletonScript
 	
 	IEnumerator FadeIn()
 	{
-		mTransitionState = Transition.FadingIn;
+		transitionState = Transition.FadingIn;
 		yield return new WaitForSeconds(fadeInDuration);
-		mTransitionState = Transition.CompletelyFaded;
+		transitionState = Transition.CompletelyFaded;
 
 		// Check if we're in a webplayer
-		Application.LoadLevelAsync(mNextLevel);
+		Application.LoadLevelAsync(nextLevel);
 	}
 	
 	IEnumerator FadeOut()
 	{
-		mTransitionState = Transition.FadingOut;
+		transitionState = Transition.FadingOut;
 		yield return new WaitForSeconds(fadeOutDuration);
-		mTransitionState = Transition.NotTransitioning;
+		transitionState = Transition.NotTransitioning;
 	}
 }
