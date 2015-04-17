@@ -28,11 +28,12 @@ public class SceneTransition : ISingletonScript
     [SerializeField]
     Text fullScreenText;
 
-    int nextLevel = 1;
+    string nextLevel = "";
     Transition transitionState = Transition.NotTransitioning;
     float targetAlpha = 0, currentAlpha = 0;
     Color targetColor, targetTextColor;
-    
+    AudioSource audioCache = null;
+
     public Transition State
     {
         get
@@ -41,11 +42,15 @@ public class SceneTransition : ISingletonScript
         }
     }
 
-    public int NextLevel
+    public AudioSource Sound
     {
         get
         {
-            return nextLevel;
+            if(audioCache == null)
+            {
+                audioCache = GetComponent<AudioSource>();
+            }
+            return audioCache;
         }
     }
 
@@ -69,7 +74,7 @@ public class SceneTransition : ISingletonScript
     
     public override void SceneStart(Singleton instance)
     {
-        if(Application.loadedLevel == nextLevel)
+        if(string.Equals(Application.loadedLevelName, nextLevel) == true)
         {
             // Loaded the correct scene, display fade-out transition
             StartCoroutine(FadeOut());
@@ -80,26 +85,19 @@ public class SceneTransition : ISingletonScript
         }
     }
 
-    public bool LoadLevel(int levelIndex)
+    public void LoadLevel(GameSettings.LevelInfo level)
     {
-        bool returnFlag = false;
-        GameSettings settings = Singleton.Get<GameSettings>();
-        if ((levelIndex >= 0) && (levelIndex <= settings.NumLevels))
-        {
-            // Play sound
-            GetComponent<AudioSource>().Play();
+        // Play sound
+        Sound.Play();
 
-            // Set the next level
-            nextLevel = levelIndex;
+        // Set the next level
+        nextLevel = level.SceneName;
             
-            // Start fading in
-            StartCoroutine(FadeIn());
+        // Start fading in
+        StartCoroutine(FadeIn());
 
-            // Check what level we're loading to
-            fullScreenText.text = settings.GetLevelName(levelIndex);
-            returnFlag = true;
-        }
-        return returnFlag;
+        // Check what level we're loading to
+        fullScreenText.text = level.DisplayName;
     }
     
     void Update()
@@ -188,7 +186,7 @@ public class SceneTransition : ISingletonScript
         yield return new WaitForSeconds(fadeInDuration);
         transitionState = Transition.CompletelyFaded;
 
-        // Check if we're in a webplayer
+        // Load the next level
         Application.LoadLevelAsync(nextLevel);
     }
     
