@@ -37,14 +37,7 @@ public class BackgroundMusic : ISingletonScript
         set
         {
             // Set volume
-            if (value > 0)
-            {
-                settings.MusicVolume = Mathf.Clamp01(value);
-            }
-            else
-            {
-                settings.MusicVolume = -1f;
-            }
+            settings.MusicVolume = Mathf.Clamp01(value);
 
             // Check if we're transitioning
             if(float.IsNaN(timePassedInTransition) == true)
@@ -71,7 +64,11 @@ public class BackgroundMusic : ISingletonScript
     {
         get
         {
-            return (settings.MusicVolume < 0);
+            return settings.IsMusicMuted;
+        }
+        set
+        {
+            settings.IsMusicMuted = value;
         }
     }
 
@@ -170,6 +167,7 @@ public class BackgroundMusic : ISingletonScript
             allAudioSources[index] = gameObject.AddComponent<AudioSource>();
 
             // Update this audio's settings
+            allAudioSources[index].spatialBlend = 0f;
             allAudioSources[index].mute = IsMuted;
             allAudioSources[index].volume = Volume;
             allAudioSources[index].priority = audioPriority;

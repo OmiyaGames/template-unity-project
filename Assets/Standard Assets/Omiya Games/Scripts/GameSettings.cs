@@ -10,7 +10,9 @@ public class GameSettings : ISingletonScript
 
     public const string NumLevelsUnlockedKey = "Number of Unlocked Levels";
     public const string MusicVolumeKey = "Music Volume";
+    public const string MusicMutedKey = "Music Muted";
     public const string SoundVolumeKey = "Sound Volume";
+    public const string SoundMutedKey = "Sound Muted";
 
     [System.Serializable]
     public class LevelInfo
@@ -62,6 +64,7 @@ public class GameSettings : ISingletonScript
 
     int numLevelsUnlocked = 1;
     float musicVolume = 0, soundVolume = 0;
+    bool musicMuted = false, soundMuted = false;
 
     #region Properties
     public bool IsWebplayer
@@ -167,6 +170,19 @@ public class GameSettings : ISingletonScript
         }
     }
 
+    internal bool IsMusicMuted
+    {
+        get
+        {
+            return musicMuted;
+        }
+        set
+        {
+            musicMuted = value;
+            PlayerPrefs.SetInt(MusicMutedKey, (musicMuted ? 1 : 0));
+        }
+    }
+
     internal float SoundVolume
     {
         get
@@ -177,6 +193,19 @@ public class GameSettings : ISingletonScript
         {
             soundVolume = value;
             PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
+        }
+    }
+
+    internal bool IsSoundMuted
+    {
+        get
+        {
+            return soundMuted;
+        }
+        set
+        {
+            soundMuted = value;
+            PlayerPrefs.SetInt(SoundMutedKey, (soundMuted ? 1 : 0));
         }
     }
     #endregion
@@ -208,11 +237,13 @@ public class GameSettings : ISingletonScript
         numLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
         numLevelsUnlocked = Mathf.Clamp(numLevelsUnlocked, 1, NumLevels);
 
-        // Grab the music volume
+        // Grab the music settings
         musicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, DefaultMusicVolume);
+        musicMuted = (PlayerPrefs.GetInt(MusicMutedKey, 0) != 0);
 
-        // Grab the sound volume
+        // Grab the sound settings
         soundVolume = PlayerPrefs.GetFloat(SoundVolumeKey, DefaultSoundVolume);
+        soundMuted = (PlayerPrefs.GetInt(SoundMutedKey, 0) != 0);
 
         // NOTE: Feel free to add more stuff here
 
@@ -223,12 +254,14 @@ public class GameSettings : ISingletonScript
         // Save the number of levels unlocked
         PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
 
-        // Save the music volume
+        // Save the music settings
         PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
+        PlayerPrefs.SetInt(MusicMutedKey, (musicMuted ? 1 : 0));
 
-        // Save the sound volume
+        // Save the sound settings
         PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
-
+        PlayerPrefs.SetInt(SoundMutedKey, (soundMuted ? 1 : 0));
+        
         // NOTE: Feel free to add more stuff here
 
         PlayerPrefs.Save();

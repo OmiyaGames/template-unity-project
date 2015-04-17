@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(AudioSource))]
+[RequireComponent(typeof(SoundEffect))]
 public class AudioMutator : MonoBehaviour
 {
     /// <summary>
@@ -16,17 +16,26 @@ public class AudioMutator : MonoBehaviour
     [SerializeField]
     Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
 
+    SoundEffect soundCache = null;
     AudioSource audioCache = null;
+
+    public SoundEffect Sound
+    {
+        get
+        {
+            if(soundCache == null)
+            {
+                soundCache = GetComponent<SoundEffect>();
+            }
+            return soundCache;
+        }
+    }
 
     public AudioSource Audio
     {
         get
         {
-            if(audioCache == null)
-            {
-                audioCache = GetComponent<AudioSource>();
-            }
-            return audioCache;
+            return Sound.Audio;
         }
     }
 
