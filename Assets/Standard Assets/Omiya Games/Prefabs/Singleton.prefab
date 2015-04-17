@@ -366,8 +366,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22456536}
-  - 222: {fileID: 22243424}
-  - 114: {fileID: 11491272}
   m_Layer: 5
   m_Name: SfxPanel
   m_TagString: Untagged
@@ -720,6 +718,7 @@ GameObject:
   - 4: {fileID: 492638}
   - 114: {fileID: 11481166}
   - 82: {fileID: 8262732}
+  - 114: {fileID: 11428756}
   m_Layer: 0
   m_Name: OptionsMenu
   m_TagString: Untagged
@@ -925,8 +924,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22409594}
-  - 222: {fileID: 22270672}
-  - 114: {fileID: 11490232}
   m_Layer: 5
   m_Name: MusicPanel
   m_TagString: Untagged
@@ -1423,6 +1420,16 @@ MonoBehaviour:
   levels:
   - sceneName: Menu
     displayName: Menu
+  - sceneName: Level 1
+    displayName: Level 1
+  - sceneName: Level 5
+    displayName: Level 2
+  - sceneName: Level 3
+    displayName: Level 3
+  - sceneName: Level 4
+    displayName: Level 4
+  - sceneName: Level 2
+    displayName: Level 5
 --- !u!114 &11400020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2229,6 +2236,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11428756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 149606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae95aacedb290847a5af5f0a0223a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11428906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2945,6 +2963,7 @@ MonoBehaviour:
     volumeSlider: {fileID: 11476528}
     volumePercentLabel: {fileID: 11429142}
     checkBoxMark: {fileID: 11477134}
+  delayPlayingTestSound: .200000003
 --- !u!114 &11482428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3031,27 +3050,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11490232
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: .39199999}
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!114 &11490908
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3106,27 +3104,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11491272
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: .39199999}
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!114 &11491584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3377,12 +3354,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 132156}
---- !u!222 &22243424
-CanvasRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 104562}
 --- !u!222 &22249500
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -3425,12 +3396,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 161546}
---- !u!222 &22270672
-CanvasRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 177030}
 --- !u!222 &22271720
 CanvasRenderer:
   m_ObjectHideFlags: 1

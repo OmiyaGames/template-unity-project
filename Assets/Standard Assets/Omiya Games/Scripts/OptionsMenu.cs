@@ -28,10 +28,13 @@ public class OptionsMenu : ISingletonScript
     AudioControls musicControls;
     [SerializeField]
     AudioControls soundEffectsControls;
+    [SerializeField]
+    float delayPlayingTestSound = 0.2f;
 
     GameSettings settings = null;
     BackgroundMusic musicSettings = null;
     bool inSetupMode = false;
+    float timeSfxValueChanged = -1f;
 
     System.Action<OptionsMenu> hideAction = null;
 
@@ -45,7 +48,7 @@ public class OptionsMenu : ISingletonScript
 
     public override void SingletonStart(Singleton instance)
     {
-        // Do nothing
+        instance.OnUpdate += UpdateOptions;
     }
 
     public override void SceneStart(Singleton instance)
@@ -109,10 +112,8 @@ public class OptionsMenu : ISingletonScript
         if (inSetupMode == false)
         {
             SoundEffect.GlobalVolume = soundEffectsControls.volumeSlider.value;
-            musicControls.volumePercentLabel.text = Percent(SoundEffect.GlobalVolume);
-
-            testSoundEffects.volume = SoundEffect.GlobalVolume;
-            testSoundEffects.Play();
+            soundEffectsControls.volumePercentLabel.text = Percent(SoundEffect.GlobalVolume);
+            timeSfxValueChanged = Time.time;
         }
     }
 
@@ -156,6 +157,15 @@ public class OptionsMenu : ISingletonScript
     {
         //float volumePercent = (val * 100);
         //return volumePercent.ToString("%");
-        return val.ToString("%");
+        return val.ToString("0%");
+    }
+
+    void UpdateOptions(float obj)
+    {
+        if ((timeSfxValueChanged > 0) && ((Time.time - timeSfxValueChanged) > delayPlayingTestSound))
+        {
+            testSoundEffects.Play();
+            timeSfxValueChanged = -1;
+        }
     }
 }
