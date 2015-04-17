@@ -54,11 +54,8 @@ public class LevelCompleteMenu : ISingletonScript
 
     public void Hide()
     {
-        if (IsVisible == true)
-        {
-            // Make the game object inactive
-            levelCompletePanel.SetActive(false);
-        }
+        // Make the game object inactive
+        levelCompletePanel.SetActive(false);
     }
 
     public void OnNextLevelClicked()

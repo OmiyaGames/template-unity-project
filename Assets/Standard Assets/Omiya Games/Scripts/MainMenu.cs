@@ -156,7 +156,7 @@ public class MainMenu : MonoBehaviour
         for (int index = 0; index < AllLevelButtons.Length; ++index)
         {
             // Make the button interactable if it's unlocked
-            if ((enabled == true) && (index <= settings.NumLevelsUnlocked))
+            if ((enabled == true) && (index < settings.NumLevelsUnlocked))
             {
                 AllLevelButtons[index].interactable = true;
             }
