@@ -16,10 +16,7 @@ public class GameSettings : ISingletonScript
     [SerializeField]
     bool simulateWebplayer = false;
     [SerializeField]
-    //[ReadOnly]
-    int numLevels = 0;
-    [SerializeField]
-    //[ReadOnly]
+    [ReadOnly]
     string[] levelNames;
 
     int numLevelsUnlocked = 1;
@@ -38,7 +35,7 @@ public class GameSettings : ISingletonScript
     {
         get
         {
-            return numLevels;
+            return levelNames.Length;
         }
     }
 
@@ -145,13 +142,16 @@ public class GameSettings : ISingletonScript
     public string GetLevelName(int levelIndex)
     {
         string returnString = "Menu";
-        if (levelIndex < levelNames.Length)
+        if(levelIndex > 0)
         {
-            returnString = levelNames[levelIndex];
-        }
-        else
-        {
-            returnString = "Level " + levelIndex;
+            if (levelIndex <= NumLevels)
+            {
+                returnString = levelNames[levelIndex - 1];
+            }
+            else
+            {
+                returnString = "Level " + levelIndex;
+            }
         }
         return returnString;
     }

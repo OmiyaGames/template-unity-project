@@ -16,6 +16,8 @@ public class PauseMenu : ISingletonScript
     GameObject pausePanel;
     [SerializeField]
     CursorLockMode lockModeOnResume = CursorLockMode.None;
+    [SerializeField]
+    Button[] allButtons = null;
 
     /// <summary>
     /// The action to take when the visibility of the dialog changes
@@ -67,7 +69,16 @@ public class PauseMenu : ISingletonScript
         OnContinueClicked();
     }
 
-    // FIXME: add options clicked event
+    public void OnOptionsClicked()
+    {
+        // Disable all buttons
+        for(int index = 0; index < allButtons.Length; ++index)
+        {
+            allButtons[index].interactable = false;
+        }
+
+        // FIXME: open the options dialog
+    }
 
     public void OnContinueClicked()
     {
@@ -102,6 +113,14 @@ public class PauseMenu : ISingletonScript
         {
             onVisibleChanged(action);
             onVisibleChanged = null;
+        }
+    }
+
+    void EnableAllButtons()
+    {
+        for (int index = 0; index < allButtons.Length; ++index)
+        {
+            allButtons[index].interactable = true;
         }
     }
 }
