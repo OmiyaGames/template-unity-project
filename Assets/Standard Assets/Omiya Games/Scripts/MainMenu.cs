@@ -9,6 +9,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     Button levelButton;
     [SerializeField]
+    Button optionsButton;
+    [SerializeField]
     Button quitButton;
 
     bool isClicked = false;
@@ -70,12 +72,9 @@ public class MainMenu : MonoBehaviour
             quitButton.gameObject.SetActive(false);
         }
 
-        // Check if we need to update the button states
-        if (transition.State != SceneTransition.Transition.NotTransitioning)
-        {
-            UpdateButtonEnabled(transition.State, allLevelButtons);
-            lastTransitionState = transition.State;
-        }
+        // Update button states
+        UpdateButtonEnabled(transition.State == SceneTransition.Transition.NotTransitioning);
+        lastTransitionState = transition.State;
     }
 
     void Update()
@@ -83,7 +82,7 @@ public class MainMenu : MonoBehaviour
         // Check if we need to update the button states
         if (transition.State != lastTransitionState)
         {
-            UpdateButtonEnabled(transition.State, allLevelButtons);
+            UpdateButtonEnabled(transition.State == SceneTransition.Transition.NotTransitioning);
             lastTransitionState = transition.State;
         }
     }
@@ -96,6 +95,12 @@ public class MainMenu : MonoBehaviour
         {
             isClicked = true;
         }
+    }
+
+    public void OnOptionsClicked()
+    {
+        // FIXME: open the options menu, and disable every button
+        // FIXME: also bind an action that would reset the button enabled
     }
 
     public void OnQuitClicked()
@@ -153,35 +158,29 @@ public class MainMenu : MonoBehaviour
         return allButtons;
     }
 
-    void UpdateButtonEnabled(SceneTransition.Transition transitionState, Button[] allButtons)
+    void UpdateButtonEnabled(bool enabled)
     {
-        if(allButtons != null)
+        // If not transitioning, enable buttons
+        for (index = 0; index < AllLevelButtons.Length; ++index)
         {
-            // Check whether we want to enable buttons or not
-            if(transitionState == SceneTransition.Transition.NotTransitioning)
+            // Make the button interactable if it's unlocked
+            if ((enabled == true) && (index < settings.NumLevelsUnlocked))
             {
-                // If not transitioning, enable buttons
-                for (index = 0; index < allButtons.Length; ++index)
-                {
-                    // Make the button interactable if it's unlocked
-                    allButtons[index].interactable = (index < settings.NumLevelsUnlocked);
-                }
-
-                // Enable the quit button
-                quitButton.interactable = true;
+                AllLevelButtons[index].interactable = true;
             }
             else
             {
-                // If so, disable all buttons
-                for (index = 0; index < allButtons.Length; ++index)
-                {
-                    allButtons[index].interactable = false;
-                }
-
-                // Disable the quit button
-                quitButton.interactable = true;
+                AllLevelButtons[index].interactable = false;
             }
         }
+
+        // Enable the quit button
+        quitButton.interactable = true;
+    }
+
+    void EnableAllButtons()
+    {
+        UpdateButtonEnabled(true);
     }
     #endregion
 }
