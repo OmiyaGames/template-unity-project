@@ -31,6 +31,15 @@ public class PauseMenu : ISingletonScript
     {
     }
 
+    void OnApplicationPause(bool isPaused)
+    {
+        if(isPaused == true)
+        {
+            Singleton.Get<GameSettings>().SaveSettings();
+            Show();
+        }
+    }
+
     public void Show(System.Action<ClickedAction> visibleChanged = null)
     {
         // Store function pointer
@@ -57,6 +66,8 @@ public class PauseMenu : ISingletonScript
     {
         OnContinueClicked();
     }
+
+    // FIXME: add options clicked event
 
     public void OnContinueClicked()
     {

@@ -7,9 +7,6 @@ using System.Collections;
 /// </summary>
 public class BackgroundMusic : ISingletonScript
 {
-    public const string VolumeSettingsKey = "Background Music Volume";
-    public const string IsMutedSettingsKey = "Background Music Is Muted";
-
     [Tooltip("The background music's clip. 2D AudioClip is recommended.")]
     [SerializeField]
     AudioClip startingClip = null;
@@ -18,17 +15,13 @@ public class BackgroundMusic : ISingletonScript
     float transitionDuration = 1;
     [SerializeField]
     bool loopMusic = true;
-    [Tooltip("The default background volume. This value is overridden if a volume is already stored in PlayerPrefs.")]
-    [Range(0f, 1f)]
-    [SerializeField]
-    float defaultVolume = 1;
     [Tooltip("The priority of the audio sources when they're created.")]
     [SerializeField]
     int audioPriority = 128;
 
-    float volume = 0, timePassedInTransition = float.NaN, volumeChangeSpeed = 1;
-    bool isMuted = false;
+    float timePassedInTransition = float.NaN, volumeChangeSpeed = 1;
     int currentAudioSourceIndex = 0, index = 0;
+    GameSettings settings = null;
     readonly AudioSource[] allAudioSources = new AudioSource[2];
 
     /// <summary>
@@ -39,32 +32,36 @@ public class BackgroundMusic : ISingletonScript
     {
         get
         {
-            return volume;
+            return Mathf.Clamp01(settings.MusicVolume);
         }
         set
         {
             // Set volume
-            volume = Mathf.Clamp01(value);
-
-            // Store the volume settings
-            PlayerPrefs.SetFloat(VolumeSettingsKey, volume);
+            if (value > 0)
+            {
+                settings.MusicVolume = Mathf.Clamp01(value);
+            }
+            else
+            {
+                settings.MusicVolume = -1f;
+            }
 
             // Check if we're transitioning
             if(float.IsNaN(timePassedInTransition) == true)
             {
                 // Update audio sources
-                CurrentAudioSource.volume = volume;
+                CurrentAudioSource.volume = settings.MusicVolume;
             }
             else
             {
                 // Reduce the volume of each audio source, if it has a louder volume
-                if(TransitionAudioSource.volume > volume)
+                if (TransitionAudioSource.volume > settings.MusicVolume)
                 {
-                    TransitionAudioSource.volume = volume;
+                    TransitionAudioSource.volume = settings.MusicVolume;
                 }
-                if(CurrentAudioSource.volume > volume)
+                if (CurrentAudioSource.volume > settings.MusicVolume)
                 {
-                    CurrentAudioSource.volume = volume;
+                    CurrentAudioSource.volume = settings.MusicVolume;
                 }
             }
         }
@@ -74,33 +71,7 @@ public class BackgroundMusic : ISingletonScript
     {
         get
         {
-            return isMuted;
-        }
-        set
-        {
-            // Check if the value is different
-            if(isMuted != value)
-            {
-                // Update the value
-                isMuted = value;
-
-                // Store the mute settings
-                if(isMuted == true)
-                {
-                    PlayerPrefs.SetInt(IsMutedSettingsKey, 1);
-                }
-                else
-                {
-                    PlayerPrefs.SetInt(IsMutedSettingsKey, 0);
-                }
-
-                // Mute or unmute the current audio sources
-                for(index = 0; index < allAudioSources.Length; ++index)
-                {
-                    // Update this audio's settings
-                    allAudioSources[index].mute = isMuted;
-                }
-            }
+            return (settings.MusicVolume < 0);
         }
     }
 
@@ -164,13 +135,26 @@ public class BackgroundMusic : ISingletonScript
 
     public override void SingletonStart(Singleton instance)
     {
+        // Do nothing
+    }
+
+    public override void SceneStart(Singleton instance)
+    {
+        // Don't do anything if this object is already setup
+        if(settings != null)
+        {
+            return;
+        }
+
+        // Grab an instance of the settings
+        settings = Singleton.Get<GameSettings>();
+
         // Setup variables
-        GameObject thisObject = gameObject;
         timePassedInTransition = float.NaN;
         currentAudioSourceIndex = 0;
 
         // Calculate the volume change speed
-        if((transitionDuration < 0) || (Mathf.Approximately(transitionDuration, 0) == true))
+        if ((transitionDuration < 0) || (Mathf.Approximately(transitionDuration, 0) == true))
         {
             volumeChangeSpeed = float.NaN;
         }
@@ -179,24 +163,11 @@ public class BackgroundMusic : ISingletonScript
             volumeChangeSpeed = 1f / transitionDuration;
         }
 
-        // Retrieve the mute settings
-        if(PlayerPrefs.GetInt(IsMutedSettingsKey, 1) != 0)
-        {
-            isMuted = false;
-        }
-        else
-        {
-            isMuted = true;
-        }
-
-        // Retrieve the volume settings
-        volume = PlayerPrefs.GetFloat(VolumeSettingsKey, defaultVolume);
-
         // Go through all audio sources
-        for(index = 0; index < allAudioSources.Length; ++index)
+        for (index = 0; index < allAudioSources.Length; ++index)
         {
             // Create audio sources
-            allAudioSources[index] = thisObject.AddComponent<AudioSource>();
+            allAudioSources[index] = gameObject.AddComponent<AudioSource>();
 
             // Update this audio's settings
             allAudioSources[index].mute = IsMuted;
@@ -205,7 +176,7 @@ public class BackgroundMusic : ISingletonScript
             allAudioSources[index].loop = loopMusic;
 
             // Check if we should play this audio
-            if(index == currentAudioSourceIndex)
+            if (index == currentAudioSourceIndex)
             {
                 allAudioSources[index].playOnAwake = true;
                 allAudioSources[index].clip = startingClip;
@@ -219,15 +190,10 @@ public class BackgroundMusic : ISingletonScript
         }
 
         // Bind to the singleton's update event
-        if(instance != null)
+        if (instance != null)
         {
             instance.OnRealTimeUpdate += RealTimeUpdate;
         }
-    }
-
-    public override void SceneStart(Singleton instance)
-    {
-        // Do nothing
     }
 
     void RealTimeUpdate(float deltaTime)
