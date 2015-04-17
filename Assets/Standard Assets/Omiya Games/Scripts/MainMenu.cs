@@ -94,8 +94,9 @@ public class MainMenu : MonoBehaviour
 
     public void OnOptionsClicked()
     {
-        // FIXME: open the options menu, and disable every button
-        // FIXME: also bind an action that would reset the button enabled
+        // Open the options menu, and disable every button
+        UpdateButtonEnabled(false);
+        Singleton.Get<OptionsMenu>().Show(EnableAllButtons);
     }
 
     public void OnQuitClicked()
@@ -168,7 +169,7 @@ public class MainMenu : MonoBehaviour
         optionsButton.interactable = enabled;
     }
 
-    void EnableAllButtons()
+    void EnableAllButtons(OptionsMenu menu)
     {
         UpdateButtonEnabled(true);
     }
