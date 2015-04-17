@@ -20,8 +20,6 @@ public class PauseMenu : ISingletonScript
     Button[] allButtons = null;
     [SerializeField]
     Text returnToMenuLabel = null;
-    [SerializeField]
-    string returnToMenuText = "Return to {0}";
 
     /// <summary>
     /// The action to take when the visibility of the dialog changes
@@ -47,10 +45,10 @@ public class PauseMenu : ISingletonScript
         settings = Singleton.Get<GameSettings>();
 
         // Check if we need to update the menu label
-        if((returnToMenuLabel != null) && (string.IsNullOrEmpty(returnToMenuText) == false))
+        if ((returnToMenuLabel != null) && (string.IsNullOrEmpty(settings.ReturnToMenuText) == false))
         {
             // Update the menu label
-            returnToMenuLabel.text = string.Format(returnToMenuText, settings.MenuLevel.DisplayName);
+            returnToMenuLabel.text = string.Format(settings.ReturnToMenuText, settings.MenuLevel.DisplayName);
         }
     }
 
