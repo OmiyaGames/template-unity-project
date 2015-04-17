@@ -127,6 +127,7 @@ public class MainMenu : MonoBehaviour
                 // Setup the level button
                 clone = (GameObject)Instantiate(levelButton.gameObject);
                 clone.transform.SetParent(buttonParent);
+                clone.transform.localScale = Vector3.one;
 
                 // Add the button into the button list
                 allButtons[index - 1] = SetupButton(clone, index);
