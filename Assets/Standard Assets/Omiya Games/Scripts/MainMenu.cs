@@ -15,6 +15,8 @@ public class MainMenu : MonoBehaviour
     int index = 0;
     SceneTransition.Transition lastTransitionState = SceneTransition.Transition.NotTransitioning;
     Button[] allLevelButtons = null;
+    SceneTransition transition = null;
+    GameSettings settings = null;
 
     #region Properties
     public Button[] AllLevelButtons
@@ -34,19 +36,19 @@ public class MainMenu : MonoBehaviour
     }
     #endregion
 
-    void Awake()
+    void Start()
     {
-        // Grab the parent of the level button
-        Transform buttonParent = levelButton.transform.parent;
-
         // Grab the settings
-        SceneTransition transition = Singleton.Get<SceneTransition>();
-
-        // Setup all buttons
-        allLevelButtons = SetupLevelButtons(buttonParent, transition);
+        transition = Singleton.Get<SceneTransition>();
 
         // Grab the game settings
-        GameSettings settings = Singleton.Get<GameSettings>();
+        settings = Singleton.Get<GameSettings>();
+
+        // Grab the parent of the level button
+        Transform buttonParent = levelButton.transform.parent;
+        
+        // Setup all buttons
+        allLevelButtons = SetupLevelButtons(buttonParent);
 
         // Check if we should remove the quit button (you can't quite out of a webplayer)
         if(settings.IsWebplayer == true)
@@ -78,9 +80,6 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-        // Grab the settings
-        SceneTransition transition = Singleton.Get<SceneTransition>();
-
         // Check if we need to update the button states
         if (transition.State != lastTransitionState)
         {
@@ -89,9 +88,11 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    // FIXME: add options clicked event
+
     public void OnLevelClicked(int buttonNumber)
     {
-        if ((isClicked == false) && (Singleton.Get<SceneTransition>().LoadLevel(buttonNumber) == true))
+        if ((isClicked == false) && (transition.LoadLevel(buttonNumber) == true))
         {
             isClicked = true;
         }
@@ -107,29 +108,29 @@ public class MainMenu : MonoBehaviour
     }
 
     #region Helper Methods
-    Button[] SetupLevelButtons(Transform buttonParent, SceneTransition transition)
+    Button[] SetupLevelButtons(Transform buttonParent)
     {
         // Check how many levels there are
         Button[] allButtons = null;
         Text buttonLabel = null;
         GameObject clone = null;
         Button newButton = null;
-        if (GameSettings.NumLevels >= 1)
+        if (settings.NumLevels >= 1)
         {
             // Setup the first level button behavior
             levelButton.onClick.AddListener(() => { OnLevelClicked(1); });
 
             // Setup the first level button label
             buttonLabel = levelButton.GetComponentInChildren<Text>();
-            buttonLabel.text = transition.GetLevelName(1);
+            buttonLabel.text = settings.GetLevelName(1);
             levelButton.name = buttonLabel.text;
 
             // Add the button into the button list
-            allButtons = new Button[GameSettings.NumLevels];
+            allButtons = new Button[settings.NumLevels];
             allButtons[0] = levelButton;
 
             // Setup the rest of the buttons
-            for (index = 2; index <= GameSettings.NumLevels; ++index)
+            for (index = 2; index <= settings.NumLevels; ++index)
             {
                 // Setup the level button
                 clone = (GameObject)Instantiate(levelButton.gameObject);
@@ -142,7 +143,7 @@ public class MainMenu : MonoBehaviour
 
                 // Setup the level button labels
                 buttonLabel = newButton.GetComponentInChildren<Text>();
-                buttonLabel.text = transition.GetLevelName(index);
+                buttonLabel.text = settings.GetLevelName(index);
                 clone.name = buttonLabel.text;
 
                 // Add the button into the button list
@@ -159,9 +160,6 @@ public class MainMenu : MonoBehaviour
             // Check whether we want to enable buttons or not
             if(transitionState == SceneTransition.Transition.NotTransitioning)
             {
-                // Grab the game settings
-                GameSettings settings = Singleton.Get<GameSettings>();
-
                 // If not transitioning, enable buttons
                 for (index = 0; index < allButtons.Length; ++index)
                 {

@@ -13,9 +13,6 @@ public class SceneTransition : ISingletonScript
         CompletelyFaded
     }
 
-    [Header("Fade Information")]
-    [SerializeField]
-    string[] levelNames;
     [Header("Fade Duration and Speed")]
     [SerializeField]
     float fadeInDuration = 0.6f;
@@ -83,27 +80,11 @@ public class SceneTransition : ISingletonScript
         }
     }
 
-    public string GetLevelName(int levelIndex)
-    {
-        string returnString = "Menu";
-        if (levelIndex > 0)
-        {
-            if (levelIndex <= levelNames.Length)
-            {
-                returnString = levelNames[levelIndex - 1];
-            }
-            else
-            {
-                returnString = "Level " + levelIndex;
-            }
-        }
-        return returnString;
-    }
-    
     public bool LoadLevel(int levelIndex)
     {
         bool returnFlag = false;
-        if((levelIndex >= 0) && (levelIndex <= GameSettings.NumLevels))
+        GameSettings settings = Singleton.Get<GameSettings>();
+        if ((levelIndex >= 0) && (levelIndex <= settings.NumLevels))
         {
             // Play sound
             GetComponent<AudioSource>().Play();
@@ -115,7 +96,7 @@ public class SceneTransition : ISingletonScript
             StartCoroutine(FadeIn());
 
             // Check what level we're loading to
-            fullScreenText.text = GetLevelName(levelIndex);
+            fullScreenText.text = settings.GetLevelName(levelIndex);
             returnFlag = true;
         }
         return returnFlag;
