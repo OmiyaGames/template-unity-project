@@ -8,8 +8,8 @@ using System.Collections.Generic;
 [CustomEditor(typeof(PoolingManager))]
 public class PoolingManagerEditor : Editor
 {
-    private ReorderableList objectsToPreloadList;
-    private SerializedProperty objectsToPreload;
+    ReorderableList objectsToPreloadList;
+    SerializedProperty objectsToPreload;
 
     public void OnEnable()
     {
@@ -27,12 +27,12 @@ public class PoolingManagerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 
-    private void DrawObjectsToPreloadListHeader(Rect rect)
+    void DrawObjectsToPreloadListHeader(Rect rect)
     {
         EditorGUI.LabelField(rect, "Preloaded Objects");
     }
 
-    private void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
+    void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
     {
         SerializedProperty element = objectsToPreloadList.serializedProperty.GetArrayElementAtIndex(index);
         rect.y += 2;

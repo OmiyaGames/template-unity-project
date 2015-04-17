@@ -14,7 +14,6 @@ public class MainMenu : MonoBehaviour
     Button quitButton;
 
     bool isClicked = false;
-    int index = 0;
     SceneTransition.Transition lastTransitionState = SceneTransition.Transition.NotTransitioning;
     Button[] allLevelButtons = null;
     SceneTransition transition = null;
@@ -46,11 +45,8 @@ public class MainMenu : MonoBehaviour
         // Grab the game settings
         settings = Singleton.Get<GameSettings>();
 
-        // Grab the parent of the level button
-        Transform buttonParent = levelButton.transform.parent;
-        
         // Setup all buttons
-        allLevelButtons = SetupLevelButtons(buttonParent);
+        allLevelButtons = SetupLevelButtons(levelButton.transform.parent);
 
         // Check if we should remove the quit button (you can't quite out of a webplayer)
         if(settings.IsWebplayer == true)
@@ -87,12 +83,11 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    // FIXME: add options clicked event
-
-    public void OnLevelClicked(int buttonNumber)
+    public void OnLevelClicked(GameSettings.LevelInfo level)
     {
-        if ((isClicked == false) && (transition.LoadLevel(buttonNumber) == true))
+        if (isClicked == false)
         {
+            transition.LoadLevel(level);
             isClicked = true;
         }
     }
@@ -117,54 +112,49 @@ public class MainMenu : MonoBehaviour
     {
         // Check how many levels there are
         Button[] allButtons = null;
-        Text buttonLabel = null;
         GameObject clone = null;
-        Button newButton = null;
-        if (settings.NumLevels >= 1)
+        if (settings.NumLevels > 1)
         {
-            // Setup the first level button behavior
-            levelButton.onClick.AddListener(() => { OnLevelClicked(1); });
-
-            // Setup the first level button label
-            buttonLabel = levelButton.GetComponentInChildren<Text>();
-            buttonLabel.text = settings.GetLevelName(1);
-            levelButton.name = buttonLabel.text;
-
             // Add the button into the button list
-            allButtons = new Button[settings.NumLevels];
-            allButtons[0] = levelButton;
+            allButtons = new Button[settings.NumLevels - 1];
+
+            // Setup the first level button behavior
+            allButtons[0] = SetupButton(levelButton.gameObject, 1);
 
             // Setup the rest of the buttons
-            for (index = 2; index <= settings.NumLevels; ++index)
+            for (int index = 2; index < settings.NumLevels; ++index)
             {
                 // Setup the level button
                 clone = (GameObject)Instantiate(levelButton.gameObject);
                 clone.transform.SetParent(buttonParent);
 
-                // Setup the level button behavior
-                newButton = clone.GetComponent<Button>();
-                int levelIndex = index;
-                newButton.onClick.AddListener(() => { OnLevelClicked(levelIndex); });
-
-                // Setup the level button labels
-                buttonLabel = newButton.GetComponentInChildren<Text>();
-                buttonLabel.text = settings.GetLevelName(index);
-                clone.name = buttonLabel.text;
-
                 // Add the button into the button list
-                allButtons[index - 1] = newButton;
+                allButtons[index - 1] = SetupButton(clone, index);
             }
         }
         return allButtons;
     }
 
+    Button SetupButton(GameObject buttonObject, int levelOrdinal)
+    {
+        // Add an event to the button
+        Button newButton = buttonObject.GetComponent<Button>();
+        newButton.onClick.AddListener(() => { OnLevelClicked(settings.Levels[levelOrdinal]); });
+
+        // Setup the level button labels
+        Text buttonLabel = newButton.GetComponentInChildren<Text>();
+        buttonLabel.text = settings.Levels[levelOrdinal].DisplayName;
+        buttonObject.name = buttonLabel.text;
+        return newButton;
+    }
+
     void UpdateButtonEnabled(bool enabled)
     {
-        // If not transitioning, enable buttons
-        for (index = 0; index < AllLevelButtons.Length; ++index)
+        // Set all buttons
+        for (int index = 0; index < AllLevelButtons.Length; ++index)
         {
             // Make the button interactable if it's unlocked
-            if ((enabled == true) && (index < settings.NumLevelsUnlocked))
+            if ((enabled == true) && (index <= settings.NumLevelsUnlocked))
             {
                 AllLevelButtons[index].interactable = true;
             }
@@ -173,9 +163,8 @@ public class MainMenu : MonoBehaviour
                 AllLevelButtons[index].interactable = false;
             }
         }
-
-        // Enable the quit button
-        quitButton.interactable = true;
+        quitButton.interactable = enabled;
+        optionsButton.interactable = enabled;
     }
 
     void EnableAllButtons()

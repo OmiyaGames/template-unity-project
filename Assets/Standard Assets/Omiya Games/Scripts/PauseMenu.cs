@@ -18,11 +18,16 @@ public class PauseMenu : ISingletonScript
     CursorLockMode lockModeOnResume = CursorLockMode.None;
     [SerializeField]
     Button[] allButtons = null;
+    [SerializeField]
+    Text returnToMenuLabel = null;
+    [SerializeField]
+    string returnToMenuText = "Return to {0}";
 
     /// <summary>
     /// The action to take when the visibility of the dialog changes
     /// </summary>
     System.Action<ClickedAction> onVisibleChanged;
+    GameSettings settings = null;
 
     public override void SingletonStart(Singleton instance)
     {
@@ -31,6 +36,22 @@ public class PauseMenu : ISingletonScript
     
     public override void SceneStart(Singleton instance)
     {
+        // Check if we've already retrieve the settings
+        if(settings != null)
+        {
+            // If so, don't do anything
+            return;
+        }
+
+        // Retrieve settings
+        settings = Singleton.Get<GameSettings>();
+
+        // Check if we need to update the menu label
+        if((returnToMenuLabel != null) && (string.IsNullOrEmpty(returnToMenuText) == false))
+        {
+            // Update the menu label
+            returnToMenuLabel.text = string.Format(returnToMenuText, settings.MenuLevel.DisplayName);
+        }
     }
 
     void OnApplicationPause(bool isPaused)
@@ -88,13 +109,21 @@ public class PauseMenu : ISingletonScript
     public void OnRestartClicked()
     {
         OnContinueClicked(ClickedAction.Restart);
-        Singleton.Get<SceneTransition>().LoadLevel(Application.loadedLevel);
+
+        // Transition to the current level
+        GameSettings settings = Singleton.Get<GameSettings>();
+        SceneTransition transition = Singleton.Get<SceneTransition>();
+        transition.LoadLevel(settings.CurrentLevel);
     }
 
     public void OnReturnToMenuClicked()
     {
         OnContinueClicked(ClickedAction.ReturnToMenu);
-        Singleton.Get<SceneTransition>().LoadLevel(GameSettings.MenuLevel);
+
+        // Transition to the menu
+        GameSettings settings = Singleton.Get<GameSettings>();
+        SceneTransition transition = Singleton.Get<SceneTransition>();
+        transition.LoadLevel(settings.MenuLevel);
     }
 
     void OnContinueClicked(ClickedAction action)
