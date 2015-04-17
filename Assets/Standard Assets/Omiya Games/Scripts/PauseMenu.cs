@@ -24,8 +24,17 @@ public class PauseMenu : ISingletonScript
     /// <summary>
     /// The action to take when the visibility of the dialog changes
     /// </summary>
-    System.Action<ClickedAction> onVisibleChanged;
+    System.Action<PauseMenu> onVisibleChanged;
+    ClickedAction lastClickedAction = ClickedAction.Paused;
     GameSettings settings = null;
+
+    public ClickedAction LastClickedAction
+    {
+        get
+        {
+            return lastClickedAction;
+        }
+    }
 
     public override void SingletonStart(Singleton instance)
     {
@@ -61,7 +70,7 @@ public class PauseMenu : ISingletonScript
         }
     }
 
-    public void Show(System.Action<ClickedAction> visibleChanged = null)
+    public void Show(System.Action<PauseMenu> visibleChanged = null)
     {
         // Store function pointer
         onVisibleChanged = visibleChanged;
@@ -75,17 +84,19 @@ public class PauseMenu : ISingletonScript
         // Stop time
         Time.timeScale = 0;
 
+        // Indicate we paused
+        lastClickedAction = ClickedAction.Paused;
+
         // Indicate change
         if (onVisibleChanged != null)
         {
-            onVisibleChanged(ClickedAction.Paused);
-            onVisibleChanged = null;
+            onVisibleChanged(this);
         }
     }
 
     public void Hide()
     {
-        OnContinueClicked();
+        OnContinueClicked(ClickedAction.Continue);
     }
 
     public void OnOptionsClicked()
@@ -96,7 +107,8 @@ public class PauseMenu : ISingletonScript
             allButtons[index].interactable = false;
         }
 
-        // FIXME: open the options dialog
+        // Open the options dialog
+        Singleton.Get<OptionsMenu>().Show(EnableAllButtons);
     }
 
     public void OnContinueClicked()
@@ -129,6 +141,9 @@ public class PauseMenu : ISingletonScript
         // Make time flow again
         Time.timeScale = 1;
 
+        // Update the action
+        lastClickedAction = action;
+
         // Lock the cursor
         Cursor.lockState = lockModeOnResume;
 
@@ -138,12 +153,11 @@ public class PauseMenu : ISingletonScript
         // Indicate change
         if (onVisibleChanged != null)
         {
-            onVisibleChanged(action);
-            onVisibleChanged = null;
+            onVisibleChanged(this);
         }
     }
 
-    void EnableAllButtons()
+    void EnableAllButtons(OptionsMenu menu)
     {
         for (int index = 0; index < allButtons.Length; ++index)
         {
