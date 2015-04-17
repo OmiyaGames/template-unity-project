@@ -56,6 +56,8 @@ public class GameSettings : ISingletonScript
     [SerializeField]
     bool simulateWebplayer = false;
     [SerializeField]
+    string returnToMenuText = "Return to {0}";
+    [SerializeField]
     LevelInfo[] levels;
 
     int numLevelsUnlocked = 1;
@@ -83,6 +85,14 @@ public class GameSettings : ISingletonScript
                 }
             }
             return returnIsWebplayer;
+        }
+    }
+
+    public string ReturnToMenuText
+    {
+        get
+        {
+            return returnToMenuText;
         }
     }
 
