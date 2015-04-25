@@ -37,6 +37,7 @@ public class OptionsMenu : ISingletonScript
     float timeSfxValueChanged = -1f;
 
     System.Action<OptionsMenu> hideAction = null;
+    System.Action<float> updateAction = null;
 
     public bool IsVisible
     {
@@ -48,7 +49,7 @@ public class OptionsMenu : ISingletonScript
 
     public override void SingletonStart(Singleton instance)
     {
-        instance.OnUpdate += UpdateOptions;
+        // Do nothing
     }
 
     public override void SceneStart(Singleton instance)
@@ -69,6 +70,15 @@ public class OptionsMenu : ISingletonScript
         musicControls.Setup(musicSettings.Volume, musicSettings.IsMuted);
         soundEffectsControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
         inSetupMode = false;
+
+        // Setup update function
+        if (updateAction != null)
+        {
+            instance.OnUpdate -= updateAction;
+            updateAction = null;
+        }
+        updateAction = new System.Action<float>(UpdateOptions);
+        instance.OnUpdate += updateAction;
     }
 
     public void Show(System.Action<OptionsMenu> returnAction = null)

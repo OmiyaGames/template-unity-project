@@ -43,4 +43,14 @@ public abstract class IPooledObject : MonoBehaviour
     public virtual void Start()
     {
     }
+
+    public void OnDestroy()
+    {
+        OnDestroy(null);
+    }
+
+    public virtual void OnDestroy(PoolingManager manager)
+    {
+
+    }
 }

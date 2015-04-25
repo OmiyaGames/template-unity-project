@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelCompleteMenu : MonoBehaviour
+public class LevelFailedMenu : MonoBehaviour
 {
     [SerializeField]
-    GameObject levelCompletePanel;
+    GameObject levelFailedPanel;
     [SerializeField]
     UnityEngine.UI.Text returnToMenuLabel = null;
     [SerializeField]
-    UnityEngine.UI.Button nextLevelButton = null;
-    [SerializeField]
     UnityEngine.UI.Text completeLabel = null;
     [SerializeField]
-    string displayString = "{0} complete!";
+    string displayString = "{0} Failed!";
 
     GameSettings settings = null;
 
@@ -20,7 +18,7 @@ public class LevelCompleteMenu : MonoBehaviour
     {
         get
         {
-            return levelCompletePanel.activeSelf;
+            return levelFailedPanel.activeSelf;
         }
     }
 
@@ -38,12 +36,6 @@ public class LevelCompleteMenu : MonoBehaviour
                 returnToMenuLabel.text = string.Format(settings.ReturnToMenuText, settings.MenuLevel.DisplayName);
             }
 
-            // Check if we need to disable the next level button
-            if((nextLevelButton != null) && (settings.NextLevel == null))
-            {
-                nextLevelButton.interactable = false;
-            }
-
             // Setup complete label
             if((completeLabel != null) && (string.IsNullOrEmpty(displayString) == false))
             {
@@ -58,7 +50,7 @@ public class LevelCompleteMenu : MonoBehaviour
         if (IsVisible == false)
         {
             // Make the game object active
-            levelCompletePanel.SetActive(true);
+            levelFailedPanel.SetActive(true);
         }
     }
 
@@ -66,17 +58,7 @@ public class LevelCompleteMenu : MonoBehaviour
     {
         // Make the game object inactive
         Setup();
-        levelCompletePanel.SetActive(false);
-    }
-
-    public void OnNextLevelClicked()
-    {
-        // Hide the panel
-        Hide();
-
-        // Transition to the current level
-        SceneTransition transition = Singleton.Get<SceneTransition>();
-        transition.LoadLevel(settings.NextLevel);
+        levelFailedPanel.SetActive(false);
     }
 
     public void OnRestartClicked()
