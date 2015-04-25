@@ -74,6 +74,7 @@ public class SceneTransition : ISingletonScript
     
     public override void SceneStart(Singleton instance)
     {
+        /*
         if(string.Equals(Application.loadedLevelName, nextLevel) == true)
         {
             // Loaded the correct scene, display fade-out transition
@@ -83,10 +84,13 @@ public class SceneTransition : ISingletonScript
         {
             transitionState = Transition.NotTransitioning; 
         }
+         * */
     }
 
     public void LoadLevel(GameSettings.LevelInfo level)
     {
+		// FIXME: Not sure why the scene transition script is now broken...
+		/*
         // Play sound
         Sound.Play();
 
@@ -98,6 +102,13 @@ public class SceneTransition : ISingletonScript
 
         // Check what level we're loading to
         fullScreenText.text = level.DisplayName;
+         * */
+
+		// Indicate the next scene was loaded
+		Singleton.Get<PoolingManager>().DestroyAll();
+
+		// FIXME: Using load level for now.  Once above is fixed, take this line out
+        Application.LoadLevel(level.SceneName);
     }
     
     void Update()

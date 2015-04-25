@@ -130,27 +130,43 @@ public class GameSettings : ISingletonScript
             LevelInfo returnLevel = null;
             if ((Application.loadedLevel + 1) < NumLevels)
             {
-                returnLevel = levels[(Application.loadedLevel + 1)];
+				returnLevel = Levels[(Application.loadedLevel + 1)];
             }
             return returnLevel;
         }
     }
 
+	/// <summary>
+	/// The menu level is assumed to be the first scene.
+	/// </summary>
+	/// <value>The menu level.</value>
     public LevelInfo MenuLevel
     {
         get
         {
-            return levels[0];
+			return Levels[0];
         }
     }
 
-    public int NumLevelsUnlocked
+	/// <summary>
+	/// The credits level is assumed to be the first scene.
+	/// </summary>
+	/// <value>The menu level.</value>
+	public LevelInfo CreditsLevel
+	{
+		get
+		{
+			return Levels[NumLevels - 1];
+		}
+	}
+
+	public int NumLevelsUnlocked
     {
         get
         {
             return numLevelsUnlocked;
         }
-        internal set
+        set
         {
             numLevelsUnlocked = Mathf.Clamp(value, 1, NumLevels);
             PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);

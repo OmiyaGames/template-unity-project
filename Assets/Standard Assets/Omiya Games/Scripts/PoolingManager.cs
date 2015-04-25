@@ -149,4 +149,23 @@ public class PoolingManager : ISingletonScript
         }
         return returnObject;
     }
+
+    internal void DestroyAll()
+    {
+        // Deactivate everything
+        foreach(PoolSet pool in allPooledObjects.Values)
+        {
+            foreach(KeyValuePair<GameObject, IPooledObject> set in pool.allClonedInstances)
+            {
+                if(set.Key.activeSelf == true)
+                {
+                    set.Key.SetActive(false);
+                    if (set.Value != null)
+                    {
+                        set.Value.OnDestroy(this);
+                    }
+                }
+            }
+        }
+    }
 }

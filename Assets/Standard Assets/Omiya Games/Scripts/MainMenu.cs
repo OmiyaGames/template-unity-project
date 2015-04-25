@@ -51,6 +51,7 @@ public class MainMenu : MonoBehaviour
         // Check if we should remove the quit button (you can't quite out of a webplayer)
         if(settings.IsWebplayer == true)
         {
+            /*
             // Grab the level gird's minimum range
             Vector2 minAnchor = levelLayoutGroup.CachedRectTransform.anchorMin;
             Vector2 minOffset = levelLayoutGroup.CachedRectTransform.offsetMin;
@@ -63,7 +64,7 @@ public class MainMenu : MonoBehaviour
             // Expand the level gird to encompass
             levelLayoutGroup.CachedRectTransform.anchorMin = minAnchor;
             levelLayoutGroup.CachedRectTransform.offsetMin = minOffset;
-
+            */
             // Disable the quit button entirely
             quitButton.gameObject.SetActive(false);
         }
@@ -153,17 +154,23 @@ public class MainMenu : MonoBehaviour
     void UpdateButtonEnabled(bool enabled)
     {
         // Set all buttons
+		bool levelButtonEnabled = false;
         for (int index = 0; index < AllLevelButtons.Length; ++index)
         {
             // Make the button interactable if it's unlocked
-            if ((enabled == true) && (index < settings.NumLevelsUnlocked))
+			levelButtonEnabled = false;
+            if (enabled == true)
             {
-                AllLevelButtons[index].interactable = true;
+				if(index < settings.NumLevelsUnlocked)
+				{
+					levelButtonEnabled = true;
+				}
+				else if(index >= (settings.CreditsLevel.Ordinal - 1))
+				{
+					levelButtonEnabled = true;
+				}
             }
-            else
-            {
-                AllLevelButtons[index].interactable = false;
-            }
+			AllLevelButtons[index].interactable = levelButtonEnabled;
         }
         quitButton.interactable = enabled;
         optionsButton.interactable = enabled;
