@@ -56,7 +56,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void SingletonStart(Singleton instance)
+        public override void SingletonAwake(Singleton instance)
         {
             targetColor = fullScreenImage.color;
             targetTextColor = fullScreenText.color;
@@ -74,7 +74,7 @@ namespace OmiyaGames
             fullScreenText.gameObject.SetActive(false);
         }
 
-        public override void SceneStart(Singleton instance)
+        public override void SceneAwake(Singleton instance)
         {
             /*
             if(string.Equals(Application.loadedLevelName, nextLevel) == true)

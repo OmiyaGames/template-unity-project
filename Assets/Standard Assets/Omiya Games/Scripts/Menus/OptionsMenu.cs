@@ -49,12 +49,12 @@ namespace OmiyaGames
             }
         }
 
-        public override void SingletonStart(Singleton instance)
+        public override void SingletonAwake(Singleton instance)
         {
             // Do nothing
         }
 
-        public override void SceneStart(Singleton instance)
+        public override void SceneAwake(Singleton instance)
         {
             // Check if we've already retrieve the settings
             if (settings != null)

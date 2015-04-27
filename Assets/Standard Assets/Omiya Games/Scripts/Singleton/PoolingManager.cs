@@ -36,7 +36,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
-        public override void SingletonStart(Singleton globalGameObject)
+        public override void SingletonAwake(Singleton globalGameObject)
         {
             // Cache the transform everything will be pooled to
             poolingParent = transform;
@@ -53,7 +53,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when any scene after the first one is loaded.
         /// </summary>
-        public override void SceneStart(Singleton globalGameObject)
+        public override void SceneAwake(Singleton globalGameObject)
         {
             // Do nothing
         }
