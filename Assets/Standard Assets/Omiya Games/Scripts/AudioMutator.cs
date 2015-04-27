@@ -1,76 +1,79 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(SoundEffect))]
-public class AudioMutator : MonoBehaviour
+namespace OmiyaGames
 {
-    /// <summary>
-    /// The center pitch of this audio.
-    /// </summary>
-    [Range(-3, 3)]
-    [SerializeField]
-    float centerPitch = 1;
-    /// <summary>
-    /// The allowed range the pitch can mutate from the center pitch
-    /// </summary>
-    [SerializeField]
-    Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
-
-    SoundEffect soundCache = null;
-    AudioSource audioCache = null;
-
-    public SoundEffect Sound
+    [RequireComponent(typeof(SoundEffect))]
+    public class AudioMutator : MonoBehaviour
     {
-        get
+        /// <summary>
+        /// The center pitch of this audio.
+        /// </summary>
+        [Range(-3, 3)]
+        [SerializeField]
+        float centerPitch = 1;
+        /// <summary>
+        /// The allowed range the pitch can mutate from the center pitch
+        /// </summary>
+        [SerializeField]
+        Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
+
+        SoundEffect soundCache = null;
+        AudioSource audioCache = null;
+
+        public SoundEffect Sound
         {
-            if(soundCache == null)
+            get
             {
-                soundCache = GetComponent<SoundEffect>();
+                if (soundCache == null)
+                {
+                    soundCache = GetComponent<SoundEffect>();
+                }
+                return soundCache;
             }
-            return soundCache;
         }
-    }
 
-    public AudioSource Audio
-    {
-        get
+        public AudioSource Audio
         {
-            return Sound.Audio;
+            get
+            {
+                return Sound.Audio;
+            }
         }
-    }
 
-    public void Play()
-    {
-        // Stop the audio
-        Audio.Stop();
+        public void Play()
+        {
+            // Stop the audio
+            Audio.Stop();
 
-        // Change the audio's pitch
-        Audio.pitch = centerPitch + Random.Range(pitchMutationRange.x, pitchMutationRange.y);
+            // Change the audio's pitch
+            Audio.pitch = centerPitch + Random.Range(pitchMutationRange.x, pitchMutationRange.y);
 
-        // Play the audio
-        Audio.Play();
-    }
+            // Play the audio
+            Audio.Play();
+        }
 
-    public void Play(float delaySeconds)
-    {
-        // Delay playing the audio
-        StartCoroutine(DelayPlay(delaySeconds));
-    }
+        public void Play(float delaySeconds)
+        {
+            // Delay playing the audio
+            StartCoroutine(DelayPlay(delaySeconds));
+        }
 
-    public void Stop()
-    {
-        Audio.Stop();
-    }
+        public void Stop()
+        {
+            Audio.Stop();
+        }
 
-    void Awake()
-    {
-        // Update the pithes first
-        Audio.pitch = centerPitch;
-    }
+        void Awake()
+        {
+            // Update the pithes first
+            Audio.pitch = centerPitch;
+        }
 
-    IEnumerator DelayPlay(float delaySeconds)
-    {
-        yield return new WaitForSeconds(delaySeconds);
-        Play();
+        IEnumerator DelayPlay(float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            Play();
+        }
     }
 }
