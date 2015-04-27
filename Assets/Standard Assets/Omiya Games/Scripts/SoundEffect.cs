@@ -8,11 +8,32 @@ namespace OmiyaGames
     {
         static readonly HashSet<SoundEffect> allSoundEffects = new HashSet<SoundEffect>();
 
-        float volume = 0;
-        bool mute = false;
+        /// <summary>
+        /// Whether this sound effect's pitch should be mutated
+        /// </summary>
+        [SerializeField]
+        bool mutatePitch = false;
+        /// <summary>
+        /// The allowed range the pitch can mutate from the center pitch
+        /// </summary>
+        [SerializeField]
+        Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
+        /// <summary>
+        /// Whether this sound effect's volume should be mutated
+        /// </summary>
+        [SerializeField]
+        bool mutateVolume = false;
+        /// <summary>
+        /// The allowed range the volume can mutate from the center pitch
+        /// </summary>
+        [SerializeField]
+        Vector2 volumeMutationRange = new Vector2(-0.5f, 0f);
 
+        float centerVolume = 0, centerPitch = 0;
+        bool mute = false;
         AudioSource audioCache = null;
 
+        #region Static Properties
         public static float GlobalVolume
         {
             get
@@ -52,7 +73,9 @@ namespace OmiyaGames
                 }
             }
         }
+        #endregion
 
+        #region Local Properties
         public AudioSource Audio
         {
             get
@@ -82,19 +105,34 @@ namespace OmiyaGames
         {
             get
             {
-                return volume;
+                return centerVolume;
             }
             set
             {
-                volume = value;
+                centerVolume = value;
                 UpdateAudio(Singleton.Get<GameSettings>());
             }
         }
 
+        public float Pitch
+        {
+            get
+            {
+                return centerPitch;
+            }
+            set
+            {
+                centerPitch = value;
+            }
+        }
+        #endregion
+
+        #region Unity Events
         void Start()
         {
             // Grab the original values
-            volume = Audio.volume;
+            centerPitch = Audio.pitch;
+            centerVolume = Audio.volume;
             mute = Audio.mute;
 
             // Calculate how the audio should behave
@@ -105,11 +143,33 @@ namespace OmiyaGames
         {
             allSoundEffects.Remove(this);
         }
+        #endregion
+
+        public void Play()
+        {
+            // Stop the audio
+            Audio.Stop();
+
+            // Apply mutation
+            if(mutatePitch == true)
+            {
+                // Change the audio's pitch
+                Audio.pitch = centerPitch + Random.Range(pitchMutationRange.x, pitchMutationRange.y);
+            }
+            if(mutateVolume == true)
+            {
+                // Change the audio's volume
+                Audio.volume = Mathf.Clamp01(Volume + (Random.Range(volumeMutationRange.x, volumeMutationRange.y) * GlobalVolume));
+            }
+
+            // Play the audio
+            Audio.Play();
+        }
 
         void UpdateAudio(GameSettings settings)
         {
             // Update the volume
-            Audio.volume = Mathf.Clamp01(volume * settings.SoundVolume);
+            Audio.volume = Mathf.Clamp01(centerVolume * settings.SoundVolume);
 
             // Update mute
             Audio.mute = (mute || settings.IsSoundMuted);
