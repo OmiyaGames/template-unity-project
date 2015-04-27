@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class ResetPlayerPrefsContextMenu
+namespace OmiyaGames
 {
-    [MenuItem ("Omiya Games/Reset Stored Settings")]
-    public static void ResetPlayerPrefs()
+    public class ResetPlayerPrefsContextMenu
     {
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
+        [MenuItem("Omiya Games/Reset Stored Settings")]
+        public static void ResetPlayerPrefs()
+        {
+            PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+        }
     }
 }
