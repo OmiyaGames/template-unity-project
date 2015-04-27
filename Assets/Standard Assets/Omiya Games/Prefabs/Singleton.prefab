@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
   - 114: {fileID: 11400476}
+  - 114: {fileID: 11428526}
   - 114: {fileID: 11412146}
   - 114: {fileID: 11475404}
   - 114: {fileID: 11455948}
@@ -69,6 +70,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectsToPreload: []
+--- !u!114 &11428526
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59fc91b7d8e9924bbdda8bc4c92860b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  splash:
+    sceneName: Splash
+    displayName: Splash
+  mainMenu:
+    sceneName: Start Menu
+    displayName: Main Menu
+  credits:
+    sceneName: Credits
+    displayName: Credits
+  levels:
+  - sceneName: Level 1
+    displayName: Level 1
+  - sceneName: Level 2
+    displayName: Level 2
+  - sceneName: Level 3
+    displayName: Level 3
+  returnToTextTemplate: Return to {0}
+  restartTextTemplate: Restart {0}
+  levelDisplayNameTemplate: Level {0}
 --- !u!114 &11437662
 MonoBehaviour:
   m_ObjectHideFlags: 1
