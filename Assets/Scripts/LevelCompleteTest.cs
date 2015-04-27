@@ -5,6 +5,6 @@ public class LevelCompleteTest : MonoBehaviour
 {
     public void OnCompleteClicked()
     {
-        Singleton.Get<LevelCompleteMenu>().Show();
+        //Singleton.Get<LevelCompleteMenu>().Show();
     }
 }

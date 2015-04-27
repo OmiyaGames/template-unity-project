@@ -1,115 +1,118 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(AudioSource))]
-public class SoundEffect : MonoBehaviour
+namespace OmiyaGames
 {
-    static readonly HashSet<SoundEffect> allSoundEffects = new HashSet<SoundEffect>();
-
-    float volume = 0;
-    bool mute = false;
-
-    AudioSource audioCache = null;
-
-    public static float GlobalVolume
+    [RequireComponent(typeof(AudioSource))]
+    public class SoundEffect : MonoBehaviour
     {
-        get
-        {
-            return Mathf.Clamp01(Singleton.Get<GameSettings>().SoundVolume);
-        }
-        set
-        {
-            // First, set the sound volume
-            GameSettings settings = Singleton.Get<GameSettings>();
-            settings.SoundVolume = Mathf.Clamp01(value);
+        static readonly HashSet<SoundEffect> allSoundEffects = new HashSet<SoundEffect>();
 
-            // Go through every instance of SoundEffect and update their settings
-            foreach (SoundEffect effect in allSoundEffects)
+        float volume = 0;
+        bool mute = false;
+
+        AudioSource audioCache = null;
+
+        public static float GlobalVolume
+        {
+            get
             {
-                effect.UpdateAudio(settings);
+                return Mathf.Clamp01(Singleton.Get<GameSettings>().SoundVolume);
+            }
+            set
+            {
+                // First, set the sound volume
+                GameSettings settings = Singleton.Get<GameSettings>();
+                settings.SoundVolume = Mathf.Clamp01(value);
+
+                // Go through every instance of SoundEffect and update their settings
+                foreach (SoundEffect effect in allSoundEffects)
+                {
+                    effect.UpdateAudio(settings);
+                }
             }
         }
-    }
 
-    public static bool GlobalMute
-    {
-        get
+        public static bool GlobalMute
         {
-            return Singleton.Get<GameSettings>().IsSoundMuted;
-        }
-        set
-        {
-            // First, set the sound setting
-            GameSettings settings = Singleton.Get<GameSettings>();
-            settings.IsSoundMuted = value;
-
-            // Go through every instance of SoundEffect and update their settings
-            foreach(SoundEffect effect in allSoundEffects)
+            get
             {
-                effect.UpdateAudio(settings);
+                return Singleton.Get<GameSettings>().IsSoundMuted;
+            }
+            set
+            {
+                // First, set the sound setting
+                GameSettings settings = Singleton.Get<GameSettings>();
+                settings.IsSoundMuted = value;
+
+                // Go through every instance of SoundEffect and update their settings
+                foreach (SoundEffect effect in allSoundEffects)
+                {
+                    effect.UpdateAudio(settings);
+                }
             }
         }
-    }
 
-    public AudioSource Audio
-    {
-        get
+        public AudioSource Audio
         {
-            if (audioCache == null)
+            get
             {
-                audioCache = GetComponent<AudioSource>();
+                if (audioCache == null)
+                {
+                    audioCache = GetComponent<AudioSource>();
+                }
+                return audioCache;
             }
-            return audioCache;
         }
-    }
 
-    public bool IsMuted
-    {
-        get
+        public bool IsMuted
         {
-            return mute;
+            get
+            {
+                return mute;
+            }
+            set
+            {
+                mute = value;
+                UpdateAudio(Singleton.Get<GameSettings>());
+            }
         }
-        set
+
+        public float Volume
         {
-            mute = value;
-            UpdateAudio(Singleton.Get<GameSettings>());
+            get
+            {
+                return volume;
+            }
+            set
+            {
+                volume = value;
+                UpdateAudio(Singleton.Get<GameSettings>());
+            }
         }
-    }
 
-    public float Volume
-    {
-        get
+        void Start()
         {
-            return volume;
+            // Grab the original values
+            volume = Audio.volume;
+            mute = Audio.mute;
+
+            // Calculate how the audio should behave
+            allSoundEffects.Add(this);
         }
-        set
+
+        void OnDestroy()
         {
-            volume = value;
-            UpdateAudio(Singleton.Get<GameSettings>());
+            allSoundEffects.Remove(this);
         }
-    }
 
-    void Start()
-    {
-        // Grab the original values
-        volume = Audio.volume;
-        mute = Audio.mute;
+        void UpdateAudio(GameSettings settings)
+        {
+            // Update the volume
+            Audio.volume = Mathf.Clamp01(volume * settings.SoundVolume);
 
-        // Calculate how the audio should behave
-        allSoundEffects.Add(this);
-    }
-
-    void OnDestroy()
-    {
-        allSoundEffects.Remove(this);
-    }
-
-    void UpdateAudio(GameSettings settings)
-    {
-        // Update the volume
-        Audio.volume = Mathf.Clamp01(volume * settings.SoundVolume);
-
-        // Update mute
-        Audio.mute = (mute || settings.IsSoundMuted);
+            // Update mute
+            Audio.mute = (mute || settings.IsSoundMuted);
+        }
     }
 }

@@ -5,6 +5,6 @@ public class PauseTest : MonoBehaviour
 {
     public void OnPauseClicked()
     {
-        Singleton.Get<PauseMenu>().Show();
+        //Singleton.Get<PauseMenu>().Show();
     }
 }

@@ -5,9 +5,9 @@ using UnityEditor.AnimatedValues;
 
 namespace UnityEditor.UI
 {
-    [CustomEditor(typeof(MainMenuLayoutGroup), true)]
+    [CustomEditor(typeof(ResizableGridLayoutGroup), true)]
     [CanEditMultipleObjects]
-    public class MainMenuLayoutGroupEditor : Editor
+    public class ResizableGridLayoutGroupEditor : Editor
     {
         SerializedProperty m_Padding;
         SerializedProperty m_Spacing;
