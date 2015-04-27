@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 namespace UnityEngine.UI
 {
-    public class MainMenuLayoutGroup : GridLayoutGroup
+    public class ResizableGridLayoutGroup : GridLayoutGroup
     {
-        public enum MainMenuConstraint
+        public enum ResizableConstraint
         {
             FixedColumnCount = 0,
             FixedRowCount
         }
 
         [SerializeField]
-        protected MainMenuConstraint m_menuConstraint = MainMenuConstraint.FixedColumnCount;
-        public MainMenuConstraint mainMenuConstraint
+        protected ResizableConstraint m_menuConstraint = ResizableConstraint.FixedColumnCount;
+        public ResizableConstraint mainMenuConstraint
         {
             get
             {
@@ -40,7 +40,7 @@ namespace UnityEngine.UI
         Vector2 tempCellSize = Vector2.one;
         RectTransform rectTransformCache = null;
 
-        protected MainMenuLayoutGroup()
+        protected ResizableGridLayoutGroup()
         { }
 
         public override void CalculateLayoutInputHorizontal()
@@ -71,17 +71,17 @@ namespace UnityEngine.UI
             base.SetLayoutVertical();
         }
 
-        Constraint ConvertToConstraint(MainMenuConstraint menuConstraint)
+        Constraint ConvertToConstraint(ResizableConstraint menuConstraint)
         {
             Constraint returnEnum = Constraint.FixedColumnCount;
-            if(menuConstraint == MainMenuConstraint.FixedRowCount)
+            if(menuConstraint == ResizableConstraint.FixedRowCount)
             {
                 returnEnum = Constraint.FixedRowCount;
             }
             return returnEnum;
         }
 
-        Vector2 CalculateCellSize(MainMenuConstraint menuConstraint, int constraintQuantity)
+        Vector2 CalculateCellSize(ResizableConstraint menuConstraint, int constraintQuantity)
         {
             // Calculate the number of columns and rows (assuming menuConstraint is set to default, i.e. FixedColumnCount)
             int numColumns = Mathf.Max(constraintQuantity, 1);
@@ -92,7 +92,7 @@ namespace UnityEngine.UI
             }
 
             // Check if menuConstraint is actually set to default (i.e. FixedColumnCount)
-            if(menuConstraint == MainMenuConstraint.FixedRowCount)
+            if(menuConstraint == ResizableConstraint.FixedRowCount)
             {
                 // If not, swap the values
                 int swap = numColumns;
