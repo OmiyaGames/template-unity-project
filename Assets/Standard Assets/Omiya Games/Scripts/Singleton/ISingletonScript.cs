@@ -5,7 +5,7 @@ namespace OmiyaGames
 {
     public abstract class ISingletonScript : MonoBehaviour
     {
-        abstract public void SingletonStart(Singleton instance);
-        abstract public void SceneStart(Singleton instance);
+        abstract public void SingletonAwake(Singleton instance);
+        abstract public void SceneAwake(Singleton instance);
     }
 }

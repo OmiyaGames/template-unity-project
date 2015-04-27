@@ -34,6 +34,7 @@ namespace OmiyaGames
         // Use this for initialization
         void Awake()
         {
+            ISingletonScript[] allSingletonScripts = null;
             if (msInstance == null)
             {
                 // Set the instance variable
@@ -42,18 +43,12 @@ namespace OmiyaGames
                 // Prevent this object from destroying itself
                 DontDestroyOnLoad(gameObject);
 
-                // Go through every ISingletonScript
-                ISingletonScript[] allSingletonScripts = GetComponentsInChildren<ISingletonScript>();
-                if (allSingletonScripts != null)
+                // Go through every ISingletonScript, and run singleton awake
+                allSingletonScripts = GetComponentsInChildren<ISingletonScript>();
+                foreach (ISingletonScript script in allSingletonScripts)
                 {
-                    foreach (ISingletonScript script in allSingletonScripts)
-                    {
-                        if (script != null)
-                        {
-                            script.SingletonStart(msInstance);
-                            script.SceneStart(msInstance);
-                        }
-                    }
+                    // Run singleton awake
+                    script.SingletonAwake(msInstance);
                 }
             }
             else
@@ -62,17 +57,13 @@ namespace OmiyaGames
                 Destroy(gameObject);
 
                 // Go through every ISingletonScript
-                ISingletonScript[] allSingletonScripts = msInstance.GetComponentsInChildren<ISingletonScript>();
-                if (allSingletonScripts != null)
-                {
-                    foreach (ISingletonScript script in allSingletonScripts)
-                    {
-                        if (script != null)
-                        {
-                            script.SceneStart(msInstance);
-                        }
-                    }
-                }
+                allSingletonScripts = msInstance.GetComponentsInChildren<ISingletonScript>();
+            }
+
+            // Go through every ISingletonScript, and run scene awake
+            foreach (ISingletonScript script in allSingletonScripts)
+            {
+                script.SceneAwake(msInstance);
             }
         }
 

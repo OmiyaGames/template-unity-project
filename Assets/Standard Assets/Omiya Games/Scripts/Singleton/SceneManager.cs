@@ -155,7 +155,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void SingletonStart(Singleton instance)
+        public override void SingletonAwake(Singleton instance)
         {
             // Update level information
             for (int index = 0; index < Levels.Length; ++index)
@@ -164,7 +164,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void SceneStart(Singleton instance)
+        public override void SceneAwake(Singleton instance)
         {
         }
 

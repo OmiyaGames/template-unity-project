@@ -113,13 +113,13 @@ namespace OmiyaGames
         }
         #endregion
 
-        public override void SingletonStart(Singleton instance)
+        public override void SingletonAwake(Singleton instance)
         {
             // Load settings
             RetrieveFromSettings();
         }
 
-        public override void SceneStart(Singleton instance)
+        public override void SceneAwake(Singleton instance)
         {
         }
 
