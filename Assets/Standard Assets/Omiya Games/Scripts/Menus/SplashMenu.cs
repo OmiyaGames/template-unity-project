@@ -1,18 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Animator))]
-public class SplashMenu : MonoBehaviour
+namespace OmiyaGames
 {
-    const string VisibleField = "Visible";
-
-    [SerializeField]
-    bool fadeoutSplashOnStart = true;
-
-	// Use this for initialization
-	IEnumerator Start ()
+    [RequireComponent(typeof(Animator))]
+    public class SplashMenu : MonoBehaviour
     {
-        yield return null;
-        GetComponent<Animator>().SetBool(VisibleField, false);
-	}
+        const string VisibleField = "Visible";
+
+        [SerializeField]
+        bool fadeoutSplashOnStart = true;
+
+        // Use this for initialization
+        IEnumerator Start()
+        {
+            yield return null;
+            GetComponent<Animator>().SetBool(VisibleField, false);
+        }
+    }
 }

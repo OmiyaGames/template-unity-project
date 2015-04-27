@@ -4,39 +4,41 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-
-[CustomEditor(typeof(PoolingManager))]
-public class PoolingManagerEditor : Editor
+namespace OmiyaGames
 {
-    ReorderableList objectsToPreloadList;
-    SerializedProperty objectsToPreload;
-
-    public void OnEnable()
+    [CustomEditor(typeof(PoolingManager))]
+    public class PoolingManagerEditor : Editor
     {
-        objectsToPreload = serializedObject.FindProperty("objectsToPreload");
+        ReorderableList objectsToPreloadList;
+        SerializedProperty objectsToPreload;
 
-        objectsToPreloadList = new ReorderableList(serializedObject, objectsToPreload, true, true, true, true);
-        objectsToPreloadList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
-        objectsToPreloadList.drawElementCallback = DrawObjectsToPreloadListElement;
-    }
+        public void OnEnable()
+        {
+            objectsToPreload = serializedObject.FindProperty("objectsToPreload");
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        objectsToPreloadList.DoLayoutList();
-        serializedObject.ApplyModifiedProperties();
-    }
+            objectsToPreloadList = new ReorderableList(serializedObject, objectsToPreload, true, true, true, true);
+            objectsToPreloadList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
+            objectsToPreloadList.drawElementCallback = DrawObjectsToPreloadListElement;
+        }
 
-    void DrawObjectsToPreloadListHeader(Rect rect)
-    {
-        EditorGUI.LabelField(rect, "Preloaded Objects");
-    }
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            objectsToPreloadList.DoLayoutList();
+            serializedObject.ApplyModifiedProperties();
+        }
 
-    void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
-    {
-        SerializedProperty element = objectsToPreloadList.serializedProperty.GetArrayElementAtIndex(index);
-        rect.y += 2;
-        rect.height = EditorGUIUtility.singleLineHeight;
-        EditorGUI.PropertyField(rect, element, GUIContent.none);
+        void DrawObjectsToPreloadListHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "Preloaded Objects");
+        }
+
+        void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty element = objectsToPreloadList.serializedProperty.GetArrayElementAtIndex(index);
+            rect.y += 2;
+            rect.height = EditorGUIUtility.singleLineHeight;
+            EditorGUI.PropertyField(rect, element, GUIContent.none);
+        }
     }
 }
