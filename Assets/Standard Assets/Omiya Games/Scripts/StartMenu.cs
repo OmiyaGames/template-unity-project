@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class MainMenu : MonoBehaviour
+public class StartMenu : MonoBehaviour
 {
     [SerializeField]
     MainMenuLayoutGroup levelLayoutGroup;
