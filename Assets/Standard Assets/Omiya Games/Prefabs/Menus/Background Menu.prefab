@@ -25,6 +25,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22486468}
+  - 95: {fileID: 9593690}
+  - 114: {fileID: 11439630}
   m_Layer: 5
   m_Name: Background Menu
   m_TagString: Untagged
@@ -32,6 +34,34 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &9593690
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198480}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a4e9eb32515df114b9b1b0a21f03f058, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11439630
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 198480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f08c1ad7fb31d9e4b8c87a11fc452d21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11476976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -73,9 +103,9 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: .75, y: 1}
-  m_AnchoredPosition: {x: -7.62939453e-06, y: 0}
+  m_AnchoredPosition: {x: 6.51759619e-05, y: 0}
   m_SizeDelta: {x: 1.52587891e-05, y: 0}
-  m_Pivot: {x: .5, y: .5}
+  m_Pivot: {x: 0, y: .5}
 --- !u!224 &22486468
 RectTransform:
   m_ObjectHideFlags: 1
