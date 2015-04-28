@@ -4,7 +4,9 @@ using System.Collections;
 
 namespace OmiyaGames
 {
-    public class OptionsMenu : ISingletonScript
+    [RequireComponent(typeof(Animator))]
+    [RequireComponent(typeof(SoundEffect))]
+    public class OptionsMenu : IMenu
     {
         [System.Serializable]
         public struct AudioControls
@@ -23,10 +25,6 @@ namespace OmiyaGames
         }
 
         [SerializeField]
-        GameObject optionsPanel;
-        [SerializeField]
-        AudioSource testSoundEffects;
-        [SerializeField]
         AudioControls musicControls;
         [SerializeField]
         AudioControls soundEffectsControls;
@@ -35,26 +33,41 @@ namespace OmiyaGames
 
         GameSettings settings = null;
         BackgroundMusic musicSettings = null;
-        bool inSetupMode = false;
-        float timeSfxValueChanged = -1f;
+        SoundEffect audioCache;
+        bool inSetupMode = false,
+            isButtonLocked = false;
 
         System.Action<OptionsMenu> hideAction = null;
-        System.Action<float> updateAction = null;
 
-        public bool IsVisible
+        public SoundEffect TestSoundEffect
         {
             get
             {
-                return optionsPanel.activeSelf;
+                if(audioCache == null)
+                {
+                    audioCache = GetComponent<SoundEffect>();
+                }
+                return audioCache;
             }
         }
 
-        public override void SingletonAwake(Singleton instance)
+        public override Type MenuType
         {
-            // Do nothing
+            get
+            {
+                return Type.ManagedMenu;
+            }
         }
 
-        public override void SceneAwake(Singleton instance)
+        public override GameObject DefaultUi
+        {
+            get
+            {
+                return musicControls.volumeSlider.gameObject;
+            }
+        }
+
+        void Start()
         {
             // Check if we've already retrieve the settings
             if (settings != null)
@@ -72,23 +85,35 @@ namespace OmiyaGames
             musicControls.Setup(musicSettings.Volume, musicSettings.IsMuted);
             soundEffectsControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
             inSetupMode = false;
+        }
 
-            // Setup update function
-            if (updateAction != null)
+        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        {
+            // Call the base method
+            base.OnStateChanged(from, to);
+
+            if (to == State.Visible)
             {
-                instance.OnUpdate -= updateAction;
-                updateAction = null;
+                // If this menu is visible again, release the button lock
+                isButtonLocked = false;
             }
-            updateAction = new System.Action<float>(UpdateOptions);
-            instance.OnUpdate += updateAction;
+            else if ((from == State.Visible) && (to == State.Hidden))
+            {
+                // Run the last action
+                if (hideAction != null)
+                {
+                    hideAction(this);
+                    hideAction = null;
+                }
+            }
         }
 
         public void Show(System.Action<OptionsMenu> returnAction = null)
         {
-            if (IsVisible == false)
+            if (CurrentState == State.Hidden)
             {
-                // Make the game object active
-                optionsPanel.SetActive(true);
+                // Make the panel visible
+                CurrentState = State.Visible;
 
                 // Setup the next action
                 hideAction = returnAction;
@@ -97,19 +122,17 @@ namespace OmiyaGames
 
         public void Hide()
         {
-            if (IsVisible == true)
+            if ((CurrentState == State.Visible) && (isButtonLocked == false))
             {
-                // Make the game object inactive
-                optionsPanel.SetActive(false);
+                // Lock the buttons
+                isButtonLocked = true;
 
-                // Run the last action
-                if (hideAction != null)
-                {
-                    hideAction(this);
-                }
+                // Make the panel hidden
+                CurrentState = State.Hidden;
             }
         }
 
+        #region UI events
         public void OnMusicSliderChanged()
         {
             if (inSetupMode == false)
@@ -125,8 +148,12 @@ namespace OmiyaGames
             {
                 SoundEffect.GlobalVolume = soundEffectsControls.volumeSlider.value;
                 soundEffectsControls.volumePercentLabel.text = Percent(SoundEffect.GlobalVolume);
-                timeSfxValueChanged = Time.time;
             }
+        }
+        
+        public void OnSoundEffectsSliderPointerUp()
+        {
+            TestSoundEffect.Play();
         }
 
         public void OnMusicMuteClicked()
@@ -157,28 +184,15 @@ namespace OmiyaGames
                 // disable the slider
                 soundEffectsControls.volumeSlider.interactable = !SoundEffect.GlobalMute;
 
-                // Play sound effect if not muted
-                if (SoundEffect.GlobalMute == false)
-                {
-                    testSoundEffects.Play();
-                }
+                // Play a test sound effect
+                OnSoundEffectsSliderPointerUp();
             }
         }
+        #endregion
 
         static string Percent(float val)
         {
-            //float volumePercent = (val * 100);
-            //return volumePercent.ToString("%");
             return val.ToString("0%");
-        }
-
-        void UpdateOptions(float obj)
-        {
-            if ((timeSfxValueChanged > 0) && ((Time.time - timeSfxValueChanged) > delayPlayingTestSound))
-            {
-                testSoundEffects.Play();
-                timeSfxValueChanged = -1;
-            }
         }
     }
 }

@@ -47,6 +47,7 @@ namespace OmiyaGames
 
             // Select the level select button by default
             defaultButton = levelSelectButton.gameObject;
+            Singleton.Get<UnityEngine.EventSystems.EventSystem>().firstSelectedGameObject = defaultButton;
         }
 
         #region Button Events
@@ -68,7 +69,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                //Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().CurrentState = IMenu.State.Visible;
+                Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().Show();
 
                 // Indicate we've clicked on a button
                 defaultButton = optionsButton.gameObject;
@@ -115,7 +116,10 @@ namespace OmiyaGames
             base.OnStateChanged(from, to);
 
             // If this menu is visible again, release the button lock
-            isButtonLocked = false;
+            if(to == State.Visible)
+            {
+                isButtonLocked = false;
+            }
         }
     }
 }

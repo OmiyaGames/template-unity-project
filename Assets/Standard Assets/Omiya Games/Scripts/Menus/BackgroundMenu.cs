@@ -30,30 +30,29 @@ namespace OmiyaGames
         {
             // Grab the Menu manager and update the background visibility
             MenuManager manager = Singleton.Get<MenuManager>();
-            UpdateBackgroundVisibility(manager);
-
-            // Bind to the manager event
-            if (onMenuNumberChanged != null)
+            if(manager != null)
             {
-                manager.OnManagedMenusStackChanged -= onMenuNumberChanged;
-                onMenuNumberChanged = null;
+                UpdateBackgroundVisibility(manager);
+
+                // Bind to the manager event
+                if (onMenuNumberChanged != null)
+                {
+                    manager.OnManagedMenusStackChanged -= onMenuNumberChanged;
+                    onMenuNumberChanged = null;
+                }
+                onMenuNumberChanged = new System.Action<MenuManager>(UpdateBackgroundVisibility);
+                manager.OnManagedMenusStackChanged += onMenuNumberChanged;
             }
-            onMenuNumberChanged = new System.Action<MenuManager>(UpdateBackgroundVisibility);
-            manager.OnManagedMenusStackChanged += onMenuNumberChanged;
         }
 
         protected virtual void OnDestroy()
         {
             MenuManager manager = Singleton.Get<MenuManager>();
-
-            // Bind to the manager event
-            if (onMenuNumberChanged != null)
+            if ((manager != null) && (onMenuNumberChanged != null))
             {
                 manager.OnManagedMenusStackChanged -= onMenuNumberChanged;
                 onMenuNumberChanged = null;
             }
-            onMenuNumberChanged = new System.Action<MenuManager>(UpdateBackgroundVisibility);
-            manager.OnManagedMenusStackChanged += onMenuNumberChanged;
         }
 
         protected override void OnStateChanged(State from, State to)

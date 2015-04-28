@@ -12,6 +12,14 @@ namespace OmiyaGames
         public event Action<float> OnUpdate;
         public event Action<float> OnRealTimeUpdate;
 
+        public static Singleton Instance
+        {
+            get
+            {
+                return msInstance;
+            }
+        }
+
         public static COMPONENT Get<COMPONENT>() where COMPONENT : Component
         {
             COMPONENT returnObject = null;
