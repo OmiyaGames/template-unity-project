@@ -4,18 +4,39 @@ using System.Collections;
 namespace OmiyaGames
 {
     [RequireComponent(typeof(Animator))]
-    public class SplashMenu : MonoBehaviour
+    public class SplashMenu : BackgroundMenu
     {
-        const string VisibleField = "Visible";
-
         [SerializeField]
         bool fadeoutSplashOnStart = true;
+        [SerializeField]
+        float fadeoutDuration = 1f;
 
         // Use this for initialization
-        IEnumerator Start()
+        protected override void Start()
         {
-            yield return null;
-            GetComponent<Animator>().SetBool(VisibleField, false);
+            // Splash should be visible in the beginning
+            CurrentState = State.Visible;
+
+            // Check if we need to fade out
+            if(fadeoutSplashOnStart == true)
+            {
+                // Start the fadeout
+                StartCoroutine(DelayedFadeOut());
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            // Do nothing
+        }
+
+        IEnumerator DelayedFadeOut()
+        {
+            // Wait for the designated time
+            yield return new WaitForSeconds(fadeoutDuration);
+
+            // Indicate we're hidden
+            CurrentState = State.Hidden;
         }
     }
 }
