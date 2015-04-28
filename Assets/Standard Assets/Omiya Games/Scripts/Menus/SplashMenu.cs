@@ -6,8 +6,13 @@ namespace OmiyaGames
     [RequireComponent(typeof(Animator))]
     public class SplashMenu : BackgroundMenu
     {
+        public enum Transition
+        {
+            NextScene,
+            FadeOut
+        }
         [SerializeField]
-        bool fadeoutSplashOnStart = true;
+        Transition tranitionType = Transition.FadeOut;
         [SerializeField]
         float fadeoutDuration = 1f;
 
@@ -18,10 +23,15 @@ namespace OmiyaGames
             CurrentState = State.Visible;
 
             // Check if we need to fade out
-            if(fadeoutSplashOnStart == true)
+            if (tranitionType == Transition.FadeOut)
             {
                 // Start the fadeout
                 StartCoroutine(DelayedFadeOut());
+            }
+            else
+            {
+                // Load the next level
+                Application.LoadLevel(Singleton.Get<SceneManager>().MainMenu.SceneName);
             }
         }
 
