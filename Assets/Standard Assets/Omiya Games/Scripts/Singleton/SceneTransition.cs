@@ -4,6 +4,9 @@ using System.Collections;
 
 namespace OmiyaGames
 {
+    /// <summary>
+    /// Deprecated.  Will be replaced with SceneManager and SceneTransitionMenu.
+    /// </summary>
     [RequireComponent(typeof(SoundEffect))]
     public class SceneTransition : ISingletonScript
     {

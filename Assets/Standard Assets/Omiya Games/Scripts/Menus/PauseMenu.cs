@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace OmiyaGames
 {
-    public class PauseMenu : ISingletonScript
+    public class PauseMenu : IMenu
     {
         public enum ClickedAction
         {
@@ -15,156 +15,93 @@ namespace OmiyaGames
         }
 
         [SerializeField]
-        GameObject pausePanel;
+        Button resumeButton = null;
         [SerializeField]
-        CursorLockMode lockModeOnResume = CursorLockMode.None;
-        [SerializeField]
-        Button[] allButtons = null;
+        Text restartLabel = null;
         [SerializeField]
         Text returnToMenuLabel = null;
 
-        /// <summary>
-        /// The action to take when the visibility of the dialog changes
-        /// </summary>
-        System.Action<PauseMenu> onVisibleChanged;
-        ClickedAction lastClickedAction = ClickedAction.Paused;
-        SceneManager settings = null;
-
-        public ClickedAction LastClickedAction
+        public override Type MenuType
         {
             get
             {
-                return lastClickedAction;
+                return Type.ManagedMenu;
             }
         }
 
-        public override void SingletonAwake(Singleton instance)
+        public override GameObject DefaultUi
         {
-            OnContinueClicked();
+            get
+            {
+                return resumeButton.gameObject;
+            }
         }
 
-        public override void SceneAwake(Singleton instance)
+        protected virtual void Start()
         {
-            // Check if we've already retrieve the settings
-            if (settings != null)
-            {
-                // If so, don't do anything
-                return;
-            }
-
-            // Retrieve settings
-            settings = Singleton.Get<SceneManager>();
-
-            // Check if we need to update the menu label
-            if (returnToMenuLabel != null)
-            {
-                // Update the menu label
-                returnToMenuLabel.text = settings.ReturnToMenuText;
-            }
+            // Update the labels on each button
+            SceneManager manager = Singleton.Get<SceneManager>();
+            restartLabel.text = string.Format(manager.RestartCurrentSceneText, manager.CurrentScene.DisplayName);
+            returnToMenuLabel.text = string.Format(manager.ReturnToMenuText, manager.MainMenu.DisplayName);
         }
 
         void OnApplicationPause(bool isPaused)
         {
             if (isPaused == true)
             {
-                Singleton.Get<GameSettings>().SaveSettings();
                 Show();
             }
         }
 
-        public void Show(System.Action<PauseMenu> visibleChanged = null)
+        public override void Show(System.Action<IMenu> stateChanged = null)
         {
-            // Store function pointer
-            onVisibleChanged = visibleChanged;
+            // Call base function
+            base.Show(stateChanged);
 
             // Unlock the cursor
             Cursor.lockState = CursorLockMode.None;
 
-            // Make the game object active
-            pausePanel.SetActive(true);
-
             // Stop time
-            Time.timeScale = 0;
-
-            // Indicate we paused
-            lastClickedAction = ClickedAction.Paused;
-
-            // Indicate change
-            if (onVisibleChanged != null)
-            {
-                onVisibleChanged(this);
-            }
+            Singleton.Get<TimeManager>().IsManuallyPaused = true;
         }
 
-        public void Hide()
+        public override void Hide()
         {
-            OnContinueClicked(ClickedAction.Continue);
+            // Call base function
+            base.Hide();
+
+            // Lock the cursor to what the scene is set to
+            Cursor.lockState = Singleton.Get<SceneManager>().CurrentScene.LockMode;
+
+            // Resume the time
+            Singleton.Get<TimeManager>().IsManuallyPaused = false;
         }
 
         public void OnOptionsClicked()
         {
-            // Disable all buttons
-            for (int index = 0; index < allButtons.Length; ++index)
-            {
-                allButtons[index].interactable = false;
-            }
-
             // Open the options dialog
-            Singleton.Get<OptionsMenu>().Show(EnableAllButtons);
+            Singleton.Get<OptionsMenu>().Show();
         }
 
-        public void OnContinueClicked()
+        public void OnResumeClicked()
         {
-            OnContinueClicked(ClickedAction.Continue);
+            Hide();
         }
 
         public void OnRestartClicked()
         {
-            OnContinueClicked(ClickedAction.Restart);
+            Hide();
 
             // Transition to the current level
-            SceneManager settings = Singleton.Get<SceneManager>();
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.CurrentScene);
+            Singleton.Get<SceneManager>().ReloadCurrentScene();
         }
 
         public void OnReturnToMenuClicked()
         {
-            OnContinueClicked(ClickedAction.ReturnToMenu);
+            Hide();
 
             // Transition to the menu
-            SceneManager settings = Singleton.Get<SceneManager>();
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.MainMenu);
-        }
-
-        void OnContinueClicked(ClickedAction action)
-        {
-            // Make time flow again
-            Time.timeScale = 1;
-
-            // Update the action
-            lastClickedAction = action;
-
-            // Lock the cursor
-            Cursor.lockState = lockModeOnResume;
-
-            // Hide the panel
-            pausePanel.SetActive(false);
-
-            // Indicate change
-            if (onVisibleChanged != null)
-            {
-                onVisibleChanged(this);
-            }
-        }
-
-        void EnableAllButtons(OptionsMenu menu)
-        {
-            for (int index = 0; index < allButtons.Length; ++index)
-            {
-                allButtons[index].interactable = true;
-            }
+            Singleton.Get<SceneManager>().LoadMainMenu();
         }
     }
 }

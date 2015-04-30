@@ -35,6 +35,7 @@ namespace OmiyaGames
 
         State currentState = State.Hidden;
         Animator animatorCache = null;
+        protected System.Action<IMenu> onStateChanged = null;
 
         #region Properties
         public Animator Animator
@@ -55,7 +56,7 @@ namespace OmiyaGames
             {
                 return currentState;
             }
-            set
+            internal set
             {
                 if (currentState != value)
                 {
@@ -78,6 +79,21 @@ namespace OmiyaGames
         public abstract GameObject DefaultUi
         {
             get;
+        }
+
+        public virtual void Show(System.Action<IMenu> stateChanged = null)
+        {
+            onStateChanged = stateChanged;
+            CurrentState = State.Visible;
+        }
+
+        public virtual void Hide()
+        {
+            CurrentState = State.Hidden;
+            if(onStateChanged != null)
+            {
+                onStateChanged = null;
+            }
         }
 
         protected virtual void OnStateChanged(State from, State to)
@@ -114,6 +130,12 @@ namespace OmiyaGames
                         manager.PopFromManagedStack();
                     }
                 }
+            }
+
+            // Check if there's an action associated with this dialog
+            if(onStateChanged != null)
+            {
+                onStateChanged(this);
             }
         }
     }
