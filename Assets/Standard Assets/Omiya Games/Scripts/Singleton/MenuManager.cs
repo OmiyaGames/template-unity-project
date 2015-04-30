@@ -9,19 +9,45 @@ namespace OmiyaGames
     [RequireComponent(typeof(EventSystem))]
     public class MenuManager : ISingletonScript
     {
+        [Header("Behaviors")]
+        [Tooltip("Name of input under the InputManager that is going to pause the game")]
         [SerializeField]
         string pauseInput = "Pause";
         [SerializeField]
         float delaySelectingDefaultUiBy = 0.5f;
 
+        [Header("Menu Label Templates")]
+        // TODO: consider using the translation patch instead
+        [Tooltip("Template for any menus with button text indicating to return to a scene")]
+        [SerializeField]
+        string returnToTextTemplate = "Return to {0}";
+        // TODO: consider using the translation patch instead
+        [Tooltip("Template for any menus with button text indicating to restart a scene")]
+        [SerializeField]
+        string restartTextTemplate = "Restart {0}";
+        // TODO: consider using the translation patch instead
+        [Tooltip("Template for any menus with button text indicating a scene was completed")]
+        [SerializeField]
+        string completeTextTemplate = "{0} Complete";
+        // TODO: consider using the translation patch instead
+        [Tooltip("Template for any menus with button text indicating game over")]
+        [SerializeField]
+        string failedTextTemplate = "{0} Failed";
+        // TODO: consider using the translation patch instead
+        [Tooltip("Template for any menus with button text indicating a scene was completed")]
+        [SerializeField]
+        string nextTextTemplate = "Proceed to {0}";
+
         EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
+        string menuTextCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
         readonly Type pauseMenuType = typeof(PauseMenu);
 
         public event Action<MenuManager> OnManagedMenusStackChanged;
 
+        #region Properties
         public EventSystem Events
         {
             get
@@ -54,6 +80,94 @@ namespace OmiyaGames
                 return managedMenusStack.Count;
             }
         }
+        public string ReturnToMenuText
+        {
+            get
+            {
+                if (menuTextCache == null)
+                {
+                    menuTextCache = Singleton.Get<SceneManager>().MainMenu.DisplayName;
+                    if (string.IsNullOrEmpty(returnToTextTemplate) == false)
+                    {
+                        menuTextCache = string.Format(returnToTextTemplate, menuTextCache);
+                    }
+                }
+                return menuTextCache;
+            }
+        }
+
+        public string RestartCurrentSceneText
+        {
+            get
+            {
+                string returnText = "";
+                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                if (currentScene != null)
+                {
+                    returnText = currentScene.DisplayName;
+                    if (string.IsNullOrEmpty(restartTextTemplate) == false)
+                    {
+                        returnText = string.Format(restartTextTemplate, currentScene.DisplayName);
+                    }
+                }
+                return returnText;
+            }
+        }
+
+        public string CompletedCurrentSceneText
+        {
+            get
+            {
+                string returnText = "";
+                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                if (currentScene != null)
+                {
+                    returnText = currentScene.DisplayName;
+                    if (string.IsNullOrEmpty(completeTextTemplate) == false)
+                    {
+                        returnText = string.Format(completeTextTemplate, currentScene.DisplayName);
+                    }
+                }
+                return returnText;
+            }
+        }
+
+        public string FailedCurrentSceneText
+        {
+            get
+            {
+                string returnText = "";
+                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                if (currentScene != null)
+                {
+                    returnText = currentScene.DisplayName;
+                    if (string.IsNullOrEmpty(failedTextTemplate) == false)
+                    {
+                        returnText = string.Format(failedTextTemplate, currentScene.DisplayName);
+                    }
+                }
+                return returnText;
+            }
+        }
+
+        public string NextSceneText
+        {
+            get
+            {
+                string returnText = "";
+                SceneInfo nextScene = Singleton.Get<SceneManager>().NextScene;
+                if (nextScene != null)
+                {
+                    returnText = nextScene.DisplayName;
+                    if (string.IsNullOrEmpty(nextTextTemplate) == false)
+                    {
+                        returnText = string.Format(nextTextTemplate, nextScene.DisplayName);
+                    }
+                }
+                return returnText;
+            }
+        }
+        #endregion
 
         public override void SingletonAwake(Singleton instance)
         {
@@ -90,7 +204,7 @@ namespace OmiyaGames
                     displayedManagedMenu = menu;
 
                     // Indicate it should be visible
-                    displayedManagedMenu.CurrentState = IMenu.State.Visible;
+                    displayedManagedMenu.Show();
                 }
             }
         }

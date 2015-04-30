@@ -49,7 +49,7 @@ namespace OmiyaGames
             }
             set
             {
-                if (isManuallyPaused == value)
+                if (isManuallyPaused != value)
                 {
                     // Change value
                     isManuallyPaused = value;

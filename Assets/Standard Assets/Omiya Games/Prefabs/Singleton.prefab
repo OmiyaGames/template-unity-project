@@ -169,29 +169,39 @@ MonoBehaviour:
   loadLevelAsynchronously: 1
   returnToTextTemplate: Return to {0}
   restartTextTemplate: Restart {0}
+  completeTextTemplate: '{0} Complete'
+  failedTextTemplate: '{0} Failed'
+  nextTextTemplate: Proceed to {0}
   splash:
     sceneName: Splash
     displayName: Splash
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   mainMenu:
     sceneName: Main Menu
     displayName: Main Menu
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   credits:
     sceneName: Credits
     displayName: Credits
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   levels:
   - sceneName: Level 1
     displayName: Level 1
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   - sceneName: Level 2
     displayName: Level 2
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   - sceneName: Level 3
     displayName: Level 3
+    revertTimeScale: 1
     sceneCursorLockMode: 0
   levelDisplayNameTemplate: Level {0}
+  levelRevertsTimeScaleTemplate: 1
   levelLockModeTemplate: 0
 --- !u!114 &11437662
 MonoBehaviour:
