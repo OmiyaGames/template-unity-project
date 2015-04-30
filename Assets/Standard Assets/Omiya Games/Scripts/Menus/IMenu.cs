@@ -92,7 +92,7 @@ namespace OmiyaGames
             if((to == State.Visible) && (DefaultUi != null))
             {
                 // If so, update the menu manager to select the default UI
-                manager.Events.firstSelectedGameObject = DefaultUi;
+                manager.SelectGuiGameObject(DefaultUi);
             }
 
             // Check if this is managed

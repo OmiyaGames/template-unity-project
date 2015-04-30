@@ -56,7 +56,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the Level Select menu
-                //Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().CurrentState = IMenu.State.Visible;
+                Singleton.Get<MenuManager>().GetMenu<LevelSelectMenu>().CurrentState = IMenu.State.Visible;
 
                 // Indicate we've clicked on a button
                 defaultButton = levelSelectButton.gameObject;

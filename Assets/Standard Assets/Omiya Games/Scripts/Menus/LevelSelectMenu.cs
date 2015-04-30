@@ -4,178 +4,191 @@ using System.Collections;
 
 namespace OmiyaGames
 {
-    public class LevelSelectMenu : MonoBehaviour
+    public class LevelSelectMenu : IMenu
     {
         [SerializeField]
-        ResizableGridLayoutGroup levelLayoutGroup;
+        GridLayoutGroup levelContent;
         [SerializeField]
-        Button levelButton;
+        Button levelButtonToDuplicate;
         [SerializeField]
-        Button optionsButton;
-        [SerializeField]
-        Button quitButton;
+        Button backButton;
 
-        bool isClicked = false;
-        SceneTransition.Transition lastTransitionState = SceneTransition.Transition.NotTransitioning;
+        bool isButtonLocked = false;
         Button[] allLevelButtons = null;
-        SceneTransition transition = null;
-        SceneManager settings = null;
+        GameObject lastUnlockedButton = null;
 
-        #region Properties
-        public Button[] AllLevelButtons
+        public override Type MenuType
         {
             get
             {
-                return allLevelButtons;
+                return Type.ManagedMenu;
             }
         }
 
-        public Button QuitButton
+        public override GameObject DefaultUi
         {
             get
             {
-                return quitButton;
+                return lastUnlockedButton;
+            }
+        }
+
+        void Start()
+        {
+            // Setup all buttons
+            allLevelButtons = SetupLevelButtons(levelButtonToDuplicate);
+
+            // Update button states
+            lastUnlockedButton = SetButtonsEnabled(true);
+            
+            // Make sure there are more than one button
+            if(allLevelButtons.Length > 0)
+            {
+                // Get the grid layout size
+                RectTransform contentTransform = levelContent.GetComponent<RectTransform>();
+
+                // Calculate the height of the content
+                float height = (levelContent.cellSize.y * allLevelButtons.Length);
+                height += (levelContent.spacing.y * (allLevelButtons.Length - 1));
+                contentTransform.sizeDelta = new Vector2(levelContent.cellSize.x, height);
+            }
+        }
+
+        #region Button Events
+        public void OnLevelClicked(SceneInfo level)
+        {
+            if (isButtonLocked == false)
+            {
+                Singleton.Get<SceneTransition>().LoadLevel(level);
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnBackClicked()
+        {
+            if (isButtonLocked == false)
+            {
+                CurrentState = State.Hidden;
+                isButtonLocked = true;
             }
         }
         #endregion
 
-        void Start()
+        public GameObject SetButtonsEnabled(bool enabled)
         {
-            // Grab the settings
-            transition = Singleton.Get<SceneTransition>();
-
-            // Grab the game settings
-            settings = Singleton.Get<SceneManager>();
-
-            // Setup all buttons
-            allLevelButtons = SetupLevelButtons(levelButton.transform.parent);
-
-            // Check if we should remove the quit button (you can't quite out of a webplayer)
+            // Set all buttons
+            GameObject returnButton = backButton.gameObject;
             GameSettings gameSettings = Singleton.Get<GameSettings>();
-            if (gameSettings.IsWebplayer == true)
+            for (int index = 0; index < allLevelButtons.Length; ++index)
             {
-                /*
-                // Grab the level gird's minimum range
-                Vector2 minAnchor = levelLayoutGroup.CachedRectTransform.anchorMin;
-                Vector2 minOffset = levelLayoutGroup.CachedRectTransform.offsetMin;
-
-                // Grab quite button's minimum range
-                RectTransform buttonTransform = quitButton.GetComponent<RectTransform>();
-                minAnchor.y = buttonTransform.anchorMin.y;
-                minOffset.y = buttonTransform.offsetMin.y;
-
-                // Expand the level gird to encompass
-                levelLayoutGroup.CachedRectTransform.anchorMin = minAnchor;
-                levelLayoutGroup.CachedRectTransform.offsetMin = minOffset;
-                */
-                // Disable the quit button entirely
-                quitButton.gameObject.SetActive(false);
+                // Make the button interactable if it's unlocked
+                if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
+                {
+                    allLevelButtons[index].interactable = true;
+                    returnButton = allLevelButtons[index].gameObject;
+                }
+                else
+                {
+                    allLevelButtons[index].interactable = false;
+                }
             }
+            backButton.interactable = enabled;
 
-            // Update button states
-            UpdateButtonEnabled(transition.State == SceneTransition.Transition.NotTransitioning);
-            lastTransitionState = transition.State;
+            // Return the last interactable button
+            return returnButton;
         }
 
-        void Update()
+        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
         {
-            // Check if we need to update the button states
-            if (transition.State != lastTransitionState)
+            // Call the base method
+            base.OnStateChanged(from, to);
+
+            // If this menu is visible again, release the button lock
+            if (to == State.Visible)
             {
-                UpdateButtonEnabled(transition.State == SceneTransition.Transition.NotTransitioning);
-                lastTransitionState = transition.State;
-            }
-        }
-
-        public void OnLevelClicked(SceneInfo level)
-        {
-            if (isClicked == false)
-            {
-                transition.LoadLevel(level);
-                isClicked = true;
-            }
-        }
-
-        public void OnOptionsClicked()
-        {
-            // Open the options menu, and disable every button
-            UpdateButtonEnabled(false);
-            Singleton.Get<OptionsMenu>().Show(EnableAllButtons);
-        }
-
-        public void OnQuitClicked()
-        {
-            if (isClicked == false)
-            {
-                isClicked = true;
-                Application.Quit();
+                isButtonLocked = false;
             }
         }
 
         #region Helper Methods
-        Button[] SetupLevelButtons(Transform buttonParent)
+        Button[] SetupLevelButtons(Button buttonToDuplicate)
         {
+            // Grab the Scene Manager
+            SceneManager settings = Singleton.Get<SceneManager>();
+
+            // Grab the parent transform from the button
+            Transform buttonParent = buttonToDuplicate.transform.parent;
+
             // Check how many levels there are
             Button[] allButtons = null;
             GameObject clone = null;
             if (settings.NumLevels > 1)
             {
                 // Add the button into the button list
-                allButtons = new Button[settings.NumLevels - 1];
+                allButtons = new Button[settings.NumLevels];
 
                 // Setup the first level button behavior
-                allButtons[0] = SetupButton(levelButton.gameObject, 1);
+                int index = 0;
+                SetupButtonEventAndName(settings, buttonToDuplicate, index);
+                SetupButtonNavigation(buttonToDuplicate, backButton);
+                allButtons[index] = buttonToDuplicate;
+                ++index;
 
                 // Setup the rest of the buttons
-                for (int index = 2; index < settings.NumLevels; ++index)
+                for (; index < allButtons.Length; ++index)
                 {
                     // Setup the level button
-                    clone = (GameObject)Instantiate(levelButton.gameObject);
+                    clone = (GameObject)Instantiate(buttonToDuplicate.gameObject);
                     clone.transform.SetParent(buttonParent);
                     clone.transform.localScale = Vector3.one;
 
                     // Add the button into the button list
-                    allButtons[index - 1] = SetupButton(clone, index);
+                    allButtons[index] = SetupButtonEventAndName(settings, clone, index);
+                    SetupButtonNavigation(allButtons[index], allButtons[index - 1]);
                 }
+
+                // Setup the last button
+                SetupButtonNavigation(backButton, allButtons[allButtons.Length - 1]);
             }
             return allButtons;
         }
 
-        Button SetupButton(GameObject buttonObject, int levelOrdinal)
+        Button SetupButtonEventAndName(SceneManager settings, GameObject buttonObject, int levelOrdinal)
         {
             // Add an event to the button
             Button newButton = buttonObject.GetComponent<Button>();
-            newButton.onClick.AddListener(() => { OnLevelClicked(settings.Levels[levelOrdinal]); });
-
-            // Setup the level button labels
-            Text buttonLabel = newButton.GetComponentInChildren<Text>();
-            buttonLabel.text = settings.Levels[levelOrdinal].DisplayName;
-            buttonObject.name = buttonLabel.text;
+            SetupButtonEventAndName(settings, newButton, levelOrdinal);
             return newButton;
         }
 
-        void UpdateButtonEnabled(bool enabled)
+        void SetupButtonEventAndName(SceneManager settings, Button newButton, int levelOrdinal)
         {
-            // Set all buttons
-            bool levelButtonEnabled = false;
-            GameSettings gameSettings = Singleton.Get<GameSettings>();
-            for (int index = 0; index < AllLevelButtons.Length; ++index)
+            // Add an event to the button
+            newButton.onClick.AddListener(() =>
             {
-                // Make the button interactable if it's unlocked
-                levelButtonEnabled = false;
-                if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
-                {
-                    levelButtonEnabled = true;
-                }
-                AllLevelButtons[index].interactable = levelButtonEnabled;
+                OnLevelClicked(settings.Levels[levelOrdinal]);
+            });
+
+            // Setup the level button labels
+            Text[] buttonLabels = newButton.GetComponentsInChildren<Text>(true);
+            foreach (Text label in buttonLabels)
+            {
+                label.text = settings.Levels[levelOrdinal].DisplayName;
             }
-            quitButton.interactable = enabled;
-            optionsButton.interactable = enabled;
+            newButton.name = settings.Levels[levelOrdinal].DisplayName;
         }
 
-        void EnableAllButtons(OptionsMenu menu)
+        void SetupButtonNavigation(Button newButton, Button lastButton)
         {
-            UpdateButtonEnabled(true);
+            // Update the new button to navigate up to the last button
+            Navigation buttonNavigation = newButton.navigation;
+            buttonNavigation.selectOnUp = lastButton;
+            newButton.navigation = buttonNavigation;
+
+            // Update the last button to navigate down to the new button
+            buttonNavigation = lastButton.navigation;
+            buttonNavigation.selectOnDown = newButton;
+            lastButton.navigation = buttonNavigation;
         }
         #endregion
     }
