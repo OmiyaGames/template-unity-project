@@ -1,119 +1,65 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 namespace OmiyaGames
 {
-    public class LevelCompleteMenu : MonoBehaviour
+    public class LevelCompleteMenu : ISceneChangingMenu
     {
+        [Header("Behavior")]
         [SerializeField]
-        GameObject levelCompletePanel;
-        [SerializeField]
-        UnityEngine.UI.Text returnToMenuLabel = null;
-        [SerializeField]
-        UnityEngine.UI.Button nextLevelButton = null;
-        [SerializeField]
-        UnityEngine.UI.Text completeLabel = null;
-        [SerializeField]
-        string displayString = "{0} complete!";
+        bool pauseGameOnShow = false;
         [SerializeField]
         bool unlockNextLevel = true;
 
-        SceneManager settings = null;
-
-        public bool IsVisible
+        public override bool PauseOnShow
         {
             get
             {
-                return levelCompletePanel.activeSelf;
+                return pauseGameOnShow;
             }
         }
 
-        public void Show()
+        protected override void Start()
         {
-            Setup();
-            if (IsVisible == false)
+            base.Start();
+
+            // Check if we need to disable the next level button
+            if ((defaultButton != null) && (Singleton.Get<SceneManager>().NextScene == null))
             {
-                // Check if we need to unlock the next level
-                if (unlockNextLevel == true)
-                {
-                    // Retrieve settings, and check if this level ISN'T unlocked
-                    GameSettings gameSettings = Singleton.Get<GameSettings>();
-                    if((gameSettings != null) && (gameSettings.NumLevelsUnlocked <= settings.CurrentScene.Ordinal))
-                    {
-                        // Indicate the next scene is unlocked
-                        gameSettings.NumLevelsUnlocked = (settings.CurrentScene.Ordinal + 1);
-                    }
-                }
-
-                // Make the game object active
-                levelCompletePanel.SetActive(true);
+                defaultButton.interactable = false;
             }
         }
 
-        public void Hide()
+        public override void Show(System.Action<IMenu> stateChanged = null)
         {
-            // Make the game object inactive
-            levelCompletePanel.SetActive(false);
+            // Call base function
+            base.Show(stateChanged);
+
+            // Check if we need to unlock the next level
+            if(unlockNextLevel == true)
+            {
+                SceneManager manager = Singleton.Get<SceneManager>();
+                GameSettings settings = Singleton.Get<GameSettings>();
+                if (Singleton.Get<SceneManager>().NextScene != null)
+                {
+                    // Unlock the next level
+                    settings.NumLevelsUnlocked = manager.CurrentScene.Ordinal + 1;
+                }
+                else
+                {
+                    // Unlock this level (last one)
+                    settings.NumLevelsUnlocked = manager.CurrentScene.Ordinal;
+                }
+            }
         }
 
-        #region Button Events
         public void OnNextLevelClicked()
         {
-            // Hide the panel
             Hide();
 
             // Transition to the current level
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.NextScene);
-        }
-
-        public void OnRestartClicked()
-        {
-            // Hide the panel
-            Hide();
-
-            // Transition to the current level
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.CurrentScene);
-        }
-
-        public void OnReturnToMenuClicked()
-        {
-            // Hide the panel
-            Hide();
-
-            // Transition to the menu
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.MainMenu);
-        }
-        #endregion
-
-        protected virtual void Setup()
-        {
-            if (settings == null)
-            {
-                // Retrieve settings
-                settings = Singleton.Get<SceneManager>();
-
-                // Check if we need to update the menu label
-                if (returnToMenuLabel != null)
-                {
-                    // Update the menu label
-                    returnToMenuLabel.text = settings.ReturnToMenuText;
-                }
-
-                // Check if we need to disable the next level button
-                if ((nextLevelButton != null) && (settings.NextScene == null))
-                {
-                    nextLevelButton.interactable = false;
-                }
-
-                // Setup complete label
-                if ((completeLabel != null) && (string.IsNullOrEmpty(displayString) == false))
-                {
-                    completeLabel.text = string.Format(displayString, settings.CurrentScene.DisplayName);
-                }
-            }
+            Singleton.Get<SceneManager>().LoadNextLevel();
         }
     }
 }

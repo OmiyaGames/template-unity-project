@@ -19,19 +19,30 @@ namespace OmiyaGames
         // Use this for initialization
         protected override void Start()
         {
-            // Splash should be visible in the beginning
+            // By default, show the splash screen
             CurrentState = State.Visible;
 
-            // Check if we need to fade out
-            if (tranitionType == Transition.FadeOut)
+            // Check if the last scene was splash (or this is the first scene loaded)
+            SceneManager manager = Singleton.Get<SceneManager>();
+            if((manager.LastScene == null) || (manager.LastScene == manager.Splash))
             {
-                // Start the fadeout
-                StartCoroutine(DelayedFadeOut());
+                // Check if we need to fade out
+                if (manager.CurrentScene == manager.MainMenu)
+                {
+                    // Start the fadeout
+                    StartCoroutine(DelayedFadeOut());
+                }
+                else
+                {
+                    // Load the next level
+                    manager.LoadMainMenu();
+                }
             }
             else
             {
-                // Load the next level
-                Application.LoadLevel(Singleton.Get<SceneManager>().MainMenu.SceneName);
+                // Hide the splash
+                CurrentState = State.Hidden;
+                gameObject.SetActive(false);
             }
         }
 

@@ -9,16 +9,6 @@ namespace OmiyaGames
         [SerializeField]
         bool loadLevelAsynchronously = true;
 
-        [Header("Menu Label Templates")]
-        // TODO: consider using the translation patch instead
-        [Tooltip("Template for any menus with button text indicating to return to a scene")]
-        [SerializeField]
-        string returnToTextTemplate = "Return to {0}";
-        // TODO: consider using the translation patch instead
-        [Tooltip("Template for any menus with button text indicating to restart a scene")]
-        [SerializeField]
-        string restartTextTemplate = "Restart {0}";
-
         [Header("Scene Information")]
         [SerializeField]
         SceneInfo splash;
@@ -34,11 +24,14 @@ namespace OmiyaGames
         [SerializeField]
         string levelDisplayNameTemplate = "Level {0}";
         [SerializeField]
+        bool levelRevertsTimeScaleTemplate = true;
+        [SerializeField]
         CursorLockMode levelLockModeTemplate = CursorLockMode.None;
 #endif
 
+        SceneInfo lastScene = null;
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
-        string menuTextCache = null, sceneToLoad = null;
+        string sceneToLoad = null;
 
         #region Properties
         public SceneInfo Splash
@@ -94,6 +87,18 @@ namespace OmiyaGames
             }
         }
 
+        public SceneInfo LastScene
+        {
+            get
+            {
+                return lastScene;
+            }
+            private set
+            {
+                lastScene = value;
+            }
+        }
+
         public SceneInfo NextScene
         {
             get
@@ -130,40 +135,6 @@ namespace OmiyaGames
                 return returnLevel;
             }
         }
-
-        public string ReturnToMenuText
-        {
-            get
-            {
-                if(menuTextCache == null)
-                {
-                    menuTextCache = mainMenu.DisplayName;
-                    if (string.IsNullOrEmpty(returnToTextTemplate) == false)
-                    {
-                        menuTextCache = string.Format(returnToTextTemplate, mainMenu.DisplayName);
-                    }
-                }
-                return menuTextCache;
-            }
-        }
-
-        public string RestartCurrentSceneText
-        {
-            get
-            {
-                string returnText = "";
-                SceneInfo currentScene = CurrentScene;
-                if(currentScene != null)
-                {
-                    returnText = currentScene.DisplayName;
-                    if (string.IsNullOrEmpty(restartTextTemplate) == false)
-                    {
-                        returnText = string.Format(restartTextTemplate, currentScene.DisplayName);
-                    }
-                }
-                return returnText;
-            }
-        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -191,6 +162,12 @@ namespace OmiyaGames
         {
             // Update the cursor locking
             Cursor.lockState = CurrentScene.LockMode;
+
+            // Revert the time scale
+            if(CurrentScene.RevertTimeScale == true)
+            {
+                Singleton.Get<TimeManager>().RevertToOriginalTime();
+            }
         }
 
         /// <summary>
@@ -235,6 +212,12 @@ namespace OmiyaGames
             else if(string.IsNullOrEmpty(scene.SceneName) == true)
             {
                 throw new System.ArgumentException("No scene name is set", "scene");
+            }
+
+            // Check if we need to update the last scene
+            if (CurrentScene != scene)
+            {
+                lastScene = CurrentScene;
             }
 
             // Update which scene to load
@@ -319,7 +302,7 @@ namespace OmiyaGames
 
                     // Create a new level
                     int ordinal = newLevels.Count;
-                    newLevels.Add(new SceneInfo(sceneName, displayName, levelLockModeTemplate, ordinal));
+                    newLevels.Add(new SceneInfo(sceneName, displayName, levelRevertsTimeScaleTemplate, levelLockModeTemplate, ordinal));
                 }
             }
 

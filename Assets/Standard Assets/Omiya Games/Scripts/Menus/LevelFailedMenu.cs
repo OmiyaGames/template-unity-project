@@ -3,84 +3,24 @@ using System.Collections;
 
 namespace OmiyaGames
 {
-    public class LevelFailedMenu : MonoBehaviour
+    public class LevelFailedMenu : ISceneChangingMenu
     {
+        [Header("Behavior")]
         [SerializeField]
-        GameObject levelFailedPanel;
-        [SerializeField]
-        UnityEngine.UI.Text returnToMenuLabel = null;
-        [SerializeField]
-        UnityEngine.UI.Text completeLabel = null;
-        [SerializeField]
-        string displayString = "{0} Failed!";
+        bool pauseGameOnShow = false;
 
-        SceneManager settings = null;
-
-        public bool IsVisible
+        public override bool PauseOnShow
         {
             get
             {
-                return levelFailedPanel.activeSelf;
+                return pauseGameOnShow;
             }
         }
 
-        void Setup()
+        public void OnOptionsClicked()
         {
-            if (settings == null)
-            {
-                // Retrieve settings
-                settings = Singleton.Get<SceneManager>();
-
-                // Check if we need to update the menu label
-                if (returnToMenuLabel != null)
-                {
-                    // Update the menu label
-                    returnToMenuLabel.text = settings.ReturnToMenuText;
-                }
-
-                // Setup complete label
-                if ((completeLabel != null) && (string.IsNullOrEmpty(displayString) == false))
-                {
-                    completeLabel.text = string.Format(displayString, settings.MainMenu.DisplayName);
-                }
-            }
-        }
-
-        public void Show()
-        {
-            Setup();
-            if (IsVisible == false)
-            {
-                // Make the game object active
-                levelFailedPanel.SetActive(true);
-            }
-        }
-
-        public void Hide()
-        {
-            // Make the game object inactive
-            Setup();
-            levelFailedPanel.SetActive(false);
-        }
-
-        public void OnRestartClicked()
-        {
-            // Hide the panel
-            Hide();
-
-            // Transition to the current level
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.CurrentScene);
-        }
-
-        public void OnReturnToMenuClicked()
-        {
-            // Hide the panel
-            Hide();
-
-            // Transition to the menu
-            SceneTransition transition = Singleton.Get<SceneTransition>();
-            transition.LoadLevel(settings.CurrentScene);
+            // Open the options dialog
+            Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().Show();
         }
     }
 }

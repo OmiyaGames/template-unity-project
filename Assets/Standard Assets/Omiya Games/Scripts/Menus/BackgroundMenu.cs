@@ -45,7 +45,7 @@ namespace OmiyaGames
             }
 
             // Always make this the background
-            transform.SetAsFirstSibling();
+            //transform.SetAsFirstSibling();
         }
 
         protected virtual void OnDestroy()
