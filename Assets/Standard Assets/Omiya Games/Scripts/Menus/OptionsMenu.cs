@@ -28,8 +28,6 @@ namespace OmiyaGames
         AudioControls musicControls;
         [SerializeField]
         AudioControls soundEffectsControls;
-        [SerializeField]
-        float delayPlayingTestSound = 0.2f;
 
         GameSettings settings = null;
         BackgroundMusic musicSettings = null;
@@ -105,30 +103,6 @@ namespace OmiyaGames
                     hideAction(this);
                     hideAction = null;
                 }
-            }
-        }
-
-        public void Show(System.Action<OptionsMenu> returnAction = null)
-        {
-            if (CurrentState == State.Hidden)
-            {
-                // Make the panel visible
-                CurrentState = State.Visible;
-
-                // Setup the next action
-                hideAction = returnAction;
-            }
-        }
-
-        public void Hide()
-        {
-            if ((CurrentState == State.Visible) && (isButtonLocked == false))
-            {
-                // Lock the buttons
-                isButtonLocked = true;
-
-                // Make the panel hidden
-                CurrentState = State.Hidden;
             }
         }
 

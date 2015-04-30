@@ -69,7 +69,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged = null)
+        public override void Show(System.Action<IMenu> stateChanged)
         {
             // Call base function
             base.Show(stateChanged);

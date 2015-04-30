@@ -81,7 +81,12 @@ namespace OmiyaGames
             get;
         }
 
-        public virtual void Show(System.Action<IMenu> stateChanged = null)
+        public void Show()
+        {
+            Show(null);
+        }
+
+        public virtual void Show(System.Action<IMenu> stateChanged)
         {
             onStateChanged = stateChanged;
             CurrentState = State.Visible;
