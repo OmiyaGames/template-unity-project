@@ -31,13 +31,13 @@ namespace OmiyaGames
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged = null)
+        public override void Show(System.Action<IMenu> stateChanged)
         {
             // Call base function
             base.Show(stateChanged);
 
             // Check if we need to unlock the next level
-            if(unlockNextLevel == true)
+            if (unlockNextLevel == true)
             {
                 SceneManager manager = Singleton.Get<SceneManager>();
                 GameSettings settings = Singleton.Get<GameSettings>();
