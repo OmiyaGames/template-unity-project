@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -10,8 +11,11 @@ namespace OmiyaGames
     {
         [SerializeField]
         string pauseInput = "Pause";
+        [SerializeField]
+        float delaySelectingDefaultUiBy = 0.5f;
 
         EventSystem eventSystemCache = null;
+        WaitForSeconds delaySelection = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -53,6 +57,7 @@ namespace OmiyaGames
         public override void SingletonAwake(Singleton instance)
         {
             instance.OnRealTimeUpdate += QueryInput;
+            delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 
         public override void SceneAwake(Singleton instance)
@@ -146,9 +151,20 @@ namespace OmiyaGames
             return returnMenu as MENU;
         }
 
+        public void SelectGuiGameObject(GameObject guiElement)
+        {
+            StartCoroutine(DelaySelection(guiElement));
+        }
+
         void QueryInput(float unscaledDeltaTime)
         {
             // FIXME: detect input for pause button
+        }
+
+        IEnumerator DelaySelection(GameObject guiElement)
+        {
+            yield return delaySelectingDefaultUiBy;
+            Events.SetSelectedGameObject(guiElement);
         }
     }
 }
