@@ -18,6 +18,7 @@ namespace OmiyaGames
         WaitForSeconds delaySelection = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
+        readonly Type pauseMenuType = typeof(PauseMenu);
 
         public event Action<MenuManager> OnManagedMenusStackChanged;
 
@@ -83,7 +84,7 @@ namespace OmiyaGames
                 }
 
                 // Check if this is the first displayed, managed menu
-                if ((displayedManagedMenu == null) && (menu.MenuType == IMenu.Type.DefaultManagedMenu))
+                if ((menu.MenuType == IMenu.Type.DefaultManagedMenu) && (displayedManagedMenu == null))
                 {
                     // Grab this menu
                     displayedManagedMenu = menu;
@@ -114,6 +115,12 @@ namespace OmiyaGames
 
                     // Push the current menu onto the stack
                     managedMenusStack.Push(menu);
+
+                    // Run the event that indicates the stack changed
+                    if(OnManagedMenusStackChanged != null)
+                    {
+                        OnManagedMenusStackChanged(this);
+                    }
                 }
             }
         }
@@ -137,6 +144,12 @@ namespace OmiyaGames
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
                 }
+
+                // Run the event that indicates the stack changed
+                if (OnManagedMenusStackChanged != null)
+                {
+                    OnManagedMenusStackChanged(this);
+                }
             }
             return returnMenu;
         }
@@ -158,7 +171,23 @@ namespace OmiyaGames
 
         void QueryInput(float unscaledDeltaTime)
         {
-            // FIXME: detect input for pause button
+            // Detect input for pause button
+            if(Input.GetButtonDown(pauseInput) == true)
+            {
+                // Attempt to grab the pause menu
+                PauseMenu pauseMenu = GetMenu<PauseMenu>();
+                if(pauseMenu != null)
+                {
+                    if(pauseMenu.CurrentState == IMenu.State.Hidden)
+                    {
+                        pauseMenu.Show();
+                    }
+                    else if(pauseMenu.CurrentState == IMenu.State.Visible)
+                    {
+                        pauseMenu.Hide();
+                    }
+                }
+            }
         }
 
         IEnumerator DelaySelection(GameObject guiElement)

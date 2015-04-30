@@ -10,13 +10,16 @@ namespace OmiyaGames
         string sceneName = "";
         [SerializeField]
         string displayName = "";
+        [SerializeField]
+        CursorLockMode sceneCursorLockMode = CursorLockMode.None;
 
         int ordinal = 0;
 
-        public SceneInfo(string scene, string display, int index = 0)
+        public SceneInfo(string scene, string display, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
         {
             sceneName = scene;
             displayName = display;
+            sceneCursorLockMode = lockMode;
             ordinal = index;
         }
 
@@ -49,6 +52,14 @@ namespace OmiyaGames
             internal set
             {
                 ordinal = value;
+            }
+        }
+
+        public CursorLockMode LockMode
+        {
+            get
+            {
+                return sceneCursorLockMode;
             }
         }
     }

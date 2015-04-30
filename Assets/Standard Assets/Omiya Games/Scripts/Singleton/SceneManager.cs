@@ -5,15 +5,11 @@ namespace OmiyaGames
 {
     public class SceneManager : ISingletonScript
     {
+        [Header("Scene Transition")]
         [SerializeField]
-        SceneInfo splash;
-        [SerializeField]
-        SceneInfo mainMenu;
-        [SerializeField]
-        SceneInfo credits;
-        [SerializeField]
-        SceneInfo[] levels;
+        bool loadLevelAsynchronously = true;
 
+        [Header("Menu Label Templates")]
         // TODO: consider using the translation patch instead
         [Tooltip("Template for any menus with button text indicating to return to a scene")]
         [SerializeField]
@@ -23,14 +19,28 @@ namespace OmiyaGames
         [SerializeField]
         string restartTextTemplate = "Restart {0}";
 
+        [Header("Scene Information")]
+        [SerializeField]
+        SceneInfo splash;
+        [SerializeField]
+        SceneInfo mainMenu;
+        [SerializeField]
+        SceneInfo credits;
+        [SerializeField]
+        SceneInfo[] levels;
+
 #if UNITY_EDITOR
+        [Header("Default Levels Information")]
         [SerializeField]
         string levelDisplayNameTemplate = "Level {0}";
+        [SerializeField]
+        CursorLockMode levelLockModeTemplate = CursorLockMode.None;
 #endif
 
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
-        string menuTextCache = null;
+        string menuTextCache = null, sceneToLoad = null;
 
+        #region Properties
         public SceneInfo Splash
         {
             get
@@ -154,20 +164,122 @@ namespace OmiyaGames
                 return returnText;
             }
         }
+        #endregion
 
         public override void SingletonAwake(Singleton instance)
         {
+            // Reset scene name to info dictionary
+            sceneNameToInfo.Clear();
+
+            // Add the main menu, credits, and splash scene
+            sceneNameToInfo.Add(MainMenu.SceneName, MainMenu);
+            sceneNameToInfo.Add(Credits.SceneName, Credits);
+            sceneNameToInfo.Add(Splash.SceneName, Splash);
+
             // Update level information
             for (int index = 0; index < Levels.Length; ++index)
             {
+                // Update the ordinal of the level
                 Levels[index].Ordinal = index;
+
+                // Add the level to the dictionary
+                sceneNameToInfo.Add(Levels[index].SceneName, Levels[index]);
             }
         }
 
         public override void SceneAwake(Singleton instance)
         {
+            // Update the cursor locking
+            Cursor.lockState = CurrentScene.LockMode;
         }
 
+        /// <summary>
+        /// Reloads the current scene, effectively resetting it.
+        /// </summary>
+        public void ReloadCurrentScene()
+        {
+            LoadScene(CurrentScene);
+        }
+
+        /// <summary>
+        /// Loads the Main Menu scene.
+        /// </summary>
+        public void LoadMainMenu()
+        {
+            LoadScene(MainMenu);
+        }
+        
+        /// <summary>
+        /// Loads the Credits scene.
+        /// </summary>
+        public void LoadCredits()
+        {
+            LoadScene(Credits);
+        }
+
+        /// <summary>
+        /// Loads the next scene.
+        /// </summary>
+        public void LoadNextLevel()
+        {
+            LoadScene(NextScene);
+        }
+
+        public void LoadScene(SceneInfo scene)
+        {
+            // Make sure the parameter is correct
+            if(scene == null)
+            {
+                throw new System.ArgumentNullException("scene");
+            }
+            else if(string.IsNullOrEmpty(scene.SceneName) == true)
+            {
+                throw new System.ArgumentException("No scene name is set", "scene");
+            }
+
+            // Update which scene to load
+            sceneToLoad = scene.SceneName;
+
+            // FIXME: Grab the level transition menu here
+            //SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().GetMenu<SceneTransitionMenu>();
+            SceneTransitionMenu transitionMenu = null;
+
+            // Check if there's a transition menu
+            if(transitionMenu != null)
+            {
+                // FIXME: run the transition menu's display function
+                //transitionMenu.Show(TransitionMenuFullyOpaque);
+            }
+            else
+            {
+                // Just load the scene without the menu
+                TransitionMenuFullyOpaque(null);
+            }
+        }
+
+        void TransitionMenuFullyOpaque(SceneTransitionMenu menu)
+        {
+            // Make sure we have a level to load
+            if (string.IsNullOrEmpty(sceneToLoad) == false)
+            {
+                // Check the async flag
+                if (loadLevelAsynchronously == true)
+                {
+                    // Load asynchronously
+                    Application.LoadLevelAsync(sceneToLoad);
+                }
+                else
+                {
+                    // Load synchronously
+                    Application.LoadLevel(sceneToLoad);
+                }
+
+                // Indicate this level is already in progress of loading
+                sceneToLoad = null;
+            }
+        }
+
+        #region Editor Methods
 #if UNITY_EDITOR
         [ContextMenu("Setup Levels (using Level Numbers)")]
         public void SetupLevelsUsingLevelNumber()
@@ -207,7 +319,7 @@ namespace OmiyaGames
 
                     // Create a new level
                     int ordinal = newLevels.Count;
-                    newLevels.Add(new SceneInfo(sceneName, displayName, ordinal));
+                    newLevels.Add(new SceneInfo(sceneName, displayName, levelLockModeTemplate, ordinal));
                 }
             }
 
@@ -229,5 +341,6 @@ namespace OmiyaGames
             return displayName;
         }
 #endif
+        #endregion
     }
 }

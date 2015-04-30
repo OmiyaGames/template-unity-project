@@ -43,6 +43,9 @@ namespace OmiyaGames
                 onMenuNumberChanged = new System.Action<MenuManager>(UpdateBackgroundVisibility);
                 manager.OnManagedMenusStackChanged += onMenuNumberChanged;
             }
+
+            // Always make this the background
+            transform.SetAsFirstSibling();
         }
 
         protected virtual void OnDestroy()
