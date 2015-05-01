@@ -298,7 +298,7 @@ namespace OmiyaGames
                     (string.Equals(sceneName, credits.SceneName) == false))
                 {
                     // Get the display name
-                    string displayName = GetDisplayName(index, sceneName, formatText);
+                    string displayName = GetDisplayName((newLevels.Count + 1), sceneName, formatText);
 
                     // Create a new level
                     int ordinal = newLevels.Count;
