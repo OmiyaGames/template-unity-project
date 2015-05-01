@@ -167,11 +167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadLevelAsynchronously: 1
-  returnToTextTemplate: Return to {0}
-  restartTextTemplate: Restart {0}
-  completeTextTemplate: '{0} Complete'
-  failedTextTemplate: '{0} Failed'
-  nextTextTemplate: Proceed to {0}
   splash:
     sceneName: Splash
     displayName: Splash
@@ -194,10 +189,6 @@ MonoBehaviour:
     sceneCursorLockMode: 0
   - sceneName: Level 2
     displayName: Level 2
-    revertTimeScale: 1
-    sceneCursorLockMode: 0
-  - sceneName: Level 3
-    displayName: Level 3
     revertTimeScale: 1
     sceneCursorLockMode: 0
   levelDisplayNameTemplate: Level {0}
@@ -262,6 +253,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseInput: Pause
   delaySelectingDefaultUiBy: .5
+  returnToTextTemplate: Return to {0}
+  restartTextTemplate: Restart {0}
+  completeTextTemplate: '{0} Complete'
+  failedTextTemplate: '{0} Failed'
+  nextTextTemplate: Proceed to {0}
 --- !u!114 &11475404
 MonoBehaviour:
   m_ObjectHideFlags: 1

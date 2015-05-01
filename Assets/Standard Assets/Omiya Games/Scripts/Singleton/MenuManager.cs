@@ -285,8 +285,8 @@ namespace OmiyaGames
 
         void QueryInput(float unscaledDeltaTime)
         {
-            // Detect input for pause button
-            if(Input.GetButtonDown(pauseInput) == true)
+            // Detect input for pause button (make sure no managed dialogs are shown, either).
+            if((NumManagedMenus <= 0) && (Input.GetButtonDown(pauseInput) == true))
             {
                 // Attempt to grab the pause menu
                 PauseMenu pauseMenu = GetMenu<PauseMenu>();
