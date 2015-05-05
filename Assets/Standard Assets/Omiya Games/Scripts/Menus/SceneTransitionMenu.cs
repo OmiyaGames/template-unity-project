@@ -1,15 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SceneTransitionMenu : MonoBehaviour {
+namespace OmiyaGames
+{
+    public class SceneTransitionMenu : IMenu
+    {
+        public override Type MenuType
+        {
+            get
+            {
+                return Type.UnmanagedMenu;
+            }
+        }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        public override GameObject DefaultUi
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        // FIXME: start implementing these functions
+        // FIXME: create animation events on the animator
+
+        public void OnSceneTransitionInEnd()
+        {
+
+        }
+
+        public void OnSceneTransitionOutEnd()
+        {
+
+        }
+    }
 }
