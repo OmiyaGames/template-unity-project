@@ -43,9 +43,9 @@ namespace OmiyaGames
 
         protected virtual void Start()
         {
-            // FIXME: Adjust the size of the scroll panel content
+            // Adjust the size of the scroll panel content
             contentSize = content.sizeDelta.y;
-            normalizedPosition = 0;
+            normalizedPosition = 1;
 
             // Start scrolling the contents
             StartCoroutine(ScrollCredits());
@@ -102,10 +102,10 @@ namespace OmiyaGames
             yield return new WaitForSeconds(startDelay);
 
             // Check what the scroll panel condition is so far
-            while (Mathf.Approximately(normalizedPosition, 1) == false)
+            while (Mathf.Approximately(normalizedPosition, 0) == false)
             {
                 // Scroll the panel
-                normalizedPosition += (scrollSpeed * Time.deltaTime) / contentSize;
+                normalizedPosition -= (scrollSpeed * Time.deltaTime) / contentSize;
                 normalizedPosition = Mathf.Clamp01(normalizedPosition);
                 scrollable.verticalNormalizedPosition = normalizedPosition;
 
