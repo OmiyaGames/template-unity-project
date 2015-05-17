@@ -32,8 +32,7 @@ namespace OmiyaGames
         GameSettings settings = null;
         BackgroundMusic musicSettings = null;
         SoundEffect audioCache;
-        bool inSetupMode = false,
-            isButtonLocked = false;
+        bool inSetupMode = false;
 
         System.Action<OptionsMenu> hideAction = null;
 
@@ -90,12 +89,7 @@ namespace OmiyaGames
             // Call the base method
             base.OnStateChanged(from, to);
 
-            if (to == State.Visible)
-            {
-                // If this menu is visible again, release the button lock
-                isButtonLocked = false;
-            }
-            else if ((from == State.Visible) && (to == State.Hidden))
+            if ((from == State.Visible) && (to == State.Hidden))
             {
                 // Run the last action
                 if (hideAction != null)
