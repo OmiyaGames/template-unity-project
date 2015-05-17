@@ -5,6 +5,7 @@ namespace OmiyaGames
 {
     public class SceneManager : ISingletonScript
     {
+        // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
         bool loadLevelAsynchronously = true;
@@ -223,28 +224,31 @@ namespace OmiyaGames
             // Update which scene to load
             sceneToLoad = scene.SceneName;
 
-            // FIXME: Grab the level transition menu here
-            //SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().GetMenu<SceneTransitionMenu>();
-            SceneTransitionMenu transitionMenu = null;
-
-            // Check if there's a transition menu
-            if(transitionMenu != null)
-            {
-                // FIXME: run the transition menu's display function
-                //transitionMenu.Show(TransitionMenuFullyOpaque);
-            }
-            else
-            {
-                // Just load the scene without the menu
-                TransitionMenuFullyOpaque(null);
-            }
-        }
-
-        void TransitionMenuFullyOpaque(SceneTransitionMenu menu)
-        {
             // Make sure we have a level to load
             if (string.IsNullOrEmpty(sceneToLoad) == false)
             {
+                // Show the level transition menu
+                SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().Show<SceneTransitionMenu>(TransitionMenuFullyOpaque);
+
+                // Check if there's a transition menu
+                if(transitionMenu == null)
+                {
+                    // Just load the scene without the menu
+                    TransitionMenuFullyOpaque(null);
+                }
+            }
+        }
+
+        void TransitionMenuFullyOpaque(IMenu menu)
+        {
+            SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
+            if ((string.IsNullOrEmpty(sceneToLoad) == false) && 
+                ((transitionMenu == null) ||
+             (transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)))
+            {
+                // Indicate the next scene was loaded
+                Singleton.Get<PoolingManager>().DestroyAll();
+
                 // Check the async flag
                 if (loadLevelAsynchronously == true)
                 {
