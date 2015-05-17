@@ -43,7 +43,6 @@ namespace OmiyaGames
         string menuTextCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
-        readonly Type pauseMenuType = typeof(PauseMenu);
 
         public event Action<MenuManager> OnManagedMenusStackChanged;
 
@@ -187,6 +186,7 @@ namespace OmiyaGames
             // Add them into the dictionary
             Type menuType;
             IMenu displayedManagedMenu = null;
+            SceneTransitionMenu transitionMenu = null;
             foreach(IMenu menu in menus)
             {
                 // Add the menu to the dictionary
@@ -195,6 +195,12 @@ namespace OmiyaGames
                 {
                     // Add the menu
                     typeToMenuMap.Add(menuType, menu);
+
+                    // Check if this menu is a SceneTransitionMenu
+                    if(menuType == typeof(SceneTransitionMenu))
+                    {
+                        transitionMenu = (SceneTransitionMenu)menu;
+                    }
                 }
 
                 // Check if this is the first displayed, managed menu
@@ -206,6 +212,18 @@ namespace OmiyaGames
                     // Indicate it should be visible
                     displayedManagedMenu.Show();
                 }
+            }
+
+            // Check to see if there was a transition menu
+            if(transitionMenu == null)
+            {
+                // If not, run the scene manager's transition-in events immediately
+                Singleton.Get<SceneManager>().TransitionIn(null);
+            }
+            else
+            {
+                // If so, run the transition menu's transition-in animation
+                transitionMenu.Hide(Singleton.Get<SceneManager>().TransitionIn);
             }
         }
 
@@ -326,7 +344,7 @@ namespace OmiyaGames
 
         IEnumerator DelaySelection(GameObject guiElement)
         {
-            yield return delaySelectingDefaultUiBy;
+            yield return delaySelection;
             Events.SetSelectedGameObject(guiElement);
         }
     }

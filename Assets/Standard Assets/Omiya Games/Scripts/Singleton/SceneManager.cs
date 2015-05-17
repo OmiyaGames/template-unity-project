@@ -1,10 +1,16 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace OmiyaGames
 {
     public class SceneManager : ISingletonScript
     {
+        public event Action<IMenu> OnSceneTransitionInStart;
+        public event Action<IMenu> OnSceneTransitionInEnd;
+        public event Action<IMenu> OnSceneTransitionOutStart;
+        public event Action<IMenu> OnSceneTransitionOutEnd;
+
         // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
@@ -228,42 +234,116 @@ namespace OmiyaGames
             if (string.IsNullOrEmpty(sceneToLoad) == false)
             {
                 // Show the level transition menu
-                SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().Show<SceneTransitionMenu>(TransitionMenuFullyOpaque);
+                SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().Show<SceneTransitionMenu>(TransitionOut);
 
                 // Check if there's a transition menu
                 if(transitionMenu == null)
                 {
                     // Just load the scene without the menu
-                    TransitionMenuFullyOpaque(null);
+                    TransitionOut(null);
                 }
             }
         }
 
-        void TransitionMenuFullyOpaque(IMenu menu)
+        internal void TransitionIn(IMenu menu)
         {
+            // Check to see if the argument for the next menu is provided
             SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
-            if ((string.IsNullOrEmpty(sceneToLoad) == false) && 
-                ((transitionMenu == null) ||
-             (transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)))
+            if(transitionMenu == null)
             {
-                // Indicate the next scene was loaded
-                Singleton.Get<PoolingManager>().DestroyAll();
-
-                // Check the async flag
-                if (loadLevelAsynchronously == true)
+                // If not, we're not transitioning, so run both transition-out events at the same time
+                if(OnSceneTransitionInStart != null)
                 {
-                    // Load asynchronously
-                    Application.LoadLevelAsync(sceneToLoad);
+                    OnSceneTransitionInStart(menu);
+                }
+                if(OnSceneTransitionInEnd != null)
+                {
+                    OnSceneTransitionInEnd(menu);
+                }
+            }
+            else
+            {
+                // If so, check to see the current menu state
+                if((transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInStart) && (OnSceneTransitionInStart != null))
+                {
+                    // If just transitioning in, run the transition-out start event
+                    OnSceneTransitionInStart(menu);
+                }
+                else if((transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInEnd) && (OnSceneTransitionInEnd != null))
+                {
+                    // If transitioning ended, run the transition-out end event
+                    OnSceneTransitionInEnd(menu);
+                }
+            }
+        }
+
+        void TransitionOut(IMenu menu)
+        {
+            // Check to see if the next scene name is provided
+            if (string.IsNullOrEmpty(sceneToLoad) == false)
+            {
+                // Check to see if the argument for the next menu is provided
+                SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
+                if(transitionMenu == null)
+                {
+                    // If not, we're not transitioning, so run both transition-out events at the same time
+                    if(OnSceneTransitionOutStart != null)
+                    {
+                        OnSceneTransitionOutStart(menu);
+                    }
+                    if(OnSceneTransitionOutEnd != null)
+                    {
+                        OnSceneTransitionOutEnd(menu);
+                    }
+
+                    // Transition to the next scene
+                    TransitionToScene(loadLevelAsynchronously, ref sceneToLoad);
                 }
                 else
                 {
-                    // Load synchronously
-                    Application.LoadLevel(sceneToLoad);
-                }
+                    // If so, check to see the current menu state
+                    if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutStart)
+                    {
+                        // If just transitioning in, run the transition-out start event
+                        if(OnSceneTransitionOutStart != null)
+                        {
+                            OnSceneTransitionOutStart(menu);
+                        }
+                    }
+                    else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)
+                    {
+                        // If transitioning ended, run the transition-out end event
+                        if(OnSceneTransitionOutEnd != null)
+                        {
+                            OnSceneTransitionOutEnd(menu);
+                        }
 
-                // Indicate this level is already in progress of loading
-                sceneToLoad = null;
+                        // Transition to the next scene
+                        TransitionToScene(loadLevelAsynchronously, ref sceneToLoad);
+                    }
+                }
             }
+        }
+
+        static void TransitionToScene(bool loadLevelAsynchronously, ref string sceneToLoad)
+        {
+            // Indicate the next scene was loaded
+            Singleton.Get<PoolingManager>().DestroyAll();
+
+            // Check the async flag
+            if (loadLevelAsynchronously == true)
+            {
+                // Load asynchronously
+                Application.LoadLevelAsync(sceneToLoad);
+            }
+            else
+            {
+                // Load synchronously
+                Application.LoadLevel(sceneToLoad);
+            }
+
+            // Indicate this level is already in progress of loading
+            sceneToLoad = null;
         }
 
         #region Editor Methods
