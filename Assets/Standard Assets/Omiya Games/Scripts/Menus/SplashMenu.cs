@@ -4,49 +4,114 @@ using System.Collections;
 namespace OmiyaGames
 {
     [RequireComponent(typeof(Animator))]
-    public class SplashMenu : BackgroundMenu
+    public class SplashMenu : IMenu
     {
-        public enum Transition
+        public class LoadingInfo
         {
-            NextScene,
-            FadeOut
+            bool isFinished = false;
+            float ratio = 0;
+
+            public bool IsFinished
+            {
+                get
+                {
+                    return isFinished;
+                }
+                set
+                {
+                    isFinished = value;
+                    if(isFinished == true)
+                    {
+                        Ratio = 1f;
+                    }
+                }
+            }
+
+            public float Ratio
+            {
+                get
+                {
+                    return ratio;
+                }
+                set
+                {
+                    ratio = Mathf.Clamp01(value);
+                }
+            }
         }
+
+        [Header("Logo Only settings")]
         [SerializeField]
-        Transition tranitionType = Transition.FadeOut;
+        float logoDisplayDuration = 4f;
         [SerializeField]
-        float fadeoutDuration = 1f;
+        GameObject logoOnlySet = null;
+
+        [Header("Loading Bar Included settings")]
+        [SerializeField]
+        RectTransform loadingBar = null;
+        [SerializeField]
+        GameObject loadingBarIncludedSet = null;
+
+        public override Type MenuType
+        {
+            get
+            {
+                return Type.UnmanagedMenu;
+            }
+        }
+
+        public override GameObject DefaultUi
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Override this property to display the loading bar in the splash menu
+        /// </summary>
+        public bool IsLoading
+        {
+            get
+            {
+                return (LoadingStatus != null);
+            }
+        }
+
+        /// <summary>
+        /// Override this property to let the splash menu know
+        /// whether it needs to display the loading bar (don't
+        /// return null), and if so, how much the game loaded.
+        /// </summary>
+        public virtual LoadingInfo LoadingStatus
+        {
+            get
+            {
+                return null;
+            }
+        }
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
-            // By default, show the splash screen
-            CurrentState = State.Visible;
-
-            // Check if the last scene was splash (or this is the first scene loaded)
-            SceneManager manager = Singleton.Get<SceneManager>();
-            if((manager.LastScene == null) || (manager.LastScene == manager.Splash))
+            if(IsLoading == false)
             {
-                // Check if we need to fade out
-                if (manager.CurrentScene == manager.MainMenu)
-                {
-                    // Start the fadeout
-                    StartCoroutine(DelayedFadeOut());
-                }
-                else
-                {
-                    // Load the next level
-                    manager.LoadMainMenu();
-                }
+                // Start the fadeout
+                logoOnlySet.SetActive(true);
+                loadingBarIncludedSet.SetActive(false);
+                StartCoroutine(DelayedFadeOut());
             }
             else
             {
-                // Hide the splash
-                CurrentState = State.Hidden;
-                gameObject.SetActive(false);
+                // Start the loading screen
+                loadingBarIncludedSet.SetActive(true);
+                logoOnlySet.SetActive(false);
+                StartCoroutine(ShowLoadingScreen());
             }
         }
 
-        protected override void OnDestroy()
+        protected override void OnStateChanged(State from, State to)
         {
             // Do nothing
         }
@@ -54,10 +119,42 @@ namespace OmiyaGames
         IEnumerator DelayedFadeOut()
         {
             // Wait for the designated time
-            yield return new WaitForSeconds(fadeoutDuration);
+            yield return new WaitForSeconds(logoDisplayDuration);
 
-            // Indicate we're hidden
-            CurrentState = State.Hidden;
+            // Get the scene manager to change scenes
+            Singleton.Get<SceneManager>().LoadMainMenu();
+        }
+
+        IEnumerator ShowLoadingScreen()
+        {
+            // Reset the loading bar
+            Vector2 max = loadingBar.anchorMax;
+            max.x = 0;
+            loadingBar.anchorMax = max;
+
+            // Wait until the loading status is finished
+            while (LoadingStatus.IsFinished == false)
+            {
+                // Wait for a frame
+                yield return null;
+
+                // Update the loading bar
+                max.x = LoadingStatus.Ratio;
+                loadingBar.anchorMax = max;
+            }
+
+            // Wait for a frame
+            yield return null;
+
+            // Make the loading bar full
+            max.x = 1;
+            loadingBar.anchorMax = max;
+
+            // Wait for a frame
+            yield return null;
+
+            // Get the scene manager to change scenes
+            Singleton.Get<SceneManager>().LoadMainMenu();
         }
     }
 }

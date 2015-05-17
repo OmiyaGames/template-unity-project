@@ -69,7 +69,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().Show();
+                Singleton.Get<MenuManager>().Show<OptionsMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = optionsButton.gameObject;
@@ -82,7 +82,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Transition to the credits
-                Singleton.Get<SceneTransition>().LoadLevel(Singleton.Get<SceneManager>().Credits);
+                Singleton.Get<SceneManager>().LoadScene(Singleton.Get<SceneManager>().Credits);
 
                 // Change the menu to stand by
                 CurrentState = State.StandBy;
