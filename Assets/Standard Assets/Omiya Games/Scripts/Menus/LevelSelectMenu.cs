@@ -59,7 +59,7 @@ namespace OmiyaGames
         {
             if (isButtonLocked == false)
             {
-                Singleton.Get<SceneTransition>().LoadLevel(level);
+                Singleton.Get<SceneManager>().LoadScene(level);
                 isButtonLocked = true;
             }
         }
