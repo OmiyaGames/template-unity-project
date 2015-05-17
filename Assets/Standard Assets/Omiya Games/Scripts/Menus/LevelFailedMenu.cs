@@ -20,7 +20,7 @@ namespace OmiyaGames
         public void OnOptionsClicked()
         {
             // Open the options dialog
-            Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().Show();
+            Singleton.Get<MenuManager>().Show<OptionsMenu>();
         }
     }
 }

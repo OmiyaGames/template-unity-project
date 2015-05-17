@@ -6,14 +6,14 @@ public class MenuTest : MonoBehaviour
 {
     public void OnPauseClicked()
     {
-        Singleton.Get<MenuManager>().GetMenu<PauseMenu>().Show();
+        Singleton.Get<MenuManager>().Show<PauseMenu>();
     }
     public void OnFailedClicked()
     {
-        Singleton.Get<MenuManager>().GetMenu<LevelFailedMenu>().Show();
+        Singleton.Get<MenuManager>().Show<LevelFailedMenu>();
     }
     public void OnCompleteClicked()
     {
-        Singleton.Get<MenuManager>().GetMenu<LevelCompleteMenu>().Show();
+        Singleton.Get<MenuManager>().Show<LevelCompleteMenu>();
     }
 }
