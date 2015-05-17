@@ -19,7 +19,6 @@ GameObject:
   - 114: {fileID: 11460546}
   - 82: {fileID: 8207126}
   - 114: {fileID: 11458252}
-  - 114: {fileID: 11489116}
   - 114: {fileID: 11420754}
   m_Layer: 0
   m_Name: Singleton
@@ -285,21 +284,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowActivationOnStandalone: 0
---- !u!114 &11489116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565d47fd9ba2f3f41a83fbad864c31b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeInDuration: .600000024
-  fadeInSpeed: 1
-  fadeOutDuration: 1
-  fadeOutSpeed: 5
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
