@@ -278,6 +278,34 @@ namespace OmiyaGames
             return returnMenu as MENU;
         }
 
+        public MENU Show<MENU>(Action<IMenu> action = null) where MENU : IMenu
+        {
+            IMenu returnMenu = null;
+            if (typeToMenuMap.TryGetValue(typeof(MENU), out returnMenu) == true)
+            {
+                returnMenu.Show(action);
+            }
+            else
+            {
+                returnMenu = null;
+            }
+            return returnMenu as MENU;
+        }
+
+        public MENU Hide<MENU>() where MENU : IMenu
+        {
+            IMenu returnMenu = null;
+            if (typeToMenuMap.TryGetValue(typeof(MENU), out returnMenu) == true)
+            {
+                returnMenu.Hide();
+            }
+            else
+            {
+                returnMenu = null;
+            }
+            return returnMenu as MENU;
+        }
+
         public void SelectGuiGameObject(GameObject guiElement)
         {
             StartCoroutine(DelaySelection(guiElement));
