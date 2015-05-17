@@ -69,7 +69,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                Singleton.Get<MenuManager>().GetMenu<OptionsMenu>().Show();
+                Singleton.Get<MenuManager>().Show<OptionsMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = optionsButton.gameObject;
