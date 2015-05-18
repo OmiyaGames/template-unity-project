@@ -4,7 +4,6 @@ using System.Collections;
 namespace OmiyaGames
 {
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(SoundEffect))]
     public class SceneTransitionMenu : IMenu
     {
         public enum Transition
@@ -22,7 +21,6 @@ namespace OmiyaGames
         string transitionOutTrigger = "transitionOut";
 
         Transition currentTransition = Transition.None;
-        SoundEffect audioCache = null;
 
         public override Type MenuType
         {
@@ -52,18 +50,6 @@ namespace OmiyaGames
             }
         }
 
-        public SoundEffect Sound
-        {
-            get
-            {
-                if (audioCache == null)
-                {
-                    audioCache = GetComponent<SoundEffect>();
-                }
-                return audioCache;
-            }
-        }
-
         protected override void OnStateChanged(State from, State to)
         {
             // Do nothing
@@ -79,9 +65,6 @@ namespace OmiyaGames
 
             // Run the animation
             Animator.SetTrigger(transitionOutTrigger);
-
-            // Play the sound effect
-            Sound.Play();
 
             // Check if there's an action associated with this dialog
             if(onStateChanged != null)
