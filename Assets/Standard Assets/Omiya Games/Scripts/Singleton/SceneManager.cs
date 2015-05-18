@@ -15,6 +15,8 @@ namespace OmiyaGames
         [Header("Scene Transition")]
         [SerializeField]
         bool loadLevelAsynchronously = true;
+        [SerializeField]
+        SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
         [SerializeField]
@@ -308,6 +310,12 @@ namespace OmiyaGames
                         if(OnSceneTransitionOutStart != null)
                         {
                             OnSceneTransitionOutStart(menu);
+                        }
+
+                        // Play the sound effect
+                        if(soundEffect != null)
+                        {
+                            soundEffect.Play();
                         }
                     }
                     else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)
