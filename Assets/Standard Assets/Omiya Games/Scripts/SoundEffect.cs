@@ -3,11 +3,55 @@ using System.Collections.Generic;
 
 namespace OmiyaGames
 {
+    ///-----------------------------------------------------------------------
+    /// <copyright file="SoundEffect.cs" company="Omiya Games">
+    /// The MIT License (MIT)
+    /// 
+    /// Copyright (c) 2014-2015 Omiya Games
+    /// 
+    /// Permission is hereby granted, free of charge, to any person obtaining a copy
+    /// of this software and associated documentation files (the "Software"), to deal
+    /// in the Software without restriction, including without limitation the rights
+    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    /// copies of the Software, and to permit persons to whom the Software is
+    /// furnished to do so, subject to the following conditions:
+    /// 
+    /// The above copyright notice and this permission notice shall be included in
+    /// all copies or substantial portions of the Software.
+    /// 
+    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    /// THE SOFTWARE.
+    /// </copyright>
+    /// <author>Taro Omiya</author>
+    /// <date>5/18/2015</date>
+    ///-----------------------------------------------------------------------
+    /// <summary>
+    /// A script for playing sound effects, with extra options such as clip, pitch,
+    /// and volume mutation. Also allows configuring sound effects' volume.
+    /// 
+    /// Note: for the <code>OptionsMenu</code> to work, ALL <code>AudioSource</code>s
+    /// must have a <code>SoundEffect</code> script attached, or managed by
+    /// <code>BackgroundMusic</code>.
+    /// </summary>
+    /// <seealso cref="AudioSource"/>
+    /// <seealso cref="BackgroundMusic"/>
+    /// <seealso cref="OptionsMenu"/>
     [RequireComponent(typeof(AudioSource))]
     public class SoundEffect : MonoBehaviour
     {
         static readonly HashSet<SoundEffect> allSoundEffects = new HashSet<SoundEffect>();
 
+        /// <summary>
+        /// A series of clips to play at random
+        /// </summary>
+        [Tooltip("A randomized list of clips to play. Note that the clip set on the AudioSource on start will be added to this list automatically.")]
+        [SerializeField]
+        RandomList<AudioClip> clipVariations = new RandomList<AudioClip>();
         /// <summary>
         /// Whether this sound effect's pitch should be mutated
         /// </summary>
@@ -135,6 +179,12 @@ namespace OmiyaGames
             centerVolume = Audio.volume;
             mute = Audio.mute;
 
+            // Add the audio source's clip to the random list
+            if(Audio.clip != null)
+            {
+                clipVariations.Add(Audio.clip);
+            }
+
             // Calculate how the audio should behave
             allSoundEffects.Add(this);
         }
@@ -151,6 +201,10 @@ namespace OmiyaGames
             Audio.Stop();
 
             // Apply mutation
+            if (clipVariations.Count > 1)
+            {
+                Audio.clip = clipVariations.CurrentElement;
+            }
             if(mutatePitch == true)
             {
                 // Change the audio's pitch
