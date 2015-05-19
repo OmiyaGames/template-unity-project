@@ -1,3 +1,6 @@
+// -----------------------------------------------------------------------
+// Sadly, can't figure out where this shader is from
+// -----------------------------------------------------------------------
 Shader "Unify Community/Texture With Transparency"
 {
     Properties
