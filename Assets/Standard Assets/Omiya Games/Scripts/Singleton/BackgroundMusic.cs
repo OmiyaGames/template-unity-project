@@ -93,7 +93,6 @@ namespace OmiyaGames
         MusicInfo music2 = null;
 
         bool isPlayingMusic1 = true;
-        int index = 0;
 
         /// <summary>
         /// Gets or sets the volume of the background music, which is a value between 0 and 1.
