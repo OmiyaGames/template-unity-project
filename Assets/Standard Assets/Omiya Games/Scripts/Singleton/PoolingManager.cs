@@ -4,6 +4,40 @@ using System.Collections.Generic;
 
 namespace OmiyaGames
 {
+    ///-----------------------------------------------------------------------
+    /// <copyright file="PoolingManager.cs" company="Omiya Games">
+    /// The MIT License (MIT)
+    /// 
+    /// Copyright (c) 2014-2015 Omiya Games
+    /// 
+    /// Permission is hereby granted, free of charge, to any person obtaining a copy
+    /// of this software and associated documentation files (the "Software"), to deal
+    /// in the Software without restriction, including without limitation the rights
+    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    /// copies of the Software, and to permit persons to whom the Software is
+    /// furnished to do so, subject to the following conditions:
+    /// 
+    /// The above copyright notice and this permission notice shall be included in
+    /// all copies or substantial portions of the Software.
+    /// 
+    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    /// THE SOFTWARE.
+    /// </copyright>
+    /// <author>Taro Omiya</author>
+    /// <date>5/18/2015</date>
+    ///-----------------------------------------------------------------------
+    /// <summary>
+    /// A singleton script that pools <code>GameObjects</code> for re-use.  It will
+    /// dynamically create more if any of its <code>GameObjects</code> are active.
+    /// 
+    /// Will also call events on <code>IPooledObject</code>s.
+    /// </summary>
+    /// <seealso cref="IPooledObject"/>
     public class PoolingManager : ISingletonScript
     {
         [SerializeField]
@@ -32,6 +66,22 @@ namespace OmiyaGames
 
         Transform poolingParent = null;
         readonly Dictionary<GameObject, PoolSet> allPooledObjects = new Dictionary<GameObject, PoolSet>();
+
+        public static void ReturnToPool(Component script)
+        {
+            if (script != null)
+            {
+                ReturnToPool(script.gameObject);
+            }
+        }
+
+        public static void ReturnToPool(GameObject gameObject)
+        {
+            if(gameObject != null)
+            {
+                gameObject.SetActive(false);
+            }
+        }
 
         /// <summary>
         /// Called when the first scene is loaded.
@@ -119,10 +169,31 @@ namespace OmiyaGames
             GameObject returnObject = null;
             if (prefab != null)
             {
-                Transform returnTransform = prefab.transform;
-                returnObject = GetInstance(prefab, returnTransform.position, returnTransform.rotation);
+                returnObject = GetInstance(prefab, prefab.transform.position, prefab.transform.rotation);
             }
             return returnObject;
+        }
+
+        public C GetInstance<C>(C script, Vector3 position, Quaternion rotation) where C : Component
+        {
+            C returnScript = default(C);
+            if(script != null)
+            {
+                GameObject instance = GetInstance(script.gameObject, position, rotation);
+                returnScript = instance.GetComponent<C>();
+            }
+            return returnScript;
+        }
+
+        public C GetInstance<C>(C script) where C : Component
+        {
+            C returnScript = default(C);
+            if (script != null)
+            {
+                GameObject instance = GetInstance(script.gameObject);
+                returnScript = instance.GetComponent<C>();
+            }
+            return returnScript;
         }
 
         GameObject CloneNewInstance(GameObject prefab, PoolSet pooledSet, Vector3 position, Quaternion rotation)
