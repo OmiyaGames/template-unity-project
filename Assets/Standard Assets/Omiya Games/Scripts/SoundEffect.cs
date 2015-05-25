@@ -44,6 +44,9 @@ namespace OmiyaGames
     [RequireComponent(typeof(AudioSource))]
     public class SoundEffect : MonoBehaviour
     {
+        public const float MinPitch = -3, MaxPitch = 3;
+        public const float MinVolume = 0, MaxVolume = 1;
+
         static readonly HashSet<SoundEffect> allSoundEffects = new HashSet<SoundEffect>();
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace OmiyaGames
         /// </summary>
         [Tooltip("A randomized list of clips to play. Note that the clip set on the AudioSource on start will be added to this list automatically.")]
         [SerializeField]
-        RandomList<AudioClip> clipVariations = new RandomList<AudioClip>();
+        List<AudioClip> clipVariations = new List<AudioClip>();
         /// <summary>
         /// Whether this sound effect's pitch should be mutated
         /// </summary>
@@ -61,7 +64,7 @@ namespace OmiyaGames
         /// The allowed range the pitch can mutate from the center pitch
         /// </summary>
         [SerializeField]
-        Vector2 pitchMutationRange = new Vector2(-0.5f, 0.5f);
+        Vector2 pitchMutationRange = new Vector2(0.5f, 1.5f);
         /// <summary>
         /// Whether this sound effect's volume should be mutated
         /// </summary>
@@ -71,11 +74,12 @@ namespace OmiyaGames
         /// The allowed range the volume can mutate from the center pitch
         /// </summary>
         [SerializeField]
-        Vector2 volumeMutationRange = new Vector2(-0.5f, 0f);
+        Vector2 volumeMutationRange = new Vector2(0.5f, 1f);
 
-        float centerVolume = 0, centerPitch = 0;
+        float lastVolumeRatio = 1, globalVolume = 1;
         bool mute = false;
         AudioSource audioCache = null;
+        RandomList<AudioClip> clipRandomizer = null;
 
         #region Static Properties
         public static float GlobalVolume
@@ -145,28 +149,37 @@ namespace OmiyaGames
             }
         }
 
-        public float Volume
+        public float CenterVolume
         {
             get
             {
-                return centerVolume;
-            }
-            set
-            {
-                centerVolume = value;
-                UpdateAudio(Singleton.Get<GameSettings>());
+                float returnVolume = Audio.volume;
+                if(mutateVolume == true)
+                {
+                    returnVolume = (volumeMutationRange.x + volumeMutationRange.y) / 2f;
+                }
+                return returnVolume;
             }
         }
 
-        public float Pitch
+        public float CenterPitch
         {
             get
             {
-                return centerPitch;
+                float returnPitch = Audio.pitch;
+                if (mutateVolume == true)
+                {
+                    returnPitch = (pitchMutationRange.x + pitchMutationRange.y) / 2f;
+                }
+                return returnPitch;
             }
-            set
+        }
+
+        public List<AudioClip> ClipVariations
+        {
+            get
             {
-                centerPitch = value;
+                return clipVariations;
             }
         }
         #endregion
@@ -175,15 +188,15 @@ namespace OmiyaGames
         void Start()
         {
             // Grab the original values
-            centerPitch = Audio.pitch;
-            centerVolume = Audio.volume;
             mute = Audio.mute;
-
-            // Add the audio source's clip to the random list
-            if(Audio.clip != null)
+            lastVolumeRatio = Audio.volume / globalVolume;
+            
+            // Add the audio source's clip to the random list, if it isn't in there already
+            if ((Audio.clip != null) && (ClipVariations.Contains(Audio.clip) == false))
             {
-                clipVariations.Add(Audio.clip);
+                ClipVariations.Add(Audio.clip);
             }
+            clipRandomizer = new RandomList<AudioClip>(ClipVariations);
 
             // Calculate how the audio should behave
             allSoundEffects.Add(this);
@@ -201,19 +214,28 @@ namespace OmiyaGames
             Audio.Stop();
 
             // Apply mutation
-            if (clipVariations.Count > 1)
+            if (clipRandomizer.Count > 1)
             {
-                Audio.clip = clipVariations.CurrentElement;
+                Audio.clip = clipRandomizer.RandomElement;
             }
             if(mutatePitch == true)
             {
                 // Change the audio's pitch
-                Audio.pitch = centerPitch + Random.Range(pitchMutationRange.x, pitchMutationRange.y);
+                Audio.pitch = Random.Range(pitchMutationRange.x, pitchMutationRange.y);
             }
+
+            // Update the volume
+            globalVolume = GlobalVolume;
             if(mutateVolume == true)
             {
                 // Change the audio's volume
-                Audio.volume = Mathf.Clamp01(Volume + (Random.Range(volumeMutationRange.x, volumeMutationRange.y) * GlobalVolume));
+                lastVolumeRatio = Random.Range(volumeMutationRange.x, volumeMutationRange.y);
+                Audio.volume = Mathf.Clamp01(lastVolumeRatio * globalVolume);
+            }
+            else
+            {
+                // Update the last played volume
+                lastVolumeRatio = Audio.volume / globalVolume;
             }
 
             // Play the audio
@@ -223,7 +245,7 @@ namespace OmiyaGames
         void UpdateAudio(GameSettings settings)
         {
             // Update the volume
-            Audio.volume = Mathf.Clamp01(centerVolume * settings.SoundVolume);
+            Audio.volume = Mathf.Clamp01(lastVolumeRatio * settings.SoundVolume);
 
             // Update mute
             Audio.mute = (mute || settings.IsSoundMuted);
