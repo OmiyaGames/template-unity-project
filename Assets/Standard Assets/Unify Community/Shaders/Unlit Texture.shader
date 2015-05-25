@@ -1,4 +1,11 @@
-﻿Shader "Unify Community/Unlit Texture" {
+﻿// -----------------------------------------------------------------------
+// Code by Jessy from Unify Community:
+// http://wiki.unity3d.com/index.php/Texture_Only
+// 
+// Licensed under Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0):
+// http://creativecommons.org/licenses/by-sa/3.0/
+// -----------------------------------------------------------------------
+Shader "Unify Community/Unlit Texture" {
  
 Properties {
     _MainTex ("Texture", 2D) = ""

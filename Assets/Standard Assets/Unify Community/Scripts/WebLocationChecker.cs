@@ -2,6 +2,13 @@
 using System.Collections;
 using System.Text;
 
+///-----------------------------------------------------------------------
+/// <copyright file="WebLocationChecker.cs">
+/// Code by andyman from Github:
+/// https://gist.github.com/andyman/e58dea85cce23cccecff
+/// </copyright>
+/// <author>andyman</author>
+///-----------------------------------------------------------------------
 /// <summary>
 /// Add this script to an object in the first scene of your game.
 /// It doesn't do anything for non-webplayer builds. For webplayer
@@ -9,10 +16,6 @@ using System.Text;
 /// one of the strings, or it will redirect the page to the proper
 /// URL for the game.
 /// </summary>
-/// <remarks>
-/// Code by andyman from Github:
-/// https://gist.github.com/andyman/e58dea85cce23cccecff
-/// </remarks>
 public class WebLocationChecker : MonoBehaviour
 {
     ///<summary>

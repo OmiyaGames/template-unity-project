@@ -1,5 +1,18 @@
 ﻿using UnityEngine;
 
+///-----------------------------------------------------------------------
+/// <copyright file="HSBColor.cs">
+/// Code by Jonathan Czeck from Unify Community:
+/// http://wiki.unity3d.com/index.php/HSBColor
+/// 
+/// Licensed under Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0):
+/// http://creativecommons.org/licenses/by-sa/3.0/
+/// </copyright>
+/// <author>Jonathan Czeck</author>
+///-----------------------------------------------------------------------
+/// <summary>
+/// Displays the frame-rate in the upper-left hand corner of the screen.
+/// </summary>
 [System.Serializable]
 public struct HSBColor
 {

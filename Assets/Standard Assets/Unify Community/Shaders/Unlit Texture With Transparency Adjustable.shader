@@ -1,5 +1,7 @@
-﻿// Taken from Jessy
+﻿// -----------------------------------------------------------------------
+// Code by Jessy from Unity Forums:
 // http://forum.unity3d.com/threads/unlit-with-adjustable-alpha.115455/
+// -----------------------------------------------------------------------
 Shader "Unify Community/Unlit Texture With Transparency Adjustable" {
 Properties {
     _Color ("Main Color (A=Opacity)", Color) = (1,1,1,1)
