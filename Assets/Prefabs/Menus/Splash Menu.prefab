@@ -72,6 +72,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22484774}
+  - 114: {fileID: 11416216}
   - 114: {fileID: 11406624}
   - 95: {fileID: 9506288}
   m_Layer: 5
@@ -199,9 +200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d1e7c067c415447b7d55449a4a5ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logoDisplayDuration: 4
+  logoDisplayDuration: 3
   logoOnlySet: {fileID: 123232}
-  loadingBar: {fileID: 11406548}
+  loadingBar: {fileID: 22404720}
   loadingBarIncludedSet: {fileID: 136396}
 --- !u!114 &11414610
 MonoBehaviour:
@@ -224,6 +225,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11416216
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 148166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66323afbd69e1904f8df75431dfad808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  domainMustContain: []
+  redirectURL: 
 --- !u!114 &11452050
 MonoBehaviour:
   m_ObjectHideFlags: 1
