@@ -27,7 +27,7 @@ using OmiyaGames;
 /// THE SOFTWARE.
 /// </copyright>
 /// <author>Taro Omiya</author>
-/// <date>5/18/2015</date>
+/// <date>5/25/2015</date>
 ///-----------------------------------------------------------------------
 /// <summary>A simple test script: displays the <code>PauseMenu</code>, <code>LevelFailedMenu</code>, or <code>LevelCompleteMenu</code></summary>
 /// <seealso cref="PauseMenu"/>
@@ -46,5 +46,13 @@ public class MenuTest : MonoBehaviour
     public void OnCompleteClicked()
     {
         Singleton.Get<MenuManager>().Show<LevelCompleteMenu>();
+    }
+    public void OnSoundClicked()
+    {
+        SoundEffect sound = GetComponent<SoundEffect>();
+        if(sound != null)
+        {
+            sound.Play();
+        }
     }
 }
