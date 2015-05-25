@@ -1,13 +1,12 @@
-﻿/*
- * Comment or uncomment the preprocessor directives below
- * to adjust what "Build All" context menu will build
-*/
+﻿/// Comment or uncomment the preprocessor directives below
+/// to adjust what "Build All" context menu will build
+
 #define BUILD_TO_MAJOR_DESKTOP_OS
 //#define BUILD_32_BIT_AND_64_BIT_SEPARATELY
 
 //#define BUILD_TO_MAJOR_MOBILE_OS
 
-#define BUILD_TO_WEBGL
+//#define BUILD_TO_WEBGL
 //#define BUILD_TO_WEBPLAYER
 //#define BUILD_TO_STREAMED_WEBPLAYER
 
@@ -20,14 +19,41 @@ using System.Collections.Generic;
 
 namespace OmiyaGames
 {
+    ///-----------------------------------------------------------------------
+    /// <copyright file="OmiyaGamesBuildScript.cs" company="Omiya Games">
+    /// The MIT License (MIT)
+    /// 
+    /// Copyright (c) 2014-2015 Omiya Games
+    /// 
+    /// Permission is hereby granted, free of charge, to any person obtaining a copy
+    /// of this software and associated documentation files (the "Software"), to deal
+    /// in the Software without restriction, including without limitation the rights
+    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    /// copies of the Software, and to permit persons to whom the Software is
+    /// furnished to do so, subject to the following conditions:
+    /// 
+    /// The above copyright notice and this permission notice shall be included in
+    /// all copies or substantial portions of the Software.
+    /// 
+    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    /// THE SOFTWARE.
+    /// </copyright>
+    /// <author>Taro Omiya</author>
+    /// <date>5/18/2015</date>
+    ///-----------------------------------------------------------------------
     /// <summary>
-    /// Script that builds for a specific platform.
-    /// Useful for continuous integration, like Jenkins.
+    /// Script that builds for a specific platform.  It even adds several menu items
+    /// under "Omiya Games" in the file menu bar to quickly build to a different
+    /// platform.
+    /// 
+    /// Also useful for continuous integration, like Jenkins.
     /// Use the Unity command feature to run this script, such as:
     /// <code>unity -batchmode -quit -executeMethod OmiyaGamesBuildScript.BuildAllPlatforms</code>
-    /// 
-    /// This code is under the MIT license.
-    /// For more details, see LICENSE.txt at the root of this project.
     /// </summary>
     public class Build
     {
