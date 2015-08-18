@@ -98,7 +98,7 @@ namespace OmiyaGames
         /// Gets or sets the volume of the background music, which is a value between 0 and 1.
         /// </summary>
         /// <value>The background music's volume.</value>
-        public float Volume
+        public static float Volume
         {
             get
             {
@@ -110,13 +110,15 @@ namespace OmiyaGames
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.MusicVolume = Mathf.Clamp01(value);
 
-                // Update audio sources
-                music1.Source.volume = settings.MusicVolume;
-                music2.Source.volume = settings.MusicVolume;
+                // Update the AudioMixerReference, if NOT muted
+                if (settings.IsMusicMuted == false)
+                {
+                    Singleton.Get<AudioMixerReference>().BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                }
             }
         }
 
-        public bool IsMuted
+        public static bool IsMuted
         {
             get
             {
@@ -128,9 +130,28 @@ namespace OmiyaGames
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.IsMusicMuted = value;
 
-                // Update audio sources
-                music1.Source.mute = value;
-                music2.Source.mute = value;
+                // Update the AudioMixerReference to either mute or revert the volume back to settings
+                AudioMixerReference audioMixer = Singleton.Get<AudioMixerReference>();
+                if (settings.IsMusicMuted == true)
+                {
+                    audioMixer.BackgroundMusicVolumeDb = audioMixer.MuteVolumeDb;
+                }
+                else
+                {
+                    audioMixer.BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                }
+            }
+        }
+
+        public static float Pitch
+        {
+            get
+            {
+                return Singleton.Get<AudioMixerReference>().BackgroundMusicPitch;
+            }
+            set
+            {
+                Singleton.Get<AudioMixerReference>().BackgroundMusicPitch = value;
             }
         }
 
@@ -156,6 +177,14 @@ namespace OmiyaGames
                         music2.ChangeClip(value, transitionDuration);
                     }
                 }
+            }
+        }
+
+        public bool IsPlaying
+        {
+            get
+            {
+                return CurrentAudioSource.Source.isPlaying;
             }
         }
 
@@ -187,6 +216,27 @@ namespace OmiyaGames
                     return music1;
                 }
             }
+        }
+
+        public void Play()
+        {
+            // Play the audio
+            CurrentAudioSource.Source.Play();
+        }
+
+        public void Stop()
+        {
+            CurrentAudioSource.Source.Stop();
+        }
+
+        public void Pause()
+        {
+            CurrentAudioSource.Source.Pause();
+        }
+
+        public void UnPause()
+        {
+            CurrentAudioSource.Source.UnPause();
         }
     }
 }
