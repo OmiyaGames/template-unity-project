@@ -63,7 +63,6 @@ namespace OmiyaGames
         AudioControls soundEffectsControls;
 
         GameSettings settings = null;
-        BackgroundMusic musicSettings = null;
         SoundEffect audioCache;
         bool inSetupMode = false;
 
@@ -108,11 +107,10 @@ namespace OmiyaGames
 
             // Retrieve settings
             settings = Singleton.Get<GameSettings>();
-            musicSettings = Singleton.Get<BackgroundMusic>();
 
             // Setup controls
             inSetupMode = true;
-            musicControls.Setup(musicSettings.Volume, musicSettings.IsMuted);
+            musicControls.Setup(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
             soundEffectsControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
             inSetupMode = false;
         }
@@ -138,8 +136,8 @@ namespace OmiyaGames
         {
             if (inSetupMode == false)
             {
-                musicSettings.Volume = musicControls.volumeSlider.value;
-                musicControls.volumePercentLabel.text = Percent(musicSettings.Volume);
+                BackgroundMusic.GlobalVolume = musicControls.volumeSlider.value;
+                musicControls.volumePercentLabel.text = Percent(BackgroundMusic.GlobalVolume);
             }
         }
 
@@ -162,13 +160,13 @@ namespace OmiyaGames
             if (inSetupMode == false)
             {
                 // Toggle mute
-                musicSettings.IsMuted = !musicSettings.IsMuted;
+                BackgroundMusic.GlobalMute = !BackgroundMusic.GlobalMute;
 
                 // Change the check box
-                musicControls.checkBoxMark.enabled = musicSettings.IsMuted;
+                musicControls.checkBoxMark.enabled = BackgroundMusic.GlobalMute;
 
                 // disable the slider
-                musicControls.volumeSlider.interactable = !musicSettings.IsMuted;
+                musicControls.volumeSlider.interactable = !BackgroundMusic.GlobalMute;
             }
         }
 
