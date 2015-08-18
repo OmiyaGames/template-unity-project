@@ -98,7 +98,7 @@ namespace OmiyaGames
         /// Gets or sets the volume of the background music, which is a value between 0 and 1.
         /// </summary>
         /// <value>The background music's volume.</value>
-        public static float Volume
+        public static float GlobalVolume
         {
             get
             {
@@ -118,7 +118,7 @@ namespace OmiyaGames
             }
         }
 
-        public static bool IsMuted
+        public static bool GlobalMute
         {
             get
             {
@@ -143,7 +143,7 @@ namespace OmiyaGames
             }
         }
 
-        public static float Pitch
+        public static float GlobalPitch
         {
             get
             {
