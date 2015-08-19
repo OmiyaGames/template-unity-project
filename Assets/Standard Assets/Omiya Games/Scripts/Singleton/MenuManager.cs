@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that retrieves all <code>IMenu</code>s in the scene.
@@ -378,10 +378,16 @@ namespace OmiyaGames
                     if(pauseMenu.CurrentState == IMenu.State.Hidden)
                     {
                         pauseMenu.Show();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
                     else if(pauseMenu.CurrentState == IMenu.State.Visible)
                     {
                         pauseMenu.Hide();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
                 }
             }
