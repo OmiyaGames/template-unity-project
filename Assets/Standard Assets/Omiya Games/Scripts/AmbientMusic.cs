@@ -31,12 +31,12 @@ namespace OmiyaGames
     /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An interface for ambient music.  More useful when used in conjunction with Audio Finder.
+    /// An interface for ambient music.  More useful when used in conjunction with AudioFinder.
     /// </summary>
     /// <seealso cref="AudioSource"/>
     /// <seealso cref="BackgroundMusic"/>
     /// <seealso cref="AmbientMusic"/>
-    /// <seealso cref="OptionsMenu"/>
+    /// <seealso cref="AudioFinder"/>
     [RequireComponent(typeof(AudioSource))]
     public class AmbientMusic : IAudio
     {
