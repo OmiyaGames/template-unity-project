@@ -75,6 +75,7 @@ namespace OmiyaGames
         // Use this for initialization
         void Awake()
         {
+            int index = 0;
             ISingletonScript[] allSingletonScripts = null;
             if (msInstance == null)
             {
@@ -86,10 +87,10 @@ namespace OmiyaGames
 
                 // Go through every ISingletonScript, and run singleton awake
                 allSingletonScripts = GetComponentsInChildren<ISingletonScript>();
-                foreach (ISingletonScript script in allSingletonScripts)
+                for (index = 0; index < allSingletonScripts.Length; ++index)
                 {
                     // Run singleton awake
-                    script.SingletonAwake(msInstance);
+                    allSingletonScripts[index].SingletonAwake(msInstance);
                 }
             }
             else
@@ -97,14 +98,14 @@ namespace OmiyaGames
                 // Destroy this gameobject
                 Destroy(gameObject);
 
-                // Go through every ISingletonScript
+                // Retrieve the singleton script from the instance
                 allSingletonScripts = msInstance.GetComponentsInChildren<ISingletonScript>();
             }
 
             // Go through every ISingletonScript, and run scene awake
-            foreach (ISingletonScript script in allSingletonScripts)
+            for (index = 0; index < allSingletonScripts.Length; ++index)
             {
-                script.SceneAwake(msInstance);
+                allSingletonScripts[index].SceneAwake(msInstance);
             }
         }
 

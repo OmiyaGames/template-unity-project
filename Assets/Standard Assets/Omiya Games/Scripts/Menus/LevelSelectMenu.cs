@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -93,6 +92,9 @@ namespace OmiyaGames
             {
                 Singleton.Get<SceneManager>().LoadScene(level);
                 isButtonLocked = true;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
 
@@ -102,6 +104,9 @@ namespace OmiyaGames
             {
                 CurrentState = State.Hidden;
                 isButtonLocked = true;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
         #endregion

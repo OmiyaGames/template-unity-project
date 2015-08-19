@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -28,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A script for playing sound effects, with extra options such as clip, pitch,
@@ -40,9 +41,10 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="AudioSource"/>
     /// <seealso cref="BackgroundMusic"/>
+    /// <seealso cref="AmbientMusic"/>
     /// <seealso cref="OptionsMenu"/>
     [RequireComponent(typeof(AudioSource))]
-    public class SoundEffect : MonoBehaviour
+    public class SoundEffect : IAudio
     {
         public const float MinPitch = -3, MaxPitch = 3;
         public const float MinVolume = 0, MaxVolume = 1;
@@ -76,8 +78,6 @@ namespace OmiyaGames
         [SerializeField]
         Vector2 volumeMutationRange = new Vector2(0.5f, 1f);
 
-        float lastVolumeRatio = 1, globalVolume = 1;
-        bool mute = false;
         AudioSource audioCache = null;
         RandomList<AudioClip> clipRandomizer = null;
 
@@ -93,15 +93,15 @@ namespace OmiyaGames
                 // First, set the sound volume
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.SoundVolume = Mathf.Clamp01(value);
-
-                // Go through every instance of SoundEffect and update their settings
-                foreach (SoundEffect effect in allSoundEffects)
+                
+                // Update the AudioMixerReference, if NOT muted
+                if(settings.IsSoundMuted == false)
                 {
-                    effect.UpdateAudio(settings);
+                    Singleton.Get<AudioMixerReference>().SoundEffectsVolumeNormalized = settings.SoundVolume;
                 }
             }
         }
-
+        
         public static bool GlobalMute
         {
             get
@@ -113,18 +113,43 @@ namespace OmiyaGames
                 // First, set the sound setting
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.IsSoundMuted = value;
-
-                // Go through every instance of SoundEffect and update their settings
-                foreach (SoundEffect effect in allSoundEffects)
+                
+                // Update the AudioMixerReference to either mute or revert the volume back to settings
+                AudioMixerReference audioMixer = Singleton.Get<AudioMixerReference>();
+                if(settings.IsSoundMuted == true)
                 {
-                    effect.UpdateAudio(settings);
+                    audioMixer.SoundEffectsVolumeDb = audioMixer.MuteVolumeDb;
                 }
+                else
+                {
+                    audioMixer.SoundEffectsVolumeNormalized = settings.SoundVolume;
+                }
+            }
+        }
+        
+        public static float GlobalPitch
+        {
+            get
+            {
+                return Singleton.Get<AudioMixerReference>().SoundEffectsPitch;
+            }
+            set
+            {
+                Singleton.Get<AudioMixerReference>().SoundEffectsPitch = value;
+            }
+        }
+        
+        public static IEnumerable<SoundEffect> AllSoundEffects
+        {
+            get
+            {
+                return allSoundEffects;
             }
         }
         #endregion
 
         #region Local Properties
-        public AudioSource Audio
+        public override AudioSource Audio
         {
             get
             {
@@ -133,19 +158,6 @@ namespace OmiyaGames
                     audioCache = GetComponent<AudioSource>();
                 }
                 return audioCache;
-            }
-        }
-
-        public bool IsMuted
-        {
-            get
-            {
-                return mute;
-            }
-            set
-            {
-                mute = value;
-                UpdateAudio(Singleton.Get<GameSettings>());
             }
         }
 
@@ -160,6 +172,10 @@ namespace OmiyaGames
                 }
                 return returnVolume;
             }
+            set
+            {
+                Audio.volume = value;
+            }
         }
 
         public float CenterPitch
@@ -173,6 +189,10 @@ namespace OmiyaGames
                 }
                 return returnPitch;
             }
+            set
+            {
+                Audio.pitch = value;
+            }
         }
 
         public List<AudioClip> ClipVariations
@@ -182,22 +202,28 @@ namespace OmiyaGames
                 return clipVariations;
             }
         }
+
+        RandomList<AudioClip> ClipRandomizer
+        {
+            get
+            {
+                if (clipRandomizer == null)
+                {
+                    // Add the audio source's clip to the random list, if it isn't in there already
+                    if ((Audio.clip != null) && (ClipVariations.Contains(Audio.clip) == false))
+                    {
+                        ClipVariations.Add(Audio.clip);
+                    }
+                    clipRandomizer = new RandomList<AudioClip>(ClipVariations);
+                }
+                return clipRandomizer;
+            }
+        }
         #endregion
 
         #region Unity Events
         void Start()
         {
-            // Grab the original values
-            mute = Audio.mute;
-            lastVolumeRatio = Audio.volume / globalVolume;
-            
-            // Add the audio source's clip to the random list, if it isn't in there already
-            if ((Audio.clip != null) && (ClipVariations.Contains(Audio.clip) == false))
-            {
-                ClipVariations.Add(Audio.clip);
-            }
-            clipRandomizer = new RandomList<AudioClip>(ClipVariations);
-
             // Calculate how the audio should behave
             allSoundEffects.Add(this);
         }
@@ -208,15 +234,15 @@ namespace OmiyaGames
         }
         #endregion
 
-        public void Play()
+        public override void Play()
         {
             // Stop the audio
-            Audio.Stop();
+            Stop();
 
             // Apply mutation
-            if (clipRandomizer.Count > 1)
+            if (ClipRandomizer.Count > 1)
             {
-                Audio.clip = clipRandomizer.RandomElement;
+                Audio.clip = ClipRandomizer.RandomElement;
             }
             if(mutatePitch == true)
             {
@@ -225,30 +251,14 @@ namespace OmiyaGames
             }
 
             // Update the volume
-            globalVolume = GlobalVolume;
             if(mutateVolume == true)
             {
                 // Change the audio's volume
-                lastVolumeRatio = Random.Range(volumeMutationRange.x, volumeMutationRange.y);
-                Audio.volume = Mathf.Clamp01(lastVolumeRatio * globalVolume);
-            }
-            else
-            {
-                // Update the last played volume
-                lastVolumeRatio = Audio.volume / globalVolume;
+                Audio.volume = Random.Range(volumeMutationRange.x, volumeMutationRange.y);
             }
 
             // Play the audio
             Audio.Play();
-        }
-
-        void UpdateAudio(GameSettings settings)
-        {
-            // Update the volume
-            Audio.volume = Mathf.Clamp01(lastVolumeRatio * settings.SoundVolume);
-
-            // Update mute
-            Audio.mute = (mute || settings.IsSoundMuted);
         }
     }
 }

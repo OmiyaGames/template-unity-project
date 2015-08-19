@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -29,7 +28,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Menu that provides options.  Currently only supports changing sound
@@ -63,7 +62,6 @@ namespace OmiyaGames
         AudioControls soundEffectsControls;
 
         GameSettings settings = null;
-        BackgroundMusic musicSettings = null;
         SoundEffect audioCache;
         bool inSetupMode = false;
 
@@ -108,11 +106,10 @@ namespace OmiyaGames
 
             // Retrieve settings
             settings = Singleton.Get<GameSettings>();
-            musicSettings = Singleton.Get<BackgroundMusic>();
 
             // Setup controls
             inSetupMode = true;
-            musicControls.Setup(musicSettings.Volume, musicSettings.IsMuted);
+            musicControls.Setup(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
             soundEffectsControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
             inSetupMode = false;
         }
@@ -134,12 +131,20 @@ namespace OmiyaGames
         }
 
         #region UI events
+        public override void Hide()
+        {
+            base.Hide();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
+        }
+
         public void OnMusicSliderChanged()
         {
             if (inSetupMode == false)
             {
-                musicSettings.Volume = musicControls.volumeSlider.value;
-                musicControls.volumePercentLabel.text = Percent(musicSettings.Volume);
+                BackgroundMusic.GlobalVolume = musicControls.volumeSlider.value;
+                musicControls.volumePercentLabel.text = Percent(BackgroundMusic.GlobalVolume);
             }
         }
 
@@ -162,13 +167,16 @@ namespace OmiyaGames
             if (inSetupMode == false)
             {
                 // Toggle mute
-                musicSettings.IsMuted = !musicSettings.IsMuted;
+                BackgroundMusic.GlobalMute = !BackgroundMusic.GlobalMute;
 
                 // Change the check box
-                musicControls.checkBoxMark.enabled = musicSettings.IsMuted;
+                musicControls.checkBoxMark.enabled = BackgroundMusic.GlobalMute;
 
                 // disable the slider
-                musicControls.volumeSlider.interactable = !musicSettings.IsMuted;
+                musicControls.volumeSlider.interactable = !BackgroundMusic.GlobalMute;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
 
@@ -185,8 +193,8 @@ namespace OmiyaGames
                 // disable the slider
                 soundEffectsControls.volumeSlider.interactable = !SoundEffect.GlobalMute;
 
-                // Play a test sound effect
-                OnSoundEffectsSliderPointerUp();
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
         #endregion

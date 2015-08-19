@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that retrieves all <code>IMenu</code>s in the scene.
@@ -70,9 +70,14 @@ namespace OmiyaGames
         [SerializeField]
         string nextTextTemplate = "Proceed to {0}";
 
+        [Header("Sound Templates")]
+        [SerializeField]
+        SoundEffect buttonClickSound = null;
+
         EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
         string menuTextCache = null;
+        PauseMenu pauseMenuCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -88,6 +93,14 @@ namespace OmiyaGames
                     eventSystemCache = GetComponent<EventSystem>();
                 }
                 return eventSystemCache;
+            }
+        }
+
+        public SoundEffect ButtonClick
+        {
+            get
+            {
+                return buttonClickSound;
             }
         }
 
@@ -111,6 +124,7 @@ namespace OmiyaGames
                 return managedMenusStack.Count;
             }
         }
+
         public string ReturnToMenuText
         {
             get
@@ -202,7 +216,13 @@ namespace OmiyaGames
 
         public override void SingletonAwake(Singleton instance)
         {
+            // Enable events
+            Events.enabled = true;
+
+            // Bind to update
             instance.OnRealTimeUpdate += QueryInput;
+
+
             delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 
@@ -211,6 +231,7 @@ namespace OmiyaGames
             // Clear out all the menus
             typeToMenuMap.Clear();
             managedMenusStack.Clear();
+            pauseMenuCache = null;
 
             // Search for all menus in the scene
             IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
@@ -359,16 +380,25 @@ namespace OmiyaGames
             if((NumManagedMenus <= 0) && (Input.GetButtonDown(pauseInput) == true))
             {
                 // Attempt to grab the pause menu
-                PauseMenu pauseMenu = GetMenu<PauseMenu>();
-                if(pauseMenu != null)
+                if(pauseMenuCache == null)
                 {
-                    if(pauseMenu.CurrentState == IMenu.State.Hidden)
+                    pauseMenuCache = GetMenu<PauseMenu>();
+                }
+                if (pauseMenuCache != null)
+                {
+                    if(pauseMenuCache.CurrentState == IMenu.State.Hidden)
                     {
-                        pauseMenu.Show();
+                        pauseMenuCache.Show();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
-                    else if(pauseMenu.CurrentState == IMenu.State.Visible)
+                    else if(pauseMenuCache.CurrentState == IMenu.State.Visible)
                     {
-                        pauseMenu.Hide();
+                        pauseMenuCache.Hide();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
                 }
             }
