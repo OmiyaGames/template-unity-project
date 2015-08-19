@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections;
+using System;
 
 namespace OmiyaGames
 {
@@ -29,13 +30,17 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that allows smooth transitions between 2 background musics.
     /// </summary>
     /// <seealso cref="Singleton"/>
-    public class BackgroundMusic : MonoBehaviour
+    /// <seealso cref="AudioSource"/>
+    /// <seealso cref="SoundEffect"/>
+    /// <seealso cref="AmbientMusic"/>
+    /// <seealso cref="OptionsMenu"/>
+    public class BackgroundMusic : IAudio
     {
         [System.Serializable]
         public class MusicInfo
@@ -94,6 +99,7 @@ namespace OmiyaGames
 
         bool isPlayingMusic1 = true;
 
+        #region Static Properties
         /// <summary>
         /// Gets or sets the volume of the background music, which is a value between 0 and 1.
         /// </summary>
@@ -154,7 +160,9 @@ namespace OmiyaGames
                 Singleton.Get<AudioMixerReference>().BackgroundMusicPitch = value;
             }
         }
+        #endregion
 
+        #region Properties
         public AudioClip CurrentMusic
         {
             get
@@ -180,19 +188,21 @@ namespace OmiyaGames
             }
         }
 
-        public bool IsPlaying
+        public override AudioSource Audio
         {
             get
             {
-                return CurrentAudioSource.Source.isPlaying;
+                return CurrentAudioSource.Source;
             }
         }
+        #endregion
 
+        #region Helper Properties & Methods
         MusicInfo CurrentAudioSource
         {
             get
             {
-                if(isPlayingMusic1 == true)
+                if (isPlayingMusic1 == true)
                 {
                     return music1;
                 }
@@ -207,7 +217,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(isPlayingMusic1 == true)
+                if (isPlayingMusic1 == true)
                 {
                     return music2;
                 }
@@ -218,25 +228,11 @@ namespace OmiyaGames
             }
         }
 
-        public void Play()
+        IEnumerator DelayPlay(float delaySeconds)
         {
-            // Play the audio
-            CurrentAudioSource.Source.Play();
+            yield return new WaitForSeconds(delaySeconds);
+            Play();
         }
-
-        public void Stop()
-        {
-            CurrentAudioSource.Source.Stop();
-        }
-
-        public void Pause()
-        {
-            CurrentAudioSource.Source.Pause();
-        }
-
-        public void UnPause()
-        {
-            CurrentAudioSource.Source.UnPause();
-        }
+        #endregion
     }
 }
