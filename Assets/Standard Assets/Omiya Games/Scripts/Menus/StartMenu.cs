@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -89,9 +88,10 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the Level Select menu
-                Singleton.Get<MenuManager>().GetMenu<LevelSelectMenu>().CurrentState = IMenu.State.Visible;
+                Manager.Show<LevelSelectMenu>();
 
                 // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
                 defaultButton = levelSelectButton.gameObject;
                 isButtonLocked = true;
             }
@@ -102,9 +102,10 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                Singleton.Get<MenuManager>().Show<OptionsMenu>();
+                Manager.Show<OptionsMenu>();
 
                 // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
                 defaultButton = optionsButton.gameObject;
                 isButtonLocked = true;
             }
@@ -121,6 +122,7 @@ namespace OmiyaGames
                 CurrentState = State.StandBy;
 
                 // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
                 defaultButton = creditsButton.gameObject;
                 isButtonLocked = true;
             }
@@ -137,6 +139,7 @@ namespace OmiyaGames
                 CurrentState = State.StandBy;
 
                 // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
                 defaultButton = quitButton.gameObject;
                 isButtonLocked = true;
             }
