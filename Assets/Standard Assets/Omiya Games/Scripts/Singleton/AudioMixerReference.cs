@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="BackgroundMusic.cs" company="Omiya Games">
+    /// <copyright file="AudioMixerReference.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2015 Omiya Games
