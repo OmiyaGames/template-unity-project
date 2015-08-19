@@ -12,9 +12,28 @@ GameObject:
   - 114: {fileID: 11400476}
   - 114: {fileID: 11428526}
   - 114: {fileID: 11412146}
+  - 114: {fileID: 11406472}
+  - 114: {fileID: 11462580}
   - 114: {fileID: 11420754}
   m_Layer: 0
   m_Name: Singleton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &104202
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 489720}
+  - 82: {fileID: 8221844}
+  - 114: {fileID: 11410914}
+  m_Layer: 0
+  m_Name: Button Click Sound Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +49,7 @@ GameObject:
   - 4: {fileID: 479606}
   - 114: {fileID: 11419168}
   m_Layer: 0
-  m_Name: BackgroundMusic
+  m_Name: Background Music
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +65,7 @@ GameObject:
   - 4: {fileID: 486568}
   - 82: {fileID: 8264130}
   m_Layer: 0
-  m_Name: Music2
+  m_Name: Music 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +101,7 @@ GameObject:
   - 114: {fileID: 11406140}
   - 114: {fileID: 11480656}
   m_Layer: 0
-  m_Name: MenuManager
+  m_Name: Menu Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,7 +117,7 @@ GameObject:
   - 4: {fileID: 483340}
   - 82: {fileID: 8237012}
   m_Layer: 0
-  m_Name: Music1
+  m_Name: Music 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +147,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 489720}
   m_Father: {fileID: 400000}
   m_RootOrder: 0
 --- !u!4 &479606
@@ -169,6 +189,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 479606}
   m_RootOrder: 1
+--- !u!4 &489720
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104202}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 447738}
+  m_RootOrder: 0
 --- !u!4 &490124
 Transform:
   m_ObjectHideFlags: 1
@@ -189,10 +221,81 @@ AudioSource:
   m_GameObject: {fileID: 120378}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24360054, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: ef863394110a8b94f8c1a2c08be3ba0b, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+--- !u!82 &8221844
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104202}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24360054, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 139c825b4c9cd0040a0fd1b5550d5122, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: .5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -425,6 +528,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowActivationOnStandalone: 0
+--- !u!114 &11406472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 251822aa2b6816d4f8d3b944bb81a257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loadFileAsset: {fileID: 4900000, guid: d2e58b55fb3f2a44b9f3ac03d9583ec3, type: 3}
+  loadFileName: 
+  keyHeader: Keys
+  testLanguage: 
+  languageMap:
+  - language: 10
+    header: English (USA)
+--- !u!114 &11410914
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 104202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae95aacedb290847a5af5f0a0223a8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clipVariations: []
+  mutatePitch: 1
+  pitchMutationRange: {x: .5, y: 1.5}
+  mutateVolume: 0
+  volumeMutationRange: {x: .5, y: 1}
 --- !u!114 &11412146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -522,7 +659,29 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
+  m_RepeatDelay: .5
   m_AllowActivationOnMobileDevice: 0
+--- !u!114 &11462580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2551938a73f87424887bd15f359d4c49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  muteVolumeDb: -80
+  mixer: {fileID: 24100000, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+  backgroundMusicVolume:
+  - Music Volume
+  soundEffectsVolume:
+  - Sound Effects Volume
+  backgroundMusicPitch:
+  - Music Pitch
+  soundEffectsPitch:
+  - Sound Effects Pitch
 --- !u!114 &11480656
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -541,6 +700,7 @@ MonoBehaviour:
   completeTextTemplate: '{0} Complete'
   failedTextTemplate: '{0} Failed'
   nextTextTemplate: Proceed to {0}
+  buttonClickSound: {fileID: 11410914}
 --- !u!114 &11492550
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -552,6 +712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae95aacedb290847a5af5f0a0223a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clipVariations: []
   mutatePitch: 0
   pitchMutationRange: {x: -.5, y: .5}
   mutateVolume: 0
@@ -562,7 +723,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 129462}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -619905303, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
@@ -576,7 +737,11 @@ Prefab:
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
-    m_Modifications: []
+    m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}

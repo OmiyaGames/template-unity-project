@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -92,6 +90,9 @@ namespace OmiyaGames
 
             // Transition to the current level
             Singleton.Get<SceneManager>().LoadNextLevel();
+
+            // Indicate the button was clicked
+            Manager.ButtonClick.Play();
         }
     }
 }

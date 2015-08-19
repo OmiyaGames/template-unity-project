@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -29,7 +27,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Menu that appears when you press the pause button (based on the "Pause"
@@ -59,12 +57,19 @@ namespace OmiyaGames
         public void OnOptionsClicked()
         {
             // Open the options dialog
-            Singleton.Get<MenuManager>().Show<OptionsMenu>();
+            Manager.Show<OptionsMenu>();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
         }
 
         public void OnResumeClicked()
         {
+            // Hide the pause menu
             Hide();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
         }
     }
 }
