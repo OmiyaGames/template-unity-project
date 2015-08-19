@@ -215,7 +215,13 @@ namespace OmiyaGames
 
         public override void SingletonAwake(Singleton instance)
         {
+            // Enable events
+            Events.enabled = true;
+
+            // Bind to update
             instance.OnRealTimeUpdate += QueryInput;
+
+
             delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 

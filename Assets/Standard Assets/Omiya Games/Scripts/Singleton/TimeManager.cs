@@ -38,6 +38,7 @@ namespace OmiyaGames
     /// <seealso cref="Singleton"/>
     public class TimeManager : ISingletonScript
     {
+        // TODO: consider adding full-screen flashes
         public event System.Action<TimeManager> OnManuallyPausedChanged;
 
         float originalTimeScale = 1f,
