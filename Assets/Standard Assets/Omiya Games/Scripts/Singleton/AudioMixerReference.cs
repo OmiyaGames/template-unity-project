@@ -43,14 +43,22 @@ namespace OmiyaGames
         float muteVolumeDb = -80;
         [SerializeField]
         AudioMixer mixer = null;
+
+        [Header("Volume Settings")]
         [SerializeField]
         string[] backgroundMusicVolume = new string[] { "Music Volume" };
         [SerializeField]
         string[] soundEffectsVolume = new string[] { "Sound Effects Volume" };
+
+        [Header("Pitch Settings")]
         [SerializeField]
         string[] backgroundMusicPitch = new string[] { "Music Pitch" };
         [SerializeField]
         string[] soundEffectsPitch = new string[] { "Sound Effects Pitch" };
+
+        [Header("Pause Effect Settings")]
+        [SerializeField]
+        string musicDuckField = "Music Duck Level";
 
         int index = 0;
         bool isSetup = false;
@@ -194,29 +202,16 @@ namespace OmiyaGames
             {
                 // Retrieve settings
                 GameSettings settings = Singleton.Get<GameSettings>();
-
-                // Check if the background music was muted
-                if(settings.IsMusicMuted == true)
+                if (settings != null)
                 {
-                    // Mute the background music
-                    BackgroundMusicVolumeDb = MuteVolumeDb;
-                }
-                else
-                {
-                    // Set the background music volume based on settings
-                    BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                    SetupVolumeAndMute(settings);
                 }
 
-                // Check if the background music was muted
-                if(settings.IsSoundMuted == true)
+                // Check the TimeManager event
+                TimeManager manager = Singleton.Get<TimeManager>();
+                if(manager != null)
                 {
-                    // Mute the background music
-                    SoundEffectsVolumeDb = MuteVolumeDb;
-                }
-                else
-                {
-                    // Set the background music volume based on settings
-                    SoundEffectsVolumeNormalized = settings.SoundVolume;
+                    manager.OnManuallyPausedChanged += OnPauseChanged;
                 }
 
                 // Indicate we don't need to setup anymore
@@ -247,5 +242,46 @@ namespace OmiyaGames
                 }
             }
         }
+
+        #region Helper Methods
+        void SetupVolumeAndMute(GameSettings settings)
+        {
+            // Check if the background music was muted
+            if (settings.IsMusicMuted == true)
+            {
+                // Mute the background music
+                BackgroundMusicVolumeDb = MuteVolumeDb;
+            }
+            else
+            {
+                // Set the background music volume based on settings
+                BackgroundMusicVolumeNormalized = settings.MusicVolume;
+            }
+
+            // Check if the background music was muted
+            if (settings.IsSoundMuted == true)
+            {
+                // Mute the background music
+                SoundEffectsVolumeDb = MuteVolumeDb;
+            }
+            else
+            {
+                // Set the background music volume based on settings
+                SoundEffectsVolumeNormalized = settings.SoundVolume;
+            }
+        }
+
+        void OnPauseChanged(TimeManager pauseCheck)
+        {
+            if (pauseCheck.IsManuallyPaused == true)
+            {
+                mixer.SetFloat(musicDuckField, 0f);
+            }
+            else
+            {
+                mixer.SetFloat(musicDuckField, MuteVolumeDb);
+            }
+        }
+        #endregion
     }
 }

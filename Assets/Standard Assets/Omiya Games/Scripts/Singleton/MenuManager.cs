@@ -77,6 +77,7 @@ namespace OmiyaGames
         EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
         string menuTextCache = null;
+        PauseMenu pauseMenuCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -230,6 +231,7 @@ namespace OmiyaGames
             // Clear out all the menus
             typeToMenuMap.Clear();
             managedMenusStack.Clear();
+            pauseMenuCache = null;
 
             // Search for all menus in the scene
             IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
@@ -378,19 +380,22 @@ namespace OmiyaGames
             if((NumManagedMenus <= 0) && (Input.GetButtonDown(pauseInput) == true))
             {
                 // Attempt to grab the pause menu
-                PauseMenu pauseMenu = GetMenu<PauseMenu>();
-                if(pauseMenu != null)
+                if(pauseMenuCache == null)
                 {
-                    if(pauseMenu.CurrentState == IMenu.State.Hidden)
+                    pauseMenuCache = GetMenu<PauseMenu>();
+                }
+                if (pauseMenuCache != null)
+                {
+                    if(pauseMenuCache.CurrentState == IMenu.State.Hidden)
                     {
-                        pauseMenu.Show();
+                        pauseMenuCache.Show();
 
                         // Indicate button is clicked
                         ButtonClick.Play();
                     }
-                    else if(pauseMenu.CurrentState == IMenu.State.Visible)
+                    else if(pauseMenuCache.CurrentState == IMenu.State.Visible)
                     {
-                        pauseMenu.Hide();
+                        pauseMenuCache.Hide();
 
                         // Indicate button is clicked
                         ButtonClick.Play();
