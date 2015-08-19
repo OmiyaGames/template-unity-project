@@ -26,7 +26,7 @@ using OmiyaGames;
 /// THE SOFTWARE.
 /// </copyright>
 /// <author>Taro Omiya</author>
-/// <date>5/18/2015</date>
+/// <date>8/18/2015</date>
 ///-----------------------------------------------------------------------
 /// <summary>A simple test script: changes the background music when the scene starts</summary>
 /// <seealso cref="BackgroundMusic"/>

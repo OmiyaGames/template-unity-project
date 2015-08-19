@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -29,7 +28,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Menu that provides options.  Currently only supports changing sound
