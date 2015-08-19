@@ -47,13 +47,11 @@ namespace OmiyaGames
         [Header("Audio Sources")]
         public List<AudioSource> soundEffects = new List<AudioSource>();
         public List<AudioSource> ambientMusics = new List<AudioSource>();
-        public List<AudioSource> backgroundMusics = new List<AudioSource>();
         public List<AudioSource> unknownSources = new List<AudioSource>();
 
         [Header("Audio Sources")]
         public AudioMixerGroup soundEffectsGroup = null;
         public AudioMixerGroup ambientMusicGroup = null;
-        public AudioMixerGroup backgroundMusicGroup = null;
 
         [ContextMenu("Find all audio sources")]
         void FindAllAudioSources()
@@ -61,7 +59,6 @@ namespace OmiyaGames
             // Clear all lists
             soundEffects.Clear();
             ambientMusics.Clear();
-            backgroundMusics.Clear();
             unknownSources.Clear();
 
             // Seek for all AudioSources
@@ -84,10 +81,6 @@ namespace OmiyaGames
                     {
                         ambientMusics.Add(source);
                     }
-                    else if ((soundComponent == null) && (ambientComponent == null) && (backgroundComponent != null))
-                    {
-                        backgroundMusics.Add(source);
-                    }
                     else
                     {
                         unknownSources.Add(source);
@@ -107,10 +100,6 @@ namespace OmiyaGames
             foreach (AudioSource source in ambientMusics)
             {
                 source.outputAudioMixerGroup = ambientMusicGroup;
-            }
-            foreach (AudioSource source in backgroundMusics)
-            {
-                source.outputAudioMixerGroup = backgroundMusicGroup;
             }
         }
     }
