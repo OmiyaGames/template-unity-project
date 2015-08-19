@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -137,6 +136,9 @@ namespace OmiyaGames
 
             // Transition to the current level
             Singleton.Get<SceneManager>().ReloadCurrentScene();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
         }
 
         public void OnReturnToMenuClicked()
@@ -145,6 +147,9 @@ namespace OmiyaGames
 
             // Transition to the menu
             Singleton.Get<SceneManager>().LoadMainMenu();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
         }
     }
 }

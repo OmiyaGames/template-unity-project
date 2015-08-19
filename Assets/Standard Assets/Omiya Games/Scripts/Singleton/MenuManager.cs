@@ -70,6 +70,10 @@ namespace OmiyaGames
         [SerializeField]
         string nextTextTemplate = "Proceed to {0}";
 
+        [Header("Sound Templates")]
+        [SerializeField]
+        SoundEffect buttonClickSound = null;
+
         EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
         string menuTextCache = null;
@@ -88,6 +92,14 @@ namespace OmiyaGames
                     eventSystemCache = GetComponent<EventSystem>();
                 }
                 return eventSystemCache;
+            }
+        }
+
+        public SoundEffect ButtonClick
+        {
+            get
+            {
+                return buttonClickSound;
             }
         }
 
@@ -111,6 +123,7 @@ namespace OmiyaGames
                 return managedMenusStack.Count;
             }
         }
+
         public string ReturnToMenuText
         {
             get

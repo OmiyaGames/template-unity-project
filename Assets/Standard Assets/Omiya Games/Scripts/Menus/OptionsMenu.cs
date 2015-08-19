@@ -131,6 +131,14 @@ namespace OmiyaGames
         }
 
         #region UI events
+        public override void Hide()
+        {
+            base.Hide();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
+        }
+
         public void OnMusicSliderChanged()
         {
             if (inSetupMode == false)
@@ -166,6 +174,9 @@ namespace OmiyaGames
 
                 // disable the slider
                 musicControls.volumeSlider.interactable = !BackgroundMusic.GlobalMute;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
 
@@ -182,8 +193,8 @@ namespace OmiyaGames
                 // disable the slider
                 soundEffectsControls.volumeSlider.interactable = !SoundEffect.GlobalMute;
 
-                // Play a test sound effect
-                OnSoundEffectsSliderPointerUp();
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
             }
         }
         #endregion
