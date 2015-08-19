@@ -29,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A script for playing sound effects, with extra options such as clip, pitch,
@@ -41,9 +41,10 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="AudioSource"/>
     /// <seealso cref="BackgroundMusic"/>
+    /// <seealso cref="AmbientMusic"/>
     /// <seealso cref="OptionsMenu"/>
     [RequireComponent(typeof(AudioSource))]
-    public class SoundEffect : MonoBehaviour
+    public class SoundEffect : IAudio
     {
         public const float MinPitch = -3, MaxPitch = 3;
         public const float MinVolume = 0, MaxVolume = 1;
@@ -148,7 +149,7 @@ namespace OmiyaGames
         #endregion
 
         #region Local Properties
-        public AudioSource Audio
+        public override AudioSource Audio
         {
             get
             {
@@ -233,7 +234,7 @@ namespace OmiyaGames
         }
         #endregion
 
-        public void Play()
+        public override void Play()
         {
             // Stop the audio
             Stop();
@@ -258,23 +259,6 @@ namespace OmiyaGames
 
             // Play the audio
             Audio.Play();
-        }
-
-        public void Play(float delaySeconds)
-        {
-            // Delay playing the audio
-            StartCoroutine(DelayPlay(delaySeconds));
-        }
-        
-        public void Stop()
-        {
-            Audio.Stop();
-        }
-        
-        IEnumerator DelayPlay(float delaySeconds)
-        {
-            yield return new WaitForSeconds(delaySeconds);
-            Play();
         }
     }
 }
