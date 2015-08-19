@@ -10,13 +10,13 @@ namespace OmiyaGames
         [SerializeField]
         AudioMixer mixer = null;
         [SerializeField]
-        string[] backgroundMusicVolume = new string[] { "backgroundVolume" };
+        string[] backgroundMusicVolume = new string[] { "Music Volume" };
         [SerializeField]
-        string[] soundEffectsVolume = new string[] { "soundEffectsVolume" };
+        string[] soundEffectsVolume = new string[] { "Sound Effects Volume" };
         [SerializeField]
-        string[] backgroundMusicPitch = new string[] { "musicPitch" };
+        string[] backgroundMusicPitch = new string[] { "Music Pitch" };
         [SerializeField]
-        string[] soundEffectsPitch = new string[] { "soundPitch" };
+        string[] soundEffectsPitch = new string[] { "Sound Effects Pitch" };
 
         int index = 0;
         bool isSetup = false;
