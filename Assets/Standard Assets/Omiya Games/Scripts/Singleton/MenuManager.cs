@@ -83,6 +83,7 @@ namespace OmiyaGames
         WaitForSeconds delaySelection = null;
         string menuTextCache = null;
         PauseMenu pauseMenuCache = null;
+        PopUpManager popUpManager = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -217,6 +218,14 @@ namespace OmiyaGames
                 return returnText;
             }
         }
+
+        public PopUpManager PopUps
+        {
+            get
+            {
+                return popUpManager;
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -237,9 +246,12 @@ namespace OmiyaGames
             managedMenusStack.Clear();
             pauseMenuCache = null;
 
-            // Popupate typeToMenuMap dictionary
+            // Populate typeToMenuMap dictionary
             SceneTransitionMenu transitionMenu = null;
             PopulateTypeToMenuDictionary(typeToMenuMap, out transitionMenu);
+
+            // Attempt to find a pop-up manager
+            popUpManager = UnityEngine.Object.FindObjectOfType<PopUpManager>();
 
             // Check to see if there was a transition menu
             if (transitionMenu == null)
