@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1 &125850
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
@@ -12,9 +12,8 @@ GameObject:
   - 114: {fileID: 11441694}
   - 114: {fileID: 11413046}
   - 114: {fileID: 11475858}
-  - 114: {fileID: 11417178}
   m_Layer: 5
-  m_Name: Dialog (0)
+  m_Name: Panel Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +27,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22440622}
-  - 95: {fileID: 9590000}
   - 114: {fileID: 11496170}
   m_Layer: 5
   m_Name: Pop-up Menu
@@ -48,22 +46,39 @@ GameObject:
   - 222: {fileID: 22241734}
   - 114: {fileID: 11481218}
   m_Layer: 5
-  m_Name: Text
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!95 &9590000
+--- !u!1 &193162
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 224: {fileID: 22418066}
+  - 114: {fileID: 11417178}
+  - 95: {fileID: 9525780}
+  m_Layer: 5
+  m_Name: Dialog (0)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &9525780
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 171582}
+  m_GameObject: {fileID: 193162}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58fbf2953e183d64f87cd968f128e51c, type: 2}
+  m_Controller: {fileID: 9100000, guid: e4b4aebde1d1c6e4e9cf5edf27f612f0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
@@ -96,13 +111,14 @@ MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 125850}
+  m_GameObject: {fileID: 193162}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 984e858ea5d64964e9237ad917b652e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   label: {fileID: 11481218}
+  panel: {fileID: 22459894}
 --- !u!114 &11441694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -176,6 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogInstace: {fileID: 11417178}
+  moveLerpSpeed: 10
 --- !u!222 &22235998
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -188,6 +205,24 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 192244}
+--- !u!224 &22418066
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 193162}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 22459894}
+  m_Father: {fileID: 22440622}
+  m_RootOrder: 0
+  m_AnchorMin: {x: .200000003, y: 1}
+  m_AnchorMax: {x: .800000012, y: 1}
+  m_AnchoredPosition: {x: -1.52587891e-05, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: .5, y: 1}
 --- !u!224 &22440622
 RectTransform:
   m_ObjectHideFlags: 1
@@ -198,7 +233,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 22459894}
+  - {fileID: 22418066}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0}
@@ -234,11 +269,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 22448106}
-  m_Father: {fileID: 22440622}
+  m_Father: {fileID: 22418066}
   m_RootOrder: 0
-  m_AnchorMin: {x: .200000003, y: 1}
-  m_AnchorMax: {x: .800000012, y: 1}
-  m_AnchoredPosition: {x: 4.57763672e-05, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: 1}
 --- !u!1001 &100100000
