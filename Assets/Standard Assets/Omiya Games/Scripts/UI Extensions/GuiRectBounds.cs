@@ -28,7 +28,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
+    /// <date>8/21/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A helper script to handle increasing the interactive bounding box of certain
