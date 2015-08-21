@@ -63,6 +63,8 @@ namespace OmiyaGames
         float moveLerpSpeed = 10f;
         [SerializeField]
         float padding = 10f;
+        [SerializeField]
+        float spacing = 10f;
 
         // FIXME: handle animating
         [Header("Required Components")]
@@ -78,9 +80,10 @@ namespace OmiyaGames
         System.Action<float> animateDialogEvent = null;
         bool repositionDialogs = false;
 
-        // FIXME: create a queue of texts and their corresponding ID
+        // A queue of all texts logged, along with their associated ID
         readonly SortedDictionary<ulong, string> allLoggedTexts = new SortedDictionary<ulong, string>(new DescendingOrder());
-        // FIXME: create a stack of dialogs and their corresponding ID
+
+        // Lists of visible and hidden dialogs
         List<PopUpDialog> visibleDialogs = null;
         Stack<PopUpDialog> hiddenDialogs = null;
 
@@ -258,6 +261,7 @@ namespace OmiyaGames
                     {
                         // If so, increment position
                         targetPosition.y -= visibleDialogs[index].Height;
+                        targetPosition.y -= spacing;
                     }
                     else
                     {
@@ -395,6 +399,7 @@ namespace OmiyaGames
                 if (dialog.Height > 0)
                 {
                     returnYPos -= dialog.Height;
+                    returnYPos -= spacing;
                 }
             }
             return returnYPos;

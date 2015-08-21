@@ -157,6 +157,7 @@ namespace OmiyaGames
 
         internal void UpdateAnchorPosition(float deltaTime, float lerpSpeed)
         {
+            // Check if this panel is ripe for positionining
             if((targetAnchorPosition.HasValue == true) && (panel.gameObject.activeInHierarchy == true))
             {
                 // Check if we're close enough to the target position
