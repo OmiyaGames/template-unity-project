@@ -212,31 +212,31 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 320.139893
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_SizeDelta.x
-      value: 620.279785
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22448106, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 58.7412605
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 22459894, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
       propertyPath: m_SizeDelta.y
-      value: 78.7412567
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9c21726528fb646faada8f5b717daf17, type: 2}
@@ -370,7 +370,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   popUpManager: {fileID: 1189224942}
   popUpTexts:
-  - Testing, testing, 1...2...3....
+  - Text 0
+  - Text 1
+  - Testing a really long text that hopefully causes a larger dialog to appear, making
+    it taller as a consequence
+  - Text 2
+  - Text 3
+  - Text 4
 --- !u!1 &805109575
 GameObject:
   m_ObjectHideFlags: 0

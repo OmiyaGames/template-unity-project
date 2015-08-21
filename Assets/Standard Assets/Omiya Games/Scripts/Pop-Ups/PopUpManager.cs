@@ -328,7 +328,8 @@ namespace OmiyaGames
 
         void AppendDialogs(PopUpDialog lastDialog)
         {
-            if ((allDialogs != null) && (allDialogs.Length > 0))
+            // Check to see if there's more texts to display
+            if ((allDialogs != null) && (allDialogs.Length > 0) && (allLoggedTexts.Count > visibleDialogs.Count))
             {
                 // Calculate last dialog's position
                 targetPosition.y = startingPosition.y;
@@ -342,13 +343,12 @@ namespace OmiyaGames
                 }
 
                 // Append dialogs
-                while ((visibleDialogs.Count < maxNumberOfDialogs) && (hiddenDialogs.Count > 0))
+                while ((allLoggedTexts.Count > visibleDialogs.Count) && (visibleDialogs.Count < maxNumberOfDialogs) && (hiddenDialogs.Count > 0))
                 {
                     // Find the string to display
                     index = 0;
                     foreach(KeyValuePair<ulong, string> info in allLoggedTexts)
                     {
-                        ++index;
                         if(index >= visibleDialogs.Count)
                         {
                             // Find a new dialog
@@ -373,6 +373,13 @@ namespace OmiyaGames
                             repositionDialogs = true;
                             break;
                         }
+                        ++index;
+                    }
+
+                    // This shouldn't happen, but in case we don't find the string to display, stop appending dialogs
+                    if (index >= allLoggedTexts.Count)
+                    {
+                        break;
                     }
                 }
             }
