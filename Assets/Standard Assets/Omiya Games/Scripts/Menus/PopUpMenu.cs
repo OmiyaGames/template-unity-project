@@ -1,16 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-public class PopUpMenu : MonoBehaviour
+namespace OmiyaGames
 {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public class PopUpMenu : MonoBehaviour
+    {
+        // FIXME: handle animating
+        [SerializeField]
+        PopUpMenuDialog dialogInstace;
+    }
 }
