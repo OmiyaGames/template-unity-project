@@ -163,7 +163,7 @@ namespace OmiyaGames
                 if(visibleDialogs.Count > maxNumberOfDialogs)
                 {
                     // If so, hide the last dialog
-                    RemoveLastVisibleDialog();
+                    RemoveLastVisibleDialog(false);
                 }
 
                 // Return this dialog's ID
@@ -186,8 +186,8 @@ namespace OmiyaGames
 
             if (visibleDialogs.Count > 0)
             {
-                // Append any left over dialog
-                AppendDialogs(visibleDialogs[visibleDialogs.Count - 1]);
+                // Grab the current last dialog
+                float bottomPosition = YPositionBelow(visibleDialogs[visibleDialogs.Count - 1]);
 
                 // Search for the pop-up dialog in the displayed dialog list
                 for (index = 0; index < visibleDialogs.Count; ++index)
@@ -203,33 +203,15 @@ namespace OmiyaGames
                         break;
                     }
                 }
+
+                // Append dialog
+                AppendDialogs(bottomPosition);
             }
         }
 
         public ulong RemoveLastVisibleDialog()
         {
-            ulong returnId = 0;
-            if(visibleDialogs.Count > 0)
-            {
-                // Check to see if there's a text to remove
-                index = visibleDialogs.Count - 1;
-                returnId = visibleDialogs[index].ID;
-                if (allLoggedTexts.ContainsKey(returnId) == true)
-                {
-                    // If so, remove the entry
-                    allLoggedTexts.Remove(returnId);
-                }
-
-                // Append any left over dialog
-                AppendDialogs(visibleDialogs[index]);
-
-                // Run the hide animation on the last element
-                HideDialog(visibleDialogs[index]);
-
-                // Remove the last element
-                visibleDialogs.RemoveAt(index);
-            }
-            return returnId;
+            return RemoveLastVisibleDialog(true);
         }
 
         public void RemoveAllDialogs()
@@ -326,21 +308,13 @@ namespace OmiyaGames
             repositionDialogs = true;
         }
 
-        void AppendDialogs(PopUpDialog lastDialog)
+        void AppendDialogs(float yPosition)
         {
             // Check to see if there's more texts to display
             if ((allDialogs != null) && (allDialogs.Length > 0) && (allLoggedTexts.Count > visibleDialogs.Count))
             {
-                // Calculate last dialog's position
-                targetPosition.y = startingPosition.y;
-                if(lastDialog != null)
-                {
-                    targetPosition.y = lastDialog.TargetAnchorPosition.y;
-                    if(lastDialog.Height > 0)
-                    {
-                        targetPosition.y -= lastDialog.Height;
-                    }
-                }
+                // Calculate position
+                targetPosition.y = yPosition;
 
                 // Append dialogs
                 while ((allLoggedTexts.Count > visibleDialogs.Count) && (visibleDialogs.Count < maxNumberOfDialogs) && (hiddenDialogs.Count > 0))
@@ -383,6 +357,47 @@ namespace OmiyaGames
                     }
                 }
             }
+        }
+
+        ulong RemoveLastVisibleDialog(bool removeText)
+        {
+            ulong returnId = 0;
+            if (visibleDialogs.Count > 0)
+            {
+                // Check to see if there's a text to remove
+                index = visibleDialogs.Count - 1;
+                returnId = visibleDialogs[index].ID;
+                if ((removeText == true) && (allLoggedTexts.ContainsKey(returnId) == true))
+                {
+                    // If so, remove the entry
+                    allLoggedTexts.Remove(returnId);
+                }
+
+                // Run the hide animation on the last element
+                HideDialog(visibleDialogs[index]);
+
+                // Remove the last element
+                float bottomPosition = YPositionBelow(visibleDialogs[index]);
+                visibleDialogs.RemoveAt(index);
+
+                // Append any left over dialog
+                AppendDialogs(bottomPosition);
+            }
+            return returnId;
+        }
+
+        float YPositionBelow(PopUpDialog dialog)
+        {
+            float returnYPos = startingPosition.y;
+            if (dialog != null)
+            {
+                returnYPos = dialog.TargetAnchorPosition.y;
+                if (dialog.Height > 0)
+                {
+                    returnYPos -= dialog.Height;
+                }
+            }
+            return returnYPos;
         }
         #endregion
     }
