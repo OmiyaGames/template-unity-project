@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace OmiyaGames
 {
@@ -35,12 +36,33 @@ namespace OmiyaGames
     /// </summary>
     public class PopUpManager : MonoBehaviour
     {
+        private class DescendingOrder : IComparer<ulong>
+        {
+            public int Compare(ulong x, ulong y)
+            {
+                if(x == y)
+                {
+                    return 0;
+                }
+                else if(x > y)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
+
         [Header("Stats")]
         [Range(1, 5)]
         [SerializeField]
         int maxNumberOfDialogs = 3;
         [SerializeField]
         float moveLerpSpeed = 10f;
+        [SerializeField]
+        float padding = 10f;
 
         // FIXME: handle animating
         [Header("Required Components")]
@@ -49,20 +71,236 @@ namespace OmiyaGames
         [SerializeField]
         string dialogName = "Dialog ({0})";
 
-        ulong uniqueId = 0;
+        int index = 0;
+        ulong uniqueId = 1;
         PopUpDialog[] allDialogs = null;
+        Vector2 startingPosition, targetPosition;
+        System.Action<float> animateDialogEvent = null;
+        bool repositionDialogs = false;
 
         // FIXME: create a queue of texts and their corresponding ID
+        readonly SortedDictionary<ulong, string> allLoggedTexts = new SortedDictionary<ulong, string>(new DescendingOrder());
         // FIXME: create a stack of dialogs and their corresponding ID
+        List<PopUpDialog> visibleDialogs = null;
+        Stack<PopUpDialog> hiddenDialogs = null;
 
-        void Awake()
+        public int MaximumNumberOfDialogs
         {
+            get
+            {
+                return maxNumberOfDialogs;
+            }
+        }
+
+        #region MonoBehavior Events
+        void Start()
+        {
+            // Reset flags
+            repositionDialogs = false;
+
+            // Calculate the starting dialog position
+            startingPosition.x = 0;
+            startingPosition.y = -padding;
+            targetPosition = startingPosition;
+
+            // Create the dialog array
             allDialogs = new PopUpDialog[maxNumberOfDialogs + 1];
-            allDialogs[0] = dialogInstace;
+            SetupDialogArray(allDialogs);
+
+            // Setup dynamic dialog lists
+            allLoggedTexts.Clear();
+            visibleDialogs = new List<PopUpDialog>(allDialogs.Length);
+            hiddenDialogs = new Stack<PopUpDialog>(allDialogs.Length);
+            for(index = 0; index < allDialogs.Length; ++index)
+            {
+                hiddenDialogs.Push(allDialogs[index]);
+            }
+
+            // Bind to the real-time update event
+            if (animateDialogEvent == null)
+            {
+                animateDialogEvent = new System.Action<float>(AnimateDialogs);
+                Singleton.Instance.OnRealTimeUpdate += animateDialogEvent;
+            }
+        }
+
+        void OnDestroy()
+        {
+            // Un-bind from the real-time update event
+            if (animateDialogEvent != null)
+            {
+                Singleton.Instance.OnRealTimeUpdate -= animateDialogEvent;
+                animateDialogEvent = null;
+            }
+        }
+        #endregion
+
+        public ulong ShowNewDialog(string text)
+        {
+            ulong returnId = 0;
+            if ((allDialogs != null) && (allDialogs.Length > 0) && (hiddenDialogs.Count > 0))
+            {
+                // Find a new dialog
+                PopUpDialog newDialog = hiddenDialogs.Pop();
+
+                // Set the dialog's unique ID
+                newDialog.ID = uniqueId++;
+
+                // Update dialog text
+                newDialog.Label.text = text;
+                allLoggedTexts.Add(newDialog.ID, text);
+
+                // Update the dialog's transform
+                newDialog.CachedTransform.SetAsLastSibling();
+                newDialog.CachedTransform.anchoredPosition = startingPosition;
+                newDialog.TargetAnchorPosition = startingPosition;
+
+                // Show the dialog
+                newDialog.Show();
+                visibleDialogs.Insert(0, newDialog);
+
+                // Check to see if we reached the max number of dialogs
+                if(visibleDialogs.Count > maxNumberOfDialogs)
+                {
+                    // If so, hide the last dialog
+                    RemoveLastVisibleDialog();
+                }
+
+                // Return this dialog's ID
+                returnId = newDialog.ID;
+
+                // Indicate dialogs need to be re-positioned
+                repositionDialogs = true;
+            }
+            return returnId;
+        }
+
+        public void RemoveDialog(ulong id)
+        {
+            // Check to see if there's a text to remove
+            if (allLoggedTexts.ContainsKey(id) == true)
+            {
+                // If so, remove the entry
+                allLoggedTexts.Remove(id);
+            }
+
+            if (visibleDialogs.Count > 0)
+            {
+                // Append any left over dialog
+                AppendDialogs(visibleDialogs[visibleDialogs.Count - 1]);
+
+                // Search for the pop-up dialog in the displayed dialog list
+                for (index = 0; index < visibleDialogs.Count; ++index)
+                {
+                    // Check if the ID matches
+                    if (visibleDialogs[index].ID == id)
+                    {
+                        // Run the hide animation
+                        HideDialog(visibleDialogs[index]);
+
+                        // Remove the dialog from the list
+                        visibleDialogs.RemoveAt(index);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public ulong RemoveLastVisibleDialog()
+        {
+            ulong returnId = 0;
+            if(visibleDialogs.Count > 0)
+            {
+                // Check to see if there's a text to remove
+                index = visibleDialogs.Count - 1;
+                returnId = visibleDialogs[index].ID;
+                if (allLoggedTexts.ContainsKey(returnId) == true)
+                {
+                    // If so, remove the entry
+                    allLoggedTexts.Remove(returnId);
+                }
+
+                // Append any left over dialog
+                AppendDialogs(visibleDialogs[index]);
+
+                // Run the hide animation on the last element
+                HideDialog(visibleDialogs[index]);
+
+                // Remove the last element
+                visibleDialogs.RemoveAt(index);
+            }
+            return returnId;
+        }
+
+        public void RemoveAllDialogs()
+        {
+            // Clear out all the texts
+            allLoggedTexts.Clear();
+
+            // Check to see if there's any dialogs to clear
+            if (visibleDialogs.Count > 0)
+            {
+                // Move all the visible dialogs to hidden list
+                for (index = 0; index < visibleDialogs.Count; ++index)
+                {
+                    // Animate to move back to the top of the screen
+                    visibleDialogs[index].TargetAnchorPosition = startingPosition;
+
+                    // Run the hide animation
+                    HideDialog(visibleDialogs[index]);
+                }
+
+                // Clear out the visible dialog list
+                visibleDialogs.Clear();
+            }
+        }
+
+        #region Helper Methods
+        void AnimateDialogs(float deltaTime)
+        {
+            if (repositionDialogs == true)
+            {
+                // By default, indicate we don't need to reposition anything
+                repositionDialogs = false;
+
+                // Go through all the visible dialogs
+                targetPosition.y = startingPosition.y;
+                for (index = 0; index < visibleDialogs.Count; ++index)
+                {
+                    // Update dialog position and highlight state
+                    visibleDialogs[index].TargetAnchorPosition = targetPosition;
+                    visibleDialogs[index].Highlight = (index == 0);
+
+                    // Check to see if the height of this dialog has been properly calculated
+                    if (visibleDialogs[index].Height > 0)
+                    {
+                        // If so, increment position
+                        targetPosition.y -= visibleDialogs[index].Height;
+                    }
+                    else
+                    {
+                        // Indicate we still need to re-calculate positioninng of all the visible dialogs
+                        repositionDialogs = true;
+                    }
+                }
+            }
+
+            // Animate all dialogs
+            for (index = 0; index < allDialogs.Length; ++index)
+            {
+                allDialogs[index].UpdateAnchorPosition(deltaTime, moveLerpSpeed);
+            }
+        }
+
+        void SetupDialogArray(PopUpDialog[] dialogArray)
+        {
+            // Populate the first entry
+            dialogArray[0] = dialogInstace;
             dialogInstace.name = string.Format(dialogName, 0);
 
+            // Populate the rest
             GameObject clone = null;
-            for(int index = 1; index < allDialogs.Length; ++index)
+            for (index = 1; index < dialogArray.Length; ++index)
             {
                 // Clone dialog
                 clone = Instantiate<GameObject>(dialogInstace.gameObject);
@@ -72,41 +310,73 @@ namespace OmiyaGames
                 clone.name = string.Format(dialogName, index);
 
                 // Grab the script from the dialog
-                allDialogs[index] = clone.GetComponent<PopUpDialog>();
+                dialogArray[index] = clone.GetComponent<PopUpDialog>();
             }
         }
 
-        public ulong ShowNewDialog(string text)
+        void HideDialog(PopUpDialog removeDialog)
         {
-            // FIXME: for now, only using one dialog
+            // Hide the dialog
+            removeDialog.Hide();
 
-            // Update dialog text
-            allDialogs[0].Label.text = text;
+            // Push it back to the hidden dialog list
+            hiddenDialogs.Push(removeDialog);
 
-            // Set the dialog's unique ID
-            allDialogs[0].ID = uniqueId++;
-
-            // Show the dialog
-            allDialogs[0].Show();
-
-            // Return this dialog's ID
-            return allDialogs[0].ID;
+            // Indicate dialogs need to be re-positioned
+            repositionDialogs = true;
         }
 
-        public void HideDialog(ulong id)
+        void AppendDialogs(PopUpDialog lastDialog)
         {
-            // FIXME: for now, only using one dialog
+            if ((allDialogs != null) && (allDialogs.Length > 0))
+            {
+                // Calculate last dialog's position
+                targetPosition.y = startingPosition.y;
+                if(lastDialog != null)
+                {
+                    targetPosition.y = lastDialog.TargetAnchorPosition.y;
+                    if(lastDialog.Height > 0)
+                    {
+                        targetPosition.y -= lastDialog.Height;
+                    }
+                }
 
-            // Update dialog text
-            allDialogs[0].Hide();
+                // Append dialogs
+                while ((visibleDialogs.Count < maxNumberOfDialogs) && (hiddenDialogs.Count > 0))
+                {
+                    // Find the string to display
+                    index = 0;
+                    foreach(KeyValuePair<ulong, string> info in allLoggedTexts)
+                    {
+                        ++index;
+                        if(index >= visibleDialogs.Count)
+                        {
+                            // Find a new dialog
+                            PopUpDialog newDialog = hiddenDialogs.Pop();
+
+                            // Set the dialog's unique ID
+                            newDialog.ID = info.Key;
+
+                            // Update dialog text
+                            newDialog.Label.text = info.Value;
+
+                            // Update the dialog's transform
+                            newDialog.CachedTransform.SetAsFirstSibling();
+                            newDialog.CachedTransform.anchoredPosition = targetPosition;
+                            newDialog.TargetAnchorPosition = targetPosition;
+
+                            // Show the dialog
+                            newDialog.Show();
+                            visibleDialogs.Add(newDialog);
+
+                            // Indicate dialogs need to be re-positioned
+                            repositionDialogs = true;
+                            break;
+                        }
+                    }
+                }
+            }
         }
-
-        public void HideAllDialogs()
-        {
-            // FIXME: for now, only using one dialog
-
-            // Update dialog text
-            allDialogs[0].Hide();
-        }
+        #endregion
     }
 }

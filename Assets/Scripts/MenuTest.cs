@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using OmiyaGames;
 
 ///-----------------------------------------------------------------------
@@ -40,20 +40,65 @@ public class MenuTest : MonoBehaviour
     [SerializeField]
     string[] popUpTexts;
 
+    int popUpTextsIndex = 0;
+    readonly List<KeyValuePair<ulong, string>> allPopUpTexts = new List<KeyValuePair<ulong, string>>();
+
     // FIXME: for pop-up dialogs, store their ID information
     public void OnPopUpClicked()
     {
-        popUpManager.ShowNewDialog(popUpTexts[0]);
+        // Show a new dialog
+        ulong id = popUpManager.ShowNewDialog(popUpTexts[popUpTextsIndex]);
+
+        // Store information
+        allPopUpTexts.Add(new KeyValuePair<ulong, string>(id, popUpTexts[popUpTextsIndex]));
+
+        // Get next index
+        ++popUpTextsIndex;
+        if(popUpTextsIndex >= popUpTexts.Length)
+        {
+            popUpTextsIndex = 0;
+        }
     }
 
-    public void OnPopUpHideNewestClicked()
+    public void OnPopUpHideTopClicked()
     {
-        popUpManager.HideAllDialogs();
+        if(allPopUpTexts.Count > 0)
+        {
+            popUpManager.RemoveDialog(allPopUpTexts[allPopUpTexts.Count - 1].Key);
+            allPopUpTexts.RemoveAt(allPopUpTexts.Count - 1);
+        }
     }
 
-    public void OnPopUpHideOldestClicked()
+    public void OnPopUpHideBottomClicked()
     {
-        popUpManager.HideAllDialogs();
+        if (allPopUpTexts.Count > 0)
+        {
+            ulong id = popUpManager.RemoveLastVisibleDialog();
+            for (int index = (allPopUpTexts.Count - 1); index >= 0; --index)
+            {
+                if (allPopUpTexts[index].Key == id)
+                {
+                    allPopUpTexts.RemoveAt(index);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void OnPopUpHideRandomClicked()
+    {
+        if (allPopUpTexts.Count > 0)
+        {
+            int randomIndex = (allPopUpTexts.Count - popUpManager.MaximumNumberOfDialogs);
+            if(randomIndex < 0)
+            {
+                randomIndex = 0;
+            }
+            randomIndex = Random.Range(randomIndex, allPopUpTexts.Count);
+
+            popUpManager.RemoveDialog(allPopUpTexts[randomIndex].Key);
+            allPopUpTexts.RemoveAt(randomIndex);
+        }
     }
 
     public void OnPauseClicked()

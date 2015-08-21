@@ -115,16 +115,49 @@ namespace OmiyaGames
 
         public Vector2 TargetAnchorPosition
         {
+            get
+            {
+                if(targetAnchorPosition.HasValue == true)
+                {
+                    return targetAnchorPosition.Value;
+                }
+                else
+                {
+                    return CachedTransform.anchoredPosition;
+                }
+            }
             set
             {
                 targetAnchorPosition = value;
+            }
+        }
+
+        public bool Highlight
+        {
+            get
+            {
+                return (CurrentState == State.Visible);
+            }
+            set
+            {
+                if(CurrentState != State.Hidden)
+                {
+                    if(value == true)
+                    {
+                        CurrentState = State.Visible;
+                    }
+                    else
+                    {
+                        CurrentState = State.StandBy;
+                    }
+                }
             }
         }
         #endregion
 
         internal void UpdateAnchorPosition(float deltaTime, float lerpSpeed)
         {
-            if(targetAnchorPosition.HasValue == true)
+            if((targetAnchorPosition.HasValue == true) && (panel.gameObject.activeInHierarchy == true))
             {
                 // Check if we're close enough to the target position
                 if(Vector2.Distance(CachedTransform.anchoredPosition, targetAnchorPosition.Value) < Utility.SnapToThreshold)
