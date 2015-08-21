@@ -37,6 +37,8 @@ namespace OmiyaGames
     {
         [SerializeField]
         Text label;
+        [SerializeField]
+        RectTransform panel;
 
         RectTransform cacheTransform = null;
 
@@ -57,6 +59,20 @@ namespace OmiyaGames
                     cacheTransform = transform as RectTransform;
                 }
                 return cacheTransform;
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                float returnHeight = -1f;
+                if(gameObject.activeInHierarchy == true)
+                {
+                    // TODO: check to see if this works
+                    returnHeight = panel.sizeDelta.y * panel.localScale.y;
+                }
+                return returnHeight;
             }
         }
     }

@@ -38,5 +38,8 @@ namespace OmiyaGames
         // FIXME: handle animating
         [SerializeField]
         PopUpDialog dialogInstace;
+        [SerializeField]
+        float moveLerpSpeed = 10f;
+
     }
 }
