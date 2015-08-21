@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace OmiyaGames
 {
-    public class PopUpMenu : MonoBehaviour
+    public class PopUpManager : MonoBehaviour
     {
         // FIXME: handle animating
         [SerializeField]
-        PopUpMenuDialog dialogInstace;
+        PopUpDialog dialogInstace;
     }
 }
