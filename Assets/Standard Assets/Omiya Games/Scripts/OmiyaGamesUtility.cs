@@ -35,6 +35,8 @@ namespace OmiyaGames
     /// </summary>
     public static class Utility
     {
+        public const float SnapToThreshold = 0.01f;
+
         /// <summary>
         /// Shuffles the list.
         /// </summary>
