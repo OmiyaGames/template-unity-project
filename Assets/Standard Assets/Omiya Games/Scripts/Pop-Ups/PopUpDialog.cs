@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace OmiyaGames
 {
-    public class PopUpMenuDialog : MonoBehaviour
+    public class PopUpDialog : MonoBehaviour
     {
         [SerializeField]
         Text label;
