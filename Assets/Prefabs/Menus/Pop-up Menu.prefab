@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11413046}
   - 114: {fileID: 11475858}
   m_Layer: 5
-  m_Name: Panel Image
+  m_Name: Animated Transform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,8 +60,8 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 22418066}
-  - 114: {fileID: 11417178}
   - 95: {fileID: 9525780}
+  - 114: {fileID: 11417178}
   m_Layer: 5
   m_Name: Dialog (0)
   m_TagString: Untagged
@@ -119,6 +119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   label: {fileID: 11481218}
   panel: {fileID: 22459894}
+  highlightStateYScale: 1
+  normalStateYScale: .800000012
 --- !u!114 &11441694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -191,8 +193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b468be38d21994e8db2434e709d945fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogInstace: {fileID: 11417178}
+  maxNumberOfDialogs: 3
   moveLerpSpeed: 10
+  dialogInstace: {fileID: 11417178}
+  dialogName: Dialog ({0})
 --- !u!222 &22235998
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -218,9 +222,9 @@ RectTransform:
   - {fileID: 22459894}
   m_Father: {fileID: 22440622}
   m_RootOrder: 0
-  m_AnchorMin: {x: .200000003, y: 1}
-  m_AnchorMax: {x: .800000012, y: 1}
-  m_AnchoredPosition: {x: -1.52587891e-05, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: 1}
 --- !u!224 &22440622
@@ -236,9 +240,9 @@ RectTransform:
   - {fileID: 22418066}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -3.05175781e-05, y: 3.05175781e-05}
+  m_AnchorMin: {x: .200000003, y: 1}
+  m_AnchorMax: {x: .800000012, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: .5, y: .5}
 --- !u!224 &22448106

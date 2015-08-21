@@ -33,14 +33,29 @@ namespace OmiyaGames
     /// <summary>
     /// TODO: documentation
     /// </summary>
-    public class PopUpDialog : MonoBehaviour
+    [RequireComponent(typeof(Animator))]
+    public class PopUpDialog : IMenu
     {
         [SerializeField]
         Text label;
         [SerializeField]
         RectTransform panel;
 
+        [Header("Animation")]
+        [SerializeField]
+        float highlightStateYScale = 1f;
+        [SerializeField]
+        float normalStateYScale = 0.8f;
+
         RectTransform cacheTransform = null;
+        Vector2? targetAnchorPosition = null;
+
+        #region Properties
+        public ulong ID
+        {
+            get;
+            set;
+        }
 
         public Text Label
         {
@@ -67,12 +82,64 @@ namespace OmiyaGames
             get
             {
                 float returnHeight = -1f;
-                if(gameObject.activeInHierarchy == true)
+                if((CurrentState != State.Hidden) && (panel.gameObject.activeInHierarchy == true))
                 {
-                    // TODO: check to see if this works
-                    returnHeight = panel.sizeDelta.y * panel.localScale.y;
+                    if(CurrentState == State.Visible)
+                    {
+                        returnHeight = panel.sizeDelta.y * highlightStateYScale;
+                    }
+                    else
+                    {
+                        returnHeight = panel.sizeDelta.y * normalStateYScale;
+                    }
                 }
                 return returnHeight;
+            }
+        }
+
+        public override Type MenuType
+        {
+            get
+            {
+                return Type.UnmanagedMenu;
+            }
+        }
+
+        public override GameObject DefaultUi
+        {
+            get
+            {
+                return label.gameObject;
+            }
+        }
+
+        public Vector2 TargetAnchorPosition
+        {
+            set
+            {
+                targetAnchorPosition = value;
+            }
+        }
+        #endregion
+
+        internal void UpdateAnchorPosition(float deltaTime, float lerpSpeed)
+        {
+            if(targetAnchorPosition.HasValue == true)
+            {
+                // Check if we're close enough to the target position
+                if(Vector2.Distance(CachedTransform.anchoredPosition, targetAnchorPosition.Value) < Utility.SnapToThreshold)
+                {
+                    // Snap to this position
+                    CachedTransform.anchoredPosition = targetAnchorPosition.Value;
+
+                    // Flag to stop animating
+                    targetAnchorPosition = null;
+                }
+                else
+                {
+                    // Lerp to the target position
+                    CachedTransform.anchoredPosition = Vector2.Lerp(CachedTransform.anchoredPosition, targetAnchorPosition.Value, (deltaTime * lerpSpeed));
+                }
             }
         }
     }

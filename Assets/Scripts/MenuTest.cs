@@ -27,7 +27,7 @@ using OmiyaGames;
 /// THE SOFTWARE.
 /// </copyright>
 /// <author>Taro Omiya</author>
-/// <date>8/18/2015</date>
+/// <date>8/21/2015</date>
 ///-----------------------------------------------------------------------
 /// <summary>A simple test script: displays the <code>PauseMenu</code>, <code>LevelFailedMenu</code>, or <code>LevelCompleteMenu</code></summary>
 /// <seealso cref="PauseMenu"/>
@@ -35,6 +35,27 @@ using OmiyaGames;
 /// <seealso cref="LevelCompleteMenu"/>
 public class MenuTest : MonoBehaviour
 {
+    [SerializeField]
+    PopUpManager popUpManager;
+    [SerializeField]
+    string[] popUpTexts;
+
+    // FIXME: for pop-up dialogs, store their ID information
+    public void OnPopUpClicked()
+    {
+        popUpManager.ShowNewDialog(popUpTexts[0]);
+    }
+
+    public void OnPopUpHideNewestClicked()
+    {
+        popUpManager.HideAllDialogs();
+    }
+
+    public void OnPopUpHideOldestClicked()
+    {
+        popUpManager.HideAllDialogs();
+    }
+
     public void OnPauseClicked()
     {
         MenuManager manager = Singleton.Get<MenuManager>();

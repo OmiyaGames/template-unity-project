@@ -35,11 +35,78 @@ namespace OmiyaGames
     /// </summary>
     public class PopUpManager : MonoBehaviour
     {
-        // FIXME: handle animating
+        [Header("Stats")]
+        [Range(1, 5)]
         [SerializeField]
-        PopUpDialog dialogInstace;
+        int maxNumberOfDialogs = 3;
         [SerializeField]
         float moveLerpSpeed = 10f;
 
+        // FIXME: handle animating
+        [Header("Required Components")]
+        [SerializeField]
+        PopUpDialog dialogInstace;
+        [SerializeField]
+        string dialogName = "Dialog ({0})";
+
+        ulong uniqueId = 0;
+        PopUpDialog[] allDialogs = null;
+
+        // FIXME: create a queue of texts and their corresponding ID
+        // FIXME: create a stack of dialogs and their corresponding ID
+
+        void Awake()
+        {
+            allDialogs = new PopUpDialog[maxNumberOfDialogs + 1];
+            allDialogs[0] = dialogInstace;
+            dialogInstace.name = string.Format(dialogName, 0);
+
+            GameObject clone = null;
+            for(int index = 1; index < allDialogs.Length; ++index)
+            {
+                // Clone dialog
+                clone = Instantiate<GameObject>(dialogInstace.gameObject);
+
+                // Setup the dialog properly
+                clone.transform.SetParent(transform, false);
+                clone.name = string.Format(dialogName, index);
+
+                // Grab the script from the dialog
+                allDialogs[index] = clone.GetComponent<PopUpDialog>();
+            }
+        }
+
+        public ulong ShowNewDialog(string text)
+        {
+            // FIXME: for now, only using one dialog
+
+            // Update dialog text
+            allDialogs[0].Label.text = text;
+
+            // Set the dialog's unique ID
+            allDialogs[0].ID = uniqueId++;
+
+            // Show the dialog
+            allDialogs[0].Show();
+
+            // Return this dialog's ID
+            return allDialogs[0].ID;
+        }
+
+        public void HideDialog(ulong id)
+        {
+            // FIXME: for now, only using one dialog
+
+            // Update dialog text
+            allDialogs[0].Hide();
+        }
+
+        public void HideAllDialogs()
+        {
+            // FIXME: for now, only using one dialog
+
+            // Update dialog text
+            allDialogs[0].Hide();
+        }
     }
 }
