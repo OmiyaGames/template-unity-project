@@ -335,6 +335,11 @@ namespace OmiyaGames
                     {
                         managedMenusStack.Peek().CurrentState = IMenu.State.StandBy;
                     }
+                    else
+                    {
+                        // Unlock the cursor
+                        SceneManager.CursorMode = CursorLockMode.None;
+                    }
 
                     // Push the current menu onto the stack
                     managedMenusStack.Push(menu);
@@ -367,12 +372,33 @@ namespace OmiyaGames
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
                 }
+                else
+                {
+                    // Lock the cursor to what the scene is set to
+                    SceneManager.CursorMode = Singleton.Get<SceneManager>().CurrentScene.LockMode;
+                }
 
                 // Run the event that indicates the stack changed
                 if (OnManagedMenusStackChanged != null)
                 {
                     OnManagedMenusStackChanged(this);
                 }
+            }
+            return returnMenu;
+        }
+
+        /// <summary>
+        /// Pops a hidden menu out of the stack, and
+        /// changes the last menu already in the stack to visible
+        /// </summary>
+        internal IMenu PeekFromManagedStack()
+        {
+            // Make sure this menu is already on top of the stack
+            IMenu returnMenu = null;
+            if (NumManagedMenus > 0)
+            {
+                // If so, peek the stack
+                returnMenu = managedMenusStack.Peek();
             }
             return returnMenu;
         }
