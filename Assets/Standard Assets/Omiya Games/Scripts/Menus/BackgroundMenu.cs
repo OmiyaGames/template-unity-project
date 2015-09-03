@@ -106,7 +106,15 @@ namespace OmiyaGames
         {
             if (manager.NumManagedMenus > 0)
             {
-                CurrentState = State.Visible;
+                IMenu menu = manager.PeekFromManagedStack();
+                if(menu.ShowBackground == true)
+                {
+                    CurrentState = State.Visible;
+                }
+                else
+                {
+                    CurrentState = State.Hidden;
+                }
             }
             else
             {

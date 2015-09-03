@@ -159,7 +159,7 @@ namespace OmiyaGames
             // Check how many levels there are
             Button[] allButtons = null;
             GameObject clone = null;
-            if (settings.NumLevels > 1)
+            if (settings.NumLevels >= 1)
             {
                 // Add the button into the button list
                 allButtons = new Button[settings.NumLevels];
@@ -175,7 +175,7 @@ namespace OmiyaGames
                 for (; index < allButtons.Length; ++index)
                 {
                     // Setup the level button
-                    clone = (GameObject)Instantiate(buttonToDuplicate.gameObject);
+                    clone = Instantiate<GameObject>(buttonToDuplicate.gameObject);
                     clone.transform.SetParent(buttonParent);
                     clone.transform.localScale = Vector3.one;
 

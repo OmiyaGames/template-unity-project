@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Text;
 
 namespace OmiyaGames
 {
@@ -113,9 +114,10 @@ namespace OmiyaGames
             {
                 return numLevelsUnlocked;
             }
-            internal set
+            set
             {
-                PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
+                numLevelsUnlocked = value;
+                PlayerPrefs.SetInt(NumLevelsUnlockedKey, numLevelsUnlocked);
             }
         }
 
@@ -200,7 +202,7 @@ namespace OmiyaGames
             SaveSettings();
         }
 
-        public void RetrieveFromSettings()
+        public virtual void RetrieveFromSettings()
         {
             // Grab the the app version
             int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
@@ -234,10 +236,9 @@ namespace OmiyaGames
             language = PlayerPrefs.GetString(LanguageKey, DefaultLanguage);
 
             // NOTE: Feel free to add more stuff here
-
         }
 
-        public void SaveSettings()
+        public virtual void SaveSettings()
         {
             // Save the number of levels unlocked
             PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
@@ -255,12 +256,36 @@ namespace OmiyaGames
 
             // NOTE: Feel free to add more stuff here
 
+            // Save the preferences
             PlayerPrefs.Save();
         }
 
-        public void ClearSettings()
+        public virtual void ClearSettings()
         {
+            // Grab the the app version
+            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+
+            // Delete all stored preferences
             PlayerPrefs.DeleteAll();
+
+			// Store settings that are part of options.
+			// Since member variables are unchanged up to this point, we can re-use them here.
+
+            // Set the version
+			PlayerPrefs.SetInt(VersionKey, currentVersion);
+
+            // Save the music settings
+            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
+            PlayerPrefs.SetInt(MusicMutedKey, (musicMuted ? 1 : 0));
+            
+            // Save the sound settings
+            PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
+            PlayerPrefs.SetInt(SoundMutedKey, (soundMuted ? 1 : 0));
+            
+            // Set the language
+            PlayerPrefs.SetString(LanguageKey, language);
+
+			// Reset all other member variables
             RetrieveFromSettings();
         }
     }

@@ -77,6 +77,19 @@ namespace OmiyaGames
         string sceneToLoad = null;
 
         #region Properties
+        public static CursorLockMode CursorMode
+        {
+            get
+            {
+                return Cursor.lockState;
+            }
+            set
+            {
+                Cursor.lockState = value;
+                Cursor.visible = (value != CursorLockMode.Locked);
+            }
+        }
+
         public SceneInfo Splash
         {
             get
@@ -204,7 +217,7 @@ namespace OmiyaGames
         public override void SceneAwake(Singleton instance)
         {
             // Update the cursor locking
-            Cursor.lockState = CurrentScene.LockMode;
+            CursorMode = CurrentScene.LockMode;
 
             // Revert the time scale
             if(CurrentScene.RevertTimeScale == true)
