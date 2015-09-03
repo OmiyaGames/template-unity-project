@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace OmiyaGames
 {
@@ -39,6 +38,7 @@ namespace OmiyaGames
     public abstract class IMenu : MonoBehaviour
     {
         public const string StateField = "State";
+        static MenuManager managerCache = null;
 
         public enum State
         {
@@ -70,6 +70,18 @@ namespace OmiyaGames
         protected System.Action<IMenu> onStateChanged = null;
 
         #region Properties
+        protected static MenuManager Manager
+        {
+            get
+            {
+                if(managerCache == null)
+                {
+                    managerCache = Singleton.Get<MenuManager>();
+                }
+                return managerCache;
+            }
+        }
+
         public Animator Animator
         {
             get

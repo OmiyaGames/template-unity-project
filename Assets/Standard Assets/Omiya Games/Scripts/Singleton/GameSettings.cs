@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -28,7 +27,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script to retrieve settings stored in <code>PlayerPrefs</code>.
@@ -38,16 +37,33 @@ namespace OmiyaGames
     /// <seealso cref="PlayerPrefs"/>
     public class GameSettings : ISingletonScript
     {
+        public enum AppStatus
+        {
+            FirstTimeOpened,
+            RecentlyUpdated,
+            Replaying
+        }
+
+        /// <summary>
+        /// The app version.  Must be positive.
+        /// Increment every time a new build is released.
+        /// Useful for backwards compatibility.
+        /// </summary>
+        public const int AppVersion = 0;
+
         public const int DefaultNumLevelsUnlocked = 1;
 
         public const float DefaultMusicVolume = 1;
         public const float DefaultSoundVolume = 1;
+        public const string DefaultLanguage = "";
 
+        public const string VersionKey = "AppVersion";
         public const string NumLevelsUnlockedKey = "Number of Unlocked Levels";
         public const string MusicVolumeKey = "Music Volume";
         public const string MusicMutedKey = "Music Muted";
         public const string SoundVolumeKey = "Sound Volume";
         public const string SoundMutedKey = "Sound Muted";
+        public const string LanguageKey = "Language";
 
         [SerializeField]
         bool simulateWebplayer = false;
@@ -55,6 +71,8 @@ namespace OmiyaGames
         int numLevelsUnlocked = 1;
         float musicVolume = 0, soundVolume = 0;
         bool musicMuted = false, soundMuted = false;
+        AppStatus status = AppStatus.Replaying;
+        string language = DefaultLanguage;
 
         #region Properties
         public bool IsWebplayer
@@ -78,6 +96,14 @@ namespace OmiyaGames
                     }
                 }
                 return returnIsWebplayer;
+            }
+        }
+
+        public AppStatus Status
+        {
+            get
+            {
+                return status;
             }
         }
 
@@ -144,6 +170,19 @@ namespace OmiyaGames
                 PlayerPrefs.SetInt(SoundMutedKey, (soundMuted ? 1 : 0));
             }
         }
+
+        public string Language
+        {
+            get
+            {
+                return language;
+            }
+            internal set
+            {
+                language = value;
+                PlayerPrefs.SetString(LanguageKey, language);
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -163,6 +202,23 @@ namespace OmiyaGames
 
         public void RetrieveFromSettings()
         {
+            // Grab the the app version
+            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+
+            // Update the app status
+            status = AppStatus.Replaying;
+            if (currentVersion < 0)
+            {
+                status = AppStatus.FirstTimeOpened;
+            }
+            else if (currentVersion < AppVersion)
+            {
+                status = AppStatus.RecentlyUpdated;
+            }
+
+            // Set the version
+            PlayerPrefs.SetInt(VersionKey, AppVersion);
+
             // Grab the number of levels unlocked
             numLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
 
@@ -173,6 +229,9 @@ namespace OmiyaGames
             // Grab the sound settings
             soundVolume = PlayerPrefs.GetFloat(SoundVolumeKey, DefaultSoundVolume);
             soundMuted = (PlayerPrefs.GetInt(SoundMutedKey, 0) != 0);
+
+            // Grab the language
+            language = PlayerPrefs.GetString(LanguageKey, DefaultLanguage);
 
             // NOTE: Feel free to add more stuff here
 
@@ -190,6 +249,9 @@ namespace OmiyaGames
             // Save the sound settings
             PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
             PlayerPrefs.SetInt(SoundMutedKey, (soundMuted ? 1 : 0));
+
+            // Set the language
+            PlayerPrefs.SetString(LanguageKey, language);
 
             // NOTE: Feel free to add more stuff here
 

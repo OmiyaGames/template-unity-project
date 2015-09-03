@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace OmiyaGames
 {
@@ -28,26 +28,38 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A series of utilities used throughout the <code>OmiyaGames</code> namespace.
     /// </summary>
     public static class Utility
     {
+        public const float SnapToThreshold = 0.01f;
+
         /// <summary>
         /// Shuffles the list.
         /// </summary>
         /// <param name="list">The list to shuffle.</param>
+        /// <param name="upTo">Number of elements to shuffle, starting at index 0.
+        /// Elements outside of this range maybe be shuffled between this range as well.
+        /// If negative, will shuffle all list elements.</param>
         /// <typeparam name="H">The list type parameter.</typeparam>
-        public static void ShuffleList<H>(H[] list)
+        public static void ShuffleList<H>(IList<H> list, int upTo = -1)
         {
-            int index = 0, randomIndex = 0;
+            // Check if we want to shuffle the entire list
+            if((upTo < 0) || (upTo > list.Count))
+            {
+                upTo = list.Count;
+            }
+
+            // Go through every list element
             H swapObject = default(H);
-            for(; index < list.Length; ++index)
+            int index = 0, randomIndex = 0;
+            for(; index < upTo; ++index)
             {
                 // Swap a random element
-                randomIndex = Random.Range(0, list.Length);
+                randomIndex = Random.Range(0, list.Count);
                 if(index != randomIndex)
                 {
                     swapObject = list[index];
@@ -55,6 +67,14 @@ namespace OmiyaGames
                     list[randomIndex] = swapObject;
                 }
             }
+        }
+
+        public static void Log(string message)
+        {
+#if DEBUG
+            // Only do something if we're in debug mode
+            Debug.Log(message);
+#endif
         }
     }
 }

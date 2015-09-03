@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OmiyaGames
 {
@@ -29,38 +27,94 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A list that shuffles its elements to randomize its content.
     /// </summary>
-    [System.Serializable]
-    public class RandomList<T> : List<T>
+    public class RandomList<T>
     {
-        int[] randomizedIndexes = null;
+        readonly List<T> originalList;
+        readonly List<int> randomizedIndexes;
         int index = int.MinValue;
+
+        public RandomList(T[] array)
+        {
+            if (array == null)
+            {
+                throw new System.ArgumentNullException("array");
+            }
+
+            // Cache list size
+            if (array.Length > 0)
+            {
+                // Setup member variables
+                originalList = new List<T>(array.Length);
+                randomizedIndexes = new List<int>(array.Length);
+
+                // Popualte list
+                originalList.AddRange(array);
+            }
+            else
+            {
+                // Setup member variables
+                originalList = new List<T>();
+                randomizedIndexes = new List<int>();
+            }
+        }
+
+        public RandomList(List<T> list)
+        {
+            if(list == null)
+            {
+                throw new System.ArgumentNullException("list");
+            }
+
+            // Setup member variables
+            originalList = list;
+
+            // Cache list size
+            if(list.Count > 0)
+            {
+                randomizedIndexes = new List<int>(list.Count);
+            }
+            else
+            {
+                randomizedIndexes = new List<int>();
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return originalList.Count;
+            }
+        }
 
         public T CurrentElement
         {
             get
             {
                 T returnElement = default(T);
-                if (Count > 0)
+                if(Count == 1)
+                {
+                    // Grab the only element
+                    if (originalList != null)
+                    {
+                        returnElement = originalList[0];
+                    }
+                }
+                else if (Count > 1)
                 {
                     // Check if I need to setup a list
-                    if (randomizedIndexes == null)
+                    if ((randomizedIndexes == null) || (randomizedIndexes.Count != Count))
                     {
                         SetupList();
                         Utility.ShuffleList<int>(randomizedIndexes);
                         index = 0;
                     }
-                    else if (randomizedIndexes.Length != Count)
-                    {
-                        SetupList();
-                        Utility.ShuffleList<int>(randomizedIndexes);
-                        index = 0;
-                    }
-                    else if ((index >= randomizedIndexes.Length) || (index < 0))
+                    else if ((index >= randomizedIndexes.Count) || (index < 0))
                     {
                         // Shuffle the list if we got to the last element
                         Utility.ShuffleList<int>(randomizedIndexes);
@@ -68,7 +122,10 @@ namespace OmiyaGames
                     }
 
                     // Grab the current element
-                    returnElement = this[randomizedIndexes[index]];
+                    if (originalList != null)
+                    {
+                        returnElement = originalList[randomizedIndexes[index]];
+                    }
                 }
                 return returnElement;
             }
@@ -78,13 +135,11 @@ namespace OmiyaGames
         {
             get
             {
-                T returnElement = default(T);
-                if (Count > 0)
+                if (Count > 1)
                 {
                     ++index;
-                    returnElement = CurrentElement;
                 }
-                return returnElement;
+                return CurrentElement;
             }
         }
 
@@ -98,10 +153,10 @@ namespace OmiyaGames
         void SetupList()
         {
             // Generate a new list, populated with entries based on frequency
-            randomizedIndexes = new int[Count];
-            for (index = 0; index < randomizedIndexes.Length; ++index)
+            randomizedIndexes.Clear();
+            for (index = 0; index < Count; ++index)
             {
-                randomizedIndexes[index] = index;
+                randomizedIndexes.Add(index);
             }
         }
 

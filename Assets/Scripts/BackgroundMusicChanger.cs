@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using OmiyaGames;
 
 ///-----------------------------------------------------------------------
-/// <copyright file="BackgroundMusicTest.cs" company="Omiya Games">
+/// <copyright file="BackgroundMusicChanger.cs" company="Omiya Games">
 /// The MIT License (MIT)
 /// 
 /// Copyright (c) 2014-2015 Omiya Games
@@ -27,11 +26,11 @@ using OmiyaGames;
 /// THE SOFTWARE.
 /// </copyright>
 /// <author>Taro Omiya</author>
-/// <date>5/18/2015</date>
+/// <date>8/18/2015</date>
 ///-----------------------------------------------------------------------
 /// <summary>A simple test script: changes the background music when the scene starts</summary>
 /// <seealso cref="BackgroundMusic"/>
-public class BackgroundMusicTest : MonoBehaviour
+public class BackgroundMusicChanger : MonoBehaviour
 {
     [SerializeField]
     AudioClip backgroundMusic;
