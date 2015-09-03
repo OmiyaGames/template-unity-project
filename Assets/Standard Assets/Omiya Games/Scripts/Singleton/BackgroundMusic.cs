@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections;
+using System;
 
 namespace OmiyaGames
 {
@@ -29,13 +30,17 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that allows smooth transitions between 2 background musics.
     /// </summary>
     /// <seealso cref="Singleton"/>
-    public class BackgroundMusic : MonoBehaviour
+    /// <seealso cref="AudioSource"/>
+    /// <seealso cref="SoundEffect"/>
+    /// <seealso cref="AmbientMusic"/>
+    /// <seealso cref="OptionsMenu"/>
+    public class BackgroundMusic : IAudio
     {
         [System.Serializable]
         public class MusicInfo
@@ -94,11 +99,12 @@ namespace OmiyaGames
 
         bool isPlayingMusic1 = true;
 
+        #region Static Properties
         /// <summary>
         /// Gets or sets the volume of the background music, which is a value between 0 and 1.
         /// </summary>
         /// <value>The background music's volume.</value>
-        public float Volume
+        public static float GlobalVolume
         {
             get
             {
@@ -110,13 +116,15 @@ namespace OmiyaGames
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.MusicVolume = Mathf.Clamp01(value);
 
-                // Update audio sources
-                music1.Source.volume = settings.MusicVolume;
-                music2.Source.volume = settings.MusicVolume;
+                // Update the AudioMixerReference, if NOT muted
+                if (settings.IsMusicMuted == false)
+                {
+                    Singleton.Get<AudioMixerReference>().BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                }
             }
         }
 
-        public bool IsMuted
+        public static bool GlobalMute
         {
             get
             {
@@ -128,12 +136,33 @@ namespace OmiyaGames
                 GameSettings settings = Singleton.Get<GameSettings>();
                 settings.IsMusicMuted = value;
 
-                // Update audio sources
-                music1.Source.mute = value;
-                music2.Source.mute = value;
+                // Update the AudioMixerReference to either mute or revert the volume back to settings
+                AudioMixerReference audioMixer = Singleton.Get<AudioMixerReference>();
+                if (settings.IsMusicMuted == true)
+                {
+                    audioMixer.BackgroundMusicVolumeDb = audioMixer.MuteVolumeDb;
+                }
+                else
+                {
+                    audioMixer.BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                }
             }
         }
 
+        public static float GlobalPitch
+        {
+            get
+            {
+                return Singleton.Get<AudioMixerReference>().BackgroundMusicPitch;
+            }
+            set
+            {
+                Singleton.Get<AudioMixerReference>().BackgroundMusicPitch = value;
+            }
+        }
+        #endregion
+
+        #region Properties
         public AudioClip CurrentMusic
         {
             get
@@ -159,11 +188,21 @@ namespace OmiyaGames
             }
         }
 
+        public override AudioSource Audio
+        {
+            get
+            {
+                return CurrentAudioSource.Source;
+            }
+        }
+        #endregion
+
+        #region Helper Properties & Methods
         MusicInfo CurrentAudioSource
         {
             get
             {
-                if(isPlayingMusic1 == true)
+                if (isPlayingMusic1 == true)
                 {
                     return music1;
                 }
@@ -178,7 +217,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(isPlayingMusic1 == true)
+                if (isPlayingMusic1 == true)
                 {
                     return music2;
                 }
@@ -188,5 +227,12 @@ namespace OmiyaGames
                 }
             }
         }
+
+        IEnumerator DelayPlay(float delaySeconds)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+            Play();
+        }
+        #endregion
     }
 }

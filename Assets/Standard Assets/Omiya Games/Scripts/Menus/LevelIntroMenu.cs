@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -123,6 +122,9 @@ namespace OmiyaGames
                 Singleton.Instance.OnUpdate -= checkInput;
                 checkInput = null;
             }
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
         }
 
         void CheckForAnyKey(float deltaTime)

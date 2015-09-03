@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>8/21/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that retrieves all <code>IMenu</code>s in the scene.
@@ -41,6 +41,11 @@ namespace OmiyaGames
     [RequireComponent(typeof(EventSystem))]
     public class MenuManager : ISingletonScript
     {
+        static readonly Type[] IgnoreTypes = new Type[]
+        {
+            typeof(PopUpDialog)
+        };
+
         [Header("Behaviors")]
         [Tooltip("Name of input under the InputManager that is going to pause the game")]
         [SerializeField]
@@ -70,9 +75,15 @@ namespace OmiyaGames
         [SerializeField]
         string nextTextTemplate = "Proceed to {0}";
 
+        [Header("Sound Templates")]
+        [SerializeField]
+        SoundEffect buttonClickSound = null;
+
         EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
         string menuTextCache = null;
+        PauseMenu pauseMenuCache = null;
+        PopUpManager popUpManager = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -88,6 +99,14 @@ namespace OmiyaGames
                     eventSystemCache = GetComponent<EventSystem>();
                 }
                 return eventSystemCache;
+            }
+        }
+
+        public SoundEffect ButtonClick
+        {
+            get
+            {
+                return buttonClickSound;
             }
         }
 
@@ -111,6 +130,7 @@ namespace OmiyaGames
                 return managedMenusStack.Count;
             }
         }
+
         public string ReturnToMenuText
         {
             get
@@ -198,56 +218,43 @@ namespace OmiyaGames
                 return returnText;
             }
         }
+
+        public PopUpManager PopUps
+        {
+            get
+            {
+                return popUpManager;
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
         {
+            // Enable events
+            Events.enabled = true;
+
+            // Bind to update
             instance.OnRealTimeUpdate += QueryInput;
+
+
             delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 
         public override void SceneAwake(Singleton instance)
         {
             // Clear out all the menus
-            typeToMenuMap.Clear();
             managedMenusStack.Clear();
+            pauseMenuCache = null;
 
-            // Search for all menus in the scene
-            IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
-
-            // Add them into the dictionary
-            Type menuType;
-            IMenu displayedManagedMenu = null;
+            // Populate typeToMenuMap dictionary
             SceneTransitionMenu transitionMenu = null;
-            foreach(IMenu menu in menus)
-            {
-                // Add the menu to the dictionary
-                menuType = menu.GetType();
-                if (typeToMenuMap.ContainsKey(menuType) == false)
-                {
-                    // Add the menu
-                    typeToMenuMap.Add(menuType, menu);
+            PopulateTypeToMenuDictionary(typeToMenuMap, out transitionMenu);
 
-                    // Check if this menu is a SceneTransitionMenu
-                    if(menuType == typeof(SceneTransitionMenu))
-                    {
-                        transitionMenu = (SceneTransitionMenu)menu;
-                    }
-                }
-
-                // Check if this is the first displayed, managed menu
-                if ((menu.MenuType == IMenu.Type.DefaultManagedMenu) && (displayedManagedMenu == null))
-                {
-                    // Grab this menu
-                    displayedManagedMenu = menu;
-
-                    // Indicate it should be visible
-                    displayedManagedMenu.Show();
-                }
-            }
+            // Attempt to find a pop-up manager
+            popUpManager = UnityEngine.Object.FindObjectOfType<PopUpManager>();
 
             // Check to see if there was a transition menu
-            if(transitionMenu == null)
+            if (transitionMenu == null)
             {
                 // If not, run the scene manager's transition-in events immediately
                 Singleton.Get<SceneManager>().TransitionIn(null);
@@ -256,6 +263,58 @@ namespace OmiyaGames
             {
                 // If so, run the transition menu's transition-in animation
                 transitionMenu.Hide(Singleton.Get<SceneManager>().TransitionIn);
+            }
+        }
+
+        void PopulateTypeToMenuDictionary(Dictionary<Type, IMenu> typeToMenuDictionary, out SceneTransitionMenu transitionMenu)
+        {
+            // Setup variables
+            int index = 0;
+            transitionMenu = null;
+            typeToMenuDictionary.Clear();
+            
+            // Populate items to ignore into the type map
+            for (; index < IgnoreTypes.Length; ++index)
+            {
+                typeToMenuDictionary.Add(IgnoreTypes[index], null);
+            }
+
+            // Search for all menus in the scene
+            IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
+            if(menus != null)
+            {
+                // Add them into the dictionary
+                Type menuType;
+                IMenu displayedManagedMenu = null;
+                for (index = 0; index < menus.Length; ++index)
+                {
+                    if (menus[index] != null)
+                    {
+                        // Add the menu to the dictionary
+                        menuType = menus[index].GetType();
+                        if (typeToMenuDictionary.ContainsKey(menuType) == false)
+                        {
+                            // Add the menu
+                            typeToMenuDictionary.Add(menuType, menus[index]);
+
+                            // Check if this menu is a SceneTransitionMenu
+                            if (menuType == typeof(SceneTransitionMenu))
+                            {
+                                transitionMenu = (SceneTransitionMenu)menus[index];
+                            }
+                        }
+
+                        // Check if this is the first displayed, managed menu
+                        if ((menus[index].MenuType == IMenu.Type.DefaultManagedMenu) && (displayedManagedMenu == null))
+                        {
+                            // Grab this menu
+                            displayedManagedMenu = menus[index];
+
+                            // Indicate it should be visible
+                            displayedManagedMenu.Show();
+                        }
+                    }
+                }
             }
         }
 
@@ -359,16 +418,25 @@ namespace OmiyaGames
             if((NumManagedMenus <= 0) && (Input.GetButtonDown(pauseInput) == true))
             {
                 // Attempt to grab the pause menu
-                PauseMenu pauseMenu = GetMenu<PauseMenu>();
-                if(pauseMenu != null)
+                if(pauseMenuCache == null)
                 {
-                    if(pauseMenu.CurrentState == IMenu.State.Hidden)
+                    pauseMenuCache = GetMenu<PauseMenu>();
+                }
+                if (pauseMenuCache != null)
+                {
+                    if(pauseMenuCache.CurrentState == IMenu.State.Hidden)
                     {
-                        pauseMenu.Show();
+                        pauseMenuCache.Show();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
-                    else if(pauseMenu.CurrentState == IMenu.State.Visible)
+                    else if(pauseMenuCache.CurrentState == IMenu.State.Visible)
                     {
-                        pauseMenu.Hide();
+                        pauseMenuCache.Hide();
+
+                        // Indicate button is clicked
+                        ButtonClick.Play();
                     }
                 }
             }

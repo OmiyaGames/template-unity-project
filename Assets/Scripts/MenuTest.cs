@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using OmiyaGames;
 
 ///-----------------------------------------------------------------------
@@ -27,7 +27,7 @@ using OmiyaGames;
 /// THE SOFTWARE.
 /// </copyright>
 /// <author>Taro Omiya</author>
-/// <date>5/18/2015</date>
+/// <date>8/21/2015</date>
 ///-----------------------------------------------------------------------
 /// <summary>A simple test script: displays the <code>PauseMenu</code>, <code>LevelFailedMenu</code>, or <code>LevelCompleteMenu</code></summary>
 /// <seealso cref="PauseMenu"/>
@@ -35,16 +35,100 @@ using OmiyaGames;
 /// <seealso cref="LevelCompleteMenu"/>
 public class MenuTest : MonoBehaviour
 {
+    [SerializeField]
+    string[] popUpTexts;
+
+    int popUpTextsIndex = 0;
+    readonly List<KeyValuePair<ulong, string>> allPopUpTexts = new List<KeyValuePair<ulong, string>>();
+
+    public void OnPopUpClicked()
+    {
+        // Show a new dialog
+        MenuManager manager = Singleton.Get<MenuManager>();
+        ulong id = manager.PopUps.ShowNewDialog(popUpTexts[popUpTextsIndex]);
+
+        // Store information
+        allPopUpTexts.Add(new KeyValuePair<ulong, string>(id, popUpTexts[popUpTextsIndex]));
+
+        // Get next index
+        ++popUpTextsIndex;
+        if(popUpTextsIndex >= popUpTexts.Length)
+        {
+            popUpTextsIndex = 0;
+        }
+    }
+
+    public void OnPopUpHideTopClicked()
+    {
+        if(allPopUpTexts.Count > 0)
+        {
+            MenuManager manager = Singleton.Get<MenuManager>();
+            manager.PopUps.RemoveDialog(allPopUpTexts[allPopUpTexts.Count - 1].Key);
+            allPopUpTexts.RemoveAt(allPopUpTexts.Count - 1);
+        }
+    }
+
+    public void OnPopUpHideBottomClicked()
+    {
+        if (allPopUpTexts.Count > 0)
+        {
+            MenuManager manager = Singleton.Get<MenuManager>();
+            ulong id = manager.PopUps.RemoveLastVisibleDialog();
+            for (int index = (allPopUpTexts.Count - 1); index >= 0; --index)
+            {
+                if (allPopUpTexts[index].Key == id)
+                {
+                    allPopUpTexts.RemoveAt(index);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void OnPopUpHideRandomClicked()
+    {
+        if (allPopUpTexts.Count > 0)
+        {
+            MenuManager manager = Singleton.Get<MenuManager>();
+            int randomIndex = (allPopUpTexts.Count - manager.PopUps.MaximumNumberOfDialogs);
+            if(randomIndex < 0)
+            {
+                randomIndex = 0;
+            }
+            randomIndex = Random.Range(randomIndex, allPopUpTexts.Count);
+
+            manager.PopUps.RemoveDialog(allPopUpTexts[randomIndex].Key);
+            allPopUpTexts.RemoveAt(randomIndex);
+        }
+    }
+
     public void OnPauseClicked()
     {
-        Singleton.Get<MenuManager>().Show<PauseMenu>();
+        MenuManager manager = Singleton.Get<MenuManager>();
+        manager.Show<PauseMenu>();
+        manager.ButtonClick.Play();
     }
+
     public void OnFailedClicked()
     {
-        Singleton.Get<MenuManager>().Show<LevelFailedMenu>();
+        MenuManager manager = Singleton.Get<MenuManager>();
+        manager.Show<LevelFailedMenu>();
+        manager.ButtonClick.Play();
     }
+
     public void OnCompleteClicked()
     {
-        Singleton.Get<MenuManager>().Show<LevelCompleteMenu>();
+        MenuManager manager = Singleton.Get<MenuManager>();
+        manager.Show<LevelCompleteMenu>();
+        manager.ButtonClick.Play();
+    }
+
+    public void OnSoundClicked()
+    {
+        SoundEffect sound = GetComponent<SoundEffect>();
+        if(sound != null)
+        {
+            sound.Play();
+        }
     }
 }

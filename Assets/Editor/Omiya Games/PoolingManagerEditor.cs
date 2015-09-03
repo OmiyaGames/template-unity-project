@@ -1,8 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace OmiyaGames
 {
@@ -31,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>5/25/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Editor script for <code>PoolingManager</code>
@@ -40,6 +38,8 @@ namespace OmiyaGames
     [CustomEditor(typeof(PoolingManager))]
     public class PoolingManagerEditor : Editor
     {
+        const float VerticalMargin = 2;
+
         ReorderableList objectsToPreloadList;
         SerializedProperty objectsToPreload;
 
@@ -67,7 +67,7 @@ namespace OmiyaGames
         void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = objectsToPreloadList.serializedProperty.GetArrayElementAtIndex(index);
-            rect.y += 2;
+            rect.y += VerticalMargin;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
