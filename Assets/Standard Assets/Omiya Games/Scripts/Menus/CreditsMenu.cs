@@ -75,10 +75,6 @@ namespace OmiyaGames
 
         protected virtual void Start()
         {
-            // Adjust the size of the scroll panel content
-            contentSize = content.sizeDelta.y;
-            normalizedPosition = 1;
-
             // Start scrolling the contents
             StartCoroutine(ScrollCredits());
         }
@@ -89,7 +85,7 @@ namespace OmiyaGames
             base.Show(stateChanged);
 
             // Unlock the cursor
-            Cursor.lockState = CursorLockMode.None;
+            //SceneManager.CursorMode = CursorLockMode.None;
 
             // Check if we've previously binded to the singleton's update function
             if (checkInput != null)
@@ -114,7 +110,7 @@ namespace OmiyaGames
             {
                 // Lock the cursor to what the scene is set to
                 SceneManager manager = Singleton.Get<SceneManager>();
-                Cursor.lockState = manager.CurrentScene.LockMode;
+                //SceneManager.CursorMode = manager.CurrentScene.LockMode;
 
                 // Unbind to Singleton's update function
                 if (checkInput != null)
@@ -132,6 +128,10 @@ namespace OmiyaGames
         {
             // Wait for a bit before starting the credits
             yield return new WaitForSeconds(startDelay);
+
+            // Adjust the size of the scroll panel content
+            contentSize = content.sizeDelta.y;
+            normalizedPosition = 1;
 
             // Check what the scroll panel condition is so far
             while (Mathf.Approximately(normalizedPosition, 0) == false)

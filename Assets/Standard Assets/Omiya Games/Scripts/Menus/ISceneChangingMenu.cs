@@ -103,9 +103,6 @@ namespace OmiyaGames
             // Call base function
             base.Show(stateChanged);
 
-            // Unlock the cursor
-            Cursor.lockState = CursorLockMode.None;
-
             // Check if we should stop time
             if (PauseOnShow == true)
             {
@@ -118,9 +115,6 @@ namespace OmiyaGames
         {
             // Call base function
             base.Hide();
-
-            // Lock the cursor to what the scene is set to
-            Cursor.lockState = Singleton.Get<SceneManager>().CurrentScene.LockMode;
 
             // Check if we should stop time
             if (PauseOnShow == true)

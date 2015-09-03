@@ -32,26 +32,31 @@ public class WebLocationChecker : MonoBehaviour
     [SerializeField]
     string redirectURL;
 
-#if UNITY_WEBPLAYER || UNITY_WEBGL
+#if UNITY_WEBPLAYER
     void Awake()
     {
 		if (domainMustContain.Length > 0)
 		{
 			StringBuilder buf = new StringBuilder();
 
-			for(int index = 0; index < domainMustContain.Length; index++)
+            buf.Append("if(");
+            for (int index = 0; index < domainMustContain.Length; index++)
 			{
-				string domain = domainMustContain[index];
-
 				if (index > 0)
 				{
 					buf.Append(" && ");
 				}
-				buf.Append("(document.location.host.indexOf('"+domain+"') == -1)");
+
+                buf.Append("(document.location.host.indexOf('");
+                buf.Append(domainMustContain[index]);
+                buf.Append("') == -1)");
 			}
-			string criteria = buf.ToString();
-			Application.ExternalEval("if("+criteria+") { document.location='"+redirectURL+"'; }");
-		}
+
+            buf.Append(") { document.location='");
+            buf.Append(redirectURL);
+            buf.Append("'; }");
+            Application.ExternalEval(buf.ToString());
+        }
     }
 #endif
 }
