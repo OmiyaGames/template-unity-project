@@ -117,14 +117,20 @@ namespace OmiyaGames
                     // Retrieve the default language settings from GameSettings
                     GameSettings settings = Singleton.Get<GameSettings>();
                     currentLanguage = settings.Language;
-                    Utility.Log("Retrieved language from settings: " + currentLanguage);
+                    if(Debug.isDebugBuild == true)
+                    {
+                        Debug.Log("Retrieved language from settings: " + currentLanguage);
+                    }
 
                     // Check to see if we support the system language
                     if(headerDictionary.ContainsKey(Application.systemLanguage) == true)
                     {
                         // Set the default language
                         defaultLanguage = headerDictionary[Application.systemLanguage];
-                        Utility.Log("Retrieved default language from language map: " + currentLanguage);
+                        if(Debug.isDebugBuild == true)
+                        {
+                            Debug.Log("Retrieved default language from language map: " + currentLanguage);
+                        }
 
                         // Check to see if the current language is an empty string
                         if (string.IsNullOrEmpty(currentLanguage) == true)
@@ -142,9 +148,15 @@ namespace OmiyaGames
                     // If so, set both the current and default language to the test language
                     defaultLanguage = testLanguage;
                     currentLanguage = testLanguage;
-                    Utility.Log("Retrieved language from testLanguage: " + testLanguage);
+                    if(Debug.isDebugBuild == true)
+                    {
+                        Debug.Log("Retrieved language from testLanguage: " + testLanguage);
+                    }
                 }
-                Utility.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
+                if(Debug.isDebugBuild == true)
+                {
+                    Debug.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
+                }
 
                 // Check which parameter to use to load the next file
                 if (loadFileAsset != null)
@@ -324,7 +336,14 @@ namespace OmiyaGames
             {
                 string key = data[i][keyHeader];
                 string val = data[i][currentLanguage];
-                translationDictionary.Add(key, val);
+                if(translationDictionary.ContainsKey(key) == false)
+                {
+                    translationDictionary.Add(key, val);
+                }
+                else
+                {
+                    Debug.LogError("Translation CSV file contains duplicate key: " + key);
+                }
             }
 
             /* Update any Text labels */

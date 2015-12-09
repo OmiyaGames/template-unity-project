@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OmiyaGames
 {
@@ -13,6 +12,13 @@ namespace OmiyaGames
     {
         static readonly HashSet<TranslatedText> allTranslationScripts = new HashSet<TranslatedText>();
         static CSVLanguageParser parser = null;
+
+        public enum LetterFormatting
+        {
+            None,
+            UpperCase,
+            LowerCase
+        }
 
         public static IEnumerable<TranslatedText> AllTranslationScripts
         {
@@ -38,14 +44,21 @@ namespace OmiyaGames
         /// The key to the CSVLanguageParser.
         /// </summary>
         [SerializeField]
+        [Tooltip("The key to the CSVLanguageParser.")]
         string translationKey = "";
+        [SerializeField]
+        [Tooltip("(Optional) Any extra formatting one might want to add to a translated text (e.g. \"<b>{0}</b>\" will create a bolded text. Leave it blank for no formatting.")]
+        string extraFormatting = "";
+        [SerializeField]
+        [Tooltip("(Optional) Any extra formatting one might want to add to a translated text (e.g. \"<b>{0}</b>\" will create a bolded text. Leave it blank for no formatting.")]
+        LetterFormatting letterFormatting = LetterFormatting.None;
 
         /// <summary>
         /// The attached label.
         /// </summary>
         Text label = null;
         object[] formatArgs = null;
-        StringBuilder formatBuilder = null;
+        string displayString = null;
 
         public bool IsTranslating
         {
@@ -130,27 +143,33 @@ namespace OmiyaGames
             // Check if there's a CSV parser
             if ((enabled == true) && (Parser != null) && (Parser.ContainsKey(TranslationKey) == true))
             {
-                // check if there's any formatting involved
+                // By default, find the key's translation
+                displayString = Parser[TranslationKey];
+
+                // Check if there's any formatting involved
                 if ((formatArgs != null) && (formatArgs.Length > 0))
                 {
-                    // Create a string builder if it hasn't already
-                    if(formatBuilder == null)
-                    {
-                        formatBuilder = new StringBuilder();
-                    }
-
-                    // Use StringBuilder for formatting text
-                    formatBuilder.Length = 0;
-                    formatBuilder.AppendFormat(Parser[TranslationKey], formatArgs);
-
-                    // Set the label to the text directly
-                    Label.text = formatBuilder.ToString();
+                    // Format the string based on the translation and arguments
+                    displayString = string.Format(displayString, formatArgs);
                 }
-                else
+                if(string.IsNullOrEmpty(extraFormatting) == false)
                 {
-                    // Set the label to the text directly
-                    Label.text = Parser[TranslationKey];
+                    // Format the string based on extra formatting
+                    displayString = string.Format(extraFormatting, displayString);
                 }
+                switch(letterFormatting)
+                {
+                    // Format the string based on extra formatting
+                    case LetterFormatting.UpperCase:
+                        displayString = displayString.ToUpper();
+                        break;
+                    case LetterFormatting.LowerCase:
+                        displayString = displayString.ToLower();
+                        break;
+                }
+
+                // Set the label
+                Label.text = displayString;
             }
         }
 
