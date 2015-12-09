@@ -197,11 +197,41 @@ namespace OmiyaGames
                 Manager.ButtonClick.Play();
             }
         }
+
+        public void OnResetSavedData()
+        {
+            ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
+            if(menu != null)
+            {
+                // Display confirmation dialog
+                menu.DefaultToYes = false;
+                menu.Show(CheckResetSavedDataConfirmation);
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
+            }
+        }
         #endregion
 
         static string Percent(float val)
         {
             return val.ToString("0%");
+        }
+
+        void CheckResetSavedDataConfirmation(IMenu menu)
+        {
+            if(((ConfirmationMenu)menu).IsYesSelected == true)
+            {
+                // Clear settings
+                Singleton.Get<GameSettings>().ClearSettings();
+
+                // Update the level select menu, if one is available
+                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
+                if(levelSelect != null)
+                {
+                    levelSelect.SetButtonsEnabled(true);
+                }
+            }
         }
     }
 }

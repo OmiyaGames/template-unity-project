@@ -125,6 +125,14 @@ namespace OmiyaGames
             get;
         }
 
+        public virtual bool ShowBackground
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public void Show()
         {
             Show(null);
