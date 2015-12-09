@@ -52,32 +52,61 @@ namespace OmiyaGames
         const string UnityKey = "unityVersion";
         const string UnityLabel = "Unity: ";
 
+        static bool loadedManifest = false;
+        static Dictionary<string, object> buildMapping = null;
+
+        public static Dictionary<string, object> ManifestMapping
+        {
+            get
+            {
+                // Check if we've ever attempted to load the manifest file
+                if(loadedManifest == false)
+                {
+                    // If not, attempt to load the manifest file
+                    TextAsset manifest = Resources.Load(ManifestFileName) as TextAsset;
+                    if(manifest != null)
+                    {
+                        // Parse the file
+                        buildMapping = Json.Deserialize(manifest.text) as Dictionary<string, object>;
+                    }
+
+                    // Flag that we've already loaded the manifest file
+                    loadedManifest = true;
+                }
+                return buildMapping;
+            }
+        }
+
+        public static bool IsCloudBuild
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return true;
+#else
+                return (ManifestMapping != null);
+#endif
+            }
+        }
+
         void Start()
         {
             // Setup variables
             bool showLabel = false;
             Text label = GetComponent<Text>();
-            TextAsset manifest = Resources.Load(ManifestFileName) as TextAsset;
 
             // Check to see if a label and json values are available
-            if ((manifest != null) && (label != null))
+            if ((ManifestMapping != null) && (label != null))
             {
-                // Parse the file
-                Dictionary<string, object> buildMapping = Json.Deserialize(manifest.text) as Dictionary<string, object>;
-
-                // Make sure the file parsing succeeded
-                if(buildMapping != null)
+                // Generate string to display
+                string versionString = GenerateVersionString(buildMapping);
+                if(string.IsNullOrEmpty(versionString) == false)
                 {
-                    // Generate string to display
-                    string versionString = GenerateVersionString(buildMapping);
-                    if(string.IsNullOrEmpty(versionString) == false)
-                    {
-                        // Set the label's text
-                        label.text = versionString;
+                    // Set the label's text
+                    label.text = versionString;
 
-                        // Indicate the label should be shown
-                        showLabel = true;
-                    }
+                    // Indicate the label should be shown
+                    showLabel = true;
                 }
             }
 
