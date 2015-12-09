@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 namespace OmiyaGames
 {
@@ -36,6 +35,8 @@ namespace OmiyaGames
     /// </summary>
     public class PopUpManager : MonoBehaviour
     {
+        public const ulong InvalidId = 0;
+
         private class DescendingOrder : IComparer<ulong>
         {
             public int Compare(ulong x, ulong y)
@@ -74,7 +75,7 @@ namespace OmiyaGames
         string dialogName = "Dialog ({0})";
 
         int index = 0;
-        ulong uniqueId = 1;
+        ulong uniqueId = (InvalidId + 1);
         PopUpDialog[] allDialogs = null;
         Vector2 startingPosition, targetPosition;
         System.Action<float> animateDialogEvent = null;
@@ -85,13 +86,27 @@ namespace OmiyaGames
 
         // Lists of visible and hidden dialogs
         List<PopUpDialog> visibleDialogs = null;
-        Stack<PopUpDialog> hiddenDialogs = null;
+        Queue<PopUpDialog> hiddenDialogs = null;
 
         public int MaximumNumberOfDialogs
         {
             get
             {
                 return maxNumberOfDialogs;
+            }
+        }
+
+        ulong NextId
+        {
+            get
+            {
+                ulong returnId = uniqueId;
+                ++uniqueId;
+                if(uniqueId == ulong.MaxValue)
+                {
+                    uniqueId = (InvalidId + 1);
+                }
+                return returnId;
             }
         }
 
@@ -113,10 +128,10 @@ namespace OmiyaGames
             // Setup dynamic dialog lists
             allLoggedTexts.Clear();
             visibleDialogs = new List<PopUpDialog>(allDialogs.Length);
-            hiddenDialogs = new Stack<PopUpDialog>(allDialogs.Length);
+            hiddenDialogs = new Queue<PopUpDialog>(allDialogs.Length);
             for(index = 0; index < allDialogs.Length; ++index)
             {
-                hiddenDialogs.Push(allDialogs[index]);
+                hiddenDialogs.Enqueue(allDialogs[index]);
             }
 
             // Bind to the real-time update event
@@ -144,10 +159,10 @@ namespace OmiyaGames
             if ((allDialogs != null) && (allDialogs.Length > 0) && (hiddenDialogs.Count > 0))
             {
                 // Find a new dialog
-                PopUpDialog newDialog = hiddenDialogs.Pop();
+                PopUpDialog newDialog = hiddenDialogs.Dequeue();
 
                 // Set the dialog's unique ID
-                newDialog.ID = uniqueId++;
+                newDialog.ID = NextId;
 
                 // Update dialog text
                 newDialog.Label.text = text;
@@ -306,7 +321,7 @@ namespace OmiyaGames
             removeDialog.Hide();
 
             // Push it back to the hidden dialog list
-            hiddenDialogs.Push(removeDialog);
+            hiddenDialogs.Enqueue(removeDialog);
 
             // Indicate dialogs need to be re-positioned
             repositionDialogs = true;
@@ -330,7 +345,7 @@ namespace OmiyaGames
                         if(index >= visibleDialogs.Count)
                         {
                             // Find a new dialog
-                            PopUpDialog newDialog = hiddenDialogs.Pop();
+                            PopUpDialog newDialog = hiddenDialogs.Dequeue();
 
                             // Set the dialog's unique ID
                             newDialog.ID = info.Key;
