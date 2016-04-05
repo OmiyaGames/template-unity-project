@@ -10,7 +10,7 @@ namespace OmiyaGames
     public class TranslatedTextMesh : MonoBehaviour
     {
         static readonly HashSet<TranslatedTextMesh> allTranslationScripts = new HashSet<TranslatedTextMesh>();
-        static CSVLanguageParser parser = null;
+        static TranslationManager parser = null;
 
         public static IEnumerable<TranslatedTextMesh> AllTranslationScripts
         {
@@ -20,13 +20,13 @@ namespace OmiyaGames
             }
         }
 
-        private static CSVLanguageParser Parser
+        private static TranslationManager Parser
         {
             get
             {
                 if (parser == null)
                 {
-                    parser = Singleton.Get<CSVLanguageParser>();
+                    parser = Singleton.Get<TranslationManager>();
                 }
                 return parser;
             }

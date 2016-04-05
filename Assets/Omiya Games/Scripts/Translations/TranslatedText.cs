@@ -11,7 +11,7 @@ namespace OmiyaGames
     public class TranslatedText : MonoBehaviour
     {
         static readonly HashSet<TranslatedText> allTranslationScripts = new HashSet<TranslatedText>();
-        static CSVLanguageParser parser = null;
+        static TranslationManager parser = null;
 
         public enum LetterFormatting
         {
@@ -28,13 +28,13 @@ namespace OmiyaGames
             }
         }
 
-        private static CSVLanguageParser Parser
+        private static TranslationManager Parser
         {
             get
             {
                 if (parser == null)
                 {
-                    parser = Singleton.Get<CSVLanguageParser>();
+                    parser = Singleton.Get<TranslationManager>();
                 }
                 return parser;
             }
