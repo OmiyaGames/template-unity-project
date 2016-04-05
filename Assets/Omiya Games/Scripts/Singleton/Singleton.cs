@@ -45,6 +45,11 @@ namespace OmiyaGames
         public event Action<float> OnUpdate;
         public event Action<float> OnRealTimeUpdate;
 
+#if UNITY_EDITOR
+        [SerializeField]
+        bool simulateWebplayer = false;
+#endif
+
         public static Singleton Instance
         {
             get
@@ -70,6 +75,23 @@ namespace OmiyaGames
                 }
             }
             return returnObject;
+        }
+
+        public bool IsWebplayer
+        {
+            get
+            {
+#if (UNITY_WEBPLAYER || UNITY_WEBGL)
+                // Always return true if already on a webplayer
+                return true;
+#elif UNITY_EDITOR
+                // Check if webplayer simulation checkbox is checked
+                return simulateWebplayer;
+#else
+                // Always return false, otherwise
+                return true;
+#endif
+            }
         }
 
         // Use this for initialization
