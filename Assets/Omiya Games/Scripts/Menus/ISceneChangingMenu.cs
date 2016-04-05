@@ -129,7 +129,7 @@ namespace OmiyaGames
             Hide();
 
             // Transition to the current level
-            Singleton.Get<SceneManager>().ReloadCurrentScene();
+            Singleton.Get<SceneTransitionManager>().ReloadCurrentScene();
 
             // Indicate button is clicked
             Manager.ButtonClick.Play();
@@ -140,7 +140,7 @@ namespace OmiyaGames
             Hide();
 
             // Transition to the menu
-            Singleton.Get<SceneManager>().LoadMainMenu();
+            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
 
             // Indicate button is clicked
             Manager.ButtonClick.Play();

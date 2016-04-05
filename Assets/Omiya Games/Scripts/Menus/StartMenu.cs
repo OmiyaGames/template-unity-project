@@ -116,7 +116,7 @@ namespace OmiyaGames
             if (isButtonLocked == false)
             {
                 // Transition to the credits
-                Singleton.Get<SceneManager>().LoadScene(Singleton.Get<SceneManager>().Credits);
+                Singleton.Get<SceneTransitionManager>().LoadScene(Singleton.Get<SceneTransitionManager>().Credits);
 
                 // Change the menu to stand by
                 CurrentState = State.StandBy;

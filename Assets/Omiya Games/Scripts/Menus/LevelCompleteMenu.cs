@@ -55,7 +55,7 @@ namespace OmiyaGames
             base.Start();
 
             // Check if we need to disable the next level button
-            if ((defaultButton != null) && (Singleton.Get<SceneManager>().NextScene == null))
+            if ((defaultButton != null) && (Singleton.Get<SceneTransitionManager>().NextScene == null))
             {
                 defaultButton.interactable = false;
             }
@@ -69,9 +69,9 @@ namespace OmiyaGames
             // Check if we need to unlock the next level
             if (unlockNextLevel == true)
             {
-                SceneManager manager = Singleton.Get<SceneManager>();
+                SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
                 GameSettings settings = Singleton.Get<GameSettings>();
-                if (Singleton.Get<SceneManager>().NextScene != null)
+                if (Singleton.Get<SceneTransitionManager>().NextScene != null)
                 {
                     // Unlock the next level
                     settings.NumLevelsUnlocked = manager.CurrentScene.Ordinal + 1;
@@ -89,7 +89,7 @@ namespace OmiyaGames
             Hide();
 
             // Transition to the current level
-            Singleton.Get<SceneManager>().LoadNextLevel();
+            Singleton.Get<SceneTransitionManager>().LoadNextLevel();
 
             // Indicate the button was clicked
             Manager.ButtonClick.Play();

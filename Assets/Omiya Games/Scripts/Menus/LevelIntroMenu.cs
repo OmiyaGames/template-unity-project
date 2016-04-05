@@ -70,7 +70,7 @@ namespace OmiyaGames
             // Setup all labels, if available
             if (levelNameLabel != null)
             {
-                levelNameLabel.text = Singleton.Get<SceneManager>().CurrentScene.DisplayName;
+                levelNameLabel.text = Singleton.Get<SceneTransitionManager>().CurrentScene.DisplayName;
             }
         }
 

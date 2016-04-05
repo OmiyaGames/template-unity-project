@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
 
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="SceneManager.cs" company="Omiya Games">
+    /// <copyright file="SceneTransitionManager.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2015 Omiya Games
@@ -29,7 +30,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>4/5/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that retains information about which scene to switch to.
@@ -38,7 +39,7 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="SceneTransitionMenu"/>
     /// <seealso cref="Singleton"/>
-    public class SceneManager : ISingletonScript
+    public class SceneTransitionManager : ISingletonScript
     {
         public event Action<IMenu> OnSceneTransitionInStart;
         public event Action<IMenu> OnSceneTransitionInEnd;
@@ -135,7 +136,7 @@ namespace OmiyaGames
             get
             {
                 SceneInfo returnScene = null;
-                if (sceneNameToInfo.TryGetValue(Application.loadedLevelName, out returnScene) == false)
+                if (sceneNameToInfo.TryGetValue(SceneManager.GetActiveScene().name, out returnScene) == false)
                 {
                     returnScene = null;
                 }
@@ -389,12 +390,12 @@ namespace OmiyaGames
             if (loadLevelAsynchronously == true)
             {
                 // Load asynchronously
-                Application.LoadLevelAsync(sceneToLoad);
+                SceneManager.LoadSceneAsync(sceneToLoad);
             }
             else
             {
                 // Load synchronously
-                Application.LoadLevel(sceneToLoad);
+                SceneManager.LoadScene(sceneToLoad);
             }
 
             // Indicate this level is already in progress of loading

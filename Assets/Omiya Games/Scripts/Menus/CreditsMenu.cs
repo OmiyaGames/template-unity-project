@@ -109,7 +109,7 @@ namespace OmiyaGames
             if (wasVisible == true)
             {
                 // Lock the cursor to what the scene is set to
-                SceneManager manager = Singleton.Get<SceneManager>();
+                SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
                 //SceneManager.CursorMode = manager.CurrentScene.LockMode;
 
                 // Unbind to Singleton's update function

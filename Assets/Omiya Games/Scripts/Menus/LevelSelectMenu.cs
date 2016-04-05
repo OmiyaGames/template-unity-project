@@ -90,7 +90,7 @@ namespace OmiyaGames
         {
             if (isButtonLocked == false)
             {
-                Singleton.Get<SceneManager>().LoadScene(level);
+                Singleton.Get<SceneTransitionManager>().LoadScene(level);
                 isButtonLocked = true;
 
                 // Indicate button is clicked
@@ -151,7 +151,7 @@ namespace OmiyaGames
         Button[] SetupLevelButtons(Button buttonToDuplicate)
         {
             // Grab the Scene Manager
-            SceneManager settings = Singleton.Get<SceneManager>();
+            SceneTransitionManager settings = Singleton.Get<SceneTransitionManager>();
 
             // Grab the parent transform from the button
             Transform buttonParent = buttonToDuplicate.transform.parent;
@@ -190,7 +190,7 @@ namespace OmiyaGames
             return allButtons;
         }
 
-        Button SetupButtonEventAndName(SceneManager settings, GameObject buttonObject, int levelOrdinal)
+        Button SetupButtonEventAndName(SceneTransitionManager settings, GameObject buttonObject, int levelOrdinal)
         {
             // Add an event to the button
             Button newButton = buttonObject.GetComponent<Button>();
@@ -198,7 +198,7 @@ namespace OmiyaGames
             return newButton;
         }
 
-        void SetupButtonEventAndName(SceneManager settings, Button newButton, int levelOrdinal)
+        void SetupButtonEventAndName(SceneTransitionManager settings, Button newButton, int levelOrdinal)
         {
             // Add an event to the button
             newButton.onClick.AddListener(() =>
