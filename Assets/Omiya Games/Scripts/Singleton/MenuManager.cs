@@ -137,7 +137,7 @@ namespace OmiyaGames
             {
                 if (menuTextCache == null)
                 {
-                    menuTextCache = Singleton.Get<SceneManager>().MainMenu.DisplayName;
+                    menuTextCache = Singleton.Get<SceneTransitionManager>().MainMenu.DisplayName;
                     if (string.IsNullOrEmpty(returnToTextTemplate) == false)
                     {
                         menuTextCache = string.Format(returnToTextTemplate, menuTextCache);
@@ -152,7 +152,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -170,7 +170,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -188,7 +188,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneManager>().CurrentScene;
+                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -206,7 +206,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo nextScene = Singleton.Get<SceneManager>().NextScene;
+                SceneInfo nextScene = Singleton.Get<SceneTransitionManager>().NextScene;
                 if (nextScene != null)
                 {
                     returnText = nextScene.DisplayName;
@@ -257,12 +257,12 @@ namespace OmiyaGames
             if (transitionMenu == null)
             {
                 // If not, run the scene manager's transition-in events immediately
-                Singleton.Get<SceneManager>().TransitionIn(null);
+                Singleton.Get<SceneTransitionManager>().TransitionIn(null);
             }
             else
             {
                 // If so, run the transition menu's transition-in animation
-                transitionMenu.Hide(Singleton.Get<SceneManager>().TransitionIn);
+                transitionMenu.Hide(Singleton.Get<SceneTransitionManager>().TransitionIn);
             }
         }
 
@@ -338,7 +338,7 @@ namespace OmiyaGames
                     else
                     {
                         // Unlock the cursor
-                        SceneManager.CursorMode = CursorLockMode.None;
+                        SceneTransitionManager.CursorMode = CursorLockMode.None;
                     }
 
                     // Push the current menu onto the stack
@@ -375,7 +375,7 @@ namespace OmiyaGames
                 else
                 {
                     // Lock the cursor to what the scene is set to
-                    SceneManager.CursorMode = Singleton.Get<SceneManager>().CurrentScene.LockMode;
+                    SceneTransitionManager.CursorMode = Singleton.Get<SceneTransitionManager>().CurrentScene.LockMode;
                 }
 
                 // Run the event that indicates the stack changed

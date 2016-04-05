@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 namespace OmiyaGames
 {
@@ -28,18 +28,20 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/21/2015</date>
+    /// <date>4/5/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A helper script to handle increasing the interactive bounding box of certain
     /// <code>UnityEngine.UI</code> elements, such as <code>Button</code>.
+    /// 
+    /// Borrowed code from http://answers.unity3d.com/questions/844524/ugui-how-to-increase-hitzone-click-area-button-rec.html.
     /// </summary>
     [ExecuteInEditMode]
-    public class GuiRectBounds : UnityEngine.UI.Graphic
+    public class GuiRectBounds : Graphic
     {
-        protected override void OnFillVBO(System.Collections.Generic.List<UIVertex> vbo)
+        protected override void OnPopulateMesh(VertexHelper vh)
         {
-            // Do nothing
+            vh.Clear();
         }
     }
 }

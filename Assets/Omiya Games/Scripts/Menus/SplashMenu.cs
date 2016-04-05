@@ -154,7 +154,7 @@ namespace OmiyaGames
             yield return new WaitForSeconds(logoDisplayDuration);
 
             // Get the scene manager to change scenes
-            Singleton.Get<SceneManager>().LoadMainMenu();
+            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
         }
 
         IEnumerator ShowLoadingScreen()
@@ -186,7 +186,7 @@ namespace OmiyaGames
             yield return null;
 
             // Get the scene manager to change scenes
-            Singleton.Get<SceneManager>().LoadMainMenu();
+            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
         }
     }
 }
