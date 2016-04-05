@@ -8,9 +8,9 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 431816}
-  - 114: {fileID: 11445800}
+  - 114: {fileID: 11433248}
   m_Layer: 0
-  m_Name: Audio Scripts Finder
+  m_Name: Pause Free Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!114 &11445800
+--- !u!114 &11433248
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -36,15 +36,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 155980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e844b61c4e2141c18959a65c03d9fc6, type: 3}
+  m_Script: {fileID: 11500000, guid: a0dcf3125de1c594d87e8a70a87d6b34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  searchThrough: []
-  soundEffects: []
-  ambientMusics: []
-  unknownSources: []
-  soundEffectsGroup: {fileID: 24360054, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
-  ambientMusicGroup: {fileID: 24364948, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+  usingPauseFreeCamera: 0
+  usingSlowMotion: 0
+  cameraScriptToDisable: []
+  toggleScreenshotModeKey: 291
+  nextFrameKey: 292
+  toggleSlowMotionModeKey: 293
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
