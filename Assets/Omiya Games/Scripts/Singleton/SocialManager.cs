@@ -199,7 +199,7 @@ namespace OmiyaGames
         [SerializeField]
         int numberOfAuthenticationRetries = 3;
 
-        #pragma warning disable 0414
+#pragma warning disable 0414
         [Header("Leaderboard IDs")]
         // TODO: add support for Xbox Live
         [SerializeField]
@@ -227,7 +227,7 @@ namespace OmiyaGames
         [SerializeField]
         [Tooltip("Leaderboard ID for Kongregate Web Portal (requires KONGREGATE macro defined)")]
         string defaultKongregateLeaderboardId = "";
-        #pragma warning restore 0414
+#pragma warning restore 0414
 
         readonly Dictionary<LeaderboardKey, LeaderboardWrapper> allLeaderboards = new Dictionary<LeaderboardKey, LeaderboardWrapper>();
         LogInState authenticationState = LogInState.NotConnected;
