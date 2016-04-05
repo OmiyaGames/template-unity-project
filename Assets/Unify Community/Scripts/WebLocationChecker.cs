@@ -20,7 +20,8 @@ public class WebLocationChecker : MonoBehaviour
 {
     ///<summary>
     /// If it is a webplayer, then the domain must contain any
-    /// one or more of these strings, or it will be redirected
+    /// one or more of these strings, or it will be redirected.
+    /// This array is ignored if empty (i.e. no redirect will occur).
     ///</summary>
     [SerializeField]
     string[] domainMustContain;
@@ -32,7 +33,7 @@ public class WebLocationChecker : MonoBehaviour
     [SerializeField]
     string redirectURL;
 
-#if UNITY_WEBPLAYER
+#if (UNITY_WEBPLAYER || UNITY_WEBGL)
     void Awake()
     {
 		if (domainMustContain.Length > 0)
