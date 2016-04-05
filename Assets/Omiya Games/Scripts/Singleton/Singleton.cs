@@ -81,12 +81,12 @@ namespace OmiyaGames
         {
             get
             {
-#if (UNITY_WEBPLAYER || UNITY_WEBGL)
-                // Always return true if already on a webplayer
-                return true;
-#elif UNITY_EDITOR
+#if UNITY_EDITOR
                 // Check if webplayer simulation checkbox is checked
                 return simulateWebplayer;
+#elif (UNITY_WEBPLAYER || UNITY_WEBGL)
+                // Always return true if already on a webplayer
+                return true;
 #else
                 // Always return false, otherwise
                 return true;
