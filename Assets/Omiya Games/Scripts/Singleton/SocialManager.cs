@@ -353,7 +353,7 @@ namespace OmiyaGames
             CurrentScoreReportState = ScoreReportState.NoReport;
 
             // If this script is enabled, start authentication
-            if (authenticateOnStartUp == true)
+            if ((authenticateOnStartUp == true) && (IsSupported == true))
             {
                 // Sign to Singleton's update function
                 OnDestroy();
