@@ -11,7 +11,7 @@ using GooglePlayGames.BasicApi;
 
 namespace OmiyaGames
 {
-    public class SocialManager : ISingletonScript
+    public partial class SocialManager : ISingletonScript
     {
         public enum LogInState
         {
@@ -41,141 +41,6 @@ namespace OmiyaGames
             NumberOfServiceTypes
         }
 
-        public class LeaderboardWrapper
-        {
-            public enum State
-            {
-                NothingLoaded,
-                AttemptingToLoadScores,
-                ScoresLoaded,
-                FailedToLoadScores
-            }
-
-            public readonly ILeaderboard reference;
-            State currentState = State.NothingLoaded;
-
-            internal LeaderboardWrapper(string id,
-                UserScope userScope, TimeScope timeScope, 
-                ushort startingRank, ushort numberOfRanks)
-            {
-                // Setup Leaderboard
-                reference = Social.CreateLeaderboard();
-                reference.id = id;
-                reference.userScope = userScope;
-                reference.timeScope = timeScope;
-
-                // Update the range
-                Range newRange = reference.range;
-                if(startingRank > 0)
-                {
-                    newRange.from = startingRank;
-                }
-                if(numberOfRanks > 0)
-                {
-                    newRange.count = numberOfRanks;
-                }
-                reference.range = newRange;
-            }
-
-            internal LeaderboardWrapper(LeaderboardKey key) :
-                this(key.id, key.userScope, key.timeScope,
-                key.startingRank, key.numberOfRanks)
-            {
-            }
-
-            public State CurrentState
-            {
-                get
-                {
-                    return currentState;
-                }
-            }
-
-            /// <summary>
-            /// Gets the local user's score.
-            /// </summary>
-            /// <value>The list of scores.  If null, no scores has been loaded yet.</value>
-            public IScore UserScore
-            {
-                get
-                {
-                    IScore returnScores = null;
-                    if(CurrentState == State.ScoresLoaded)
-                    {
-                        returnScores = reference.localUserScore;
-                    }
-                    return returnScores;
-                }
-            }
-
-            /// <summary>
-            /// Gets the scores.
-            /// </summary>
-            /// <value>The list of scores.  If null, no scores has been loaded yet.</value>
-            public IScore[] Scores
-            {
-                get
-                {
-                    IScore[] returnScores = null;
-                    if(CurrentState == State.ScoresLoaded)
-                    {
-                        returnScores = reference.scores;
-                    }
-                    return returnScores;
-                }
-            }
-
-            string DebugId
-            {
-                get
-                {
-                    return ("id " + reference.id + ", user " + reference.userScope + ", time " + reference.timeScope);
-
-                }
-            }
-
-            public bool LoadScoresAsync(bool forceLoadingNewScores = false)
-            {
-                bool returnFlag = false;
-
-                // Check if the leaderboard is created, and scores haven't been loaded yet (or we want to force the score loading)
-                if((CurrentState == State.NothingLoaded) || (forceLoadingNewScores == true))
-                {
-                    // Setup flags
-                    returnFlag = true;
-                    currentState = State.AttemptingToLoadScores;
-
-                    // Start loading in scores
-                    if (Debug.isDebugBuild == true)
-                    {
-                        Debug.Log("Loading Scores for: " + DebugId);
-                    }
-                    reference.LoadScores(OnScoresLoaded);
-                }
-                return returnFlag;
-            }
-
-            void OnScoresLoaded(bool isSuccess)
-            {
-                if(isSuccess == true)
-                {
-                    currentState = State.ScoresLoaded;
-                    if (Debug.isDebugBuild == true)
-                    {
-                        Debug.Log("Scores loaded for: " + DebugId);
-                    }
-                }
-                else
-                {
-                    currentState = State.FailedToLoadScores;
-                    if (Debug.isDebugBuild == true)
-                    {
-                        Debug.Log("Failed to loads scores for: " + DebugId);
-                    }
-                }
-            }
-        }
-
         internal struct LeaderboardKey
         {
             public readonly string id;
@@ -199,7 +64,7 @@ namespace OmiyaGames
         [SerializeField]
         int numberOfAuthenticationRetries = 3;
 
-#pragma warning disable 0414
+        #pragma warning disable 0414
         [Header("Leaderboard IDs")]
         // TODO: add support for Xbox Live
         [SerializeField]
@@ -227,13 +92,12 @@ namespace OmiyaGames
         [SerializeField]
         [Tooltip("Leaderboard ID for Kongregate Web Portal (requires KONGREGATE macro defined)")]
         string defaultKongregateLeaderboardId = "";
-#pragma warning restore 0414
+        #pragma warning restore 0414
 
         readonly Dictionary<LeaderboardKey, LeaderboardWrapper> allLeaderboards = new Dictionary<LeaderboardKey, LeaderboardWrapper>();
         LogInState authenticationState = LogInState.NotConnected;
         ScoreReportState scoreReportState = ScoreReportState.NoReport;
         System.Action<float> onUpdate = null;
-        int currentNumberOfAuthenticationRetries = 0;
 
         #region Properties
         public LogInState CurrentLogInState
@@ -312,7 +176,10 @@ namespace OmiyaGames
             {
                 // TODO: as more services are implemented in SetupPlatformSpecificServices(),
                 // add more supported services below here
-#if GOOGLE_PLAY_GAMES
+#if UNITY_EDITOR
+                // In the editor, don't allow any leaderboard services
+                return ServiceType.None;
+#elif GOOGLE_PLAY_GAMES
                 return ServiceType.GooglePlayGames;
 #elif UNITY_IOS
                 return ServiceType.AppleGameCenter;
@@ -439,7 +306,7 @@ namespace OmiyaGames
                     // Check if we should retrive scores for this leaderboard
                     if((retrieveScore == true) && (CurrentLogInState == LogInState.AuthenticationSuccess))
                     {
-                        returnWrapper.LoadScoresAsync();
+                        returnWrapper.LoadLeaderboardAsync();
                     }
                 }
             }
@@ -452,7 +319,6 @@ namespace OmiyaGames
             // Setup flag
             CurrentLogInState = LogInState.NotConnected;
             CurrentScoreReportState = ScoreReportState.NoReport;
-            currentNumberOfAuthenticationRetries = 0;
 
             // If this script is enabled, start authentication
             if (authenticateOnStartUp == true)
@@ -481,34 +347,21 @@ namespace OmiyaGames
 
         void OnEveryFrame(float deltaTime)
         {
-            switch(CurrentLogInState)
+            if(CurrentLogInState == LogInState.NotConnected)
             {
-                case LogInState.NotConnected:
+                if(numberOfAuthenticationRetries > 0)
                 {
-                    if(currentNumberOfAuthenticationRetries < numberOfAuthenticationRetries)
-                    {
-                        // Increment the number of attempts to authenticate
-                        ++currentNumberOfAuthenticationRetries;
+                    // Login
+                    LogInAsync(true);
 
-                        // Login (this will change the CurrentLoginState)
-                        LogInAsync(true);
-                    }
-                    else
-                    {
-                        // We've went through all the retries
-                        // Stop attempting to authenticate
-                        OnDestroy();
-                    }
-                    break;
+                    // Decrement the number of attempts to authenticate
+                    --numberOfAuthenticationRetries;
                 }
-                case LogInState.AuthenticationSuccess:
+                else
                 {
-                    if(currentNumberOfAuthenticationRetries > 0)
-                    {
-                        // Revert the number of authentication back to 0
-                        currentNumberOfAuthenticationRetries = 0;
-                    }
-                    break;
+                    // We've went through all the retries
+                    // Stop attempting to authenticate
+                    OnDestroy();
                 }
             }
         }
