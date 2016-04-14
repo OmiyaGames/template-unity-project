@@ -102,5 +102,18 @@ namespace OmiyaGames
                 return audioCache;
             }
         }
+
+        #region Unity Events
+        protected override void Awake()
+        {
+            base.Awake();
+            allAmbientMusics.Add(this);
+        }
+
+        void OnDestroy()
+        {
+            allAmbientMusics.Remove(this);
+        }
+        #endregion
     }
 }

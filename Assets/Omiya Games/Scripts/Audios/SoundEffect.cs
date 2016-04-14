@@ -222,9 +222,9 @@ namespace OmiyaGames
         #endregion
 
         #region Unity Events
-        void Start()
+        protected override void Awake()
         {
-            // Calculate how the audio should behave
+            base.Awake();
             allSoundEffects.Add(this);
         }
 
@@ -234,31 +234,42 @@ namespace OmiyaGames
         }
         #endregion
 
-        public override void Play()
+        protected override bool ChangeAudioSourceState(State before, State after)
         {
-            // Stop the audio
-            Stop();
-
-            // Apply mutation
-            if (ClipRandomizer.Count > 1)
+            // Check if we're playing this sound effect from Playing or Stopped state
+            bool returnFlag = false;
+            if((after == State.Playing) && (before != State.Paused))
             {
-                Audio.clip = ClipRandomizer.RandomElement;
-            }
-            if(mutatePitch == true)
-            {
-                // Change the audio's pitch
-                Audio.pitch = Random.Range(pitchMutationRange.x, pitchMutationRange.y);
-            }
+                // Stop the audio
+                Audio.Stop();
 
-            // Update the volume
-            if(mutateVolume == true)
-            {
-                // Change the audio's volume
-                Audio.volume = Random.Range(volumeMutationRange.x, volumeMutationRange.y);
-            }
+                // Apply mutation
+                if (ClipRandomizer.Count > 1)
+                {
+                    Audio.clip = ClipRandomizer.RandomElement;
+                }
+                if (mutatePitch == true)
+                {
+                    // Change the audio's pitch
+                    Audio.pitch = Random.Range(pitchMutationRange.x, pitchMutationRange.y);
+                }
 
-            // Play the audio
-            Audio.Play();
+                // Update the volume
+                if (mutateVolume == true)
+                {
+                    // Change the audio's volume
+                    Audio.volume = Random.Range(volumeMutationRange.x, volumeMutationRange.y);
+                }
+
+                // Play the audio
+                Audio.Play();
+                returnFlag = true;
+            }
+            else
+            {
+                returnFlag = base.ChangeAudioSourceState(before, after);
+            }
+            return returnFlag;
         }
     }
 }

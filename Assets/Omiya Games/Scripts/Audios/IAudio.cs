@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace OmiyaGames
 {
@@ -40,56 +39,109 @@ namespace OmiyaGames
     /// <seealso cref="SoundEffect"/>
     public abstract class IAudio : MonoBehaviour
     {
+        public enum State
+        {
+            Stopped,
+            Playing,
+            Paused
+        }
+
+        State currentState = State.Stopped;
+
         public abstract AudioSource Audio
         {
             get;
         }
 
-        public bool IsPlaying
+        public State CurrentState
         {
             get
             {
-                return Audio.isPlaying;
+                UpdateStateToAudioIsPlaying(ref currentState);
+                return currentState;
             }
-        }
-
-        public virtual void Play()
-        {
-            Audio.Play();
-        }
-
-        public void Play(float delaySeconds)
-        {
-            if(delaySeconds > 0)
+            set
             {
-                // Delay playing the audio
-                StartCoroutine(DelayPlay(delaySeconds));
+                UpdateStateToAudioIsPlaying(ref currentState);
+                if (ChangeAudioSourceState(currentState, value) == true)
+                {
+                    currentState = value;
+                }
             }
-            else
+        }
+
+        public void Play()
+        {
+            CurrentState = State.Playing;
+        }
+
+        protected virtual void Awake()
+        {
+            if(Audio.playOnAwake == true)
             {
-                Play();
+                currentState = State.Playing;
             }
         }
 
-        public void Stop()
+        #region Helper Methods
+        protected virtual void UpdateStateToAudioIsPlaying(ref State state)
         {
-            Audio.Stop();
+            if ((state == State.Playing) && (Audio.isPlaying == false))
+            {
+                state = State.Stopped;
+            }
+            else if ((state == State.Stopped) && (Audio.isPlaying == true))
+            {
+                state = State.Playing;
+            }
         }
 
-        public void Pause()
+        protected virtual bool ChangeAudioSourceState(State before, State after)
         {
-            Audio.Pause();
-        }
+            // Make sure the before and after are two different states
+            bool returnFlag = false;
+            if (before != after)
+            {
+                // Check the state we're switching into
+                switch (after)
+                {
+                    case State.Playing:
+                        if (before == State.Stopped)
+                        {
+                            // Play the audio if we're switching from stopped to playing
+                            Audio.Play();
+                        }
+                        else
+                        {
+                            // Unpause the audio if we're switching from paused to play
+                            Audio.UnPause();
+                        }
+                        returnFlag = true;
+                        break;
+                    case State.Paused:
+                        if (before == State.Playing)
+                        {
+                            // Pause the audio if we're switching from playing to paused
+                            Audio.Pause();
+                            returnFlag = true;
+                        }
+                        break;
+                    default:
+                        // Check if we're paused
+                        if (before == State.Paused)
+                        {
+                            // Unpause the audio
+                            Audio.UnPause();
+                        }
 
-        public void UnPause()
-        {
-            Audio.UnPause();
+                        // Stop the audio
+                        Audio.Stop();
+                        returnFlag = true;
+                        break;
+                }
+            }
+            return returnFlag;
         }
-
-        IEnumerator DelayPlay(float delaySeconds)
-        {
-            yield return new WaitForSeconds(delaySeconds);
-            Play();
-        }
+        #endregion
     }
 }
