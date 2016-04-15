@@ -40,35 +40,35 @@ namespace UnityEditor.UI
     [CanEditMultipleObjects]
     public class ResizableGridLayoutGroupEditor : Editor
     {
-        SerializedProperty m_Padding;
-        SerializedProperty m_Spacing;
-        SerializedProperty m_StartCorner;
-        SerializedProperty m_StartAxis;
-        SerializedProperty m_ChildAlignment;
-        SerializedProperty m_Constraint;
-        SerializedProperty m_ConstraintCount;
+        SerializedProperty padding;
+        SerializedProperty spacing;
+        SerializedProperty startCorner;
+        SerializedProperty startAxis;
+        SerializedProperty childAlignment;
+        SerializedProperty constraint;
+        SerializedProperty constraintCount;
 
         protected virtual void OnEnable()
         {
-            m_Padding = serializedObject.FindProperty("m_Padding");
-            m_Spacing = serializedObject.FindProperty("m_Spacing");
-            m_StartCorner = serializedObject.FindProperty("m_StartCorner");
-            m_StartAxis = serializedObject.FindProperty("m_StartAxis");
-            m_ChildAlignment = serializedObject.FindProperty("m_ChildAlignment");
-            m_Constraint = serializedObject.FindProperty("m_menuConstraint");
-            m_ConstraintCount = serializedObject.FindProperty("m_ConstraintCount");
+            padding = serializedObject.FindProperty("m_Padding");
+            spacing = serializedObject.FindProperty("m_Spacing");
+            startCorner = serializedObject.FindProperty("m_StartCorner");
+            startAxis = serializedObject.FindProperty("m_StartAxis");
+            childAlignment = serializedObject.FindProperty("m_ChildAlignment");
+            constraint = serializedObject.FindProperty("m_menuConstraint");
+            constraintCount = serializedObject.FindProperty("m_ConstraintCount");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(m_Padding, true);
-            EditorGUILayout.PropertyField(m_Spacing, true);
-            EditorGUILayout.PropertyField(m_StartCorner, true);
-            EditorGUILayout.PropertyField(m_StartAxis, true);
-            EditorGUILayout.PropertyField(m_ChildAlignment, true);
-            EditorGUILayout.PropertyField(m_Constraint, true);
-            EditorGUILayout.PropertyField(m_ConstraintCount, true);
+            EditorGUILayout.PropertyField(padding, true);
+            EditorGUILayout.PropertyField(spacing, true);
+            EditorGUILayout.PropertyField(startCorner, true);
+            EditorGUILayout.PropertyField(startAxis, true);
+            EditorGUILayout.PropertyField(childAlignment, true);
+            EditorGUILayout.PropertyField(constraint, true);
+            EditorGUILayout.PropertyField(constraintCount, true);
             serializedObject.ApplyModifiedProperties();
         }
     }
