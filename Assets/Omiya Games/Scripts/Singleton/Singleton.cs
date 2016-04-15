@@ -29,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>4/15/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Any GameObject with this script will not be destroyed when switching between
@@ -97,37 +97,24 @@ namespace OmiyaGames
         // Use this for initialization
         void Awake()
         {
-            int index = 0;
-            ISingletonScript[] allSingletonScripts = null;
             if (msInstance == null)
             {
                 // Set the instance variable
                 msInstance = this;
 
+                // Run all the events
+                RunSingletonEvents(true);
+
                 // Prevent this object from destroying itself
                 DontDestroyOnLoad(gameObject);
-
-                // Go through every ISingletonScript, and run singleton awake
-                allSingletonScripts = GetComponentsInChildren<ISingletonScript>();
-                for (index = 0; index < allSingletonScripts.Length; ++index)
-                {
-                    // Run singleton awake
-                    allSingletonScripts[index].SingletonAwake(msInstance);
-                }
             }
             else
             {
+                // Run all the events
+                RunSingletonEvents(true);
+
                 // Destroy this gameobject
                 Destroy(gameObject);
-
-                // Retrieve the singleton script from the instance
-                allSingletonScripts = msInstance.GetComponentsInChildren<ISingletonScript>();
-            }
-
-            // Go through every ISingletonScript, and run scene awake
-            for (index = 0; index < allSingletonScripts.Length; ++index)
-            {
-                allSingletonScripts[index].SceneAwake(msInstance);
             }
         }
 
@@ -140,6 +127,28 @@ namespace OmiyaGames
             if (OnRealTimeUpdate != null)
             {
                 OnRealTimeUpdate(Time.unscaledDeltaTime);
+            }
+        }
+
+        void RunSingletonEvents(bool alsoRunSingletonAwake)
+        {
+            int index = 0;
+            ISingletonScript[] allSingletonScripts = Instance.GetComponentsInChildren<ISingletonScript>();
+
+            if (alsoRunSingletonAwake == true)
+            {
+                // Go through every ISingletonScript, and run singleton awake
+                for (index = 0; index < allSingletonScripts.Length; ++index)
+                {
+                    // Run singleton awake
+                    allSingletonScripts[index].SingletonAwake(msInstance);
+                }
+            }
+
+            // Go through every ISingletonScript, and run scene awake
+            for (index = 0; index < allSingletonScripts.Length; ++index)
+            {
+                allSingletonScripts[index].SceneAwake(msInstance);
             }
         }
     }
