@@ -48,6 +48,7 @@ namespace OmiyaGames
         bool revertTimeScale = true;
 
         Scene? reference = null;
+        string sceneName = null;
         int ordinal = 0;
 
         public SceneInfo(string scene, string display, bool revertTime = true, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
@@ -79,19 +80,15 @@ namespace OmiyaGames
             }
         }
 
-        public int SceneIndex
-        {
-            get
-            {
-                return Reference.buildIndex;
-            }
-        }
-
         public string SceneName
         {
             get
             {
-                return Reference.name;
+                if(sceneName == null)
+                {
+                    sceneName = System.IO.Path.GetFileNameWithoutExtension(ScenePath);
+                }
+                return sceneName;
             }
         }
 
