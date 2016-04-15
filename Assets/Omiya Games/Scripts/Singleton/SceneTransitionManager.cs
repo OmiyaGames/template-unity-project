@@ -126,7 +126,7 @@ namespace OmiyaGames
             get
             {
                 SceneInfo returnScene = null;
-                if (sceneNameToInfo.TryGetValue(SceneManager.GetActiveScene().name, out returnScene) == false)
+                if (sceneNameToInfo.TryGetValue(SceneManager.GetActiveScene().path, out returnScene) == false)
                 {
                     returnScene = null;
                 }
