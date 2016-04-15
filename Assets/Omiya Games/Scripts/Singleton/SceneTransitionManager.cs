@@ -63,19 +63,9 @@ namespace OmiyaGames
         [SerializeField]
         SceneInfo[] levels;
 
-#if UNITY_EDITOR
-        [Header("Default Levels Information")]
-        [SerializeField]
-        string levelDisplayNameTemplate = "Level {0}";
-        [SerializeField]
-        bool levelRevertsTimeScaleTemplate = true;
-        [SerializeField]
-        CursorLockMode levelLockModeTemplate = CursorLockMode.None;
-#endif
-
         SceneInfo lastScene = null;
+        SceneInfo sceneToLoad = null;
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
-        string sceneToLoad = null;
 
         #region Properties
         public static CursorLockMode CursorMode
@@ -200,9 +190,9 @@ namespace OmiyaGames
             sceneNameToInfo.Clear();
 
             // Add the main menu, credits, and splash scene
-            sceneNameToInfo.Add(MainMenu.SceneName, MainMenu);
-            sceneNameToInfo.Add(Credits.SceneName, Credits);
-            sceneNameToInfo.Add(Splash.SceneName, Splash);
+            sceneNameToInfo.Add(MainMenu.ScenePath, MainMenu);
+            sceneNameToInfo.Add(Credits.ScenePath, Credits);
+            sceneNameToInfo.Add(Splash.ScenePath, Splash);
 
             // Update level information
             for (int index = 0; index < Levels.Length; ++index)
@@ -211,7 +201,7 @@ namespace OmiyaGames
                 Levels[index].Ordinal = index;
 
                 // Add the level to the dictionary
-                sceneNameToInfo.Add(Levels[index].SceneName, Levels[index]);
+                sceneNameToInfo.Add(Levels[index].ScenePath, Levels[index]);
             }
         }
 
@@ -264,11 +254,11 @@ namespace OmiyaGames
             // Make sure the parameter is correct
             if(scene == null)
             {
-                throw new System.ArgumentNullException("scene");
+                throw new ArgumentNullException("scene");
             }
-            else if(string.IsNullOrEmpty(scene.SceneName) == true)
+            else if(string.IsNullOrEmpty(scene.ScenePath) == true)
             {
-                throw new System.ArgumentException("No scene name is set", "scene");
+                throw new ArgumentException("No scene name is set", "scene");
             }
 
             // Check if we need to update the last scene
@@ -278,10 +268,10 @@ namespace OmiyaGames
             }
 
             // Update which scene to load
-            sceneToLoad = scene.SceneName;
+            sceneToLoad = scene;
 
             // Make sure we have a level to load
-            if (string.IsNullOrEmpty(sceneToLoad) == false)
+            if (sceneToLoad != null)
             {
                 // Show the level transition menu
                 SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().Show<SceneTransitionMenu>(TransitionOut);
@@ -330,7 +320,7 @@ namespace OmiyaGames
         void TransitionOut(IMenu menu)
         {
             // Check to see if the next scene name is provided
-            if (string.IsNullOrEmpty(sceneToLoad) == false)
+            if (sceneToLoad != null)
             {
                 // Check to see if the argument for the next menu is provided
                 SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
@@ -347,7 +337,7 @@ namespace OmiyaGames
                     }
 
                     // Transition to the next scene
-                    TransitionToScene(loadLevelAsynchronously, ref sceneToLoad);
+                    TransitionToScene(loadLevelAsynchronously, sceneToLoad);
                 }
                 else
                 {
@@ -375,13 +365,13 @@ namespace OmiyaGames
                         }
 
                         // Transition to the next scene
-                        TransitionToScene(loadLevelAsynchronously, ref sceneToLoad);
+                        TransitionToScene(loadLevelAsynchronously, sceneToLoad);
                     }
                 }
             }
         }
 
-        static void TransitionToScene(bool loadLevelAsynchronously, ref string sceneToLoad)
+        static void TransitionToScene(bool loadLevelAsynchronously, SceneInfo sceneToLoad)
         {
             // Indicate the next scene was loaded
             Singleton.Get<PoolingManager>().DestroyAll();
@@ -390,12 +380,12 @@ namespace OmiyaGames
             if (loadLevelAsynchronously == true)
             {
                 // Load asynchronously
-                SceneManager.LoadSceneAsync(sceneToLoad);
+                SceneManager.LoadSceneAsync(sceneToLoad.SceneName);
             }
             else
             {
                 // Load synchronously
-                SceneManager.LoadScene(sceneToLoad);
+                SceneManager.LoadScene(sceneToLoad.SceneName);
             }
 
             // Indicate this level is already in progress of loading
@@ -404,45 +394,55 @@ namespace OmiyaGames
 
         #region Editor Methods
 #if UNITY_EDITOR
-        [ContextMenu("Setup Levels (using Level Numbers)")]
-        public void SetupLevelsUsingLevelNumber()
+        public void SetupLevels(string displayNameTemplate, bool fillInSceneName, bool defaultRevertTimeScale, CursorLockMode defaultCursorLockMode, bool appendLevels)
         {
-            SetupLevels(levelDisplayNameTemplate);
-        }
+            // To prevent conflicts, collect all the scenes we already have listed
+            HashSet<string> usedPaths = new HashSet<string>();
+            usedPaths.Add(splash.ScenePath);
+            usedPaths.Add(mainMenu.ScenePath);
+            usedPaths.Add(credits.ScenePath);
 
-        [ContextMenu("Setup Levels (using Scene Names)")]
-        public void SetupLevelsUsingSceneName()
-        {
-            SetupLevels();
-        }
-
-        [ContextMenu("Setup Levels")]
-        void SetupLevels(string formatText = null)
-        {
             // Create a new list
-            int numScenes = UnityEditor.EditorBuildSettings.scenes.Length;
+            int index = 0;
             List<SceneInfo> newLevels = new List<SceneInfo>();
 
+            // If we're appending, add all the scene info from before
+            if (appendLevels == true)
+            {
+                for (index = 0; index < levels.Length; ++index)
+                {
+                    newLevels.Add(levels[index]);
+                    usedPaths.Add(levels[index].ScenePath);
+                }
+            }
+
             // Go through each level
-            for (int index = 0; index < numScenes; ++index)
+            int numScenes = UnityEditor.EditorBuildSettings.scenes.Length;
+            for (index = 0; index < numScenes; ++index)
             {
                 // Grab the scene
                 UnityEditor.EditorBuildSettingsScene scene = UnityEditor.EditorBuildSettings.scenes[index];
 
-                // Get the scene name
-                string sceneName = System.IO.Path.GetFileNameWithoutExtension(scene.path);
-
                 // Make sure the scene doesn't have the same name as the splash, main menu or the credits
-                if ((string.Equals(sceneName, splash.SceneName) == false) &&
-                    (string.Equals(sceneName, mainMenu.SceneName) == false) &&
-                    (string.Equals(sceneName, credits.SceneName) == false))
+                if ((scene.enabled == true) && (usedPaths.Contains(scene.path) == false))
                 {
                     // Get the display name
-                    string displayName = GetDisplayName((newLevels.Count + 1), sceneName, formatText);
+                    int ordinal = newLevels.Count;
+                    string displayName = displayNameTemplate;
+                    if (fillInSceneName == true)
+                    {
+                        displayName = string.Format(displayNameTemplate, System.IO.Path.GetFileNameWithoutExtension(scene.path));
+                    }
+                    else
+                    {
+                        displayName = string.Format(displayNameTemplate, (ordinal + 1));
+                    }
 
                     // Create a new level
-                    int ordinal = newLevels.Count;
-                    newLevels.Add(new SceneInfo(sceneName, displayName, levelRevertsTimeScaleTemplate, levelLockModeTemplate, ordinal));
+                    newLevels.Add(new SceneInfo(scene.path, displayName, defaultRevertTimeScale, defaultCursorLockMode, ordinal));
+
+                    // Add this path to avoid adding this scene twice
+                    usedPaths.Contains(scene.path);
                 }
             }
 
@@ -450,18 +450,9 @@ namespace OmiyaGames
             levels = newLevels.ToArray();
         }
 
-        static string GetDisplayName(int index, string sceneName, string formatText)
+        static string GetDisplayName(int index, string formatText)
         {
-            string displayName;
-            if (string.IsNullOrEmpty(formatText) == true)
-            {
-                displayName = sceneName;
-            }
-            else
-            {
-                displayName = string.Format(formatText, index);
-            }
-            return displayName;
+            return string.Format(formatText, index);
         }
 #endif
         #endregion

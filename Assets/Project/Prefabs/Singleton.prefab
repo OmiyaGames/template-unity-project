@@ -585,7 +585,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -607,7 +607,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!82 &8264130
 AudioSource:
   m_ObjectHideFlags: 1
@@ -660,7 +660,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -682,7 +682,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -793,36 +793,33 @@ MonoBehaviour:
   loadLevelAsynchronously: 1
   soundEffect: {fileID: 11492550}
   splash:
-    sceneName: Splash
+    scenePath: Assets/Project/Scenes/Menus/Splash.unity
     displayName: Splash
     revertTimeScale: 1
     sceneCursorLockMode: 0
   mainMenu:
-    sceneName: Main Menu
+    scenePath: Assets/Project/Scenes/Menus/Main Menu.unity
     displayName: Main Menu
     revertTimeScale: 1
     sceneCursorLockMode: 0
   credits:
-    sceneName: Credits
+    scenePath: Assets/Project/Scenes/Menus/Credits.unity
     displayName: Credits
     revertTimeScale: 1
     sceneCursorLockMode: 0
   levels:
-  - sceneName: Level 1
+  - scenePath: Assets/Project/Scenes/Level 1.unity
     displayName: Level 1
     revertTimeScale: 1
-    sceneCursorLockMode: 0
-  - sceneName: Level 2
+    sceneCursorLockMode: 2
+  - scenePath: Assets/Project/Scenes/Level 2.unity
     displayName: Level 2
     revertTimeScale: 1
-    sceneCursorLockMode: 0
-  - sceneName: Level 3
+    sceneCursorLockMode: 2
+  - scenePath: Assets/Project/Scenes/Level 3.unity
     displayName: Level 3
     revertTimeScale: 1
-    sceneCursorLockMode: 0
-  levelDisplayNameTemplate: Level {0}
-  levelRevertsTimeScaleTemplate: 1
-  levelLockModeTemplate: 0
+    sceneCursorLockMode: 2
 --- !u!114 &11428920
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace OmiyaGames
 {
@@ -39,7 +39,7 @@ namespace OmiyaGames
     public class SceneInfo
     {
         [SerializeField]
-        string sceneName = "";
+        string scenePath = "";
         [SerializeField]
         string displayName = "";
         [SerializeField]
@@ -47,22 +47,51 @@ namespace OmiyaGames
         [SerializeField]
         CursorLockMode sceneCursorLockMode = CursorLockMode.None;
 
+        Scene? reference = null;
         int ordinal = 0;
 
         public SceneInfo(string scene, string display, bool revertTime = true, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
         {
-            sceneName = scene;
+            scenePath = scene;
             displayName = display;
             revertTimeScale = revertTime;
             sceneCursorLockMode = lockMode;
             ordinal = index;
         }
 
+        public string ScenePath
+        {
+            get
+            {
+                return scenePath;
+            }
+        }
+
+        public Scene Reference
+        {
+            get
+            {
+                if(reference.HasValue == false)
+                {
+                    reference = SceneManager.GetSceneByPath(ScenePath);
+                }
+                return reference.Value;
+            }
+        }
+
+        public int SceneIndex
+        {
+            get
+            {
+                return Reference.buildIndex;
+            }
+        }
+
         public string SceneName
         {
             get
             {
-                return sceneName;
+                return Reference.name;
             }
         }
 
@@ -71,10 +100,6 @@ namespace OmiyaGames
             get
             {
                 return displayName;
-            }
-            set
-            {
-                displayName = value;
             }
         }
 
