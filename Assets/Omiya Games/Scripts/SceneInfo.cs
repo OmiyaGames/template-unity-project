@@ -43,9 +43,9 @@ namespace OmiyaGames
         [SerializeField]
         string displayName = "";
         [SerializeField]
-        bool revertTimeScale = true;
+        CursorLockMode cursorMode = CursorLockMode.None;
         [SerializeField]
-        CursorLockMode sceneCursorLockMode = CursorLockMode.None;
+        bool revertTimeScale = true;
 
         Scene? reference = null;
         int ordinal = 0;
@@ -55,7 +55,7 @@ namespace OmiyaGames
             scenePath = scene;
             displayName = display;
             revertTimeScale = revertTime;
-            sceneCursorLockMode = lockMode;
+            cursorMode = lockMode;
             ordinal = index;
         }
 
@@ -119,7 +119,7 @@ namespace OmiyaGames
         {
             get
             {
-                return sceneCursorLockMode;
+                return cursorMode;
             }
         }
 
