@@ -178,6 +178,8 @@ namespace OmiyaGames
                     clone = Instantiate<GameObject>(buttonToDuplicate.gameObject);
                     clone.transform.SetParent(buttonParent);
                     clone.transform.localScale = Vector3.one;
+                    clone.transform.localPosition = Vector3.one;
+                    clone.transform.localRotation = Quaternion.identity;
 
                     // Add the button into the button list
                     allButtons[index] = SetupButtonEventAndName(settings, clone, index);

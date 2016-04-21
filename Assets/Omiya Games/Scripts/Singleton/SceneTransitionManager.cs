@@ -207,6 +207,12 @@ namespace OmiyaGames
 
         public override void SceneAwake(Singleton instance)
         {
+            if(CurrentScene == null)
+            {
+                Debug.LogWarning("Current scene is not added to the Build Settings");
+                return;
+            }
+
             // Update the cursor locking
             CursorMode = CurrentScene.LockMode;
 
