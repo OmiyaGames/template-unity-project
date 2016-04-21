@@ -128,25 +128,26 @@ namespace OmiyaGames
 
         public override void SingletonAwake(Singleton instance)
         {
-#if (UNITY_WEBPLAYER || UNITY_WEBGL)
-#if !UNITY_EDITOR
-            // Shoot a coroutine if not in editor, and making Webplayer or WebGL
-            StartCoroutine(CheckDomainList());
+            if (Singleton.Instance.IsWebplayer == true)
+            {
+#if UNITY_EDITOR
+                // Do a little bit of debugging
+                StringBuilder buf = new StringBuilder();
+                if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
+                {
+                    // Print remote domain list URL
+                    Debug.Log("Example URL to grab remote Domain List will look like:\n" + GenerateRemoteDomainList(buf));
+                }
+                if (string.IsNullOrEmpty(redirectURL) == false)
+                {
+                    // Print redirect javascript
+                    Debug.Log("Redirect javascript will look like:\n" + GenerateRedirect(buf));
+                }
 #else
-            // Do a little bit of debugging
-            StringBuilder buf = new StringBuilder();
-            if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
-            {
-                // Print remote domain list URL
-                Debug.Log("Example URL to grab remote Domain List will look like:\n" + GenerateRemoteDomainList(buf));
-            }
-            if (string.IsNullOrEmpty(redirectURL) == false)
-            {
-                // Print redirect javascript
-                Debug.Log("Redirect javascript will look like:\n" + GenerateRedirect(buf));
-            }
+                // Shoot a coroutine if not in editor, and making Webplayer or WebGL
+                StartCoroutine(CheckDomainList());
 #endif
-#endif
+            }
         }
 
         public override void SceneAwake(Singleton instance)
@@ -178,7 +179,6 @@ namespace OmiyaGames
             return buf.ToString();
         }
 
-#if (UNITY_WEBPLAYER || UNITY_WEBGL)
         IEnumerator CheckDomainList()
         {
             // Update state
@@ -292,7 +292,6 @@ namespace OmiyaGames
             }
             return isTheCorrectHost;
         }
-#endif
         #endregion
     }
 }
