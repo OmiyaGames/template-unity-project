@@ -89,7 +89,7 @@ namespace OmiyaGames
                 return true;
 #else
                 // Always return false, otherwise
-                return true;
+                return false;
 #endif
             }
         }
