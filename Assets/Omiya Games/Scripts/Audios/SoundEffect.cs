@@ -226,6 +226,19 @@ namespace OmiyaGames
         {
             base.Awake();
             allSoundEffects.Add(this);
+
+            // Add the first clip into the audio, if there aren't any
+            if((Audio.clip == null) && (ClipVariations.Count > 0))
+            {
+                for(int i = 0; i < ClipVariations.Count; ++i)
+                {
+                    if(ClipVariations[i] != null)
+                    {
+                        Audio.clip = ClipVariations[i];
+                        break;
+                    }
+                }
+            }
         }
 
         void OnDestroy()
