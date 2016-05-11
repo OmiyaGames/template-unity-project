@@ -76,7 +76,8 @@ namespace OmiyaGames
         /// (optional) or fetch the domain list from this URL
         ///</summary>
         [SerializeField]
-        char[] splitRemoteDomainListUrlBy = new char[] { ',' };
+        [Multiline]
+        string[] splitRemoteDomainListUrlBy = new string[] { "\n", "," };
         ///<summary>
         /// (optional) game objects to deactivate while the domain checking is happening
         ///</summary>
@@ -99,6 +100,7 @@ namespace OmiyaGames
 
         State currentState = State.NotUsed;
         bool downloadedRemoteDomainList = false;
+        string retrievedHostName = null;
 
         #region Properties
         public State CurrentState
@@ -122,6 +124,14 @@ namespace OmiyaGames
             private set
             {
                 downloadedRemoteDomainList = value;
+            }
+        }
+
+        public string RetrievedHostName
+        {
+            get
+            {
+                return retrievedHostName;
             }
         }
         #endregion
@@ -179,6 +189,20 @@ namespace OmiyaGames
             return buf.ToString();
         }
 
+        IEnumerator DownloadRemoteDomainList(StringBuilder buf)
+        {
+            WWW www = new WWW(GenerateRemoteDomainList(buf));
+            yield return www;
+
+            // Check if there were any errors
+            if (string.IsNullOrEmpty(www.error) == true)
+            {
+                // If none, split the text file we've downloaded, and add it to the list
+                domainMustContain.AddRange(www.text.Split(splitRemoteDomainListUrlBy, StringSplitOptions.RemoveEmptyEntries));
+                IsRemoteDomainListSuccessfullyDownloaded = true;
+            }
+        }
+
         IEnumerator CheckDomainList()
         {
             // Update state
@@ -196,16 +220,7 @@ namespace OmiyaGames
             if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
             {
                 // Grab remote domain list
-                WWW www = new WWW(GenerateRemoteDomainList(buf));
-                yield return www;
-
-                // Check if there were any errors
-                if (string.IsNullOrEmpty(www.error) == true)
-                {
-                    // If none, split the text file we've downloaded, and add it to the list
-                    domainMustContain.AddRange(www.text.Split(splitRemoteDomainListUrlBy));
-                    IsRemoteDomainListSuccessfullyDownloaded = true;
-                }
+                yield return StartCoroutine(DownloadRemoteDomainList(buf));
             }
 
             // Make sure there's at least one domain we need to check
@@ -213,7 +228,7 @@ namespace OmiyaGames
             {
                 // parse the page's address
                 bool isErrorEncountered = false;
-                if (IsHostMatchingListedDomain(domainMustContain, out isErrorEncountered) == true)
+                if (IsHostMatchingListedDomain(domainMustContain, out isErrorEncountered, out retrievedHostName) == true)
                 {
                     // Update state
                     CurrentState = State.DomainMatched;
@@ -259,10 +274,11 @@ namespace OmiyaGames
             return buf.ToString();
         }
 
-        bool IsHostMatchingListedDomain(List<string> domainList, out bool encounteredError)
+        bool IsHostMatchingListedDomain(List<string> domainList, out bool encounteredError, out string retrievedHostName)
         {
             Uri uri;
             bool isTheCorrectHost = false;
+            retrievedHostName = null;
 
             // Evaluate the URL
             encounteredError = true;
@@ -270,6 +286,7 @@ namespace OmiyaGames
             {
                 // Indicate there were no errors
                 encounteredError = false;
+                retrievedHostName = uri.Host;
 
                 // Check if the scheme isn't file (i.e. local file run on computer)
                 if (uri.Scheme != "file")
@@ -277,7 +294,7 @@ namespace OmiyaGames
                     // Make sure host matches any one of the domains
                     for (int index = 0; index < domainList.Count; ++index)
                     {
-                        if (uri.Host == domainList[index])
+                        if (retrievedHostName == domainList[index])
                         {
                             isTheCorrectHost = true;
                             break;

@@ -40,6 +40,9 @@ namespace OmiyaGames
     [RequireComponent(typeof(SoundEffect))]
     public class OptionsMenu : IMenu
     {
+        public const float MinimumDisplayedVolume = 0.01f;
+        public const float MaximumDisplayedVolume = 1f;
+
         [System.Serializable]
         public struct AudioControls
         {
@@ -53,6 +56,22 @@ namespace OmiyaGames
                 volumePercentLabel.text = Percent(volume);
                 volumeSlider.interactable = !mute;
                 checkBoxMark.enabled = mute;
+            }
+
+            public float MinValue
+            {
+                get
+                {
+                    return volumeSlider.minValue;
+                }
+            }
+
+            public float MaxValue
+            {
+                get
+                {
+                    return volumeSlider.maxValue;
+                }
             }
         }
 

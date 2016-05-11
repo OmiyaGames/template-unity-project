@@ -796,29 +796,35 @@ MonoBehaviour:
     scenePath: Assets/Project/Scenes/Menus/Splash.unity
     displayName: Splash
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
   mainMenu:
     scenePath: Assets/Project/Scenes/Menus/Main Menu.unity
     displayName: Main Menu
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
   credits:
     scenePath: Assets/Project/Scenes/Menus/Credits.unity
     displayName: Credits
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
   levels:
   - scenePath: Assets/Project/Scenes/Level 1.unity
     displayName: Level 1
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
   - scenePath: Assets/Project/Scenes/Level 2.unity
     displayName: Level 2
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
   - scenePath: Assets/Project/Scenes/Level 3.unity
     displayName: Level 3
     cursorMode: 0
+    cursorModeWeb: 0
     revertTimeScale: 1
 --- !u!114 &11428920
 MonoBehaviour:
@@ -831,6 +837,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2551938a73f87424887bd15f359d4c49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mixerRangeDb: {x: -40, y: 0}
   muteVolumeDb: -40
   mixer: {fileID: 24100000, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
   backgroundMusicVolume:
@@ -871,7 +878,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66323afbd69e1904f8df75431dfad808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  domainMustContain: []
+  domainMustContain:
+  - omiyagames.com
+  - gamejolt.com
+  - itch.io
+  - newgrounds.com
+  - kongregate.com
+  - ludumdare.com
+  - unity3d.com
+  remoteDomainListUrl: http://www.omiyagames.com/webplayer/domains.txt
+  splitRemoteDomainListUrlBy:
+  - '
+
+'
+  - ','
+  waitObjects: []
+  forceRedirectIfDomainDoesntMatch: 1
   redirectURL: 
 --- !u!114 &11480656
 MonoBehaviour:
