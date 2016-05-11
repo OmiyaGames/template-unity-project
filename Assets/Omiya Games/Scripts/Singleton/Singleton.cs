@@ -45,6 +45,8 @@ namespace OmiyaGames
         public event Action<float> OnUpdate;
         public event Action<float> OnRealTimeUpdate;
 
+        ISingletonScript[] allSingletonScriptsCache = null;
+
 #if UNITY_EDITOR
         [SerializeField]
         bool simulateWebplayer = false;
@@ -103,7 +105,7 @@ namespace OmiyaGames
                 msInstance = this;
 
                 // Run all the events
-                RunSingletonEvents(true);
+                RunSingletonEvents();
 
                 // Prevent this object from destroying itself
                 DontDestroyOnLoad(gameObject);
@@ -111,7 +113,7 @@ namespace OmiyaGames
             else
             {
                 // Run all the events
-                RunSingletonEvents(true);
+                RunSingletonEvents();
 
                 // Destroy this gameobject
                 Destroy(gameObject);
@@ -130,25 +132,27 @@ namespace OmiyaGames
             }
         }
 
-        void RunSingletonEvents(bool alsoRunSingletonAwake)
+        void RunSingletonEvents()
         {
             int index = 0;
-            ISingletonScript[] allSingletonScripts = Instance.GetComponentsInChildren<ISingletonScript>();
-
-            if (alsoRunSingletonAwake == true)
+            if(allSingletonScriptsCache == null)
             {
+                // Cache all the singleton scripts
+                allSingletonScriptsCache = Instance.GetComponentsInChildren<ISingletonScript>();
+
                 // Go through every ISingletonScript, and run singleton awake
-                for (index = 0; index < allSingletonScripts.Length; ++index)
+                for (index = 0; index < allSingletonScriptsCache.Length; ++index)
                 {
                     // Run singleton awake
-                    allSingletonScripts[index].SingletonAwake(msInstance);
+                    allSingletonScriptsCache[index].SingletonInstance = Instance;
+                    allSingletonScriptsCache[index].SingletonAwake(msInstance);
                 }
             }
 
             // Go through every ISingletonScript, and run scene awake
-            for (index = 0; index < allSingletonScripts.Length; ++index)
+            for (index = 0; index < allSingletonScriptsCache.Length; ++index)
             {
-                allSingletonScripts[index].SceneAwake(msInstance);
+                allSingletonScriptsCache[index].SceneAwake(msInstance);
             }
         }
     }

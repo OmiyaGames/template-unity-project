@@ -84,6 +84,7 @@ namespace OmiyaGames
         string menuTextCache = null;
         PauseMenu pauseMenuCache = null;
         PopUpManager popUpManager = null;
+        SceneTransitionManager transitionManagerCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -137,7 +138,7 @@ namespace OmiyaGames
             {
                 if (menuTextCache == null)
                 {
-                    menuTextCache = Singleton.Get<SceneTransitionManager>().MainMenu.DisplayName;
+                    menuTextCache = CachedTransitionManager.MainMenu.DisplayName;
                     if (string.IsNullOrEmpty(returnToTextTemplate) == false)
                     {
                         menuTextCache = string.Format(returnToTextTemplate, menuTextCache);
@@ -152,7 +153,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
+                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -170,7 +171,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
+                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -188,7 +189,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
+                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
                 if (currentScene != null)
                 {
                     returnText = currentScene.DisplayName;
@@ -206,7 +207,7 @@ namespace OmiyaGames
             get
             {
                 string returnText = "";
-                SceneInfo nextScene = Singleton.Get<SceneTransitionManager>().NextScene;
+                SceneInfo nextScene = CachedTransitionManager.NextScene;
                 if (nextScene != null)
                 {
                     returnText = nextScene.DisplayName;
@@ -224,6 +225,18 @@ namespace OmiyaGames
             get
             {
                 return popUpManager;
+            }
+        }
+
+        SceneTransitionManager CachedTransitionManager
+        {
+            get
+            {
+                if(transitionManagerCache == null)
+                {
+                    transitionManagerCache = Singleton.Get<SceneTransitionManager>();
+                }
+                return transitionManagerCache;
             }
         }
         #endregion
@@ -257,12 +270,12 @@ namespace OmiyaGames
             if (transitionMenu == null)
             {
                 // If not, run the scene manager's transition-in events immediately
-                Singleton.Get<SceneTransitionManager>().TransitionIn(null);
+                CachedTransitionManager.TransitionIn(null);
             }
             else
             {
                 // If so, run the transition menu's transition-in animation
-                transitionMenu.Hide(Singleton.Get<SceneTransitionManager>().TransitionIn);
+                transitionMenu.Hide(CachedTransitionManager.TransitionIn);
             }
         }
 
@@ -372,10 +385,10 @@ namespace OmiyaGames
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
                 }
-                else
+                else if(CachedTransitionManager.CurrentScene != null)
                 {
                     // Lock the cursor to what the scene is set to
-                    SceneTransitionManager.CursorMode = Singleton.Get<SceneTransitionManager>().CurrentScene.LockMode;
+                    SceneTransitionManager.CursorMode = CachedTransitionManager.CurrentScene.LockMode;
                 }
 
                 // Run the event that indicates the stack changed

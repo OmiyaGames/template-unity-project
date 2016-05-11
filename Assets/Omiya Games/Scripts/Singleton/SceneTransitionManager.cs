@@ -214,10 +214,17 @@ namespace OmiyaGames
             }
 
             // Update the cursor locking
-            CursorMode = CurrentScene.LockMode;
+            if(Singleton.Instance.IsWebplayer == true)
+            {
+                CursorMode = CurrentScene.LockModeWeb;
+            }
+            else
+            {
+                CursorMode = CurrentScene.LockMode;
+            }
 
             // Revert the time scale
-            if(CurrentScene.RevertTimeScale == true)
+            if (CurrentScene.RevertTimeScale == true)
             {
                 Singleton.Get<TimeManager>().RevertToOriginalTime();
             }

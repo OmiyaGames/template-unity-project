@@ -40,6 +40,8 @@ namespace OmiyaGames
     public class AudioMixerReference : ISingletonScript
     {
         [SerializeField]
+        Vector2 mixerRangeDb = new Vector2(-40f, 0f);
+        [SerializeField]
         float muteVolumeDb = -80;
         [SerializeField]
         AudioMixer mixer = null;
@@ -61,7 +63,6 @@ namespace OmiyaGames
         string musicDuckField = "Music Duck Level";
 
         int index = 0;
-        bool isSetup = false;
 
         #region Properties
         public float MuteVolumeDb
@@ -69,6 +70,22 @@ namespace OmiyaGames
             get
             {
                 return muteVolumeDb;
+            }
+        }
+
+        public float MinimumVolumeDb
+        {
+            get
+            {
+                return mixerRangeDb.x;
+            }
+        }
+
+        public float MaximumVolumeDb
+        {
+            get
+            {
+                return mixerRangeDb.y;
             }
         }
 
@@ -88,9 +105,14 @@ namespace OmiyaGames
             }
             internal set
             {
+                float setValue = MuteVolumeDb;
+                if(value > MinimumVolumeDb)
+                {
+                    setValue = Mathf.Clamp(value, MinimumVolumeDb, MaximumVolumeDb);
+                }
                 for (index = 0; index < backgroundMusicVolume.Length; ++index)
                 {
-                    mixer.SetFloat(backgroundMusicVolume[index], value);
+                    mixer.SetFloat(backgroundMusicVolume[index], setValue);
                 }
             }
         }
@@ -103,7 +125,12 @@ namespace OmiyaGames
             }
             internal set
             {
-                BackgroundMusicVolumeDb = Mathf.Lerp(MuteVolumeDb, 0f, value);
+                float setValue = MuteVolumeDb;
+                if (value > 0)
+                {
+                    setValue = Mathf.Lerp(MinimumVolumeDb, MaximumVolumeDb, value);
+                }
+                BackgroundMusicVolumeDb = setValue;
             }
         }
 
@@ -123,9 +150,14 @@ namespace OmiyaGames
             }
             internal set
             {
+                float setValue = MuteVolumeDb;
+                if (value > MinimumVolumeDb)
+                {
+                    setValue = Mathf.Clamp(value, MinimumVolumeDb, MaximumVolumeDb);
+                }
                 for (index = 0; index < soundEffectsVolume.Length; ++index)
                 {
-                    mixer.SetFloat(soundEffectsVolume[index], value);
+                    mixer.SetFloat(soundEffectsVolume[index], setValue);
                 }
             }
         }
@@ -138,7 +170,12 @@ namespace OmiyaGames
             }
             internal set
             {
-                SoundEffectsVolumeDb = Mathf.Lerp(MuteVolumeDb, 0f, value);
+                float setValue = MuteVolumeDb;
+                if (value > 0)
+                {
+                    setValue = Mathf.Lerp(MinimumVolumeDb, MaximumVolumeDb, value);
+                }
+                SoundEffectsVolumeDb = setValue;
             }
         }
 
@@ -190,15 +227,9 @@ namespace OmiyaGames
         #endregion
 
         #region implemented abstract members of ISingletonScript
-        public override void SingletonAwake(Singleton instance)
+        public void Start()
         {
-            // Do nothing
-        }
-        
-        public override void SceneAwake(Singleton instance)
-        {
-            // Check if we need to setup
-            if(isSetup == false)
+            if (IsPartOfSingleton == true)
             {
                 // Retrieve settings
                 GameSettings settings = Singleton.Get<GameSettings>();
@@ -209,14 +240,21 @@ namespace OmiyaGames
 
                 // Check the TimeManager event
                 TimeManager manager = Singleton.Get<TimeManager>();
-                if(manager != null)
+                if (manager != null)
                 {
                     manager.OnManuallyPausedChanged += OnPauseChanged;
                 }
-
-                // Indicate we don't need to setup anymore
-                isSetup = true;
             }
+        }
+
+        public override void SingletonAwake(Singleton instance)
+        {
+            // Do nothing
+        }
+
+        public override void SceneAwake(Singleton instance)
+        {
+            // Do nothing
         }
         #endregion
 

@@ -41,7 +41,7 @@ namespace OmiyaGames
         const int FileNameLabelWidth = 96;
         const float RevertTimeLabelWidth = 120;
         const float RevertTimeFieldTotalMargin = 14;
-        const int CursorModeLabelWidth = 120;
+        const int CursorModeLabelWidth = 160;
         const int VerticalMargin = 2;
 
         static GUIStyle rightAlignStyleCache = null;
@@ -119,7 +119,11 @@ namespace OmiyaGames
             position.y += (position.height + VerticalMargin);
 
             // Draw Cursor label
-            DrawTextField(position, property, "Cursor Lock Mode", "cursorMode", CursorModeLabelWidth);
+            DrawTextField(position, property, "Cursor Lock Mode (App)", "cursorMode", CursorModeLabelWidth);
+
+            // Dock the rest of the fields down a bit
+            position.y += (position.height + VerticalMargin);
+            DrawTextField(position, property, "Cursor Lock Mode (Web)", "cursorModeWeb", CursorModeLabelWidth);
 
             // Set indent back to what it was
             EditorGUI.indentLevel = indent;
@@ -142,7 +146,7 @@ namespace OmiyaGames
 
         internal static float GetHeight(bool containsPrefixLabel)
         {
-            int numRows = 3;
+            int numRows = 4;
             if(containsPrefixLabel == true)
             {
                 numRows += 1;

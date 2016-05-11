@@ -153,8 +153,60 @@ namespace OmiyaGames
             // Wait for the designated time
             yield return new WaitForSeconds(logoDisplayDuration);
 
-            // Get the scene manager to change scenes
-            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+            // Show the Malformed game menu if there's any problems
+            MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
+            if (Application.genuineCheckAvailable == false)
+            {
+                buildState = MalformedGameMenu.Reason.CannotConfirmGenuine;
+            }
+            else if (Application.genuine == false)
+            {
+                buildState = MalformedGameMenu.Reason.IsNotGenuine;
+            }
+            else
+            {
+                // Grab the web checker
+                WebLocationChecker webChecker = null;
+                if (Singleton.Instance.IsWebplayer == true)
+                {
+                    webChecker = Singleton.Get<WebLocationChecker>();
+                }
+
+                // Check if the Web Checker passed
+                if (webChecker != null)
+                {
+                    // Wait until the webchecker is done
+                    while (webChecker.CurrentState == WebLocationChecker.State.InProgress)
+                    {
+                        yield return null;
+                    }
+
+                    // Check the state
+                    switch(webChecker.CurrentState)
+                    {
+                        case WebLocationChecker.State.EncounteredError:
+                            buildState = MalformedGameMenu.Reason.CannotConfirmDomain;
+                            break;
+                        case WebLocationChecker.State.DomainDidntMatch:
+                            buildState = MalformedGameMenu.Reason.IsIncorrectDomain;
+                            break;
+                    }
+                }
+            }
+
+            if(buildState == MalformedGameMenu.Reason.None)
+            {
+                // Get the scene manager to change scenes
+                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+            }
+            else
+            {
+                // Show the malformed menu
+                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
+
+                // TODO: update the reasoning
+                menu.UpdateReason(buildState);
+            }
         }
 
         IEnumerator ShowLoadingScreen()
