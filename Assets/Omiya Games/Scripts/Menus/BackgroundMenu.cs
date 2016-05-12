@@ -39,6 +39,9 @@ namespace OmiyaGames
     {
         public const string VisibleField = "Visible";
 
+        [SerializeField]
+        bool forceToBack = true;
+
         System.Action<MenuManager> onMenuNumberChanged = null;
 
         public override Type MenuType
@@ -75,8 +78,11 @@ namespace OmiyaGames
                 manager.OnManagedMenusStackChanged += onMenuNumberChanged;
             }
 
-            // Always make this the background
-            //transform.SetAsFirstSibling();
+            if (forceToBack == true)
+            {
+                // Always make this the background
+                transform.SetAsFirstSibling();
+            }
         }
 
         protected virtual void OnDestroy()
