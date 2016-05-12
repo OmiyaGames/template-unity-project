@@ -69,6 +69,37 @@ namespace OmiyaGames
             }
         }
 
+        public static void RemoveDuplicateEntries<H>(List<H> list, IEqualityComparer<H> comparer = null)
+        {
+            // Go through every list element
+            int focusIndex = 0, compareIndex = 0;
+            bool isDuplicate = false;
+            for (; focusIndex < list.Count; ++focusIndex)
+            {
+                // Start the loop with the next element the next element
+                for(compareIndex = (focusIndex + 1); compareIndex < list.Count; ++compareIndex)
+                {
+                    // Check if the elements are the same
+                    if (comparer == null)
+                    {
+                        isDuplicate = list[focusIndex].Equals(list[compareIndex]);
+                    }
+                    else
+                    {
+                        isDuplicate = comparer.Equals(list[focusIndex], list[compareIndex]);
+                    }
+
+                    // Check if this element is a dupicate
+                    if (isDuplicate == true)
+                    {
+                        // If so, remove from the list
+                        list.RemoveAt(compareIndex);
+                        --compareIndex;
+                    }
+                }
+            }
+        }
+
         public static void Log(string message)
         {
 #if DEBUG
