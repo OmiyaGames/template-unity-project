@@ -2,6 +2,7 @@
 using System;
 using System.Text;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -134,6 +135,14 @@ namespace OmiyaGames
                 return retrievedHostName;
             }
         }
+
+        public ReadOnlyCollection<string> DomainList
+        {
+            get
+            {
+                return domainMustContain.AsReadOnly();
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -199,6 +208,7 @@ namespace OmiyaGames
             {
                 // If none, split the text file we've downloaded, and add it to the list
                 domainMustContain.AddRange(www.text.Split(splitRemoteDomainListUrlBy, StringSplitOptions.RemoveEmptyEntries));
+                Utility.RemoveDuplicateEntries<string>(domainMustContain);
                 IsRemoteDomainListSuccessfullyDownloaded = true;
             }
         }
