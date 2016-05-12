@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Text;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System;
 
 namespace OmiyaGames
 {
@@ -43,21 +45,44 @@ namespace OmiyaGames
         public enum Reason
         {
             None = -1,
-            CannotConfirmGenuine = 0,
-            IsNotGenuine,
+            IsNotGenuine = 0,
             CannotConfirmDomain,
-            IsIncorrectDomain
+            IsIncorrectDomain,
+            JustTesting
         }
 
-        [Header("Components")]
+        [System.Serializable]
+        public struct WebsiteInfo
+        {
+            [SerializeField]
+            string display;
+            [SerializeField]
+            string redirectTo;
+
+            public void UpdateButton(WebsiteButton button)
+            {
+                button.DisplayedText = display;
+                button.RedirectTo = redirectTo;
+            }
+        }
+
+        [Header("First Option")]
         [SerializeField]
-        Button defaultButton = null;
+        WebsiteInfo websiteInfo;
         [SerializeField]
-        ScrollRect scrollable = null;
+        Text reasonMessage = null;
         [SerializeField]
-        RectTransform content = null;
+        WebsiteButton websiteButton = null;
+
+        [Header("Second Option")]
         [SerializeField]
-        Text message = null;
+        WebsiteInfo[] otherSites = null;
+        [SerializeField]
+        Text[] secondOptionSet = null;
+        [SerializeField]
+        WebsiteButton otherSitesButton = null;
+
+        readonly List<WebsiteButton> allSecondOptionButtons = new List<WebsiteButton>();
 
         public override Type MenuType
         {
@@ -71,7 +96,30 @@ namespace OmiyaGames
         {
             get
             {
-                return defaultButton.gameObject;
+                return websiteButton.gameObject;
+            }
+        }
+
+        public override void Show(Action<IMenu> stateChanged)
+        {
+            // Call base function
+            base.Show(stateChanged);
+
+            // Setup the dialog
+            websiteInfo.UpdateButton(websiteButton);
+            if((otherSites != null) && (otherSites.Length > 0))
+            {
+                // Setup the second options
+                SetupSecondOptions();
+            }
+            else
+            {
+                // Turn off everything related to the second options
+                for(int index = 0; index < secondOptionSet.Length; ++index)
+                {
+                    secondOptionSet[index].gameObject.SetActive(false);
+                }
+                otherSitesButton.gameObject.SetActive(false);
             }
         }
 
@@ -101,37 +149,69 @@ namespace OmiyaGames
                 webChecker = Singleton.Get<WebLocationChecker>();
             }
 
+            // Update the reason for this dialog to appear
             StringBuilder builder = new StringBuilder();
-
-            // FIXME: do something!
-            switch (reason)
+            if (reason == Reason.IsIncorrectDomain)
             {
-                case Reason.CannotConfirmGenuine:
-                    builder.Append("Cannot confirm game is genuine");
-                    break;
-                case Reason.IsNotGenuine:
-                    builder.Append("Game is not genuine");
-                    break;
-                case Reason.CannotConfirmDomain:
-                    builder.Append("Error confirming the domain of this website");
-                    break;
-                case Reason.IsIncorrectDomain:
-                    builder.AppendLine("Incorrect domain detected");
-                    builder.Append("Detected domain: ");
-                    builder.AppendLine(webChecker.RetrievedHostName);
-                    builder.AppendLine("Accepted domains:");
-                    if (webChecker != null)
+                builder.Append("Detected url, \"");
+                builder.Append(webChecker.RetrievedHostName);
+                builder.AppendLine(",\" does not match any of the domains we uploaded our game to.");
+                if (webChecker != null)
+                {
+                    ReadOnlyCollection<string> allDomains = webChecker.DomainList;
+                    for (int index = 0; index < allDomains.Count; ++index)
                     {
-                        ReadOnlyCollection<string> allDomains = webChecker.DomainList;
-                        for(int index = 0; index < allDomains.Count; ++index)
-                        {
-                            builder.Append("* ");
-                            builder.AppendLine(allDomains[index]);
-                        }
+                        builder.Append("* ");
+                        builder.AppendLine(allDomains[index]);
                     }
-                    break;
+                }
             }
-            message.text = builder.ToString();
+            else
+            { 
+                builder.Append("The test to confirm this game is genuine indicated it isn't.");
+            }
+            reasonMessage.text = builder.ToString();
         }
+
+        #region Helper Methods
+        void SetupSecondOptions()
+        {
+            // Populate the list of buttons with at least one button
+            if (allSecondOptionButtons.Count <= 0)
+            {
+                allSecondOptionButtons.Add(otherSitesButton);
+            }
+
+            // Go through all the sites
+            int index = 0;
+            GameObject clone;
+            for (; index < otherSites.Length; ++index)
+            {
+                // Check if we have enough buttons
+                if (allSecondOptionButtons.Count <= index)
+                {
+                    // If not, create a new one
+                    clone = Instantiate<GameObject>(otherSitesButton.gameObject);
+                    allSecondOptionButtons.Add(clone.GetComponent<WebsiteButton>());
+
+                    // Position this button properly
+                    clone.transform.SetParent(otherSitesButton.transform.parent);
+                    clone.transform.localScale = Vector3.one;
+                    clone.transform.SetSiblingIndex(otherSitesButton.transform.GetSiblingIndex() + index);
+                }
+
+                // Setup this button
+                allSecondOptionButtons[index].gameObject.SetActive(true);
+                otherSites[index].UpdateButton(allSecondOptionButtons[index]);
+                
+            }
+
+            // Turn off the rest of the buttons
+            for (; index < allSecondOptionButtons.Count; ++index)
+            {
+                allSecondOptionButtons[index].gameObject.SetActive(false);
+            }
+        }
+        #endregion
     }
 }

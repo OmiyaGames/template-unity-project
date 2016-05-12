@@ -74,7 +74,8 @@ namespace OmiyaGames
 
         [Header("Logo Only settings")]
         [SerializeField]
-        float logoDisplayDuration = 4f;
+        [UnityEngine.Serialization.FormerlySerializedAs("logoDisplayDuration")]
+        float minimumLogoDisplayDuration = 3f;
         [SerializeField]
         GameObject logoOnlySet = null;
 
@@ -150,22 +151,19 @@ namespace OmiyaGames
 
         IEnumerator DelayedFadeOut()
         {
-            // Wait for the designated time
-            yield return new WaitForSeconds(logoDisplayDuration);
+            float startTime = Time.realtimeSinceStartup;
 
             // Show the Malformed game menu if there's any problems
             MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
-            if (Application.genuineCheckAvailable == false)
+            if(Singleton.Instance.IsSimulatingMalformedGame == true)
             {
-                buildState = MalformedGameMenu.Reason.CannotConfirmGenuine;
+                buildState = MalformedGameMenu.Reason.JustTesting;
             }
-            else if (Application.genuine == false)
+            else if ((Application.genuineCheckAvailable == true) && (Application.genuine == false))
             {
                 buildState = MalformedGameMenu.Reason.IsNotGenuine;
             }
-
-            // Check Web URL
-            if (Singleton.Instance.IsWebplayer == true)
+            else if (Singleton.Instance.IsWebplayer == true)
             {
                 // Grab the web checker
                 WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();
@@ -192,20 +190,27 @@ namespace OmiyaGames
                 }
             }
 
-            switch(buildState)
+            // Check how much time has passed
+            float logoDisplayDuration = minimumLogoDisplayDuration - (Time.realtimeSinceStartup - startTime);
+            if(logoDisplayDuration > 0)
             {
-                case MalformedGameMenu.Reason.None:
-                case MalformedGameMenu.Reason.CannotConfirmGenuine:
-                    // Get the scene manager to change scenes
-                    Singleton.Get<SceneTransitionManager>().LoadMainMenu();
-                    break;
-                default:
-                    // Show the malformed menu
-                    MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
+                // Wait for the designated time
+                yield return new WaitForSeconds(logoDisplayDuration);
+            }
 
-                    // Update the reasoning
-                    menu.UpdateReason(buildState);
-                    break;
+            // Check the build state
+            if (buildState == MalformedGameMenu.Reason.None)
+            {
+                // Get the scene manager to change scenes
+                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+            }
+            else
+            { 
+                // Show the malformed menu
+                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
+
+                // Update the reasoning
+                menu.UpdateReason(buildState);
             }
         }
 
