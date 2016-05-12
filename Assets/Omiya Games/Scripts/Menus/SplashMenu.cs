@@ -163,14 +163,12 @@ namespace OmiyaGames
             {
                 buildState = MalformedGameMenu.Reason.IsNotGenuine;
             }
-            else
+
+            // Check Web URL
+            if (Singleton.Instance.IsWebplayer == true)
             {
                 // Grab the web checker
-                WebLocationChecker webChecker = null;
-                if (Singleton.Instance.IsWebplayer == true)
-                {
-                    webChecker = Singleton.Get<WebLocationChecker>();
-                }
+                WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();
 
                 // Check if the Web Checker passed
                 if (webChecker != null)
@@ -194,18 +192,20 @@ namespace OmiyaGames
                 }
             }
 
-            if(buildState == MalformedGameMenu.Reason.None)
+            switch(buildState)
             {
-                // Get the scene manager to change scenes
-                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
-            }
-            else
-            {
-                // Show the malformed menu
-                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
+                case MalformedGameMenu.Reason.None:
+                case MalformedGameMenu.Reason.CannotConfirmGenuine:
+                    // Get the scene manager to change scenes
+                    Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+                    break;
+                default:
+                    // Show the malformed menu
+                    MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
 
-                // TODO: update the reasoning
-                menu.UpdateReason(buildState);
+                    // Update the reasoning
+                    menu.UpdateReason(buildState);
+                    break;
             }
         }
 

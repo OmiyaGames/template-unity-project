@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
+using System.Collections.ObjectModel;
 
 namespace OmiyaGames
 {
-
     ///-----------------------------------------------------------------------
-    /// <copyright file="CreditsMenu.cs" company="Omiya Games">
+    /// <copyright file="MalformedGameMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2015 Omiya Games
@@ -29,10 +30,11 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>5/11/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Scrolling credits. You can retrieve this menu from the singleton script,
+    /// Dialog indicating this game may not be genuine.
+    /// You can retrieve this menu from the singleton script,
     /// <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
@@ -54,8 +56,8 @@ namespace OmiyaGames
         ScrollRect scrollable = null;
         [SerializeField]
         RectTransform content = null;
-
-        System.Action<float> checkInput = null;
+        [SerializeField]
+        Text message = null;
 
         public override Type MenuType
         {
@@ -73,26 +75,6 @@ namespace OmiyaGames
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
-        {
-            // Call base function
-            base.Show(stateChanged);
-
-            // Unlock the cursor
-            //SceneManager.CursorMode = CursorLockMode.None;
-
-            // Check if we've previously binded to the singleton's update function
-            if (checkInput != null)
-            {
-                Singleton.Instance.OnUpdate -= checkInput;
-                checkInput = null;
-            }
-
-            // Bind to Singleton's update function
-            checkInput = new System.Action<float>(CheckForAnyKey);
-            Singleton.Instance.OnUpdate += checkInput;
-        }
-
         public override void Hide()
         {
             bool wasVisible = (CurrentState == State.Visible);
@@ -104,14 +86,6 @@ namespace OmiyaGames
             {
                 // Lock the cursor to what the scene is set to
                 SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
-                //SceneManager.CursorMode = manager.CurrentScene.LockMode;
-
-                // Unbind to Singleton's update function
-                if (checkInput != null)
-                {
-                    Singleton.Instance.OnUpdate -= checkInput;
-                    checkInput = null;
-                }
 
                 // Return to the menu
                 manager.LoadMainMenu();
@@ -127,34 +101,37 @@ namespace OmiyaGames
                 webChecker = Singleton.Get<WebLocationChecker>();
             }
 
+            StringBuilder builder = new StringBuilder();
+
             // FIXME: do something!
             switch (reason)
             {
                 case Reason.CannotConfirmGenuine:
+                    builder.Append("Cannot confirm game is genuine");
                     break;
                 case Reason.IsNotGenuine:
+                    builder.Append("Game is not genuine");
                     break;
                 case Reason.CannotConfirmDomain:
-                    if (webChecker != null)
-                    {
-
-                    }
+                    builder.Append("Error confirming the domain of this website");
                     break;
                 case Reason.IsIncorrectDomain:
+                    builder.AppendLine("Incorrect domain detected");
+                    builder.Append("Detected domain: ");
+                    builder.AppendLine(webChecker.RetrievedHostName);
+                    builder.AppendLine("Accepted domains:");
                     if (webChecker != null)
                     {
-
+                        ReadOnlyCollection<string> allDomains = webChecker.DomainList;
+                        for(int index = 0; index < allDomains.Count; ++index)
+                        {
+                            builder.Append("* ");
+                            builder.AppendLine(allDomains[index]);
+                        }
                     }
                     break;
             }
-        }
-
-        void CheckForAnyKey(float deltaTime)
-        {
-            if (Input.anyKeyDown == true)
-            {
-                Hide();
-            }
+            message.text = builder.ToString();
         }
     }
 }
