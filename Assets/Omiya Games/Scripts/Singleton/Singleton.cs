@@ -50,6 +50,8 @@ namespace OmiyaGames
 #if UNITY_EDITOR
         [SerializeField]
         bool simulateWebplayer = false;
+        [SerializeField]
+        bool simulateMalformedGame = false;
 #endif
 
         public static Singleton Instance
@@ -89,6 +91,20 @@ namespace OmiyaGames
 #elif (UNITY_WEBPLAYER || UNITY_WEBGL)
                 // Always return true if already on a webplayer
                 return true;
+#else
+                // Always return false, otherwise
+                return false;
+#endif
+            }
+        }
+
+        public bool IsSimulatingMalformedGame
+        {
+            get
+            {
+#if UNITY_EDITOR
+                // Check if simulation checkbox is checked
+                return simulateMalformedGame;
 #else
                 // Always return false, otherwise
                 return false;

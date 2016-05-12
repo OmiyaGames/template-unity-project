@@ -695,6 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulateWebplayer: 0
+  simulateMalformedGame: 0
 --- !u!114 &11400340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -879,14 +880,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   domainMustContain:
+  - localhost
+  - unity3d.com
   - omiyagames.com
+  - ludumdare.com
   - gamejolt.com
   - itch.io
   - newgrounds.com
   - kongregate.com
-  - ludumdare.com
-  - unity3d.com
-  - localhost
   remoteDomainListUrl: http://www.omiyagames.com/webplayer/domains.txt
   splitRemoteDomainListUrlBy:
   - '
