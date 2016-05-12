@@ -151,24 +151,28 @@ namespace OmiyaGames
 
             // Update the reason for this dialog to appear
             StringBuilder builder = new StringBuilder();
-            if (reason == Reason.IsIncorrectDomain)
+            switch(reason)
             {
-                builder.Append("Detected url, \"");
-                builder.Append(webChecker.RetrievedHostName);
-                builder.AppendLine(",\" does not match any of the domains we uploaded our game to.");
-                if (webChecker != null)
-                {
-                    ReadOnlyCollection<string> allDomains = webChecker.DomainList;
-                    for (int index = 0; index < allDomains.Count; ++index)
+                case Reason.IsIncorrectDomain:
+                    builder.Append("Detected url, \"");
+                    builder.Append(webChecker.RetrievedHostName);
+                    builder.AppendLine(",\" does not match any of the domains we uploaded our game to.");
+                    if (webChecker != null)
                     {
-                        builder.Append("* ");
-                        builder.AppendLine(allDomains[index]);
+                        ReadOnlyCollection<string> allDomains = webChecker.DomainList;
+                        for (int index = 0; index < allDomains.Count; ++index)
+                        {
+                            builder.Append("* ");
+                            builder.AppendLine(allDomains[index]);
+                        }
                     }
-                }
-            }
-            else
-            { 
-                builder.Append("The test to confirm this game is genuine indicated it isn't.");
+                    break;
+                case Reason.JustTesting:
+                    builder.Append("Just kidding, we're just testing this form, and whether it works or not!");
+                    break;
+                default:
+                    builder.Append("The test to confirm this game is genuine indicated it isn't.");
+                    break;
             }
             reasonMessage.text = builder.ToString();
         }
@@ -197,6 +201,7 @@ namespace OmiyaGames
                     // Position this button properly
                     clone.transform.SetParent(otherSitesButton.transform.parent);
                     clone.transform.localScale = Vector3.one;
+                    clone.transform.localRotation = Quaternion.identity;
                     clone.transform.SetSiblingIndex(otherSitesButton.transform.GetSiblingIndex() + index);
                 }
 
