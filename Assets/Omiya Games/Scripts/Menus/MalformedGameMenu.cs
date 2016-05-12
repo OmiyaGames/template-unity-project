@@ -59,8 +59,6 @@ namespace OmiyaGames
         [SerializeField]
         Text message = null;
 
-        System.Action<float> checkInput = null;
-
         public override Type MenuType
         {
             get
@@ -77,26 +75,6 @@ namespace OmiyaGames
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
-        {
-            // Call base function
-            base.Show(stateChanged);
-
-            // Unlock the cursor
-            //SceneManager.CursorMode = CursorLockMode.None;
-
-            // Check if we've previously binded to the singleton's update function
-            if (checkInput != null)
-            {
-                Singleton.Instance.OnUpdate -= checkInput;
-                checkInput = null;
-            }
-
-            // Bind to Singleton's update function
-            checkInput = new System.Action<float>(CheckForAnyKey);
-            Singleton.Instance.OnUpdate += checkInput;
-        }
-
         public override void Hide()
         {
             bool wasVisible = (CurrentState == State.Visible);
@@ -108,14 +86,6 @@ namespace OmiyaGames
             {
                 // Lock the cursor to what the scene is set to
                 SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
-                //SceneManager.CursorMode = manager.CurrentScene.LockMode;
-
-                // Unbind to Singleton's update function
-                if (checkInput != null)
-                {
-                    Singleton.Instance.OnUpdate -= checkInput;
-                    checkInput = null;
-                }
 
                 // Return to the menu
                 manager.LoadMainMenu();
@@ -162,14 +132,6 @@ namespace OmiyaGames
                     break;
             }
             message.text = builder.ToString();
-        }
-
-        void CheckForAnyKey(float deltaTime)
-        {
-            if (Input.anyKeyDown == true)
-            {
-                Hide();
-            }
         }
     }
 }
