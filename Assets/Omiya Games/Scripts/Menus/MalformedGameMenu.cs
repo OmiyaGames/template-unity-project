@@ -236,16 +236,22 @@ namespace OmiyaGames
                 builder.AppendLine(" More info according to the WebLocationChecker:");
 
                 // Indicate the object's state
-                builder.AppendLine("1) the WebLocationChecker state is:");
+                int bulletNumber = 1;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") the WebLocationChecker state is:");
                 builder.AppendLine(webChecker.CurrentState.ToString());
 
                 // Indicate the current domain information
-                builder.AppendLine("2) this game's domain is:");
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") this game's domain is:");
                 builder.AppendLine(webChecker.RetrievedHostName);
 
                 // List entries from the default domain list
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") the default domain list is:");
                 int index = 0;
-                builder.AppendLine("3) the default domain list is:");
                 for (; index < webChecker.DefaultDomainList.Length; ++index)
                 {
                     builder.Append("- ");
@@ -256,13 +262,17 @@ namespace OmiyaGames
                 if(string.IsNullOrEmpty(webChecker.DownloadDomainsUrl) == false)
                 {
                     // Print that URL
-                    builder.AppendLine("4) downloaded a list of domains from:");
+                    ++bulletNumber;
+                    builder.Append(bulletNumber);
+                    builder.AppendLine(") downloaded a list of domains from:");
                     builder.AppendLine(webChecker.DownloadDomainsUrl);
 
                     // Check if there are any downloaded domains
                     if (webChecker.DownloadedDomainList != null)
                     {
-                        builder.AppendLine("5) downloaded the following domains:");
+                        ++bulletNumber;
+                        builder.Append(bulletNumber);
+                        builder.AppendLine(") downloaded the following domains:");
                         for (index = 0; index < webChecker.DownloadedDomainList.Length; ++index)
                         {
                             builder.Append("- ");
@@ -271,8 +281,20 @@ namespace OmiyaGames
                     }
                     else
                     {
-                        builder.AppendLine("5) downloading that list failed, however.");
+                        ++bulletNumber;
+                        builder.Append(bulletNumber);
+                        builder.AppendLine(") downloading that list failed, however.");
                     }
+                }
+
+                // Show unique list of domains
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") together, the full domain list is as follows:");
+                foreach(string domain in webChecker.AllUniqueDomains)
+                {
+                    builder.Append("- ");
+                    builder.AppendLine(domain);
                 }
             }
         }
