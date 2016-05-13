@@ -47,11 +47,12 @@ namespace OmiyaGames
 
         ISingletonScript[] allSingletonScriptsCache = null;
 
+        [SerializeField]
+        bool simulateMalformedGame = false;
+
 #if UNITY_EDITOR
         [SerializeField]
         bool simulateWebplayer = false;
-        [SerializeField]
-        bool simulateMalformedGame = false;
 #endif
 
         public static Singleton Instance
@@ -102,13 +103,18 @@ namespace OmiyaGames
         {
             get
             {
-#if UNITY_EDITOR
+                bool returnFlag = simulateMalformedGame;
+
+                // Check if we're not in the editor, and this build is in debug mode
+//#if !UNITY_EDITOR
+//                if (Debug.isDebugBuild == false)
+//                {
+//                    // Always return false
+//                    returnFlag = false;
+//                }
+//#endif
                 // Check if simulation checkbox is checked
-                return simulateMalformedGame;
-#else
-                // Always return false, otherwise
-                return false;
-#endif
+                return returnFlag;
             }
         }
 
