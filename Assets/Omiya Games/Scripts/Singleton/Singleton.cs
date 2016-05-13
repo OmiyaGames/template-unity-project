@@ -106,13 +106,13 @@ namespace OmiyaGames
                 bool returnFlag = simulateMalformedGame;
 
                 // Check if we're not in the editor, and this build is in debug mode
-//#if !UNITY_EDITOR
-//                if (Debug.isDebugBuild == false)
-//                {
-//                    // Always return false
-//                    returnFlag = false;
-//                }
-//#endif
+#if !UNITY_EDITOR
+                if (Debug.isDebugBuild == false)
+                {
+                    // Always return false
+                    returnFlag = false;
+                }
+#endif
                 // Check if simulation checkbox is checked
                 return returnFlag;
             }
