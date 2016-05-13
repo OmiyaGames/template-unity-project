@@ -6,7 +6,7 @@
 
 //#define BUILD_TO_MAJOR_MOBILE_OS
 
-//#define BUILD_TO_WEBGL
+#define BUILD_TO_WEBGL
 //#define BUILD_TO_WEBPLAYER
 //#define BUILD_TO_STREAMED_WEBPLAYER
 
@@ -23,7 +23,7 @@ namespace OmiyaGames
     /// <copyright file="OmiyaGamesBuildScript.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>5/12/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Script that builds for a specific platform.  It even adds several menu items
@@ -95,8 +95,8 @@ namespace OmiyaGames
 #endif
 
 #if BUILD_TO_MAJOR_MOBILE_OS
-		// Build for Mobile platforms
-		PerformMobileBuilds();
+            // Build for Mobile platforms
+            PerformMobileBuilds();
 #endif
 
 #if BUILD_TO_WEBGL
@@ -126,13 +126,13 @@ namespace OmiyaGames
             PerformWindows64Build();
 
 #if BUILD_32_BIT_AND_64_BIT_SEPARATELY
-		// Build for the Mac platform
-		PerformMac32Build();
-		PerformMac64Build();
-		
-		// Build for the Linux platform
-		PerformLinux32Build();
-		PerformLinux64Build();
+            // Build for the Mac platform
+            PerformMac32Build();
+            PerformMac64Build();
+
+            // Build for the Linux platform
+            PerformLinux32Build();
+            PerformLinux64Build();
 #else
             // Build for the Mac platform
             PerformMacUniversalBuild();
