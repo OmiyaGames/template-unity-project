@@ -99,7 +99,6 @@ namespace OmiyaGames
         string redirectURL;
 
         State currentState = State.NotUsed;
-        bool downloadedRemoteDomainList = false;
         string retrievedHostName = null;
         string downloadDomainsUrl = null;
         string[] downloadedDomainList = null;
