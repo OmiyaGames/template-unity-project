@@ -158,6 +158,14 @@ namespace OmiyaGames
                 return downloadDomainsUrl;
             }
         }
+
+        public HashSet<string> AllUniqueDomains
+        {
+            get
+            {
+                return allUniqueDomains;
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
