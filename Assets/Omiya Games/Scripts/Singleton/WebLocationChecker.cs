@@ -2,7 +2,6 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -306,7 +305,7 @@ namespace OmiyaGames
             buf.Length = 0;
             buf.Append(remoteDomainListUrl);
             buf.Append("?r=");
-            buf.Append(UnityEngine.Random.value);
+            buf.Append(UnityEngine.Random.Range(0, int.MaxValue));
             return buf.ToString();
         }
 
