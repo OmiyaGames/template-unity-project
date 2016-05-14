@@ -5,7 +5,7 @@ using UnityEngine;
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="PoolingManagerEditor.cs" company="Omiya Games">
+    /// <copyright file="SceneTransitionManagerEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2016 Omiya Games
@@ -156,7 +156,7 @@ namespace OmiyaGames
     }
 
     ///-----------------------------------------------------------------------
-    /// <copyright file="PoolingManagerEditor.cs" company="Omiya Games">
+    /// <copyright file="SceneTransitionManagerEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2016 Omiya Games
