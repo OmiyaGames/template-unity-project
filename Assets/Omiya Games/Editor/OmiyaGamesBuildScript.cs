@@ -7,8 +7,6 @@
 //#define BUILD_TO_MAJOR_MOBILE_OS
 
 #define BUILD_TO_WEBGL
-//#define BUILD_TO_WEBPLAYER
-//#define BUILD_TO_STREAMED_WEBPLAYER
 
 using UnityEngine;
 using UnityEditor;
@@ -108,16 +106,6 @@ namespace OmiyaGames
             // Build for the Web platform
             PerformWebGLBuild();
 #endif
-
-#if BUILD_TO_WEBPLAYER
-        // Build for the Web platform
-        PerformWebplayerBuild();
-#endif
-
-#if BUILD_TO_STREAMED_WEBPLAYER
-        // Build for the Web platform
-        PerformStreamedWebplayerBuild();
-#endif
         }
 
         /// <summary>
@@ -176,24 +164,6 @@ namespace OmiyaGames
         public static void PerformWebGLBuild()
         {
             GenericBuild("WebGL", "", BuildTarget.WebGL);
-        }
-
-        /// <summary>
-        /// Function that builds for Web.
-        /// </summary>
-        [MenuItem("Omiya Games/Build For/Streamed Webplayer")]
-        public static void PerformStreamedWebplayerBuild()
-        {
-            GenericBuild("Streamed Webplayer", "", BuildTarget.WebPlayerStreamed);
-        }
-
-        /// <summary>
-        /// Function that builds for Web.
-        /// </summary>
-        [MenuItem("Omiya Games/Build For/Webplayer")]
-        public static void PerformWebplayerBuild()
-        {
-            GenericBuild("Webplayer", "", BuildTarget.WebPlayer);
         }
 
         /// <summary>
@@ -324,14 +294,6 @@ namespace OmiyaGames
 
             switch (buildTarget)
             {
-                case BuildTarget.WebPlayer:
-                case BuildTarget.WebPlayerStreamed:
-                    // Append the file extension, if available
-                    if (string.IsNullOrEmpty(fileExtension) == false)
-                    {
-                        FileNameGenerator.Append(fileExtension);
-                    }
-                    break;
                 case BuildTarget.WebGL:
                     // Append the slugged product name
                     FileNameGenerator.Append('\\');
@@ -368,7 +330,7 @@ namespace OmiyaGames
 
             // Determine the best build option
             BuildOptions buildOption = OptionsAll;
-            if (buildTarget == BuildTarget.WebPlayer)
+            if (buildTarget == BuildTarget.WebGL)
             {
                 buildOption |= OptionsWeb;
             }
