@@ -16,6 +16,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace OmiyaGames
 {
@@ -81,6 +82,10 @@ namespace OmiyaGames
         /// The folder where the game will be built to.
         /// </summary>
         private const string BuildDirectory = "Builds";
+        /// <summary>
+        /// The maximum WebGL build name
+        /// </summary>
+        public const int MaxSlugLength = 45;
 
         /// <summary>
         /// Function that builds for all platforms.  Edit this function if you want
@@ -296,7 +301,7 @@ namespace OmiyaGames
         private static void GenericBuild(string platformName, string fileExtension, BuildTarget buildTarget)
         {
             // Sanitize the product name
-            string sanitizedProductName = InvalidFileNameCharacters.Replace(PlayerSettings.productName, "_");
+            string sanitizedProductName = InvalidFileNameCharacters.Replace(RemoveDiacritics(PlayerSettings.productName), "");
             if (string.IsNullOrEmpty(sanitizedProductName) == true)
             {
                 throw new Exception("Product name is not available!");
@@ -327,6 +332,11 @@ namespace OmiyaGames
                         FileNameGenerator.Append(fileExtension);
                     }
                     break;
+                case BuildTarget.WebGL:
+                    // Append the slugged product name
+                    FileNameGenerator.Append('\\');
+                    FileNameGenerator.Append(GenerateSlug(sanitizedProductName));
+                    break;
                 default:
                     // Append the sanitized product name
                     FileNameGenerator.Append('\\');
@@ -342,6 +352,10 @@ namespace OmiyaGames
 
             // Generate the build
             GenericBuild(FileNameGenerator.ToString(), buildTarget);
+
+            // Printing where the build was created
+            FileNameGenerator.Insert(0, "Created build to: ");
+            Debug.Log(FileNameGenerator.ToString());
         }
 
         /// <summary>
@@ -382,6 +396,49 @@ namespace OmiyaGames
                 }
             }
             return EditorScenes.ToArray();
+        }
+
+        /// <summary>
+        /// Taken from http://predicatet.blogspot.com/2009/04/improved-c-slug-generator-or-how-to.html
+        /// </summary>
+        public static string GenerateSlug(string originalString)
+        {
+            // Remove invalid chars
+            string returnSlug = Regex.Replace(originalString.ToLower(), @"[^a-z0-9\s-]", "");
+
+            // Convert multiple spaces into one space
+            returnSlug = Regex.Replace(returnSlug, @"\s+", " ").Trim();
+
+            // Trim the length of the slug down to MaxSlugLength characters
+            if(returnSlug.Length > MaxSlugLength)
+            {
+                returnSlug = returnSlug.Substring(0, MaxSlugLength).Trim();
+            }
+
+            // Replace spaces with hyphens
+            returnSlug = Regex.Replace(returnSlug, @"\s", "-");
+
+            return returnSlug;
+        }
+
+        /// <summary>
+        /// Taken from http://archives.miloush.net/michkap/archive/2007/05/14/2629747.html
+        /// </summary>
+        public static string RemoveDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int index = 0; index < normalizedString.Length; ++index)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(normalizedString[index]);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(normalizedString[index]);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }
