@@ -43,11 +43,11 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/12/2016</date>
+    /// <date>5/13/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Script that builds for a specific platform.  It even adds several menu items
-    /// under "Omiya Games" in the file menu bar to quickly build to a different
+    /// under "Build" in the file menu bar to quickly build to a different
     /// platform.
     /// 
     /// Also useful for continuous integration, like Jenkins.
@@ -89,7 +89,7 @@ namespace OmiyaGames
         /// Function that builds for all platforms.  Edit this function if you want
         /// to add more platforms besides PC, Mac, Linux, and Web.
         /// </summary>
-        [MenuItem("Omiya Games/Build All")]
+        [MenuItem("Build/Build All")]
         public static void BuildAllPlatforms()
         {
 #if BUILD_TO_MAJOR_DESKTOP_OS
@@ -111,7 +111,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Desktop OSs.
         /// </summary>
-        [MenuItem("Omiya Games/Build Set/Major Desktop OSs")]
+        [MenuItem("Build/Build Set/Major Desktop OSs")]
         public static void PerformDesktopBuilds()
         {
             // Build for the Windows platform
@@ -138,7 +138,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mobile OSs.
         /// </summary>
-        [MenuItem("Omiya Games/Build Set/Major Mobile OSs")]
+        [MenuItem("Build/Build Set/Major Mobile OSs")]
         public static void PerformMobileBuilds()
         {
             // Check the editor's platform
@@ -160,7 +160,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Web.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/WebGL")]
+        [MenuItem("Build/Build For/WebGL")]
         public static void PerformWebGLBuild()
         {
             GenericBuild("WebGL", "", BuildTarget.WebGL);
@@ -169,7 +169,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 32-bit")]
+        [MenuItem("Build/Build For/Windows 32-bit")]
         public static void PerformWindows32Build()
         {
             GenericBuild("Windows 32-bit", ".exe", BuildTarget.StandaloneWindows);
@@ -178,7 +178,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 64-bit")]
+        [MenuItem("Build/Build For/Windows 64-bit")]
         public static void PerformWindows64Build()
         {
             GenericBuild("Windows 64-bit", ".exe", BuildTarget.StandaloneWindows64);
@@ -187,7 +187,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac (Universal)")]
+        [MenuItem("Build/Build For/Mac (Universal)")]
         public static void PerformMacUniversalBuild()
         {
             GenericBuild("Mac", ".app", BuildTarget.StandaloneOSXIntel);
@@ -196,7 +196,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac 32-bit")]
+        [MenuItem("Build/Build For/Mac 32-bit")]
         public static void PerformMac32Build()
         {
             GenericBuild("Mac 32-bit", ".app", BuildTarget.StandaloneOSXUniversal);
@@ -205,7 +205,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac 64-bit")]
+        [MenuItem("Build/Build For/Mac 64-bit")]
         public static void PerformMac64Build()
         {
             GenericBuild("Mac 64-bit", ".app", BuildTarget.StandaloneOSXIntel64);
@@ -214,7 +214,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux (Universal)")]
+        [MenuItem("Build/Build For/Linux (Universal)")]
         public static void PerformLinuxUniversalBuild()
         {
             GenericBuild("Linux", "", BuildTarget.StandaloneLinuxUniversal);
@@ -223,7 +223,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux 32-bit")]
+        [MenuItem("Build/Build For/Linux 32-bit")]
         public static void PerformLinux32Build()
         {
             GenericBuild("Linux 32-bit", "", BuildTarget.StandaloneLinux);
@@ -232,7 +232,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux 64-bit")]
+        [MenuItem("Build/Build For/Linux 64-bit")]
         public static void PerformLinux64Build()
         {
             GenericBuild("Linux 64-bit", "", BuildTarget.StandaloneLinux64);
@@ -241,7 +241,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for iOS.  Note this function only runs on a Mac.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/iOS")]
+        [MenuItem("Build/Build For/iOS")]
         public static void PerformIosBuild()
         {
             GenericBuild("iOS", "", BuildTarget.iOS);
@@ -250,7 +250,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Android.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Android")]
+        [MenuItem("Build/Build For/Android")]
         public static void PerformAndroidBuild()
         {
             GenericBuild("Android", ".apk", BuildTarget.Android);
@@ -259,7 +259,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows 8.  Note this function only runs on Windows 8.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 8")]
+        [MenuItem("Build/Build For/Windows 8")]
         public static void PerformWp8Build()
         {
             GenericBuild("Windows 8", "", BuildTarget.WP8Player);

@@ -28,10 +28,10 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>5/13/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Adds a menu item under "Omiya Games" in the file menu bar to reset
+    /// Adds a menu item under "Player Prefs" in the file menu bar to reset
     /// player settings in <code>PlayerPrefs</code>.
     /// </summary>
     /// <seealso cref="PlayerPrefs"/>
@@ -41,7 +41,7 @@ namespace OmiyaGames
         /// Deletes all stores settings in <code>PlayerPrefs</code>.
         /// </summary>
         /// <seealso cref="PlayerPrefs"/>
-        [MenuItem("Omiya Games/Reset Stored Settings")]
+        [MenuItem("Player Prefs/Delete All")]
         public static void ResetPlayerPrefs()
         {
             PlayerPrefs.DeleteAll();
