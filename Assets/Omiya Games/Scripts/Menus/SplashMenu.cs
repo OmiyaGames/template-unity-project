@@ -7,7 +7,7 @@ namespace OmiyaGames
     /// <copyright file="SplashMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -85,6 +85,8 @@ namespace OmiyaGames
         [SerializeField]
         GameObject loadingBarIncludedSet = null;
 
+        MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
+
         public override Type MenuType
         {
             get
@@ -152,43 +154,10 @@ namespace OmiyaGames
         IEnumerator DelayedFadeOut()
         {
             float startTime = Time.realtimeSinceStartup;
+            buildState = MalformedGameMenu.Reason.None;
 
             // Show the Malformed game menu if there's any problems
-            MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
-            if(Singleton.Instance.IsSimulatingMalformedGame == true)
-            {
-                buildState = MalformedGameMenu.Reason.JustTesting;
-            }
-            else if ((Application.genuineCheckAvailable == true) && (Application.genuine == false))
-            {
-                buildState = MalformedGameMenu.Reason.IsNotGenuine;
-            }
-            else if (Singleton.Instance.IsWebplayer == true)
-            {
-                // Grab the web checker
-                WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();
-
-                // Check if the Web Checker passed
-                if (webChecker != null)
-                {
-                    // Wait until the webchecker is done
-                    while (webChecker.CurrentState == WebLocationChecker.State.InProgress)
-                    {
-                        yield return null;
-                    }
-
-                    // Check the state
-                    switch(webChecker.CurrentState)
-                    {
-                        case WebLocationChecker.State.EncounteredError:
-                            buildState = MalformedGameMenu.Reason.CannotConfirmDomain;
-                            break;
-                        case WebLocationChecker.State.DomainDidntMatch:
-                            buildState = MalformedGameMenu.Reason.IsIncorrectDomain;
-                            break;
-                    }
-                }
-            }
+            yield return StartCoroutine(VerifyBuild());
 
             // Check how much time has passed
             float logoDisplayDuration = minimumLogoDisplayDuration - (Time.realtimeSinceStartup - startTime);
@@ -199,19 +168,7 @@ namespace OmiyaGames
             }
 
             // Check the build state
-            if (buildState == MalformedGameMenu.Reason.None)
-            {
-                // Get the scene manager to change scenes
-                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
-            }
-            else
-            { 
-                // Show the malformed menu
-                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
-
-                // Update the reasoning
-                menu.UpdateReason(buildState);
-            }
+            LoadNextMenu(buildState);
         }
 
         IEnumerator ShowLoadingScreen()
@@ -220,16 +177,20 @@ namespace OmiyaGames
             Vector2 max = loadingBar.anchorMax;
             max.x = 0;
             loadingBar.anchorMax = max;
+            buildState = MalformedGameMenu.Reason.None;
+
+            // Show the Malformed game menu if there's any problems
+            yield return StartCoroutine(VerifyBuild());
 
             // Wait until the loading status is finished
             while (LoadingStatus.IsFinished == false)
             {
-                // Wait for a frame
-                yield return null;
-
                 // Update the loading bar
                 max.x = LoadingStatus.Ratio;
                 loadingBar.anchorMax = max;
+
+                // Wait for a frame
+                yield return null;
             }
 
             // Wait for a frame
@@ -243,7 +204,64 @@ namespace OmiyaGames
             yield return null;
 
             // Get the scene manager to change scenes
-            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+            LoadNextMenu(buildState);
+        }
+
+        IEnumerator VerifyBuild()
+        {
+            if (Singleton.Instance.IsWebplayer == true)
+            {
+                // Grab the web checker
+                WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();
+                if (webChecker != null)
+                {
+                    // Wait until the webchecker is done
+                    while (webChecker.CurrentState == WebLocationChecker.State.InProgress)
+                    {
+                        yield return null;
+                    }
+
+                    // Check the state
+                    switch (webChecker.CurrentState)
+                    {
+                        case WebLocationChecker.State.EncounteredError:
+                            buildState = MalformedGameMenu.Reason.CannotConfirmDomain;
+                            break;
+                        case WebLocationChecker.State.DomainDidntMatch:
+                            buildState = MalformedGameMenu.Reason.IsIncorrectDomain;
+                            break;
+                    }
+                }
+            }
+            else if ((Application.genuineCheckAvailable == true) && (Application.genuine == false))
+            {
+                buildState = MalformedGameMenu.Reason.IsNotGenuine;
+            }
+
+            // Check if we're simulating failure
+            if (Singleton.Instance.IsSimulatingMalformedGame == true)
+            {
+                // Indicate as such
+                buildState = MalformedGameMenu.Reason.JustTesting;
+            }
+        }
+
+        static void LoadNextMenu(MalformedGameMenu.Reason state)
+        {
+            // Check the build state
+            if (state == MalformedGameMenu.Reason.None)
+            {
+                // Get the scene manager to change scenes
+                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+            }
+            else
+            {
+                // Show the malformed menu
+                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
+
+                // Update the reasoning
+                menu.UpdateReason(state);
+            }
         }
     }
 }

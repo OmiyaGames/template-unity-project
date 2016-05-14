@@ -8,7 +8,7 @@ namespace OmiyaGames
     /// <copyright file="Singleton.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -47,11 +47,12 @@ namespace OmiyaGames
 
         ISingletonScript[] allSingletonScriptsCache = null;
 
+        [SerializeField]
+        bool simulateMalformedGame = false;
+
 #if UNITY_EDITOR
         [SerializeField]
         bool simulateWebplayer = false;
-        [SerializeField]
-        bool simulateMalformedGame = false;
 #endif
 
         public static Singleton Instance
@@ -102,13 +103,18 @@ namespace OmiyaGames
         {
             get
             {
-#if UNITY_EDITOR
-                // Check if simulation checkbox is checked
-                return simulateMalformedGame;
-#else
-                // Always return false, otherwise
-                return false;
+                bool returnFlag = simulateMalformedGame;
+
+                // Check if we're not in the editor, and this build is in debug mode
+#if !UNITY_EDITOR
+                if (Debug.isDebugBuild == false)
+                {
+                    // Always return false
+                    returnFlag = false;
+                }
 #endif
+                // Check if simulation checkbox is checked
+                return returnFlag;
             }
         }
 

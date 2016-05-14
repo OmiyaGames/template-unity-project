@@ -2,7 +2,6 @@
 using System;
 using System.Text;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -11,7 +10,7 @@ namespace OmiyaGames
     /// <copyright file="WebLocationChecker.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +64,7 @@ namespace OmiyaGames
         /// This array is ignored if empty (i.e. no redirect will occur).
         ///</summary>
         [SerializeField]
-        List<string> domainMustContain;
+        string[] domainMustContain;
 
         ///<summary>
         /// (optional) or fetch the domain list from this URL
@@ -100,8 +99,10 @@ namespace OmiyaGames
         string redirectURL;
 
         State currentState = State.NotUsed;
-        bool downloadedRemoteDomainList = false;
         string retrievedHostName = null;
+        string downloadDomainsUrl = null;
+        string[] downloadedDomainList = null;
+        readonly HashSet<string> allUniqueDomains = new HashSet<string>();
 
         #region Properties
         public State CurrentState
@@ -116,15 +117,11 @@ namespace OmiyaGames
             }
         }
 
-        public bool IsRemoteDomainListSuccessfullyDownloaded
+        public bool IsDomainListSuccessfullyDownloaded
         {
             get
             {
-                return downloadedRemoteDomainList;
-            }
-            private set
-            {
-                downloadedRemoteDomainList = value;
+                return ((DownloadedDomainList != null) && (string.IsNullOrEmpty(DownloadDomainsUrl) == false));
             }
         }
 
@@ -136,11 +133,35 @@ namespace OmiyaGames
             }
         }
 
-        public ReadOnlyCollection<string> DomainList
+        public string[] DefaultDomainList
         {
             get
             {
-                return domainMustContain.AsReadOnly();
+                return domainMustContain;
+            }
+        }
+
+        public string[] DownloadedDomainList
+        {
+            get
+            {
+                return downloadedDomainList;
+            }
+        }
+
+        public string DownloadDomainsUrl
+        {
+            get
+            {
+                return downloadDomainsUrl;
+            }
+        }
+
+        public HashSet<string> AllUniqueDomains
+        {
+            get
+            {
+                return allUniqueDomains;
             }
         }
         #endregion
@@ -149,23 +170,8 @@ namespace OmiyaGames
         {
             if (Singleton.Instance.IsWebplayer == true)
             {
-#if UNITY_EDITOR
-                // Do a little bit of debugging
-                StringBuilder buf = new StringBuilder();
-                if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
-                {
-                    // Print remote domain list URL
-                    Debug.Log("Example URL to grab remote Domain List will look like:\n" + GenerateRemoteDomainList(buf));
-                }
-                if (string.IsNullOrEmpty(redirectURL) == false)
-                {
-                    // Print redirect javascript
-                    Debug.Log("Redirect javascript will look like:\n" + GenerateRedirect(buf));
-                }
-#else
                 // Shoot a coroutine if not in editor, and making Webplayer or WebGL
                 StartCoroutine(CheckDomainList());
-#endif
             }
         }
 
@@ -198,47 +204,65 @@ namespace OmiyaGames
             return buf.ToString();
         }
 
-        IEnumerator DownloadRemoteDomainList(StringBuilder buf)
+        IEnumerator DownloadRemoteDomainList(StringBuilder buf, string remoteDomainUrl)
         {
-            WWW www = new WWW(GenerateRemoteDomainList(buf));
+            WWW www = new WWW(remoteDomainListUrl);
             yield return www;
 
             // Check if there were any errors
             if (string.IsNullOrEmpty(www.error) == true)
             {
                 // If none, split the text file we've downloaded, and add it to the list
-                domainMustContain.AddRange(www.text.Split(splitRemoteDomainListUrlBy, StringSplitOptions.RemoveEmptyEntries));
-                Utility.RemoveDuplicateEntries<string>(domainMustContain);
-                IsRemoteDomainListSuccessfullyDownloaded = true;
+                downloadedDomainList = www.text.Split(splitRemoteDomainListUrlBy, StringSplitOptions.RemoveEmptyEntries);
             }
         }
 
         IEnumerator CheckDomainList()
         {
             // Update state
+            StringBuilder buf = new StringBuilder();
             CurrentState = State.InProgress;
 
             // Deactivate any objects
             int index = 0;
-            for (index = 0; index < waitObjects.Length; ++index)
+            for (; index < waitObjects.Length; ++index)
             {
                 waitObjects[index].SetActive(false);
             }
 
             // Grab a domain list remotely
-            StringBuilder buf = new StringBuilder();
+            downloadedDomainList = null;
+            downloadDomainsUrl = null;
             if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
             {
                 // Grab remote domain list
-                yield return StartCoroutine(DownloadRemoteDomainList(buf));
+                downloadDomainsUrl = GenerateRemoteDomainList(buf);
+                yield return StartCoroutine(DownloadRemoteDomainList(buf, downloadDomainsUrl));
+            }
+
+            // Setup hashset
+            allUniqueDomains.Clear();
+            if (DefaultDomainList != null)
+            {
+                for (index = 0; index < DefaultDomainList.Length; ++index)
+                {
+                    allUniqueDomains.Add(DefaultDomainList[index]);
+                }
+            }
+            if (DownloadedDomainList != null)
+            {
+                for (index = 0; index < DownloadedDomainList.Length; ++index)
+                {
+                    allUniqueDomains.Add(DownloadedDomainList[index]);
+                }
             }
 
             // Make sure there's at least one domain we need to check
-            if (domainMustContain.Count > 0)
+            if (allUniqueDomains.Count > 0)
             {
                 // parse the page's address
                 bool isErrorEncountered = false;
-                if (IsHostMatchingListedDomain(domainMustContain, out isErrorEncountered, out retrievedHostName) == true)
+                if (IsHostMatchingListedDomain(allUniqueDomains, out isErrorEncountered, out retrievedHostName) == true)
                 {
                     // Update state
                     CurrentState = State.DomainMatched;
@@ -280,11 +304,11 @@ namespace OmiyaGames
             buf.Length = 0;
             buf.Append(remoteDomainListUrl);
             buf.Append("?r=");
-            buf.Append(UnityEngine.Random.value);
+            buf.Append(UnityEngine.Random.Range(0, int.MaxValue));
             return buf.ToString();
         }
 
-        bool IsHostMatchingListedDomain(List<string> domainList, out bool encounteredError, out string retrievedHostName)
+        bool IsHostMatchingListedDomain(HashSet<string> domainList, out bool encounteredError, out string retrievedHostName)
         {
             Uri uri;
             bool isTheCorrectHost = false;
@@ -299,22 +323,15 @@ namespace OmiyaGames
                 retrievedHostName = uri.Host;
 
                 // Check if the scheme isn't file (i.e. local file run on computer)
-                if (uri.Scheme != "file")
-                {
-                    // Make sure host matches any one of the domains
-                    for (int index = 0; index < domainList.Count; ++index)
-                    {
-                        if (retrievedHostName == domainList[index])
-                        {
-                            isTheCorrectHost = true;
-                            break;
-                        }
-                    }
-                }
-                else
+                if (uri.Scheme == "file")
                 {
                     // If this is a file run by a local computer, indicate domain matched
                     isTheCorrectHost = true;
+                }
+                else
+                {
+                    // Make sure host matches any one of the domains
+                    isTheCorrectHost = domainList.Contains(retrievedHostName);
                 }
             }
             return isTheCorrectHost;

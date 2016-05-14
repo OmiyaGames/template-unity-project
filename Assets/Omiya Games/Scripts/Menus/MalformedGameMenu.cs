@@ -11,7 +11,7 @@ namespace OmiyaGames
     /// <copyright file="MalformedGameMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -68,19 +68,30 @@ namespace OmiyaGames
 
         [Header("First Option")]
         [SerializeField]
-        WebsiteInfo websiteInfo;
-        [SerializeField]
-        Text reasonMessage = null;
-        [SerializeField]
         WebsiteButton websiteButton = null;
+        [SerializeField]
+        WebsiteInfo websiteInfo;
 
         [Header("Second Option")]
+        [SerializeField]
+        WebsiteButton otherSitesButton = null;
         [SerializeField]
         WebsiteInfo[] otherSites = null;
         [SerializeField]
         Text[] secondOptionSet = null;
+
+        [Header("Error Messages")]
         [SerializeField]
-        WebsiteButton otherSitesButton = null;
+        Text reasonMessage = null;
+        [SerializeField]
+        [Multiline]
+        string gameIsNotGenuineMessage = "Internal tests confirm this game is not genuine.";
+        [SerializeField]
+        [Multiline]
+        string cannotConfirmDomainMessage = "Unable to confirm this game is hosted by a domain the developers uploaded their game to.";
+        [SerializeField]
+        [Multiline]
+        string domainDoesNotMatchMessage = "The detected url, \"{0},\" does not match any of the domains the developers uploaded their game to.";
 
         readonly List<WebsiteButton> allSecondOptionButtons = new List<WebsiteButton>();
 
@@ -153,25 +164,24 @@ namespace OmiyaGames
             StringBuilder builder = new StringBuilder();
             switch(reason)
             {
+                case Reason.CannotConfirmDomain:
+                    builder.Append(cannotConfirmDomainMessage);
+                    break;
                 case Reason.IsIncorrectDomain:
-                    builder.Append("Detected url, \"");
-                    builder.Append(webChecker.RetrievedHostName);
-                    builder.AppendLine(",\" does not match any of the domains we uploaded our game to.");
                     if (webChecker != null)
                     {
-                        ReadOnlyCollection<string> allDomains = webChecker.DomainList;
-                        for (int index = 0; index < allDomains.Count; ++index)
-                        {
-                            builder.Append("* ");
-                            builder.AppendLine(allDomains[index]);
-                        }
+                        builder.AppendFormat(domainDoesNotMatchMessage, webChecker.RetrievedHostName);
+                    }
+                    else
+                    {
+                        builder.Append(gameIsNotGenuineMessage);
                     }
                     break;
                 case Reason.JustTesting:
-                    builder.Append("Just kidding, we're just testing this form, and whether it works or not!");
+                    BuildTestMessage(builder, webChecker);
                     break;
                 default:
-                    builder.Append("The test to confirm this game is genuine indicated it isn't.");
+                    builder.Append(gameIsNotGenuineMessage);
                     break;
             }
             reasonMessage.text = builder.ToString();
@@ -215,6 +225,77 @@ namespace OmiyaGames
             for (; index < allSecondOptionButtons.Count; ++index)
             {
                 allSecondOptionButtons[index].gameObject.SetActive(false);
+            }
+        }
+
+        private void BuildTestMessage(StringBuilder builder, WebLocationChecker webChecker)
+        {
+            builder.Append("This menu is just a test.");
+            if (webChecker != null)
+            {
+                builder.AppendLine(" More info according to the WebLocationChecker:");
+
+                // Indicate the object's state
+                int bulletNumber = 1;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") the WebLocationChecker state is:");
+                builder.AppendLine(webChecker.CurrentState.ToString());
+
+                // Indicate the current domain information
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") this game's domain is:");
+                builder.AppendLine(webChecker.RetrievedHostName);
+
+                // List entries from the default domain list
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") the default domain list is:");
+                int index = 0;
+                for (; index < webChecker.DefaultDomainList.Length; ++index)
+                {
+                    builder.Append("- ");
+                    builder.AppendLine(webChecker.DefaultDomainList[index]);
+                }
+
+                // Check if there's a download URL to list
+                if(string.IsNullOrEmpty(webChecker.DownloadDomainsUrl) == false)
+                {
+                    // Print that URL
+                    ++bulletNumber;
+                    builder.Append(bulletNumber);
+                    builder.AppendLine(") downloaded a list of domains from:");
+                    builder.AppendLine(webChecker.DownloadDomainsUrl);
+
+                    // Check if there are any downloaded domains
+                    if (webChecker.DownloadedDomainList != null)
+                    {
+                        ++bulletNumber;
+                        builder.Append(bulletNumber);
+                        builder.AppendLine(") downloaded the following domains:");
+                        for (index = 0; index < webChecker.DownloadedDomainList.Length; ++index)
+                        {
+                            builder.Append("- ");
+                            builder.AppendLine(webChecker.DownloadedDomainList[index]);
+                        }
+                    }
+                    else
+                    {
+                        ++bulletNumber;
+                        builder.Append(bulletNumber);
+                        builder.AppendLine(") downloading that list failed, however.");
+                    }
+                }
+
+                // Show unique list of domains
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") together, the full domain list is as follows:");
+                foreach(string domain in webChecker.AllUniqueDomains)
+                {
+                    builder.Append("- ");
+                    builder.AppendLine(domain);
+                }
             }
         }
         #endregion
