@@ -58,6 +58,8 @@ namespace OmiyaGames
             DomainDidntMatch
         }
 
+        static readonly string[] AlwaysSplitDomainsBy = new string[] { "\r\n", "\n" };
+
         ///<summary>
         /// If it is a webplayer, then the domain must contain any
         /// one or more of these strings, or it will be redirected.
@@ -76,8 +78,7 @@ namespace OmiyaGames
         /// (optional) or fetch the domain list from this URL
         ///</summary>
         [SerializeField]
-        [Multiline]
-        string[] splitRemoteDomainListUrlBy = new string[] { "\n", "," };
+        string[] splitRemoteDomainListUrlBy = new string[] { "," };
         ///<summary>
         /// (optional) game objects to deactivate while the domain checking is happening
         ///</summary>
@@ -102,6 +103,7 @@ namespace OmiyaGames
         string retrievedHostName = null;
         string downloadDomainsUrl = null;
         string[] downloadedDomainList = null;
+        string[] cachedSplitString = null;
         readonly HashSet<string> allUniqueDomains = new HashSet<string>();
 
         #region Properties
@@ -164,6 +166,47 @@ namespace OmiyaGames
                 return allUniqueDomains;
             }
         }
+
+        public string[] SplitString
+        {
+            get
+            {
+                if(cachedSplitString == null)
+                {
+                    // Setup variables
+                    int index = 0;
+                    string toAdd;
+                    HashSet<string> allUniqueSplits = new HashSet<string>();
+
+                    // Add these two arrays into the hashset
+                    for(; index < splitRemoteDomainListUrlBy.Length; ++index)
+                    {
+                        toAdd = splitRemoteDomainListUrlBy[index];
+                        if ((string.IsNullOrEmpty(toAdd) == false) && (allUniqueSplits.Contains(toAdd) == false))
+                        {
+                            allUniqueSplits.Add(toAdd);
+                        }
+                    }
+                    for (index = 0; index < AlwaysSplitDomainsBy.Length; ++index)
+                    {
+                        toAdd = AlwaysSplitDomainsBy[index];
+                        if ((string.IsNullOrEmpty(toAdd) == false) && (allUniqueSplits.Contains(toAdd) == false))
+                        {
+                            allUniqueSplits.Add(toAdd);
+                        }
+                    }
+
+                    // Convert the hashset into an array
+                    index = 0;
+                    cachedSplitString = new string[allUniqueSplits.Count];
+                    foreach(string splitString in allUniqueSplits)
+                    {
+                        cachedSplitString[index] = splitString;
+                    }
+                }
+                return cachedSplitString;
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -213,7 +256,12 @@ namespace OmiyaGames
             if (string.IsNullOrEmpty(www.error) == true)
             {
                 // If none, split the text file we've downloaded, and add it to the list
-                downloadedDomainList = www.text.Split(splitRemoteDomainListUrlBy, StringSplitOptions.RemoveEmptyEntries);
+                downloadedDomainList = www.text.Split(SplitString, StringSplitOptions.RemoveEmptyEntries);
+                for(int index = 0; index < downloadedDomainList.Length; ++index)
+                {
+                    // Trim out any empty spaces in each string
+                    downloadedDomainList[index] = downloadedDomainList[index].Trim();
+                }
             }
         }
 
