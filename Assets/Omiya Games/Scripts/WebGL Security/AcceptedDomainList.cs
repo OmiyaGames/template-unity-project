@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 
-public class AcceptedDomainList : ScriptableObject
+namespace OmiyaGames
 {
-    [SerializeField]
-    string[] domains = null;
-
-    public string[] AllDomains
+    public class AcceptedDomainList : ScriptableObject
     {
-        get
+        [SerializeField]
+        string[] domains = null;
+
+        public string[] AllDomains
         {
-            return domains;
+            get
+            {
+                return domains;
+            }
+            set
+            {
+                domains = value;
+            }
         }
     }
 }
