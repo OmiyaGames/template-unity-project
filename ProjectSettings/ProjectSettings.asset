@@ -17,9 +17,9 @@ PlayerSettings:
   m_VirtualRealitySplashScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
-  defaultScreenWidthWeb: 900
-  defaultScreenHeightWeb: 600
-  m_RenderingPath: 3
+  defaultScreenWidthWeb: 800
+  defaultScreenHeightWeb: 480
+  m_RenderingPath: 1
   m_MobileRenderingPath: 3
   m_ActiveColorSpace: 0
   m_MTRendering: 1
@@ -441,6 +441,9 @@ PlayerSettings:
   - iOS::Architecture
   - iOS::EnableIncrementalBuildSupportForIl2cpp
   - iOS::ScriptingBackend
+  - tvOS::Architecture
+  - tvOS::EnableIncrementalBuildSupportForIl2cpp
+  - tvOS::ScriptingBackend
   Android::ScriptingBackend: 0
   Metro::ScriptingBackend: 2
   Standalone::ScriptingBackend: 0
@@ -452,6 +455,9 @@ PlayerSettings:
   iOS::Architecture: 2
   iOS::EnableIncrementalBuildSupportForIl2cpp: 1
   iOS::ScriptingBackend: 1
+  tvOS::Architecture: 1
+  tvOS::EnableIncrementalBuildSupportForIl2cpp: 0
+  tvOS::ScriptingBackend: 1
   boolPropertyNames:
   - WebGL::analyzeBuildSize
   - WebGL::dataCaching
@@ -464,7 +470,7 @@ PlayerSettings:
   - WebGL::template
   - additionalIl2CppArgs::additionalIl2CppArgs
   WebGL::emscriptenArgs: 
-  WebGL::template: APPLICATION:Minimal
+  WebGL::template: PROJECT:Embedding
   additionalIl2CppArgs::additionalIl2CppArgs: 
   cloudProjectId: 
   projectName: 

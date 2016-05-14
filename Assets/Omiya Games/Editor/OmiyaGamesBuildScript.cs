@@ -6,9 +6,7 @@
 
 //#define BUILD_TO_MAJOR_MOBILE_OS
 
-//#define BUILD_TO_WEBGL
-//#define BUILD_TO_WEBPLAYER
-//#define BUILD_TO_STREAMED_WEBPLAYER
+#define BUILD_TO_WEBGL
 
 using UnityEngine;
 using UnityEditor;
@@ -16,6 +14,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace OmiyaGames
 {
@@ -23,7 +22,7 @@ namespace OmiyaGames
     /// <copyright file="OmiyaGamesBuildScript.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2015 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -44,11 +43,11 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>5/13/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Script that builds for a specific platform.  It even adds several menu items
-    /// under "Omiya Games" in the file menu bar to quickly build to a different
+    /// under "Build" in the file menu bar to quickly build to a different
     /// platform.
     /// 
     /// Also useful for continuous integration, like Jenkins.
@@ -81,12 +80,16 @@ namespace OmiyaGames
         /// The folder where the game will be built to.
         /// </summary>
         private const string BuildDirectory = "Builds";
+        /// <summary>
+        /// The maximum WebGL build name
+        /// </summary>
+        public const int MaxSlugLength = 45;
 
         /// <summary>
         /// Function that builds for all platforms.  Edit this function if you want
         /// to add more platforms besides PC, Mac, Linux, and Web.
         /// </summary>
-        [MenuItem("Omiya Games/Build All")]
+        [MenuItem("Build/Build All")]
         public static void BuildAllPlatforms()
         {
 #if BUILD_TO_MAJOR_DESKTOP_OS
@@ -95,30 +98,20 @@ namespace OmiyaGames
 #endif
 
 #if BUILD_TO_MAJOR_MOBILE_OS
-		// Build for Mobile platforms
-		PerformMobileBuilds();
+            // Build for Mobile platforms
+            PerformMobileBuilds();
 #endif
 
 #if BUILD_TO_WEBGL
             // Build for the Web platform
             PerformWebGLBuild();
 #endif
-
-#if BUILD_TO_WEBPLAYER
-        // Build for the Web platform
-        PerformWebplayerBuild();
-#endif
-
-#if BUILD_TO_STREAMED_WEBPLAYER
-        // Build for the Web platform
-        PerformStreamedWebplayerBuild();
-#endif
         }
 
         /// <summary>
         /// Function that builds for Desktop OSs.
         /// </summary>
-        [MenuItem("Omiya Games/Build Set/Major Desktop OSs")]
+        [MenuItem("Build/Build Set/Major Desktop OSs")]
         public static void PerformDesktopBuilds()
         {
             // Build for the Windows platform
@@ -126,13 +119,13 @@ namespace OmiyaGames
             PerformWindows64Build();
 
 #if BUILD_32_BIT_AND_64_BIT_SEPARATELY
-		// Build for the Mac platform
-		PerformMac32Build();
-		PerformMac64Build();
-		
-		// Build for the Linux platform
-		PerformLinux32Build();
-		PerformLinux64Build();
+            // Build for the Mac platform
+            PerformMac32Build();
+            PerformMac64Build();
+
+            // Build for the Linux platform
+            PerformLinux32Build();
+            PerformLinux64Build();
 #else
             // Build for the Mac platform
             PerformMacUniversalBuild();
@@ -145,7 +138,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mobile OSs.
         /// </summary>
-        [MenuItem("Omiya Games/Build Set/Major Mobile OSs")]
+        [MenuItem("Build/Build Set/Major Mobile OSs")]
         public static void PerformMobileBuilds()
         {
             // Check the editor's platform
@@ -167,34 +160,16 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Web.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/WebGL")]
+        [MenuItem("Build/Build For/WebGL")]
         public static void PerformWebGLBuild()
         {
             GenericBuild("WebGL", "", BuildTarget.WebGL);
         }
 
         /// <summary>
-        /// Function that builds for Web.
-        /// </summary>
-        [MenuItem("Omiya Games/Build For/Streamed Webplayer")]
-        public static void PerformStreamedWebplayerBuild()
-        {
-            GenericBuild("Streamed Webplayer", "", BuildTarget.WebPlayerStreamed);
-        }
-
-        /// <summary>
-        /// Function that builds for Web.
-        /// </summary>
-        [MenuItem("Omiya Games/Build For/Webplayer")]
-        public static void PerformWebplayerBuild()
-        {
-            GenericBuild("Webplayer", "", BuildTarget.WebPlayer);
-        }
-
-        /// <summary>
         /// Function that builds for Windows, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 32-bit")]
+        [MenuItem("Build/Build For/Windows 32-bit")]
         public static void PerformWindows32Build()
         {
             GenericBuild("Windows 32-bit", ".exe", BuildTarget.StandaloneWindows);
@@ -203,7 +178,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 64-bit")]
+        [MenuItem("Build/Build For/Windows 64-bit")]
         public static void PerformWindows64Build()
         {
             GenericBuild("Windows 64-bit", ".exe", BuildTarget.StandaloneWindows64);
@@ -212,7 +187,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac (Universal)")]
+        [MenuItem("Build/Build For/Mac (Universal)")]
         public static void PerformMacUniversalBuild()
         {
             GenericBuild("Mac", ".app", BuildTarget.StandaloneOSXIntel);
@@ -221,7 +196,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac 32-bit")]
+        [MenuItem("Build/Build For/Mac 32-bit")]
         public static void PerformMac32Build()
         {
             GenericBuild("Mac 32-bit", ".app", BuildTarget.StandaloneOSXUniversal);
@@ -230,7 +205,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Mac 64-bit")]
+        [MenuItem("Build/Build For/Mac 64-bit")]
         public static void PerformMac64Build()
         {
             GenericBuild("Mac 64-bit", ".app", BuildTarget.StandaloneOSXIntel64);
@@ -239,7 +214,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux (Universal)")]
+        [MenuItem("Build/Build For/Linux (Universal)")]
         public static void PerformLinuxUniversalBuild()
         {
             GenericBuild("Linux", "", BuildTarget.StandaloneLinuxUniversal);
@@ -248,7 +223,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 32-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux 32-bit")]
+        [MenuItem("Build/Build For/Linux 32-bit")]
         public static void PerformLinux32Build()
         {
             GenericBuild("Linux 32-bit", "", BuildTarget.StandaloneLinux);
@@ -257,7 +232,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 64-bit.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Linux 64-bit")]
+        [MenuItem("Build/Build For/Linux 64-bit")]
         public static void PerformLinux64Build()
         {
             GenericBuild("Linux 64-bit", "", BuildTarget.StandaloneLinux64);
@@ -266,7 +241,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for iOS.  Note this function only runs on a Mac.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/iOS")]
+        [MenuItem("Build/Build For/iOS")]
         public static void PerformIosBuild()
         {
             GenericBuild("iOS", "", BuildTarget.iOS);
@@ -275,7 +250,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Android.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Android")]
+        [MenuItem("Build/Build For/Android")]
         public static void PerformAndroidBuild()
         {
             GenericBuild("Android", ".apk", BuildTarget.Android);
@@ -284,7 +259,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows 8.  Note this function only runs on Windows 8.
         /// </summary>
-        [MenuItem("Omiya Games/Build For/Windows 8")]
+        [MenuItem("Build/Build For/Windows 8")]
         public static void PerformWp8Build()
         {
             GenericBuild("Windows 8", "", BuildTarget.WP8Player);
@@ -296,7 +271,7 @@ namespace OmiyaGames
         private static void GenericBuild(string platformName, string fileExtension, BuildTarget buildTarget)
         {
             // Sanitize the product name
-            string sanitizedProductName = InvalidFileNameCharacters.Replace(PlayerSettings.productName, "_");
+            string sanitizedProductName = InvalidFileNameCharacters.Replace(RemoveDiacritics(PlayerSettings.productName), "");
             if (string.IsNullOrEmpty(sanitizedProductName) == true)
             {
                 throw new Exception("Product name is not available!");
@@ -319,13 +294,10 @@ namespace OmiyaGames
 
             switch (buildTarget)
             {
-                case BuildTarget.WebPlayer:
-                case BuildTarget.WebPlayerStreamed:
-                    // Append the file extension, if available
-                    if (string.IsNullOrEmpty(fileExtension) == false)
-                    {
-                        FileNameGenerator.Append(fileExtension);
-                    }
+                case BuildTarget.WebGL:
+                    // Append the slugged product name
+                    FileNameGenerator.Append('\\');
+                    FileNameGenerator.Append(GenerateSlug(sanitizedProductName));
                     break;
                 default:
                     // Append the sanitized product name
@@ -342,6 +314,10 @@ namespace OmiyaGames
 
             // Generate the build
             GenericBuild(FileNameGenerator.ToString(), buildTarget);
+
+            // Printing where the build was created
+            FileNameGenerator.Insert(0, "Created build to: ");
+            Debug.Log(FileNameGenerator.ToString());
         }
 
         /// <summary>
@@ -354,7 +330,7 @@ namespace OmiyaGames
 
             // Determine the best build option
             BuildOptions buildOption = OptionsAll;
-            if (buildTarget == BuildTarget.WebPlayer)
+            if (buildTarget == BuildTarget.WebGL)
             {
                 buildOption |= OptionsWeb;
             }
@@ -382,6 +358,49 @@ namespace OmiyaGames
                 }
             }
             return EditorScenes.ToArray();
+        }
+
+        /// <summary>
+        /// Taken from http://predicatet.blogspot.com/2009/04/improved-c-slug-generator-or-how-to.html
+        /// </summary>
+        public static string GenerateSlug(string originalString)
+        {
+            // Remove invalid chars
+            string returnSlug = Regex.Replace(originalString.ToLower(), @"[^a-z0-9\s-]", "");
+
+            // Convert multiple spaces into one space
+            returnSlug = Regex.Replace(returnSlug, @"\s+", " ").Trim();
+
+            // Trim the length of the slug down to MaxSlugLength characters
+            if(returnSlug.Length > MaxSlugLength)
+            {
+                returnSlug = returnSlug.Substring(0, MaxSlugLength).Trim();
+            }
+
+            // Replace spaces with hyphens
+            returnSlug = Regex.Replace(returnSlug, @"\s", "-");
+
+            return returnSlug;
+        }
+
+        /// <summary>
+        /// Taken from http://archives.miloush.net/michkap/archive/2007/05/14/2629747.html
+        /// </summary>
+        public static string RemoveDiacritics(string text)
+        {
+            string normalizedString = text.Normalize(NormalizationForm.FormD);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int index = 0; index < normalizedString.Length; ++index)
+            {
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(normalizedString[index]);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(normalizedString[index]);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

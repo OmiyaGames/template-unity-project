@@ -694,8 +694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3fc771d117b07245ba05b0a2a650a73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simulateWebplayer: 0
   simulateMalformedGame: 0
+  simulateWebplayer: 0
 --- !u!114 &11400340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -881,19 +881,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   domainMustContain:
   - localhost
-  - unity3d.com
-  - omiyagames.com
-  - ludumdare.com
-  - gamejolt.com
-  - itch.io
-  - newgrounds.com
-  - kongregate.com
-  remoteDomainListUrl: http://www.omiyagames.com/webplayer/domains.txt
+  remoteDomainListUrl: TemplateData/domains.txt
   splitRemoteDomainListUrlBy:
   - '
 
 '
-  - ','
   waitObjects: []
   forceRedirectIfDomainDoesntMatch: 0
   redirectURL: 
