@@ -316,6 +316,7 @@ namespace OmiyaGames
             return returnDomainList;
         }
 
+        // TODO: refactor this method; make it shorter
         IEnumerator CheckDomainList()
         {
             // Update state
@@ -430,6 +431,7 @@ namespace OmiyaGames
                 }
                 else
                 {
+                    // FIXME: do not match by exact string, but do take wild cards (*) into account
                     // Make sure host matches any one of the domains
                     isTheCorrectHost = domainList.Contains(retrievedHostName);
                 }
