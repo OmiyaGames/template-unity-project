@@ -30,7 +30,7 @@ namespace OmiyaGames
     /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     /// THE SOFTWARE.
     /// </copyright>
-    /// <date>4/21/2015</date>
+    /// <date>5/14/2016</date>
     /// <author>Taro Omiya</author>
     /// <author>andyman</author>
     /// <author>jcx</author>
@@ -58,6 +58,12 @@ namespace OmiyaGames
             DomainDidntMatch
         }
 
+        public enum DownloadedFileType
+        {
+            Text,
+            AcceptedDomainListAssetBundle
+        }
+
         static readonly string[] AlwaysSplitDomainsBy = new string[] { "\r\n", "\n" };
 
         ///<summary>
@@ -69,20 +75,30 @@ namespace OmiyaGames
         string[] domainMustContain;
 
         ///<summary>
-        /// (optional) or fetch the domain list from this URL
+        /// [optional] The URL to fetch a list of domains
         ///</summary>
         [Header("Getting Domain List Remotely")]
         [SerializeField]
+        [Tooltip("[optional] The URL to fetch a list of domains")]
         string remoteDomainListUrl;
+        /// <summary>
+        /// The file type of this list of domains
+        /// </summary>
+        [SerializeField]
+        [Tooltip("[optional] The file type of this list of domains")]
+        DownloadedFileType remoteListFileType = DownloadedFileType.AcceptedDomainListAssetBundle;
         ///<summary>
-        /// (optional) or fetch the domain list from this URL
+        /// [optional] The list of strings the text list of domains will be split by.
+        /// Note that the text list will already be divided by newlines.
         ///</summary>
         [SerializeField]
+        [Tooltip("[optional] The list of strings the text list of domains will be split by.\nNote that the text list will already be divided by newlines.")]
         string[] splitRemoteDomainListUrlBy = new string[] { "," };
         ///<summary>
-        /// (optional) game objects to deactivate while the domain checking is happening
+        /// [Optional] GameObjects to deactivate while the domain checking is happening
         ///</summary>
         [SerializeField]
+        [Tooltip("[Optional] GameObjects to deactivate while the domain checking is happening")]
         GameObject[] waitObjects;
 
         ///<summary>
@@ -102,6 +118,7 @@ namespace OmiyaGames
         State currentState = State.NotUsed;
         string retrievedHostName = null;
         string downloadDomainsUrl = null;
+        string downloadErrorMessage = null;
         string[] downloadedDomainList = null;
         string[] cachedSplitString = null;
         readonly HashSet<string> allUniqueDomains = new HashSet<string>();
@@ -233,36 +250,70 @@ namespace OmiyaGames
         {
             if (string.IsNullOrEmpty(redirectURL) == false)
             {
-                // Evaluate the javascript
-                Application.ExternalEval(GenerateRedirect(buf));
-            }
-        }
+                // Create a redirect javascript command
+                buf.Length = 0;
+                buf.Append("window.top.location='");
+                buf.Append(redirectURL);
+                buf.Append("';");
 
-        string GenerateRedirect(StringBuilder buf)
-        {
-            buf.Length = 0;
-            buf.Append("window.top.location='");
-            buf.Append(redirectURL);
-            buf.Append("';");
-            return buf.ToString();
+                // Evaluate the javascript
+                Application.ExternalEval(buf.ToString());
+            }
         }
 
         IEnumerator DownloadRemoteDomainList(StringBuilder buf, string remoteDomainUrl)
         {
-            WWW www = new WWW(remoteDomainListUrl);
-            yield return www;
-
-            // Check if there were any errors
-            if (string.IsNullOrEmpty(www.error) == true)
+            // Start downloading the remote file (never cache this file)
+            using (WWW www = new WWW(remoteDomainListUrl))
             {
-                // If none, split the text file we've downloaded, and add it to the list
-                downloadedDomainList = www.text.Split(SplitString, StringSplitOptions.RemoveEmptyEntries);
-                for(int index = 0; index < downloadedDomainList.Length; ++index)
+                yield return www;
+
+                // Check if there were any errors
+                downloadErrorMessage = www.error;
+                if (string.IsNullOrEmpty(downloadErrorMessage) == true)
                 {
-                    // Trim out any empty spaces in each string
-                    downloadedDomainList[index] = downloadedDomainList[index].Trim();
+                    // If none, check what type this downloaded file is
+                    if(remoteListFileType == DownloadedFileType.Text)
+                    {
+                        // If text, split the text file we've downloaded, and add it to the list
+                        downloadedDomainList = ConvertToDomainList(www.text, SplitString);
+                    }
+                    else if(www.assetBundle != null)
+                    {
+                        // If asset bundle, convert it into a list
+                        downloadedDomainList = ConvertToDomainList(www.assetBundle.mainAsset as AcceptedDomainList);
+                    }
                 }
             }
+        }
+
+        static string[] ConvertToDomainList(string text, string[] splitBy)
+        {
+            string[] returnDomainList = text.Split(splitBy, StringSplitOptions.RemoveEmptyEntries);
+            for (int index = 0; index < returnDomainList.Length; ++index)
+            {
+                // Trim out any empty spaces in each string
+                returnDomainList[index] = returnDomainList[index].Trim();
+            }
+            return returnDomainList;
+        }
+
+        static string[] ConvertToDomainList(AcceptedDomainList domainList)
+        {
+            string[] returnDomainList = null;
+            if ((domainList != null) && (domainList.AllDomains != null) && (domainList.AllDomains.Length > 0))
+            {
+                // Create a new string array
+                returnDomainList = new string[domainList.AllDomains.Length];
+
+                // Copy each element from the domainList
+                for (int index = 0; index < returnDomainList.Length; ++index)
+                {
+                    // Trim out any empty spaces in each string
+                    returnDomainList[index] = domainList.AllDomains[index].Trim();
+                }
+            }
+            return returnDomainList;
         }
 
         IEnumerator CheckDomainList()
@@ -281,6 +332,7 @@ namespace OmiyaGames
             // Grab a domain list remotely
             downloadedDomainList = null;
             downloadDomainsUrl = null;
+            downloadErrorMessage = null;
             if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
             {
                 // Grab remote domain list
