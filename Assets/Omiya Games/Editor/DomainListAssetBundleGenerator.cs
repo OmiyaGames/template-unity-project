@@ -61,6 +61,7 @@ namespace OmiyaGames
                 FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
 
                 // Refresh the project window
+                AssetDatabase.Refresh();
                 EditorUtility.FocusProjectWindow();
                 Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
             }
