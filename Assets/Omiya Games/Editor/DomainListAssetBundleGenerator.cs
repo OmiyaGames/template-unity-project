@@ -225,37 +225,45 @@ namespace OmiyaGames
 
         static void TestDomainAsset(Object testAsset, StringBuilder builder, out string testResult, out MessageType testResultType)
         {
+            // Setup variables
             AssetBundle bundle = null;
+            testResult = TestErrorInvalidFileMessage;
+            testResultType = MessageType.Error;
             try
             {
                 // Load the bundle, and convert it to a domain list
                 bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
                 DomainList domainList = Utility.GetDomainList(bundle);
 
+                // By default, indicate the bundle doesn't contain DomainList
+                testResult = TestErrorInvalidAssetMessage;
+                testResultType = MessageType.Error;
+
                 // Check if the bundle contains an AcceptedDomainList
-                if (domainList == null)
+                if (domainList != null)
                 {
-                    // Indicate the bundle doesn't contain AcceptedDomainList
-                    testResult = TestErrorInvalidAssetMessage;
-                    testResultType = MessageType.Error;
-                }
-                else if ((domainList != null) && (domainList.Count > 0))
-                {
-                    // FIXME: list out all the domains in the list
-                    testResult = TestInfoMessage;
-                    testResultType = MessageType.Info;
-                }
-                else
-                {
-                    // Indicate the domain list is empty
+                    // By default, indicate the domain list is empty
                     testResult = TestEmptyWarningMessage;
                     testResultType = MessageType.Warning;
+                    if ((domainList != null) && (domainList.Count > 0))
+                    {
+                        // FIXME: list out all the domains in the list
+                        builder.Length = 0;
+                        builder.AppendLine(TestInfoMessage);
+                        for(int index = 0; index < domainList.Count; ++index)
+                        {
+                            builder.Append("* \"");
+                            builder.Append(domainList[index]);
+                            builder.Append("\"");
+                            if (index < (domainList.Count - 1))
+                            {
+                                builder.AppendLine();
+                            }
+                        }
+                        testResult = builder.ToString();
+                        testResultType = MessageType.Info;
+                    }
                 }
-            }
-            catch (System.Exception)
-            {
-                testResult = TestErrorInvalidFileMessage;
-                testResultType = MessageType.Error;
             }
             finally
             {
