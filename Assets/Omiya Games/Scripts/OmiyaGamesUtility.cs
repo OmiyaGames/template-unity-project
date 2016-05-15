@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
 
 namespace OmiyaGames
@@ -145,6 +146,76 @@ namespace OmiyaGames
                 }
             }
             return returnDomain;
+        }
+
+        public static string BuildTestMessage(StringBuilder builder, WebLocationChecker webChecker)
+        {
+            builder.AppendLine("Information according to the WebLocationChecker:");
+
+            // Indicate the object's state
+            int bulletNumber = 1;
+            builder.Append(bulletNumber);
+            builder.AppendLine(") the WebLocationChecker state is:");
+            builder.AppendLine(webChecker.CurrentState.ToString());
+
+            // Indicate the current domain information
+            ++bulletNumber;
+            builder.Append(bulletNumber);
+            builder.AppendLine(") this game's domain is:");
+            builder.AppendLine(webChecker.RetrievedHostName);
+
+            // List entries from the default domain list
+            ++bulletNumber;
+            builder.Append(bulletNumber);
+            builder.AppendLine(") the default domain list is:");
+            int index = 0;
+            for (; index < webChecker.DefaultDomainList.Length; ++index)
+            {
+                builder.Append("- ");
+                builder.AppendLine(webChecker.DefaultDomainList[index]);
+            }
+
+            // Check if there's a download URL to list
+            if (string.IsNullOrEmpty(webChecker.DownloadDomainsUrl) == false)
+            {
+                // Print that URL
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine(") downloaded a list of domains from:");
+                builder.AppendLine(webChecker.DownloadDomainsUrl);
+
+                // Check if there are any downloaded domains
+                if (webChecker.DownloadedDomainList != null)
+                {
+                    ++bulletNumber;
+                    builder.Append(bulletNumber);
+                    builder.AppendLine(") downloaded the following domains:");
+                    for (index = 0; index < webChecker.DownloadedDomainList.Length; ++index)
+                    {
+                        builder.Append("- ");
+                        builder.AppendLine(webChecker.DownloadedDomainList[index]);
+                    }
+                }
+                else
+                {
+                    ++bulletNumber;
+                    builder.Append(bulletNumber);
+                    builder.AppendLine(") downloading that list failed, however.");
+                }
+            }
+
+            // Show unique list of domains
+            ++bulletNumber;
+            builder.Append(bulletNumber);
+            builder.AppendLine(") together, the full domain list is as follows:");
+            foreach (string domain in webChecker.AllUniqueDomains.Keys)
+            {
+                builder.Append("- ");
+                builder.AppendLine(domain);
+            }
+
+            // Return URL
+            return builder.ToString();
         }
     }
 }
