@@ -178,7 +178,8 @@ namespace OmiyaGames
                     }
                     break;
                 case Reason.JustTesting:
-                    BuildTestMessage(builder, webChecker);
+                    builder.Append("This menu is just a test. ");
+                    Utility.BuildTestMessage(builder, webChecker);
                     break;
                 default:
                     builder.Append(gameIsNotGenuineMessage);
@@ -225,77 +226,6 @@ namespace OmiyaGames
             for (; index < allSecondOptionButtons.Count; ++index)
             {
                 allSecondOptionButtons[index].gameObject.SetActive(false);
-            }
-        }
-
-        private void BuildTestMessage(StringBuilder builder, WebLocationChecker webChecker)
-        {
-            builder.Append("This menu is just a test.");
-            if (webChecker != null)
-            {
-                builder.AppendLine(" More info according to the WebLocationChecker:");
-
-                // Indicate the object's state
-                int bulletNumber = 1;
-                builder.Append(bulletNumber);
-                builder.AppendLine(") the WebLocationChecker state is:");
-                builder.AppendLine(webChecker.CurrentState.ToString());
-
-                // Indicate the current domain information
-                ++bulletNumber;
-                builder.Append(bulletNumber);
-                builder.AppendLine(") this game's domain is:");
-                builder.AppendLine(webChecker.RetrievedHostName);
-
-                // List entries from the default domain list
-                ++bulletNumber;
-                builder.Append(bulletNumber);
-                builder.AppendLine(") the default domain list is:");
-                int index = 0;
-                for (; index < webChecker.DefaultDomainList.Length; ++index)
-                {
-                    builder.Append("- ");
-                    builder.AppendLine(webChecker.DefaultDomainList[index]);
-                }
-
-                // Check if there's a download URL to list
-                if(string.IsNullOrEmpty(webChecker.DownloadDomainsUrl) == false)
-                {
-                    // Print that URL
-                    ++bulletNumber;
-                    builder.Append(bulletNumber);
-                    builder.AppendLine(") downloaded a list of domains from:");
-                    builder.AppendLine(webChecker.DownloadDomainsUrl);
-
-                    // Check if there are any downloaded domains
-                    if (webChecker.DownloadedDomainList != null)
-                    {
-                        ++bulletNumber;
-                        builder.Append(bulletNumber);
-                        builder.AppendLine(") downloaded the following domains:");
-                        for (index = 0; index < webChecker.DownloadedDomainList.Length; ++index)
-                        {
-                            builder.Append("- ");
-                            builder.AppendLine(webChecker.DownloadedDomainList[index]);
-                        }
-                    }
-                    else
-                    {
-                        ++bulletNumber;
-                        builder.Append(bulletNumber);
-                        builder.AppendLine(") downloading that list failed, however.");
-                    }
-                }
-
-                // Show unique list of domains
-                ++bulletNumber;
-                builder.Append(bulletNumber);
-                builder.AppendLine(") together, the full domain list is as follows:");
-                foreach(string domain in webChecker.AllUniqueDomains.Keys)
-                {
-                    builder.Append("- ");
-                    builder.AppendLine(domain);
-                }
             }
         }
         #endregion

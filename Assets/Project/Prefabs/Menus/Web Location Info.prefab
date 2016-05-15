@@ -58,6 +58,7 @@ GameObject:
   - 224: {fileID: 22427806}
   - 222: {fileID: 22258896}
   - 114: {fileID: 11418218}
+  - 114: {fileID: 11454810}
   m_Layer: 5
   m_Name: Web Location Info
   m_TagString: Untagged
@@ -284,6 +285,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &11454810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 165840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1eb7e32da9bfb2489939d5fc4c512bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  infoLabel: {fileID: 11403858}
 --- !u!114 &11465720
 MonoBehaviour:
   m_ObjectHideFlags: 1
