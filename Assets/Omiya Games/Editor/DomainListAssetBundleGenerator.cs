@@ -57,7 +57,7 @@ namespace OmiyaGames
         const string TestEmptyWarningMessage = "Was able to read the Asset Bundle, but the asset contained in it was not an AcceptedDomainList object.";
         const string TestInfoMessage = "Asset Bundle contains the following domains:";
 
-        string nameOfFile = BundleId, nameOfFolder = "Assets/WebGLTemplates/Embedding/TemplateData", testResult = null;
+        string nameOfFile = BundleId, nameOfFolder = "Assets/WebGLTemplates/Embedding/AcceptedDomains", testResult = null;
         MessageType testResultType = MessageType.None;
         bool toggleGenerateArea = true, toggleTestArea = false;
         Object testAsset = null, lastTestAsset = null;
