@@ -281,7 +281,7 @@ namespace OmiyaGames
                     else if(www.assetBundle != null)
                     {
                         // If asset bundle, convert it into a list
-                        downloadedDomainList = ConvertToDomainList(www.assetBundle.mainAsset as AcceptedDomainList);
+                        downloadedDomainList = ConvertToDomainList(Utility.GetDomainList(www.assetBundle));
                     }
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.IO;
 
 namespace OmiyaGames
 {
@@ -36,6 +37,7 @@ namespace OmiyaGames
     public static class Utility
     {
         public const float SnapToThreshold = 0.01f;
+        public const string ScriptableObjectFileExtension = ".asset";
 
         /// <summary>
         /// Shuffles the list.
@@ -106,6 +108,43 @@ namespace OmiyaGames
             // Only do something if we're in debug mode
             Debug.Log(message);
 #endif
+        }
+
+        public static AcceptedDomainList GetDomainList(AssetBundle bundle, string assetNameNoExtension = null)
+        {
+            AcceptedDomainList returnDomain = null;
+
+            // Search for an *.asset file
+            string[] allAssets = bundle.GetAllAssetNames();
+            string firstAsset = null;
+            if(allAssets != null)
+            {
+                for(int index = 0; index < allAssets.Length; ++index)
+                {
+                    if((string.IsNullOrEmpty(allAssets[index]) == false) &&
+                        (Path.GetExtension(allAssets[index]) == ScriptableObjectFileExtension) &&
+                        ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
+                    {
+                        firstAsset = allAssets[index];
+                        break;
+                    }
+                }
+            }
+
+            // Check if an asset is found
+            if(string.IsNullOrEmpty(firstAsset) == false)
+            {
+                try
+                {
+                    // Convert it to an AcceptedDomainList
+                    returnDomain = bundle.LoadAsset<AcceptedDomainList>(firstAsset);
+                }
+                catch(System.Exception)
+                {
+                    returnDomain = null;
+                }
+            }
+            return returnDomain;
         }
     }
 }

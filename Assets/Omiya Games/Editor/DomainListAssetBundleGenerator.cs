@@ -43,7 +43,6 @@ namespace OmiyaGames
     public class DomainListAssetBundleGenerator : EditorWindow
     {
         const float VerticalMargin = 2;
-        const string ScriptableObjectFileExtension = ".asset";
         const string CreateScriptableObjectAtFolder = "Assets/";
         const string ManifestFileExtension = ".manifest";
         const string BundleId = "domains";
@@ -226,11 +225,12 @@ namespace OmiyaGames
 
         static void TestDomainAsset(Object testAsset, StringBuilder builder, out string testResult, out MessageType testResultType)
         {
+            AssetBundle bundle = null;
             try
             {
                 // Load the bundle, and convert it to a domain list
-                AssetBundle bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
-                AcceptedDomainList domainList = bundle.mainAsset as AcceptedDomainList;
+                bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
+                AcceptedDomainList domainList = Utility.GetDomainList(bundle);
 
                 // Check if the bundle contains an AcceptedDomainList
                 if (domainList == null)
@@ -251,14 +251,19 @@ namespace OmiyaGames
                     testResult = TestEmptyWarningMessage;
                     testResultType = MessageType.Warning;
                 }
-
-                // Clean-up
-                bundle.Unload(true);
             }
             catch (System.Exception)
             {
                 testResult = TestErrorInvalidFileMessage;
                 testResultType = MessageType.Error;
+            }
+            finally
+            {
+                if(bundle != null)
+                {
+                    // Clean-up
+                    bundle.Unload(true);
+                }
             }
         }
 
@@ -272,7 +277,7 @@ namespace OmiyaGames
             // Generate a path to create an AcceptedDomainList
             builder.Length = 0;
             builder.Append(Path.Combine(folderName, fileName));
-            builder.Append(ScriptableObjectFileExtension);
+            builder.Append(Utility.ScriptableObjectFileExtension);
             pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
 
             // Create the AcceptedDomainList at the assigned path
