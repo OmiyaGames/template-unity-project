@@ -172,20 +172,9 @@ namespace OmiyaGames
                 {
                     // Generate the asset bundle at the Assets folder
                     string pathOfAsset;
-                    GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset);
-                    GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
-
-                    // clean-up the rest of the assets
-                    CleanUpFiles(builder, pathOfAsset);
-
-                    // Move the asset to the folder designated by the user
-                    pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
-                    FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
-
-                    // Refresh the project window
-                    AssetDatabase.Refresh();
-                    EditorUtility.FocusProjectWindow();
-                    Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
+                    AssetUtility.GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset, BundleId);
+                    AssetUtility.GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
+                    MoveAssetBundleTo(builder, pathOfAsset, Path.Combine(nameOfFolder, nameOfFile));
                 }
             }
             EditorGUILayout.EndVertical();
@@ -247,7 +236,7 @@ namespace OmiyaGames
                     testResultType = MessageType.Warning;
                     if ((domainList != null) && (domainList.Count > 0))
                     {
-                        // FIXME: list out all the domains in the list
+                        // list out all the domains in the list
                         builder.Length = 0;
                         builder.AppendLine(TestInfoMessage);
                         for(int index = 0; index < domainList.Count; ++index)
@@ -275,47 +264,20 @@ namespace OmiyaGames
             }
         }
 
-        // TODO: consider moving this logic to a separate editor utility script
-        static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
+        static void MoveAssetBundleTo(StringBuilder builder, string pathOfAsset, string newPath)
         {
-            DomainList returnAsset = ScriptableObject.CreateInstance<DomainList>();
-            returnAsset.name = fileName;
-            returnAsset.Domains = content;
+            // clean-up the rest of the assets
+            CleanUpFiles(builder, pathOfAsset);
 
-            // Generate a path to create an AcceptedDomainList
-            builder.Length = 0;
-            builder.Append(Path.Combine(folderName, fileName));
-            builder.Append(Utility.ScriptableObjectFileExtension);
-            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
+            // Move the asset to the folder designated by the user
+            pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, BundleId);
+            FileUtil.ReplaceFile(pathOfAsset, newPath);
+            FileUtil.DeleteFileOrDirectory(pathOfAsset);
 
-            // Create the AcceptedDomainList at the assigned path
-            AssetDatabase.CreateAsset(returnAsset, pathOfAsset);
-
-            // Set its asset bundle name
-            AssetImporter importer = AssetImporter.GetAtPath(pathOfAsset);
-            importer.assetBundleName = BundleId;
-
-            // Save and refresh this asset
-            AssetDatabase.SaveAssets();
+            // Refresh the project window
             AssetDatabase.Refresh();
-            return returnAsset;
-        }
-
-        // TODO: consider moving this logic to a separate editor utility script
-        static void GenerateAssetBundle(string folderName, string bundleId, params string[] objectPaths)
-        {
-            // Create the array of bundle build details.
-            AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
-
-            buildMap[0].assetBundleName = bundleId;
-            buildMap[0].assetNames = objectPaths;
-
-            // Put the bundles in folderName
-            BuildPipeline.BuildAssetBundles(folderName, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
-
-            // Save and refresh this asset
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(newPath);
         }
 
         static void CleanUpFiles(StringBuilder builder, string acceptedDomainListObjectPath)
