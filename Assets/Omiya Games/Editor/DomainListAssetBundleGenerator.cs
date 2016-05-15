@@ -64,7 +64,21 @@ namespace OmiyaGames
         Object testAsset = null, lastTestAsset = null;
         List<string> allDomains = new List<string> { "localhost", "build.cloud.unity3d.com" };
         ReorderableList allDomainsField = null;
+        //GUIStyle cachedFoldOutStyle = null;
         readonly StringBuilder builder = new StringBuilder();
+
+        GUIStyle FoldOutstyle
+        {
+            get
+            {
+                //if(cachedFoldOutStyle == null)
+                //{
+                //    cachedFoldOutStyle = new GUIStyle(EditorStyles.foldout);
+                //    cachedFoldOutStyle.fontStyle = FontStyle.Bold;
+                //}
+                return EditorStyles.foldout;
+            }
+        }
 
         [MenuItem("Omiya Games/Domain List Asset Generator")]
         static void Initialize()
@@ -138,74 +152,76 @@ namespace OmiyaGames
         #region Helper Methods
         void DrawGenerateAssetArea()
         {
-            // Draw toggle area
-            toggleGenerateArea = EditorGUILayout.BeginToggleGroup("Generate Domain Asset", toggleGenerateArea);
-
-            // Ask the list of layouts
-            allDomainsField.DoLayoutList();
-
-            // Ask the path this will generate
-            GUILayout.Label("Name of folder to generate this asset:");
-            nameOfFolder = EditorGUILayout.TextField(nameOfFolder);
-
-            // Ask the name of the file this will generate
-            GUILayout.Label("Name of asset to generate:");
-            nameOfFile = EditorGUILayout.TextField(nameOfFile);
-
-            // Create a generate button
-            if (GUILayout.Button("Generate Domain Asset") == true)
+            // Draw foldout area
+            EditorGUILayout.BeginVertical();
+            toggleGenerateArea = EditorGUILayout.Foldout(toggleGenerateArea, "Generate Domain Asset", FoldOutstyle);
+            if (toggleGenerateArea == true)
             {
-                // Generate the asset bundle at the Assets folder
-                string pathOfAsset;
-                GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset);
-                GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
+                // Ask the list of layouts
+                allDomainsField.DoLayoutList();
 
-                // clean-up the rest of the assets
-                CleanUpFiles(builder, pathOfAsset);
+                // Ask the path this will generate
+                GUILayout.Label("Name of folder to generate this asset:");
+                nameOfFolder = EditorGUILayout.TextField(nameOfFolder);
 
-                // Move the asset to the folder designated by the user
-                pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
-                FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
+                // Ask the name of the file this will generate
+                GUILayout.Label("Name of asset to generate:");
+                nameOfFile = EditorGUILayout.TextField(nameOfFile);
 
-                // Refresh the project window
-                AssetDatabase.Refresh();
-                EditorUtility.FocusProjectWindow();
-                Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
+                // Create a generate button
+                if (GUILayout.Button("Generate Domain Asset") == true)
+                {
+                    // Generate the asset bundle at the Assets folder
+                    string pathOfAsset;
+                    GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset);
+                    GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
+
+                    // clean-up the rest of the assets
+                    CleanUpFiles(builder, pathOfAsset);
+
+                    // Move the asset to the folder designated by the user
+                    pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
+                    FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
+
+                    // Refresh the project window
+                    AssetDatabase.Refresh();
+                    EditorUtility.FocusProjectWindow();
+                    Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
+                }
             }
-
-            // Close the toggle group
-            EditorGUILayout.EndToggleGroup();
+            EditorGUILayout.EndVertical();
         }
 
         void DrawTestAssetArea()
         {
-            // Draw toggle area
-            toggleGenerateArea = EditorGUILayout.BeginToggleGroup("Generate Domain Asset", toggleGenerateArea);
-
-            // Create a field to set an object
-            testAsset = EditorGUILayout.ObjectField(lastTestAsset, typeof(Object), false);
-            if((testAsset == null) || (testAsset != lastTestAsset))
+            // Draw foldout area
+            EditorGUILayout.BeginVertical();
+            toggleTestArea = EditorGUILayout.Foldout(toggleTestArea, "Test Domain Asset", FoldOutstyle);
+            if (toggleTestArea == true)
             {
-                // Clear results
-                testResult = null;
-                testResultType = MessageType.None;
-            }
-            lastTestAsset = testAsset;
+                // Create a field to set an object
+                testAsset = EditorGUILayout.ObjectField(lastTestAsset, typeof(Object), false);
+                if ((testAsset == null) || (testAsset != lastTestAsset))
+                {
+                    // Clear results
+                    testResult = null;
+                    testResultType = MessageType.None;
+                }
+                lastTestAsset = testAsset;
 
-            // Create a generate button
-            if (GUILayout.Button("Test Domain Asset") == true)
-            {
-                TestDomainAsset(testAsset, builder, out testResult, out testResultType);
-            }
+                // Create a generate button
+                if (GUILayout.Button("Test Domain Asset") == true)
+                {
+                    TestDomainAsset(testAsset, builder, out testResult, out testResultType);
+                }
 
-            // Print out results, if there are any
-            if(string.IsNullOrEmpty(testResult) == false)
-            {
-                EditorGUILayout.HelpBox(testResult, testResultType);
+                // Print out results, if there are any
+                if (string.IsNullOrEmpty(testResult) == false)
+                {
+                    EditorGUILayout.HelpBox(testResult, testResultType);
+                }
             }
-
-            // Close the toggle group
-            EditorGUILayout.EndToggleGroup();
+            EditorGUILayout.EndVertical();
         }
 
         static void TestDomainAsset(Object testAsset, StringBuilder builder, out string testResult, out MessageType testResultType)
@@ -226,7 +242,7 @@ namespace OmiyaGames
                 else if ((domainList.AllDomains != null) && (domainList.AllDomains.Length > 0))
                 {
                     // FIXME: list out all the domains in the list
-                    testResult = "TODO";
+                    testResult = TestInfoMessage;
                     testResultType = MessageType.Info;
                 }
                 else
