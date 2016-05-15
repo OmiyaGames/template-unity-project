@@ -968,7 +968,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22438358}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.36501825
+  m_Size: 0.41638815
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1256,16 +1256,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f5277d7a39a4d4e9e86a6f710c1b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  websiteButton: {fileID: 11474742}
   websiteInfo:
     display: Omiya Games
     redirectTo: http://www.omiyagames.com/games/
-  reasonMessage: {fileID: 11495214}
-  websiteButton: {fileID: 11474742}
+  otherSitesButton: {fileID: 11401960}
   otherSites: []
   secondOptionSet:
   - {fileID: 11449936}
   - {fileID: 11434550}
-  otherSitesButton: {fileID: 11401960}
+  reasonMessage: {fileID: 11495214}
+  gameIsNotGenuineMessage: Internal tests confirm this game is not genuine.
+  cannotConfirmDomainMessage: Unable to confirm this game is hosted by a domain the
+    developers uploaded their game to.
+  domainDoesNotMatchMessage: The detected url, "{0}," does not match any of the domains
+    the developers uploaded their game to.
 --- !u!114 &11468186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1687,7 +1692,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22416382
 RectTransform:
@@ -1890,7 +1895,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 20}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22442228
 RectTransform:
@@ -2030,7 +2035,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: -40}
+  m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22481644
 RectTransform:
