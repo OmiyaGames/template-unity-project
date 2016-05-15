@@ -192,35 +192,15 @@ namespace OmiyaGames
                 if(cachedSplitString == null)
                 {
                     // Setup variables
-                    int index = 0;
-                    string toAdd;
+                    List<string> allSplits = new List<string>();
                     HashSet<string> allUniqueSplits = new HashSet<string>();
 
                     // Add these two arrays into the hashset
-                    for(; index < splitRemoteDomainListUrlBy.Length; ++index)
-                    {
-                        toAdd = splitRemoteDomainListUrlBy[index];
-                        if ((string.IsNullOrEmpty(toAdd) == false) && (allUniqueSplits.Contains(toAdd) == false))
-                        {
-                            allUniqueSplits.Add(toAdd);
-                        }
-                    }
-                    for (index = 0; index < AlwaysSplitDomainsBy.Length; ++index)
-                    {
-                        toAdd = AlwaysSplitDomainsBy[index];
-                        if ((string.IsNullOrEmpty(toAdd) == false) && (allUniqueSplits.Contains(toAdd) == false))
-                        {
-                            allUniqueSplits.Add(toAdd);
-                        }
-                    }
+                    AddString(AlwaysSplitDomainsBy, allSplits, allUniqueSplits);
+                    AddString(splitRemoteDomainListUrlBy, allSplits, allUniqueSplits);
 
-                    // Convert the hashset into an array
-                    index = 0;
-                    cachedSplitString = new string[allUniqueSplits.Count];
-                    foreach(string splitString in allUniqueSplits)
-                    {
-                        cachedSplitString[index] = splitString;
-                    }
+                    // Convert the list into an array
+                    cachedSplitString = allSplits.ToArray();
                 }
                 return cachedSplitString;
             }
@@ -383,6 +363,23 @@ namespace OmiyaGames
                     break;
             }
             return returnState;
+        }
+
+        static void AddString(string[] toAddArray, List<string> listToAddTo, HashSet<string> setToAddTo)
+        {
+            if (toAddArray != null)
+            {
+                string toAdd;
+                for (int index = 0; index < toAddArray.Length; ++index)
+                {
+                    toAdd = toAddArray[index];
+                    if ((string.IsNullOrEmpty(toAdd) == false) && (setToAddTo.Contains(toAdd) == false))
+                    {
+                        listToAddTo.Add(toAdd);
+                        setToAddTo.Add(toAdd);
+                    }
+                }
+            }
         }
         #endregion
 
