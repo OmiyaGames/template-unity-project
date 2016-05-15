@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System;
+using System.Collections;
 
 namespace OmiyaGames
 {
@@ -35,14 +38,14 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="DomainListAssetBundleGenerator"/>
     /// <seealso cref="WebLocationChecker"/>
-    public class AcceptedDomainList : ScriptableObject
+    public class DomainList : ScriptableObject, ICollection<string>
     {
         [SerializeField]
         string[] domains = null;
 
-        public string[] AllDomains
+        public string[] Domains
         {
-            get
+            private get
             {
                 return domains;
             }
@@ -51,5 +54,85 @@ namespace OmiyaGames
                 domains = value;
             }
         }
+
+        public string this[int index]
+        {
+            get
+            {
+                return Domains[index];
+            }
+            set
+            {
+                Domains[index] = value;
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return Domains.Length;
+            }
+        }
+
+        #region ICollection Implementation
+        public bool IsReadOnly
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public void CopyTo(string[] array, int arrayIndex)
+        {
+            arrayIndex = Mathf.Clamp(arrayIndex, 0, array.Length);
+            for(int index = 0; ((index < Count) && ((index + arrayIndex) < array.Length)); ++index)
+            {
+                array[index + arrayIndex] = Domains[index];
+            }
+        }
+
+        public IEnumerator<string> GetEnumerator()
+        {
+            return ((IEnumerable<string>) Domains).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Domains.GetEnumerator();
+        }
+
+        public bool Contains(string item)
+        {
+            bool returnFlag = false;
+            for (int index = 0; index < Count; ++index)
+            {
+                if(Domains[index] == item)
+                {
+                    returnFlag = true;
+                    break;
+                }
+            }
+            return returnFlag;
+        }
+        #endregion
+
+        #region Unimplemented methods
+        public void Add(string item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(string item)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
