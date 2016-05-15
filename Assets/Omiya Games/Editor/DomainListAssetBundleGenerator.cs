@@ -144,7 +144,7 @@ namespace OmiyaGames
             buildMap[0].assetNames = objectPaths;
 
             // Put the bundles in folderName
-            BuildPipeline.BuildAssetBundles(folderName, buildMap, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.WebGL);
+            BuildPipeline.BuildAssetBundles(folderName, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
 
             // Save and refresh this asset
             AssetDatabase.SaveAssets();
