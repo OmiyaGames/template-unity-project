@@ -38,7 +38,7 @@ namespace OmiyaGames
     /// Creates a window that, after pushing the "Generate Domain Asset," creates
     /// an Asset Bundle containing an instance of <code>AcceptedDomainList</code>.
     /// </summary>
-    /// <seealso cref="AcceptedDomainList"/>
+    /// <seealso cref="DomainList"/>
     /// <seealso cref="WebLocationChecker"/>
     public class DomainListAssetBundleGenerator : EditorWindow
     {
@@ -230,7 +230,7 @@ namespace OmiyaGames
             {
                 // Load the bundle, and convert it to a domain list
                 bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
-                AcceptedDomainList domainList = Utility.GetDomainList(bundle);
+                DomainList domainList = Utility.GetDomainList(bundle);
 
                 // Check if the bundle contains an AcceptedDomainList
                 if (domainList == null)
@@ -239,7 +239,7 @@ namespace OmiyaGames
                     testResult = TestErrorInvalidAssetMessage;
                     testResultType = MessageType.Error;
                 }
-                else if ((domainList.AllDomains != null) && (domainList.AllDomains.Length > 0))
+                else if ((domainList != null) && (domainList.Count > 0))
                 {
                     // FIXME: list out all the domains in the list
                     testResult = TestInfoMessage;
@@ -268,11 +268,11 @@ namespace OmiyaGames
         }
 
         // TODO: consider moving this logic to a separate editor utility script
-        static AcceptedDomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
+        static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
         {
-            AcceptedDomainList returnAsset = ScriptableObject.CreateInstance<AcceptedDomainList>();
+            DomainList returnAsset = ScriptableObject.CreateInstance<DomainList>();
             returnAsset.name = fileName;
-            returnAsset.AllDomains = content;
+            returnAsset.Domains = content;
 
             // Generate a path to create an AcceptedDomainList
             builder.Length = 0;

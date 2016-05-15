@@ -110,9 +110,9 @@ namespace OmiyaGames
 #endif
         }
 
-        public static AcceptedDomainList GetDomainList(AssetBundle bundle, string assetNameNoExtension = null)
+        public static DomainList GetDomainList(AssetBundle bundle, string assetNameNoExtension = null)
         {
-            AcceptedDomainList returnDomain = null;
+            DomainList returnDomain = null;
 
             // Search for an *.asset file
             string[] allAssets = bundle.GetAllAssetNames();
@@ -137,7 +137,7 @@ namespace OmiyaGames
                 try
                 {
                     // Convert it to an AcceptedDomainList
-                    returnDomain = bundle.LoadAsset<AcceptedDomainList>(firstAsset);
+                    returnDomain = bundle.LoadAsset<DomainList>(firstAsset);
                 }
                 catch(System.Exception)
                 {

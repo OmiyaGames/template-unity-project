@@ -298,19 +298,19 @@ namespace OmiyaGames
             return returnDomainList;
         }
 
-        static string[] ConvertToDomainList(AcceptedDomainList domainList)
+        static string[] ConvertToDomainList(DomainList domainList)
         {
             string[] returnDomainList = null;
-            if ((domainList != null) && (domainList.AllDomains != null) && (domainList.AllDomains.Length > 0))
+            if ((domainList != null) && (domainList.Count > 0))
             {
                 // Create a new string array
-                returnDomainList = new string[domainList.AllDomains.Length];
+                returnDomainList = new string[domainList.Count];
 
                 // Copy each element from the domainList
                 for (int index = 0; index < returnDomainList.Length; ++index)
                 {
                     // Trim out any empty spaces in each string
-                    returnDomainList[index] = domainList.AllDomains[index].Trim();
+                    returnDomainList[index] = domainList[index].Trim();
                 }
             }
             return returnDomainList;
