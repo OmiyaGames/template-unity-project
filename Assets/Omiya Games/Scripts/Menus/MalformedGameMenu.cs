@@ -291,7 +291,7 @@ namespace OmiyaGames
                 ++bulletNumber;
                 builder.Append(bulletNumber);
                 builder.AppendLine(") together, the full domain list is as follows:");
-                foreach(string domain in webChecker.AllUniqueDomains)
+                foreach(string domain in webChecker.AllUniqueDomains.Keys)
                 {
                     builder.Append("- ");
                     builder.AppendLine(domain);
