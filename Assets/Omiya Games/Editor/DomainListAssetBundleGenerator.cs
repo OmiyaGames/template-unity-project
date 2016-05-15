@@ -47,9 +47,21 @@ namespace OmiyaGames
         const string CreateScriptableObjectAtFolder = "Assets/";
         const string ManifestFileExtension = ".manifest";
         const string BundleId = "domains";
+        const string HelpMessage = "What is a Domain List Asset?\n\n" +
+            "It's an asset containing a list of domains the WebLocationChecker script uses to" +
+            " check if the domain of the website the WebGL build is running in is an accepted" +
+            " host or not. Since Asset Bundles are serialized, and thus, harder to edit, it " +
+            "creates a more secure method for developers to change the list of approved domains" +
+            " on-the-fly while making it harder for others to change it.";
+        const string TestErrorInvalidFileMessage = "Unable to read file. Is it really an Asset Bundle?";
+        const string TestErrorInvalidAssetMessage = "Was able to read the Asset Bundle, but the asset contained in it was not an AcceptedDomainList object.";
+        const string TestEmptyWarningMessage = "Was able to read the Asset Bundle, but the asset contained in it was not an AcceptedDomainList object.";
+        const string TestInfoMessage = "Asset Bundle contains the following domains:";
 
-        string nameOfFile = BundleId;
-        string nameOfFolder = "Assets/WebGLTemplates/Embedding/TemplateData";
+        string nameOfFile = BundleId, nameOfFolder = "Assets/WebGLTemplates/Embedding/TemplateData", testResult = null;
+        MessageType testResultType = MessageType.None;
+        bool toggleGenerateArea = true, toggleTestArea = false;
+        Object testAsset = null, lastTestAsset = null;
         List<string> allDomains = new List<string> { "localhost", "build.cloud.unity3d.com" };
         ReorderableList allDomainsField = null;
         readonly StringBuilder builder = new StringBuilder();
@@ -65,43 +77,25 @@ namespace OmiyaGames
         void OnGUI()
         {
             // Explain what this dialog does
-            EditorGUILayout.HelpBox("What is a Domain List Asset?\nIt's an asset containing a list of domains the WebLocationChecker script uses to check if the domain of the website the WebGL build is running in is an accepted host or not. Since Asset Bundles are serialized, and thus, harder to edit, it creates a more secure method for developers to change the list of approved domains on-the-fly while making it harder for others to change it.", MessageType.Info);
+            EditorGUILayout.HelpBox(HelpMessage, MessageType.None);
 
-            // Ask the list of layouts
-            allDomainsField.DoLayoutList();
+            // Draw the area for generating domain assets
+            DrawGenerateAssetArea();
 
-            // Ask the path this will generate
-            GUILayout.Label("Name of folder to generate this asset:");
-            nameOfFolder = EditorGUILayout.TextField(nameOfFolder);
+            // Put a space between generated and test area
+            EditorGUILayout.Space();
 
-            // Ask the name of the file this will generate
-            GUILayout.Label("Name of asset to generate:");
-            nameOfFile = EditorGUILayout.TextField(nameOfFile);
-
-            // Create a generate button
-            if (GUILayout.Button("Generate Domain Asset") == true)
-            {
-                // Generate the asset bundle at the Assets folder
-                string pathOfAsset;
-                GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset);
-                GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
-
-                // clean-up the rest of the assets
-                CleanUpFiles(builder, pathOfAsset);
-
-                // Move the asset to the folder designated by the user
-                pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
-                FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
-
-                // Refresh the project window
-                AssetDatabase.Refresh();
-                EditorUtility.FocusProjectWindow();
-                Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
-            }
+            // Draw the area for testing an asset bundle
+            DrawTestAssetArea();
         }
 
         void OnEnable()
         {
+            // Setup toggle
+            toggleGenerateArea = true;
+            toggleTestArea = false;
+
+            // Setup Reordable list
             allDomainsField = new ReorderableList(allDomains, typeof(string), true, true, true, true);
             allDomainsField.drawHeaderCallback = DrawLevelListHeader;
             allDomainsField.drawElementCallback = DrawLevelListElement;
@@ -142,6 +136,116 @@ namespace OmiyaGames
         #endregion
 
         #region Helper Methods
+        void DrawGenerateAssetArea()
+        {
+            // Draw toggle area
+            toggleGenerateArea = EditorGUILayout.BeginToggleGroup("Generate Domain Asset", toggleGenerateArea);
+
+            // Ask the list of layouts
+            allDomainsField.DoLayoutList();
+
+            // Ask the path this will generate
+            GUILayout.Label("Name of folder to generate this asset:");
+            nameOfFolder = EditorGUILayout.TextField(nameOfFolder);
+
+            // Ask the name of the file this will generate
+            GUILayout.Label("Name of asset to generate:");
+            nameOfFile = EditorGUILayout.TextField(nameOfFile);
+
+            // Create a generate button
+            if (GUILayout.Button("Generate Domain Asset") == true)
+            {
+                // Generate the asset bundle at the Assets folder
+                string pathOfAsset;
+                GenerateAcceptedDomainList(builder, CreateScriptableObjectAtFolder, nameOfFile, allDomains.ToArray(), out pathOfAsset);
+                GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
+
+                // clean-up the rest of the assets
+                CleanUpFiles(builder, pathOfAsset);
+
+                // Move the asset to the folder designated by the user
+                pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
+                FileUtil.MoveFileOrDirectory(Path.Combine(CreateScriptableObjectAtFolder, BundleId), pathOfAsset);
+
+                // Refresh the project window
+                AssetDatabase.Refresh();
+                EditorUtility.FocusProjectWindow();
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<AssetBundle>(pathOfAsset);
+            }
+
+            // Close the toggle group
+            EditorGUILayout.EndToggleGroup();
+        }
+
+        void DrawTestAssetArea()
+        {
+            // Draw toggle area
+            toggleGenerateArea = EditorGUILayout.BeginToggleGroup("Generate Domain Asset", toggleGenerateArea);
+
+            // Create a field to set an object
+            testAsset = EditorGUILayout.ObjectField(lastTestAsset, typeof(Object), false);
+            if((testAsset == null) || (testAsset != lastTestAsset))
+            {
+                // Clear results
+                testResult = null;
+                testResultType = MessageType.None;
+            }
+            lastTestAsset = testAsset;
+
+            // Create a generate button
+            if (GUILayout.Button("Test Domain Asset") == true)
+            {
+                TestDomainAsset(testAsset, builder, out testResult, out testResultType);
+            }
+
+            // Print out results, if there are any
+            if(string.IsNullOrEmpty(testResult) == false)
+            {
+                EditorGUILayout.HelpBox(testResult, testResultType);
+            }
+
+            // Close the toggle group
+            EditorGUILayout.EndToggleGroup();
+        }
+
+        static void TestDomainAsset(Object testAsset, StringBuilder builder, out string testResult, out MessageType testResultType)
+        {
+            try
+            {
+                // Load the bundle, and convert it to a domain list
+                AssetBundle bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
+                AcceptedDomainList domainList = bundle.mainAsset as AcceptedDomainList;
+
+                // Check if the bundle contains an AcceptedDomainList
+                if (domainList == null)
+                {
+                    // Indicate the bundle doesn't contain AcceptedDomainList
+                    testResult = TestErrorInvalidAssetMessage;
+                    testResultType = MessageType.Error;
+                }
+                else if ((domainList.AllDomains != null) && (domainList.AllDomains.Length > 0))
+                {
+                    // FIXME: list out all the domains in the list
+                    testResult = "TODO";
+                    testResultType = MessageType.Info;
+                }
+                else
+                {
+                    // Indicate the domain list is empty
+                    testResult = TestEmptyWarningMessage;
+                    testResultType = MessageType.Warning;
+                }
+
+                // Clean-up
+                bundle.Unload(true);
+            }
+            catch (System.Exception)
+            {
+                testResult = TestErrorInvalidFileMessage;
+                testResultType = MessageType.Error;
+            }
+        }
+
         // TODO: consider moving this logic to a separate editor utility script
         static AcceptedDomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
         {
