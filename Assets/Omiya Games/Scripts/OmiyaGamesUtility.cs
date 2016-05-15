@@ -38,7 +38,8 @@ namespace OmiyaGames
     public static class Utility
     {
         public const float SnapToThreshold = 0.01f;
-        public const string ScriptableObjectFileExtension = ".asset";
+        public const string FileExtensionScriptableObject = ".asset";
+        public const string FileExtensionText = ".txt";
 
         /// <summary>
         /// Shuffles the list.
@@ -123,7 +124,7 @@ namespace OmiyaGames
                 for(int index = 0; index < allAssets.Length; ++index)
                 {
                     if((string.IsNullOrEmpty(allAssets[index]) == false) &&
-                        (Path.GetExtension(allAssets[index]) == ScriptableObjectFileExtension) &&
+                        (Path.GetExtension(allAssets[index]) == FileExtensionScriptableObject) &&
                         ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
                     {
                         firstAsset = allAssets[index];
