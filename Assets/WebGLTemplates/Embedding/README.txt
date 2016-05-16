@@ -2,9 +2,9 @@ This folder is a template that is selectable in the Unity WebGL Player settings.
 It's made to be uploadable to any web portals, including Itch.io, GameJolt, Newgrounds, and Kongregate.
 
 If this is an exported folder intended to be zipped for upload, take the following into consideration:
-1) Do not zip the "AcceptedDomains" folder.
+1) Do not zip or upload the "AcceptedDomains" folder.
     It simply contains files used to replace the "TemplateData/domains" or "TemplateData/domains.txt" files.
-2) Do not zip this README.txt, either.
+2) Do not zip or upload this README.txt, either.
 3) If you are not using the WebLocationChecker script, you can delete "TemplateData/domains" and "TemplateData/domains.txt".
     They're not needed.
 4) If you are using WebLocationChecker, and decided on using the asset bundle file, remember to replace the "TemplateData/domains"
