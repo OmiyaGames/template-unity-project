@@ -50,6 +50,7 @@ namespace OmiyaGames
     /// </summary>
     public class WebLocationChecker : ISingletonScript
     {
+        public const string RemoteDomainListHeader = "Remote Domain List";
         public enum State
         {
             NotUsed = -1,
@@ -78,7 +79,7 @@ namespace OmiyaGames
         ///<summary>
         /// [optional] The URL to fetch a list of domains
         ///</summary>
-        [Header("Getting Domain List Remotely")]
+        [Header(RemoteDomainListHeader)]
         [SerializeField]
         [Tooltip("[optional] The URL to fetch a list of domains")]
         string remoteDomainListUrl;
