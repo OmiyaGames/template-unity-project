@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     /// THE SOFTWARE.
     /// </copyright>
-    /// <date>5/14/2016</date>
+    /// <date>5/15/2016</date>
     /// <author>Taro Omiya</author>
     /// <author>andyman</author>
     /// <author>jcx</author>

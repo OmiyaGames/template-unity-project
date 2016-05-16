@@ -113,7 +113,7 @@ namespace OmiyaGames
             allDomainsField.drawHeaderCallback = DrawLevelListHeader;
             allDomainsField.drawElementCallback = DrawLevelListElement;
             allDomainsField.onAddCallback = OnAddDomain;
-            allDomainsField.elementHeight = (EditorGUIUtility.singleLineHeight + (VerticalMargin * 2));
+            allDomainsField.elementHeight = AssetUtility.SingleLineHeight(VerticalMargin);
         }
         #endregion
 
