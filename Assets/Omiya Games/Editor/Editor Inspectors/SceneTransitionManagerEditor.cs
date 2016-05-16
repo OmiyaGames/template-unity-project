@@ -262,7 +262,7 @@ namespace OmiyaGames
 
         void DrawLevelListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            SerializedProperty element = levelList.serializedProperty.GetArrayElementAtIndex(index);
+            SerializedProperty element = levels.GetArrayElementAtIndex(index);
             rect.y += VerticalMargin;
             rect.height = SceneInfoDrawer.GetHeight(false);
             EditorGUI.PropertyField(rect, element, GUIContent.none);

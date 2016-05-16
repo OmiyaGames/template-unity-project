@@ -7,6 +7,11 @@ namespace OmiyaGames
 {
     public static class AssetUtility
     {
+        public static float SingleLineHeight(float verticalMargin)
+        {
+            return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
+        }
+
         public static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset, string bundleId = null)
         {
             DomainList returnAsset = ScriptableObject.CreateInstance<DomainList>();

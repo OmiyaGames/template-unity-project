@@ -50,6 +50,7 @@ namespace OmiyaGames
             objectsToPreloadList = new ReorderableList(serializedObject, objectsToPreload, true, true, true, true);
             objectsToPreloadList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
             objectsToPreloadList.drawElementCallback = DrawObjectsToPreloadListElement;
+            objectsToPreloadList.elementHeight = AssetUtility.SingleLineHeight(VerticalMargin);
         }
 
         public override void OnInspectorGUI()
