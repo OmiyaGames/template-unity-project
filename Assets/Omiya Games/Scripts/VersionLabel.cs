@@ -40,7 +40,6 @@ namespace OmiyaGames
     [RequireComponent(typeof(Text))]
     public class VersionLabel : MonoBehaviour
     {
-        // FIXME: consider adding boolean field options to choose which information to show.
         const string ManifestFileName = "UnityCloudBuildManifest.json";
 
         const string CommitKey = "scmCommitId";
@@ -54,6 +53,13 @@ namespace OmiyaGames
 
         static bool loadedManifest = false;
         static Dictionary<string, object> buildMapping = null;
+
+        [SerializeField]
+        bool displayCommit = false;
+        [SerializeField]
+        bool displayBuildNumber = false;
+        [SerializeField]
+        bool displayUnityVersion = false;
 
         public static Dictionary<string, object> ManifestMapping
         {
@@ -118,21 +124,21 @@ namespace OmiyaGames
             }
         }
 
-        static string GenerateVersionString(Dictionary<string, object> buildMapping)
+        string GenerateVersionString(Dictionary<string, object> buildMapping)
         {
             StringBuilder builder = new StringBuilder();
-            System.Object checkValue = null;
+            object checkValue = null;
 
             // Grab each field
-            if ((buildMapping.TryGetValue(CommitKey, out checkValue) == true) && (checkValue != null))
+            if ((displayCommit == true) && (buildMapping.TryGetValue(CommitKey, out checkValue) == true) && (checkValue != null))
             {
                 AppendInfo(builder, CommitLabel, checkValue);
             }
-            if ((buildMapping.TryGetValue(BuildKey, out checkValue) == true) && (checkValue != null))
+            if ((displayBuildNumber == true) && (buildMapping.TryGetValue(BuildKey, out checkValue) == true) && (checkValue != null))
             {
                 AppendBuildNumber(builder, checkValue);
             }
-            if ((buildMapping.TryGetValue(UnityKey, out checkValue) == true) && (checkValue != null))
+            if ((displayUnityVersion == true) && (buildMapping.TryGetValue(UnityKey, out checkValue) == true) && (checkValue != null))
             {
                 AppendInfo(builder, UnityLabel, checkValue);
             }
