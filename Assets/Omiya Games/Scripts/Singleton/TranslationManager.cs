@@ -207,7 +207,12 @@ namespace OmiyaGames
         {
             get
             {
-                return translationDictionary[key].ToString();
+                string returnString = null;
+                if(translationDictionary.TryGetValue(key, out returnString) == false)
+                {
+                    throw new ArgumentException("The key, \"" + key + "\" was not present in the CSV file.");
+                }
+                return returnString;
             }
         }
 
