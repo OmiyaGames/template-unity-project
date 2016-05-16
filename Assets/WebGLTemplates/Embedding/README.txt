@@ -1,5 +1,5 @@
 This folder is a template that is selectable in the Unity WebGL Player settings.
-It's made to be uploadable to any web portals, including Itch.io, GameJolt, Newgrounds, and Kongregate.
+It's intend to make uploading to web portals -- such as Itch.io, GameJolt, Newgrounds, and Kongregate -- a lot easier.
 
 If this is an exported folder intended to be zipped for upload, take the following into consideration:
 1) Do not zip or upload the "AcceptedDomains" folder.
