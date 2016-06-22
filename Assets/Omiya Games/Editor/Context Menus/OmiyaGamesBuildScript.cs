@@ -150,7 +150,7 @@ namespace OmiyaGames
             else if (Application.platform == RuntimePlatform.WindowsEditor)
             {
                 // If on Windows 8, build a Windows 8 Visual Studio 2012 project
-                PerformWp8Build();
+                PerformWsaBuild();
             }
 
             // Build for the Android platform
@@ -257,12 +257,12 @@ namespace OmiyaGames
         }
 
         /// <summary>
-        /// Function that builds for Windows 8.  Note this function only runs on Windows 8.
+        /// Function that builds for Windows Store.  Note this function only runs on Windows 8.
         /// </summary>
-        [MenuItem("Build/Build For/Windows 8")]
-        public static void PerformWp8Build()
+        [MenuItem("Build/Build For/Windows Store Apps")]
+        public static void PerformWsaBuild()
         {
-            GenericBuild("Windows 8", "", BuildTarget.WP8Player);
+            GenericBuild("Windows Store Apps", "", BuildTarget.WSAPlayer);
         }
 
         /// <summary>
