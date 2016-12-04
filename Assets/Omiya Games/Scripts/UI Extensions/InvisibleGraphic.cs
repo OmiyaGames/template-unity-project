@@ -37,7 +37,7 @@ namespace OmiyaGames
     /// Borrowed code from http://answers.unity3d.com/questions/844524/ugui-how-to-increase-hitzone-click-area-button-rec.html.
     /// </summary>
     [ExecuteInEditMode]
-    public class GuiRectBounds : Graphic
+    public class InvisibleGraphic : Graphic
     {
         protected override void OnPopulateMesh(VertexHelper vh)
         {

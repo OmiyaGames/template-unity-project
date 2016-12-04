@@ -61,6 +61,8 @@ namespace OmiyaGames
         [SerializeField]
         bool displayUnityVersion = false;
 
+        bool showLabel = false;
+
         public static Dictionary<string, object> ManifestMapping
         {
             get
@@ -94,11 +96,20 @@ namespace OmiyaGames
 #endif
             }
         }
+        
+        public bool IsVisible
+        {
+            get
+            
+            {
+                return showLabel;
+            }
+        }
 
         void Start()
         {
             // Setup variables
-            bool showLabel = false;
+            showLabel = false;
             Text label = GetComponent<Text>();
 
             // Check to see if a label and json values are available
