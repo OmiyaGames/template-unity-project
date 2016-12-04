@@ -42,6 +42,109 @@ namespace OmiyaGames
         public const string FileExtensionText = ".txt";
 
         /// <summary>
+        /// Creates a clone of the components <code>GameObject</code>, places it under
+        /// the same parent on the hierarchy, and finally returns the copy of a component
+        /// attached to that clone.
+        /// </summary>
+        /// <typeparam name="T">Component attached to a <code>GameObject</code></typeparam>
+        /// <param name="copyFrom">The component to grab its <code>GameObject</code>.
+        /// This will be used  to clone a new <code>GameObject</code>.</param>
+        /// <param name="setActive">Whether the clone is active or not</param>
+        /// <param name="copyPosition">Whether the clone will be at the same position
+        /// as the original or not</param>
+        /// <param name="copyRotation">Whether the clone will have the same rotation
+        /// as the original or not</param>
+        /// <param name="copyScale">Whether the clone will be scaled the same as the
+        /// original or not</param>
+        /// <returns>A component attached to the new clone</returns>
+        public static T Replicate<T>(T copyFrom, bool setActive = true) where T : Component
+        {
+            // Create a clone
+            GameObject clone = Replicate(copyFrom.gameObject, setActive);
+
+            // Grab its component
+            return clone.GetComponent<T>();
+        }
+
+        /// <summary>
+        /// Creates a clone of the provided <code>GameObject</code> and places it under
+        /// the assigned transform on the hierarchy.
+        /// </summary>
+        /// <typeparam name="T">Component attached to a <code>GameObject</code></typeparam>
+        /// <param name="copyFrom">The component to grab its <code>GameObject</code>.
+        /// <param name="attachTo">The <code>Transform</code> to make the clone a child of.
+        /// <code>null</code> will place the clone at the hierarchy's root.</param>
+        /// <param name="setActive">Whether the clone is active or not</param>
+        /// <param name="copyLocalPosition">Whether the clone will be at the same position
+        /// as the original or not</param>
+        /// <param name="copyLocalRotation">Whether the clone will have the same rotation
+        /// as the original or not</param>
+        /// <param name="copyLocalScale">Whether the clone will be scaled the same as the
+        /// original or not</param>
+        /// <returns>A component attached to the new clone</returns>
+        public static T Replicate<T>(T copyFrom, Transform attachTo, bool setActive = true, bool copyLocalPosition = true, bool copyLocalRotation = true, bool copyLocalScale = true) where T : Component
+        {
+            // Create a clone
+            GameObject clone = Replicate(copyFrom.gameObject, copyFrom.transform.parent, setActive, copyLocalPosition, copyLocalRotation, copyLocalScale);
+
+            // Grab its component
+            return clone.GetComponent<T>();
+        }
+
+        /// <summary>
+        /// Creates a clone of the provided <code>GameObject</code> and places it under
+        /// the same parent on the hierarchy.
+        /// </summary>
+        /// <param name="copyFrom">The <code>GameObject</code> to clone off of.</param>
+        /// <param name="setActive">Whether the clone is active or not</param>
+        /// <returns>A clone of <code>GameObject</code></returns>
+        public static GameObject Replicate(GameObject copyFrom, bool setActive = true)
+        {
+            return Replicate(copyFrom, copyFrom.transform.parent, setActive, true, true, true);
+        }
+
+        /// <summary>
+        /// Creates a clone of the provided <code>GameObject</code> and places it under
+        /// the assigned transform on the hierarchy.
+        /// </summary>
+        /// <param name="copyFrom">The <code>GameObject</code> to clone off of.</param>
+        /// <param name="attachTo">The <code>Transform</code> to make the clone a child of.
+        /// <code>null</code> will place the clone at the hierarchy's root.</param>
+        /// <param name="setActive">Whether the clone is active or not</param>
+        /// <param name="copyLocalPosition">Whether the clone will be at the same position
+        /// as the original or not</param>
+        /// <param name="copyLocalRotation">Whether the clone will have the same rotation
+        /// as the original or not</param>
+        /// <param name="copyLocalScale">Whether the clone will be scaled the same as the
+        /// original or not</param>
+        /// <returns>A clone of <code>GameObject</code></returns>
+        public static GameObject Replicate(GameObject copyFrom, Transform attachTo, bool setActive = true, bool copyLocalPosition = true, bool copyLocalRotation = true, bool copyLocalScale = true)
+        {
+            // Create a clone
+            GameObject clone = MonoBehaviour.Instantiate<GameObject>(copyFrom);
+
+            // Setup its transform
+            clone.transform.SetParent(attachTo, true);
+            clone.transform.SetAsLastSibling();
+
+            // Setup it's dimensions
+            clone.SetActive(setActive);
+            if (copyLocalPosition == true)
+            {
+                clone.transform.localPosition = copyFrom.transform.localPosition;
+            }
+            if (copyLocalRotation == true)
+            {
+                clone.transform.localRotation = copyFrom.transform.localRotation;
+            }
+            if (copyLocalScale == true)
+            {
+                clone.transform.localScale = copyFrom.transform.localScale;
+            }
+            return clone;
+        }
+
+        /// <summary>
         /// Shuffles the list.
         /// </summary>
         /// <param name="list">The list to shuffle.</param>

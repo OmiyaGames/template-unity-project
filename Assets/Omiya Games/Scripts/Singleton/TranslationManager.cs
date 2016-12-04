@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -48,8 +47,12 @@ namespace OmiyaGames
     /// 2015/07/03  Taro   Retrieving language from GameSettings
     /// </remarks>
     /// <seealso cref="Singleton"/>
+    [DisallowMultipleComponent]
     public class TranslationManager : ISingletonScript
     {
+        public delegate void LanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage);
+        public event LanguageChanged OnAfterLanguageChanged;
+
         [System.Serializable]
         public struct LanguageMap
         {
@@ -197,7 +200,7 @@ namespace OmiyaGames
                 }
                 else
                 {
-                    Debug.LogWarning("No file found for CSVLanguageParser");
+                    Debug.LogWarning("No file found for TranslationManager");
                 }
             }
         }
@@ -210,7 +213,7 @@ namespace OmiyaGames
                 string returnString = null;
                 if(translationDictionary.TryGetValue(key, out returnString) == false)
                 {
-                    throw new ArgumentException("The key, \"" + key + "\" was not present in the CSV file.");
+                    throw new System.ArgumentException("The key, \"" + key + "\" was not present in the CSV file.");
                 }
                 return returnString;
             }
@@ -264,6 +267,7 @@ namespace OmiyaGames
                     if (supportedLanguages.Contains(value) == true)
                     {
                         // Set the language
+                        string lastLanguage = currentLanguage;
                         currentLanguage = value;
 
                         // Parse the file
@@ -271,6 +275,12 @@ namespace OmiyaGames
 
                         // Update settings
                         Singleton.Get<GameSettings>().Language = currentLanguage;
+
+                        // Call the event that the langauge changed
+                        if(OnAfterLanguageChanged != null)
+                        {
+                            OnAfterLanguageChanged(this, lastLanguage, currentLanguage);
+                        }
                     }
                     else
                     {

@@ -65,6 +65,14 @@ namespace OmiyaGames
         int index = 0;
 
         #region Properties
+        public AudioMixer Mixer
+        {
+            get
+            {
+                return mixer;
+            }
+        }
+
         public float MuteVolumeDb
         {
             get
@@ -282,6 +290,16 @@ namespace OmiyaGames
         }
 
         #region Helper Methods
+        public float DecibelsToNormalized(float decibels)
+        {
+            return Mathf.InverseLerp(MuteVolumeDb, 0f, decibels);
+        }
+
+        public float NormalizedToDecibels(float normalized)
+        {
+            return Mathf.Lerp(MuteVolumeDb, 0f, normalized);
+        }
+
         void SetupVolumeAndMute(GameSettings settings)
         {
             // Check if the background music was muted
@@ -311,13 +329,16 @@ namespace OmiyaGames
 
         void OnPauseChanged(TimeManager pauseCheck)
         {
-            if (pauseCheck.IsManuallyPaused == true)
+            if (string.IsNullOrEmpty(musicDuckField) == false)
             {
-                mixer.SetFloat(musicDuckField, 0f);
-            }
-            else
-            {
-                mixer.SetFloat(musicDuckField, MuteVolumeDb);
+                if (pauseCheck.IsManuallyPaused == true)
+                {
+                    mixer.SetFloat(musicDuckField, 0f);
+                }
+                else
+                {
+                    mixer.SetFloat(musicDuckField, MuteVolumeDb);
+                }
             }
         }
         #endregion

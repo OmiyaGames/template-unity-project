@@ -29,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>4/15/2016</date>
+    /// <date>9/22/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Any GameObject with this script will not be destroyed when switching between
@@ -39,6 +39,14 @@ namespace OmiyaGames
     /// <seealso cref="ISingletonScript"/>
     public class Singleton : MonoBehaviour
     {
+        public enum GenuineStatus
+        {
+            Unchecked = -1,
+            IsGenuine = 0,
+            NotGenuine,
+            VerificationNotSupported
+        }
+
         private static Singleton msInstance = null;
         private readonly Dictionary<Type, Component> mCacheRetrievedComponent = new Dictionary<Type, Component>();
 
@@ -47,13 +55,19 @@ namespace OmiyaGames
 
         ISingletonScript[] allSingletonScriptsCache = null;
 
+        [Header("Simulation")]
         [SerializeField]
         bool simulateMalformedGame = false;
-
 #if UNITY_EDITOR
         [SerializeField]
         bool simulateWebplayer = false;
 #endif
+
+        [Header("Store Information")]
+        [SerializeField]
+        PlatformSpecificLink storeUrls;
+
+        GenuineStatus genuineStatus = GenuineStatus.Unchecked;
 
         public static Singleton Instance
         {
@@ -115,6 +129,60 @@ namespace OmiyaGames
 #endif
                 // Check if simulation checkbox is checked
                 return returnFlag;
+            }
+        }
+
+        public string PlatformSpecificStoreLink
+        {
+            get
+            {
+                return storeUrls.PlatformLink;
+            }
+        }
+
+        public string WebsiteLink
+        {
+            get
+            {
+                return storeUrls.WebLink;
+            }
+        }
+
+        public string GetStoreLink(PlatformSpecificLink.SupportedPlatforms platform)
+        {
+            return storeUrls.GetPlatformLink(platform);
+        }
+
+        public GenuineStatus CheckGenuine
+        {
+            get
+            {
+                if (genuineStatus == GenuineStatus.Unchecked)
+                {
+                    // We'll be using Unity's own method of checking piracy for now
+                    genuineStatus = GenuineStatus.VerificationNotSupported;
+
+                    // Make sure the check is available
+                    if (Application.genuineCheckAvailable == true)
+                    {
+                        genuineStatus = GenuineStatus.NotGenuine;
+
+                        // Make sure this copy is genuine
+                        if (Application.genuine == true)
+                        {
+                            genuineStatus = GenuineStatus.IsGenuine;
+                        }
+                    }
+                }
+                return genuineStatus;
+            }
+        }
+
+        public bool IsPiracyDetected
+        {
+            get
+            {
+                return (CheckGenuine == GenuineStatus.NotGenuine);
             }
         }
 
