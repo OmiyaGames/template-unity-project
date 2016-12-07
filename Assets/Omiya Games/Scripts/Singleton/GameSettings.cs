@@ -48,108 +48,9 @@ namespace OmiyaGames
             Replaying
         }
 
-        /// <summary>
-        /// Stores high score information
-        /// </summary>
-        /// <seealso cref="GameSettings"/>
-        public struct HighScore
-        {
-            const char Divider = ',';
-
-            public readonly int score;
-            public readonly int appVersion;
-            public readonly string name;
-            public readonly DateTime dateAchievedUtc;
-
-            internal HighScore(int score, string name)
-            {
-                // Setup all the member variables
-                this.score = score;
-                this.appVersion = AppVersion;
-                this.dateAchievedUtc = DateTime.UtcNow;
-
-                // Record name (don't allow null)
-                if(string.IsNullOrEmpty(name) == false)
-                {
-                    this.name = name;
-                }
-                else
-                {
-                    this.name = string.Empty;
-                }
-            }
-
-            internal HighScore(string pastRecord)
-            {
-                if(string.IsNullOrEmpty(pastRecord) == true)
-                {
-                    throw new ArgumentNullException("pastRecord must be provided");
-                }
-
-                // Split the information
-                string[] info = pastRecord.Split(Divider);
-                if ((info == null) || (info.Length <= 0))
-                {
-                    throw new ArgumentException("Could not parse pastRecord: " + pastRecord);
-                }
-
-                // Grab app version
-                byte index = 0;
-                if(int.TryParse(info[index], out appVersion) == false)
-                {
-                    throw new ArgumentException("Could not parse the version number from pastRecord: " + pastRecord);
-                }
-
-                // TODO: decrypt the rest of the information based on app version
-                // Grab score
-                ++index;
-                if(int.TryParse(info[index], out score) == false)
-                {
-                    throw new ArgumentException("Could not parse the score from pastRecord: " + pastRecord);
-                }
-
-                // Grab name
-                ++index;
-                name = info[index];
-
-                // Grab time
-                long ticks;
-                ++index;
-                if (long.TryParse(info[index], out ticks) == true)
-                {
-                    dateAchievedUtc = new DateTime(ticks);
-                }
-                else
-                {
-                    throw new ArgumentException("Could not parse the date from pastRecord: " + pastRecord);
-                }
-            }
-
-            public string GetRecord(StringBuilder builder)
-            {
-                // Create a record out of this information
-                builder.Length = 0;
-
-                // TODO: check the app version before recording everything else
-                // Add app version
-                builder.Append(appVersion);
-                builder.Append(Divider);
-
-                // Add score
-                builder.Append(score);
-                builder.Append(Divider);
-
-                // Add name
-                builder.Append(name);
-                builder.Append(Divider);
-
-                // Add date of record in UTC
-                builder.Append(dateAchievedUtc.Ticks);
-
-                // Store this achievement as a string record
-                return builder.ToString();
-            }
-        }
+        public event Action<GameSettings> OnRetrieveSettings;
+        public event Action<GameSettings> OnSaveSettings;
+        public event Action<GameSettings> OnClearSettings;
 
         /// <summary>
         /// The app version.  Must be positive.
@@ -157,7 +58,10 @@ namespace OmiyaGames
         /// Useful for backwards compatibility.
         /// </summary>
         public const int AppVersion = 0;
+        public const string VersionKey = "AppVersion";
+        AppStatus status = AppStatus.Replaying;
 
+        #region Version 0 Settings Consts
         public const int DefaultNumLevelsUnlocked = 1;
         public const int LocalHighScoresMaxListSize = 10;
         const char ScoreDivider = '\n';
@@ -167,7 +71,6 @@ namespace OmiyaGames
         public const string DefaultLanguage = "";
         public const int DefaultBestScore = 0;
 
-        public const string VersionKey = "AppVersion";
         public const string NumLevelsUnlockedKey = "Number of Unlocked Levels";
         public const string MusicVolumeKey = "Music Volume";
         public const string MusicMutedKey = "Music Muted";
@@ -176,19 +79,27 @@ namespace OmiyaGames
         public const string LanguageKey = "Language";
         public const string LocalHighScoresKey = "Local High Scores";
         public const string LeaderboardUserScopeKey = "Leaderboard User Scope";
+        public const string NumberOfTimesAppOpenedKey = "Number of Times App Open";
+        public const string TotalPlayTimeKey = "Total Play Time";
+        #endregion
 
+        #region Version 0 Settings Member Variables
         readonly StringBuilder listEntryBuilder = new StringBuilder(),
             fullListBuilder = new StringBuilder();
         readonly List<HighScore> bestScores = new List<HighScore>(LocalHighScoresMaxListSize);
         int numLevelsUnlocked = 1;
-        float musicVolume = 0, soundVolume = 0;
-        bool musicMuted = false, soundMuted = false;
-        AppStatus status = AppStatus.Replaying;
+        float musicVolume = 0;
+        float soundVolume = 0;
+        bool musicMuted = false;
+        bool soundMuted = false;
         string language = DefaultLanguage;
         UserScope leaderboardUserScope;
         Comparison<int> sortScoresBy = null;
+        DateTime lastTimeOpen;
+        TimeSpan lastPlayTime = TimeSpan.Zero;
+        int numberOfTimesAppOpened = 0;
+        #endregion
 
-        #region Properties
         public static UserScope DefaultLeaderboardUserScope
         {
             get
@@ -209,6 +120,7 @@ namespace OmiyaGames
             }
         }
 
+        #region Version 0 Settings Properties
         public int NumLevelsUnlocked
         {
             get
@@ -295,7 +207,7 @@ namespace OmiyaGames
             }
             set
             {
-                if(leaderboardUserScope != value)
+                if (leaderboardUserScope != value)
                 {
                     leaderboardUserScope = value;
                     PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
@@ -308,7 +220,7 @@ namespace OmiyaGames
             get
             {
                 int returnScore = DefaultBestScore;
-                if(bestScores.Count > 0)
+                if (bestScores.Count > 0)
                 {
                     returnScore = bestScores[0].score;
                 }
@@ -331,18 +243,42 @@ namespace OmiyaGames
         {
             get
             {
-                if(sortScoresBy == null)
+                if (sortScoresBy == null)
                 {
-                    sortScoresBy = new Comparison<int>(DescendingOrder);
+                    sortScoresBy = (int left, int right) => { return (left - right); };
                 }
                 return sortScoresBy;
             }
             set
             {
-                if((value != null) && (sortScoresBy != value))
+                if ((value != null) && (sortScoresBy != value))
                 {
                     sortScoresBy = value;
                 }
+            }
+        }
+
+        public int NumberOfTimesAppOpened
+        {
+            get
+            {
+                return numberOfTimesAppOpened;
+            }
+            private set
+            {
+                if (numberOfTimesAppOpened != value)
+                {
+                    numberOfTimesAppOpened = value;
+                    PlayerPrefs.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
+                }
+            }
+        }
+
+        public TimeSpan TotalPlayTime
+        {
+            get
+            {
+                return lastPlayTime.Add(DateTime.UtcNow - lastTimeOpen);
             }
         }
         #endregion
@@ -357,25 +293,23 @@ namespace OmiyaGames
             PlayerPrefs.SetInt(key, (setValue ? 1 : 0));
         }
 
-        /*
         public static ENUM GetEnum<ENUM>(string key, ENUM defaultValue) where ENUM : struct, IConvertible
         {
-            if (!typeof(ENUM).IsEnum) 
+            if (!typeof(ENUM).IsEnum)
             {
                 throw new NotSupportedException("T must be an enum");
             }
-            return (ENUM)PlayerPrefs.GetInt(key, defaultValue.ToInt32(System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
+            return (ENUM)(object)PlayerPrefs.GetInt(key, defaultValue.ToInt32(System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
         }
 
         public static void SetEnum<ENUM>(string key, ENUM setValue) where ENUM : struct, IConvertible
         {
-            if (!typeof(ENUM).IsEnum) 
+            if (!typeof(ENUM).IsEnum)
             {
                 throw new NotSupportedException("T must be an enum");
             }
             PlayerPrefs.SetInt(key, setValue.ToInt32(System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
         }
-        */
 
         #region Singleton Overrides
         public override void SingletonAwake(Singleton instance)
@@ -396,112 +330,19 @@ namespace OmiyaGames
         }
         #endregion
 
-        public virtual void RetrieveFromSettings()
+        public void RetrieveFromSettings()
         {
-            // Grab the the app version
-            string tempString;
-            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
-
-            // Update the app status
-            status = AppStatus.Replaying;
-            if (currentVersion < 0)
-            {
-                status = AppStatus.FirstTimeOpened;
-            }
-            else if (currentVersion < AppVersion)
-            {
-                status = AppStatus.RecentlyUpdated;
-            }
-
-            // Set the version
-            PlayerPrefs.SetInt(VersionKey, AppVersion);
-
-            // Grab the number of levels unlocked
-            numLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
-
-            // Grab the music settings
-            musicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, DefaultMusicVolume);
-            musicMuted = GetBool(MusicMutedKey, false);
-
-            // Grab the sound settings
-            soundVolume = PlayerPrefs.GetFloat(SoundVolumeKey, DefaultSoundVolume);
-            soundMuted = GetBool(SoundMutedKey, false);
-
-            // Grab the language
-            language = PlayerPrefs.GetString(LanguageKey, DefaultLanguage);
-
-            // Grab leaderboard user scope
-            leaderboardUserScope = (UserScope)PlayerPrefs.GetInt(LeaderboardUserScopeKey, (int)DefaultLeaderboardUserScope);
-
-            // Grab the best score
-            tempString = PlayerPrefs.GetString(LocalHighScoresKey, null);
-            bestScores.Clear();
-            if (string.IsNullOrEmpty(tempString) == false)
-            {
-                RetrieveHighScores(tempString);
-            }
-
-            // NOTE: Feel free to add more stuff here
+            RetrieveFromSettings(true);
         }
 
-        public virtual void SaveSettings()
+        public void SaveSettings()
         {
-            // Save the number of levels unlocked
-            PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
-
-            // Save the music settings
-            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
-            SetBool(MusicMutedKey, musicMuted);
-
-            // Save the sound settings
-            PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
-            SetBool(SoundMutedKey, soundMuted);
-
-            // Set the language
-            PlayerPrefs.SetString(LanguageKey, language);
-
-            // Set leaderboard's user scope variable
-            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
-
-            // Set the best score
-            PlayerPrefs.SetString(LocalHighScoresKey, GenerateHighScoresString());
-
-            // NOTE: Feel free to add more stuff here
-
-            // Save the preferences
-            PlayerPrefs.Save();
+            SaveSettings(true);
         }
 
-        public virtual void ClearSettings()
+        public void ClearSettings()
         {
-            // Grab the the app version
-            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
-
-            // Delete all stored preferences
-            PlayerPrefs.DeleteAll();
-
-			// Store settings that are part of options.
-			// Since member variables are unchanged up to this point, we can re-use them here.
-
-            // Set the version
-			PlayerPrefs.SetInt(VersionKey, currentVersion);
-
-            // Save the music settings
-            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
-            SetBool(MusicMutedKey, musicMuted);
-            
-            // Save the sound settings
-            PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
-            SetBool(SoundMutedKey, soundMuted);
-
-            // Set leaderboard's user scope variable
-            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
-
-            // Set the language
-            PlayerPrefs.SetString(LanguageKey, language);
-
-			// Reset all other member variables
-            RetrieveFromSettings();
+            ClearSettings(true);
         }
 
         /// <summary>
@@ -547,10 +388,165 @@ namespace OmiyaGames
             return returnRank;
         }
 
-        #region Helper Methods
-        int DescendingOrder(int left, int right)
+        #region Virtual Methods
+        protected virtual void RetrieveFromSettings(bool runEvent)
         {
-            return (left - right);
+            // Grab the the app version
+            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+
+            // Update the app status
+            status = AppStatus.Replaying;
+            if (currentVersion < 0)
+            {
+                status = AppStatus.FirstTimeOpened;
+            }
+            else if (currentVersion < AppVersion)
+            {
+                status = AppStatus.RecentlyUpdated;
+            }
+
+            // Set the version
+            PlayerPrefs.SetInt(VersionKey, AppVersion);
+            PlayerPrefs.Save();
+
+            // NOTE: Feel free to add more stuff here
+            RetrieveVersion0Settings();
+
+            // Run events
+            if ((runEvent == true) && (OnRetrieveSettings != null))
+            {
+                OnRetrieveSettings(this);
+            }
+        }
+
+        protected virtual void SaveSettings(bool runEvent)
+        {
+            // NOTE: Feel free to add more stuff here
+            SaveVersion0Settings();
+
+            // Save the preferences
+            PlayerPrefs.Save();
+
+            // Run events
+            if ((runEvent == true) && (OnSaveSettings != null))
+            {
+                OnSaveSettings(this);
+            }
+        }
+
+        protected virtual void ClearSettings(bool runEvent)
+        {
+            // Grab the the app version
+            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+
+            // Delete all stored preferences
+            PlayerPrefs.DeleteAll();
+
+            // Store settings that are part of options.
+            // Since member variables are unchanged up to this point, we can re-use them here.
+
+            // Set the version
+            PlayerPrefs.SetInt(VersionKey, currentVersion);
+            RevertVersion0SettingsClearedSettings();
+
+            // Reset all other member variables
+            RetrieveFromSettings(false);
+
+            // Run events
+            if ((runEvent == true) && (OnClearSettings != null))
+            {
+                OnClearSettings(this);
+            }
+        }
+        #endregion
+
+        #region Version 0 Settings Methods
+        void RetrieveVersion0Settings()
+        {
+            // Grab the number of levels unlocked
+            numLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
+
+            // Grab the music settings
+            musicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, DefaultMusicVolume);
+            musicMuted = GetBool(MusicMutedKey, false);
+
+            // Grab the sound settings
+            soundVolume = PlayerPrefs.GetFloat(SoundVolumeKey, DefaultSoundVolume);
+            soundMuted = GetBool(SoundMutedKey, false);
+
+            // Grab the language
+            language = PlayerPrefs.GetString(LanguageKey, DefaultLanguage);
+
+            // Grab leaderboard user scope
+            leaderboardUserScope = (UserScope)PlayerPrefs.GetInt(LeaderboardUserScopeKey, (int)DefaultLeaderboardUserScope);
+
+            // Grab number of plays
+            numberOfTimesAppOpened = PlayerPrefs.GetInt(NumberOfTimesAppOpenedKey, 0);
+
+            // Grab the best score
+            string tempString = PlayerPrefs.GetString(LocalHighScoresKey, null);
+            bestScores.Clear();
+            if (string.IsNullOrEmpty(tempString) == false)
+            {
+                RetrieveHighScores(tempString);
+            }
+
+            // Grab how long we've played this game
+            long numberOfTicks;
+            lastPlayTime = TimeSpan.Zero;
+            tempString = PlayerPrefs.GetString(TotalPlayTimeKey, null);
+            if ((string.IsNullOrEmpty(tempString) == false) && (long.TryParse(tempString, out numberOfTicks) == true))
+            {
+                lastPlayTime = new TimeSpan(numberOfTicks);
+            }
+        }
+
+        void SaveVersion0Settings()
+        {
+            // Save the number of levels unlocked
+            PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
+
+            // Save the music settings
+            PlayerPrefs.SetFloat(MusicVolumeKey, MusicVolume);
+            SetBool(MusicMutedKey, IsMusicMuted);
+
+            // Save the sound settings
+            PlayerPrefs.SetFloat(SoundVolumeKey, SoundVolume);
+            SetBool(SoundMutedKey, IsSoundMuted);
+
+            // Set the language
+            PlayerPrefs.SetString(LanguageKey, Language);
+
+            // Set leaderboard's user scope variable
+            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)LeaderboardUserScope);
+
+            // Set the best score
+            PlayerPrefs.SetString(LocalHighScoresKey, GenerateHighScoresString());
+
+            // Set number of plays variables
+            PlayerPrefs.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
+
+            // Set the play time
+            lastPlayTime = TotalPlayTime;
+            PlayerPrefs.SetString(TotalPlayTimeKey, lastPlayTime.Ticks.ToString());
+            lastTimeOpen = DateTime.UtcNow;
+        }
+
+        void RevertVersion0SettingsClearedSettings()
+        {
+            // Save the music settings
+            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
+            SetBool(MusicMutedKey, musicMuted);
+
+            // Save the sound settings
+            PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
+            SetBool(SoundMutedKey, soundMuted);
+
+            // Set leaderboard's user scope variable
+            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
+
+            // Set the language
+            PlayerPrefs.SetString(LanguageKey, language);
         }
 
         void RetrieveHighScores(string highScoresString)
@@ -579,7 +575,7 @@ namespace OmiyaGames
                 {
                     fullListBuilder.Append(ScoreDivider);
                 }
-                fullListBuilder.Append(bestScores[i].GetRecord(listEntryBuilder));
+                fullListBuilder.Append(bestScores[i].ToString());
             }
             return fullListBuilder.ToString();
         }
