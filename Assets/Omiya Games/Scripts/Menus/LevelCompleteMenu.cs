@@ -50,12 +50,28 @@ namespace OmiyaGames
             }
         }
 
+        public SceneTransitionManager TransitionManager
+        {
+            get
+            {
+                return Singleton.Get<SceneTransitionManager>();
+            }
+        }
+
+        public GameSettings Settings
+        {
+            get
+            {
+                return Singleton.Get<GameSettings>();
+            }
+        }
+
         protected override void Start()
         {
             base.Start();
 
             // Check if we need to disable the next level button
-            if ((defaultButton != null) && (Singleton.Get<SceneTransitionManager>().NextScene == null))
+            if ((defaultButton != null) && (TransitionManager.NextScene == null))
             {
                 defaultButton.interactable = false;
             }
@@ -69,17 +85,19 @@ namespace OmiyaGames
             // Check if we need to unlock the next level
             if (unlockNextLevel == true)
             {
-                SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
-                GameSettings settings = Singleton.Get<GameSettings>();
-                if (Singleton.Get<SceneTransitionManager>().NextScene != null)
+                // Check which level to unlock
+                int nextLevelUnlocked = TransitionManager.CurrentScene.Ordinal;
+                if (TransitionManager.NextScene != null)
                 {
                     // Unlock the next level
-                    settings.NumLevelsUnlocked = manager.CurrentScene.Ordinal + 1;
+                    nextLevelUnlocked += 1;
                 }
-                else
+
+                // Check if this level hasn't been unlocked already
+                if (nextLevelUnlocked > Settings.NumLevelsUnlocked)
                 {
-                    // Unlock this level (last one)
-                    settings.NumLevelsUnlocked = manager.CurrentScene.Ordinal;
+                    // Unlock this level
+                    Settings.NumLevelsUnlocked = nextLevelUnlocked;
                 }
             }
         }
@@ -89,7 +107,7 @@ namespace OmiyaGames
             Hide();
 
             // Transition to the current level
-            Singleton.Get<SceneTransitionManager>().LoadNextLevel();
+            TransitionManager.LoadNextLevel();
 
             // Indicate the button was clicked
             Manager.ButtonClick.Play();
