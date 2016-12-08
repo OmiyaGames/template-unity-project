@@ -361,11 +361,11 @@ namespace OmiyaGames
         [Tooltip("ID for iOS and Mac devices")]
         string AppleGameCenter;
         [SerializeField]
-        [Tooltip("ID for Android devices")]
+        [Tooltip("ID for Android devices (requires GOOGLE_PLAY_GAMES macro defined)")]
         string GooglePlayGames;
         //// TODO: add support for Amazon
         //[SerializeField]
-        //[Tooltip("ID for Amazon devices (requires AMAZON macro defined)")]
+        //[Tooltip("ID for Amazon devices (requires AMAZON_GAME_CIRCLE macro defined)")]
         //string AmazonGameCircle;
         //// TODO: add support for Xbox Live
         //[SerializeField]
