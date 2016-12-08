@@ -29,7 +29,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>12/7/2015</date>
+    /// <date>12/8/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// An implementation of <code>ISettings</code> using <code>PlayerPrefs</code>.
