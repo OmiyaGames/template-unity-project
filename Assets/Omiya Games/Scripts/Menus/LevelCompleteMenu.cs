@@ -27,7 +27,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>12/8/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Menu indicating you've completed a level. You can retrieve this menu from

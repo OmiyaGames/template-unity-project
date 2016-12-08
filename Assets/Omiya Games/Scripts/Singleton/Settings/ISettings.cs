@@ -27,7 +27,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>12/7/2015</date>
+    /// <date>12/8/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// An interface for storing settings. Useful for indicating where a game's settings should be saved.

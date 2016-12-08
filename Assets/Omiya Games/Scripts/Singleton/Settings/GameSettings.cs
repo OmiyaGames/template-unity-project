@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
+    /// <date>12/8/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script to retrieve settings stored in <code>PlayerPrefs</code>.
