@@ -1,8 +1,8 @@
-using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace OmiyaGames
 {
@@ -59,6 +59,7 @@ namespace OmiyaGames
         /// </summary>
         public const int AppVersion = 0;
         public const string VersionKey = "AppVersion";
+        public static readonly ISettings DefaultSettings = new PlayerPrefsSettings();
         AppStatus status = AppStatus.Replaying;
 
         #region Version 0 Settings Consts
@@ -84,8 +85,8 @@ namespace OmiyaGames
         #endregion
 
         #region Version 0 Settings Member Variables
-        readonly StringBuilder listEntryBuilder = new StringBuilder(),
-            fullListBuilder = new StringBuilder();
+        readonly StringBuilder listEntryBuilder = new StringBuilder();
+        readonly StringBuilder fullListBuilder = new StringBuilder();
         readonly List<HighScore> bestScores = new List<HighScore>(LocalHighScoresMaxListSize);
         int numLevelsUnlocked = 1;
         float musicVolume = 0;
@@ -120,6 +121,14 @@ namespace OmiyaGames
             }
         }
 
+        public virtual ISettings Settings
+        {
+            get
+            {
+                return DefaultSettings;
+            }
+        }
+
         #region Version 0 Settings Properties
         public int NumLevelsUnlocked
         {
@@ -130,7 +139,7 @@ namespace OmiyaGames
             set
             {
                 numLevelsUnlocked = value;
-                PlayerPrefs.SetInt(NumLevelsUnlockedKey, numLevelsUnlocked);
+                Settings.SetInt(NumLevelsUnlockedKey, numLevelsUnlocked);
             }
         }
 
@@ -143,7 +152,7 @@ namespace OmiyaGames
             internal set
             {
                 musicVolume = value;
-                PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
+                Settings.SetFloat(MusicVolumeKey, musicVolume);
             }
         }
 
@@ -156,7 +165,7 @@ namespace OmiyaGames
             internal set
             {
                 musicMuted = value;
-                SetBool(MusicMutedKey, musicMuted);
+                Settings.SetBool(MusicMutedKey, musicMuted);
             }
         }
 
@@ -169,7 +178,7 @@ namespace OmiyaGames
             internal set
             {
                 soundVolume = value;
-                PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
+                Settings.SetFloat(SoundVolumeKey, soundVolume);
             }
         }
 
@@ -182,7 +191,7 @@ namespace OmiyaGames
             internal set
             {
                 soundMuted = value;
-                SetBool(SoundMutedKey, soundMuted);
+                Settings.SetBool(SoundMutedKey, soundMuted);
             }
         }
 
@@ -195,7 +204,7 @@ namespace OmiyaGames
             internal set
             {
                 language = value;
-                PlayerPrefs.SetString(LanguageKey, language);
+                Settings.SetString(LanguageKey, language);
             }
         }
 
@@ -210,7 +219,7 @@ namespace OmiyaGames
                 if (leaderboardUserScope != value)
                 {
                     leaderboardUserScope = value;
-                    PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
+                    Settings.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
                 }
             }
         }
@@ -228,7 +237,7 @@ namespace OmiyaGames
             }
         }
 
-        public System.Collections.ObjectModel.ReadOnlyCollection<HighScore> HighScores
+        public ReadOnlyCollection<HighScore> HighScores
         {
             get
             {
@@ -269,7 +278,7 @@ namespace OmiyaGames
                 if (numberOfTimesAppOpened != value)
                 {
                     numberOfTimesAppOpened = value;
-                    PlayerPrefs.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
+                    Settings.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
                 }
             }
         }
@@ -282,34 +291,6 @@ namespace OmiyaGames
             }
         }
         #endregion
-
-        public static bool GetBool(string key, bool defaultValue)
-        {
-            return (PlayerPrefs.GetInt(key, (defaultValue ? 1 : 0)) != 0);
-        }
-
-        public static void SetBool(string key, bool setValue)
-        {
-            PlayerPrefs.SetInt(key, (setValue ? 1 : 0));
-        }
-
-        public static ENUM GetEnum<ENUM>(string key, ENUM defaultValue) where ENUM : struct, IConvertible
-        {
-            if (!typeof(ENUM).IsEnum)
-            {
-                throw new NotSupportedException("T must be an enum");
-            }
-            return (ENUM)(object)PlayerPrefs.GetInt(key, defaultValue.ToInt32(System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
-        }
-
-        public static void SetEnum<ENUM>(string key, ENUM setValue) where ENUM : struct, IConvertible
-        {
-            if (!typeof(ENUM).IsEnum)
-            {
-                throw new NotSupportedException("T must be an enum");
-            }
-            PlayerPrefs.SetInt(key, setValue.ToInt32(System.Globalization.CultureInfo.InvariantCulture.NumberFormat));
-        }
 
         #region Singleton Overrides
         public override void SingletonAwake(Singleton instance)
@@ -383,7 +364,7 @@ namespace OmiyaGames
                 bestScores.Insert(returnRank, new HighScore(newScore, name));
 
                 // Save this information
-                PlayerPrefs.SetString(LocalHighScoresKey, GenerateHighScoresString());
+                Settings.SetString(LocalHighScoresKey, GenerateHighScoresString());
             }
             return returnRank;
         }
@@ -392,7 +373,7 @@ namespace OmiyaGames
         protected virtual void RetrieveFromSettings(bool runEvent)
         {
             // Grab the the app version
-            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+            int currentVersion = Settings.GetInt(VersionKey, -1);
 
             // Update the app status
             status = AppStatus.Replaying;
@@ -406,8 +387,8 @@ namespace OmiyaGames
             }
 
             // Set the version
-            PlayerPrefs.SetInt(VersionKey, AppVersion);
-            PlayerPrefs.Save();
+            Settings.SetInt(VersionKey, AppVersion);
+            Settings.Save();
 
             // NOTE: Feel free to add more stuff here
             RetrieveVersion0Settings();
@@ -425,7 +406,7 @@ namespace OmiyaGames
             SaveVersion0Settings();
 
             // Save the preferences
-            PlayerPrefs.Save();
+            Settings.Save();
 
             // Run events
             if ((runEvent == true) && (OnSaveSettings != null))
@@ -437,16 +418,17 @@ namespace OmiyaGames
         protected virtual void ClearSettings(bool runEvent)
         {
             // Grab the the app version
-            int currentVersion = PlayerPrefs.GetInt(VersionKey, -1);
+            int currentVersion = Settings.GetInt(VersionKey, -1);
 
             // Delete all stored preferences
-            PlayerPrefs.DeleteAll();
+            Settings.DeleteAll();
+
+            // Set the version
+            Settings.SetInt(VersionKey, currentVersion);
 
             // Store settings that are part of options.
             // Since member variables are unchanged up to this point, we can re-use them here.
-
-            // Set the version
-            PlayerPrefs.SetInt(VersionKey, currentVersion);
+            // NOTE: Feel free to add more stuff here
             RevertVersion0SettingsClearedSettings();
 
             // Reset all other member variables
@@ -464,27 +446,27 @@ namespace OmiyaGames
         void RetrieveVersion0Settings()
         {
             // Grab the number of levels unlocked
-            numLevelsUnlocked = PlayerPrefs.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
+            numLevelsUnlocked = Settings.GetInt(NumLevelsUnlockedKey, DefaultNumLevelsUnlocked);
 
             // Grab the music settings
-            musicVolume = PlayerPrefs.GetFloat(MusicVolumeKey, DefaultMusicVolume);
-            musicMuted = GetBool(MusicMutedKey, false);
+            musicVolume = Settings.GetFloat(MusicVolumeKey, DefaultMusicVolume);
+            musicMuted = Settings.GetBool(MusicMutedKey, false);
 
             // Grab the sound settings
-            soundVolume = PlayerPrefs.GetFloat(SoundVolumeKey, DefaultSoundVolume);
-            soundMuted = GetBool(SoundMutedKey, false);
+            soundVolume = Settings.GetFloat(SoundVolumeKey, DefaultSoundVolume);
+            soundMuted = Settings.GetBool(SoundMutedKey, false);
 
             // Grab the language
-            language = PlayerPrefs.GetString(LanguageKey, DefaultLanguage);
+            language = Settings.GetString(LanguageKey, DefaultLanguage);
 
             // Grab leaderboard user scope
-            leaderboardUserScope = (UserScope)PlayerPrefs.GetInt(LeaderboardUserScopeKey, (int)DefaultLeaderboardUserScope);
+            leaderboardUserScope = Settings.GetEnum(LeaderboardUserScopeKey, DefaultLeaderboardUserScope);
 
             // Grab number of plays
-            numberOfTimesAppOpened = PlayerPrefs.GetInt(NumberOfTimesAppOpenedKey, 0);
+            numberOfTimesAppOpened = Settings.GetInt(NumberOfTimesAppOpenedKey, 0);
 
             // Grab the best score
-            string tempString = PlayerPrefs.GetString(LocalHighScoresKey, null);
+            string tempString = Settings.GetString(LocalHighScoresKey, null);
             bestScores.Clear();
             if (string.IsNullOrEmpty(tempString) == false)
             {
@@ -492,61 +474,54 @@ namespace OmiyaGames
             }
 
             // Grab how long we've played this game
-            long numberOfTicks;
-            lastPlayTime = TimeSpan.Zero;
-            tempString = PlayerPrefs.GetString(TotalPlayTimeKey, null);
-            if ((string.IsNullOrEmpty(tempString) == false) && (long.TryParse(tempString, out numberOfTicks) == true))
-            {
-                lastPlayTime = new TimeSpan(numberOfTicks);
-            }
+            lastTimeOpen = DateTime.UtcNow;
+            lastPlayTime = Settings.GetTimeSpan(TotalPlayTimeKey, TimeSpan.Zero);
         }
 
         void SaveVersion0Settings()
         {
             // Save the number of levels unlocked
-            PlayerPrefs.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
+            Settings.SetInt(NumLevelsUnlockedKey, NumLevelsUnlocked);
 
             // Save the music settings
-            PlayerPrefs.SetFloat(MusicVolumeKey, MusicVolume);
-            SetBool(MusicMutedKey, IsMusicMuted);
+            Settings.SetFloat(MusicVolumeKey, MusicVolume);
+            Settings.SetBool(MusicMutedKey, IsMusicMuted);
 
             // Save the sound settings
-            PlayerPrefs.SetFloat(SoundVolumeKey, SoundVolume);
-            SetBool(SoundMutedKey, IsSoundMuted);
+            Settings.SetFloat(SoundVolumeKey, SoundVolume);
+            Settings.SetBool(SoundMutedKey, IsSoundMuted);
 
             // Set the language
-            PlayerPrefs.SetString(LanguageKey, Language);
+            Settings.SetString(LanguageKey, Language);
 
             // Set leaderboard's user scope variable
-            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)LeaderboardUserScope);
+            Settings.SetEnum(LeaderboardUserScopeKey, LeaderboardUserScope);
 
             // Set the best score
-            PlayerPrefs.SetString(LocalHighScoresKey, GenerateHighScoresString());
+            Settings.SetString(LocalHighScoresKey, GenerateHighScoresString());
 
             // Set number of plays variables
-            PlayerPrefs.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
+            Settings.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
 
             // Set the play time
-            lastPlayTime = TotalPlayTime;
-            PlayerPrefs.SetString(TotalPlayTimeKey, lastPlayTime.Ticks.ToString());
-            lastTimeOpen = DateTime.UtcNow;
+            Settings.SetTimeSpan(TotalPlayTimeKey, TotalPlayTime);
         }
 
         void RevertVersion0SettingsClearedSettings()
         {
             // Save the music settings
-            PlayerPrefs.SetFloat(MusicVolumeKey, musicVolume);
-            SetBool(MusicMutedKey, musicMuted);
+            Settings.SetFloat(MusicVolumeKey, musicVolume);
+            Settings.SetBool(MusicMutedKey, musicMuted);
 
             // Save the sound settings
-            PlayerPrefs.SetFloat(SoundVolumeKey, soundVolume);
-            SetBool(SoundMutedKey, soundMuted);
+            Settings.SetFloat(SoundVolumeKey, soundVolume);
+            Settings.SetBool(SoundMutedKey, soundMuted);
 
             // Set leaderboard's user scope variable
-            PlayerPrefs.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
+            Settings.SetInt(LeaderboardUserScopeKey, (int)leaderboardUserScope);
 
             // Set the language
-            PlayerPrefs.SetString(LanguageKey, language);
+            Settings.SetString(LanguageKey, language);
         }
 
         void RetrieveHighScores(string highScoresString)
