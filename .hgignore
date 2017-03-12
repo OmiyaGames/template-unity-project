@@ -57,10 +57,20 @@ $RECYCLE.BIN/
 Desktop.ini
 
 # ====== #
+# Blender backup files
+# ====== #
+*.blend[1-9]
+*.blend[1-9].meta
+
+# ====== #
+# Visual Code files
+# ====== #
+Assets/VSCode.meta
+Assets/VSCode/*
+.vscode
+
+# ====== #
 # Others #
 # ====== #
 Builds/
 Assets/.~lock.*
-Assets/VSCode.meta
-Assets/VSCode/*
-.vscode
