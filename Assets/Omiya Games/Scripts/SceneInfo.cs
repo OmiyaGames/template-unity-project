@@ -49,18 +49,23 @@ namespace OmiyaGames
         [SerializeField]
         bool revertTimeScale = true;
 
+        TranslatedString? translatedDisplayName = null;
         Scene? reference = null;
         string sceneName = null;
         int ordinal = 0;
 
-        public SceneInfo(string scene, string display, bool revertTime = true, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
+        public SceneInfo(string scene, string displayNameTranslationKey, bool revertTime = true, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
         {
+            // Setup all member variables
             scenePath = scene;
-            displayName = display;
+            displayName = displayNameTranslationKey;
             revertTimeScale = revertTime;
             cursorMode = lockMode;
             cursorModeWeb = lockMode;
             ordinal = index;
+
+            // Setup translation variable
+            translatedDisplayName = new TranslatedString(displayName);
         }
 
         public string ScenePath
@@ -83,7 +88,7 @@ namespace OmiyaGames
             }
         }
 
-        public string SceneName
+        public string SceneFileName
         {
             get
             {
@@ -95,11 +100,15 @@ namespace OmiyaGames
             }
         }
 
-        public string DisplayName
+        public TranslatedString DisplayName
         {
             get
             {
-                return displayName;
+                if(translatedDisplayName.HasValue == false)
+                {
+                    translatedDisplayName = new TranslatedString(displayName);
+                }
+                return translatedDisplayName.Value;
             }
         }
 

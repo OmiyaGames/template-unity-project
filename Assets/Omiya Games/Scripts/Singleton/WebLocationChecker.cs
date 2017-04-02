@@ -258,14 +258,23 @@ namespace OmiyaGames
             // Clear the dictionary
             allUniqueDomains.Clear();
 
-            // Go through all the domains
-            for (; listIndex < allDomains.Length; ++listIndex)
+            if(allDomains != null)
             {
-                // Go through all strings in the list
-                for (stringIndex = 0; stringIndex < allDomains[listIndex].Length; ++stringIndex)
+                // Go through all the domains
+                for (; listIndex < allDomains.Length; ++listIndex)
                 {
-                    // Add the entry and its regular expression equivalent
-                    allUniqueDomains.Add(allDomains[listIndex][stringIndex], ConvertToWildCardAcceptingRegex(buf, allDomains[listIndex][stringIndex]));
+                    if(allDomains[listIndex] != null)
+                    {
+                        // Go through all strings in the list
+                        for (stringIndex = 0; stringIndex < allDomains[listIndex].Length; ++stringIndex)
+                        {
+                            // Add the entry and its regular expression equivalent
+                            if(string.IsNullOrEmpty(allDomains[listIndex][stringIndex]) == false)
+                            {
+                                allUniqueDomains.Add(allDomains[listIndex][stringIndex], ConvertToWildCardAcceptingRegex(buf, allDomains[listIndex][stringIndex]));
+                            }
+                        }
+                    }
                 }
             }
         }

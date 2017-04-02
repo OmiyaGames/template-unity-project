@@ -2,18 +2,18 @@
 /// to adjust what "Build All" context menu will build
 
 // FIXME: consider moving preprocessor directives into PlayerPrefs, and have a window specific to editing that.
-//#define BUILD_TO_MAJOR_DESKTOP_OS
+#define BUILD_TO_MAJOR_DESKTOP_OS
 //#define BUILD_32_BIT_AND_64_BIT_SEPARATELY
-//#define SPRITE_PACK_MAJOR_DESKTOP_OS
+#define SPRITE_PACK_MAJOR_DESKTOP_OS
 
-#define BUILD_TO_MAJOR_MOBILE_OS
+//#define BUILD_TO_MAJOR_MOBILE_OS
 #define SPRITE_PACK_MAJOR_MOBILE_OS
 
-//#define BUILD_TO_WEBGL
+#define BUILD_TO_WEBGL
 #define SPRITE_PACK_WEBGL
 
 #define APPEND_DATE_IN_FOLDER_NAME
-#define APPEND_VERSION_IN_FOLDER_NAME
+//#define APPEND_VERSION_IN_FOLDER_NAME
 
 #define STOP_REST_OF_THE_BUILDS_IF_ANY_FAIL
 
