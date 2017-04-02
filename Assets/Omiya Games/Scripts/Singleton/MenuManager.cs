@@ -54,37 +54,28 @@ namespace OmiyaGames
         float delaySelectingDefaultUiBy = 0.5f;
 
         [Header("Menu Label Templates")]
-        // TODO: consider using the translation patch instead
         [Tooltip("Template for any menus with button text indicating to return to a scene")]
         [SerializeField]
-        string returnToTextTemplate = "Return to {0}";
-        // TODO: consider using the translation patch instead
+        string returnToTextTemplateTranslationKey = "Return To Menu Button";
         [Tooltip("Template for any menus with button text indicating to restart a scene")]
         [SerializeField]
-        string restartTextTemplate = "Restart {0}";
-        // TODO: consider using the translation patch instead
+        string restartTextTemplateTranslationKey = "Restart Button";
         [Tooltip("Template for any menus with button text indicating a scene was completed")]
         [SerializeField]
-        string completeTextTemplate = "{0} Complete";
-        // TODO: consider using the translation patch instead
+        string completeTextTemplateTranslationKey = "Level Complete Title";
         [Tooltip("Template for any menus with button text indicating game over")]
         [SerializeField]
-        string failedTextTemplate = "{0} Failed";
-        // TODO: consider using the translation patch instead
+        string failedTextTemplateTranslationKey = "Level Failed Title";
         [Tooltip("Template for any menus with button text indicating a scene was completed")]
         [SerializeField]
-        string nextTextTemplate = "Proceed to {0}";
+        string nextTextTemplateTranslationKey = "Proceed Button";
 
         [Header("Sound Templates")]
         [SerializeField]
         SoundEffect buttonClickSound = null;
 
-        EventSystem eventSystemCache = null;
         WaitForSeconds delaySelection = null;
-        string menuTextCache = null;
-        PauseMenu pauseMenuCache = null;
         PopUpManager popUpManager = null;
-        SceneTransitionManager transitionManagerCache = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -95,11 +86,15 @@ namespace OmiyaGames
         {
             get
             {
-                if(eventSystemCache == null)
-                {
-                    eventSystemCache = GetComponent<EventSystem>();
-                }
-                return eventSystemCache;
+                return Singleton.Get<EventSystem>();
+            }
+        }
+
+        public PauseMenu PauseMenu
+        {
+            get
+            {
+                return GetMenu<PauseMenu>();
             }
         }
 
@@ -132,94 +127,6 @@ namespace OmiyaGames
             }
         }
 
-        public string ReturnToMenuText
-        {
-            get
-            {
-                if (menuTextCache == null)
-                {
-                    menuTextCache = CachedTransitionManager.MainMenu.DisplayName;
-                    if (string.IsNullOrEmpty(returnToTextTemplate) == false)
-                    {
-                        menuTextCache = string.Format(returnToTextTemplate, menuTextCache);
-                    }
-                }
-                return menuTextCache;
-            }
-        }
-
-        public string RestartCurrentSceneText
-        {
-            get
-            {
-                string returnText = "";
-                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
-                if (currentScene != null)
-                {
-                    returnText = currentScene.DisplayName;
-                    if (string.IsNullOrEmpty(restartTextTemplate) == false)
-                    {
-                        returnText = string.Format(restartTextTemplate, currentScene.DisplayName);
-                    }
-                }
-                return returnText;
-            }
-        }
-
-        public string CompletedCurrentSceneText
-        {
-            get
-            {
-                string returnText = "";
-                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
-                if (currentScene != null)
-                {
-                    returnText = currentScene.DisplayName;
-                    if (string.IsNullOrEmpty(completeTextTemplate) == false)
-                    {
-                        returnText = string.Format(completeTextTemplate, currentScene.DisplayName);
-                    }
-                }
-                return returnText;
-            }
-        }
-
-        public string FailedCurrentSceneText
-        {
-            get
-            {
-                string returnText = "";
-                SceneInfo currentScene = CachedTransitionManager.CurrentScene;
-                if (currentScene != null)
-                {
-                    returnText = currentScene.DisplayName;
-                    if (string.IsNullOrEmpty(failedTextTemplate) == false)
-                    {
-                        returnText = string.Format(failedTextTemplate, currentScene.DisplayName);
-                    }
-                }
-                return returnText;
-            }
-        }
-
-        public string NextSceneText
-        {
-            get
-            {
-                string returnText = "";
-                SceneInfo nextScene = CachedTransitionManager.NextScene;
-                if (nextScene != null)
-                {
-                    returnText = nextScene.DisplayName;
-                    if (string.IsNullOrEmpty(nextTextTemplate) == false)
-                    {
-                        returnText = string.Format(nextTextTemplate, nextScene.DisplayName);
-                    }
-                }
-                return returnText;
-            }
-        }
-
         public PopUpManager PopUps
         {
             get
@@ -228,15 +135,19 @@ namespace OmiyaGames
             }
         }
 
-        SceneTransitionManager CachedTransitionManager
+        public string PauseInput
         {
             get
             {
-                if(transitionManagerCache == null)
-                {
-                    transitionManagerCache = Singleton.Get<SceneTransitionManager>();
-                }
-                return transitionManagerCache;
+                return pauseInput;
+            }
+        }
+
+        SceneTransitionManager TransitionManager
+        {
+            get
+            {
+                return Singleton.Get<SceneTransitionManager>();
             }
         }
         #endregion
@@ -257,163 +168,53 @@ namespace OmiyaGames
         {
             // Clear out all the menus
             managedMenusStack.Clear();
-            pauseMenuCache = null;
 
             // Populate typeToMenuMap dictionary
             SceneTransitionMenu transitionMenu = null;
             PopulateTypeToMenuDictionary(typeToMenuMap, out transitionMenu);
 
             // Attempt to find a pop-up manager
-            popUpManager = UnityEngine.Object.FindObjectOfType<PopUpManager>();
+            popUpManager = FindObjectOfType<PopUpManager>();
 
             // Check to see if there was a transition menu
             if (transitionMenu == null)
             {
                 // If not, run the scene manager's transition-in events immediately
-                CachedTransitionManager.TransitionIn(null);
+                TransitionManager.TransitionIn(null);
             }
             else
             {
                 // If so, run the transition menu's transition-in animation
-                transitionMenu.Hide(CachedTransitionManager.TransitionIn);
+                transitionMenu.Hide(TransitionManager.TransitionIn);
             }
         }
 
-        void PopulateTypeToMenuDictionary(Dictionary<Type, IMenu> typeToMenuDictionary, out SceneTransitionMenu transitionMenu)
+        public void SetLabelTextToReturnToMenu(TranslatedText label)
         {
-            // Setup variables
-            int index = 0;
-            transitionMenu = null;
-            typeToMenuDictionary.Clear();
-            
-            // Populate items to ignore into the type map
-            for (; index < IgnoreTypes.Length; ++index)
+            if ((label != null) && (string.IsNullOrEmpty(returnToTextTemplateTranslationKey) == false))
             {
-                typeToMenuDictionary.Add(IgnoreTypes[index], null);
-            }
-
-            // Search for all menus in the scene
-            IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
-            if(menus != null)
-            {
-                // Add them into the dictionary
-                Type menuType;
-                IMenu displayedManagedMenu = null;
-                for (index = 0; index < menus.Length; ++index)
-                {
-                    if (menus[index] != null)
-                    {
-                        // Add the menu to the dictionary
-                        menuType = menus[index].GetType();
-                        if (typeToMenuDictionary.ContainsKey(menuType) == false)
-                        {
-                            // Add the menu
-                            typeToMenuDictionary.Add(menuType, menus[index]);
-
-                            // Check if this menu is a SceneTransitionMenu
-                            if (menuType == typeof(SceneTransitionMenu))
-                            {
-                                transitionMenu = (SceneTransitionMenu)menus[index];
-                            }
-                        }
-
-                        // Check if this is the first displayed, managed menu
-                        if ((menus[index].MenuType == IMenu.Type.DefaultManagedMenu) && (displayedManagedMenu == null))
-                        {
-                            // Grab this menu
-                            displayedManagedMenu = menus[index];
-
-                            // Indicate it should be visible
-                            displayedManagedMenu.Show();
-                        }
-                    }
-                }
+                label.SetTranslationKey(returnToTextTemplateTranslationKey, TransitionManager.MainMenu.DisplayName);
             }
         }
 
-        /// <summary>
-        /// Pushes a visible menu into the stack, and
-        /// changes the other menus already in the stack to stand-by
-        /// </summary>
-        internal void PushToManagedStack(IMenu menu)
+        public void SetLabelTextToRestartCurrentScene(TranslatedText label)
         {
-            if (menu != null)
-            {
-                // Make sure the menu isn't already in the stack
-                // (the stack is usually small, so this should be pretty efficient)
-                if (managedMenusStack.Contains(menu) == false)
-                {
-                    // Change the top-most menu (if any) to stand-by
-                    if (NumManagedMenus > 0)
-                    {
-                        managedMenusStack.Peek().CurrentState = IMenu.State.StandBy;
-                    }
-                    else
-                    {
-                        // Unlock the cursor
-                        SceneTransitionManager.CursorMode = CursorLockMode.None;
-                    }
-
-                    // Push the current menu onto the stack
-                    managedMenusStack.Push(menu);
-
-                    // Run the event that indicates the stack changed
-                    if(OnManagedMenusStackChanged != null)
-                    {
-                        OnManagedMenusStackChanged(this);
-                    }
-                }
-            }
+            SetLabelTextTo(label, restartTextTemplateTranslationKey);
         }
 
-        /// <summary>
-        /// Pops a hidden menu out of the stack, and
-        /// changes the last menu already in the stack to visible
-        /// </summary>
-        internal IMenu PopFromManagedStack()
+        public void SetLabelTextToCompletedCurrentScene(TranslatedText label)
         {
-            // Make sure this menu is already on top of the stack
-            IMenu returnMenu = null;
-            if (NumManagedMenus > 0)
-            {
-                // If so, pop the menu
-                returnMenu = managedMenusStack.Pop();
-
-                // Check if there are any other menus left
-                if (NumManagedMenus > 0)
-                {
-                    // Change the top-most menu into visible
-                    managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
-                }
-                else if(CachedTransitionManager.CurrentScene != null)
-                {
-                    // Lock the cursor to what the scene is set to
-                    SceneTransitionManager.CursorMode = CachedTransitionManager.CurrentScene.LockMode;
-                }
-
-                // Run the event that indicates the stack changed
-                if (OnManagedMenusStackChanged != null)
-                {
-                    OnManagedMenusStackChanged(this);
-                }
-            }
-            return returnMenu;
+            SetLabelTextTo(label, completeTextTemplateTranslationKey);
         }
 
-        /// <summary>
-        /// Pops a hidden menu out of the stack, and
-        /// changes the last menu already in the stack to visible
-        /// </summary>
-        internal IMenu PeekFromManagedStack()
+        public void SetLabelTextToFailedCurrentScene(TranslatedText label)
         {
-            // Make sure this menu is already on top of the stack
-            IMenu returnMenu = null;
-            if (NumManagedMenus > 0)
-            {
-                // If so, peek the stack
-                returnMenu = managedMenusStack.Peek();
-            }
-            return returnMenu;
+            SetLabelTextTo(label, failedTextTemplateTranslationKey);
+        }
+
+        public void SetLabelTextToNextScene(TranslatedText label)
+        {
+            SetLabelTextTo(label, nextTextTemplateTranslationKey);
         }
 
         public MENU GetMenu<MENU>() where MENU : IMenu
@@ -451,28 +252,176 @@ namespace OmiyaGames
             StartCoroutine(DelaySelection(guiElement));
         }
 
+        #region Internal Methods
+        /// <summary>
+        /// Pushes a visible menu into the stack, and
+        /// changes the other menus already in the stack to stand-by
+        /// </summary>
+        internal void PushToManagedStack(IMenu menu)
+        {
+            if (menu != null)
+            {
+                // Make sure the menu isn't already in the stack
+                // (the stack is usually small, so this should be pretty efficient)
+                if (managedMenusStack.Contains(menu) == false)
+                {
+                    // Change the top-most menu (if any) to stand-by
+                    if (NumManagedMenus > 0)
+                    {
+                        managedMenusStack.Peek().CurrentState = IMenu.State.StandBy;
+                    }
+                    else
+                    {
+                        // Unlock the cursor
+                        SceneTransitionManager.CursorMode = CursorLockMode.None;
+                    }
+
+                    // Push the current menu onto the stack
+                    managedMenusStack.Push(menu);
+
+                    // Run the event that indicates the stack changed
+                    if (OnManagedMenusStackChanged != null)
+                    {
+                        OnManagedMenusStackChanged(this);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Pops a hidden menu out of the stack, and
+        /// changes the last menu already in the stack to visible
+        /// </summary>
+        internal IMenu PopFromManagedStack()
+        {
+            // Make sure this menu is already on top of the stack
+            IMenu returnMenu = null;
+            if (NumManagedMenus > 0)
+            {
+                // If so, pop the menu
+                returnMenu = managedMenusStack.Pop();
+
+                // Check if there are any other menus left
+                if (NumManagedMenus > 0)
+                {
+                    // Change the top-most menu into visible
+                    managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
+                }
+                else if (TransitionManager.CurrentScene != null)
+                {
+                    // Lock the cursor to what the scene is set to
+                    SceneTransitionManager.CursorMode = TransitionManager.CurrentScene.LockMode;
+                }
+
+                // Run the event that indicates the stack changed
+                if (OnManagedMenusStackChanged != null)
+                {
+                    OnManagedMenusStackChanged(this);
+                }
+            }
+            return returnMenu;
+        }
+
+        /// <summary>
+        /// Pops a hidden menu out of the stack, and
+        /// changes the last menu already in the stack to visible
+        /// </summary>
+        internal IMenu PeekFromManagedStack()
+        {
+            // Make sure this menu is already on top of the stack
+            IMenu returnMenu = null;
+            if (NumManagedMenus > 0)
+            {
+                // If so, peek the stack
+                returnMenu = managedMenusStack.Peek();
+            }
+            return returnMenu;
+        }
+        #endregion
+
+        #region Helper Methods
+        void SetLabelTextTo(TranslatedText label, string templateKey)
+        {
+            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false))
+            {
+                SceneInfo currentScene = TransitionManager.CurrentScene;
+                if (currentScene != null)
+                {
+                    label.SetTranslationKey(templateKey, currentScene.DisplayName);
+                }
+            }
+        }
+
+        void PopulateTypeToMenuDictionary(Dictionary<Type, IMenu> typeToMenuDictionary, out SceneTransitionMenu transitionMenu)
+        {
+            // Setup variables
+            int index = 0;
+            transitionMenu = null;
+            typeToMenuDictionary.Clear();
+
+            // Populate items to ignore into the type map
+            for (; index < IgnoreTypes.Length; ++index)
+            {
+                typeToMenuDictionary.Add(IgnoreTypes[index], null);
+            }
+
+            // Search for all menus in the scene
+            IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
+            if (menus != null)
+            {
+                // Add them into the dictionary
+                Type menuType;
+                IMenu displayedManagedMenu = null;
+                for (index = 0; index < menus.Length; ++index)
+                {
+                    if (menus[index] != null)
+                    {
+                        // Add the menu to the dictionary
+                        menuType = menus[index].GetType();
+                        if (typeToMenuDictionary.ContainsKey(menuType) == false)
+                        {
+                            // Add the menu
+                            typeToMenuDictionary.Add(menuType, menus[index]);
+
+                            // Check if this menu is a SceneTransitionMenu
+                            if (menuType == typeof(SceneTransitionMenu))
+                            {
+                                transitionMenu = (SceneTransitionMenu)menus[index];
+                            }
+                        }
+
+                        // Check if this is the first displayed, managed menu
+                        if ((menus[index].MenuType == IMenu.Type.DefaultManagedMenu) && (displayedManagedMenu == null))
+                        {
+                            // Grab this menu
+                            displayedManagedMenu = menus[index];
+
+                            // Indicate it should be visible
+                            displayedManagedMenu.Show();
+                        }
+                    }
+                }
+            }
+        }
+
         void QueryInput(float unscaledDeltaTime)
         {
             // Detect input for pause button (make sure no managed dialogs are shown, either).
-            if((NumManagedMenus <= 0) && (Input.GetButtonDown(pauseInput) == true))
+            if((NumManagedMenus <= 0) && (Input.GetButtonDown(PauseInput) == true))
             {
                 // Attempt to grab the pause menu
-                if(pauseMenuCache == null)
+                if (PauseMenu != null)
                 {
-                    pauseMenuCache = GetMenu<PauseMenu>();
-                }
-                if (pauseMenuCache != null)
-                {
-                    if(pauseMenuCache.CurrentState == IMenu.State.Hidden)
+                    if(PauseMenu.CurrentState == IMenu.State.Hidden)
                     {
-                        pauseMenuCache.Show();
+                        PauseMenu.Show();
 
                         // Indicate button is clicked
                         ButtonClick.Play();
                     }
-                    else if(pauseMenuCache.CurrentState == IMenu.State.Visible)
+                    else if(PauseMenu.CurrentState == IMenu.State.Visible)
                     {
-                        pauseMenuCache.Hide();
+                        PauseMenu.Hide();
 
                         // Indicate button is clicked
                         ButtonClick.Play();
@@ -486,5 +435,6 @@ namespace OmiyaGames
             yield return delaySelection;
             Events.SetSelectedGameObject(guiElement);
         }
+        #endregion
     }
 }

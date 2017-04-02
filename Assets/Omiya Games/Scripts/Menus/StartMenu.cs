@@ -39,14 +39,31 @@ namespace OmiyaGames
     [RequireComponent(typeof(Animator))]
     public class StartMenu : IMenu
     {
+        public enum LevelSelectButtonBehavior
+        {
+            DefaultStartFirstLevel,
+            AlwaysShowLevelSelect,
+            AlwaysStartFirstLevel
+        }
+
         [SerializeField]
-        Button levelSelectButton;
+        LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
+
+        [Header("Buttons")]
+        [SerializeField]
+        ListButtonScript levelSelectButton;
         [SerializeField]
         Button optionsButton;
         [SerializeField]
         Button creditsButton;
         [SerializeField]
         Button quitButton;
+
+        [Header("Text")]
+        [SerializeField]
+        string startText = "Start";
+        [SerializeField]
+        string levelSelectText = "Level Select";
 
         GameObject defaultButton = null;
         bool isButtonLocked = false;
@@ -67,6 +84,27 @@ namespace OmiyaGames
             }
         }
 
+        bool IsStartingOnFirstLevel
+        {
+            get
+            {
+                // Use the startBehavior and game settings to return the proper flag
+                bool returnFlag = false;
+                switch(startBehavior)
+                {
+                    case LevelSelectButtonBehavior.AlwaysStartFirstLevel:
+                        // Always return true if we're supposed to always start the first level
+                        returnFlag = true;
+                        break;
+                    case LevelSelectButtonBehavior.DefaultStartFirstLevel:
+                        // Return true if we haven't unlocked any levels
+                        returnFlag = (Singleton.Get<GameSettings>().NumLevelsUnlocked <= GameSettings.DefaultNumLevelsUnlocked);
+                        break;
+                }
+                return returnFlag;
+            }
+        }
+
         void Start()
         {
             // Check if we should remove the quit button (you can't quit out of a webplayer)
@@ -79,6 +117,22 @@ namespace OmiyaGames
             // Select the level select button by default
             defaultButton = levelSelectButton.gameObject;
             Singleton.Get<UnityEngine.EventSystems.EventSystem>().firstSelectedGameObject = defaultButton;
+
+            // Update Select
+            if(IsStartingOnFirstLevel == true)
+            {
+                foreach(TranslatedText text in levelSelectButton.Labels)
+                {
+                    text.TranslationKey = startText;
+                }
+            }
+            else
+            {
+                foreach(TranslatedText text in levelSelectButton.Labels)
+                {
+                    text.TranslationKey = levelSelectText;
+                }
+            }
         }
 
         #region Button Events
@@ -86,12 +140,23 @@ namespace OmiyaGames
         {
             if (isButtonLocked == false)
             {
-                // Open the Level Select menu
-                Manager.Show<LevelSelectMenu>();
+                if(IsStartingOnFirstLevel == true)
+                {
+                    // Load the first level automatically
+                    Singleton.Get<SceneTransitionManager>().LoadNextLevel();
 
-                // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
-                defaultButton = levelSelectButton.gameObject;
+                    // Indicate button is clicked
+                    Manager.ButtonClick.Play();
+                }
+                else
+                {
+                    // Open the Level Select menu
+                    Manager.Show<LevelSelectMenu>();
+
+                    // Indicate we've clicked on a button
+                    Manager.ButtonClick.Play();
+                    defaultButton = levelSelectButton.gameObject;
+                }
                 isButtonLocked = true;
             }
         }

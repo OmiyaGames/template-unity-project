@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System;
 
 namespace OmiyaGames
 {
@@ -51,17 +49,17 @@ namespace OmiyaGames
             JustTesting
         }
 
-        [System.Serializable]
+        [Serializable]
         public struct WebsiteInfo
         {
             [SerializeField]
-            string display;
+            string labelTranslationKey;
             [SerializeField]
             string redirectTo;
 
             public void UpdateButton(WebsiteButton button)
             {
-                button.DisplayedText = display;
+                button.LabelComponent.TranslationKey = labelTranslationKey;
                 button.RedirectTo = redirectTo;
             }
         }
@@ -78,20 +76,17 @@ namespace OmiyaGames
         [SerializeField]
         WebsiteInfo[] otherSites = null;
         [SerializeField]
-        Text[] secondOptionSet = null;
+        TranslatedText[] secondOptionSet = null;
 
         [Header("Error Messages")]
         [SerializeField]
-        Text reasonMessage = null;
+        TranslatedText reasonMessage = null;
         [SerializeField]
-        [Multiline]
-        string gameIsNotGenuineMessage = "Internal tests confirm this game is not genuine.";
+        string gameIsNotGenuineMessageTranslationKey;
         [SerializeField]
-        [Multiline]
-        string cannotConfirmDomainMessage = "Unable to confirm this game is hosted by a domain the developers uploaded their game to.";
+        string cannotConfirmDomainMessageTranslationKey;
         [SerializeField]
-        [Multiline]
-        string domainDoesNotMatchMessage = "The detected url, \"{0},\" does not match any of the domains the developers uploaded their game to.";
+        string domainDoesNotMatchMessageTranslationKey;
 
         readonly List<WebsiteButton> allSecondOptionButtons = new List<WebsiteButton>();
 
@@ -161,31 +156,36 @@ namespace OmiyaGames
             }
 
             // Update the reason for this dialog to appear
-            StringBuilder builder = new StringBuilder();
             switch(reason)
             {
                 case Reason.CannotConfirmDomain:
-                    builder.Append(cannotConfirmDomainMessage);
+                    // Update translation key
+                    reasonMessage.TranslationKey = cannotConfirmDomainMessageTranslationKey;
                     break;
                 case Reason.IsIncorrectDomain:
                     if (webChecker != null)
                     {
-                        builder.AppendFormat(domainDoesNotMatchMessage, webChecker.RetrievedHostName);
+                        // Setup translation key, with proper population of fields
+                        reasonMessage.SetTranslationKey(domainDoesNotMatchMessageTranslationKey, webChecker.RetrievedHostName);
                     }
                     else
                     {
-                        builder.Append(gameIsNotGenuineMessage);
+                        // Update translation key
+                        reasonMessage.TranslationKey = gameIsNotGenuineMessageTranslationKey;
                     }
                     break;
                 case Reason.JustTesting:
+                    // Overwrite the text: it's a test
+                    StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
                     Utility.BuildTestMessage(builder, webChecker);
+                    reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:
-                    builder.Append(gameIsNotGenuineMessage);
+                    // Update translation key
+                    reasonMessage.TranslationKey = gameIsNotGenuineMessageTranslationKey;
                     break;
             }
-            reasonMessage.text = builder.ToString();
         }
 
         #region Helper Methods
