@@ -5,11 +5,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22458270}
-  - 222: {fileID: 22219734}
-  - 114: {fileID: 11494094}
+  - component: {fileID: 22458270}
+  - component: {fileID: 22219734}
+  - component: {fileID: 11494094}
   m_Layer: 5
   m_Name: White
   m_TagString: Untagged
@@ -22,9 +22,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22453664}
+  - component: {fileID: 22453664}
   m_Layer: 5
   m_Name: Logo Only Set
   m_TagString: Untagged
@@ -37,9 +37,9 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22438708}
+  - component: {fileID: 22438708}
   m_Layer: 5
   m_Name: Loading Bar Set
   m_TagString: Untagged
@@ -52,11 +52,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22404720}
-  - 222: {fileID: 22260830}
-  - 114: {fileID: 11406548}
+  - component: {fileID: 22404720}
+  - component: {fileID: 22260830}
+  - component: {fileID: 11406548}
   m_Layer: 5
   m_Name: Loading Ratio
   m_TagString: Untagged
@@ -69,11 +69,11 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22484774}
-  - 114: {fileID: 11406624}
-  - 95: {fileID: 9506288}
+  - component: {fileID: 22484774}
+  - component: {fileID: 11406624}
+  - component: {fileID: 9506288}
   m_Layer: 5
   m_Name: Splash Menu
   m_TagString: Untagged
@@ -86,11 +86,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22416620}
-  - 222: {fileID: 22266096}
-  - 114: {fileID: 11452050}
+  - component: {fileID: 22416620}
+  - component: {fileID: 22266096}
+  - component: {fileID: 11452050}
   m_Layer: 5
   m_Name: Company Logo
   m_TagString: Untagged
@@ -103,11 +103,12 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22465094}
-  - 222: {fileID: 22225672}
-  - 114: {fileID: 11494156}
+  - component: {fileID: 22465094}
+  - component: {fileID: 22225672}
+  - component: {fileID: 11494156}
+  - component: {fileID: 114673790152118558}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -120,12 +121,12 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22456122}
-  - 222: {fileID: 22279986}
-  - 114: {fileID: 11414610}
-  - 114: {fileID: 11479030}
+  - component: {fileID: 22456122}
+  - component: {fileID: 22279986}
+  - component: {fileID: 11414610}
+  - component: {fileID: 11479030}
   m_Layer: 5
   m_Name: Loading Bar
   m_TagString: Untagged
@@ -138,11 +139,11 @@ GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 224: {fileID: 22463306}
-  - 222: {fileID: 22281202}
-  - 114: {fileID: 11486370}
+  - component: {fileID: 22463306}
+  - component: {fileID: 22281202}
+  - component: {fileID: 11486370}
   m_Layer: 5
   m_Name: Company Logo
   m_TagString: Untagged
@@ -205,7 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37d1e7c067c415447b7d55449a4a5ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logoDisplayDuration: 3
+  minimumLogoDisplayDuration: 3
   logoOnlySet: {fileID: 123232}
   loadingBar: {fileID: 22404720}
   loadingBarIncludedSet: {fileID: 136396}
@@ -350,7 +351,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 02f5fba6ef4ae3943a673133f84c837a, type: 3}
+    m_Font: {fileID: 12800000, guid: 27b4c7f5e857bd5469c2f29016575778, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -411,6 +412,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22456122}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -428,6 +430,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22453664}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -447,6 +450,7 @@ RectTransform:
   - {fileID: 22456122}
   m_Father: {fileID: 22484774}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.000015258789}
@@ -465,6 +469,7 @@ RectTransform:
   - {fileID: 22416620}
   m_Father: {fileID: 22484774}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -484,10 +489,11 @@ RectTransform:
   - {fileID: 22465094}
   m_Father: {fileID: 22438708}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.08}
   m_AnchorMax: {x: 1, y: 0.2}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -486.0816, y: 0}
+  m_SizeDelta: {x: -485.89618, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22458270
 RectTransform:
@@ -501,6 +507,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22484774}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -518,6 +525,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22438708}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.2}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.0000076293945}
@@ -535,6 +543,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 22456122}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -546,7 +555,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 148166}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -555,6 +564,7 @@ RectTransform:
   - {fileID: 22438708}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -571,3 +581,19 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 148166}
   m_IsPrefabParent: 1
+--- !u!114 &114673790152118558
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 171538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73014547bf21944f9980bde6069290ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  translationKey: Loading
+  extraFormatting: 
+  letterFormatting: 0
+  fontKey: 
+  changeFontOnStyle: 0

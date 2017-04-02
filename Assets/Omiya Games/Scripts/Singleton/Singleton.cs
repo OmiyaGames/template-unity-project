@@ -52,6 +52,7 @@ namespace OmiyaGames
 
         public event Action<float> OnUpdate;
         public event Action<float> OnRealTimeUpdate;
+        public event Action<float> OnFixedUpdate;
 
         ISingletonScript[] allSingletonScriptsCache = null;
 
@@ -219,6 +220,14 @@ namespace OmiyaGames
             if (OnRealTimeUpdate != null)
             {
                 OnRealTimeUpdate(Time.unscaledDeltaTime);
+            }
+        }
+
+        void FixedUpdate()
+        {
+            if (OnFixedUpdate != null)
+            {
+                OnFixedUpdate(Time.fixedDeltaTime);
             }
         }
 

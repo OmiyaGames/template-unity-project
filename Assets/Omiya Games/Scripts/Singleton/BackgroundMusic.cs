@@ -172,19 +172,7 @@ namespace OmiyaGames
             set
             {
                 // Check if this is a different clip
-                if (CurrentAudioSource.Clip != value)
-                {
-                    // Swap to the next audio source
-                    isPlayingMusic1 = !isPlayingMusic1;
-                    if(isPlayingMusic1 == true)
-                    {
-                        music1.ChangeClip(value, transitionDuration);
-                    }
-                    else
-                    {
-                        music2.ChangeClip(value, transitionDuration);
-                    }
-                }
+                ChangeCurrentMusic(value, false);
             }
         }
 
@@ -196,6 +184,24 @@ namespace OmiyaGames
             }
         }
         #endregion
+
+        public void ChangeCurrentMusic(AudioClip newClip, bool forceChange)
+        {
+            // Check if this is a different clip
+            if ((forceChange == true) || (CurrentAudioSource.Clip != newClip))
+            {
+                // Swap to the next audio source
+                isPlayingMusic1 = !isPlayingMusic1;
+                if (isPlayingMusic1 == true)
+                {
+                    music1.ChangeClip(newClip, transitionDuration);
+                }
+                else
+                {
+                    music2.ChangeClip(newClip, transitionDuration);
+                }
+            }
+        }
 
         #region Helper Properties & Methods
         MusicInfo CurrentAudioSource

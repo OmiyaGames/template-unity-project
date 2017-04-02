@@ -7,7 +7,7 @@ namespace OmiyaGames
     /// <copyright file="LevelSelectMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2016 Omiya Games
+    /// Copyright (c) 2014-2017 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -38,14 +38,14 @@ namespace OmiyaGames
     public class LevelSelectMenu : IMenu
     {
         [SerializeField]
-        GridLayoutGroup levelContent;
+        RectTransform levelContent;
         [SerializeField]
-        Button levelButtonToDuplicate;
+        ListButtonScript levelButtonToDuplicate;
         [SerializeField]
         Button backButton;
 
         bool isButtonLocked = false;
-        Button[] allLevelButtons = null;
+        ListButtonScript[] allLevelButtons = null;
         GameObject lastUnlockedButton = null;
 
         public override Type MenuType
@@ -71,18 +71,6 @@ namespace OmiyaGames
 
             // Update button states
             lastUnlockedButton = SetButtonsEnabled(true);
-            
-            // Make sure there are more than one button
-            if(allLevelButtons.Length > 0)
-            {
-                // Get the grid layout size
-                RectTransform contentTransform = levelContent.GetComponent<RectTransform>();
-
-                // Calculate the height of the content
-                float height = (levelContent.cellSize.y * allLevelButtons.Length);
-                height += (levelContent.spacing.y * (allLevelButtons.Length - 1));
-                contentTransform.sizeDelta = new Vector2(levelContent.cellSize.x, height);
-            }
         }
 
         #region Button Events
@@ -121,12 +109,12 @@ namespace OmiyaGames
                 // Make the button interactable if it's unlocked
                 if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
                 {
-                    allLevelButtons[index].interactable = true;
+                    allLevelButtons[index].Button.interactable = true;
                     returnButton = allLevelButtons[index].gameObject;
                 }
                 else
                 {
-                    allLevelButtons[index].interactable = false;
+                    allLevelButtons[index].Button.interactable = false;
                 }
             }
             backButton.interactable = enabled;
@@ -148,26 +136,23 @@ namespace OmiyaGames
         }
 
         #region Helper Methods
-        Button[] SetupLevelButtons(Button buttonToDuplicate)
+        ListButtonScript[] SetupLevelButtons(ListButtonScript buttonToDuplicate)
         {
             // Grab the Scene Manager
             SceneTransitionManager settings = Singleton.Get<SceneTransitionManager>();
 
-            // Grab the parent transform from the button
-            Transform buttonParent = buttonToDuplicate.transform.parent;
-
             // Check how many levels there are
-            Button[] allButtons = null;
+            ListButtonScript[] allButtons = null;
             GameObject clone = null;
             if (settings.NumLevels >= 1)
             {
                 // Add the button into the button list
-                allButtons = new Button[settings.NumLevels];
+                allButtons = new ListButtonScript[settings.NumLevels];
 
                 // Setup the first level button behavior
                 int index = 0;
-                SetupButtonEventAndName(settings, buttonToDuplicate, index);
-                SetupButtonNavigation(buttonToDuplicate, backButton);
+                SetupButtonEventAndName(settings, buttonToDuplicate);
+                //SetupButtonNavigation(buttonToDuplicate, backButton);
                 allButtons[index] = buttonToDuplicate;
                 ++index;
 
@@ -176,59 +161,60 @@ namespace OmiyaGames
                 {
                     // Setup the level button
                     clone = Instantiate<GameObject>(buttonToDuplicate.gameObject);
-                    clone.transform.SetParent(buttonParent);
+                    clone.transform.SetParent(levelContent);
+                    clone.transform.SetAsLastSibling();
                     clone.transform.localScale = Vector3.one;
                     clone.transform.localPosition = Vector3.one;
                     clone.transform.localRotation = Quaternion.identity;
 
                     // Add the button into the button list
-                    allButtons[index] = SetupButtonEventAndName(settings, clone, index);
-                    SetupButtonNavigation(allButtons[index], allButtons[index - 1]);
+                    allButtons[index] = SetupButtonEventAndName(settings, clone);
+                    //SetupButtonNavigation(allButtons[index], allButtons[index - 1]);
                 }
 
                 // Setup the last button
-                SetupButtonNavigation(backButton, allButtons[allButtons.Length - 1]);
+                //SetupButtonNavigation(backButton, allButtons[allButtons.Length - 1]);
             }
             return allButtons;
         }
 
-        Button SetupButtonEventAndName(SceneTransitionManager settings, GameObject buttonObject, int levelOrdinal)
+        ListButtonScript SetupButtonEventAndName(SceneTransitionManager settings, GameObject buttonObject)
         {
             // Add an event to the button
-            Button newButton = buttonObject.GetComponent<Button>();
-            SetupButtonEventAndName(settings, newButton, levelOrdinal);
+            ListButtonScript newButton = buttonObject.GetComponent<ListButtonScript>();
+            SetupButtonEventAndName(settings, newButton);
             return newButton;
         }
 
-        void SetupButtonEventAndName(SceneTransitionManager settings, Button newButton, int levelOrdinal)
+        void SetupButtonEventAndName(SceneTransitionManager settings, ListButtonScript newButton)
         {
             // Add an event to the button
-            newButton.onClick.AddListener(() =>
+            int levelOrdinal = newButton.Index + 1;
+            newButton.OnClicked += ((button) =>
             {
                 OnLevelClicked(settings.Levels[levelOrdinal]);
             });
 
             // Setup the level button labels
-            Text[] buttonLabels = newButton.GetComponentsInChildren<Text>(true);
-            foreach (Text label in buttonLabels)
+            foreach (TranslatedText label in newButton.Labels)
             {
-                label.text = settings.Levels[levelOrdinal].DisplayName;
+                label.TranslationKey = settings.Levels[levelOrdinal].DisplayName.TranslationKey;
             }
-            newButton.name = settings.Levels[levelOrdinal].DisplayName;
+            newButton.name = settings.Levels[levelOrdinal].DisplayName.TranslationKey;
         }
 
-        void SetupButtonNavigation(Button newButton, Button lastButton)
-        {
-            // Update the new button to navigate up to the last button
-            Navigation buttonNavigation = newButton.navigation;
-            buttonNavigation.selectOnUp = lastButton;
-            newButton.navigation = buttonNavigation;
+        // void SetupButtonNavigation(Button newButton, Button lastButton)
+        // {
+        //     // Update the new button to navigate up to the last button
+        //     Navigation buttonNavigation = newButton.navigation;
+        //     buttonNavigation.selectOnUp = lastButton;
+        //     newButton.navigation = buttonNavigation;
 
-            // Update the last button to navigate down to the new button
-            buttonNavigation = lastButton.navigation;
-            buttonNavigation.selectOnDown = newButton;
-            lastButton.navigation = buttonNavigation;
-        }
+        //     // Update the last button to navigate down to the new button
+        //     buttonNavigation = lastButton.navigation;
+        //     buttonNavigation.selectOnDown = newButton;
+        //     lastButton.navigation = buttonNavigation;
+        // }
         #endregion
     }
 }

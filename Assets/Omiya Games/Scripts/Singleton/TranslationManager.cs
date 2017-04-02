@@ -78,6 +78,114 @@ namespace OmiyaGames
             }
         }
 
+        [System.Serializable]
+        public struct FontMapDetails
+        {
+            [SerializeField]
+            string name;
+            [SerializeField]
+            FontStyle style;
+            [SerializeField]
+            Font font;
+
+            public string Name
+            {
+                get
+                {
+                    return name;
+                }
+            }
+
+            public FontStyle Style
+            {
+                get
+                {
+                    return style;
+                }
+            }
+
+            public Font Font
+            {
+                get
+                {
+                    return font;
+                }
+            }
+        }
+
+        public struct FontMapKey
+        {
+            public FontMapKey(string name, FontStyle style)
+            {
+                Name = name;
+                Style = style;
+            }
+
+            public string Name { get; set; }
+            public FontStyle Style { get; set; }
+        }
+
+        [System.Serializable]
+        public class FontMap
+        {
+            [SerializeField]
+            string header;
+            [SerializeField]
+            Font defaultFont;
+            [SerializeField]
+            FontMapDetails[] otherFonts;
+
+            readonly Dictionary<FontMapKey, FontMapDetails> otherFontMap = new Dictionary<FontMapKey, FontMapDetails>();
+            FontMapKey fontSearchCache = new FontMapKey();
+
+            public string Header
+            {
+                get
+                {
+                    return header;
+                }
+            }
+
+            public Font DefaultFont
+            {
+                get
+                {
+                    return defaultFont;
+                }
+            }
+
+            public Dictionary<FontMapKey, FontMapDetails> OtherFonts
+            {
+                get
+                {
+                    if(otherFontMap.Count != otherFonts.Length)
+                    {
+                        otherFontMap.Clear();
+                        foreach(FontMapDetails details in otherFonts)
+                        {
+                            fontSearchCache.Name = details.Name;
+                            fontSearchCache.Style = details.Style;
+                            otherFontMap.Add(fontSearchCache, details);
+                        }
+                    }
+                    return otherFontMap;
+                }
+            }
+
+            public Font GetFont(string name, FontStyle style = FontStyle.Normal)
+            {
+                Font returnFont = DefaultFont;
+
+                fontSearchCache.Name = name;
+                fontSearchCache.Style = style;
+                if(OtherFonts.ContainsKey(fontSearchCache) == true)
+                {
+                    returnFont = OtherFonts[fontSearchCache].Font;
+                }
+                return returnFont;
+            }
+        }
+
         [Header("CSV File")]
         [Tooltip("Set this variable if the CSV file is a text asset that isn't in the Resources folder.")]
         [SerializeField]
@@ -90,14 +198,20 @@ namespace OmiyaGames
         [Tooltip("The header containing the keys, referencing each string.")]
         [SerializeField]
         string keyHeader = "Keys";
-        [Tooltip("The language to test on game loading. Leave blank to use the default language.")]
+        /// <summary>
+        /// Default Language in case needed for whatever reason. If null or an empty string, defaults to first language encountered in the file.
+        /// </summary>
+        [Tooltip("The language the game defaults to if the system's language is not available on the Language Map. If left blank, it uses the left-most language column in the CSV file.")]
         [SerializeField]
-        string testLanguage = "";
+        string defaultLanguage = "";
 
         [Header("Language Support")]
         [Tooltip("Maps a language to a header.")]
         [SerializeField]
         LanguageMap[] languageMap = null;
+        [Tooltip("Maps a language to a header.")]
+        [SerializeField]
+        FontMap[] fontMap = null;
 
         /// <summary>
         /// The loaded file.
@@ -112,26 +226,18 @@ namespace OmiyaGames
         /// </summary>
         Dictionary<string, string> translationDictionary = new Dictionary<string, string>();
         /// <summary>
-        /// Default Language in case needed for whatever reason. Defaults to first language encountered in the file.
-        /// </summary>
-        string defaultLanguage = "";
-        /// <summary>
         /// Currently selected langauge. Defaults to the first language encountered in the file.
         /// </summary>
         string currentLanguage = "";
-        Dictionary<SystemLanguage, string> headerDictionary = new Dictionary<SystemLanguage, string>();
+        readonly Dictionary<SystemLanguage, LanguageMap> headerDictionary = new Dictionary<SystemLanguage, LanguageMap>();
+        readonly Dictionary<string, FontMap> fontDictionary = new Dictionary<string, FontMap>();
 
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
         public override void SingletonAwake(Singleton globalGameObject)
         {
-            // Setup the header dictionary
-            headerDictionary.Clear();
-            for(int i = 0; i < languageMap.Length; ++i)
-            {
-                headerDictionary.Add(languageMap[i].Language, languageMap[i].Header);
-            }
+            // Do nothing
         }
 
         /// <summary>
@@ -142,52 +248,11 @@ namespace OmiyaGames
             // Check if we've populated any translations
             if (translationDictionary.Count <= 0)
             {
-                // Check if we're testing a language
-                if (string.IsNullOrEmpty(testLanguage) == true)
-                {
-                    // Retrieve the default language settings from GameSettings
-                    GameSettings settings = Singleton.Get<GameSettings>();
-                    currentLanguage = settings.Language;
-                    if(Debug.isDebugBuild == true)
-                    {
-                        Debug.Log("Retrieved language from settings: " + currentLanguage);
-                    }
+                // Check the system's language
+                SetupDefaultLanguage();
 
-                    // Check to see if we support the system language
-                    if(headerDictionary.ContainsKey(Application.systemLanguage) == true)
-                    {
-                        // Set the default language
-                        defaultLanguage = headerDictionary[Application.systemLanguage];
-                        if(Debug.isDebugBuild == true)
-                        {
-                            Debug.Log("Retrieved default language from language map: " + currentLanguage);
-                        }
-
-                        // Check to see if the current language is an empty string
-                        if (string.IsNullOrEmpty(currentLanguage) == true)
-                        {
-                            // If it is, use the default language instead
-                            currentLanguage = defaultLanguage;
-
-                            // Update the settings
-                            settings.Language = currentLanguage;
-                        }
-                    }
-                }
-                else
-                {
-                    // If so, set both the current and default language to the test language
-                    defaultLanguage = testLanguage;
-                    currentLanguage = testLanguage;
-                    if(Debug.isDebugBuild == true)
-                    {
-                        Debug.Log("Retrieved language from testLanguage: " + testLanguage);
-                    }
-                }
-                if(Debug.isDebugBuild == true)
-                {
-                    Debug.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
-                }
+                // Retrieve the current language settings from GameSettings
+                SetupCurrentLanguage();
 
                 // Check which parameter to use to load the next file
                 if (loadFileAsset != null)
@@ -201,6 +266,12 @@ namespace OmiyaGames
                 else
                 {
                     Debug.LogWarning("No file found for TranslationManager");
+                }
+
+                // Indicate final results
+                if(Debug.isDebugBuild == true)
+                {
+                    Debug.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
                 }
             }
         }
@@ -289,6 +360,59 @@ namespace OmiyaGames
                 }
             }
         }
+
+        public FontMap CurrentLanguageFont
+        {
+            get
+            {
+                FontMap returnFont = null;
+                if(FontDictionary.ContainsKey(CurrentLanguage) == true)
+                {
+                    returnFont = FontDictionary[CurrentLanguage];
+                }
+                else if(FontDictionary.ContainsKey(DefaultLanguage) == true)
+                {
+                    returnFont = FontDictionary[DefaultLanguage];
+                }
+                return returnFont;
+            }
+        }
+        
+        Dictionary<SystemLanguage, LanguageMap> HeaderDictionary
+        {
+            get
+            {
+                // Check if the language map has a different size of our cached dictionary
+                if((languageMap != null) && (headerDictionary.Count != languageMap.Length))
+                {
+                    // Setup the header dictionary
+                    headerDictionary.Clear();
+                    for(int i = 0; i < languageMap.Length; ++i)
+                    {
+                        headerDictionary.Add(languageMap[i].Language, languageMap[i]);
+                    }
+                }
+                return headerDictionary;
+            }
+        }
+
+        internal Dictionary<string, FontMap> FontDictionary
+        {
+            get
+            {
+                // Check if the language map has a different size of our cached dictionary
+                if((fontMap != null) && (fontDictionary.Count != fontMap.Length))
+                {
+                    // Setup the header dictionary
+                    fontDictionary.Clear();
+                    for(int i = 0; i < fontMap.Length; ++i)
+                    {
+                        fontDictionary.Add(fontMap[i].Header, fontMap[i]);
+                    }
+                }
+                return fontDictionary;
+            }
+        }
         #endregion
 
         public void ParseFile(string csvFilePath)
@@ -346,7 +470,28 @@ namespace OmiyaGames
              * values for a given row/column.
              */
             List<Dictionary<string, string>> data = CSVReader.Read(inputFile);
+            ParseHeaders(data);
+            ParseColumn(data);
 
+            /* Update any Text labels */
+            foreach (TranslatedText label in TranslatedText.AllTranslationScripts)
+            {
+                if (label != null)
+                {
+                    label.UpdateLabel();
+                }
+            }
+            foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
+            {
+                if (label != null)
+                {
+                    label.UpdateLabel();
+                }
+            }
+        }
+
+        void ParseHeaders(List<Dictionary<string, string>> data)
+        {
             /* Read the first row pulled back from the csv file. Parse the
              * dictionary to get a list of all the keys that were found. This
              * will be the list of languages in the file. When building the list,
@@ -357,20 +502,36 @@ namespace OmiyaGames
             supportedLanguages.Clear();
             foreach (string key in data[0].Keys)
             {
-                if (key != keyHeader)
+                if ((string.IsNullOrEmpty(key) == false) && (key != keyHeader))
                 {
                     supportedLanguages.Add(key);
-                    if (string.IsNullOrEmpty(defaultLanguage) == true)
-                    {
-                        defaultLanguage = key;
-                    }
-                    if (string.IsNullOrEmpty(currentLanguage) == true)
-                    {
-                        currentLanguage = key;
-                    }
                 }
             }
 
+            // Make sure there's more than one language
+            if(supportedLanguages.Count > 0)
+            {
+                // Check if the default language is set
+                if ((string.IsNullOrEmpty(defaultLanguage) == true) || (supportedLanguages.Contains(defaultLanguage) == false))
+                {
+                    // If not, grab the first language in the headers
+                    defaultLanguage = supportedLanguages[0];
+                }
+                
+                // Check if the current langauge is set
+                if ((string.IsNullOrEmpty(currentLanguage) == true) || (supportedLanguages.Contains(currentLanguage) == false))
+                {
+                    // If not, use the default language instead
+                    currentLanguage = defaultLanguage;
+
+                    // Update the settings
+                    Singleton.Get<GameSettings>().Language = currentLanguage;
+                }
+            }
+        }
+
+        void ParseColumn(List<Dictionary<string, string>> data)
+        {
             /* Loop through each row in the file. Grab the langauge-independet, and
              * the value based on the current langage. Put them in the dictionary.
              */
@@ -388,15 +549,27 @@ namespace OmiyaGames
                     Debug.LogError("Translation CSV file contains duplicate key: " + key);
                 }
             }
+        }
 
-            /* Update any Text labels */
-            foreach (TranslatedText label in TranslatedText.AllTranslationScripts)
+        void SetupDefaultLanguage()
+        {
+            if(HeaderDictionary.ContainsKey(Application.systemLanguage) == true)
             {
-                label.UpdateLabel();
+                // Set the default language
+                defaultLanguage = HeaderDictionary[Application.systemLanguage].Header;
+                if(Debug.isDebugBuild == true)
+                {
+                    Debug.Log("Retrieved default language from system: " + defaultLanguage);
+                }
             }
-            foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
+        }
+
+        void SetupCurrentLanguage()
+        {
+            currentLanguage = Singleton.Get<GameSettings>().Language;
+            if ((string.IsNullOrEmpty(currentLanguage) == false) && (Debug.isDebugBuild == true))
             {
-                label.UpdateLabel();
+                Debug.Log("Retrieved language from settings: " + currentLanguage);
             }
         }
         #endregion

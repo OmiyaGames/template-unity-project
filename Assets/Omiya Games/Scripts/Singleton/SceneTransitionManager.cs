@@ -63,6 +63,10 @@ namespace OmiyaGames
         [SerializeField]
         SceneInfo[] levels;
 
+        [Header("Debugging")]
+        [SerializeField]
+        CursorLockMode defaultLockMode = CursorLockMode.Locked;
+
         SceneInfo lastScene = null;
         SceneInfo sceneToLoad = null;
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
@@ -214,20 +218,27 @@ namespace OmiyaGames
             }
 
             // Update the cursor locking
-            if(Singleton.Instance.IsWebplayer == true)
-            {
-                CursorMode = CurrentScene.LockModeWeb;
-            }
-            else
-            {
-                CursorMode = CurrentScene.LockMode;
-            }
+            RevertCursorLockMode(true);
 
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
                 Singleton.Get<TimeManager>().RevertToOriginalTime();
             }
+        }
+
+        public void RevertCursorLockMode(bool allowWebplayerSettings)
+        {
+            CursorLockMode mode = defaultLockMode;
+            if (CurrentScene != null)
+            {
+                mode = CurrentScene.LockMode;
+                if ((allowWebplayerSettings == true) && (Singleton.Instance.IsWebplayer == true))
+                {
+                    mode = CurrentScene.LockModeWeb;
+                }
+            }
+            CursorMode = mode;
         }
 
         /// <summary>
@@ -393,12 +404,12 @@ namespace OmiyaGames
             if (loadLevelAsynchronously == true)
             {
                 // Load asynchronously
-                SceneManager.LoadSceneAsync(sceneToLoad.SceneName);
+                SceneManager.LoadSceneAsync(sceneToLoad.SceneFileName);
             }
             else
             {
                 // Load synchronously
-                SceneManager.LoadScene(sceneToLoad.SceneName);
+                SceneManager.LoadScene(sceneToLoad.SceneFileName);
             }
 
             // Indicate this level is already in progress of loading
