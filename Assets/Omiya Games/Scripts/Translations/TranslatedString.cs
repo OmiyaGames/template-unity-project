@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using System;
 
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WebsiteButton.cs" company="Omiya Games">
+    /// <copyright file="TranslatedString.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2016 Omiya Games
@@ -28,52 +28,56 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>3/23/2017</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Helper script that provides buttons a method to open websites.
+    /// A struct whose <code>ToString()</code> method automatically translates
+    /// based on settings.
     /// </summary>
-    public class WebsiteButton : MonoBehaviour
+    [Serializable]
+    public struct TranslatedString 
     {
         [SerializeField]
-        Button button;
-        [SerializeField]
-        TranslatedText label;
+        readonly string key;
 
-        string redirectTo;
+        public TranslatedString(string key)
+        {
+            this.key = key;
+        }
 
-        public Button ButtonComponent
+        public string TranslationKey
         {
             get
             {
-                return button;
+                return key;
             }
         }
 
-        public TranslatedText LabelComponent
+        public bool IsTranslating
         {
             get
             {
-                return label;
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && (Parser.ContainsKey(TranslationKey) == true);
             }
         }
 
-        public string RedirectTo
+        private static TranslationManager Parser
         {
             get
             {
-                return redirectTo;
-            }
-            set
-            {
-                redirectTo = value;
+                return Singleton.Get<TranslationManager>();
             }
         }
 
-        public void OnClick()
+        public override string ToString()
         {
-            Singleton.Get<MenuManager>().ButtonClick.Play();
-            Application.OpenURL(RedirectTo);
+            string returnString = base.ToString();
+            if (IsTranslating == true)
+            {
+                // Add this script to the dictionary
+                returnString = Parser[TranslationKey];
+            }
+            return returnString;
         }
     }
 }

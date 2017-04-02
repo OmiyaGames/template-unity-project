@@ -39,15 +39,15 @@ namespace OmiyaGames
         [SerializeField]
         protected Button defaultButton = null;
         [SerializeField]
-        protected Text completeLabel = null;
+        protected TranslatedText completeLabel = null;
         [SerializeField]
-        protected Text failedLabel = null;
+        protected TranslatedText failedLabel = null;
         [SerializeField]
-        protected Text nextSceneLabel = null;
+        protected TranslatedText nextSceneLabel = null;
         [SerializeField]
-        protected Text restartLabel = null;
+        protected TranslatedText restartLabel = null;
         [SerializeField]
-        protected Text returnToMenuLabel = null;
+        protected TranslatedText returnToMenuLabel = null;
 
         abstract public bool PauseOnShow
         {
@@ -72,36 +72,23 @@ namespace OmiyaGames
 
         protected virtual void Start()
         {
-            // Update the labels on each button
-            MenuManager manager = Singleton.Get<MenuManager>();
-
-            // Setup all labels, if available
-            if (completeLabel != null)
-            {
-                completeLabel.text = manager.CompletedCurrentSceneText;
-            }
-            if (failedLabel != null)
-            {
-                failedLabel.text = manager.FailedCurrentSceneText;
-            }
-            if (nextSceneLabel != null)
-            {
-                nextSceneLabel.text = manager.NextSceneText;
-            }
-            if (restartLabel != null)
-            {
-                restartLabel.text = manager.RestartCurrentSceneText;
-            }
-            if (returnToMenuLabel != null)
-            {
-                returnToMenuLabel.text = manager.ReturnToMenuText;
-            }
+            // Do nothing!
         }
 
         public override void Show(System.Action<IMenu> stateChanged)
         {
             // Call base function
             base.Show(stateChanged);
+
+            // Update the labels on each button
+            MenuManager manager = Singleton.Get<MenuManager>();
+
+            // Setup all labels, if available
+            manager.SetLabelTextToCompletedCurrentScene(completeLabel);
+            manager.SetLabelTextToFailedCurrentScene(failedLabel);
+            manager.SetLabelTextToNextScene(nextSceneLabel);
+            manager.SetLabelTextToRestartCurrentScene(restartLabel);
+            manager.SetLabelTextToReturnToMenu(returnToMenuLabel);
 
             // Check if we should stop time
             if (PauseOnShow == true)

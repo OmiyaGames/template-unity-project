@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 namespace OmiyaGames
 {
-    ///-----------------------------------------------------------------------
-    /// <copyright file="WebsiteButton.cs" company="Omiya Games">
+	///-----------------------------------------------------------------------
+    /// <copyright file="LevelSelectMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2016 Omiya Games
+    /// Copyright (c) 2014-2017 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -28,52 +28,55 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>3/14/2017</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Helper script that provides buttons a method to open websites.
+    /// A script for a list button.  Holds an index and a references to
+	/// buttons and label.
     /// </summary>
-    public class WebsiteButton : MonoBehaviour
-    {
-        [SerializeField]
-        Button button;
-        [SerializeField]
-        TranslatedText label;
+	[RequireComponent(typeof(Button))]
+	public class ListButtonScript : MonoBehaviour
+	{
+		public event System.Action<ListButtonScript> OnClicked;
 
-        string redirectTo;
+		[SerializeField]
+		TranslatedText[] labels = null;
+		Button buttonCache = null;
 
-        public Button ButtonComponent
-        {
-            get
-            {
-                return button;
-            }
-        }
+		public int Index
+		{
+			get
+			{
+				return transform.GetSiblingIndex();
+			}
+		}
+		
+		public Button Button
+		{
+			get
+			{
+				if(buttonCache == null)
+				{
+					buttonCache = GetComponent<Button>();
+				}
+				return buttonCache;
+			}
+		}
 
-        public TranslatedText LabelComponent
-        {
-            get
-            {
-                return label;
-            }
-        }
+		public TranslatedText[] Labels
+		{
+			get
+			{
+				return labels;
+			}
+		}
 
-        public string RedirectTo
-        {
-            get
-            {
-                return redirectTo;
-            }
-            set
-            {
-                redirectTo = value;
-            }
-        }
-
-        public void OnClick()
-        {
-            Singleton.Get<MenuManager>().ButtonClick.Play();
-            Application.OpenURL(RedirectTo);
-        }
-    }
+		public void OnClick()
+		{
+			if(OnClicked != null)
+			{
+				OnClicked(this);
+			}
+		}
+	}
 }

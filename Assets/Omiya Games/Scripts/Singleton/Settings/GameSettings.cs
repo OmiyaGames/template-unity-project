@@ -71,6 +71,7 @@ namespace OmiyaGames
         public const float DefaultSoundVolume = 1;
         public const string DefaultLanguage = "";
         public const int DefaultBestScore = 0;
+        public const float DefaultSensitivity = 0.5f;
 
         public const string NumLevelsUnlockedKey = "Number of Unlocked Levels";
         public const string MusicVolumeKey = "Music Volume";
@@ -82,10 +83,32 @@ namespace OmiyaGames
         public const string LeaderboardUserScopeKey = "Leaderboard User Scope";
         public const string NumberOfTimesAppOpenedKey = "Number of Times App Open";
         public const string TotalPlayTimeKey = "Total Play Time";
+
+        public const string SplitKeyboardAxisKey = "Split Keyboard Axis";
+        public const string KeyboardXAxisSensitivityKey = "Keyboard X-Axis Sensitivity";
+        public const string KeyboardYAxisSensitivityKey = "Keyboard Y-Axis Sensitivity";
+
+        public const string IsKeyboardXAxisInvertedKey = "Keyboard X-Axis is Inverted";
+        public const string IsKeyboardYAxisInvertedKey = "Keyboard Y-Axis is Inverted";
+
+        public const string SplitMouseAxisKey = "Split Mouse Axis";
+        public const string MouseXAxisSensitivityKey = "Mouse X-Axis Sensitivity";
+        public const string MouseYAxisSensitivityKey = "Mouse Y-Axis Sensitivity";
+
+        public const string IsMouseXAxisInvertedKey = "Mouse X-Axis is Inverted";
+        public const string IsMouseYAxisInvertedKey = "Mouse Y-Axis is Inverted";
+
+        public const string ScrollWheelSensitivityKey = "Scroll Wheel Sensitivity";
+        public const string IsScrollWheelInvertedKey = "Scroll Wheel is Inverted";
+
+        public const string IsSmoothCameraEnabledKey = "Is Smooth Camera Enabled";
+        public const string IsBobbingCameraEnabledKey = "Is Bobbing Camera Enabled";
+        public const string IsFlashesEnabledKey = "Is Flashes Enabled";
+        public const string IsMotionBlursEnabledKey = "Is Motion Blurs Enabled";
+        public const string IsBloomEnabledKey = "Is Bloom Enabled";
         #endregion
 
         #region Version 0 Settings Member Variables
-        readonly StringBuilder listEntryBuilder = new StringBuilder();
         readonly StringBuilder fullListBuilder = new StringBuilder();
         readonly List<HighScore> bestScores = new List<HighScore>(LocalHighScoresMaxListSize);
         int numLevelsUnlocked = 1;
@@ -99,6 +122,27 @@ namespace OmiyaGames
         DateTime lastTimeOpen;
         TimeSpan lastPlayTime = TimeSpan.Zero;
         int numberOfTimesAppOpened = 0;
+
+        bool splitKeyboardAxis = false;
+        float keyboardXAxisSensitivity = DefaultSensitivity;
+        float keyboardYAxisSensitivity = DefaultSensitivity;
+        bool isKeyboardXAxisInverted = false;
+        bool isKeyboardYAxisInverted = false;
+
+        bool splitMouseAxis = false;
+        float mouseXAxisSensitivity = DefaultSensitivity;
+        float mouseYAxisSensitivity = DefaultSensitivity;
+        bool isMouseXAxisInverted = false;
+        bool isMouseYAxisInverted = false;
+
+        float scrollWheelSensitivity = DefaultSensitivity;
+        bool isScrollWheelInverted = false;
+
+        bool isSmoothCameraEnabled = true;
+        bool isBobbingCameraEnabled = true;
+        bool isFlashesEnabled = true;
+        bool isMotionBlursEnabled = true;
+        bool isBloomEnabled = true;
         #endregion
 
         public static UserScope DefaultLeaderboardUserScope
@@ -290,6 +334,278 @@ namespace OmiyaGames
                 return lastPlayTime.Add(DateTime.UtcNow - lastTimeOpen);
             }
         }
+
+        public bool IsKeyboardAxisSensitivitySplit
+        {
+            get
+            {
+                return splitKeyboardAxis;
+            }
+            set
+            {
+                if (splitKeyboardAxis != value)
+                {
+                    splitKeyboardAxis = value;
+                    Settings.SetBool(SplitKeyboardAxisKey, splitKeyboardAxis);
+                }
+            }
+        }
+
+        public float KeyboardXAxisSensitivity
+        {
+            get
+            {
+                return keyboardXAxisSensitivity;
+            }
+            set
+            {
+                if (keyboardXAxisSensitivity != value)
+                {
+                    keyboardXAxisSensitivity = value;
+                    Settings.SetFloat(KeyboardXAxisSensitivityKey, keyboardXAxisSensitivity);
+                }
+            }
+        }
+
+        public float KeyboardYAxisSensitivity
+        {
+            get
+            {
+                return keyboardYAxisSensitivity;
+            }
+            set
+            {
+                if (keyboardYAxisSensitivity != value)
+                {
+                    keyboardYAxisSensitivity = value;
+                    Settings.SetFloat(KeyboardYAxisSensitivityKey, keyboardYAxisSensitivity);
+                }
+            }
+        }
+
+        public bool IsKeyboardXAxisInverted
+        {
+            get
+            {
+                return isKeyboardXAxisInverted;
+            }
+            set
+            {
+                if (isKeyboardXAxisInverted != value)
+                {
+                    isKeyboardXAxisInverted = value;
+                    Settings.SetBool(IsKeyboardXAxisInvertedKey, isKeyboardXAxisInverted);
+                }
+            }
+        }
+
+        public bool IsKeyboardYAxisInverted
+        {
+            get
+            {
+                return isKeyboardYAxisInverted;
+            }
+            set
+            {
+                if (isKeyboardYAxisInverted != value)
+                {
+                    isKeyboardYAxisInverted = value;
+                    Settings.SetBool(IsKeyboardYAxisInvertedKey, isKeyboardYAxisInverted);
+                }
+            }
+        }
+
+        public bool IsMouseAxisSensitivitySplit
+        {
+            get
+            {
+                return splitMouseAxis;
+            }
+            set
+            {
+                if (splitMouseAxis != value)
+                {
+                    splitMouseAxis = value;
+                    Settings.SetBool(SplitMouseAxisKey, splitMouseAxis);
+                }
+            }
+        }
+
+        public float MouseXAxisSensitivity
+        {
+            get
+            {
+                return mouseXAxisSensitivity;
+            }
+            set
+            {
+                if (mouseXAxisSensitivity != value)
+                {
+                    mouseXAxisSensitivity = value;
+                    Settings.SetFloat(MouseXAxisSensitivityKey, mouseXAxisSensitivity);
+                }
+            }
+        }
+
+        public float MouseYAxisSensitivity
+        {
+            get
+            {
+                return mouseYAxisSensitivity;
+            }
+            set
+            {
+                if (mouseYAxisSensitivity != value)
+                {
+                    mouseYAxisSensitivity = value;
+                    Settings.SetFloat(MouseYAxisSensitivityKey, mouseYAxisSensitivity);
+                }
+            }
+        }
+
+        public bool IsMouseXAxisInverted
+        {
+            get
+            {
+                return isMouseXAxisInverted;
+            }
+            set
+            {
+                if (isMouseXAxisInverted != value)
+                {
+                    isMouseXAxisInverted = value;
+                    Settings.SetBool(IsMouseXAxisInvertedKey, isMouseXAxisInverted);
+                }
+            }
+        }
+
+        public bool IsMouseYAxisInverted
+        {
+            get
+            {
+                return isMouseYAxisInverted;
+            }
+            set
+            {
+                if (isMouseYAxisInverted != value)
+                {
+                    isMouseYAxisInverted = value;
+                    Settings.SetBool(IsMouseYAxisInvertedKey, isMouseYAxisInverted);
+                }
+            }
+        }
+
+        public float ScrollWheelSensitivity
+        {
+            get
+            {
+                return scrollWheelSensitivity;
+            }
+            set
+            {
+                if (scrollWheelSensitivity != value)
+                {
+                    scrollWheelSensitivity = value;
+                    Settings.SetFloat(ScrollWheelSensitivityKey, scrollWheelSensitivity);
+                }
+            }
+        }
+
+        public bool IsScrollWheelInverted
+        {
+            get
+            {
+                return isScrollWheelInverted;
+            }
+            set
+            {
+                if (isScrollWheelInverted != value)
+                {
+                    isScrollWheelInverted = value;
+                    Settings.SetBool(IsScrollWheelInvertedKey, isScrollWheelInverted);
+                }
+            }
+        }
+
+        public bool IsFlashesEnabled
+        {
+            get
+            {
+                return isFlashesEnabled;
+            }
+            set
+            {
+                if (isFlashesEnabled != value)
+                {
+                    isFlashesEnabled = value;
+                    Settings.SetBool(IsFlashesEnabledKey, isFlashesEnabled);
+                }
+            }
+        }
+
+        public bool IsMotionBlursEnabled
+        {
+            get
+            {
+                return isMotionBlursEnabled;
+            }
+            set
+            {
+                if (isMotionBlursEnabled != value)
+                {
+                    isMotionBlursEnabled = value;
+                    Settings.SetBool(IsMotionBlursEnabledKey, isMotionBlursEnabled);
+                }
+            }
+        }
+
+        public bool IsBloomEnabled
+        {
+            get
+            {
+                return isBloomEnabled;
+            }
+            set
+            {
+                if (isBloomEnabled != value)
+                {
+                    isBloomEnabled = value;
+                    Settings.SetBool(IsBloomEnabledKey, isBloomEnabled);
+                }
+            }
+        }
+
+        public bool IsSmoothCameraEnabled
+        {
+            get
+            {
+                return isSmoothCameraEnabled;
+            }
+            set
+            {
+                if (isSmoothCameraEnabled != value)
+                {
+                    isSmoothCameraEnabled = value;
+                    Settings.SetBool(IsSmoothCameraEnabledKey, isSmoothCameraEnabled);
+                }
+            }
+        }
+
+        public bool IsBobbingCameraEnabled
+        {
+            get
+            {
+                return isBobbingCameraEnabled;
+            }
+            set
+            {
+                if (isBobbingCameraEnabled != value)
+                {
+                    isBobbingCameraEnabled = value;
+                    Settings.SetBool(IsBobbingCameraEnabledKey, isBobbingCameraEnabled);
+                }
+            }
+        }
         #endregion
 
         #region Singleton Overrides
@@ -473,9 +789,37 @@ namespace OmiyaGames
                 RetrieveHighScores(tempString);
             }
 
+            // Grab Keyboard Sensitivity information
+            splitKeyboardAxis = Settings.GetBool(SplitKeyboardAxisKey, false);
+
             // Grab how long we've played this game
             lastTimeOpen = DateTime.UtcNow;
             lastPlayTime = Settings.GetTimeSpan(TotalPlayTimeKey, TimeSpan.Zero);
+
+            // Get Keyboard Sensitivity information
+            splitKeyboardAxis = Settings.GetBool(SplitKeyboardAxisKey, false);
+            keyboardXAxisSensitivity = Settings.GetFloat(KeyboardXAxisSensitivityKey, DefaultSensitivity);
+            keyboardYAxisSensitivity = Settings.GetFloat(KeyboardYAxisSensitivityKey, DefaultSensitivity);
+            isKeyboardXAxisInverted = Settings.GetBool(IsKeyboardXAxisInvertedKey, false);
+            isKeyboardYAxisInverted = Settings.GetBool(IsKeyboardYAxisInvertedKey, false);
+
+            // Get Mouse Sensitivity information
+            splitMouseAxis = Settings.GetBool(SplitMouseAxisKey, false);
+            mouseXAxisSensitivity = Settings.GetFloat(MouseXAxisSensitivityKey, DefaultSensitivity);
+            mouseYAxisSensitivity = Settings.GetFloat(MouseYAxisSensitivityKey, DefaultSensitivity);
+            isMouseXAxisInverted = Settings.GetBool(IsMouseXAxisInvertedKey, false);
+            isMouseYAxisInverted = Settings.GetBool(IsMouseYAxisInvertedKey, false);
+
+            // Get Mouse Wheel Sensitivity information
+            scrollWheelSensitivity = Settings.GetFloat(ScrollWheelSensitivityKey, DefaultSensitivity);
+            isScrollWheelInverted = Settings.GetBool(IsScrollWheelInvertedKey, false);
+
+            // Get Special Effects information
+            isSmoothCameraEnabled = Settings.GetBool(IsSmoothCameraEnabledKey, false);
+            isBobbingCameraEnabled = Settings.GetBool(IsBobbingCameraEnabledKey, false);
+            isFlashesEnabled = Settings.GetBool(IsFlashesEnabledKey, true);
+            isMotionBlursEnabled = Settings.GetBool(IsMotionBlursEnabledKey, true);
+            isBloomEnabled = Settings.GetBool(IsBloomEnabledKey, true);
         }
 
         void SaveVersion0Settings()
@@ -505,6 +849,31 @@ namespace OmiyaGames
 
             // Set the play time
             Settings.SetTimeSpan(TotalPlayTimeKey, TotalPlayTime);
+
+            // Set Keyboard Sensitivity information
+            Settings.SetBool(SplitKeyboardAxisKey, splitKeyboardAxis);
+            Settings.SetFloat(KeyboardXAxisSensitivityKey, keyboardXAxisSensitivity);
+            Settings.SetFloat(KeyboardYAxisSensitivityKey, keyboardYAxisSensitivity);
+            Settings.SetBool(IsKeyboardXAxisInvertedKey, isKeyboardXAxisInverted);
+            Settings.SetBool(IsKeyboardYAxisInvertedKey, isKeyboardYAxisInverted);
+
+            // Set Mouse Sensitivity information
+            Settings.SetBool(SplitMouseAxisKey, splitMouseAxis);
+            Settings.SetFloat(MouseXAxisSensitivityKey, mouseXAxisSensitivity);
+            Settings.SetFloat(MouseYAxisSensitivityKey, mouseYAxisSensitivity);
+            Settings.SetBool(IsMouseXAxisInvertedKey, isMouseXAxisInverted);
+            Settings.SetBool(IsMouseYAxisInvertedKey, isMouseYAxisInverted);
+
+            // Set Mouse Wheel Sensitivity information
+            Settings.SetFloat(ScrollWheelSensitivityKey, scrollWheelSensitivity);
+            Settings.SetBool(IsScrollWheelInvertedKey, isScrollWheelInverted);
+
+            // Set Special Effects information
+            Settings.SetBool(IsSmoothCameraEnabledKey, isSmoothCameraEnabled);
+            Settings.SetBool(IsBobbingCameraEnabledKey, isBobbingCameraEnabled);
+            Settings.SetBool(IsFlashesEnabledKey, isFlashesEnabled);
+            Settings.SetBool(IsMotionBlursEnabledKey, isMotionBlursEnabled);
+            Settings.SetBool(IsBloomEnabledKey, isBloomEnabled);
         }
 
         void RevertVersion0SettingsClearedSettings()
@@ -522,6 +891,34 @@ namespace OmiyaGames
 
             // Set the language
             Settings.SetString(LanguageKey, language);
+
+            // Set Keyboard Sensitivity information
+            Settings.SetBool(SplitKeyboardAxisKey, splitKeyboardAxis);
+
+            // Set Keyboard Sensitivity information
+            Settings.SetBool(SplitKeyboardAxisKey, splitKeyboardAxis);
+            Settings.SetFloat(KeyboardXAxisSensitivityKey, keyboardXAxisSensitivity);
+            Settings.SetFloat(KeyboardYAxisSensitivityKey, keyboardYAxisSensitivity);
+            Settings.SetBool(IsKeyboardXAxisInvertedKey, isKeyboardXAxisInverted);
+            Settings.SetBool(IsKeyboardYAxisInvertedKey, isKeyboardYAxisInverted);
+
+            // Set Mouse Sensitivity information
+            Settings.SetBool(SplitMouseAxisKey, splitMouseAxis);
+            Settings.SetFloat(MouseXAxisSensitivityKey, mouseXAxisSensitivity);
+            Settings.SetFloat(MouseYAxisSensitivityKey, mouseYAxisSensitivity);
+            Settings.SetBool(IsMouseXAxisInvertedKey, isMouseXAxisInverted);
+            Settings.SetBool(IsMouseYAxisInvertedKey, isMouseYAxisInverted);
+
+            // Set Mouse Wheel Sensitivity information
+            Settings.SetFloat(ScrollWheelSensitivityKey, scrollWheelSensitivity);
+            Settings.SetBool(IsScrollWheelInvertedKey, isScrollWheelInverted);
+
+            // Set Special Effects information
+            Settings.SetBool(IsSmoothCameraEnabledKey, isSmoothCameraEnabled);
+            Settings.SetBool(IsBobbingCameraEnabledKey, isBobbingCameraEnabled);
+            Settings.SetBool(IsFlashesEnabledKey, isFlashesEnabled);
+            Settings.SetBool(IsMotionBlursEnabledKey, isMotionBlursEnabled);
+            Settings.SetBool(IsBloomEnabledKey, isBloomEnabled);
         }
 
         void RetrieveHighScores(string highScoresString)
