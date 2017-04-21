@@ -189,18 +189,18 @@ namespace OmiyaGames
         void SetupButtonEventAndName(SceneTransitionManager settings, ListButtonScript newButton)
         {
             // Add an event to the button
-            int levelOrdinal = newButton.Index + 1;
+            SceneInfo scene = settings.Levels[newButton.Index];
             newButton.OnClicked += ((button) =>
             {
-                OnLevelClicked(settings.Levels[levelOrdinal]);
+                OnLevelClicked(scene);
             });
 
             // Setup the level button labels
             foreach (TranslatedText label in newButton.Labels)
             {
-                label.TranslationKey = settings.Levels[levelOrdinal].DisplayName.TranslationKey;
+                label.TranslationKey = scene.DisplayName.TranslationKey;
             }
-            newButton.name = settings.Levels[levelOrdinal].DisplayName.TranslationKey;
+            newButton.name = scene.DisplayName.TranslationKey;
         }
 
         // void SetupButtonNavigation(Button newButton, Button lastButton)
