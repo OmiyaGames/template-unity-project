@@ -198,7 +198,7 @@ namespace OmiyaGames
             // Setup the level button labels
             foreach (TranslatedText label in newButton.Labels)
             {
-                label.TranslationKey = scene.DisplayName.TranslationKey;
+                label.SetTranslationKey(scene.DisplayName.TranslationKey, (newButton.Index + 1));
             }
             newButton.name = scene.DisplayName.TranslationKey;
         }
