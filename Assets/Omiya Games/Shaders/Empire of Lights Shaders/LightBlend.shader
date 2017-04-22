@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Omiya Games/LightBlend"
 {
 	Properties
@@ -53,7 +55,7 @@ Shader "Omiya Games/LightBlend"
 	}
 
 	void vert(inout appdata_full v, out Input o) {
-		float4 projVert = mul(UNITY_MATRIX_MVP, v.vertex);
+		float4 projVert = UnityObjectToClipPos(v.vertex);
 #if UNITY_UV_STARTS_AT_TOP
 		float scale = -1.0;
 #else
