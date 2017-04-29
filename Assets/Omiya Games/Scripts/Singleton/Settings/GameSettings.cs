@@ -80,6 +80,7 @@ namespace OmiyaGames
         public const string SoundMutedKey = "Sound Muted";
         public const string LanguageKey = "Language";
         public const string LocalHighScoresKey = "Local High Scores";
+        public const string LocalBestTimesKey = "Local Best Times";
         public const string LeaderboardUserScopeKey = "Leaderboard User Scope";
         public const string NumberOfTimesAppOpenedKey = "Number of Times App Open";
         public const string TotalPlayTimeKey = "Total Play Time";
@@ -106,11 +107,13 @@ namespace OmiyaGames
         public const string IsFlashesEnabledKey = "Is Flashes Enabled";
         public const string IsMotionBlursEnabledKey = "Is Motion Blurs Enabled";
         public const string IsBloomEnabledKey = "Is Bloom Enabled";
+        public const string LastEnteredNameKey = "Last Entered Name";
         #endregion
 
         #region Version 0 Settings Member Variables
         readonly StringBuilder fullListBuilder = new StringBuilder();
         readonly List<HighScore> bestScores = new List<HighScore>(LocalHighScoresMaxListSize);
+        readonly List<BestTime> bestTimes = new List<BestTime>(LocalHighScoresMaxListSize);
         int numLevelsUnlocked = 1;
         float musicVolume = 0;
         float soundVolume = 0;
@@ -118,7 +121,6 @@ namespace OmiyaGames
         bool soundMuted = false;
         string language = DefaultLanguage;
         UserScope leaderboardUserScope;
-        Comparison<int> sortScoresBy = null;
         DateTime lastTimeOpen;
         TimeSpan lastPlayTime = TimeSpan.Zero;
         int numberOfTimesAppOpened = 0;
@@ -143,6 +145,8 @@ namespace OmiyaGames
         bool isFlashesEnabled = true;
         bool isMotionBlursEnabled = true;
         bool isBloomEnabled = true;
+
+        string lastEnteredName = "";
         #endregion
 
         public static UserScope DefaultLeaderboardUserScope
@@ -281,6 +285,19 @@ namespace OmiyaGames
             }
         }
 
+        public TimeSpan BestTimeSeconds
+        {
+            get
+            {
+                TimeSpan returnScore = new TimeSpan();
+                if (bestTimes.Count > 0)
+                {
+                    returnScore = bestTimes[0].time;
+                }
+                return returnScore;
+            }
+        }
+
         public ReadOnlyCollection<HighScore> HighScores
         {
             get
@@ -289,25 +306,11 @@ namespace OmiyaGames
             }
         }
 
-        /// <summary>
-        /// The comparison used to sort the high scores.
-        /// </summary>
-        public Comparison<int> SortScoresBy
+        public ReadOnlyCollection<BestTime> BestSurvivalTimes
         {
             get
             {
-                if (sortScoresBy == null)
-                {
-                    sortScoresBy = (int left, int right) => { return (left - right); };
-                }
-                return sortScoresBy;
-            }
-            set
-            {
-                if ((value != null) && (sortScoresBy != value))
-                {
-                    sortScoresBy = value;
-                }
+                return bestTimes.AsReadOnly();
             }
         }
 
@@ -606,6 +609,22 @@ namespace OmiyaGames
                 }
             }
         }
+
+        public string LastEnteredName
+        {
+            get
+            {
+                return lastEnteredName;
+            }
+            set
+            {
+                if (lastEnteredName != value)
+                {
+                    lastEnteredName = value;
+                    Settings.SetString(LastEnteredNameKey, lastEnteredName);
+                }
+            }
+        }
         #endregion
 
         #region Singleton Overrides
@@ -648,17 +667,55 @@ namespace OmiyaGames
         /// <returns>The index of the rank the score placed in, starting with 0 as the top.</returns>
         /// <param name="newScore">New score.</param>
         /// <param name="name">Name of person achieving score.</param>
-        public int AddScore(int newScore, string name)
+        public int AddScore(int newScore, string name, out HighScore newRecord)
         {
+            return AddRecord(bestScores, SortScoresDescendingBy, newScore, name, out newRecord);
+        }
+
+        public void SaveBestScores()
+        {
+            Settings.SetString(LocalHighScoresKey, GenerateHighScoresString<HighScore, int>(bestScores));
+        }
+
+        /// <summary>
+        /// Adds the score to the local high scores list.
+        /// </summary>
+        /// <returns>The index of the rank the score placed in, starting with 0 as the top.</returns>
+        /// <param name="newScore">New score.</param>
+        /// <param name="name">Name of person achieving score.</param>
+        public int AddTime(float totalSeconds, string name, out BestTime newRecord)
+        {
+            return AddRecord(bestTimes, SortTimesDescendingBy, TimeSpan.FromSeconds(totalSeconds), name, out newRecord);
+        }
+
+        public void SaveBestTimes()
+        {
+            // Save this information
+            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, TimeSpan>(bestTimes));
+        }
+
+        private int AddRecord<T, R>(List<T> bestScores, Comparison<T> comparer, R newScore, string name, out T newRecord) where T : IRecord<R>
+        {
+            // Create a new instance of this score
+            newRecord = NewRecord<T, R>(newScore, name);
+
             // Check to see if there are any high scores recorded
             int returnRank = 0;
             if (bestScores.Count > 0)
             {
                 // Go through each high score, and see if the new score exceeds or equals any
                 returnRank = -1;
+
+                // Set to the last ranking if list size is NOT greater than max size, return that rank
+                if (bestScores.Count < LocalHighScoresMaxListSize)
+                {
+                    returnRank = bestScores.Count;
+                }
+
+                // Go through the loop
                 for (int i = 0; i < bestScores.Count; ++i)
                 {
-                    if (SortScoresBy(newScore, bestScores[i].score) >= 0)
+                    if (comparer(newRecord, bestScores[i]) >= 0)
                     {
                         // If so, return this rank
                         returnRank = i;
@@ -677,12 +734,25 @@ namespace OmiyaGames
                 }
 
                 // Insert the score
-                bestScores.Insert(returnRank, new HighScore(newScore, name));
-
-                // Save this information
-                Settings.SetString(LocalHighScoresKey, GenerateHighScoresString());
+                bestScores.Insert(returnRank, newRecord);
             }
             return returnRank;
+        }
+
+        /// <summary>
+        /// The comparison used to sort the high scores.
+        /// </summary>
+        public int SortScoresDescendingBy(HighScore left, HighScore right)
+        {
+            return (left.score - right.score);
+        }
+
+        /// <summary>
+        /// The comparison used to sort the best times (longer = better).
+        /// </summary>
+        public int SortTimesDescendingBy(BestTime left, BestTime right)
+        {
+            return left.time.CompareTo(right.time);
         }
 
         #region Virtual Methods
@@ -786,7 +856,13 @@ namespace OmiyaGames
             bestScores.Clear();
             if (string.IsNullOrEmpty(tempString) == false)
             {
-                RetrieveHighScores(tempString);
+                RetrieveHighScores<HighScore, int>(tempString, bestScores);
+            }
+            tempString = Settings.GetString(LocalBestTimesKey, null);
+            bestTimes.Clear();
+            if (string.IsNullOrEmpty(tempString) == false)
+            {
+                RetrieveHighScores<BestTime, TimeSpan>(tempString, bestTimes);
             }
 
             // Grab Keyboard Sensitivity information
@@ -820,6 +896,9 @@ namespace OmiyaGames
             isFlashesEnabled = Settings.GetBool(IsFlashesEnabledKey, true);
             isMotionBlursEnabled = Settings.GetBool(IsMotionBlursEnabledKey, true);
             isBloomEnabled = Settings.GetBool(IsBloomEnabledKey, true);
+
+            // Get last entered name
+            lastEnteredName = Settings.GetString(LastEnteredNameKey, string.Empty);
         }
 
         void SaveVersion0Settings()
@@ -842,7 +921,8 @@ namespace OmiyaGames
             Settings.SetEnum(LeaderboardUserScopeKey, LeaderboardUserScope);
 
             // Set the best score
-            Settings.SetString(LocalHighScoresKey, GenerateHighScoresString());
+            Settings.SetString(LocalHighScoresKey, GenerateHighScoresString<HighScore, int>(bestScores));
+            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, TimeSpan>(bestTimes));
 
             // Set number of plays variables
             Settings.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
@@ -874,6 +954,9 @@ namespace OmiyaGames
             Settings.SetBool(IsFlashesEnabledKey, isFlashesEnabled);
             Settings.SetBool(IsMotionBlursEnabledKey, isMotionBlursEnabled);
             Settings.SetBool(IsBloomEnabledKey, isBloomEnabled);
+
+            // Set Last Entered
+            Settings.SetString(LastEnteredNameKey, lastEnteredName);
         }
 
         void RevertVersion0SettingsClearedSettings()
@@ -919,9 +1002,22 @@ namespace OmiyaGames
             Settings.SetBool(IsFlashesEnabledKey, isFlashesEnabled);
             Settings.SetBool(IsMotionBlursEnabledKey, isMotionBlursEnabled);
             Settings.SetBool(IsBloomEnabledKey, isBloomEnabled);
+
+            // Set Last Entered
+            Settings.SetString(LastEnteredNameKey, lastEnteredName);
         }
 
-        void RetrieveHighScores(string highScoresString)
+        T NewRecord<T, R>(string storedString) where T : IRecord<R>
+        {
+            return (T)Activator.CreateInstance(typeof(T), storedString);
+        }
+
+        T NewRecord<T, R>(R record, string name) where T : IRecord<R>
+        {
+            return (T)Activator.CreateInstance(typeof(T), record, name);
+        }
+
+        void RetrieveHighScores<T, R>(string highScoresString, List<T> bestScores) where T : IRecord<R>
         {
             // Split the string
             string[] highScoresArray = highScoresString.Split(ScoreDivider);
@@ -932,11 +1028,11 @@ namespace OmiyaGames
             // Add elements to the list
             for (int i = 0; i < highScoresArray.Length; ++i)
             {
-                bestScores.Add(new HighScore(highScoresArray[i]));
+                bestScores.Add(NewRecord<T, R>(highScoresArray[i]));
             }
         }
 
-        string GenerateHighScoresString()
+        string GenerateHighScoresString<T, R>(List<T> bestScores) where T : IRecord<R>
         {
             fullListBuilder.Length = 0;
 

@@ -34,18 +34,93 @@ namespace OmiyaGames
     /// Stores high score information
     /// </summary>
     /// <seealso cref="GameSettings"/>
-    public struct HighScore
+    public class HighScore : IRecord<int>
     {
-        static readonly StringBuilder builder = new StringBuilder();
-        public const char Divider = ',';
+        private int mScore = 0;
 
-        public readonly int score;
+        public HighScore(string pastRecord) : base(pastRecord)
+        { }
+
+        public HighScore(int newRecord, string newName) : base(newRecord, newName)
+        { }
+
+        public int score
+        {
+            get
+            {
+                return mScore;
+            }
+        }
+
+        protected override void ParseRecord(string record)
+        {
+            // TODO: decrypt the rest of the information based on app version
+            if (int.TryParse(record, out mScore) == false)
+            {
+                throw new ArgumentException("Could not parse the score from pastRecord: " + record);
+            }
+        }
+
+        protected override void StoreRecord(int record)
+        {
+            mScore = record;
+        }
+
+        protected override string ConvertRecordToString()
+        {
+            return mScore.ToString();
+        }
+    }
+
+    public class BestTime : IRecord<TimeSpan>
+    {
+        private TimeSpan mTime = new TimeSpan();
+
+        public BestTime(string pastRecord) : base(pastRecord)
+        { }
+
+        public BestTime(TimeSpan newRecord, string newName) : base(newRecord, newName)
+        { }
+
+        public TimeSpan time
+        {
+            get
+            {
+                return mTime;
+            }
+        }
+
+        protected override void ParseRecord(string record)
+        {
+            // TODO: decrypt the rest of the information based on app version
+            if (TimeSpan.TryParse(record, out mTime) == false)
+            {
+                throw new ArgumentException("Could not parse the score from pastRecord: " + record);
+            }
+        }
+
+        protected override void StoreRecord(TimeSpan record)
+        {
+            mTime = record;
+        }
+
+        protected override string ConvertRecordToString()
+        {
+            return mTime.ToString();
+        }
+    }
+
+    public abstract class IRecord<T>
+    {
+        public const char Divider = '|';
+
         public readonly int appVersion;
-        public readonly string name;
         public readonly DateTime dateAchievedUtc;
-        public readonly string record;
 
-        public HighScore(string pastRecord)
+        private string mName;
+        private readonly StringBuilder builder = new StringBuilder();
+
+        public IRecord(string pastRecord)
         {
             if (string.IsNullOrEmpty(pastRecord) == true)
             {
@@ -66,13 +141,9 @@ namespace OmiyaGames
                 throw new ArgumentException("Could not parse the version number from pastRecord: " + pastRecord);
             }
 
-            // TODO: decrypt the rest of the information based on app version
             // Grab score
             ++index;
-            if (int.TryParse(info[index], out score) == false)
-            {
-                throw new ArgumentException("Could not parse the score from pastRecord: " + pastRecord);
-            }
+            ParseRecord(info[index]);
 
             // Grab name
             ++index;
@@ -89,15 +160,11 @@ namespace OmiyaGames
             {
                 throw new ArgumentException("Could not parse the date from pastRecord: " + pastRecord);
             }
-
-            // Hold the record
-            record = pastRecord;
         }
 
-        public HighScore(int newRecord, string newName)
+        public IRecord(T newRecord, string newName)
         {
             // Setup all the member variables
-            score = newRecord;
             appVersion = GameSettings.AppVersion;
             dateAchievedUtc = DateTime.UtcNow;
 
@@ -111,16 +178,37 @@ namespace OmiyaGames
                 name = string.Empty;
             }
 
+            // Record record
+            StoreRecord(newRecord);
+        }
+
+        public string name
+        {
+            get
+            {
+                return mName;
+            }
+            set
+            {
+                mName = value;
+            }
+        }
+
+        protected abstract void ParseRecord(string record);
+        protected abstract void StoreRecord(T record);
+        protected abstract string ConvertRecordToString();
+
+        public override string ToString()
+        {
             // Create a record out of this information
             builder.Length = 0;
 
-            // TODO: check the app version before recording everything else
             // Add app version
             builder.Append(appVersion);
             builder.Append(Divider);
 
             // Add score
-            builder.Append(score);
+            builder.Append(ConvertRecordToString());
             builder.Append(Divider);
 
             // Add name
@@ -131,12 +219,7 @@ namespace OmiyaGames
             builder.Append(dateAchievedUtc.Ticks);
 
             // Store this achievement as a string record
-            record = builder.ToString();
-        }
-
-        public override string ToString()
-        {
-            return record;
+            return builder.ToString();
         }
     }
 }
