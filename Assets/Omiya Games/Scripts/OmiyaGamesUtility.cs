@@ -323,7 +323,7 @@ namespace OmiyaGames
             {
                 ++bulletNumber;
                 builder.Append(bulletNumber);
-                builder.AppendLine("Errors:");
+                builder.AppendLine(") Errors messages:");
                 builder.AppendLine(webChecker.DownloadErrorMessage);
             }
 
