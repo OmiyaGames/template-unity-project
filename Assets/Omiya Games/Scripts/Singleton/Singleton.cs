@@ -76,22 +76,26 @@ namespace OmiyaGames
             {
                 return msInstance;
             }
+            private set
+            {
+                msInstance = value;
+            }
         }
 
         public static COMPONENT Get<COMPONENT>() where COMPONENT : Component
         {
             COMPONENT returnObject = null;
             Type retrieveType = typeof(COMPONENT);
-            if (msInstance != null)
+            if (Instance != null)
             {
-                if (msInstance.mCacheRetrievedComponent.ContainsKey(retrieveType) == true)
+                if (Instance.mCacheRetrievedComponent.ContainsKey(retrieveType) == true)
                 {
-                    returnObject = msInstance.mCacheRetrievedComponent[retrieveType] as COMPONENT;
+                    returnObject = Instance.mCacheRetrievedComponent[retrieveType] as COMPONENT;
                 }
                 else
                 {
-                    returnObject = msInstance.GetComponentInChildren<COMPONENT>();
-                    msInstance.mCacheRetrievedComponent.Add(retrieveType, returnObject);
+                    returnObject = Instance.GetComponentInChildren<COMPONENT>();
+                    Instance.mCacheRetrievedComponent.Add(retrieveType, returnObject);
                 }
             }
             return returnObject;
@@ -190,13 +194,13 @@ namespace OmiyaGames
         // Use this for initialization
         void Awake()
         {
-            if (msInstance == null)
+            if (Instance == null)
             {
                 // Set the instance variable
-                msInstance = this;
+                Instance = this;
 
                 // Run all the events
-                RunSingletonEvents();
+                Instance.RunSingletonEvents();
 
                 // Prevent this object from destroying itself
                 DontDestroyOnLoad(gameObject);
@@ -204,7 +208,7 @@ namespace OmiyaGames
             else
             {
                 // Run all the events
-                RunSingletonEvents();
+                Instance.RunSingletonEvents();
 
                 // Destroy this gameobject
                 Destroy(gameObject);
@@ -244,14 +248,14 @@ namespace OmiyaGames
                 {
                     // Run singleton awake
                     allSingletonScriptsCache[index].SingletonInstance = Instance;
-                    allSingletonScriptsCache[index].SingletonAwake(msInstance);
+                    allSingletonScriptsCache[index].SingletonAwake(Instance);
                 }
             }
 
             // Go through every ISingletonScript, and run scene awake
             for (index = 0; index < allSingletonScriptsCache.Length; ++index)
             {
-                allSingletonScriptsCache[index].SceneAwake(msInstance);
+                allSingletonScriptsCache[index].SceneAwake(Instance);
             }
         }
     }

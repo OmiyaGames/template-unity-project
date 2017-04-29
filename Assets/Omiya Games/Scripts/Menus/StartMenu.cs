@@ -53,7 +53,11 @@ namespace OmiyaGames
         [SerializeField]
         ListButtonScript levelSelectButton;
         [SerializeField]
+        Button howToPlayButton;
+        [SerializeField]
         Button optionsButton;
+        [SerializeField]
+        Button highScoresButton;
         [SerializeField]
         Button creditsButton;
         [SerializeField]
@@ -205,6 +209,34 @@ namespace OmiyaGames
                 // Indicate we've clicked on a button
                 Manager.ButtonClick.Play();
                 defaultButton = quitButton.gameObject;
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnHighScoresClicked()
+        {
+            if (isButtonLocked == false)
+            {
+                // Open the options menu
+                Manager.Show<LudumDare38.HighScoresMenu>();
+
+                // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
+                defaultButton = highScoresButton.gameObject;
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnHowToPlayClicked()
+        {
+            if (isButtonLocked == false)
+            {
+                // Open the options menu
+                Manager.Show<LudumDare38.HowToPlayMenu>();
+
+                // Indicate we've clicked on a button
+                Manager.ButtonClick.Play();
+                defaultButton = howToPlayButton.gameObject;
                 isButtonLocked = true;
             }
         }

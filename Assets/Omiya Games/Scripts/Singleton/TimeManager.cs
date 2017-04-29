@@ -121,6 +121,7 @@ namespace OmiyaGames
 
         public void RevertToOriginalTime()
         {
+            IsManuallyPaused = false;
             TimeScale = OriginalTimeScale;
         }
 

@@ -53,6 +53,18 @@ namespace OmiyaGames
         {
             // Open the options dialog
             Singleton.Get<MenuManager>().Show<OptionsMenu>();
+
+            // Indicate button is clicked
+            Manager.ButtonClick.Play();
+        }
+
+        public void OnCreditsClicked()
+        {
+            // Transition to the credits
+            Singleton.Get<SceneTransitionManager>().LoadScene(Singleton.Get<SceneTransitionManager>().Credits);
+
+            // Change the menu to stand by
+            CurrentState = State.StandBy;
         }
     }
 }
