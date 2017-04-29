@@ -72,17 +72,9 @@ namespace OmiyaGames
             Manager.ButtonClick.Play();
         }
 
-        public void OnHighScoresClicked()
-        {
-            Manager.Show<LudumDare38.HighScoresMenu>();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
-        }
-
         public void OnHowToPlayClicked()
         {
-            Manager.Show<LudumDare38.HowToPlayMenu>();
+            Manager.Show<HowToPlayMenu>();
 
             // Indicate button is clicked
             Manager.ButtonClick.Play();

@@ -213,26 +213,12 @@ namespace OmiyaGames
             }
         }
 
-        public void OnHighScoresClicked()
-        {
-            if (isButtonLocked == false)
-            {
-                // Open the options menu
-                Manager.Show<LudumDare38.HighScoresMenu>();
-
-                // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
-                defaultButton = highScoresButton.gameObject;
-                isButtonLocked = true;
-            }
-        }
-
         public void OnHowToPlayClicked()
         {
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                Manager.Show<LudumDare38.HowToPlayMenu>();
+                Manager.Show<HowToPlayMenu>();
 
                 // Indicate we've clicked on a button
                 Manager.ButtonClick.Play();
