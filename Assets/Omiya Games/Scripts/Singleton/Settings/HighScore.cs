@@ -52,7 +52,7 @@ namespace OmiyaGames
             }
         }
 
-        protected override void ParseRecord(string record)
+        protected override void ParseRecord(string record, int appVersion)
         {
             // TODO: decrypt the rest of the information based on app version
             if (int.TryParse(record, out mScore) == false)
@@ -72,41 +72,65 @@ namespace OmiyaGames
         }
     }
 
-    public class BestTime : IRecord<TimeSpan>
+    public class BestTime : IRecord<float>
     {
-        private TimeSpan mTime = new TimeSpan();
+        float totalSeconds = 0;
 
         public BestTime(string pastRecord) : base(pastRecord)
         { }
 
-        public BestTime(TimeSpan newRecord, string newName) : base(newRecord, newName)
+        public BestTime(float newRecord, string newName) : base(newRecord, newName)
         { }
 
-        public TimeSpan time
+        public float TotalSeconds
         {
             get
             {
-                return mTime;
+                return totalSeconds;
+            }
+            private set
+            {
+                totalSeconds = value;
             }
         }
 
-        protected override void ParseRecord(string record)
+        protected override void ParseRecord(string record, int appVersion)
         {
             // TODO: decrypt the rest of the information based on app version
-            if (TimeSpan.TryParse(record, out mTime) == false)
+            bool recordingSuccessful = false;
+            switch(appVersion)
+            {
+                case 0:
+                    TimeSpan spanOfTime;
+                    if (TimeSpan.TryParse(record, out spanOfTime) == true)
+                    {
+                        recordingSuccessful = true;
+                        TotalSeconds = (float)spanOfTime.TotalSeconds;
+                        break;
+                    }
+                    else
+                    {
+                        goto default;
+                    }
+                case 1:
+                default:
+                    recordingSuccessful = float.TryParse(record, out totalSeconds);
+                    break;
+            }
+            if(recordingSuccessful == false)
             {
                 throw new ArgumentException("Could not parse the score from pastRecord: " + record);
             }
         }
 
-        protected override void StoreRecord(TimeSpan record)
+        protected override void StoreRecord(float record)
         {
-            mTime = record;
+            totalSeconds = record;
         }
 
         protected override string ConvertRecordToString()
         {
-            return mTime.ToString();
+            return totalSeconds.ToString();
         }
     }
 
@@ -114,7 +138,6 @@ namespace OmiyaGames
     {
         public const char Divider = '|';
 
-        public readonly int appVersion;
         public readonly DateTime dateAchievedUtc;
 
         private string mName;
@@ -136,6 +159,7 @@ namespace OmiyaGames
 
             // Grab app version
             byte index = 0;
+            int appVersion;
             if (int.TryParse(info[index], out appVersion) == false)
             {
                 throw new ArgumentException("Could not parse the version number from pastRecord: " + pastRecord);
@@ -143,7 +167,7 @@ namespace OmiyaGames
 
             // Grab score
             ++index;
-            ParseRecord(info[index]);
+            ParseRecord(info[index], appVersion);
 
             // Grab name
             ++index;
@@ -165,7 +189,6 @@ namespace OmiyaGames
         public IRecord(T newRecord, string newName)
         {
             // Setup all the member variables
-            appVersion = GameSettings.AppVersion;
             dateAchievedUtc = DateTime.UtcNow;
 
             // Record name (don't allow null)
@@ -194,7 +217,7 @@ namespace OmiyaGames
             }
         }
 
-        protected abstract void ParseRecord(string record);
+        protected abstract void ParseRecord(string record, int appVersion);
         protected abstract void StoreRecord(T record);
         protected abstract string ConvertRecordToString();
 
@@ -204,7 +227,7 @@ namespace OmiyaGames
             builder.Length = 0;
 
             // Add app version
-            builder.Append(appVersion);
+            builder.Append(GameSettings.AppVersion);
             builder.Append(Divider);
 
             // Add score
