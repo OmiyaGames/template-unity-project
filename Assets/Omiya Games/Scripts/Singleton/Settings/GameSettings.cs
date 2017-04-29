@@ -285,16 +285,16 @@ namespace OmiyaGames
             }
         }
 
-        public TimeSpan BestTimeSeconds
+        public float BestTimeSeconds
         {
             get
             {
-                TimeSpan returnScore = new TimeSpan();
+                float returnTime = 0;
                 if (bestTimes.Count > 0)
                 {
-                    returnScore = bestTimes[0].time;
+                    returnTime = bestTimes[0].TotalSeconds;
                 }
-                return returnScore;
+                return returnTime;
             }
         }
 
@@ -685,13 +685,13 @@ namespace OmiyaGames
         /// <param name="name">Name of person achieving score.</param>
         public int AddTime(float totalSeconds, string name, out BestTime newRecord)
         {
-            return AddRecord(bestTimes, SortTimesDescendingBy, TimeSpan.FromSeconds(totalSeconds), name, out newRecord);
+            return AddRecord(bestTimes, SortTimesDescendingBy, totalSeconds, name, out newRecord);
         }
 
         public void SaveBestTimes()
         {
             // Save this information
-            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, TimeSpan>(bestTimes));
+            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, float>(bestTimes));
         }
 
         private int AddRecord<T, R>(List<T> bestScores, Comparison<T> comparer, R newScore, string name, out T newRecord) where T : IRecord<R>
@@ -752,7 +752,7 @@ namespace OmiyaGames
         /// </summary>
         public int SortTimesDescendingBy(BestTime left, BestTime right)
         {
-            return left.time.CompareTo(right.time);
+            return left.TotalSeconds.CompareTo(right.TotalSeconds);
         }
 
         #region Virtual Methods
@@ -862,7 +862,7 @@ namespace OmiyaGames
             bestTimes.Clear();
             if (string.IsNullOrEmpty(tempString) == false)
             {
-                RetrieveHighScores<BestTime, TimeSpan>(tempString, bestTimes);
+                RetrieveHighScores<BestTime, float>(tempString, bestTimes);
             }
 
             // Grab Keyboard Sensitivity information
@@ -922,7 +922,7 @@ namespace OmiyaGames
 
             // Set the best score
             Settings.SetString(LocalHighScoresKey, GenerateHighScoresString<HighScore, int>(bestScores));
-            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, TimeSpan>(bestTimes));
+            Settings.SetString(LocalBestTimesKey, GenerateHighScoresString<BestTime, float>(bestTimes));
 
             // Set number of plays variables
             Settings.SetInt(NumberOfTimesAppOpenedKey, numberOfTimesAppOpened);
