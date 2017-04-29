@@ -318,6 +318,15 @@ namespace OmiyaGames
                 builder.AppendLine(domain);
             }
 
+            // Show any errors
+            if (string.IsNullOrEmpty(webChecker.DownloadErrorMessage) == false)
+            {
+                ++bulletNumber;
+                builder.Append(bulletNumber);
+                builder.AppendLine("Errors:");
+                builder.AppendLine(webChecker.DownloadErrorMessage);
+            }
+
             // Return URL
             return builder.ToString();
         }

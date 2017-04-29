@@ -206,6 +206,18 @@ namespace OmiyaGames
                 return cachedSplitString;
             }
         }
+
+        public string DownloadErrorMessage
+        {
+            get
+            {
+                return downloadErrorMessage;
+            }
+            private set
+            {
+                downloadErrorMessage = value;
+            }
+        }
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -402,8 +414,8 @@ namespace OmiyaGames
                 yield return www;
 
                 // Check if there were any errors
-                downloadErrorMessage = www.error;
-                if (string.IsNullOrEmpty(downloadErrorMessage) == true)
+                DownloadErrorMessage = www.error;
+                if (string.IsNullOrEmpty(DownloadErrorMessage) == true)
                 {
                     // If none, check what type this downloaded file is
                     if(remoteListFileType == DownloadedFileType.Text)
@@ -426,7 +438,7 @@ namespace OmiyaGames
             StringBuilder buf = new StringBuilder();
             downloadedDomainList = null;
             downloadDomainsUrl = null;
-            downloadErrorMessage = null;
+            DownloadErrorMessage = null;
 
             // Update state
             CurrentState = State.InProgress;
