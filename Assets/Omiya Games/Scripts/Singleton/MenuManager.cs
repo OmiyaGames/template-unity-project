@@ -214,7 +214,7 @@ namespace OmiyaGames
 
         public void SetLabelTextToNextScene(TranslatedText label)
         {
-            SetLabelTextTo(label, nextTextTemplateTranslationKey);
+            SetLabelTextTo(label, nextTextTemplateTranslationKey, TransitionManager.NextScene);
         }
 
         public MENU GetMenu<MENU>() where MENU : IMenu
@@ -344,11 +344,15 @@ namespace OmiyaGames
         {
             if ((label != null) && (string.IsNullOrEmpty(templateKey) == false))
             {
-                SceneInfo currentScene = TransitionManager.CurrentScene;
-                if (currentScene != null)
-                {
-                    label.SetTranslationKey(templateKey, currentScene.DisplayName);
-                }
+                SetLabelTextTo(label, templateKey, TransitionManager.CurrentScene);
+            }
+        }
+
+        void SetLabelTextTo(TranslatedText label, string templateKey, SceneInfo scene)
+        {
+            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (scene != null))
+            {
+                label.SetTranslationKey(templateKey, scene.DisplayName);
             }
         }
 

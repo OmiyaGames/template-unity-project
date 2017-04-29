@@ -65,7 +65,7 @@ namespace OmiyaGames
             ordinal = index;
 
             // Setup translation variable
-            translatedDisplayName = new TranslatedString(displayName);
+            translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
         }
 
         public string ScenePath
@@ -106,7 +106,7 @@ namespace OmiyaGames
             {
                 if(translatedDisplayName.HasValue == false)
                 {
-                    translatedDisplayName = new TranslatedString(displayName);
+                    translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
                 }
                 return translatedDisplayName.Value;
             }
@@ -121,6 +121,7 @@ namespace OmiyaGames
             internal set
             {
                 ordinal = value;
+                DisplayName.SetValues(Ordinal + 1);
             }
         }
 

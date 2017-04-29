@@ -40,9 +40,14 @@ namespace OmiyaGames
         [SerializeField]
         readonly string key;
 
-        public TranslatedString(string key)
+        public TranslatedString(string key) : this(key, null)
+        {
+        }
+
+        public TranslatedString(string key, params object[] values)
         {
             this.key = key;
+            Values = values;
         }
 
         public string TranslationKey
@@ -51,6 +56,12 @@ namespace OmiyaGames
             {
                 return key;
             }
+        }
+
+        public object[] Values
+        {
+            get;
+            set;
         }
 
         public bool IsTranslating
@@ -76,8 +87,17 @@ namespace OmiyaGames
             {
                 // Add this script to the dictionary
                 returnString = Parser[TranslationKey];
+                if((Values != null) && (Values.Length > 0))
+                {
+                    returnString = string.Format(returnString, Values);
+                }
             }
             return returnString;
+        }
+
+        public void SetValues(params object[] values)
+        {
+            Values = values;
         }
     }
 }
