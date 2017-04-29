@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using OmiyaGames;
 
-namespace LudumDare38
+namespace OmiyaGames
 {
     public class HowToPlayMenu : IMenu
     {

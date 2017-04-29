@@ -12,6 +12,10 @@
 #define BUILD_TO_WEBGL
 #define SPRITE_PACK_WEBGL
 
+#define BUILD_TO_FACEBOOK_WINDOWS
+//#define BUILD_TO_FACEBOOK_WEBGL
+#define SPRITE_PACK_FACEBOOK
+
 #define APPEND_DATE_IN_FOLDER_NAME
 //#define APPEND_VERSION_IN_FOLDER_NAME
 
@@ -78,6 +82,22 @@ namespace OmiyaGames
             }
         }
 
+        private struct BuildSet
+        {
+            readonly public BuildTargetGroup targetGroup;
+            readonly public BuildTarget buildTarget;
+
+            public BuildSet(BuildTargetGroup group, BuildTarget target)
+            {
+                targetGroup = group;
+                buildTarget = target;
+            }
+
+            public BuildSet(BuildTarget target) :
+                this(GetDefaultBuildTarget(target), target)
+            { }
+        }
+
         /// <summary>
         /// Format for data string when appended to the folder.
         /// </summary>
@@ -138,38 +158,38 @@ namespace OmiyaGames
         #endregion
         // FIXME: consider moving this to PlayerPrefs, and have a window specific to editing this setting
         #region All Desktop Targets
-        private static readonly HashSet<BuildTarget> AllDesktopTargets = new HashSet<BuildTarget>()
+        private static readonly HashSet<BuildSet> AllDesktopTargets = new HashSet<BuildSet>()
         {
-            BuildTarget.StandaloneWindows,
-            BuildTarget.StandaloneWindows64,
+            new BuildSet(BuildTarget.StandaloneWindows),
+            new BuildSet(BuildTarget.StandaloneWindows64),
 #if BUILD_32_BIT_AND_64_BIT_SEPARATELY
-            BuildTarget.StandaloneOSXIntel,
-            BuildTarget.StandaloneOSXIntel64,
-            BuildTarget.StandaloneLinux,
-            BuildTarget.StandaloneLinux64
+            new BuildSet(BuildTarget.StandaloneOSXIntel),
+            new BuildSet(BuildTarget.StandaloneOSXIntel64),
+            new BuildSet(BuildTarget.StandaloneLinux),
+            new BuildSet(BuildTarget.StandaloneLinux64)
 #else
-            BuildTarget.StandaloneOSXUniversal,
-            BuildTarget.StandaloneLinuxUniversal
+            new BuildSet(BuildTarget.StandaloneOSXUniversal),
+            new BuildSet(BuildTarget.StandaloneLinuxUniversal)
 #endif
         };
         #endregion
         // FIXME: consider moving this to PlayerPrefs, and have a window specific to editing this setting
         #region All Mobile Targets
-        private static readonly HashSet<BuildTarget> AllMobileTargets = new HashSet<BuildTarget>()
+        private static readonly HashSet<BuildSet> AllMobileTargets = new HashSet<BuildSet>()
         {
-            BuildTarget.iOS,
-            BuildTarget.Android,
+            new BuildSet(BuildTarget.iOS),
+            new BuildSet(BuildTarget.Android),
             // FIMXE: add Tizen platform in the future!
-            //BuildTarget.Tizen,
+            //new BuildSet(BuildTarget.Tizen),
             // FIXME: add WSA platform in the future!
-            //BuildTarget.WSAPlayer
+            //new BuildSet(BuildTarget.WSAPlayer)
         };
         #endregion
         // FIXME: consider moving this to PlayerPrefs, and have a window specific to editing this setting
-        //private static readonly HashSet<BuildTarget> AllTvTargets = new HashSet<BuildTarget>()
+        //private static readonly HashSet<BuildSet> AllTvTargets = new HashSet<BuildSet>()
         //{
-        //    BuildTarget.tvOS,
-        //    BuildTarget.SamsungTV
+        //    new BuildSet(BuildTarget.tvOS),
+        //    new BuildSet(BuildTarget.SamsungTV)
         //};
 
         #region Constants and Read-Onlys
@@ -180,7 +200,7 @@ namespace OmiyaGames
         /// <summary>
         /// All the build targets for this single session
         /// </summary>
-        private static readonly List<BuildTarget> allBuildTargets = new List<BuildTarget>();
+        private static readonly List<BuildSet> allBuildTargets = new List<BuildSet>();
         /// <summary>
         /// Cached string builder, useful for generating file names.
         /// </summary>
@@ -218,7 +238,13 @@ namespace OmiyaGames
             allBuildTargets.AddRange(AllMobileTargets);
 #endif
 #if BUILD_TO_WEBGL
-            allBuildTargets.Add(BuildTarget.WebGL);
+            allBuildTargets.Add(new BuildSet(BuildTarget.WebGL));
+#endif
+#if BUILD_TO_FACEBOOK_WINDOWS
+            allBuildTargets.Add(new BuildSet(BuildTargetGroup.Facebook, BuildTarget.StandaloneWindows));
+#endif
+#if BUILD_TO_FACEBOOK_WEBGL
+            allBuildTargets.Add(new BuildSet(BuildTargetGroup.Facebook, BuildTarget.WebGL));
 #endif
             BuildAll();
         }
@@ -253,7 +279,7 @@ namespace OmiyaGames
         public static void PerformWebGLBuild()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.WebGL);
+            allBuildTargets.Add(new BuildSet(BuildTarget.WebGL));
             BuildAll();
         }
 
@@ -264,7 +290,7 @@ namespace OmiyaGames
         public static void PerformWindows32Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneWindows);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneWindows));
             BuildAll();
         }
 
@@ -275,7 +301,7 @@ namespace OmiyaGames
         public static void PerformWindows64Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneWindows64);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneWindows64));
             BuildAll();
         }
 
@@ -286,7 +312,7 @@ namespace OmiyaGames
         public static void PerformMacUniversalBuild()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneOSXUniversal);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSXUniversal));
             BuildAll();
         }
 
@@ -297,7 +323,7 @@ namespace OmiyaGames
         public static void PerformMac32Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneOSXIntel);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSXIntel));
             BuildAll();
         }
 
@@ -308,7 +334,7 @@ namespace OmiyaGames
         public static void PerformMac64Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneOSXIntel64);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSXIntel64));
             BuildAll();
         }
 
@@ -319,7 +345,7 @@ namespace OmiyaGames
         public static void PerformLinuxUniversalBuild()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneLinuxUniversal);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneLinuxUniversal));
             BuildAll();
         }
 
@@ -330,7 +356,7 @@ namespace OmiyaGames
         public static void PerformLinux32Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneLinux);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneLinux));
             BuildAll();
         }
 
@@ -341,7 +367,7 @@ namespace OmiyaGames
         public static void PerformLinux64Build()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.StandaloneLinux64);
+            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneLinux64));
             BuildAll();
         }
 
@@ -352,7 +378,7 @@ namespace OmiyaGames
         public static void PerformIosBuild()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.iOS);
+            allBuildTargets.Add(new BuildSet(BuildTarget.iOS));
             BuildAll();
         }
 
@@ -363,7 +389,7 @@ namespace OmiyaGames
         public static void PerformAndroidBuild()
         {
             allBuildTargets.Clear();
-            allBuildTargets.Add(BuildTarget.Android);
+            allBuildTargets.Add(new BuildSet(BuildTarget.Android));
             BuildAll();
         }
 
@@ -374,9 +400,31 @@ namespace OmiyaGames
         //public static void PerformWsaBuild()
         //{
         //    allBuildTargets.Clear();
-        //    allBuildTargets.Add(BuildTarget.WSAPlayer);
+        //    allBuildTargets.Add(new BuildSet(BuildTarget.WSAPlayer));
         //    BuildAll();
         //}
+
+        /// <summary>
+        /// Function that builds for Web.
+        /// </summary>
+        [MenuItem("Build/Build For/Facebook WebGL")]
+        public static void PerformFacebookWebGLBuild()
+        {
+            allBuildTargets.Clear();
+            allBuildTargets.Add(new BuildSet(BuildTargetGroup.Facebook, BuildTarget.WebGL));
+            BuildAll();
+        }
+
+        /// <summary>
+        /// Function that builds for Windows, 32-bit.
+        /// </summary>
+        [MenuItem("Build/Build For/Facebook Windows 32-bit")]
+        public static void PerformFacebookWindows32Build()
+        {
+            allBuildTargets.Clear();
+            allBuildTargets.Add(new BuildSet(BuildTargetGroup.Facebook, BuildTarget.StandaloneWindows));
+            BuildAll();
+        }
         #endregion
 
         [MenuItem("Build/Open Last Builds Folder")]
@@ -429,15 +477,23 @@ namespace OmiyaGames
         {
             bool returnFlag = false;
 #if SPRITE_PACK_MAJOR_DESKTOP_OS
-            if (AllDesktopTargets.Contains(target) == true)
+            foreach(BuildSet set in AllDesktopTargets)
             {
-                returnFlag = true;
+                if (set.buildTarget == target)
+                {
+                    returnFlag = true;
+                    break;
+                }
             }
 #endif
 #if SPRITE_PACK_MAJOR_MOBILE_OS
-            if (AllMobileTargets.Contains(target) == true)
+            foreach (BuildSet set in AllMobileTargets)
             {
-                returnFlag = true;
+                if (set.buildTarget == target)
+                {
+                    returnFlag = true;
+                    break;
+                }
             }
 #endif
 #if SPRITE_PACK_WEBGL
@@ -454,31 +510,44 @@ namespace OmiyaGames
             if ((allBuildTargets.Count > 0) && (string.IsNullOrEmpty(buildDirectory) == false))
             {
                 // Check to see if the current active build target is in the list
-                int activeTargetIndex = allBuildTargets.IndexOf(EditorUserBuildSettings.activeBuildTarget);
+                int activeTargetIndex = 0;
+                for(int index = 0; index < allBuildTargets.Count; ++index)
+                {
+                    // Make sure current group settings are correct
+                    if((allBuildTargets[index].buildTarget == EditorUserBuildSettings.activeBuildTarget) &&
+                        (allBuildTargets[index].targetGroup == EditorUserBuildSettings.selectedBuildTargetGroup))
+                    {
+                        activeTargetIndex = index;
+                        break;
+                    }
+                }
                 if (activeTargetIndex > 0)
                 {
                     // If the current active target is found, and not as the first element
                     // Move the target to the beginning of the list
+                    BuildSet swapSet = allBuildTargets[activeTargetIndex];
                     allBuildTargets.RemoveAt(activeTargetIndex);
-                    allBuildTargets.Insert(0, EditorUserBuildSettings.activeBuildTarget);
+                    allBuildTargets.Insert(0, swapSet);
                 }
 
                 // Go through each element of the list
+                bool enableSpritePacking = false;
                 BuildInfo info;
                 StringBuilder allTargets = new StringBuilder();
                 allTargets.Append("Build Status:");
-                foreach (BuildTarget target in allBuildTargets)
+                foreach (BuildSet set in allBuildTargets)
                 {
                     // Indicate the target we're building to
                     allTargets.AppendLine();
-                    allTargets.Append(target);
+                    allTargets.Append(set);
                     try
                     {
                         // Make sure the build target is supported
-                        if(AllBuildInfo.TryGetValue(target, out info) == true)
+                        if(AllBuildInfo.TryGetValue(set.buildTarget, out info) == true)
                         {
                             // Build the game
-                            GenericBuild(buildDirectory, info.platformName, info.fileExtension, target, IsSpritePackingSupported(target));
+                            enableSpritePacking = IsSpritePackingSupported(set.buildTarget);
+                            GenericBuild(buildDirectory, info.platformName, info.fileExtension, set.targetGroup, set.buildTarget, enableSpritePacking);
                             allTargets.Append(": Success!");
                         }
                         else
@@ -532,7 +601,7 @@ namespace OmiyaGames
                 }
 
                 // If one of these targets are Androids, make sure it has all the credentials filled in
-                if ((AndroidCredentialsFilled == false) && (allBuildTargets.Contains(BuildTarget.Android) == true))
+                if ((AndroidCredentialsFilled == false) && (Contains(allBuildTargets, BuildTarget.Android) == true))
                 {
                     // If not, prompt the user to fill in the Android credentials
                     AndroidKeystoreCredentialsWindow.Display(BuildAll);
@@ -545,17 +614,31 @@ namespace OmiyaGames
             }
         }
 
+        private static bool Contains(List<BuildSet> allBuildTargets, BuildTarget target)
+        {
+            bool returnFlag = false;
+            foreach(BuildSet set in allBuildTargets)
+            {
+                if(set.buildTarget == target)
+                {
+                    returnFlag = true;
+                    break;
+                }
+            }
+            return returnFlag;
+        }
+
         /// <summary>
         /// Helper function that generates a build using a file name based off of the file extension.
         /// </summary>
-        private static void GenericBuild(string buildDirectory, string platformName, string fileExtension, BuildTarget buildTarget, bool enableSpritePacking)
+        private static void GenericBuild(string buildDirectory, string platformName, string fileExtension, BuildTargetGroup targetGroup, BuildTarget buildTarget, bool enableSpritePacking)
         {
             // Reset the file name
             FileNameGenerator.Length = 0;
 
             // Generate the folder for this platform, if there isn't one already
             string sanitizedProductName;
-            AppendFolderName(FileNameGenerator, buildDirectory, platformName, out sanitizedProductName);
+            AppendFolderName(FileNameGenerator, buildDirectory, platformName, targetGroup, out sanitizedProductName);
             Directory.CreateDirectory(FileNameGenerator.ToString());
 
             // Add file name
@@ -577,7 +660,7 @@ namespace OmiyaGames
             try
             {
                 // Generate the build
-                GenericBuild(FileNameGenerator.ToString(), buildTarget);
+                GenericBuild(FileNameGenerator.ToString(), targetGroup, buildTarget);
 
                 // Printing where the build was created
                 FileNameGenerator.Insert(0, "Created build to: ");
@@ -593,12 +676,45 @@ namespace OmiyaGames
         /// <summary>
         /// Helper function that generates a build.
         /// </summary>
-        private static void GenericBuild(string targetDirectory, BuildTarget buildTarget)
+        private static BuildTargetGroup GetDefaultBuildTarget(BuildTarget buildTarget)
+        {
+            BuildTargetGroup targetGroup = BuildTargetGroup.Unknown;
+            switch (buildTarget)
+            {
+                case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
+                case BuildTarget.StandaloneOSXIntel:
+                case BuildTarget.StandaloneOSXIntel64:
+                case BuildTarget.StandaloneOSXUniversal:
+                case BuildTarget.StandaloneLinux:
+                case BuildTarget.StandaloneLinux64:
+                case BuildTarget.StandaloneLinuxUniversal:
+                    targetGroup = BuildTargetGroup.Standalone;
+                    break;
+                case BuildTarget.Android:
+                    targetGroup = BuildTargetGroup.Android;
+                    break;
+                case BuildTarget.iOS:
+                    targetGroup = BuildTargetGroup.iOS;
+                    break;
+                case BuildTarget.WebGL:
+                    targetGroup = BuildTargetGroup.WebGL;
+                    break;
+                case BuildTarget.WSAPlayer:
+                    targetGroup = BuildTargetGroup.WSA;
+                    break;
+            }
+            return targetGroup;
+        }
+
+        /// <summary>
+        /// Helper function that generates a build.
+        /// </summary>
+        private static void GenericBuild(string targetDirectory, BuildTargetGroup targetGroup, BuildTarget buildTarget)
         {
             // Import assets for this platform
-            if ((EditorUserBuildSettings.activeBuildTarget == buildTarget) || (EditorUserBuildSettings.SwitchActiveBuildTarget(buildTarget) == true))
+            if ((EditorUserBuildSettings.activeBuildTarget == buildTarget) || (EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, buildTarget) == true))
             {
-
                 // Determine the best build option
                 BuildOptions buildOption = OptionsAll;
                 if (buildTarget == BuildTarget.WebGL)
@@ -606,8 +722,15 @@ namespace OmiyaGames
                     buildOption |= OptionsWeb;
                 }
 
+                // Setup all options
+                BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+                buildPlayerOptions.scenes = AllScenes;
+                buildPlayerOptions.locationPathName = targetDirectory;
+                buildPlayerOptions.target = buildTarget;
+                buildPlayerOptions.options = buildOption;
+                
                 // Build everything based on the options
-                string res = BuildPipeline.BuildPlayer(AllScenes, targetDirectory, buildTarget, buildOption);
+                string res = BuildPipeline.BuildPlayer(buildPlayerOptions);
                 if (res.Length > 0)
                 {
                     throw new Exception("Failed to build to " + targetDirectory + ":\n" + res);
@@ -632,7 +755,7 @@ namespace OmiyaGames
             return EditorScenes.ToArray();
         }
 
-        private static void AppendFolderName(StringBuilder appendTo, string buildDirectory, string platformName, out string sanitizedProductName)
+        private static void AppendFolderName(StringBuilder appendTo, string buildDirectory, string platformName, BuildTargetGroup targetGroup, out string sanitizedProductName)
         {
             // Sanitize the product name
             sanitizedProductName = InvalidFileNameCharacters.Replace(RemoveDiacritics(PlayerSettings.productName), "");
@@ -662,6 +785,14 @@ namespace OmiyaGames
             // Append the platform name
             appendTo.Append(" (");
             appendTo.Append(platformName);
+
+            // Append if it's for any platform
+            switch (targetGroup)
+            {
+                case BuildTargetGroup.Facebook:
+                    appendTo.Append(" for Facebook");
+                    break;
+            }
             appendTo.Append(')');
         }
 

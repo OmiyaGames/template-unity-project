@@ -427,9 +427,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2474966da2115084c9e50b42f8b78fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startBehavior: 0
+  startBehavior: 1
   levelSelectButton: {fileID: 114150066285064330}
+  howToPlayButton: {fileID: 0}
   optionsButton: {fileID: 11440982}
+  highScoresButton: {fileID: 0}
   creditsButton: {fileID: 11441874}
   quitButton: {fileID: 11454218}
   startText: Start Button
@@ -499,7 +501,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Recursive Dollhouse
+  m_Text: Template Unity Project
 --- !u!114 &11425284
 MonoBehaviour:
   m_ObjectHideFlags: 1
