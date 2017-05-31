@@ -1,17 +1,68 @@
-#gameContainer * {border: 0; margin: 0; padding: 0}
+#gameContainer *
+{
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-family: 'Fira Sans Condensed', sans-serif;
+	font-size: 1.1em;
+}
 
-#gameContainer .logo, .progress {position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
-#gameContainer .logo {background: url('progressLogo.Light.png') no-repeat center / contain; width: 154px; height: 130px;}
-#gameContainer .progress {height: 18px; width: 141px; margin-top: 90px;}
-#gameContainer .progress .empty {background: url('progressEmpty.Light.png') no-repeat right / cover; float: right; width: 100%; height: 100%; display: inline-block;}
-#gameContainer .progress .full {background: url('progressFull.Light.png') no-repeat left / cover; float: left; width: 0%; height: 100%; display: inline-block;}
+#gameContainer .logo, .progress
+{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
 
-#gameContainer .logo.Dark {background-image: url('progressLogo.Dark.png');}
-#gameContainer .progress.Dark .empty {background-image: url('progressEmpty.Dark.png');}
-#gameContainer .progress.Dark .full {background-image: url('progressFull.Dark.png');}
+#gameContainer .logo
+{
+	background: url('progressLogo.Light.png') no-repeat center / contain;
+	width: 170px;
+	height: 140px;
+}
+#gameContainer .progress
+{
+	height: 22px;
+	width: 170px;
+	margin-top: 90px;
+	text-align: center;
+}
+#gameContainer .progress .empty
+{
+	background: url('progressEmpty.Light.png') no-repeat right / cover;
+	float: right;
+	width: 100%;
+	height: 100%;
+	display: inline-block;
+}
+#gameContainer .progress .full
+{
+	background: url('progressFull.Light.png') no-repeat left / cover;
+	float: left;
+	width: 0%;
+	height: 100%;
+	display: inline-block;
+}
+#gameContainer .progress .text
+{
+	color: #222c36;
+}
 
-#gameContainer .footer {margin-top: 5px; height: 38px; line-height: 38px; font-family: Helvetica, Verdana, Arial, sans-serif; font-size: 18px;} 
-#gameContainer .footer .webgl-logo, .title, .fullscreen {height: 100%; display: inline-block; background: transparent center no-repeat;} 
-#gameContainer .footer .webgl-logo {background-image: url('webgl-logo.png'); width: 204px; float: left;}
-#gameContainer .footer .title {margin-right: 10px; float: right;}
-#gameContainer .footer .fullscreen {background-image: url('fullscreen.png'); width: 38px; float: right;}
+#gameContainer .logo.Dark
+{
+	background-image: url('progressLogo.Dark.png');
+}
+#gameContainer .progress.Dark .empty
+{
+	background-image: url('progressEmpty.Dark.png');
+}
+#gameContainer .progress.Dark .full
+{
+	background-image: url('progressFull.Dark.png');
+}
+#gameContainer .progress.Dark .text
+{
+	color: #fff;
+}
