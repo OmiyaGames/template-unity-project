@@ -9,16 +9,21 @@ function UnityProgress(gameInstance, progress) {
   if (!gameInstance.progress) {
     gameInstance.progress = document.createElement("div");
     gameInstance.progress.className = "progress " + gameInstance.Module.splashScreenStyle;
+    gameInstance.progress.className = "progress";
     gameInstance.progress.empty = document.createElement("div");
     gameInstance.progress.empty.className = "empty";
     gameInstance.progress.appendChild(gameInstance.progress.empty);
     gameInstance.progress.full = document.createElement("div");
     gameInstance.progress.full.className = "full";
+    gameInstance.progress.progressText = document.createElement("div");
+    gameInstance.progress.progressText.className = "text";
     gameInstance.progress.appendChild(gameInstance.progress.full);
+    gameInstance.progress.appendChild(gameInstance.progress.progressText);
     gameInstance.container.appendChild(gameInstance.progress);
   }
   gameInstance.progress.full.style.width = (100 * progress) + "%";
   gameInstance.progress.empty.style.width = (100 * (1 - progress)) + "%";
+  gameInstance.progress.progressText.innerHTML = Math.floor((100 * progress)) + "%";
   if (progress == 1)
     gameInstance.logo.style.display = gameInstance.progress.style.display = "none";
 }
