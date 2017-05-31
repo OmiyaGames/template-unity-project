@@ -6,7 +6,7 @@ function UnityProgress(gameInstance, progress) {
     gameInstance.logo.className = "logo " + gameInstance.Module.splashScreenStyle;
     gameInstance.container.appendChild(gameInstance.logo);
   }
-  if (!gameInstance.progress) {    
+  if (!gameInstance.progress) {
     gameInstance.progress = document.createElement("div");
     gameInstance.progress.className = "progress " + gameInstance.Module.splashScreenStyle;
     gameInstance.progress.empty = document.createElement("div");
