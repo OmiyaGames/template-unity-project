@@ -1,16 +1,18 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>%UNITY_WEB_NAME%</title>
-    <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="shortcut icon" href="TemplateData/favicon.ico" />
+    <link rel="stylesheet" href="TemplateData/style.css">
     <script src="TemplateData/UnityProgress.js"></script>
+    <script src="%UNITY_WEBGL_LOADER_URL%"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "%UNITY_WEBGL_BUILD_URL%", { onProgress: UnityProgress });
+    </script>
   </head>
   <body style="margin: 0px;">
-    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" width="%UNITY_WIDTH%px" height="%UNITY_HEIGHT%px">
-    </canvas>
-    %UNITY_WEBGL_LOADER_GLUE%
+    <div id="gameContainer" style="width: %UNITY_WIDTH%px; height: %UNITY_HEIGHT%px"></div>
   </body>
 </html>
