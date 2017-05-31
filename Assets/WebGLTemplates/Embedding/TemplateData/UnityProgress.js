@@ -23,7 +23,7 @@ function UnityProgress(gameInstance, progress) {
   }
   gameInstance.progress.full.style.width = (100 * progress) + "%";
   gameInstance.progress.empty.style.width = (100 * (1 - progress)) + "%";
-  gameInstance.progress.progressText.innerHTML = Math.floor((100 * progress)) + "%";
+  gameInstance.progress.progressText.innerHTML = Math.round((100 * progress)) + "%";
   if (progress == 1)
     gameInstance.logo.style.display = gameInstance.progress.style.display = "none";
 }
