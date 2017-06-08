@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     public class HowToPlayMenu : IMenu
     {

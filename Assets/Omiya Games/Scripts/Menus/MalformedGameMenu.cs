@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="MalformedGameMenu.cs" company="Omiya Games">
@@ -63,6 +63,9 @@ namespace OmiyaGames
                 button.RedirectTo = redirectTo;
             }
         }
+
+        [SerializeField]
+        bool showDebugInformation = false;
 
         [Header("First Option")]
         [SerializeField]
@@ -153,6 +156,11 @@ namespace OmiyaGames
             if (Singleton.Instance.IsWebplayer == true)
             {
                 webChecker = Singleton.Get<WebLocationChecker>();
+            }
+
+            if(showDebugInformation == true)
+            {
+                reason = Reason.JustTesting;
             }
 
             // Update the reason for this dialog to appear

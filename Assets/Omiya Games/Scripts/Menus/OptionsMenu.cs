@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
+    using Settings;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)

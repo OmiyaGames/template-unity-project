@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="PauseMenu.cs" company="Omiya Games">

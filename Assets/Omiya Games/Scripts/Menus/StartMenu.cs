@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
+    using Settings;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="StartMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -88,6 +90,14 @@ namespace OmiyaGames
             }
         }
 
+        GameSettings Settings
+        {
+            get
+            {
+                return Singleton.Get<GameSettings>();
+            }
+        }
+
         bool IsStartingOnFirstLevel
         {
             get
@@ -102,7 +112,7 @@ namespace OmiyaGames
                         break;
                     case LevelSelectButtonBehavior.DefaultStartFirstLevel:
                         // Return true if we haven't unlocked any levels
-                        returnFlag = (Singleton.Get<GameSettings>().NumLevelsUnlocked <= GameSettings.DefaultNumLevelsUnlocked);
+                        returnFlag = (Settings.NumLevelsUnlocked <= Settings.DefaultNumLevelsUnlocked);
                         break;
                 }
                 return returnFlag;

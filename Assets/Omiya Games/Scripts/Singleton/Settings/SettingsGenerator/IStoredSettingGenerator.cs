@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace OmiyaGames
+﻿namespace OmiyaGames.Settings
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="ISettings.cs" company="Omiya Games">
+    /// <copyright file="IStoredSettingGenerator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2016 Omiya Games
+    /// Copyright (c) 2014-2017 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -27,38 +25,13 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>12/8/2015</date>
+    /// <date>5/17/2017</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An interface for storing settings. Useful for indicating where a game's settings should be saved.
+    /// Interface that generates a settings property.
     /// </summary>
     /// <seealso cref="GameSettings"/>
-    public interface ISettings
+    public interface IStoredSettingGenerator : IGenerator, IStoredSetting
     {
-        bool GetBool(string key, bool defaultValue);
-        void SetBool(string key, bool value);
-
-        int GetInt(string key, int defaultValue);
-        void SetInt(string key, int value);
-
-        float GetFloat(string key, float defaultValue);
-        void SetFloat(string key, float value);
-
-        string GetString(string key, string defaultValue);
-        void SetString(string key, string value);
-
-        ENUM GetEnum<ENUM>(string key, ENUM defaultValue) where ENUM : struct, IConvertible;
-        void SetEnum<ENUM>(string key, ENUM value) where ENUM : struct, IConvertible;
-
-        DateTime GetDateTimeUtc(string key, DateTime defaultValue);
-        void SetDateTimeUtc(string key, DateTime value);
-
-        TimeSpan GetTimeSpan(string key, TimeSpan defaultValue);
-        void SetTimeSpan(string key, TimeSpan value);
-
-        void Save();
-        bool HasKey(string key);
-        void DeleteKey(string key);
-        void DeleteAll();
     }
 }
