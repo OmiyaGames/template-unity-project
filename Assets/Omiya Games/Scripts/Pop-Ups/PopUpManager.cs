@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="PopUpManager.cs" company="Omiya Games">

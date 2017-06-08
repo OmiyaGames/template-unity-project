@@ -3,6 +3,8 @@ using UnityEngine.Audio;
 
 namespace OmiyaGames
 {
+    using Settings;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="AudioMixerReference.cs" company="Omiya Games">
     /// The MIT License (MIT)

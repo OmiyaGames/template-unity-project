@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
+    using Settings;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelCompleteMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)

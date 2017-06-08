@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="MenuManager.cs" company="Omiya Games">

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using OmiyaGames;
+using OmiyaGames.Menu;
 
 ///-----------------------------------------------------------------------
 /// <copyright file="MenuTest.cs" company="Omiya Games">

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionMenu.cs" company="Omiya Games">

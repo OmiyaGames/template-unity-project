@@ -5,6 +5,8 @@ using System;
 
 namespace OmiyaGames
 {
+    using Settings;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="BackgroundMusic.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -98,6 +100,9 @@ namespace OmiyaGames
         MusicInfo music2 = null;
 
         bool isPlayingMusic1 = true;
+        public static event Action<float> OnGlobalVolumePercentChange;
+        public static event Action<bool> OnGlobalMuteChange;
+        public static event Action<float> OnGlobalPitchPercentChange;
 
         #region Static Properties
         /// <summary>
@@ -120,6 +125,10 @@ namespace OmiyaGames
                 if (settings.IsMusicMuted == false)
                 {
                     Singleton.Get<AudioMixerReference>().BackgroundMusicVolumeNormalized = settings.MusicVolume;
+                }
+                if(OnGlobalVolumePercentChange != null)
+                {
+                    OnGlobalVolumePercentChange(settings.MusicVolume);
                 }
             }
         }
@@ -146,6 +155,10 @@ namespace OmiyaGames
                 {
                     audioMixer.BackgroundMusicVolumeNormalized = settings.MusicVolume;
                 }
+                if (OnGlobalMuteChange != null)
+                {
+                    OnGlobalMuteChange(settings.IsMusicMuted);
+                }
             }
         }
 
@@ -158,6 +171,10 @@ namespace OmiyaGames
             set
             {
                 Singleton.Get<AudioMixerReference>().BackgroundMusicPitch = value;
+                if(OnGlobalPitchPercentChange != null)
+                {
+                    OnGlobalPitchPercentChange(value);
+                }
             }
         }
         #endregion

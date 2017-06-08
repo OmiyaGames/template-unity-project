@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace OmiyaGames
 {
+    using Menu;
+
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionManager.cs" company="Omiya Games">
     /// The MIT License (MIT)
