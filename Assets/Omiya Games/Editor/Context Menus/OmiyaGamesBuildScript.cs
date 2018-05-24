@@ -23,6 +23,7 @@
 
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -728,10 +729,10 @@ namespace OmiyaGames
                 buildPlayerOptions.locationPathName = targetDirectory;
                 buildPlayerOptions.target = buildTarget;
                 buildPlayerOptions.options = buildOption;
-                
+
                 // Build everything based on the options
-                string res = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                if (res.Length > 0)
+                BuildReport res = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                if ((res.files == null) || (res.files.Length > 0))
                 {
                     throw new Exception("Failed to build to " + targetDirectory + ":\n" + res);
                 }
