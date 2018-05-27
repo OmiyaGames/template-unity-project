@@ -41,8 +41,6 @@ namespace OmiyaGames.Menu
         [Header("Behavior")]
         [SerializeField]
         bool pauseGameOnShow = false;
-        [SerializeField]
-        bool unlockNextLevel = true;
 
         public override bool PauseOnShow
         {
@@ -85,23 +83,7 @@ namespace OmiyaGames.Menu
             base.Show(stateChanged);
 
             // Check if we need to unlock the next level
-            if (unlockNextLevel == true)
-            {
-                // Check which level to unlock
-                int nextLevelUnlocked = TransitionManager.CurrentScene.Ordinal;
-                if (TransitionManager.NextScene != null)
-                {
-                    // Unlock the next level
-                    nextLevelUnlocked += 1;
-                }
-
-                // Check if this level hasn't been unlocked already
-                if (nextLevelUnlocked > Settings.NumLevelsUnlocked)
-                {
-                    // Unlock this level
-                    Settings.NumLevelsUnlocked = nextLevelUnlocked;
-                }
-            }
+            TransitionManager.UpdateUnlockedLevels();
         }
 
         public void OnNextLevelClicked()

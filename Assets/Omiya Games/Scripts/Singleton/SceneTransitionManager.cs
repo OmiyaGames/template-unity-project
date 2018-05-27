@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace OmiyaGames
 {
     using Menu;
+    using Settings;
 
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionManager.cs" company="Omiya Games">
@@ -287,6 +288,9 @@ namespace OmiyaGames
                 throw new ArgumentException("No scene name is set", "scene");
             }
 
+            // Unlock the next level
+            UpdateUnlockedLevels();
+
             // Check if we need to update the last scene
             if (CurrentScene != scene)
             {
@@ -308,6 +312,25 @@ namespace OmiyaGames
                     // Just load the scene without the menu
                     TransitionOut(null);
                 }
+            }
+        }
+
+        public void UpdateUnlockedLevels()
+        {
+            // Check which level to unlock
+            int nextLevelUnlocked = CurrentScene.Ordinal;
+            if (NextScene != null)
+            {
+                // Unlock the next level
+                nextLevelUnlocked += 1;
+            }
+
+            // Check if this level hasn't been unlocked already
+            GameSettings settings = Singleton.Get<GameSettings>();
+            if ((settings != null) && (nextLevelUnlocked > settings.NumLevelsUnlocked))
+            {
+                // Unlock this level
+                settings.NumLevelsUnlocked = nextLevelUnlocked;
             }
         }
 
