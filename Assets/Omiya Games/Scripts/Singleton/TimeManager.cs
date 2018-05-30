@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace OmiyaGames
 {
@@ -38,11 +37,14 @@ namespace OmiyaGames
     /// <seealso cref="Singleton"/>
     public class TimeManager : ISingletonScript
     {
-        // TODO: consider adding full-screen flashes
         public event System.Action<TimeManager> OnManuallyPausedChanged;
 
-        float originalTimeScale = 1f,
-            timeScale = 1f,
+        [SerializeField]
+        float defaultTimeScale = 1f;
+        [SerializeField]
+        float defaultHitPauseDuration = 0.2f;
+
+        float timeScale = 1f,
             timeScaleChangedFor = -1f,
             slowDownDuration = 1f;
         bool isManuallyPaused = false,
@@ -52,7 +54,7 @@ namespace OmiyaGames
         {
             get
             {
-                return originalTimeScale;
+                return defaultTimeScale;
             }
         }
 
@@ -109,7 +111,7 @@ namespace OmiyaGames
 
         public override void SingletonAwake(Singleton instance)
         {
-            originalTimeScale = Time.timeScale;
+            defaultTimeScale = Time.timeScale;
             timeScale = Time.timeScale;
             instance.OnRealTimeUpdate += UpdateRealtime;
         }
@@ -123,6 +125,11 @@ namespace OmiyaGames
         {
             IsManuallyPaused = false;
             TimeScale = OriginalTimeScale;
+        }
+
+        public void HitPause()
+        {
+            PauseFor(defaultHitPauseDuration);
         }
 
         public void PauseFor(float durationSeconds)
