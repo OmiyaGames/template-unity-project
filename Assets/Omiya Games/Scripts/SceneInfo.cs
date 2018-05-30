@@ -47,6 +47,7 @@ namespace OmiyaGames
         [SerializeField]
         CursorLockMode cursorModeWeb = CursorLockMode.None;
         [SerializeField]
+        [Tooltip("See TimeManager to set the scene's timescale.")]
         bool revertTimeScale = true;
 
         TranslatedString? translatedDisplayName = null;
