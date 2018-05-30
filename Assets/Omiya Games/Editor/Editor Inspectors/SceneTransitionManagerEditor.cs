@@ -44,6 +44,19 @@ namespace OmiyaGames
         const int CursorModeLabelWidth = 160;
         const int VerticalMargin = 2;
 
+        static GUIContent revertTimeScaleContent = null;
+        public GUIContent RevertTimeScaleContent
+        {
+            get
+            {
+                if(revertTimeScaleContent == null)
+                {
+                    revertTimeScaleContent = new GUIContent("Reset TimeScale?", "See TimeManager script to set the scene's timescale.");
+                }
+                return revertTimeScaleContent;
+            }
+        }
+
         static GUIStyle rightAlignStyleCache = null;
         public static GUIStyle RightAlignStyle
         {
@@ -108,7 +121,7 @@ namespace OmiyaGames
             {
                 labelRect.x -= RevertTimeFieldTotalMargin;
             }
-            EditorGUI.LabelField(labelRect, "Reset TimeScale?", RightAlignStyle);
+            EditorGUI.LabelField(labelRect, RevertTimeScaleContent, RightAlignStyle);
 
             // Draw the Display Name label
             fieldRect.x = position.x;
