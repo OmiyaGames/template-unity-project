@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731725, g: 0.13414745, b: 0.12107873, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -484,6 +484,10 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 22453778, guid: 939ce299a63589746b18e212fd5161ab, type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 939ce299a63589746b18e212fd5161ab, type: 2}
   m_IsPrefabParent: 0
@@ -626,10 +630,6 @@ Prefab:
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 2}
       propertyPath: m_RootOrder
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1531348621268560, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 2}
-      propertyPath: m_Name
-      value: Main Camera
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 2}
@@ -857,10 +857,14 @@ Prefab:
         type: 3}
     - target: {fileID: 11476976, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
       propertyPath: m_Color.a
-      value: 0.853
+      value: 0.9529412
       objectReference: {fileID: 0}
     - target: {fileID: 11439630, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
       propertyPath: forceToBack
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 22402130, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
