@@ -60,7 +60,7 @@ namespace OmiyaGames
 
         string nameOfFile = BundleId, nameOfFolder = "Assets/WebGLTemplates/Embedding/AcceptedDomains", testResult = null;
         MessageType testResultType = MessageType.None;
-        bool toggleGenerateArea = true, toggleTestArea = false;
+        bool toggleGenerateArea = true, toggleTestArea = true;
         Object testAsset = null, lastTestAsset = null;
         List<string> allDomains = new List<string> { "localhost", "build.cloud.unity3d.com" };
         ReorderableList allDomainsField = null;
