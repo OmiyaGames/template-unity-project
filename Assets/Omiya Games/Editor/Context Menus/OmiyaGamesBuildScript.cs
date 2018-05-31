@@ -134,8 +134,6 @@ namespace OmiyaGames
 
             // Mac platform
             { BuildTarget.StandaloneOSX, new BuildInfo("Mac", ".app") },
-            { BuildTarget.StandaloneOSXIntel, new BuildInfo("Mac 32-bit", ".app") },
-            { BuildTarget.StandaloneOSXIntel64, new BuildInfo("Mac 64-bit", ".app") },
 
             // Linux platform
             { BuildTarget.StandaloneLinuxUniversal, new BuildInfo("Linux", "") },
@@ -163,13 +161,11 @@ namespace OmiyaGames
         {
             new BuildSet(BuildTarget.StandaloneWindows),
             new BuildSet(BuildTarget.StandaloneWindows64),
+            new BuildSet(BuildTarget.StandaloneOSX),
 #if BUILD_32_BIT_AND_64_BIT_SEPARATELY
-            new BuildSet(BuildTarget.StandaloneOSXIntel),
-            new BuildSet(BuildTarget.StandaloneOSXIntel64),
             new BuildSet(BuildTarget.StandaloneLinux),
             new BuildSet(BuildTarget.StandaloneLinux64)
 #else
-            new BuildSet(BuildTarget.StandaloneOSX),
             new BuildSet(BuildTarget.StandaloneLinuxUniversal)
 #endif
         };
@@ -314,28 +310,6 @@ namespace OmiyaGames
         {
             allBuildTargets.Clear();
             allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSX));
-            BuildAll();
-        }
-
-        /// <summary>
-        /// Function that builds for Mac, 32-bit.
-        /// </summary>
-        [MenuItem("Build/Build For/Mac 32-bit")]
-        public static void PerformMac32Build()
-        {
-            allBuildTargets.Clear();
-            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSXIntel));
-            BuildAll();
-        }
-
-        /// <summary>
-        /// Function that builds for Mac, 64-bit.
-        /// </summary>
-        [MenuItem("Build/Build For/Mac 64-bit")]
-        public static void PerformMac64Build()
-        {
-            allBuildTargets.Clear();
-            allBuildTargets.Add(new BuildSet(BuildTarget.StandaloneOSXIntel64));
             BuildAll();
         }
 
@@ -684,8 +658,6 @@ namespace OmiyaGames
             {
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
-                case BuildTarget.StandaloneOSXIntel:
-                case BuildTarget.StandaloneOSXIntel64:
                 case BuildTarget.StandaloneOSX:
                 case BuildTarget.StandaloneLinux:
                 case BuildTarget.StandaloneLinux64:
