@@ -11,7 +11,7 @@ namespace OmiyaGames
     /// <copyright file="DomainListAssetBundleGenerator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2016 Omiya Games
+    /// Copyright (c) 2014-2018 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -56,6 +56,7 @@ namespace OmiyaGames
         const string TestErrorInvalidAssetMessage = "Was able to read the Asset Bundle, but the asset contained in it was not an AcceptedDomainList object.";
         const string TestEmptyWarningMessage = "Was able to read the Asset Bundle, but the asset contained in it was not an AcceptedDomainList object.";
         const string TestInfoMessage = "Asset Bundle contains the following domains:";
+        const string EditMessage = "Updated information in the section below. Just edit the details, and hit build!";
 
         string nameOfFile = BundleId, nameOfFolder = "Assets/WebGLTemplates/Embedding/AcceptedDomains", testResult = null;
         MessageType testResultType = MessageType.None;
@@ -63,18 +64,12 @@ namespace OmiyaGames
         Object testAsset = null, lastTestAsset = null;
         List<string> allDomains = new List<string> { "localhost", "build.cloud.unity3d.com" };
         ReorderableList allDomainsField = null;
-        //GUIStyle cachedFoldOutStyle = null;
         readonly StringBuilder builder = new StringBuilder();
 
         GUIStyle FoldOutstyle
         {
             get
             {
-                //if(cachedFoldOutStyle == null)
-                //{
-                //    cachedFoldOutStyle = new GUIStyle(EditorStyles.foldout);
-                //    cachedFoldOutStyle.fontStyle = FontStyle.Bold;
-                //}
                 return EditorStyles.foldout;
             }
         }
@@ -82,7 +77,7 @@ namespace OmiyaGames
         [MenuItem("Omiya Games/Domain List Generator")]
         static void Initialize()
         {
-            DomainListAssetBundleGenerator window = EditorWindow.GetWindow<DomainListAssetBundleGenerator>(title: "Domain List Generator");
+            DomainListAssetBundleGenerator window = GetWindow<DomainListAssetBundleGenerator>(title: "Domain List Generator");
             window.Show();
         }
 
@@ -92,14 +87,14 @@ namespace OmiyaGames
             // Explain what this dialog does
             EditorGUILayout.HelpBox(HelpMessage, MessageType.None);
 
-            // Draw the area for generating Domain List Assets
-            DrawGenerateAssetArea();
+            // Draw the area for testing an asset bundle
+            DrawTestAssetArea();
 
             // Put a space between generated and test area
             EditorGUILayout.Space();
 
-            // Draw the area for testing an asset bundle
-            DrawTestAssetArea();
+            // Draw the area for generating Domain List Assets
+            DrawGenerateAssetArea();
         }
 
         void OnEnable()
@@ -176,10 +171,6 @@ namespace OmiyaGames
                     AssetUtility.GenerateAssetBundle(CreateScriptableObjectAtFolder, BundleId, pathOfAsset);
                     MoveAssetBundleTo(builder, pathOfAsset, nameOfFolder, nameOfFile);
                 }
-                if (GUILayout.Button("Generate Domain List Text File") == true)
-                {
-                    CreateTextFile(builder, nameOfFolder, nameOfFile, allDomains);
-                }
             }
             EditorGUILayout.EndVertical();
         }
@@ -188,7 +179,7 @@ namespace OmiyaGames
         {
             // Draw foldout area
             EditorGUILayout.BeginVertical();
-            toggleTestArea = EditorGUILayout.Foldout(toggleTestArea, "Test Domain List Asset", FoldOutstyle);
+            toggleTestArea = EditorGUILayout.Foldout(toggleTestArea, "Read Domain List Asset", FoldOutstyle);
             if (toggleTestArea == true)
             {
                 // Create a field to set an object
@@ -202,9 +193,15 @@ namespace OmiyaGames
                 lastTestAsset = testAsset;
 
                 // Create a generate button
-                if (GUILayout.Button("Test Domain List Asset") == true)
+                if (GUILayout.Button("Read Domain List Asset") == true)
                 {
                     TestDomainAsset(testAsset, builder, out testResult, out testResultType);
+                }
+
+                // Create a generate button
+                if (GUILayout.Button("Edit Domain List Asset") == true)
+                {
+                    EditDomainAsset(testAsset, out testResult, out testResultType);
                 }
 
                 // Print out results, if there are any
@@ -222,6 +219,14 @@ namespace OmiyaGames
             AssetBundle bundle = null;
             testResult = TestErrorInvalidFileMessage;
             testResultType = MessageType.Error;
+
+            // Null check
+            if (testAsset == null)
+            {
+                // Don't do anything if asset is null
+                return;
+            }
+
             try
             {
                 // Load the bundle, and convert it to a domain list
@@ -261,6 +266,68 @@ namespace OmiyaGames
             finally
             {
                 if(bundle != null)
+                {
+                    // Clean-up
+                    bundle.Unload(true);
+                }
+            }
+        }
+
+        void EditDomainAsset(Object testAsset, out string testResult, out MessageType testResultType)
+        {
+            // Setup variables
+            AssetBundle bundle = null;
+            testResult = TestErrorInvalidFileMessage;
+            testResultType = MessageType.Error;
+
+            // Null check
+            if (testAsset == null)
+            {
+                // Don't do anything if asset is null
+                return;
+            }
+
+            try
+            {
+                // Check if we can get the path of the asset
+                string localAssetPath = AssetDatabase.GetAssetPath(testAsset);
+
+                // Load the bundle, and convert it to a domain list
+                bundle = AssetBundle.LoadFromFile(localAssetPath);
+                DomainList domainList = Utility.GetDomainList(bundle);
+
+                // By default, indicate the bundle doesn't contain DomainList
+                testResult = TestErrorInvalidAssetMessage;
+                testResultType = MessageType.Error;
+
+                // Check if the bundle contains an AcceptedDomainList
+                if (domainList != null)
+                {
+                    // By default, indicate the domain list is empty
+                    testResult = TestEmptyWarningMessage;
+                    testResultType = MessageType.Warning;
+                    if ((domainList != null) && (domainList.Count > 0))
+                    {
+                        // FIXME: Replace all the variables
+                        // Replace the name of file
+                        nameOfFile = Path.GetFileName(localAssetPath);
+
+                        // Replace the name of folder
+                        int stringLengthOfFolder = (localAssetPath.Length - (nameOfFile.Length + 1));
+                        nameOfFolder = localAssetPath.Substring(0, stringLengthOfFolder);
+
+                        // Replace the domain list
+                        allDomains.Clear();
+                        allDomains.AddRange(domainList);
+
+                        testResult = EditMessage;
+                        testResultType = MessageType.Info;
+                    }
+                }
+            }
+            finally
+            {
+                if (bundle != null)
                 {
                     // Clean-up
                     bundle.Unload(true);
@@ -313,33 +380,6 @@ namespace OmiyaGames
 
             // Clean-up unused bundle IDs
             AssetDatabase.RemoveAssetBundleName(BundleId, false);
-        }
-        
-        static void CreateTextFile(StringBuilder builder, string folderName, string fileName, IList<string> domainList)
-        {
-            // First create the folder if it's not there already
-            AssetUtility.CreateFolderRecursively(folderName);
-            
-            // Generate a path
-            string fullPath = Path.GetDirectoryName(Application.dataPath);
-            fullPath = Path.Combine(fullPath, folderName);
-            fullPath = Path.Combine(fullPath, fileName);
-            fullPath = Path.ChangeExtension(fullPath, Utility.FileExtensionText);
-            
-            // Generate a list of domains
-            builder.Length = 0;
-            for(int index = 0; index < domainList.Count; ++index)
-            {
-                builder.AppendLine(domainList[index]);
-            }
-            
-            // Generate text file
-            File.WriteAllText(fullPath, builder.ToString());
-            
-            // Refresh the project window
-            AssetDatabase.Refresh();
-            EditorUtility.FocusProjectWindow();
-            Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(Path.Combine(folderName, folderName));
         }
         #endregion
     }
