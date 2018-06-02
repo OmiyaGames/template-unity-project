@@ -39,19 +39,26 @@ namespace OmiyaGames
     /// <seealso cref="SoundEffect"/>
     /// <seealso cref="AmbientMusic"/>
     /// <seealso cref="AudioMixerReference"/>
+    [DisallowMultipleComponent]
     public class AudioFinder : MonoBehaviour
     {
         [Header("Search through...")]
-        public GameObject[] searchThrough;
+        [SerializeField]
+        GameObject[] searchThrough;
 
         [Header("Audio Sources")]
-        public List<AudioSource> soundEffects = new List<AudioSource>();
-        public List<AudioSource> ambientMusics = new List<AudioSource>();
-        public List<AudioSource> unknownSources = new List<AudioSource>();
+        [SerializeField]
+        List<AudioSource> soundEffects = new List<AudioSource>();
+        [SerializeField]
+        List<AudioSource> ambientMusics = new List<AudioSource>();
+        [SerializeField]
+        List<AudioSource> unknownSources = new List<AudioSource>();
 
         [Header("Audio Sources")]
-        public AudioMixerGroup soundEffectsGroup = null;
-        public AudioMixerGroup ambientMusicGroup = null;
+        [SerializeField]
+        AudioMixerGroup soundEffectsGroup = null;
+        [SerializeField]
+        AudioMixerGroup ambientMusicGroup = null;
 
         [ContextMenu("Find all audio sources")]
         void FindAllAudioSources()
