@@ -73,14 +73,6 @@ namespace OmiyaGames.Menu
         [SerializeField]
         WebsiteInfo websiteInfo;
 
-        [Header("Second Option")]
-        [SerializeField]
-        WebsiteButton otherSitesButton = null;
-        [SerializeField]
-        WebsiteInfo[] otherSites = null;
-        [SerializeField]
-        TranslatedText[] secondOptionSet = null;
-
         [Header("Error Messages")]
         [SerializeField]
         TranslatedText reasonMessage = null;
@@ -116,20 +108,6 @@ namespace OmiyaGames.Menu
 
             // Setup the dialog
             websiteInfo.UpdateButton(websiteButton);
-            if((otherSites != null) && (otherSites.Length > 0))
-            {
-                // Setup the second options
-                SetupSecondOptions();
-            }
-            else
-            {
-                // Turn off everything related to the second options
-                for(int index = 0; index < secondOptionSet.Length; ++index)
-                {
-                    secondOptionSet[index].gameObject.SetActive(false);
-                }
-                otherSitesButton.gameObject.SetActive(false);
-            }
         }
 
         public override void Hide()
@@ -195,47 +173,5 @@ namespace OmiyaGames.Menu
                     break;
             }
         }
-
-        #region Helper Methods
-        void SetupSecondOptions()
-        {
-            // Populate the list of buttons with at least one button
-            if (allSecondOptionButtons.Count <= 0)
-            {
-                allSecondOptionButtons.Add(otherSitesButton);
-            }
-
-            // Go through all the sites
-            int index = 0;
-            GameObject clone;
-            for (; index < otherSites.Length; ++index)
-            {
-                // Check if we have enough buttons
-                if (allSecondOptionButtons.Count <= index)
-                {
-                    // If not, create a new one
-                    clone = Instantiate<GameObject>(otherSitesButton.gameObject);
-                    allSecondOptionButtons.Add(clone.GetComponent<WebsiteButton>());
-
-                    // Position this button properly
-                    clone.transform.SetParent(otherSitesButton.transform.parent);
-                    clone.transform.localScale = Vector3.one;
-                    clone.transform.localRotation = Quaternion.identity;
-                    clone.transform.SetSiblingIndex(otherSitesButton.transform.GetSiblingIndex() + index);
-                }
-
-                // Setup this button
-                allSecondOptionButtons[index].gameObject.SetActive(true);
-                otherSites[index].UpdateButton(allSecondOptionButtons[index]);
-                
-            }
-
-            // Turn off the rest of the buttons
-            for (; index < allSecondOptionButtons.Count; ++index)
-            {
-                allSecondOptionButtons[index].gameObject.SetActive(false);
-            }
-        }
-        #endregion
     }
 }
