@@ -45,6 +45,8 @@ namespace OmiyaGames
         [Header("Search through...")]
         [SerializeField]
         GameObject[] searchThrough;
+        [SerializeField]
+        bool recursivelyCheckChildren = true;
 
         [Header("Audio Sources")]
         [SerializeField]
@@ -63,35 +65,18 @@ namespace OmiyaGames
         [ContextMenu("Find all audio sources")]
         void FindAllAudioSources()
         {
-            // Clear all lists
-            soundEffects.Clear();
-            ambientMusics.Clear();
-            unknownSources.Clear();
-
-            // Seek for all AudioSources
-            SoundEffect soundComponent = null;
-            AmbientMusic ambientComponent = null;
-            BackgroundMusic backgroundComponent = null;
-            foreach (GameObject search in searchThrough)
+            // Find texts
+            if ((searchThrough != null) && (searchThrough.Length > 0))
             {
-                AudioSource[] allSources = search.GetComponentsInChildren<AudioSource>(true);
-                foreach (AudioSource source in allSources)
+                // Clear all lists
+                soundEffects.Clear();
+                ambientMusics.Clear();
+                unknownSources.Clear();
+
+                // Find audio sources
+                foreach (GameObject search in searchThrough)
                 {
-                    soundComponent = source.GetComponent<SoundEffect>();
-                    ambientComponent = source.GetComponent<AmbientMusic>();
-                    backgroundComponent = source.GetComponent<BackgroundMusic>();
-                    if ((soundComponent != null) && (ambientComponent == null) && (backgroundComponent == null))
-                    {
-                        soundEffects.Add(source);
-                    }
-                    else if ((soundComponent == null) && (ambientComponent != null) && (backgroundComponent == null))
-                    {
-                        ambientMusics.Add(source);
-                    }
-                    else
-                    {
-                        unknownSources.Add(source);
-                    }
+                    RecursivelyFindAudioSources(search, recursivelyCheckChildren);
                 }
             }
         }
@@ -107,6 +92,45 @@ namespace OmiyaGames
             foreach (AudioSource source in ambientMusics)
             {
                 source.outputAudioMixerGroup = ambientMusicGroup;
+            }
+        }
+
+        void RecursivelyFindAudioSources(GameObject search, bool checkChildren)
+        {
+            SoundEffect soundComponent = null;
+            AmbientMusic ambientComponent = null;
+            BackgroundMusic backgroundComponent = null;
+
+            // Seek for all AudioSources
+            AudioSource[] allSources = search.GetComponentsInChildren<AudioSource>(true);
+            foreach (AudioSource source in allSources)
+            {
+                soundComponent = source.GetComponent<SoundEffect>();
+                ambientComponent = source.GetComponent<AmbientMusic>();
+                backgroundComponent = source.GetComponent<BackgroundMusic>();
+                if ((soundComponent != null) && (ambientComponent == null) && (backgroundComponent == null))
+                {
+                    soundEffects.Add(source);
+                }
+                else if ((soundComponent == null) && (ambientComponent != null) && (backgroundComponent == null))
+                {
+                    ambientMusics.Add(source);
+                }
+                else
+                {
+                    unknownSources.Add(source);
+                }
+            }
+
+            // Look for children
+            if((checkChildren == true) && (search.transform.childCount > 0))
+            {
+                Transform child;
+                for(int index = 0; index < search.transform.childCount; ++index)
+                {
+                    child = search.transform.GetChild(index);
+                    RecursivelyFindAudioSources(child.gameObject, checkChildren);
+                }
             }
         }
     }
