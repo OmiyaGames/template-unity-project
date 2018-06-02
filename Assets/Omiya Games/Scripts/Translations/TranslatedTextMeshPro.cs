@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -32,23 +32,16 @@ namespace OmiyaGames
     /// <date>6/1/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Set translation text.
+    /// Set the translation on a <code>TMP_Text</code> component.
     /// </summary>
-    /// <seealso cref="TranslatedTextMeshPro"/>
-    [RequireComponent(typeof(Text))]
-    [System.Obsolete("Obsolete in favor of TranslatedTextMeshPro")]
-    public class TranslatedText : MonoBehaviour
+    /// <seealso cref="TMP_Text"/>
+    [RequireComponent(typeof(TMP_Text))]
+    [DisallowMultipleComponent]
+    public class TranslatedTextMeshPro : MonoBehaviour
     {
-        static readonly HashSet<TranslatedText> allTranslationScripts = new HashSet<TranslatedText>();
+        static readonly HashSet<TranslatedTextMeshPro> allTranslationScripts = new HashSet<TranslatedTextMeshPro>();
 
-        public enum LetterFormatting
-        {
-            None,
-            UpperCase,
-            LowerCase
-        }
-
-        public static IEnumerable<TranslatedText> AllTranslationScripts
+        public static IEnumerable<TranslatedTextMeshPro> AllTranslationScripts
         {
             get
             {
@@ -71,26 +64,15 @@ namespace OmiyaGames
         [Tooltip("The key to the CSVLanguageParser.")]
         string translationKey = "";
 
-        [Header("Optional Formatting")]
-        [SerializeField]
-        [Tooltip("(Optional) Any extra formatting one might want to add to a translated text (e.g. \"<b>{0}</b>\" will create a bolded text. Leave it blank for no formatting.")]
-        string extraFormatting = "";
-        [SerializeField]
-        [Tooltip("(Optional) Any extra formatting one might want to add to a translated text (e.g. \"<b>{0}</b>\" will create a bolded text). Leave it blank for no formatting.")]
-        LetterFormatting letterFormatting = LetterFormatting.None;
-
         [Header("Optional Font Adjustments")]
         [SerializeField]
         [Tooltip("(Optional) Name of the font key, set in the Translation Manager.")]
         string fontKey = "";
-        [SerializeField]
-        [Tooltip("(Optional) If checked, sets the font based on the label's style.")]
-        bool changeFontOnStyle = false;
 
         /// <summary>
         /// The attached label.
         /// </summary>
-        Text label = null;
+        TMP_Text label = null;
         object[] arguments = null;
         string originalString = null;
         bool bindedToSingleton = false;
@@ -108,14 +90,14 @@ namespace OmiyaGames
         /// Gets the <c>Text</c> component.
         /// </summary>
         /// <value>The label.</value>
-        public Text Label
+        public TMP_Text Label
         {
             get
             {
                 if (label == null)
                 {
                     // Grab the label component
-                    label = GetComponent<Text>();
+                    label = GetComponent<TMP_Text>();
                 }
                 return label;
             }
@@ -192,7 +174,7 @@ namespace OmiyaGames
         /// <summary>
         /// Gets or sets the style of the label's font directly.
         /// </summary>
-        public FontStyle CurrentStyle
+        public FontStyles CurrentStyle
         {
             get
             {
@@ -202,22 +184,6 @@ namespace OmiyaGames
             {
                 Label.fontStyle = value;
                 UpdateFont();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the letter styling (e.g. all-uppercase, all-lowercase, or custom).
-        /// </summary>
-        public LetterFormatting LetterStyle
-        {
-            get
-            {
-                return letterFormatting;
-            }
-            set
-            {
-                letterFormatting = value;
-                UpdateLabelOnNextFrame();
             }
         }
 
@@ -234,24 +200,6 @@ namespace OmiyaGames
             {
                 fontKey = value;
                 UpdateFont();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the extra text formatting
-        /// (e.g. "<b>{0}</b>" will create a bolded text).
-        /// Leave it blank for no formatting.
-        /// </summary>
-        public string ExtraFormatting
-        {
-            get
-            {
-                return extraFormatting;
-            }
-            set
-            {
-                extraFormatting = value;
-                UpdateLabelOnNextFrame();  
             }
         }
         #endregion
@@ -326,14 +274,7 @@ namespace OmiyaGames
             TranslationManager.FontMap map = Parser.CurrentLanguageFont;
             if(map != null)
             {
-                if(changeFontOnStyle == true)
-                {
-                    Label.font = map.GetFont(fontKey, Label.fontStyle);
-                }
-                else
-                {
-                    Label.font = map.GetFont(fontKey);
-                }
+                Label.font = map.GetFontAsset(fontKey);
             }
         }
 
@@ -364,21 +305,6 @@ namespace OmiyaGames
             {
                 // Format the string based on the translation and arguments
                 displayString = string.Format(displayString, arguments);
-            }
-            if (string.IsNullOrEmpty(extraFormatting) == false)
-            {
-                // Format the string based on extra formatting
-                displayString = string.Format(extraFormatting, displayString);
-            }
-            switch (letterFormatting)
-            {
-                // Format the string based on extra formatting
-                case LetterFormatting.UpperCase:
-                    displayString = displayString.ToUpper();
-                    break;
-                case LetterFormatting.LowerCase:
-                    displayString = displayString.ToLower();
-                    break;
             }
 
             // Set the label's text

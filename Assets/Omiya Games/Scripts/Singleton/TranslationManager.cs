@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 using System.Collections.Generic;
 
 namespace OmiyaGames
@@ -47,6 +48,7 @@ namespace OmiyaGames
     ///                    And turning the script to a Singleton
     /// 2015/03/25  Taro   Adding variables for debugging
     /// 2015/07/03  Taro   Retrieving language from GameSettings
+    /// 2015/07/03  Taro   Retrieving language from GameSettings
     /// </remarks>
     /// <seealso cref="Singleton"/>
     [DisallowMultipleComponent]
@@ -81,6 +83,7 @@ namespace OmiyaGames
         }
 
         [System.Serializable]
+        [System.Obsolete("Obsolete in favor of FontAssetDetails")]
         public struct FontMapDetails
         {
             [SerializeField]
@@ -115,6 +118,31 @@ namespace OmiyaGames
             }
         }
 
+        [System.Serializable]
+        public struct FontAssetDetails
+        {
+            [SerializeField]
+            string name;
+            [SerializeField]
+            TMP_FontAsset font;
+
+            public string Name
+            {
+                get
+                {
+                    return name;
+                }
+            }
+
+            public TMP_FontAsset Font
+            {
+                get
+                {
+                    return font;
+                }
+            }
+        }
+
         public struct FontMapKey
         {
             public FontMapKey(string name, FontStyle style)
@@ -133,11 +161,21 @@ namespace OmiyaGames
             [SerializeField]
             string header;
             [SerializeField]
+            TMP_FontAsset defaultFontAsset;
+            [SerializeField]
+            FontAssetDetails[] otherFontAssets;
+
+            [Header("Obsolete Properties")]
+            [SerializeField]
+            [System.Obsolete("Obsolete in favor of defaultFontAsset")]
             Font defaultFont;
             [SerializeField]
+            [System.Obsolete("Obsolete in favor of otherFontAssets")]
             FontMapDetails[] otherFonts;
 
+            [System.Obsolete("Obsolete in favor of otherFontAssetMap")]
             readonly Dictionary<FontMapKey, FontMapDetails> otherFontMap = new Dictionary<FontMapKey, FontMapDetails>();
+            readonly Dictionary<string, FontAssetDetails> otherFontAssetMap = new Dictionary<string, FontAssetDetails>();
             FontMapKey fontSearchCache = new FontMapKey();
 
             public string Header
@@ -148,6 +186,7 @@ namespace OmiyaGames
                 }
             }
 
+            [System.Obsolete("Obsolete in favor of DefaultFontAsset")]
             public Font DefaultFont
             {
                 get
@@ -156,6 +195,15 @@ namespace OmiyaGames
                 }
             }
 
+            public TMP_FontAsset DefaultFontAsset
+            {
+                get
+                {
+                    return defaultFontAsset;
+                }
+            }
+
+            [System.Obsolete("Obsolete in favor of OtherFontAssets")]
             public Dictionary<FontMapKey, FontMapDetails> OtherFonts
             {
                 get
@@ -174,6 +222,23 @@ namespace OmiyaGames
                 }
             }
 
+            public Dictionary<string, FontAssetDetails> OtherFontAssets
+            {
+                get
+                {
+                    if (otherFontAssetMap.Count != otherFontAssets.Length)
+                    {
+                        otherFontAssetMap.Clear();
+                        foreach (FontAssetDetails details in otherFontAssets)
+                        {
+                            otherFontAssetMap.Add(details.Name, details);
+                        }
+                    }
+                    return otherFontAssetMap;
+                }
+            }
+
+            [System.Obsolete("Obsolete in favor of GetFontAsset")]
             public Font GetFont(string name, FontStyle style = FontStyle.Normal)
             {
                 Font returnFont = DefaultFont;
@@ -183,6 +248,16 @@ namespace OmiyaGames
                 if(OtherFonts.ContainsKey(fontSearchCache) == true)
                 {
                     returnFont = OtherFonts[fontSearchCache].Font;
+                }
+                return returnFont;
+            }
+
+            public TMP_FontAsset GetFontAsset(string name)
+            {
+                TMP_FontAsset returnFont = DefaultFontAsset;
+                if (OtherFontAssets.ContainsKey(name) == true)
+                {
+                    returnFont = OtherFontAssets[name].Font;
                 }
                 return returnFont;
             }
