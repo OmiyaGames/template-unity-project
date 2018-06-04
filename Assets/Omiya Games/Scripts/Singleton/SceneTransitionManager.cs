@@ -236,7 +236,7 @@ namespace OmiyaGames
             if (CurrentScene != null)
             {
                 mode = CurrentScene.LockMode;
-                if ((allowWebplayerSettings == true) && (Singleton.Instance.IsWebplayer == true))
+                if ((allowWebplayerSettings == true) && (Singleton.Instance.IsWebApp == true))
                 {
                     mode = CurrentScene.LockModeWeb;
                 }

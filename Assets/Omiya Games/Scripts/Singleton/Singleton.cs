@@ -47,14 +47,17 @@ namespace OmiyaGames
             VerificationNotSupported
         }
 
-        private static Singleton msInstance = null;
-        private readonly Dictionary<Type, Component> mCacheRetrievedComponent = new Dictionary<Type, Component>();
+        readonly Dictionary<Type, Component> mCacheRetrievedComponent = new Dictionary<Type, Component>();
 
         public event Action<float> OnUpdate;
         public event Action<float> OnRealTimeUpdate;
+        public event Action<float> OnLateUpdate;
+        public event Action<float> OnLateRealTimeUpdate;
         public event Action<float> OnFixedUpdate;
 
-        ISingletonScript[] allSingletonScriptsCache = null;
+        public delegate void FocusChanged(bool before, bool after);
+        public event FocusChanged OnBeforeFocusChange;
+        public event Action<bool> OnAfterFocusChange;
 
         [Header("Simulation")]
         [SerializeField]
@@ -68,19 +71,20 @@ namespace OmiyaGames
         [SerializeField]
         PlatformSpecificLink storeUrls;
 
+        ISingletonScript[] allSingletonScriptsCache = null;
         GenuineStatus genuineStatus = GenuineStatus.Unchecked;
 
         public static Singleton Instance
         {
-            get
-            {
-                return msInstance;
-            }
-            private set
-            {
-                msInstance = value;
-            }
-        }
+            get;
+            private set;
+        } = null;
+
+        public bool IsAppFocused
+        {
+            get;
+            private set;
+        } = true;
 
         public static COMPONENT Get<COMPONENT>() where COMPONENT : Component
         {
@@ -101,14 +105,14 @@ namespace OmiyaGames
             return returnObject;
         }
 
-        public bool IsWebplayer
+        public bool IsWebApp
         {
             get
             {
 #if UNITY_EDITOR
                 // Check if webplayer simulation checkbox is checked
                 return simulateWebplayer;
-#elif (UNITY_WEBPLAYER || UNITY_WEBGL)
+#elif UNITY_WEBGL
                 // Always return true if already on a webplayer
                 return true;
 #else
@@ -217,22 +221,26 @@ namespace OmiyaGames
 
         void Update()
         {
-            if (OnUpdate != null)
-            {
-                OnUpdate(Time.deltaTime);
-            }
-            if (OnRealTimeUpdate != null)
-            {
-                OnRealTimeUpdate(Time.unscaledDeltaTime);
-            }
+            OnUpdate?.Invoke(Time.deltaTime);
+            OnRealTimeUpdate?.Invoke(Time.unscaledDeltaTime);
+        }
+
+        void LateUpdate()
+        {
+            OnLateUpdate?.Invoke(Time.deltaTime);
+            OnLateRealTimeUpdate?.Invoke(Time.unscaledDeltaTime);
         }
 
         void FixedUpdate()
         {
-            if (OnFixedUpdate != null)
-            {
-                OnFixedUpdate(Time.fixedDeltaTime);
-            }
+            OnFixedUpdate?.Invoke(Time.fixedDeltaTime); 
+        }
+
+        void OnApplicationFocus(bool focus)
+        {
+            OnBeforeFocusChange?.Invoke(IsAppFocused, focus);
+            IsAppFocused = focus;
+            OnAfterFocusChange?.Invoke(IsAppFocused);
         }
 
         void RunSingletonEvents()

@@ -131,7 +131,7 @@ namespace OmiyaGames.Menu
         {
             // Grab the web checker
             WebLocationChecker webChecker = null;
-            if (Singleton.Instance.IsWebplayer == true)
+            if (Singleton.Instance.IsWebApp == true)
             {
                 webChecker = Singleton.Get<WebLocationChecker>();
             }

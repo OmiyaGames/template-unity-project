@@ -122,7 +122,7 @@ namespace OmiyaGames.Menu
         void Start()
         {
             // Check if we should remove the quit button (you can't quit out of a webplayer)
-            if (Singleton.Instance.IsWebplayer == true)
+            if (Singleton.Instance.IsWebApp == true)
             {
                 // Disable the quit button entirely
                 quitButton.gameObject.SetActive(false);
