@@ -209,7 +209,7 @@ namespace OmiyaGames.Menu
 
         IEnumerator VerifyBuild()
         {
-            if (Singleton.Instance.IsWebplayer == true)
+            if (Singleton.Instance.IsWebApp == true)
             {
                 // Grab the web checker
                 WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();

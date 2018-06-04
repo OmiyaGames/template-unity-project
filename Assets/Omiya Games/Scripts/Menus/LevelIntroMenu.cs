@@ -58,7 +58,7 @@ namespace OmiyaGames.Menu
             get
             {
                 Type returnType = Type.ManagedMenu;
-                if ((Singleton.Instance.IsWebplayer == true) || (onlyAppearOnWebplayer == false))
+                if ((Singleton.Instance.IsWebApp == true) || (onlyAppearOnWebplayer == false))
                 {
                     returnType = Type.DefaultManagedMenu;
                 }

@@ -222,7 +222,7 @@ namespace OmiyaGames
 
         public override void SingletonAwake(Singleton instance)
         {
-            if (Singleton.Instance.IsWebplayer == true)
+            if (Singleton.Instance.IsWebApp == true)
             {
                 // Shoot a coroutine if not in editor, and making Webplayer or WebGL
                 StartCoroutine(CheckDomainList());
