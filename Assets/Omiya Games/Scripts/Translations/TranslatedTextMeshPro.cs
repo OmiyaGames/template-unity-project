@@ -32,10 +32,10 @@ namespace OmiyaGames
     /// <date>6/1/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Set the translation on a <code>TMP_Text</code> component.
+    /// Set the translation on a <code>TextMeshProUGUI</code> component.
     /// </summary>
-    /// <seealso cref="TMP_Text"/>
-    [RequireComponent(typeof(TMP_Text))]
+    /// <seealso cref="TextMeshProUGUI"/>
+    [RequireComponent(typeof(TextMeshProUGUI))]
     [DisallowMultipleComponent]
     public class TranslatedTextMeshPro : MonoBehaviour
     {
@@ -72,7 +72,7 @@ namespace OmiyaGames
         /// <summary>
         /// The attached label.
         /// </summary>
-        TMP_Text label = null;
+        TextMeshProUGUI label = null;
         object[] arguments = null;
         string originalString = null;
         bool bindedToSingleton = false;
@@ -90,14 +90,14 @@ namespace OmiyaGames
         /// Gets the <c>Text</c> component.
         /// </summary>
         /// <value>The label.</value>
-        public TMP_Text Label
+        public TextMeshProUGUI Label
         {
             get
             {
                 if (label == null)
                 {
                     // Grab the label component
-                    label = GetComponent<TMP_Text>();
+                    label = GetComponent<TextMeshProUGUI>();
                 }
                 return label;
             }
@@ -271,16 +271,19 @@ namespace OmiyaGames
         #region Helper Methods
         void UpdateFont()
         {
-            TranslationManager.FontMap map = Parser.CurrentLanguageFont;
-            if(map != null)
+            if (Parser != null)
             {
-                Label.font = map.GetFontAsset(fontKey);
+                TranslationManager.FontMap map = Parser.CurrentLanguageFont;
+                if (map != null)
+                {
+                    Label.font = map.GetFontAsset(fontKey);
+                }
             }
         }
 
         void UpdateLabelOnNextFrame()
         {
-            if(bindedToSingleton == false)
+            if((bindedToSingleton == false) && (Singleton.Instance != null))
             {
                 Singleton.Instance.OnUpdate += OnEveryFrame;
                 bindedToSingleton = true;
@@ -290,7 +293,7 @@ namespace OmiyaGames
         void UpdateLabelNow()
         {
             // Check if the original string needs to be updated
-            if (string.IsNullOrEmpty(originalString) == true)
+            if ((Parser != null) && (string.IsNullOrEmpty(originalString) == true))
             {
                 originalString = CurrentText;
                 if (IsTranslating == true)
