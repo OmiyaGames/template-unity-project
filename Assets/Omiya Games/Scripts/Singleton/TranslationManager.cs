@@ -41,14 +41,34 @@ namespace OmiyaGames
     /// </summary>
     /// <remarks>
     /// Revision History:
-    /// <Date>      <Name> <Description>
-    /// 2015/03/23  Dylan  Initial verison
-    /// 2015/03/24  Taro   Refactoring Documentation,
-    ///                    replacing methods with properties
-    ///                    And turning the script to a Singleton
-    /// 2015/03/25  Taro   Adding variables for debugging
-    /// 2015/07/03  Taro   Retrieving language from GameSettings
-    /// 2015/07/03  Taro   Retrieving language from GameSettings
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>3/23/2015</description>
+    /// <description>Dylan</description>
+    /// <description>Initial verison</description>
+    /// 
+    /// <description>3/24/2015</description>
+    /// <description>Taro</description>
+    /// <description>Refactoring Documentation, replacing methods with properties and turning the script to a Singleton</description>
+    /// 
+    /// <description>3/25/2015</description>
+    /// <description>Taro</description>
+    /// <description>Adding variables for debugging</description>
+    /// 
+    /// <description>7/3/2015</description>
+    /// <description>Taro</description>
+    /// <description>Retrieving language from GameSettings</description>
+    /// 
+    /// <description>6/4/2018</description>
+    /// <description>Taro</description>
+    /// <description>Working on updating for bi-directional communication with components.</description>
+    /// </item>
+    /// </list>
     /// </remarks>
     /// <seealso cref="Singleton"/>
     [DisallowMultipleComponent]

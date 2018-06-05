@@ -1,7 +1,5 @@
 ﻿// Implementation based on script found at http://bravenewmethod.com/2014/09/13/lightweight-csv-reader-for-unity/ 
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
