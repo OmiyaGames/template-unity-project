@@ -74,12 +74,19 @@ namespace OmiyaGames
         ISingletonScript[] allSingletonScriptsCache = null;
         GenuineStatus genuineStatus = GenuineStatus.Unchecked;
 
+        /// <summary>
+        /// The static instance of this object.  Use this property to access it's information
+        /// </summary>
         public static Singleton Instance
         {
             get;
             private set;
         } = null;
 
+        /// <summary>
+        /// State indicating whether this app is focused (e.g. on WebGL,
+        /// the app is capturing the mouse input properly) on this app or not.
+        /// </summary>
         public bool IsAppFocused
         {
             get;
@@ -105,6 +112,10 @@ namespace OmiyaGames
             return returnObject;
         }
 
+        /// <summary>
+        /// Property indicating if this is a web app or not.
+        /// Basically checks if this is a WebGL build.
+        /// </summary>
         public bool IsWebApp
         {
             get
@@ -198,6 +209,7 @@ namespace OmiyaGames
         // Use this for initialization
         void Awake()
         {
+            // Check if the singleton is not instanced yet
             if (Instance == null)
             {
                 // Set the instance variable
