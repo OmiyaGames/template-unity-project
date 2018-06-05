@@ -125,7 +125,7 @@ namespace OmiyaGames.Menu
             return returnButton;
         }
 
-        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        protected override void OnStateChanged(State from, State to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
@@ -198,7 +198,7 @@ namespace OmiyaGames.Menu
             });
 
             // Setup the level button labels
-            foreach (TranslatedText label in newButton.Labels)
+            foreach (TranslatedTextMeshPro label in newButton.Labels)
             {
                 label.SetTranslationKey(scene.DisplayName.TranslationKey, (newButton.Index + 1));
             }

@@ -135,14 +135,14 @@ namespace OmiyaGames.Menu
             // Update Select
             if(IsStartingOnFirstLevel == true)
             {
-                foreach(TranslatedText text in levelSelectButton.Labels)
+                foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
                 {
                     text.TranslationKey = startText;
                 }
             }
             else
             {
-                foreach(TranslatedText text in levelSelectButton.Labels)
+                foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
                 {
                     text.TranslationKey = levelSelectText;
                 }
@@ -238,7 +238,7 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        protected override void OnStateChanged(State from, State to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
