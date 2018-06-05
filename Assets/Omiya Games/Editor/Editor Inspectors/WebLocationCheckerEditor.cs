@@ -35,7 +35,7 @@ namespace OmiyaGames
     [CustomEditor(typeof(WebLocationChecker))]
     public class WebLocationCheckerEditor : Editor
     {
-        const string AcceptedDomainsFieldName = "Accepted Domains";
+        const string AcceptedDomainsFieldName = "Domain Names To Accept By Default";
         const string DescriptionMessage = "Any domain string received from any" +
             " sources (in the \"" + AcceptedDomainsFieldName + "\" list below or" +
             " a file downloaded from the \"" +
@@ -51,23 +51,15 @@ namespace OmiyaGames
             " will match \"www.google.com\", \"o.google.com\", and \".google.com\"," +
             " while \"?.google.com\" will only match \"o.google.com\", and" +
             " \".google.com\"";
-        const string SplitStringHelpMessage = "List the strings your text file uses" +
-            " to separate each domain, such as a comma-space, below. Note that this" +
-            " script will divide the content of the downloaded domain list by" +
-            " newlines (both Windows and Unix style) automatically; there's no need" +
-            " to add them to the list. Wild cards are not accepted in this field.";
         const int VerticalMargin = 2;
 
         SerializedProperty domainMustContain;
         SerializedProperty remoteDomainListUrl;
-        SerializedProperty remoteListFileType;
-        SerializedProperty splitRemoteDomainListUrlBy;
         SerializedProperty waitObjects;
         SerializedProperty forceRedirectIfDomainDoesntMatch;
         SerializedProperty redirectURL;
 
         ReorderableList domainMustContainList;
-        ReorderableList splitRemoteDomainListUrlByList;
         ReorderableList waitObjectsList;
 
         public void OnEnable()
@@ -75,8 +67,6 @@ namespace OmiyaGames
             // Grab all serialized properties
             domainMustContain = serializedObject.FindProperty("domainMustContain");
             remoteDomainListUrl = serializedObject.FindProperty("remoteDomainListUrl");
-            remoteListFileType = serializedObject.FindProperty("remoteListFileType");
-            splitRemoteDomainListUrlBy = serializedObject.FindProperty("splitRemoteDomainListUrlBy");
             waitObjects = serializedObject.FindProperty("waitObjects");
             forceRedirectIfDomainDoesntMatch = serializedObject.FindProperty("forceRedirectIfDomainDoesntMatch");
             redirectURL = serializedObject.FindProperty("redirectURL");
@@ -86,12 +76,6 @@ namespace OmiyaGames
             domainMustContainList.drawHeaderCallback = DrawDomainHeader;
             domainMustContainList.drawElementCallback = DrawDomainElement;
             domainMustContainList.elementHeight = AssetUtility.SingleLineHeight(VerticalMargin);
-
-            // Setup splitRemoteDomainListUrlBy list
-            splitRemoteDomainListUrlByList = new ReorderableList(serializedObject, splitRemoteDomainListUrlBy, true, true, true, true);
-            splitRemoteDomainListUrlByList.drawHeaderCallback = DrawSplitHeader;
-            splitRemoteDomainListUrlByList.drawElementCallback = DrawSplitElement;
-            splitRemoteDomainListUrlByList.elementHeight = AssetUtility.SingleLineHeight(VerticalMargin);
 
             // Setup waitObjects list
             waitObjectsList = new ReorderableList(serializedObject, waitObjects, true, true, true, true);
@@ -108,27 +92,20 @@ namespace OmiyaGames
             EditorGUILayout.Separator();
             EditorGUILayout.HelpBox(DescriptionMessage, MessageType.None);
 
+            // Display the URL to where this application downloads a list of domains
+            EditorGUILayout.Separator();
+            EditorGUILayout.PropertyField(remoteDomainListUrl, true);
+            if (string.IsNullOrEmpty(remoteDomainListUrl.stringValue) == false)
+            {
+                // Display list of objects to disable
+                waitObjectsList.DoLayoutList();
+            }
+
             // Display list of built-in accepted domains
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField(AcceptedDomainsFieldName, EditorStyles.boldLabel);
             domainMustContainList.DoLayoutList();
 
-            // Display the URL to where this application downloads a list of domains
-            EditorGUILayout.PropertyField(remoteDomainListUrl, true);
-            if(string.IsNullOrEmpty(remoteDomainListUrl.stringValue) == false)
-            {
-                // Display file type and list of objects to disable
-                EditorGUILayout.PropertyField(remoteListFileType, true);
-                waitObjectsList.DoLayoutList();
-
-                // Check if the file type is text
-                if (remoteListFileType.enumValueIndex == (int)WebLocationChecker.DownloadedFileType.Text)
-                {
-                    // Display the list of strings to divide the domain list text file by
-                    EditorGUILayout.HelpBox(SplitStringHelpMessage, MessageType.None);
-                    splitRemoteDomainListUrlByList.DoLayoutList();
-                }
-            }
 
             // Display option to force redirecting the web application to a specific website
             EditorGUILayout.PropertyField(forceRedirectIfDomainDoesntMatch, true);
@@ -150,19 +127,6 @@ namespace OmiyaGames
         void DrawDomainElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = domainMustContain.GetArrayElementAtIndex(index);
-            rect.y += VerticalMargin;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.PropertyField(rect, element, GUIContent.none);
-        }
-
-        void DrawSplitHeader(Rect rect)
-        {
-            EditorGUI.LabelField(rect, "Split Text Content By:");
-        }
-
-        void DrawSplitElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            SerializedProperty element = splitRemoteDomainListUrlBy.GetArrayElementAtIndex(index);
             rect.y += VerticalMargin;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(rect, element, GUIContent.none);

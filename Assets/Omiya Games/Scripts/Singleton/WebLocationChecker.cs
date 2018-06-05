@@ -66,8 +66,6 @@ namespace OmiyaGames
             AcceptedDomainListAssetBundle
         }
 
-        static readonly string[] AlwaysSplitDomainsBy = new string[] { "\r\n", "\n" };
-
         ///<summary>
         /// If it is a webplayer, then the domain must contain any
         /// one or more of these strings, or it will be redirected.
@@ -83,19 +81,6 @@ namespace OmiyaGames
         [SerializeField]
         [Tooltip("[optional] The URL to fetch a list of domains")]
         string remoteDomainListUrl;
-        /// <summary>
-        /// The file type of this list of domains
-        /// </summary>
-        [SerializeField]
-        [Tooltip("[optional] The file type of this list of domains")]
-        DownloadedFileType remoteListFileType = DownloadedFileType.AcceptedDomainListAssetBundle;
-        ///<summary>
-        /// [optional] The list of strings the text list of domains will be split by.
-        /// Note that the text list will already be divided by newlines.
-        ///</summary>
-        [SerializeField]
-        [Tooltip("[optional] The list of strings the text list of domains will be split by.\nNote that the text list will already be divided by newlines.")]
-        string[] splitRemoteDomainListUrlBy = new string[] { "," };
         ///<summary>
         /// [Optional] GameObjects to deactivate while the domain checking is happening
         ///</summary>
@@ -116,27 +101,14 @@ namespace OmiyaGames
         ///</summary>
         [SerializeField]
         string redirectURL;
-
-        State currentState = State.NotUsed;
         string retrievedHostName = null;
-        string downloadDomainsUrl = null;
-        string downloadErrorMessage = null;
-        string[] downloadedDomainList = null;
-        string[] cachedSplitString = null;
-        readonly Dictionary<string, Regex> allUniqueDomains = new Dictionary<string, Regex>();
 
         #region Properties
         public State CurrentState
         {
-            get
-            {
-                return currentState;
-            }
-            private set
-            {
-                currentState = value;
-            }
-        }
+            get;
+            private set;
+        } = State.NotUsed;
 
         public bool IsDomainListSuccessfullyDownloaded
         {
@@ -164,60 +136,22 @@ namespace OmiyaGames
 
         public string[] DownloadedDomainList
         {
-            get
-            {
-                return downloadedDomainList;
-            }
-        }
+            get;
+            private set;
+        } = null;
 
         public string DownloadDomainsUrl
         {
-            get
-            {
-                return downloadDomainsUrl;
-            }
-        }
+            get;
+            private set;
+        } = null;
 
         public Dictionary<string, Regex> AllUniqueDomains
         {
-            get
-            {
-                return allUniqueDomains;
-            }
-        }
+            get;
+        } = new Dictionary<string, Regex>();
 
-        public string[] SplitString
-        {
-            get
-            {
-                if(cachedSplitString == null)
-                {
-                    // Setup variables
-                    List<string> allSplits = new List<string>();
-                    HashSet<string> allUniqueSplits = new HashSet<string>();
-
-                    // Add these two arrays into the hashset
-                    AddString(AlwaysSplitDomainsBy, allSplits, allUniqueSplits);
-                    AddString(splitRemoteDomainListUrlBy, allSplits, allUniqueSplits);
-
-                    // Convert the list into an array
-                    cachedSplitString = allSplits.ToArray();
-                }
-                return cachedSplitString;
-            }
-        }
-
-        public string DownloadErrorMessage
-        {
-            get
-            {
-                return downloadErrorMessage;
-            }
-            private set
-            {
-                downloadErrorMessage = value;
-            }
-        }
+        public string DownloadErrorMessage { get; private set; } = null;
         #endregion
 
         public override void SingletonAwake(Singleton instance)
@@ -415,19 +349,10 @@ namespace OmiyaGames
 
                 // Check if there were any errors
                 DownloadErrorMessage = www.error;
-                if (string.IsNullOrEmpty(DownloadErrorMessage) == true)
+                if ((www.assetBundle != null) && (string.IsNullOrEmpty(DownloadErrorMessage) == true))
                 {
-                    // If none, check what type this downloaded file is
-                    if(remoteListFileType == DownloadedFileType.Text)
-                    {
-                        // If text, split the text file we've downloaded, and add it to the list
-                        downloadedDomainList = ConvertToDomainList(www.text, SplitString);
-                    }
-                    else if(www.assetBundle != null)
-                    {
-                        // If asset bundle, convert it into a list
-                        downloadedDomainList = ConvertToDomainList(Utility.GetDomainList(www.assetBundle));
-                    }
+                    // If asset bundle, convert it into a list
+                    DownloadedDomainList = ConvertToDomainList(Utility.GetDomainList(www.assetBundle));
                 }
             }
         }
@@ -436,8 +361,8 @@ namespace OmiyaGames
         {
             // Setup variables
             StringBuilder buf = new StringBuilder();
-            downloadedDomainList = null;
-            downloadDomainsUrl = null;
+            DownloadedDomainList = null;
+            DownloadDomainsUrl = null;
             DownloadErrorMessage = null;
 
             // Update state
@@ -450,8 +375,8 @@ namespace OmiyaGames
             if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
             {
                 // Grab remote domain list
-                downloadDomainsUrl = GenerateRemoteDomainList(buf);
-                yield return StartCoroutine(DownloadRemoteDomainList(buf, downloadDomainsUrl));
+                DownloadDomainsUrl = GenerateRemoteDomainList(buf);
+                yield return StartCoroutine(DownloadRemoteDomainList(buf, DownloadDomainsUrl));
             }
 
             // Setup hashset
