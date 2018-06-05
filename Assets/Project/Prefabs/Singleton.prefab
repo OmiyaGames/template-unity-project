@@ -793,7 +793,7 @@ MonoBehaviour:
   simulateMalformedGame: 0
   simulateWebplayer: 0
   storeUrls:
-    defaultWebLink: 
+    defaultWebLink: https://omiyagames.com/games
     iosWebLink: 
     androidWebLink: 
     amazonWebLink: 
@@ -872,6 +872,8 @@ MonoBehaviour:
     header: English (USA)
   fontMap:
   - header: English (USA)
+    defaultFontAsset: {fileID: 0}
+    otherFontAssets: []
     defaultFont: {fileID: 12800000, guid: 02f5fba6ef4ae3943a673133f84c837a, type: 3}
     otherFonts: []
 --- !u!114 &11428526
@@ -1067,6 +1069,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163abccb43f295e4689a98e63247ec27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultTimeScale: 1
+  defaultHitPauseDuration: 0.2
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
