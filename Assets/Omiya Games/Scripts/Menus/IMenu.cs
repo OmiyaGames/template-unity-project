@@ -38,7 +38,6 @@ namespace OmiyaGames.Menu
     public abstract class IMenu : MonoBehaviour
     {
         public const string StateField = "State";
-        static MenuManager managerCache = null;
 
         public enum State
         {
@@ -74,11 +73,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                if(managerCache == null)
-                {
-                    managerCache = Singleton.Get<MenuManager>();
-                }
-                return managerCache;
+                return Singleton.Get<MenuManager>();
             }
         }
 
@@ -190,10 +185,7 @@ namespace OmiyaGames.Menu
             }
 
             // Check if there's an action associated with this dialog
-            if(onStateChanged != null)
-            {
-                onStateChanged(this);
-            }
+            onStateChanged?.Invoke(this);
         }
     }
 }
