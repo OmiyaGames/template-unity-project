@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using TMPro;
 
 namespace OmiyaGames
 {
@@ -33,7 +32,7 @@ namespace OmiyaGames
     /// <date>6/5/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Resizes a TextMeshPro label.
+    /// Parent class for resizing stuff based on <code>GameSettings</code>.
     /// </summary>
     /// <remarks>
     /// Revision History:
@@ -50,13 +49,10 @@ namespace OmiyaGames
     /// </item>
     /// </list>
     /// </remarks>
+    /// <seealso cref="GameSettings"/>
     [DisallowMultipleComponent]
-    public class TextMeshProResizer : MonoBehaviour
+    public abstract class IResizer : MonoBehaviour
     {
         // FIXME: do something!
-        void Start()
-        {
-
-        }
     }
 }
