@@ -255,6 +255,23 @@ namespace OmiyaGames
             return url;
         }
 
+        public static Canvas GetParentCanvas(Transform checkTransform)
+        {
+            // Check if it has a canvas
+            Canvas parentCanvas = checkTransform.GetComponent<Canvas>();
+
+            // Loop while canvas isn't set, and there is a parent to be concerned of
+            while ((checkTransform != null) && (checkTransform.parent != null) && (parentCanvas == null))
+            {
+                // Grab the next parent
+                checkTransform = checkTransform.parent;
+
+                // Check if parent has a canvas
+                parentCanvas = checkTransform.GetComponent<Canvas>();
+            }
+            return parentCanvas;
+        }
+
         public static DomainList GetDomainList(AssetBundle bundle, string assetNameNoExtension = null)
         {
             DomainList returnDomain = null;
