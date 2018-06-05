@@ -35,6 +35,25 @@ namespace OmiyaGames
     /// <summary>
     /// A series of utilities used throughout the <code>OmiyaGames</code> namespace.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>8/18/2015</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// 
+    /// <description>6/4/2018</description>
+    /// <description>Taro</description>
+    /// <description>Added method for shortening URL</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     public static class Utility
     {
         public const float SnapToThreshold = 0.01f;
