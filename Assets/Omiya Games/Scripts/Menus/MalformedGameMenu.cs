@@ -95,7 +95,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return defaultButton.gameObject;
+                return null;
             }
         }
 
