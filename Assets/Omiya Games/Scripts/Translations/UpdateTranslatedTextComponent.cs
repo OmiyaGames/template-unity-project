@@ -52,10 +52,10 @@ namespace OmiyaGames
         [Header("Text Components")]
         [SerializeField]
         List<Text> oldTextsWithoutTranslations = new List<Text>();
-        [SerializeField]
-        List<Dropdown> oldDropdowns = new List<Dropdown>();
-        [SerializeField]
-        List<InputField> oldInputs = new List<InputField>();
+        //[SerializeField]
+        //List<Dropdown> oldDropdowns = new List<Dropdown>();
+        //[SerializeField]
+        //List<InputField> oldInputs = new List<InputField>();
         [SerializeField]
         List<TranslatedText> oldTranslations = new List<TranslatedText>();
 
@@ -71,8 +71,8 @@ namespace OmiyaGames
             {
                 // Clear all lists
                 oldTextsWithoutTranslations.Clear();
-                oldDropdowns.Clear();
-                oldInputs.Clear();
+                //oldDropdowns.Clear();
+                //oldInputs.Clear();
                 oldTranslations.Clear();
 
                 // Go through all the texts
@@ -242,16 +242,16 @@ namespace OmiyaGames
             if (search != null)
             {
                 // Fill in the list
-                Dropdown dropDown = search.GetComponent<Dropdown>();
-                if(dropDown != null)
-                {
-                    oldDropdowns.Add(dropDown);
-                }
-                InputField input = search.GetComponent<InputField>();
-                if(input != null)
-                {
-                    oldInputs.Add(input);
-                }
+                //Dropdown dropDown = search.GetComponent<Dropdown>();
+                //if(dropDown != null)
+                //{
+                //    oldDropdowns.Add(dropDown);
+                //}
+                //InputField input = search.GetComponent<InputField>();
+                //if(input != null)
+                //{
+                //    oldInputs.Add(input);
+                //}
                 TranslatedText translation = search.GetComponent<TranslatedText>();
                 if(translation != null)
                 {
