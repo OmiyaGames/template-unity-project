@@ -160,11 +160,27 @@ namespace OmiyaGames
             }
         }
 
+        public string PlatformSpecificStoreLinkShortened
+        {
+            get
+            {
+                return Utility.ShortenUrl(PlatformSpecificStoreLink);
+            }
+        }
+
         public string WebsiteLink
         {
             get
             {
                 return storeUrls.WebLink;
+            }
+        }
+
+        public string WebsiteLinkShortened
+        {
+            get
+            {
+                return Utility.ShortenUrl(WebsiteLink);
             }
         }
 
