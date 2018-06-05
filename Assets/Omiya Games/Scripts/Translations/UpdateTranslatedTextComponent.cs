@@ -51,7 +51,7 @@ namespace OmiyaGames
 
         [Header("Text Components")]
         [SerializeField]
-        List<Text> oldTexts = new List<Text>();
+        List<Text> oldTextsWithoutTranslations = new List<Text>();
         [SerializeField]
         List<Dropdown> oldDropdowns = new List<Dropdown>();
         [SerializeField]
@@ -64,13 +64,13 @@ namespace OmiyaGames
         TMP_FontAsset newFont = null;
 
         [ContextMenu("Find all old texts")]
-        void FindAllAudioSources()
+        void FindAllOldText()
         {
             // Find texts
             if ((searchThrough != null) && (searchThrough.Length > 0))
             {
                 // Clear all lists
-                oldTexts.Clear();
+                oldTextsWithoutTranslations.Clear();
                 oldDropdowns.Clear();
                 oldInputs.Clear();
                 oldTranslations.Clear();
@@ -84,46 +84,157 @@ namespace OmiyaGames
         }
 
         [ContextMenu("Upgrade texts")]
-        void SetMixerGroup()
+        void UpgradeTextComponents()
         {
             // Set the texts
-            foreach (Text source in oldTexts)
+            foreach (Text source in oldTextsWithoutTranslations)
             {
                 ReplaceOldTextWithNew(source);
             }
-            oldTexts.Clear();
+            oldTextsWithoutTranslations.Clear();
 
             // Set the translations
             foreach (TranslatedText source in oldTranslations)
             {
                 ReplaceOldTranslationWithNew(source);
             }
-            oldTexts.Clear();
+            oldTextsWithoutTranslations.Clear();
         }
 
         private void ReplaceOldTranslationWithNew(TranslatedText source)
         {
-            // Add the new text component
-            TranslatedTextMeshPro newTranslation = source.gameObject.AddComponent<TranslatedTextMeshPro>();
-
-            // Copy the old translation properties into the new one
-            newTranslation.TranslationKey = source.TranslationKey;
-            newTranslation.FontKey = source.FontKey;
+            // Setup variables
+            GameObject parentObject = source.gameObject;
+            Text sourceLabel = source.Label;
+            string translationKey = source.TranslationKey;
+            string fontKey = source.FontKey;
 
             // Destroy the old component
             DestroyImmediate(source);
+
+            // Replace the label component
+            ReplaceOldTextWithNew(sourceLabel);
+
+            // Add the new text component
+            TranslatedTextMeshPro newTranslation = parentObject.AddComponent<TranslatedTextMeshPro>();
+
+            // Copy the old translation properties into the new one
+            newTranslation.TranslationKey = translationKey;
+            newTranslation.FontKey = fontKey;
         }
 
         private void ReplaceOldTextWithNew(Text source)
         {
-            // Add the new text component
-            TMP_Text newText = source.gameObject.AddComponent<TMP_Text>();
+            // Grab all the old information first
+            GameObject parentObject = source.gameObject;
+            string text = source.text;
+            FontStyle fontStyle = source.fontStyle;
+            float fontSize = source.fontSize;
+            float lineSpacing = source.lineSpacing;
+            bool richText = source.supportRichText;
+            TextAnchor alignment = source.alignment;
+            HorizontalWrapMode horizontalMode = source.horizontalOverflow;
+            VerticalWrapMode verticalMode = source.verticalOverflow;
+            bool isAutoSizing = source.resizeTextForBestFit;
+            float minFontSize = source.resizeTextMinSize;
+            float maxFontSize = source.resizeTextMaxSize;
+            Color fontColor = source.color;
+            bool rayCastTarget = source.raycastTarget;
 
-            // FIXME: Copy the old text properties into the new text
-            newText.font = newFont;
+            // Grab transform information
+            RectTransform transform = source.GetComponent<RectTransform>();
+            Vector3 anchorPosition = transform.anchoredPosition3D;
+            Vector2 anchorMax = transform.anchorMax;
+            Vector2 anchorMin = transform.anchorMin;
+            Vector2 offsetMax = transform.offsetMax;
+            Vector2 offsetMin = transform.offsetMin;
 
             // Destroy the old component
             DestroyImmediate(source);
+
+            // Add the new text component
+            TextMeshProUGUI newText = parentObject.AddComponent<TextMeshProUGUI>();
+
+            // Copy the old text properties into the new text
+            newText.text = text;
+            newText.font = newFont;
+            newText.fontStyle = ConvertFontStyle(fontStyle);
+            newText.fontSize = fontSize;
+            newText.lineSpacing = lineSpacing;
+            newText.richText = richText;
+            newText.alignment = ConvertAlignment(alignment);
+
+            // Setup word wrapping
+            newText.enableWordWrapping = (horizontalMode == HorizontalWrapMode.Wrap);
+
+            // Setup overflow
+            TextOverflowModes overflowMode = TextOverflowModes.Overflow;
+            if(verticalMode == VerticalWrapMode.Truncate)
+            {
+                overflowMode = TextOverflowModes.Truncate;
+            }
+            newText.overflowMode = overflowMode;
+
+            // Setup the rest of the properties
+            newText.enableAutoSizing = isAutoSizing;
+            newText.fontSizeMin = minFontSize;
+            newText.fontSizeMax = maxFontSize;
+            newText.color = fontColor;
+            newText.raycastTarget = rayCastTarget;
+
+            // Revert transform information
+            transform.anchoredPosition3D = anchorPosition;
+            transform.anchorMax = anchorMax;
+            transform.anchorMin = anchorMin;
+            transform.offsetMax = offsetMax;
+            transform.offsetMin = offsetMin;
+        }
+
+        public static TextAlignmentOptions ConvertAlignment(TextAnchor alignment)
+        {
+            switch (alignment)
+            {
+                case TextAnchor.UpperLeft:
+                    return TextAlignmentOptions.TopLeft;
+                case TextAnchor.UpperCenter:
+                    return TextAlignmentOptions.Top;
+                case TextAnchor.UpperRight:
+                    return TextAlignmentOptions.TopRight;
+                case TextAnchor.MiddleLeft:
+                    return TextAlignmentOptions.Left;
+                case TextAnchor.MiddleCenter:
+                    return TextAlignmentOptions.Center;
+                case TextAnchor.MiddleRight:
+                    return TextAlignmentOptions.Right;
+                case TextAnchor.LowerRight:
+                    return TextAlignmentOptions.BottomRight;
+                case TextAnchor.LowerCenter:
+                    return TextAlignmentOptions.Bottom;
+                case TextAnchor.LowerLeft:
+                default:
+                    return TextAlignmentOptions.BottomLeft;
+            }
+        }
+
+        public static FontStyles ConvertFontStyle(FontStyle fontStyle)
+        {
+            FontStyles finalStyle = FontStyles.Normal;
+            switch (fontStyle)
+            {
+                case FontStyle.Bold:
+                case FontStyle.BoldAndItalic:
+                    finalStyle &= FontStyles.Bold;
+                    break;
+            }
+            switch (fontStyle)
+            {
+                case FontStyle.Italic:
+                case FontStyle.BoldAndItalic:
+                    finalStyle &= FontStyles.Italic;
+                    break;
+            }
+
+            return finalStyle;
         }
 
         void RecursivelyFindOldTexts(GameObject search, bool checkChildren)
@@ -131,10 +242,29 @@ namespace OmiyaGames
             if (search != null)
             {
                 // Fill in the list
-                oldTexts.AddRange(search.GetComponents<Text>());
-                oldDropdowns.AddRange(search.GetComponents<Dropdown>());
-                oldInputs.AddRange(search.GetComponents<InputField>());
-                oldTranslations.AddRange(search.GetComponents<TranslatedText>());
+                Dropdown dropDown = search.GetComponent<Dropdown>();
+                if(dropDown != null)
+                {
+                    oldDropdowns.Add(dropDown);
+                }
+                InputField input = search.GetComponent<InputField>();
+                if(input != null)
+                {
+                    oldInputs.Add(input);
+                }
+                TranslatedText translation = search.GetComponent<TranslatedText>();
+                if(translation != null)
+                {
+                    oldTranslations.Add(translation);
+                }
+                else
+                {
+                    Text text = search.GetComponent<Text>();
+                    if (text != null)
+                    {
+                        oldTextsWithoutTranslations.Add(text);
+                    }
+                }
 
                 // Look for children
                 if ((checkChildren == true) && (search.transform.childCount > 0))
