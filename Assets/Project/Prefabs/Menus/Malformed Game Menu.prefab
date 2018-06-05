@@ -47,7 +47,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &134198
 GameObject:
   m_ObjectHideFlags: 1
@@ -298,7 +298,7 @@ Animator:
   m_GameObject: {fileID: 180856}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 58fbf2953e183d64f87cd968f128e51c, type: 2}
+  m_Controller: {fileID: 9100000, guid: f146e3b6e42817341b209931286575e1, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 2
   m_ApplyRootMotion: 0
@@ -515,7 +515,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 22438358}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.52559024
+  m_Size: 0.52559036
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -600,14 +600,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f5277d7a39a4d4e9e86a6f710c1b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugInformation: 0
+  defaultButton: {fileID: 11421600}
+  optionsMessage: {fileID: 114415465882897134}
+  websiteLinkId: website
   reasonMessage: {fileID: 114661041184631562}
   gameIsNotGenuineMessageTranslationKey: Hack Warning Reasoning Not Genuine
   cannotConfirmDomainMessageTranslationKey: Hack Warning Reasoning Unknown Domain
   domainDoesNotMatchMessageTranslationKey: Hack Warning Reasoning Domain Mismatch
-  defaultButton: {fileID: 11421600}
-  optionsMessage: {fileID: 114415465882897134}
-  websiteLinkId: website
 --- !u!114 &11481754
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -795,7 +794,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 776.27}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &22425932
 RectTransform:
@@ -811,10 +810,10 @@ RectTransform:
   m_Father: {fileID: 22424136}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: -723.77}
+  m_SizeDelta: {x: 869.7224, y: 65}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!224 &22426558
 RectTransform:
@@ -829,10 +828,10 @@ RectTransform:
   m_Father: {fileID: 22424136}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 434.8612, y: -20}
+  m_SizeDelta: {x: 869.7224, y: 82}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &22436662
 RectTransform:
@@ -840,7 +839,7 @@ RectTransform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121276}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -848,7 +847,7 @@ RectTransform:
   - {fileID: 22407242}
   m_Father: {fileID: 22489144}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 70, y: 20}
@@ -867,8 +866,8 @@ RectTransform:
   m_Father: {fileID: 22410018}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.47440964}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -885,10 +884,10 @@ RectTransform:
   m_Father: {fileID: 22424136}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 434.8612, y: -248}
+  m_SizeDelta: {x: 869.7224, y: 411.27}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &22453778
 RectTransform:
@@ -1018,10 +1017,10 @@ RectTransform:
   m_Father: {fileID: 22424136}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 434.8612, y: -134}
+  m_SizeDelta: {x: 869.7224, y: 82}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1001 &100100000
 Prefab:
@@ -1050,7 +1049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &114093568560185788
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1332,7 +1331,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_TypeName: OmiyaGames.LinkClickedEventListener+LinkSelectionEvent, Assembly-CSharp,
+    m_TypeName: OmiyaGames.Menu.LinkClickedEventListener+LinkSelectionEvent, Assembly-CSharp,
       Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114661041184631562
 MonoBehaviour:
@@ -1508,7 +1507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.15913136, g: 0.20112409, b: 0.2264151, a: 1}
+  m_Color: {r: 0.044143822, g: 0.15786205, b: 0.3018868, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
