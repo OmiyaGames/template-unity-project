@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
-	///-----------------------------------------------------------------------
+    ///-----------------------------------------------------------------------
     /// <copyright file="LevelSelectMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
@@ -32,51 +32,71 @@ namespace OmiyaGames.Menu
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A script for a list button.  Holds an index and a references to
-	/// buttons and label.
+    /// buttons and label.
     /// </summary>
-	[RequireComponent(typeof(Button))]
-	public class ListButtonScript : MonoBehaviour
-	{
-		public event System.Action<ListButtonScript> OnClicked;
+    [RequireComponent(typeof(Button))]
+    public class ListButtonScript : MonoBehaviour
+    {
+        public event System.Action<ListButtonScript> OnClicked;
 
-		[SerializeField]
-		TranslatedText[] labels = null;
-		Button buttonCache = null;
+        [SerializeField]
+        TranslatedText[] labels = null;
+        Button buttonCache = null;
 
-		public int Index
-		{
-			get
-			{
-				return transform.GetSiblingIndex();
-			}
-		}
-		
-		public Button Button
-		{
-			get
-			{
-				if(buttonCache == null)
-				{
-					buttonCache = GetComponent<Button>();
-				}
-				return buttonCache;
-			}
-		}
+        public int Index
+        {
+            get
+            {
+                return transform.GetSiblingIndex();
+            }
+        }
 
-		public TranslatedText[] Labels
-		{
-			get
-			{
-				return labels;
-			}
-		}
+        public Button Button
+        {
+            get
+            {
+                if (buttonCache == null)
+                {
+                    buttonCache = GetComponent<Button>();
+                }
+                return buttonCache;
+            }
+        }
 
-		public void OnClick()
-		{
-			if(OnClicked != null)
-			{
-				OnClicked(this);
-			}
-		}
-	}
+        public TranslatedText[] Labels
+        {
+            get
+            {
+                return labels;
+            }
+        }
+
+        public void OnClick()
+        {
+            OnClicked?.Invoke(this);
+        }
+
+
+#if UNITY_EDITOR
+        [ContextMenu("Set Labels")]
+        void SetLabels()
+        {
+            // Grab the current game object
+            Transform checkTransform = transform;
+
+            // Check if it has a canvas
+            parentCanvas = checkTransform.GetComponent<Canvas>();
+
+            // Loop while canvas isn't set, and there is a parent to be concerned of
+            while ((checkTransform != null) && (checkTransform.parent != null) && (parentCanvas == null))
+            {
+                // Grab the next parent
+                checkTransform = checkTransform.parent;
+
+                // Check if parent has a canvas
+                parentCanvas = checkTransform.GetComponent<Canvas>();
+            }
+        }
+#endif
+    }
 }

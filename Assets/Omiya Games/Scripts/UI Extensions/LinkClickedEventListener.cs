@@ -68,7 +68,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(labelCache == null)
+                if (labelCache == null)
                 {
                     labelCache = GetComponent<TextMeshProUGUI>();
                 }
@@ -114,5 +114,27 @@ namespace OmiyaGames
                 }
             }
         }
+
+#if UNITY_EDITOR
+        [ContextMenu("Set Parent Canvas")]
+        void SetParentCanvas()
+        {
+            // Grab the current game object
+            Transform checkTransform = transform;
+
+            // Check if it has a canvas
+            parentCanvas = checkTransform.GetComponent<Canvas>();
+
+            // Loop while canvas isn't set, and there is a parent to be concerned of
+            while ((checkTransform != null) && (checkTransform.parent != null) && (parentCanvas == null))
+            {
+                // Grab the next parent
+                checkTransform = checkTransform.parent;
+
+                // Check if parent has a canvas
+                parentCanvas = checkTransform.GetComponent<Canvas>();
+            }
+        }
+#endif
     }
 }
