@@ -40,6 +40,13 @@ namespace OmiyaGames
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
+        public static readonly string[] stripStartOfUrl = new string[]
+        {
+            "https://www.",
+            "http://www.",
+            "https://",
+            "http://"
+        };
 
         /// <summary>
         /// Creates a clone of the components <code>GameObject</code>, places it under
@@ -213,6 +220,20 @@ namespace OmiyaGames
             // Only do something if we're in debug mode
             Debug.Log(message);
 #endif
+        }
+
+        public static string ShortenUrl(string url)
+        {
+            foreach (string stripFromStart in stripStartOfUrl)
+            {
+                if (url.StartsWith(stripFromStart) == true)
+                {
+                    url = url.Remove(0, stripFromStart.Length);
+                    break;
+                }
+            }
+            url = url.TrimEnd('/');
+            return url;
         }
 
         public static DomainList GetDomainList(AssetBundle bundle, string assetNameNoExtension = null)
