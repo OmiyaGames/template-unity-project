@@ -50,7 +50,7 @@ namespace OmiyaGames
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class RectTransformResizer : MonoBehaviour
+    public class RectTransformResizer : IResizer
     {
         // FIXME: do something!
         void Start()
