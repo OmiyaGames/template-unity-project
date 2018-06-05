@@ -200,7 +200,10 @@ namespace OmiyaGames.Menu
             // Setup the level button labels
             foreach (TranslatedTextMeshPro label in newButton.Labels)
             {
-                label.SetTranslationKey(scene.DisplayName.TranslationKey, (newButton.Index + 1));
+                if(label != null)
+                {
+                    label.SetTranslationKey(scene.DisplayName.TranslationKey, (newButton.Index + 1));
+                }
             }
             newButton.name = scene.DisplayName.TranslationKey;
         }

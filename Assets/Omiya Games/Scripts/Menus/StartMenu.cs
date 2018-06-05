@@ -137,14 +137,20 @@ namespace OmiyaGames.Menu
             {
                 foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
                 {
-                    text.TranslationKey = startText;
+                    if (text != null)
+                    {
+                        text.TranslationKey = startText;
+                    }
                 }
             }
             else
             {
                 foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
                 {
-                    text.TranslationKey = levelSelectText;
+                    if(text != null)
+                    {
+                        text.TranslationKey = levelSelectText;
+                    }
                 }
             }
         }
