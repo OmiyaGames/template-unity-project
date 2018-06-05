@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 22267974}
   - component: {fileID: 114789087527325608}
   - component: {fileID: 114415465882897134}
+  - component: {fileID: 114609847889220280}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -600,11 +601,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showDebugInformation: 0
-  defaultButton: {fileID: 11421600}
   reasonMessage: {fileID: 114661041184631562}
   gameIsNotGenuineMessageTranslationKey: Hack Warning Reasoning Not Genuine
   cannotConfirmDomainMessageTranslationKey: Hack Warning Reasoning Unknown Domain
   domainDoesNotMatchMessageTranslationKey: Hack Warning Reasoning Domain Mismatch
+  defaultButton: {fileID: 11421600}
+  optionsMessage: {fileID: 114415465882897134}
+  websiteLinkId: website
 --- !u!114 &11481754
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1303,6 +1306,34 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114609847889220280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 141788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a92f0cc70046324d94892d950c9d24a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentCanvas: {fileID: 0}
+  onLinkSelection:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11465718}
+        m_MethodName: OnWebsiteLinkClicked
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: OmiyaGames.LinkClickedEventListener+LinkSelectionEvent, Assembly-CSharp,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
 --- !u!114 &114661041184631562
 MonoBehaviour:
   m_ObjectHideFlags: 1

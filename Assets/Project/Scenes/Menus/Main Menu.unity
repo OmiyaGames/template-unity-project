@@ -1387,6 +1387,11 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114609847889220280, guid: 939ce299a63589746b18e212fd5161ab,
+        type: 2}
+      propertyPath: parentCanvas
+      value: 
+      objectReference: {fileID: 1446783228}
     - target: {fileID: 22438358, guid: 939ce299a63589746b18e212fd5161ab, type: 2}
       propertyPath: m_AnchorMin.y
       value: 0
@@ -1399,16 +1404,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114833982193180320, guid: 939ce299a63589746b18e212fd5161ab,
-        type: 2}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114833982193180320, guid: 939ce299a63589746b18e212fd5161ab,
-        type: 2}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 114875216983234854, guid: 939ce299a63589746b18e212fd5161ab,
         type: 2}
       propertyPath: m_havePropertiesChanged
@@ -1429,22 +1424,32 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114093568560185788, guid: 939ce299a63589746b18e212fd5161ab,
+    - target: {fileID: 114789087527325608, guid: 939ce299a63589746b18e212fd5161ab,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114093568560185788, guid: 939ce299a63589746b18e212fd5161ab,
+    - target: {fileID: 114789087527325608, guid: 939ce299a63589746b18e212fd5161ab,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114789087527325608, guid: 939ce299a63589746b18e212fd5161ab,
+    - target: {fileID: 114833982193180320, guid: 939ce299a63589746b18e212fd5161ab,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114789087527325608, guid: 939ce299a63589746b18e212fd5161ab,
+    - target: {fileID: 114833982193180320, guid: 939ce299a63589746b18e212fd5161ab,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093568560185788, guid: 939ce299a63589746b18e212fd5161ab,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114093568560185788, guid: 939ce299a63589746b18e212fd5161ab,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -2106,6 +2111,11 @@ Prefab:
 --- !u!224 &1446783227 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22485940, guid: bc8fb7091c73f9a4aa84239569fc34c0,
+    type: 2}
+  m_PrefabInternal: {fileID: 1446783226}
+--- !u!223 &1446783228 stripped
+Canvas:
+  m_PrefabParentObject: {fileID: 22383782, guid: bc8fb7091c73f9a4aa84239569fc34c0,
     type: 2}
   m_PrefabInternal: {fileID: 1446783226}
 --- !u!1 &1481381614
