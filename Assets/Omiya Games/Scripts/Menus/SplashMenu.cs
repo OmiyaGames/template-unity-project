@@ -35,6 +35,8 @@ namespace OmiyaGames.Menu
     /// script, <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
+    // FIXME: convert to Loading Screen, as Splash Screen is to be removed.
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
     public class SplashMenu : IMenu
     {
