@@ -40,7 +40,8 @@ namespace OmiyaGames.Menu
         public event System.Action<ListButtonScript> OnClicked;
 
         [SerializeField]
-        TranslatedText[] labels = null;
+        TranslatedTextMeshPro[] labels = null;
+
         Button buttonCache = null;
 
         public int Index
@@ -63,7 +64,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public TranslatedText[] Labels
+        public TranslatedTextMeshPro[] Labels
         {
             get
             {
@@ -81,21 +82,7 @@ namespace OmiyaGames.Menu
         [ContextMenu("Set Labels")]
         void SetLabels()
         {
-            // Grab the current game object
-            Transform checkTransform = transform;
-
-            // Check if it has a canvas
-            parentCanvas = checkTransform.GetComponent<Canvas>();
-
-            // Loop while canvas isn't set, and there is a parent to be concerned of
-            while ((checkTransform != null) && (checkTransform.parent != null) && (parentCanvas == null))
-            {
-                // Grab the next parent
-                checkTransform = checkTransform.parent;
-
-                // Check if parent has a canvas
-                parentCanvas = checkTransform.GetComponent<Canvas>();
-            }
+            labels = GetComponents<TranslatedTextMeshPro>();
         }
 #endif
     }
