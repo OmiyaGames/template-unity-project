@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Text;
+using System.Collections;
 
 namespace OmiyaGames.Menu
 {
@@ -41,6 +42,7 @@ namespace OmiyaGames.Menu
     {
         public enum Reason
         {
+            InProgress = -2,
             None = -1,
             IsNotGenuine = 0,
             CannotConfirmDomain,
@@ -63,8 +65,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        [Header("UI")]
         [SerializeField]
-        bool showDebugInformation = false;
+        [Tooltip("Update the Website field to populate this label's website URL.")]
+        UnityEngine.UI.Button defaultButton = null;
+        [SerializeField]
+        TranslatedTextMeshPro optionsMessage = null;
+        [SerializeField]
+        string websiteLinkId = "website";
 
         [Header("Error Messages")]
         [SerializeField]
@@ -76,18 +84,11 @@ namespace OmiyaGames.Menu
         [SerializeField]
         string domainDoesNotMatchMessageTranslationKey;
 
-        [Header("UI")]
-        [SerializeField]
-        [Tooltip("Update the Website field to populate this label's website URL.")]
-        UnityEngine.UI.Button defaultButton = null;
-        [SerializeField]
-        TranslatedTextMeshPro optionsMessage = null;
-
         public override Type MenuType
         {
             get
             {
-                return Type.ManagedMenu;
+                return Type.UnmanagedMenu;
             }
         }
 
@@ -97,6 +98,26 @@ namespace OmiyaGames.Menu
             {
                 return null;
             }
+        }
+
+        public Reason BuildState
+        {
+            get;
+            private set;
+        } = Reason.None;
+
+        WebLocationChecker WebChecker
+        {
+            get
+            {
+                return Singleton.Get<WebLocationChecker>();
+            }
+        }
+
+        private void Start()
+        {
+            BuildState = Reason.InProgress;
+            StartCoroutine(VerifyBuild());
         }
 
         public override void Show(Action<IMenu> stateChanged)
@@ -127,18 +148,6 @@ namespace OmiyaGames.Menu
 
         public void UpdateReason(Reason reason)
         {
-            // Grab the web checker
-            WebLocationChecker webChecker = null;
-            if (Singleton.Instance.IsWebApp == true)
-            {
-                webChecker = Singleton.Get<WebLocationChecker>();
-            }
-
-            if(showDebugInformation == true)
-            {
-                reason = Reason.JustTesting;
-            }
-
             // Update the reason for this dialog to appear
             switch(reason)
             {
@@ -147,10 +156,10 @@ namespace OmiyaGames.Menu
                     reasonMessage.TranslationKey = cannotConfirmDomainMessageTranslationKey;
                     break;
                 case Reason.IsIncorrectDomain:
-                    if (webChecker != null)
+                    if (WebChecker != null)
                     {
                         // Setup translation key, with proper population of fields
-                        reasonMessage.SetTranslationKey(domainDoesNotMatchMessageTranslationKey, webChecker.RetrievedHostName);
+                        reasonMessage.SetTranslationKey(domainDoesNotMatchMessageTranslationKey, WebChecker.RetrievedHostName);
                     }
                     else
                     {
@@ -162,13 +171,82 @@ namespace OmiyaGames.Menu
                     // Overwrite the text: it's a test
                     StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
-                    Utility.BuildTestMessage(builder, webChecker);
+                    Utility.BuildTestMessage(builder, WebChecker);
                     reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:
                     // Update translation key
                     reasonMessage.TranslationKey = gameIsNotGenuineMessageTranslationKey;
                     break;
+            }
+        }
+
+        /// <summary>
+        /// Event for when link is clicked.
+        /// </summary>
+        /// <param name="linkId"></param>
+        /// <param name="linkText"></param>
+        /// <param name="linkIndex"></param>
+        public void OnWebsiteLinkClicked(string linkId, string linkText, int linkIndex)
+        {
+            if (linkId == websiteLinkId)
+            {
+                Application.OpenURL(Singleton.Instance.WebsiteLink);
+            }
+        }
+
+        IEnumerator VerifyBuild()
+        {
+            BuildState = Reason.InProgress;
+            if (Singleton.Instance.IsWebApp == true)
+            {
+                // Grab the web checker
+                if (WebChecker != null)
+                {
+                    // Wait until the webchecker is done
+                    while (WebChecker.CurrentState == WebLocationChecker.State.InProgress)
+                    {
+                        yield return null;
+                    }
+
+                    // Check the state
+                    switch (WebChecker.CurrentState)
+                    {
+                        case WebLocationChecker.State.DomainMatched:
+                        case WebLocationChecker.State.NotUsed:
+                            BuildState = Reason.None;
+                            break;
+                        case WebLocationChecker.State.DomainDidntMatch:
+                            BuildState = Reason.IsIncorrectDomain;
+                            break;
+                        case WebLocationChecker.State.EncounteredError:
+                        default:
+                            BuildState = Reason.CannotConfirmDomain;
+                            break;
+                    }
+                }
+            }
+            else if ((Application.genuineCheckAvailable == true) && (Application.genuine == false))
+            {
+                BuildState = Reason.IsNotGenuine;
+            }
+            else
+            {
+                BuildState = Reason.None;
+            }
+
+            // Check if we're simulating failure
+            if (Singleton.Instance.IsSimulatingMalformedGame == true)
+            {
+                // Indicate as such
+                BuildState = Reason.JustTesting;
+            }
+
+            // Check if the build state is valid
+            if(BuildState != Reason.None)
+            {
+                UpdateReason(BuildState);
+                Show();
             }
         }
     }
