@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using System.Text;
-using System.Collections.Generic;
 
 namespace OmiyaGames.Menu
 {
@@ -67,15 +66,9 @@ namespace OmiyaGames.Menu
         [SerializeField]
         bool showDebugInformation = false;
 
-        [Header("First Option")]
-        [SerializeField]
-        WebsiteButton websiteButton = null;
-        [SerializeField]
-        WebsiteInfo websiteInfo;
-
         [Header("Error Messages")]
         [SerializeField]
-        TranslatedText reasonMessage = null;
+        TranslatedTextMeshPro reasonMessage = null;
         [SerializeField]
         string gameIsNotGenuineMessageTranslationKey;
         [SerializeField]
@@ -83,7 +76,12 @@ namespace OmiyaGames.Menu
         [SerializeField]
         string domainDoesNotMatchMessageTranslationKey;
 
-        readonly List<WebsiteButton> allSecondOptionButtons = new List<WebsiteButton>();
+        [Header("UI")]
+        [SerializeField]
+        [Tooltip("Update the Website field to populate this label's website URL.")]
+        UnityEngine.UI.Button defaultButton = null;
+        [SerializeField]
+        TranslatedTextMeshPro optionsMessage = null;
 
         public override Type MenuType
         {
@@ -97,7 +95,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return websiteButton.gameObject;
+                return defaultButton.gameObject;
             }
         }
 
@@ -106,8 +104,8 @@ namespace OmiyaGames.Menu
             // Call base function
             base.Show(stateChanged);
 
-            // Setup the dialog
-            websiteInfo.UpdateButton(websiteButton);
+            // Update options text
+            optionsMessage.SetArguments(Singleton.Instance.WebsiteLinkShortened);
         }
 
         public override void Hide()
