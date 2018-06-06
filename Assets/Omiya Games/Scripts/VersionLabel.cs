@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using MiniJSON;
 using System.Collections.Generic;
 using System.Text;
+using TMPro;
 
 namespace OmiyaGames
 {
@@ -37,7 +37,7 @@ namespace OmiyaGames
     /// A script that updates a <code>Text</code> to include Unity Cloud version information.
     /// </summary>
     /// <seealso cref="Text"/>
-    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(TextMeshProUGUI))]
     public class VersionLabel : MonoBehaviour
     {
         const string ManifestFileName = "UnityCloudBuildManifest.json";
@@ -53,6 +53,7 @@ namespace OmiyaGames
 
         static bool loadedManifest = false;
         static Dictionary<string, object> buildMapping = null;
+        static string versionString = null;
 
         [SerializeField]
         bool displayCommit = false;
@@ -60,8 +61,6 @@ namespace OmiyaGames
         bool displayBuildNumber = false;
         [SerializeField]
         bool displayUnityVersion = false;
-
-        bool showLabel = false;
 
         public static Dictionary<string, object> ManifestMapping
         {
@@ -96,39 +95,36 @@ namespace OmiyaGames
 #endif
             }
         }
-        
+
         public bool IsVisible
         {
-            get
-            
-            {
-                return showLabel;
-            }
-        }
+            get;
+            private set;
+        } = false;
 
-        void Start()
+        void Awake()
         {
             // Setup variables
-            showLabel = false;
-            Text label = GetComponent<Text>();
+            IsVisible = false;
+            TextMeshProUGUI label = GetComponent<TextMeshProUGUI>();
 
             // Check to see if a label and json values are available
-            if ((ManifestMapping != null) && (label != null))
+            if ((string.IsNullOrEmpty(versionString) == true) && (ManifestMapping != null) && (label != null))
             {
                 // Generate string to display
-                string versionString = GenerateVersionString(buildMapping);
-                if(string.IsNullOrEmpty(versionString) == false)
-                {
-                    // Set the label's text
-                    label.text = versionString;
-
-                    // Indicate the label should be shown
-                    showLabel = true;
-                }
+                versionString = GenerateVersionString(buildMapping);
             }
 
             // Check if the text string has changed
-            if(showLabel == false)
+            if (string.IsNullOrEmpty(versionString) == false)
+            {
+                // Set the label's text
+                label.text = versionString;
+
+                // Indicate the label should be shown
+                IsVisible = true;
+            }
+            else
             {
                 // Hide the text
                 gameObject.SetActive(false);

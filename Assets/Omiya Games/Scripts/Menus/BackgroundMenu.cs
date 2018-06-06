@@ -42,6 +42,16 @@ namespace OmiyaGames.Menu
         [SerializeField]
         bool forceToBack = true;
 
+        [Header("Labels")]
+        [SerializeField]
+        bool showLabels = true;
+        [SerializeField]
+        TranslatedTextMeshPro titleLabel = null;
+        [SerializeField]
+        VersionLabel versionLabel = null;
+        [SerializeField]
+        GameObject divider = null;
+
         System.Action<MenuManager> onMenuNumberChanged = null;
 
         public override Type MenuType
@@ -57,6 +67,22 @@ namespace OmiyaGames.Menu
             get
             {
                 return null;
+            }
+        }
+
+        public bool IsLabelsVisible
+        {
+            get
+            {
+                return showLabels;
+            }
+            set
+            {
+                if(showLabels != value)
+                {
+                    showLabels = value;
+                    UpdateLabelVisibility();
+                }
             }
         }
 
@@ -77,6 +103,9 @@ namespace OmiyaGames.Menu
                 onMenuNumberChanged = new System.Action<MenuManager>(UpdateBackgroundVisibility);
                 manager.OnManagedMenusStackChanged += onMenuNumberChanged;
             }
+
+            // Update label visibility
+            UpdateLabelVisibility();
 
             if (forceToBack == true)
             {
@@ -125,6 +154,29 @@ namespace OmiyaGames.Menu
             else
             {
                 CurrentState = State.Hidden;
+            }
+        }
+
+        void UpdateLabelVisibility()
+        {
+            // Update the visibility of the title label
+            if (titleLabel != null)
+            {
+                titleLabel.gameObject.SetActive(IsLabelsVisible);
+            }
+
+            // Update the visibility of the version label
+            if ((versionLabel != null) && (versionLabel.IsVisible == true))
+            {
+                versionLabel.gameObject.SetActive(IsLabelsVisible);
+                if(divider != null)
+                {
+                    divider.SetActive(IsLabelsVisible);
+                }
+            }
+            else if (divider != null)
+            {
+                divider.SetActive(false);
             }
         }
     }
