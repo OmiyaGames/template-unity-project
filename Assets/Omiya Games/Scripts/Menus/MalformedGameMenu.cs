@@ -95,7 +95,7 @@ namespace OmiyaGames.Menu
         [Header("UI")]
         [SerializeField]
         [Tooltip("Update the Website field to populate this label's website URL.")]
-        UnityEngine.UI.Button defaultButton = null;
+        UnityEngine.UI.Scrollbar defaultUi = null;
         [SerializeField]
         TranslatedTextMeshPro optionsMessage = null;
         [SerializeField]
@@ -123,7 +123,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return null;
+                return defaultUi.gameObject;
             }
         }
 
