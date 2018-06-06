@@ -82,7 +82,7 @@ namespace OmiyaGames.Menu
         [ContextMenu("Set Labels")]
         void SetLabels()
         {
-            labels = GetComponents<TranslatedTextMeshPro>();
+            labels = GetComponentsInChildren<TranslatedTextMeshPro>();
         }
 #endif
     }
