@@ -48,6 +48,26 @@ namespace OmiyaGames
     /// one of the strings, or it will redirect the page to the proper
     /// URL for the game.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>>5/15/2016</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// 
+    /// <description>>6/5/2018</description>
+    /// <description>Taro</description>
+    /// <description>Removed plain-text support.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [DisallowMultipleComponent]
     public class WebLocationChecker : ISingletonScript
     {
         public const string RemoteDomainListHeader = "Remote Domain List";

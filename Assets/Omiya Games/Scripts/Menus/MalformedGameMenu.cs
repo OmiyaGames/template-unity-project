@@ -38,6 +38,27 @@ namespace OmiyaGames.Menu
     /// <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>5/11/2016</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// 
+    /// <description>6/5/2016</description>
+    /// <description>Taro</description>
+    /// <description>Moving the menu to the Main Menu scene.
+    /// Scene transitionis removed.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [DisallowMultipleComponent]
     public class MalformedGameMenu : IMenu
     {
         public enum Reason

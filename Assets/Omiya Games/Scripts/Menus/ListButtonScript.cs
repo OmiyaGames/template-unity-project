@@ -34,6 +34,26 @@ namespace OmiyaGames.Menu
     /// A script for a list button.  Holds an index and a references to
     /// buttons and label.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>3/14/2017</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// 
+    /// <description>3/14/2017</description>
+    /// <description>Taro</description>
+    /// <description>Transitioning to using TextMeshPro.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Button))]
     public class ListButtonScript : MonoBehaviour
     {

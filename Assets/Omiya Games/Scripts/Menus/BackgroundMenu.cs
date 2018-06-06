@@ -33,7 +33,27 @@ namespace OmiyaGames.Menu
     /// The GUI background. You can retrieve this menu from the singleton script,
     /// <code>MenuManager</code>.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>5/18/2015</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// 
+    /// <description>6/5/2016</description>
+    /// <description>Taro</description>
+    /// <description>Adding title labels.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     /// <seealso cref="MenuManager"/>
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
     public class BackgroundMenu : IMenu
     {
