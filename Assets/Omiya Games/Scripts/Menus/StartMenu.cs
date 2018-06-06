@@ -53,7 +53,9 @@ namespace OmiyaGames.Menu
 
         [Header("Buttons")]
         [SerializeField]
-        ListButtonScript levelSelectButton;
+        Button startButton;
+        [SerializeField]
+        Button levelSelectButton;
         [SerializeField]
         Button howToPlayButton;
         [SerializeField]
@@ -64,12 +66,6 @@ namespace OmiyaGames.Menu
         Button creditsButton;
         [SerializeField]
         Button quitButton;
-
-        [Header("Text")]
-        [SerializeField]
-        string startText = "Start";
-        [SerializeField]
-        string levelSelectText = "Level Select";
 
         GameObject defaultButton = null;
         bool isButtonLocked = false;
@@ -130,29 +126,11 @@ namespace OmiyaGames.Menu
 
             // Select the level select button by default
             defaultButton = levelSelectButton.gameObject;
-            Singleton.Get<UnityEngine.EventSystems.EventSystem>().firstSelectedGameObject = defaultButton;
+            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
 
             // Update Select
-            if(IsStartingOnFirstLevel == true)
-            {
-                foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
-                {
-                    if (text != null)
-                    {
-                        text.TranslationKey = startText;
-                    }
-                }
-            }
-            else
-            {
-                foreach(TranslatedTextMeshPro text in levelSelectButton.Labels)
-                {
-                    if(text != null)
-                    {
-                        text.TranslationKey = levelSelectText;
-                    }
-                }
-            }
+            startButton.gameObject.SetActive(IsStartingOnFirstLevel);
+            levelSelectButton.gameObject.SetActive(IsStartingOnFirstLevel == false);
         }
 
         #region Button Events
