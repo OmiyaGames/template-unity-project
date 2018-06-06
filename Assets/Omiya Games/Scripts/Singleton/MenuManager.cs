@@ -90,6 +90,15 @@ namespace OmiyaGames.Menu
             }
         }
 
+        // TODO: look into whether just grabbing BaseInputModule works
+        public StandaloneInputModule InputModule
+        {
+            get
+            {
+                return Singleton.Get<StandaloneInputModule>();
+            }
+        }
+
         public PauseMenu PauseMenu
         {
             get
@@ -160,7 +169,7 @@ namespace OmiyaGames.Menu
             // Bind to update
             instance.OnRealTimeUpdate += QueryInput;
 
-
+            // Setup selection
             delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 
@@ -370,7 +379,7 @@ namespace OmiyaGames.Menu
             }
 
             // Search for all menus in the scene
-            IMenu[] menus = UnityEngine.Object.FindObjectsOfType<IMenu>();
+            IMenu[] menus = FindObjectsOfType<IMenu>();
             if (menus != null)
             {
                 // Add them into the dictionary
