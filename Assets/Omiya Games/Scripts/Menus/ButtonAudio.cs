@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace OmiyaGames.Menu
 {
@@ -67,6 +67,14 @@ namespace OmiyaGames.Menu
             private set;
         } = false;
 
+        EventSystem Highlighter
+        {
+            get
+            {
+                return Singleton.Get<EventSystem>();
+            }
+        }
+
         void OnDisable()
         {
             OnUnfocused();
@@ -74,22 +82,32 @@ namespace OmiyaGames.Menu
 
         public void OnHoverPlaySound()
         {
+            // Check fo see if we can play hover sound
             if(IsHighlighted == false)
             {
-                Utility.Log("Playing Hover sound");
+                // Play the hover sound
                 PlaySoundEffect(hoverSound, ref lastHoverSound);
+
+                // Prevent this button from playing the hover sound
                 IsHighlighted = true;
+
+                // Force event system to recognize this button is highlighted
+                if((Highlighter != null) && (Highlighter.currentSelectedGameObject != gameObject))
+                {
+                    Highlighter.SetSelectedGameObject(gameObject);
+                }
             }
         }
 
         public void OnClickPlaySound()
         {
-            Utility.Log("Playing Click sound");
+            // Play clicking sound
             PlaySoundEffect(clickSound, ref lastClickSound);
         }
 
         public void OnUnfocused()
         {
+            // Reset hover sound
             IsHighlighted = false;
         }
 
