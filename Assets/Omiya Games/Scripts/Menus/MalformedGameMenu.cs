@@ -65,6 +65,12 @@ namespace OmiyaGames.Menu
             }
         }
 
+        static bool IsBuildVerified
+        {
+            get;
+            set;
+        } = false;
+
         [Header("UI")]
         [SerializeField]
         [Tooltip("Update the Website field to populate this label's website URL.")]
@@ -116,8 +122,12 @@ namespace OmiyaGames.Menu
 
         private void Start()
         {
-            BuildState = Reason.InProgress;
-            StartCoroutine(VerifyBuild());
+            BuildState = Reason.None;
+            if (IsBuildVerified == false)
+            {
+                BuildState = Reason.InProgress;
+                StartCoroutine(VerifyBuild());
+            }
         }
 
         public override void Show(Action<IMenu> stateChanged)
@@ -127,23 +137,6 @@ namespace OmiyaGames.Menu
 
             // Update options text
             optionsMessage.SetArguments(Singleton.Instance.WebsiteLinkShortened);
-        }
-
-        public override void Hide()
-        {
-            bool wasVisible = (CurrentState == State.Visible);
-
-            // Call base function
-            base.Hide();
-
-            if (wasVisible == true)
-            {
-                // Lock the cursor to what the scene is set to
-                SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
-
-                // Return to the menu
-                manager.LoadMainMenu();
-            }
         }
 
         public void UpdateReason(Reason reason)
@@ -243,11 +236,14 @@ namespace OmiyaGames.Menu
             }
 
             // Check if the build state is valid
-            if(BuildState != Reason.None)
+            if (BuildState != Reason.None)
             {
                 UpdateReason(BuildState);
                 Show();
             }
+
+            // Udpate flag
+            IsBuildVerified = true;
         }
     }
 }
