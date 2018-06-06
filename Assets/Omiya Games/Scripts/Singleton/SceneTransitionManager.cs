@@ -70,7 +70,6 @@ namespace OmiyaGames
         [SerializeField]
         CursorLockMode defaultLockMode = CursorLockMode.Locked;
 
-        SceneInfo lastScene = null;
         SceneInfo sceneToLoad = null;
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
 
@@ -87,6 +86,12 @@ namespace OmiyaGames
                 Cursor.visible = (value != CursorLockMode.Locked);
             }
         }
+
+        public SceneInfo LastScene
+        {
+            get;
+            private set;
+        } = null;
 
         public SceneInfo Splash
         {
@@ -138,18 +143,6 @@ namespace OmiyaGames
                     returnScene = null;
                 }
                 return returnScene;
-            }
-        }
-
-        public SceneInfo LastScene
-        {
-            get
-            {
-                return lastScene;
-            }
-            private set
-            {
-                lastScene = value;
             }
         }
 
@@ -294,7 +287,7 @@ namespace OmiyaGames
             // Check if we need to update the last scene
             if (CurrentScene != scene)
             {
-                lastScene = CurrentScene;
+                LastScene = CurrentScene;
             }
 
             // Update which scene to load
@@ -341,27 +334,21 @@ namespace OmiyaGames
             if(transitionMenu == null)
             {
                 // If not, we're not transitioning, so run both transition-out events at the same time
-                if(OnSceneTransitionInStart != null)
-                {
-                    OnSceneTransitionInStart(menu);
-                }
-                if(OnSceneTransitionInEnd != null)
-                {
-                    OnSceneTransitionInEnd(menu);
-                }
+                OnSceneTransitionInStart?.Invoke(menu);
+                OnSceneTransitionInEnd?.Invoke(menu);
             }
             else
             {
                 // If so, check to see the current menu state
-                if((transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInStart) && (OnSceneTransitionInStart != null))
+                if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInStart)
                 {
                     // If just transitioning in, run the transition-out start event
-                    OnSceneTransitionInStart(menu);
+                    OnSceneTransitionInStart?.Invoke(menu);
                 }
-                else if((transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInEnd) && (OnSceneTransitionInEnd != null))
+                else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInEnd)
                 {
                     // If transitioning ended, run the transition-out end event
-                    OnSceneTransitionInEnd(menu);
+                    OnSceneTransitionInEnd?.Invoke(menu);
                 }
             }
         }
@@ -376,14 +363,8 @@ namespace OmiyaGames
                 if(transitionMenu == null)
                 {
                     // If not, we're not transitioning, so run both transition-out events at the same time
-                    if(OnSceneTransitionOutStart != null)
-                    {
-                        OnSceneTransitionOutStart(menu);
-                    }
-                    if(OnSceneTransitionOutEnd != null)
-                    {
-                        OnSceneTransitionOutEnd(menu);
-                    }
+                    OnSceneTransitionOutStart?.Invoke(menu);
+                    OnSceneTransitionOutEnd?.Invoke(menu);
 
                     // Transition to the next scene
                     TransitionToScene(loadLevelAsynchronously, sceneToLoad);
@@ -394,13 +375,10 @@ namespace OmiyaGames
                     if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutStart)
                     {
                         // If just transitioning in, run the transition-out start event
-                        if(OnSceneTransitionOutStart != null)
-                        {
-                            OnSceneTransitionOutStart(menu);
-                        }
+                        OnSceneTransitionOutStart?.Invoke(menu);
 
                         // Play the sound effect
-                        if(soundEffect != null)
+                        if (soundEffect != null)
                         {
                             soundEffect.Play();
                         }
@@ -408,10 +386,7 @@ namespace OmiyaGames
                     else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)
                     {
                         // If transitioning ended, run the transition-out end event
-                        if(OnSceneTransitionOutEnd != null)
-                        {
-                            OnSceneTransitionOutEnd(menu);
-                        }
+                        OnSceneTransitionOutEnd?.Invoke(menu);
 
                         // Transition to the next scene
                         TransitionToScene(loadLevelAsynchronously, sceneToLoad);
