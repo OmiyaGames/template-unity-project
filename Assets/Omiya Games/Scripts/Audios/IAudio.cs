@@ -75,6 +75,16 @@ namespace OmiyaGames
             CurrentState = State.Playing;
         }
 
+        public void Stop()
+        {
+            CurrentState = State.Stopped;
+        }
+
+        public void Pause()
+        {
+            CurrentState = State.Paused;
+        }
+
         protected virtual void Awake()
         {
             if(Audio.playOnAwake == true)
