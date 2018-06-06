@@ -5,7 +5,7 @@ namespace OmiyaGames
     using Settings;
 
     ///-----------------------------------------------------------------------
-    /// <copyright file="TranslationManager.cs" company="Omiya Games">
+    /// <copyright file="RectTransformResizer.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games

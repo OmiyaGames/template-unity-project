@@ -42,6 +42,7 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="SceneTransitionMenu"/>
     /// <seealso cref="Singleton"/>
+    [DisallowMultipleComponent]
     public class SceneTransitionManager : ISingletonScript
     {
         public event Action<IMenu> OnSceneTransitionInStart;
