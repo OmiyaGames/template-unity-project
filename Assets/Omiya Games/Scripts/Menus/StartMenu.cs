@@ -50,6 +50,8 @@ namespace OmiyaGames.Menu
 
         [SerializeField]
         LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
+        [SerializeField]
+        string projectTitleTranslationKey = "Game Title";
 
         [Header("Buttons")]
         [SerializeField]
@@ -91,6 +93,22 @@ namespace OmiyaGames.Menu
             get
             {
                 return Singleton.Get<GameSettings>();
+            }
+        }
+
+        public override bool ShowBackground
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override string TitleTranslationKey
+        {
+            get
+            {
+                return projectTitleTranslationKey;
             }
         }
 

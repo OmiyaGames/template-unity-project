@@ -115,7 +115,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return Type.UnmanagedMenu;
+                return Type.ManagedMenu;
             }
         }
 
@@ -141,12 +141,22 @@ namespace OmiyaGames.Menu
             }
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            // Update build statue
             BuildState = Reason.None;
+
+            // Check if we need to verify the build
             if (IsBuildVerified == false)
             {
+                // Update state to in-progress
                 BuildState = Reason.InProgress;
+
+                // Wait until all start functions are run
+                yield return null;
+                yield return null;
+
+                // Start varifying the build
                 StartCoroutine(VerifyBuild());
             }
         }
