@@ -128,6 +128,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public virtual string TitleTranslationKey
+        {
+            get
+            {
+                return null;
+            }
+        }
+
         public void Show()
         {
             Show(null);
