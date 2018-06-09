@@ -169,20 +169,7 @@ namespace OmiyaGames.Menu
 
         protected override void OnStateChanged(State from, State to)
         {
-            // Update the animator
-            if (to == State.Visible)
-            {
-                // Update the background visibility
-                Animator.SetBool(backgroundVisibilityField, nextState.IsBackgroundVisible);
-
-                // Check whether to show the title
-                AnimateTitleVisibility();
-            }
-            else
-            {
-                Animator.SetBool(backgroundVisibilityField, false);
-                Animator.SetBool(titleVisibilityField, false);
-            }
+            UpdateAnimator(to);
         }
 
         public void OnTitleHidden()
@@ -196,11 +183,12 @@ namespace OmiyaGames.Menu
 
         protected void UpdateBackgroundVisibility(MenuManager manager)
         {
+            // Attempt to grab the latest menu
             State currentState = State.Hidden;
-            if (manager.NumManagedMenus > 0)
+            IMenu menu = manager.PeekFromManagedStack();
+            if (menu != null)
             {
                 // Setup the next state of the background
-                IMenu menu = manager.PeekFromManagedStack();
                 nextState.IsBackgroundVisible = menu.ShowBackground;
                 nextState.TitleTranslationKey = menu.TitleTranslationKey;
 
@@ -210,6 +198,15 @@ namespace OmiyaGames.Menu
                     currentState = State.Visible;
                 }
             }
+
+            // Before changing the state, check if this background is already visible
+            if((CurrentState == State.Visible) && (currentState == State.Visible))
+            {
+                // If so, force the animator to update
+                UpdateAnimator(currentState);
+            }
+
+            // Set the current state
             CurrentState = currentState;
         }
 
@@ -251,6 +248,24 @@ namespace OmiyaGames.Menu
             else
             {
                 // If not, hide the title
+                Animator.SetBool(titleVisibilityField, false);
+            }
+        }
+
+        void UpdateAnimator(State state)
+        {
+            // Update the animator
+            if (state == State.Visible)
+            {
+                // Update the background visibility
+                Animator.SetBool(backgroundVisibilityField, nextState.IsBackgroundVisible);
+
+                // Check whether to show the title
+                AnimateTitleVisibility();
+            }
+            else
+            {
+                Animator.SetBool(backgroundVisibilityField, false);
                 Animator.SetBool(titleVisibilityField, false);
             }
         }
