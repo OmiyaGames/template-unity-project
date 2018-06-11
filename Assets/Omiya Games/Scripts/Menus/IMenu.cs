@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
@@ -35,6 +36,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
+    [DisallowMultipleComponent]
     public abstract class IMenu : MonoBehaviour
     {
         public const string StateField = "State";
@@ -64,6 +66,17 @@ namespace OmiyaGames.Menu
             UnmanagedMenu
         }
 
+        [SerializeField]
+        [Tooltip("Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.")]
+        ScrollRect scrollToDefaultUi = null;
+
+        [Header("Background Settings")]
+        [SerializeField]
+        bool showBackground = true;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
+        string titleTranslationKey = "";
+
         State currentState = State.Hidden;
         Animator animatorCache = null;
         protected System.Action<IMenu> onStateChanged = null;
@@ -86,6 +99,18 @@ namespace OmiyaGames.Menu
                     animatorCache = GetComponent<Animator>();
                 }
                 return animatorCache;
+            }
+        }
+
+        protected ScrollRect ScrollToDefaultUi
+        {
+            get
+            {
+                return scrollToDefaultUi;
+            }
+            set
+            {
+                scrollToDefaultUi = value;
             }
         }
 
@@ -124,7 +149,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return true;
+                return showBackground;
             }
         }
 
@@ -132,7 +157,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return null;
+                return titleTranslationKey;
             }
         }
 
@@ -169,6 +194,13 @@ namespace OmiyaGames.Menu
             {
                 // If so, update the menu manager to select the default UI
                 manager.SelectGuiGameObject(DefaultUi);
+
+                // Check if we have scrolling to be concerned about
+                if(ScrollToDefaultUi != null)
+                {
+                    // FIXME: scroll to the default UI
+                    //ScrollToDefaultUi.scr
+                }
             }
 
             // Check if this is managed

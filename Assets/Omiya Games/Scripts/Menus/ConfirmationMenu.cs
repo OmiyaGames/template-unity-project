@@ -58,6 +58,7 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class ConfirmationMenu : IMenu
     {
+        [Header("Confirmation Menu")]
         [SerializeField]
         Button yesButton;
         [SerializeField]

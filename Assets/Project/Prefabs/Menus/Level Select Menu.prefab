@@ -116,11 +116,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44fe557e840722429e88af469500ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backButton: {fileID: 114455773040949038}
-  projectTitleTranslationKey: Game Title
+  scrollToDefaultUi: {fileID: 0}
   showBackground: 0
+  titleTranslationKey: Game Title
   levelContent: {fileID: 22494998}
   levelButtonToDuplicate: {fileID: 114014978841383268}
+  backButton: {fileID: 114455773040949038}
 --- !u!224 &22420562
 RectTransform:
   m_ObjectHideFlags: 1
@@ -194,7 +195,7 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.65, y: 0}
+  m_AnchorMin: {x: 0.6, y: 0}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
@@ -1037,7 +1038,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translationKey: Back Button
   fontKey: 
 --- !u!114 &114661597748908258
 MonoBehaviour:
@@ -1616,7 +1617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translationKey: Level Button
   fontKey: 
 --- !u!222 &222161384096440292
 CanvasRenderer:
