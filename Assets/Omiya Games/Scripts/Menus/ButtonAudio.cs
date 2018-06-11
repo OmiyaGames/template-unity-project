@@ -32,9 +32,7 @@ namespace OmiyaGames.Menu
     /// <date>6/6/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// A singleton script that retains information about which scene to switch to.
-    /// Where possible, it'll animate the <code>SceneTransitionMenu</code> before
-    /// switching scenes.
+    /// A script to handle audio for various UI events.
     /// </summary>
     /// <remarks>
     /// Revision History:
@@ -52,7 +50,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class ButtonAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IScrollHandler, ISubmitHandler
+    public class ButtonAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -200,40 +198,6 @@ namespace OmiyaGames.Menu
         }
 
         #region Interface Events
-
-        #region Scroll Events
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            if(ParentScrollView != null)
-            {
-                ParentScrollView.OnBeginDrag(eventData);
-            }
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            if (ParentScrollView != null)
-            {
-                ParentScrollView.OnDrag(eventData);
-            }
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
-        {
-            if (ParentScrollView != null)
-            {
-                ParentScrollView.OnEndDrag(eventData);
-            }
-        }
-
-        public void OnScroll(PointerEventData data)
-        {
-            if (ParentScrollView != null)
-            {
-                ParentScrollView.OnScroll(data);
-            }
-        }
-        #endregion
 
         #region Pointer Events
         public void OnPointerDown(PointerEventData eventData)
