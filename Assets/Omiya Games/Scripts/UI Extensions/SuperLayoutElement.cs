@@ -58,12 +58,16 @@ namespace OmiyaGames.UI
         {
             get
             {
+                // Choose which element to return the height of
                 float returnHeight = base.preferredHeight;
                 if (m_PreferredHeightElement != null)
                 {
                     returnHeight = m_PreferredHeightElement.rect.height;
                 }
-                return Mathf.Min(returnHeight, MaxHeight);
+
+                // Prevent the height from exceeding max
+                returnHeight = Mathf.Min(returnHeight, maxHeight);
+                return returnHeight;
             }
         }
 
@@ -71,12 +75,16 @@ namespace OmiyaGames.UI
         {
             get
             {
+                // Choose which element to return the width of
                 float returnWidth = base.preferredWidth;
                 if (m_PreferredWidthElement != null)
                 {
                     returnWidth = m_PreferredWidthElement.rect.height;
                 }
-                return Mathf.Min(returnWidth, MaxWidth);
+
+                // Prevent the width from exceeding max
+                returnWidth = Mathf.Min(returnWidth, maxWidth);
+                return returnWidth;
             }
         }
 
@@ -110,7 +118,7 @@ namespace OmiyaGames.UI
             }
         }
 
-        public virtual float MaxHeight
+        public virtual float maxHeight
         {
             get
             {
@@ -129,7 +137,7 @@ namespace OmiyaGames.UI
             }
         }
 
-        public virtual float MaxWidth
+        public virtual float maxWidth
         {
             get
             {
