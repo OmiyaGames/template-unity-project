@@ -234,9 +234,15 @@ namespace OmiyaGames.Menu
                 // Check if the title is already visible
                 if (Animator.GetBool(titleVisibilityField) == true)
                 {
-                    // If so, trigger the animation of changing the title;
-                    // the animation will trigger changing the label.
-                    Animator.SetTrigger(changeTitleTrigger);
+                    // If so, check if the strings are different
+                    if(string.Equals(titleLabel.TranslationKey, nextState.TitleTranslationKey) == false)
+                    {
+                        // If so, trigger the animation of changing the title;
+                        // the animation will trigger changing the label.
+                        Animator.SetTrigger(changeTitleTrigger);
+                    }
+
+                    // Otherwise do nothing.
                 }
                 else
                 {

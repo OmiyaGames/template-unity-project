@@ -73,15 +73,22 @@ namespace OmiyaGames.Menu
         [Header("Sound Templates")]
         [SerializeField]
         SoundEffect buttonClickSound = null;
+        [SerializeField]
+        SoundEffect buttonHoverSound = null;
 
         WaitForSeconds delaySelection = null;
-        PopUpManager popUpManager = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
         public event Action<MenuManager> OnManagedMenusStackChanged;
 
         #region Properties
+        public PopUpManager PopUps
+        {
+            get;
+            private set;
+        } = null;
+
         public EventSystem Events
         {
             get
@@ -115,6 +122,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public SoundEffect ButtonHover
+        {
+            get
+            {
+                return buttonHoverSound;
+            }
+        }
+
         public IMenu LastManagedMenu
         {
             get
@@ -133,14 +148,6 @@ namespace OmiyaGames.Menu
             get
             {
                 return managedMenusStack.Count;
-            }
-        }
-
-        public PopUpManager PopUps
-        {
-            get
-            {
-                return popUpManager;
             }
         }
 
@@ -183,7 +190,7 @@ namespace OmiyaGames.Menu
             PopulateTypeToMenuDictionary(typeToMenuMap, out transitionMenu);
 
             // Attempt to find a pop-up manager
-            popUpManager = FindObjectOfType<PopUpManager>();
+            PopUps = FindObjectOfType<PopUpManager>();
 
             // Check to see if there was a transition menu
             if (transitionMenu == null)
@@ -288,11 +295,11 @@ namespace OmiyaGames.Menu
                     // Push the current menu onto the stack
                     managedMenusStack.Push(menu);
 
+                    // Unselect the highlighted item
+                    Events.SetSelectedGameObject(null);
+
                     // Run the event that indicates the stack changed
-                    if (OnManagedMenusStackChanged != null)
-                    {
-                        OnManagedMenusStackChanged(this);
-                    }
+                    OnManagedMenusStackChanged?.Invoke(this);
                 }
             }
         }
@@ -322,11 +329,11 @@ namespace OmiyaGames.Menu
                     SceneTransitionManager.CursorMode = TransitionManager.CurrentScene.LockMode;
                 }
 
+                // Unselect the highlighted item
+                Events.SetSelectedGameObject(null);
+
                 // Run the event that indicates the stack changed
-                if (OnManagedMenusStackChanged != null)
-                {
-                    OnManagedMenusStackChanged(this);
-                }
+                OnManagedMenusStackChanged?.Invoke(this);
             }
             return returnMenu;
         }
@@ -446,7 +453,11 @@ namespace OmiyaGames.Menu
         IEnumerator DelaySelection(GameObject guiElement)
         {
             yield return delaySelection;
-            Events.SetSelectedGameObject(guiElement);
+
+            if(Events.currentSelectedGameObject == null)
+            {
+                Events.SetSelectedGameObject(guiElement);
+            }
         }
         #endregion
     }

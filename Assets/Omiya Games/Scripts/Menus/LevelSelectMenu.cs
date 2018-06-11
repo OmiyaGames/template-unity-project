@@ -40,9 +40,13 @@ namespace OmiyaGames.Menu
     public class LevelSelectMenu : IMenu
     {
         [SerializeField]
+        Button backButton;
+
+        [Header("Background Settings")]
+        [SerializeField]
         string projectTitleTranslationKey = "Game Title";
         [SerializeField]
-        Button backButton;
+        bool showBackground = false;
 
         [Header("Level Select")]
         [SerializeField]
@@ -74,7 +78,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return false;
+                return showBackground;
             }
         }
 
@@ -184,10 +188,13 @@ namespace OmiyaGames.Menu
                     // Setup the level button
                     clone = Instantiate<GameObject>(buttonToDuplicate.gameObject);
                     clone.transform.SetParent(levelContent);
-                    clone.transform.SetAsLastSibling();
                     clone.transform.localScale = Vector3.one;
                     clone.transform.localPosition = Vector3.one;
                     clone.transform.localRotation = Quaternion.identity;
+                    clone.transform.SetAsLastSibling();
+
+                    // Push the back button at the bottom
+                    backButton.transform.SetAsLastSibling();
 
                     // Add the button into the button list
                     allButtons[index] = SetupButtonEventAndName(settings, clone);

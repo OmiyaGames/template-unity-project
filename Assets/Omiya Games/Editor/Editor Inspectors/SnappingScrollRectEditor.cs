@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEditorInternal;
-using OmiyaGames;
+﻿using UnityEditor;
+using UnityEditor.UI;
 
-namespace UnityEditor.UI
+namespace OmiyaGames.UI
 {
     /// <summary>
     /// Editor for <code>NestedScrollRect</code>.

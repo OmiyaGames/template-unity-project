@@ -1,9 +1,8 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using OmiyaGames;
 
-namespace UnityEditor.UI
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SoundEffectEditor.cs" company="Omiya Games">

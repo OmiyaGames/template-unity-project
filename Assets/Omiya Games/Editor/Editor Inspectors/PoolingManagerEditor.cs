@@ -2,7 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="PoolingManagerEditor.cs" company="Omiya Games">
