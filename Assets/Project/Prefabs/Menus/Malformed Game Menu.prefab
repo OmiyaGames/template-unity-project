@@ -692,6 +692,7 @@ GameObject:
   - component: {fileID: 114105903657142146}
   - component: {fileID: 95376535569310616}
   - component: {fileID: 225652900314816598}
+  - component: {fileID: 114417207974618850}
   m_Layer: 5
   m_Name: Scrollbar Vertical
   m_TagString: Untagged
@@ -1175,6 +1176,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   translationKey: Hack Warning Options
   fontKey: 
+--- !u!114 &114417207974618850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1731380882685914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47015960a8f047745ad5cbf2c33dd4e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114469687611873136
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1830,9 +1842,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 25, y: 0}
+  m_AnchoredPosition: {x: 35, y: 0}
   m_SizeDelta: {x: 20, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224092208380658266
 RectTransform:
   m_ObjectHideFlags: 1
