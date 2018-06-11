@@ -232,6 +232,13 @@ namespace OmiyaGames.Menu
         {
             // Play hover
             OnHoverPlaySound();
+
+            // Check if we have the scroll view open
+            if(ParentScrollView != null)
+            {
+                // TODO: check if this selected button is visible in scroll view
+                //ParentScrollView.scr
+            }
         }
 
         public void OnDeselect(BaseEventData eventData)

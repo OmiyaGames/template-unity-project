@@ -39,20 +39,13 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     public class LevelSelectMenu : IMenu
     {
-        [SerializeField]
-        Button backButton;
-
-        [Header("Background Settings")]
-        [SerializeField]
-        string projectTitleTranslationKey = "Game Title";
-        [SerializeField]
-        bool showBackground = false;
-
         [Header("Level Select")]
         [SerializeField]
         RectTransform levelContent;
         [SerializeField]
         ListButtonScript levelButtonToDuplicate;
+        [SerializeField]
+        Button backButton;
 
         bool isButtonLocked = false;
         ListButtonScript[] allLevelButtons = null;
@@ -71,22 +64,6 @@ namespace OmiyaGames.Menu
             get
             {
                 return lastUnlockedButton;
-            }
-        }
-
-        public override bool ShowBackground
-        {
-            get
-            {
-                return showBackground;
-            }
-        }
-
-        public override string TitleTranslationKey
-        {
-            get
-            {
-                return projectTitleTranslationKey;
             }
         }
 

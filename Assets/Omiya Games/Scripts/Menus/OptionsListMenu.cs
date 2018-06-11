@@ -6,7 +6,7 @@ namespace OmiyaGames.Menu
     using Settings;
 
     ///-----------------------------------------------------------------------
-    /// <copyright file="OptionsMenu.cs" company="Omiya Games">
+    /// <copyright file="OptionsListMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -30,25 +30,20 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
+    /// <date>6/11/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that provides options.  Currently only supports changing sound
-    /// and music volume. You can retrieve this menu from the singleton script,
+    /// Menu that provides a list of option categories.
+    /// You can retrieve this menu from the singleton script,
     /// <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
+    [DisallowMultipleComponent]
     public class OptionsListMenu : IMenu
     {
         [SerializeField]
         Button defaultButton;
-
-        [Header("Background Settings")]
-        [SerializeField]
-        string projectTitleTranslationKey = "Game Title";
-        [SerializeField]
-        bool showBackground = false;
 
         /// <summary>
         /// Flag indicating a button in this menu has already been clicked.
@@ -57,6 +52,7 @@ namespace OmiyaGames.Menu
         /// </summary>
         bool isButtonLocked = false;
 
+        #region Overridden Properties
         public override Type MenuType
         {
             get
@@ -72,31 +68,80 @@ namespace OmiyaGames.Menu
                 return null;
             }
         }
+        #endregion
 
-        public override bool ShowBackground
+        protected override void OnStateChanged(State from, State to)
         {
-            get
+            // Call the base method
+            base.OnStateChanged(from, to);
+
+            // If this menu is visible again, release the button lock
+            if (to == State.Visible)
             {
-                return showBackground;
+                isButtonLocked = false;
             }
         }
 
-        public override string TitleTranslationKey
+        #region UI Events
+        public void OnAudioClicked()
         {
-            get
+            // Make sure the button isn't locked yet
+            if (isButtonLocked == false)
             {
-                return projectTitleTranslationKey;
+                // Show the audio options
+                Manager.Show<OptionsAudioMenu>();
+
+                // Indicate the button has been clicked.
+                isButtonLocked = true;
             }
         }
 
-        #region UI events
+        public void OnControlsClicked()
+        {
+            // Make sure the button isn't locked yet
+            if (isButtonLocked == false)
+            {
+                // Show the controls options
+                Manager.Show<OptionsControlsMenu>();
+
+                // Indicate the button has been clicked.
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnGraphicsClicked()
+        {
+            // Make sure the button isn't locked yet
+            if (isButtonLocked == false)
+            {
+                // Show the graphics options
+                Manager.Show<OptionsGraphicsMenu>();
+
+                // Indicate the button has been clicked.
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnAccessibilityClicked()
+        {
+            // Make sure the button isn't locked yet
+            if (isButtonLocked == false)
+            {
+                // Show the accessibility options
+                Manager.Show<OptionsAccessibilityMenu>();
+
+                // Indicate the button has been clicked.
+                isButtonLocked = true;
+            }
+        }
+
         public void OnLanguageClicked()
         {
             // Make sure the button isn't locked yet
             if (isButtonLocked == false)
             {
-                // FIXME: show the language options
-                //Manager.Show<ConfirmationMenu>();
+                // Show the language options
+                Manager.Show<OptionsLanguageMenu>();
 
                 // Indicate the button has been clicked.
                 isButtonLocked = true;
@@ -122,18 +167,7 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        protected override void OnStateChanged(State from, State to)
-        {
-            // Call the base method
-            base.OnStateChanged(from, to);
-
-            // If this menu is visible again, release the button lock
-            if (to == State.Visible)
-            {
-                isButtonLocked = false;
-            }
-        }
-
+        #region Helper Methods
         void CheckResetSavedDataConfirmation(IMenu menu)
         {
             if (((ConfirmationMenu)menu).IsYesSelected == true)
@@ -149,5 +183,6 @@ namespace OmiyaGames.Menu
                 }
             }
         }
+        #endregion
     }
 }
