@@ -92,9 +92,6 @@ namespace OmiyaGames.Menu
 
             // Transition to the current level
             TransitionManager.LoadNextLevel();
-
-            // Indicate the button was clicked
-            Manager.ButtonClick.Play();
         }
     }
 }

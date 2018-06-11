@@ -52,9 +52,6 @@ namespace OmiyaGames.Menu
         {
             // Open the options dialog
             Singleton.Get<MenuManager>().Show<OptionsMenu>();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         public void OnCreditsClicked()

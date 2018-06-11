@@ -187,7 +187,7 @@ namespace OmiyaGames.Menu
             if (isButtonLocked == false)
             {
                 // Open the options menu
-                Manager.Show<OptionsMenu>();
+                Manager.Show<OptionsListMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = optionsButton.gameObject;

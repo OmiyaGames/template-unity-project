@@ -27,7 +27,6 @@ namespace OmiyaGames.Menu
         public void OnBackClicked()
         {
             Hide();
-            Manager.ButtonClick.Play();
         }
     }
 }

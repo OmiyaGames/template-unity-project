@@ -105,10 +105,9 @@ namespace OmiyaGames.Menu
             if (isButtonLocked == false)
             {
                 Singleton.Get<SceneTransitionManager>().LoadScene(level);
-                isButtonLocked = true;
 
                 // Indicate button is clicked
-                Manager.ButtonClick.Play();
+                isButtonLocked = true;
             }
         }
 
@@ -117,10 +116,9 @@ namespace OmiyaGames.Menu
             if (isButtonLocked == false)
             {
                 CurrentState = State.Hidden;
-                isButtonLocked = true;
 
                 // Indicate button is clicked
-                Manager.ButtonClick.Play();
+                isButtonLocked = true;
             }
         }
         #endregion
