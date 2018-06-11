@@ -502,7 +502,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24360054, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: 51a72ffed663faf4bab02622a8c221a4, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 1fd5d88b57e8b1e40a88662337452bf6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.2
   m_Pitch: 1
@@ -830,7 +830,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae95aacedb290847a5af5f0a0223a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipVariations: []
+  clipVariations:
+  - {fileID: 8300000, guid: 3c3e4e2d123b90249b0d3e1540fc1fa4, type: 3}
+  - {fileID: 8300000, guid: d1c6379ad3d5b284fb030deac10ec118, type: 3}
+  - {fileID: 8300000, guid: 523dbf6596046134fa3efc6cb238d7c7, type: 3}
   mutatePitch: 1
   pitchMutationRange: {x: 0.5, y: 1.5}
   mutateVolume: 0
@@ -1226,7 +1229,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 139c825b4c9cd0140a0fd1b5550d5122, type: 3}
   - {fileID: 8300000, guid: 139c825b4c9cd0040a0fd1b5550d5522, type: 3}
   - {fileID: 8300000, guid: 139c825b4c9cd0340a0fd1b5550d5122, type: 3}
-  - {fileID: 8300000, guid: 131c825b4c9cd0040a0fd1b5550d5122, type: 3}
   mutatePitch: 1
   pitchMutationRange: {x: 0.5, y: 1.5}
   mutateVolume: 0
