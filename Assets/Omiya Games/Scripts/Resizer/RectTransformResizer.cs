@@ -52,6 +52,18 @@ namespace OmiyaGames
     [DisallowMultipleComponent]
     public class RectTransformResizer : IResizer
     {
+        [Header("Resize")]
+        [SerializeField]
+        bool resizeWidth = true;
+        [SerializeField]
+        bool resizeHeight = true;
+
+        [Header("Reposition")]
+        [SerializeField]
+        bool repositionX = false;
+        [SerializeField]
+        bool repositionY = false;
+
         // FIXME: do something!
         void Start()
         {
