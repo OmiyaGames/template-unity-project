@@ -50,7 +50,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class UiEventAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
+    public class UiEventAudio : MonoBehaviour, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -200,16 +200,24 @@ namespace OmiyaGames.Menu
         #region Interface Events
 
         #region Pointer Events
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnPointerUp(PointerEventData eventData)
         {
-            // Play clicking sound
-            PlayClickSound();
+            // Check if this registers as a click
+            if((eventData.eligibleForClick == true) && (eventData.dragging == false) && (eventData.selectedObject == gameObject))
+            {
+                // Play the click sound
+                PlayClickSound();
+            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            // Play hover
-            OnHoverPlaySound();
+            // Make sure this is not hovered from dragging
+            if (eventData.dragging == false)
+            {
+                // Play hover
+                OnHoverPlaySound();
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
