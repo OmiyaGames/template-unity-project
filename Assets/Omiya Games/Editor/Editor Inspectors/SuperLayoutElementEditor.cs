@@ -170,6 +170,10 @@ namespace OmiyaGames.UI
             // Checkbox
             EditorGUI.BeginChangeCheck();
             show = EditorGUI.ToggleLeft(toggleRect, GUIContent.none, show);
+            if ((EditorGUI.EndChangeCheck() == true) && (show == false))
+            {
+                property.objectReferenceValue = null;
+            }
 
             if (!property.hasMultipleDifferentValues && (show == true))
             {

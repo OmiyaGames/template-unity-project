@@ -116,8 +116,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44fe557e840722429e88af469500ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectTitleTranslationKey: Game Title
   backButton: {fileID: 114455773040949038}
+  projectTitleTranslationKey: Game Title
+  showBackground: 0
   levelContent: {fileID: 22494998}
   levelButtonToDuplicate: {fileID: 114014978841383268}
 --- !u!224 &22420562
@@ -680,8 +681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809fec2f002c0984cbc1491868e962f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverSound: {fileID: 0}
-  clickSound: {fileID: 0}
 --- !u!114 &114060326459502314
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -720,8 +719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809fec2f002c0984cbc1491868e962f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverSound: {fileID: 0}
-  clickSound: {fileID: 0}
 --- !u!114 &114116506586529358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1498,7 +1495,7 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
-  m_MaxHeight: 400
+  m_MaxHeight: -1
   m_MaxWidth: -1
   m_MinHeightElement: {fileID: 22494998}
   m_MinWidthElement: {fileID: 22476936}
