@@ -53,14 +53,6 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class ButtonAudio : MonoBehaviour
     {
-        static SoundEffect lastHoverSound = null;
-        static SoundEffect lastClickSound = null;
-
-        [SerializeField]
-        SoundEffect hoverSound = null;
-        [SerializeField]
-        SoundEffect clickSound = null;
-
         public bool IsHighlighted
         {
             get;
@@ -75,6 +67,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        MenuManager Manager
+        {
+            get
+            {
+                return Singleton.Get<MenuManager>();
+            }
+        }
+
         void OnDisable()
         {
             OnUnfocused();
@@ -86,7 +86,7 @@ namespace OmiyaGames.Menu
             if(IsHighlighted == false)
             {
                 // Play the hover sound
-                PlaySoundEffect(hoverSound, ref lastHoverSound);
+                Manager.ButtonHover.Play();
 
                 // Prevent this button from playing the hover sound
                 IsHighlighted = true;
@@ -102,33 +102,13 @@ namespace OmiyaGames.Menu
         public void OnClickPlaySound()
         {
             // Play clicking sound
-            PlaySoundEffect(clickSound, ref lastClickSound);
+            Manager.ButtonClick.Play();
         }
 
         public void OnUnfocused()
         {
             // Reset hover sound
             IsHighlighted = false;
-        }
-
-        static void PlaySoundEffect(SoundEffect newSound, ref SoundEffect oldSound)
-        {
-            // Make sure the sound effect is there
-            if (newSound != null)
-            {
-                // Check to see if there is a sound effect still playing
-                if (oldSound != null)
-                {
-                    // Stop that sound effect
-                    oldSound.Stop();
-                }
-
-                // Play the new sound
-                newSound.Play();
-
-                // Set the old sound variable to the new one
-                oldSound = newSound;
-            }
         }
     }
 }

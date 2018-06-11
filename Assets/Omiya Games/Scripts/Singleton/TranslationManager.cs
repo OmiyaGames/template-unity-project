@@ -315,10 +315,6 @@ namespace OmiyaGames
         /// </summary>
         TextAsset inputFile = null;
         /// <summary>
-        /// List of supported languages available after the file has been parsed.
-        /// </summary>
-        List<string> supportedLanguages = new List<string>();
-        /// <summary>
         /// A dictionary of the keys, current-language-values.
         /// </summary>
         Dictionary<string, string> translationDictionary = new Dictionary<string, string>();
@@ -391,13 +387,7 @@ namespace OmiyaGames
         /// Gets the list of langauges identified in the most recent parse.
         /// </summary>
         /// <returns>The supported languages.</returns>
-        public List<string> SupportedLanguages
-        {
-            get
-            {
-                return supportedLanguages;
-            }
-        }
+        public List<string> SupportedLanguages { get; } = new List<string>();
 
         /// <summary>
         /// Gets the default language.
@@ -432,7 +422,7 @@ namespace OmiyaGames
                 if (currentLanguage.Equals(value) == false)
                 {
                     // Check if this language is supported
-                    if (supportedLanguages.Contains(value) == true)
+                    if (SupportedLanguages.Contains(value) == true)
                     {
                         // Set the language
                         string lastLanguage = currentLanguage;
@@ -596,27 +586,27 @@ namespace OmiyaGames
              * while building, if a defualt or current language has not yet been
              * set, then set them to the first language encountered.
              */
-            supportedLanguages.Clear();
+            SupportedLanguages.Clear();
             foreach (string key in data[0].Keys)
             {
                 if ((string.IsNullOrEmpty(key) == false) && (key != keyHeader))
                 {
-                    supportedLanguages.Add(key);
+                    SupportedLanguages.Add(key);
                 }
             }
 
             // Make sure there's more than one language
-            if(supportedLanguages.Count > 0)
+            if(SupportedLanguages.Count > 0)
             {
                 // Check if the default language is set
-                if ((string.IsNullOrEmpty(defaultLanguage) == true) || (supportedLanguages.Contains(defaultLanguage) == false))
+                if ((string.IsNullOrEmpty(defaultLanguage) == true) || (SupportedLanguages.Contains(defaultLanguage) == false))
                 {
                     // If not, grab the first language in the headers
-                    defaultLanguage = supportedLanguages[0];
+                    defaultLanguage = SupportedLanguages[0];
                 }
                 
                 // Check if the current langauge is set
-                if ((string.IsNullOrEmpty(currentLanguage) == true) || (supportedLanguages.Contains(currentLanguage) == false))
+                if ((string.IsNullOrEmpty(currentLanguage) == true) || (SupportedLanguages.Contains(currentLanguage) == false))
                 {
                     // If not, use the default language instead
                     currentLanguage = defaultLanguage;

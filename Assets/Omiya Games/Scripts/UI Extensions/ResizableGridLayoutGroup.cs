@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.UI;
 
-namespace UnityEngine.UI
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="ResizableGridLayoutGroup.cs" company="Omiya Games">

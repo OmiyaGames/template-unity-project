@@ -50,8 +50,12 @@ namespace OmiyaGames.Menu
 
         [SerializeField]
         LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
+
+        [Header("Background Settings")]
         [SerializeField]
         string projectTitleTranslationKey = "Game Title";
+        [SerializeField]
+        bool showBackground = false;
 
         [Header("Buttons")]
         [SerializeField]
@@ -100,7 +104,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return false;
+                return showBackground;
             }
         }
 
@@ -152,27 +156,28 @@ namespace OmiyaGames.Menu
         }
 
         #region Button Events
+        public void OnStartClicked()
+        {
+            if (isButtonLocked == false)
+            {
+                // Load the first level automatically
+                Singleton.Get<SceneTransitionManager>().LoadNextLevel();
+
+                // Indicate button is clicked
+                defaultButton = startButton.gameObject;
+                isButtonLocked = true;
+            }
+        }
+
         public void OnLevelSelectClicked()
         {
             if (isButtonLocked == false)
             {
-                if(IsStartingOnFirstLevel == true)
-                {
-                    // Load the first level automatically
-                    Singleton.Get<SceneTransitionManager>().LoadNextLevel();
+                // Open the Level Select menu
+                Manager.Show<LevelSelectMenu>();
 
-                    // Indicate button is clicked
-                    Manager.ButtonClick.Play();
-                }
-                else
-                {
-                    // Open the Level Select menu
-                    Manager.Show<LevelSelectMenu>();
-
-                    // Indicate we've clicked on a button
-                    Manager.ButtonClick.Play();
-                    defaultButton = levelSelectButton.gameObject;
-                }
+                // Indicate we've clicked on a button
+                defaultButton = levelSelectButton.gameObject;
                 isButtonLocked = true;
             }
         }
@@ -185,7 +190,6 @@ namespace OmiyaGames.Menu
                 Manager.Show<OptionsMenu>();
 
                 // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
                 defaultButton = optionsButton.gameObject;
                 isButtonLocked = true;
             }
@@ -202,7 +206,6 @@ namespace OmiyaGames.Menu
                 CurrentState = State.StandBy;
 
                 // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
                 defaultButton = creditsButton.gameObject;
                 isButtonLocked = true;
             }
@@ -215,11 +218,10 @@ namespace OmiyaGames.Menu
                 // Quit the application
                 Application.Quit();
 
-                // Change the menu to stand by
-                CurrentState = State.StandBy;
+                // Leave the menu as-is
+                // CurrentState = State.StandBy;
 
                 // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
                 defaultButton = quitButton.gameObject;
                 isButtonLocked = true;
             }
@@ -229,12 +231,24 @@ namespace OmiyaGames.Menu
         {
             if (isButtonLocked == false)
             {
-                // Open the options menu
+                // Open the how to play menu
                 Manager.Show<HowToPlayMenu>();
 
                 // Indicate we've clicked on a button
-                Manager.ButtonClick.Play();
                 defaultButton = howToPlayButton.gameObject;
+                isButtonLocked = true;
+            }
+        }
+
+        public void OnHighScoresClicked()
+        {
+            if (isButtonLocked == false)
+            {
+                // FIXME: Open the high scores menu
+                //Manager.Show<HighScoresMenu>();
+
+                // Indicate we've clicked on a button
+                defaultButton = highScoresButton.gameObject;
                 isButtonLocked = true;
             }
         }

@@ -1,9 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEditorInternal;
-using UnityEditor.AnimatedValues;
+﻿using UnityEngine.UI;
+using UnityEditor;
 
-namespace UnityEditor.UI
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="ResizableGridLayoutGroupEditor.cs" company="Omiya Games">
