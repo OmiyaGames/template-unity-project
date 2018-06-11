@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="ButtonAudio.cs" company="Omiya Games">
+    /// <copyright file="UiEventAudio.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -50,7 +50,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class ButtonAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
+    public class UiEventAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
