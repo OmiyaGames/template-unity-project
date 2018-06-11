@@ -107,9 +107,6 @@ namespace OmiyaGames.Menu
 
             // Hide the dialog
             Hide();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         public void OnNoClicked()
@@ -119,9 +116,6 @@ namespace OmiyaGames.Menu
 
             // Hide the dialog
             Hide();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
     }
 }

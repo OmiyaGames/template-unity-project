@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 namespace OmiyaGames.Menu
@@ -51,13 +52,92 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class ButtonAudio : MonoBehaviour
+    public class ButtonAudio : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IScrollHandler, ISubmitHandler
     {
+        [Header("Hover Settings")]
+        [SerializeField]
+        bool enableHoverSound = true;
+        [SerializeField]
+        [Tooltip("Customizes the hover sound for the UI; if set to none, the default hover sound set in MenuManager plays.")]
+        SoundEffect customHoverSound = null;
+
+        [Header("Click Settings")]
+        [SerializeField]
+        bool enableClickSound = true;
+        [SerializeField]
+        [Tooltip("Customizes the click sound for the UI; if set to none, the default click sound set in MenuManager plays.")]
+        SoundEffect customClickSound = null;
+
+        [Header("Scroll Settings")]
+        [SerializeField]
+        ScrollRect parentScrollView = null;
+
+        #region Properties
         public bool IsHighlighted
         {
             get;
             private set;
         } = false;
+
+        public bool EnableHoverSound
+        {
+            get
+            {
+                return enableHoverSound;
+            }
+            set
+            {
+                enableHoverSound = value;
+            }
+        }
+
+        public SoundEffect CustomHoverSound
+        {
+            get
+            {
+                return customHoverSound;
+            }
+            set
+            {
+                customHoverSound = value;
+            }
+        }
+
+        public bool EnableClickSound
+        {
+            get
+            {
+                return enableClickSound;
+            }
+            set
+            {
+                enableClickSound = value;
+            }
+        }
+
+        public SoundEffect CustomClickSound
+        {
+            get
+            {
+                return customClickSound;
+            }
+            set
+            {
+                customClickSound = value;
+            }
+        }
+
+        public ScrollRect ParentScrollView
+        {
+            get
+            {
+                return parentScrollView;
+            }
+            set
+            {
+                parentScrollView = value;
+            }
+        }
 
         EventSystem Highlighter
         {
@@ -74,41 +154,147 @@ namespace OmiyaGames.Menu
                 return Singleton.Get<MenuManager>();
             }
         }
+        #endregion
 
+        #region Unity Events
         void OnDisable()
         {
-            OnUnfocused();
+            Reset();
+        }
+        #endregion
+
+        public void PlayClickSound()
+        {
+            if (EnableClickSound == true)
+            {
+                if (CustomClickSound != null)
+                {
+                    CustomClickSound.Play();
+                }
+                else
+                {
+                    Manager.ButtonClick.Play();
+                }
+            }
         }
 
-        public void OnHoverPlaySound()
+        public void PlayHoverSound()
+        {
+            if (EnableHoverSound == true)
+            {
+                if(CustomHoverSound != null)
+                {
+                    CustomHoverSound.Play();
+                }
+                else
+                {
+                    Manager.ButtonHover.Play();
+                }
+            }
+        }
+
+        public void Reset()
+        {
+            // Reset hover sound
+            IsHighlighted = false;
+        }
+
+        #region Interface Events
+
+        #region Scroll Events
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if(ParentScrollView != null)
+            {
+                ParentScrollView.OnBeginDrag(eventData);
+            }
+        }
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            if (ParentScrollView != null)
+            {
+                ParentScrollView.OnDrag(eventData);
+            }
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            if (ParentScrollView != null)
+            {
+                ParentScrollView.OnEndDrag(eventData);
+            }
+        }
+
+        public void OnScroll(PointerEventData data)
+        {
+            if (ParentScrollView != null)
+            {
+                ParentScrollView.OnScroll(data);
+            }
+        }
+        #endregion
+
+        #region Pointer Events
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            // Play clicking sound
+            PlayClickSound();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            // Play hover
+            OnHoverPlaySound();
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            // Reset state of UI
+            Reset();
+        }
+        #endregion
+
+        #region Select Events
+        public void OnSelect(BaseEventData eventData)
+        {
+            // Play hover
+            OnHoverPlaySound();
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            // Reset state of UI
+            Reset();
+        }
+        #endregion
+
+        public void OnSubmit(BaseEventData eventData)
+        {
+            // Play clicking sound
+            PlayClickSound();
+        }
+        #endregion
+
+        #region Helper Methods
+        void OnHoverPlaySound()
         {
             // Check fo see if we can play hover sound
-            if(IsHighlighted == false)
+            if (IsHighlighted == false)
             {
                 // Play the hover sound
-                Manager.ButtonHover.Play();
+                PlayHoverSound();
 
                 // Prevent this button from playing the hover sound
                 IsHighlighted = true;
 
                 // Force event system to recognize this button is highlighted
-                if((Highlighter != null) && (Highlighter.currentSelectedGameObject != gameObject))
+                if ((Highlighter != null) && (Highlighter.currentSelectedGameObject != gameObject))
                 {
                     Highlighter.SetSelectedGameObject(gameObject);
                 }
             }
         }
-
-        public void OnClickPlaySound()
-        {
-            // Play clicking sound
-            Manager.ButtonClick.Play();
-        }
-
-        public void OnUnfocused()
-        {
-            // Reset hover sound
-            IsHighlighted = false;
-        }
+        #endregion
     }
 }

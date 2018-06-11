@@ -117,9 +117,6 @@ namespace OmiyaGames.Menu
 
             // Transition to the current level
             Singleton.Get<SceneTransitionManager>().ReloadCurrentScene();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         public void OnReturnToMenuClicked()
@@ -128,9 +125,6 @@ namespace OmiyaGames.Menu
 
             // Transition to the menu
             Singleton.Get<SceneTransitionManager>().LoadMainMenu();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
     }
 }

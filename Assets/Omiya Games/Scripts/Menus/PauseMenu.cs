@@ -58,26 +58,23 @@ namespace OmiyaGames.Menu
         {
             // Open the options dialog
             Manager.Show<OptionsMenu>();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         public void OnResumeClicked()
         {
             // Hide the pause menu
             Hide();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         public void OnHowToPlayClicked()
         {
             Manager.Show<HowToPlayMenu>();
+        }
 
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
+        public void OnHighScoresClicked()
+        {
+            // FIXME: show high scores
+            //Manager.Show<HowToPlayMenu>();
         }
     }
 }

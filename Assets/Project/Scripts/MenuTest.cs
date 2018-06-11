@@ -107,21 +107,18 @@ public class MenuTest : MonoBehaviour
     {
         MenuManager manager = Singleton.Get<MenuManager>();
         manager.Show<PauseMenu>();
-        manager.ButtonClick.Play();
     }
 
     public void OnFailedClicked()
     {
         MenuManager manager = Singleton.Get<MenuManager>();
         manager.Show<LevelFailedMenu>();
-        manager.ButtonClick.Play();
     }
 
     public void OnCompleteClicked()
     {
         MenuManager manager = Singleton.Get<MenuManager>();
         manager.Show<LevelCompleteMenu>();
-        manager.ButtonClick.Play();
     }
 
     public void OnSoundClicked()

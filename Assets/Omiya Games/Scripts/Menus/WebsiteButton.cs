@@ -72,7 +72,6 @@ namespace OmiyaGames.Menu
 
         public void OnClick()
         {
-            Singleton.Get<MenuManager>().ButtonClick.Play();
             Application.OpenURL(RedirectTo);
         }
     }

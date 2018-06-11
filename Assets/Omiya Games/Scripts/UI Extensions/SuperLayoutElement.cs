@@ -66,7 +66,11 @@ namespace OmiyaGames.UI
                 }
 
                 // Prevent the height from exceeding max
-                returnHeight = Mathf.Min(returnHeight, maxHeight);
+                float heightLimit = maxHeight;
+                if((heightLimit > 0) && (returnHeight > heightLimit))
+                {
+                    returnHeight = heightLimit;
+                }
                 return returnHeight;
             }
         }
@@ -83,7 +87,11 @@ namespace OmiyaGames.UI
                 }
 
                 // Prevent the width from exceeding max
-                returnWidth = Mathf.Min(returnWidth, maxWidth);
+                float widthLimit = maxWidth;
+                if ((widthLimit > 0) && (returnWidth > widthLimit))
+                {
+                    returnWidth = widthLimit;
+                }
                 return returnWidth;
             }
         }

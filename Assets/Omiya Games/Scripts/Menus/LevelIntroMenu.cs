@@ -126,9 +126,6 @@ namespace OmiyaGames.Menu
                 Singleton.Instance.OnUpdate -= checkInput;
                 checkInput = null;
             }
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
         }
 
         void CheckForAnyKey(float deltaTime)

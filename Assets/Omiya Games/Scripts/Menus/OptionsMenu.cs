@@ -654,14 +654,6 @@ namespace OmiyaGames.Menu
         }
 
 #region UI events
-        public override void Hide()
-        {
-            base.Hide();
-
-            // Indicate button is clicked
-            Manager.ButtonClick.Play();
-        }
-
         public void OnLanguageSeleced(int selectedIndex)
         {
             if ((inSetupMode == false) && (selectedIndex >= 0))
