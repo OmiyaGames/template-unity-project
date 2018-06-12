@@ -655,7 +655,7 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
-        static string Percent(float val)
+        public static string Percent(float val)
         {
             return val.ToString("0%");
         }
