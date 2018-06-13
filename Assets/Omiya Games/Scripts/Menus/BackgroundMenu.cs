@@ -167,7 +167,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected override void OnStateChanged(State from, State to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             UpdateAnimator(to);
         }
@@ -184,7 +184,7 @@ namespace OmiyaGames.Menu
         protected void UpdateBackgroundVisibility(MenuManager manager)
         {
             // Attempt to grab the latest menu
-            State currentState = State.Hidden;
+            VisibilityState currentState = VisibilityState.Hidden;
             IMenu menu = manager.PeekFromManagedStack();
             if (menu != null)
             {
@@ -195,19 +195,19 @@ namespace OmiyaGames.Menu
                 // Indicate whether we want to show the background
                 if (nextState.IsVisible == true)
                 {
-                    currentState = State.Visible;
+                    currentState = VisibilityState.Visible;
                 }
             }
 
             // Before changing the state, check if this background is already visible
-            if((CurrentState == State.Visible) && (currentState == State.Visible))
+            if((CurrentVisibility == VisibilityState.Visible) && (currentState == VisibilityState.Visible))
             {
                 // If so, force the animator to update
                 UpdateAnimator(currentState);
             }
 
             // Set the current state
-            CurrentState = currentState;
+            CurrentVisibility = currentState;
         }
 
         void UpdateVersionLabelVisibility()
@@ -258,10 +258,10 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void UpdateAnimator(State state)
+        void UpdateAnimator(VisibilityState state)
         {
             // Update the animator
-            if (state == State.Visible)
+            if (state == VisibilityState.Visible)
             {
                 // Update the background visibility
                 Animator.SetBool(backgroundVisibilityField, nextState.IsBackgroundVisible);

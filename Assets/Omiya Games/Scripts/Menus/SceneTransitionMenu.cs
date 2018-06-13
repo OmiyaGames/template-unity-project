@@ -36,6 +36,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="SceneManager"/>
     /// <seealso cref="MenuManager"/>
+    // FIXME: frankly, this shouldn't be a menu at all.  It shares none of the attributes of a regular menu.
     [RequireComponent(typeof(Animator))]
     public class SceneTransitionMenu : IMenu
     {
@@ -77,58 +78,30 @@ namespace OmiyaGames.Menu
             {
                 return currentTransition;
             }
-            protected set
+            private set
             {
                 currentTransition = value;
             }
         }
 
-        protected override void OnStateChanged(State from, State to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Do nothing
-        }
-
-        public override void Show(System.Action<IMenu> stateChanged)
-        {
-            // Run show as normal
-            base.Show(stateChanged);
-
-            // Update the current transition state
-            CurrentTransition = Transition.SceneTransitionOutStart;
-
-            // Run the animation
-            Animator.SetTrigger(transitionOutTrigger);
-
-            // Check if there's an action associated with this dialog
-            if(onStateChanged != null)
+            if(to == VisibilityState.Visible)
             {
-                onStateChanged(this);
+                // Update the current transition state
+                CurrentTransition = Transition.SceneTransitionOutStart;
+
+                // Run the animation
+                Animator.SetTrigger(transitionOutTrigger);
             }
-        }
-
-        public override void Hide()
-        {
-            this.Hide(null);
-        }
-
-        public virtual void Hide(System.Action<IMenu> stateChanged)
-        {
-            // Set the next action
-            onStateChanged = stateChanged;
-
-            // Run hide as normal
-            base.Hide();
-
-            // Update the current transition state
-            CurrentTransition = Transition.SceneTransitionInStart;
-
-            // Run the animation
-            Animator.SetTrigger(transitionInTrigger);
-           
-            // Check if there's an action associated with this dialog
-            if(onStateChanged != null)
+            else if(to == VisibilityState.Hidden)
             {
-                onStateChanged(this);
+                // Update the current transition state
+                CurrentTransition = Transition.SceneTransitionInStart;
+
+                // Run the animation
+                Animator.SetTrigger(transitionInTrigger);
             }
         }
 
@@ -138,10 +111,10 @@ namespace OmiyaGames.Menu
             CurrentTransition = Transition.SceneTransitionInEnd;
 
             // Check if there's an action associated with this dialog
-            if(onStateChanged != null)
+            if(onStateChangedWhileManaged != null)
             {
-                onStateChanged(this);
-                onStateChanged = null;
+                onStateChangedWhileManaged(this);
+                onStateChangedWhileManaged = null;
             }
         }
 
@@ -151,10 +124,10 @@ namespace OmiyaGames.Menu
             CurrentTransition = Transition.SceneTransitionOutEnd;
 
             // Check if there's an action associated with this dialog
-            if(onStateChanged != null)
+            if(onStateChangedWhileManaged != null)
             {
-                onStateChanged(this);
-                onStateChanged = null;
+                onStateChangedWhileManaged(this);
+                onStateChangedWhileManaged = null;
             }
         }
     }

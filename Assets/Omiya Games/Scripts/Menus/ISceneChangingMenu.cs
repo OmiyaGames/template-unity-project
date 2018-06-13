@@ -38,6 +38,8 @@ namespace OmiyaGames.Menu
         [Header("Components")]
         [SerializeField]
         protected Button defaultButton = null;
+
+        // FIXME: think real hard here, do we *really* need these?
         [SerializeField]
         protected TranslatedText completeLabel = null;
         [SerializeField]
@@ -70,44 +72,36 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected virtual void Start()
+        protected override void OnSetup()
         {
-            // Do nothing!
+            // Call base method
+            base.OnSetup();
+
+            // FIXME: think real hard here, do we *really* need these?
+            Manager.SetLabelTextToCompletedCurrentScene(completeLabel);
+            Manager.SetLabelTextToFailedCurrentScene(failedLabel);
+            Manager.SetLabelTextToNextScene(nextSceneLabel);
+            Manager.SetLabelTextToRestartCurrentScene(restartLabel);
+            Manager.SetLabelTextToReturnToMenu(returnToMenuLabel);
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
-            // Call base function
-            base.Show(stateChanged);
+            // Call base method
+            base.OnStateChanged(from, to);
 
-            // Update the labels on each button
-            MenuManager manager = Singleton.Get<MenuManager>();
-
-            // Setup all labels, if available
-            manager.SetLabelTextToCompletedCurrentScene(completeLabel);
-            manager.SetLabelTextToFailedCurrentScene(failedLabel);
-            manager.SetLabelTextToNextScene(nextSceneLabel);
-            manager.SetLabelTextToRestartCurrentScene(restartLabel);
-            manager.SetLabelTextToReturnToMenu(returnToMenuLabel);
-
-            // Check if we should stop time
             if (PauseOnShow == true)
             {
-                // Stop time
-                Singleton.Get<TimeManager>().IsManuallyPaused = true;
-            }
-        }
-
-        public override void Hide()
-        {
-            // Call base function
-            base.Hide();
-
-            // Check if we should stop time
-            if (PauseOnShow == true)
-            {
-                // Resume the time
-                Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                if(to == VisibilityState.Visible)
+                {
+                    // Stop time
+                    Singleton.Get<TimeManager>().IsManuallyPaused = true;
+                }
+                else if(to == VisibilityState.Hidden)
+                {
+                    // Resume the time
+                    Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                }
             }
         }
 
@@ -116,15 +110,18 @@ namespace OmiyaGames.Menu
             Hide();
 
             // Transition to the current level
-            Singleton.Get<SceneTransitionManager>().ReloadCurrentScene();
+            SceneChanger.ReloadCurrentScene();
         }
 
         public void OnReturnToMenuClicked()
         {
-            Hide();
+            if(IsListeningToEvents == true)
+            {
+                // Transition to the menu
+                SceneChanger.LoadMainMenu();
 
-            // Transition to the menu
-            Singleton.Get<SceneTransitionManager>().LoadMainMenu();
+                IsListeningToEvents = false;
+            }
         }
     }
 }

@@ -383,7 +383,7 @@ namespace OmiyaGames.Menu
             inSetupMode = false;
         }
 
-        protected override void OnStateChanged(IMenu.VisibilityState from, IMenu.VisibilityState to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);

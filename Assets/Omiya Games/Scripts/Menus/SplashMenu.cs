@@ -148,7 +148,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected override void OnStateChanged(State from, State to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Do nothing
         }

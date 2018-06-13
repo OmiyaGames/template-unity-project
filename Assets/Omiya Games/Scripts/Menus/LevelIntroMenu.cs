@@ -51,7 +51,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         bool requireClickToStart = false;
 
-        System.Action<float> checkInput = null;
+        System.Action<float> checkAnyKey = null;
 
         public override Type MenuType
         {
@@ -74,21 +74,35 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected virtual void Start()
+        protected override void OnSetup()
         {
+            // Call base method
+            base.OnSetup();
+
             // Setup all labels, if available
-            SceneInfo currentScene = Singleton.Get<SceneTransitionManager>().CurrentScene;
-            if ((levelNameLabel != null) && (currentScene != null))
+            if ((levelNameLabel != null) && (SceneChanger.CurrentScene != null))
             {
-                levelNameLabel.TranslationKey = currentScene.DisplayName.TranslationKey;
+                levelNameLabel.TranslationKey = SceneChanger.CurrentScene.DisplayName.TranslationKey;
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
-            // Call base function
-            base.Show(stateChanged);
+            // Call base method
+            base.OnStateChanged(from, to);
 
+            if (to == VisibilityState.Visible)
+            {
+                OnShow();
+            }
+            else if (to == VisibilityState.Hidden)
+            {
+                OnHide();
+            }
+        }
+
+        void OnShow()
+        {
             // Check if we should stop time
             if (pauseOnStart == true)
             {
@@ -96,23 +110,20 @@ namespace OmiyaGames.Menu
                 Singleton.Get<TimeManager>().IsManuallyPaused = true;
             }
 
-            // Check if we've previously binded to the singleton's update function
-            if (checkInput != null)
-            {
-                Singleton.Instance.OnUpdate -= checkInput;
-                checkInput = null;
-            }
+            // Unbind to Singleton's update function
+            StopListeningToUpdate();
 
-            // Bind to Singleton's update function
-            checkInput = new System.Action<float>(CheckForAnyKey);
-            Singleton.Instance.OnUpdate += checkInput;
+            // Check if we need to click
+            if (requireClickToStart == false)
+            {
+                // Bind to Singleton's update function
+                checkAnyKey = new System.Action<float>(CheckForAnyKey);
+                Singleton.Instance.OnUpdate += checkAnyKey;
+            }
         }
 
-        public override void Hide()
+        void OnHide()
         {
-            // Call base function
-            base.Hide();
-
             // Check if we should stop time
             if (pauseOnStart == true)
             {
@@ -121,16 +132,25 @@ namespace OmiyaGames.Menu
             }
 
             // Unbind to Singleton's update function
-            if (checkInput != null)
+            StopListeningToUpdate();
+        }
+
+        void StopListeningToUpdate()
+        {
+            // Check if the action is not null
+            if (checkAnyKey != null)
             {
-                Singleton.Instance.OnUpdate -= checkInput;
-                checkInput = null;
+                // Remove the binding to Singleton's update function
+                Singleton.Instance.OnUpdate -= checkAnyKey;
+
+                // Set the action to null
+                checkAnyKey = null;
             }
         }
 
         void CheckForAnyKey(float deltaTime)
         {
-            if((Input.anyKeyDown == true) && (requireClickToStart == false))
+            if (Input.anyKeyDown == true)
             {
                 Hide();
             }
