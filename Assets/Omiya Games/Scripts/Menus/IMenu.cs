@@ -40,7 +40,8 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public abstract class IMenu : MonoBehaviour
     {
-        public const string StateField = "State";
+        public delegate void VisibilityChanged(IMenu source, VisibilityState from, VisibilityState to);
+        public event VisibilityChanged OnVisbibilityChanged;
 
         public enum SetupState
         {
@@ -88,9 +89,9 @@ namespace OmiyaGames.Menu
             UnmanagedMenu
         }
 
+        [Header("Animator Info")]
         [SerializeField]
-        [Tooltip("Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.")]
-        ScrollRect scrollToDefaultUi = null;
+        string stateField = "State";
 
         [Header("Background Settings")]
         [SerializeField]
@@ -99,10 +100,15 @@ namespace OmiyaGames.Menu
         [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
         string titleTranslationKey = "";
 
+        [Header("Default UI")]
+        [SerializeField]
+        [Tooltip("Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.")]
+        ScrollRect scrollToDefaultUi = null;
+
         VisibilityState currentState = VisibilityState.Hidden;
         Animator animatorCache = null;
         bool isListeningToEvents = true;
-        protected Action<IMenu> onStateChangedWhileManaged = null;
+        VisibilityChanged onStateChangedWhileManaged = null;
 
         #region Properties
         protected static MenuManager Manager
@@ -268,17 +274,6 @@ namespace OmiyaGames.Menu
         }
 
         /// <summary>
-        /// Makes the menu visible.
-        /// </summary>
-        /// <seealso cref="Show(Action<IMenu>)"/>
-        /// <seealso cref="Hide()"/>
-        public void Show()
-        {
-            Show(null);
-        }
-
-        #region Virtual Methods
-        /// <summary>
         /// Makes the menu visible. Also provides one to assign a method to
         /// listen to the menu changing states until it's made hidden.
         /// </summary>
@@ -286,10 +281,10 @@ namespace OmiyaGames.Menu
         /// <seealso cref="Show()"/>
         /// <seealso cref="Hide()"/>
         /// <seealso cref="Action<IMenu>"/>
-        public virtual void Show(Action<IMenu> stateChangedWhileManaged)
+        public void Show(VisibilityChanged stateChangedWhileManaged = null)
         {
             // Make sure the menu is Hidden
-            if(CurrentVisibility == VisibilityState.Hidden)
+            if (CurrentVisibility == VisibilityState.Hidden)
             {
                 // Set the run-once action
                 onStateChangedWhileManaged = stateChangedWhileManaged;
@@ -304,7 +299,7 @@ namespace OmiyaGames.Menu
         /// </summary>
         /// <seealso cref="Show(Action<IMenu>)"/>
         /// <seealso cref="Hide()"/>
-        public virtual void Hide()
+        public void Hide()
         {
             // Make sure the menu is Visible
             if (CurrentVisibility == VisibilityState.Visible)
@@ -314,10 +309,18 @@ namespace OmiyaGames.Menu
             }
         }
 
+        #region Virtual Methods
+        /// <summary>
+        /// Handles the menu's visiblility changing.
+        /// Called after <code>CurrentVisibility</code> has already changed.
+        /// </summary>
+        /// <param name="from">The last state.</param>
+        /// <param name="to">The new state the menu is changing to.</param>
+        /// <seealso cref="CurrentVisibility"/>
         protected virtual void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Update the animator
-            Animator.SetInteger(StateField, (int)to);
+            Animator.SetInteger(stateField, (int)to);
 
             // Check to see if we're visible
             if (to == VisibilityState.Visible)
@@ -333,15 +336,14 @@ namespace OmiyaGames.Menu
                 UpdateMenuManager(this, from, to);
             }
 
-            // Check if there's an action associated with this dialog
-            onStateChangedWhileManaged?.Invoke(this);
-            if (to == VisibilityState.Hidden)
+            // Check if there are any events associated with this dialog
+            OnVisbibilityChanged?.Invoke(this, from, to);
+            onStateChangedWhileManaged?.Invoke(this, from, to);
+
+            // Stop listening to managed events if this menu is made to be hidden
+            if ((to == VisibilityState.Hidden) && (onStateChangedWhileManaged != null))
             {
-                // Stop listening to events if this menu is made to be hidden
-                if (onStateChangedWhileManaged != null)
-                {
-                    onStateChangedWhileManaged = null;
-                }
+                onStateChangedWhileManaged = null;
             }
         }
 
