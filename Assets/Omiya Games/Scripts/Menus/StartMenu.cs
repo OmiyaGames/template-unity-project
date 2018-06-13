@@ -69,7 +69,6 @@ namespace OmiyaGames.Menu
         Button quitButton;
 
         GameObject defaultButton = null;
-        bool isButtonLocked = false;
 
         public override Type MenuType
         {
@@ -87,37 +86,30 @@ namespace OmiyaGames.Menu
             }
         }
 
-        GameSettings Settings
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>();
-            }
-        }
-
         bool IsStartingOnFirstLevel
         {
             get
             {
                 // Use the startBehavior and game settings to return the proper flag
-                bool returnFlag = false;
                 switch(startBehavior)
                 {
                     case LevelSelectButtonBehavior.AlwaysStartFirstLevel:
                         // Always return true if we're supposed to always start the first level
-                        returnFlag = true;
-                        break;
+                        return true;
                     case LevelSelectButtonBehavior.DefaultStartFirstLevel:
                         // Return true if we haven't unlocked any levels
-                        returnFlag = (Settings.NumLevelsUnlocked <= Settings.DefaultNumLevelsUnlocked);
-                        break;
+                        return (Settings.NumLevelsUnlocked <= Settings.DefaultNumLevelsUnlocked);
+                    default:
+                        return false;
                 }
-                return returnFlag;
             }
         }
 
-        void Start()
+        protected override void OnSetup()
         {
+            // Call the base method
+            base.OnSetup();
+
             // Check if we should remove the quit button (you can't quit out of a webplayer)
             if (Singleton.Instance.IsWebApp == true)
             {
@@ -125,124 +117,133 @@ namespace OmiyaGames.Menu
                 quitButton.gameObject.SetActive(false);
             }
 
-            // Select the level select button by default
-            defaultButton = levelSelectButton.gameObject;
-            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
+            // Setup the start button
+            if(IsStartingOnFirstLevel == true)
+            {
+                // Update which button to activate
+                startButton.gameObject.SetActive(true);
+                levelSelectButton.gameObject.SetActive(false);
 
-            // Update Select
-            startButton.gameObject.SetActive(IsStartingOnFirstLevel);
-            levelSelectButton.gameObject.SetActive(IsStartingOnFirstLevel == false);
+                // Select the start button by default
+                defaultButton = startButton.gameObject;
+            }
+            else
+            {
+                // Update which button to activate
+                startButton.gameObject.SetActive(false);
+                levelSelectButton.gameObject.SetActive(true);
+
+                // Select the level select button by default
+                defaultButton = levelSelectButton.gameObject;
+            }
+
+            // Setup default button
+            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
         }
 
         #region Button Events
         public void OnStartClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // Load the first level automatically
-                Singleton.Get<SceneTransitionManager>().LoadNextLevel();
+                SceneChanger.LoadNextLevel();
 
                 // Indicate button is clicked
                 defaultButton = startButton.gameObject;
-                isButtonLocked = true;
+
+                // Since we're changing scenes, forcefully prevent
+                // the other buttons from listening to the events.
+                IsListeningToEvents = false;
             }
         }
 
         public void OnLevelSelectClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // Open the Level Select menu
                 Manager.Show<LevelSelectMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = levelSelectButton.gameObject;
-                isButtonLocked = true;
             }
         }
 
         public void OnOptionsClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // Open the options menu
                 Manager.Show<OptionsListMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = optionsButton.gameObject;
-                isButtonLocked = true;
             }
         }
 
         public void OnCreditsClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // Transition to the credits
-                Singleton.Get<SceneTransitionManager>().LoadScene(Singleton.Get<SceneTransitionManager>().Credits);
-
-                // Change the menu to stand by
-                CurrentState = State.StandBy;
+                SceneChanger.LoadScene(SceneChanger.Credits);
 
                 // Indicate we've clicked on a button
                 defaultButton = creditsButton.gameObject;
-                isButtonLocked = true;
-            }
-        }
 
-        public void OnQuitClicked()
-        {
-            if (isButtonLocked == false)
-            {
-                // Quit the application
-                Application.Quit();
-
-                // Leave the menu as-is
-                // CurrentState = State.StandBy;
-
-                // Indicate we've clicked on a button
-                defaultButton = quitButton.gameObject;
-                isButtonLocked = true;
+                // Since we're changing scenes, forcefully prevent
+                // the other buttons from listening to the events.
+                IsListeningToEvents = false;
             }
         }
 
         public void OnHowToPlayClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // Open the how to play menu
                 Manager.Show<HowToPlayMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = howToPlayButton.gameObject;
-                isButtonLocked = true;
             }
         }
 
         public void OnHighScoresClicked()
         {
-            if (isButtonLocked == false)
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
             {
                 // FIXME: Open the high scores menu
                 //Manager.Show<HighScoresMenu>();
 
                 // Indicate we've clicked on a button
                 defaultButton = highScoresButton.gameObject;
-                isButtonLocked = true;
+            }
+        }
+
+        public void OnQuitClicked()
+        {
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
+            {
+                // Quit the application
+                Application.Quit();
+
+                // Indicate we've clicked on a button
+                defaultButton = quitButton.gameObject;
+
+                // Since we're closing the application, forcefully prevent
+                // the other buttons from listening to the events.
+                IsListeningToEvents = false;
             }
         }
         #endregion
-
-        protected override void OnStateChanged(State from, State to)
-        {
-            // Call the base method
-            base.OnStateChanged(from, to);
-
-            // If this menu is visible again, release the button lock
-            if(to == State.Visible)
-            {
-                isButtonLocked = false;
-            }
-        }
     }
 }

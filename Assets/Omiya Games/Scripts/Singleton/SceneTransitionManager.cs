@@ -50,6 +50,22 @@ namespace OmiyaGames
         public event Action<IMenu> OnSceneTransitionOutStart;
         public event Action<IMenu> OnSceneTransitionOutEnd;
 
+        public enum TransitionState
+        {
+            /// <summary>
+            /// Not transitioning to a different scene.
+            /// </summary>
+            None,
+            /// <summary>
+            /// Transitioning into the current scene.
+            /// </summary>
+            TransitioningIn,
+            /// <summary>
+            /// Transitioning out of the current scene.
+            /// </summary>
+            TransitioningOut
+        }
+
         // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
@@ -58,10 +74,13 @@ namespace OmiyaGames
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
+        // FIXME: remove the cursor properties from the inspector on this scene info
         [SerializeField]
         SceneInfo splash;
+        // FIXME: remove the cursor properties from the inspector on this scene info
         [SerializeField]
         SceneInfo mainMenu;
+        // FIXME: remove the cursor properties from the inspector on this scene info
         [SerializeField]
         SceneInfo credits;
         [SerializeField]
@@ -87,6 +106,12 @@ namespace OmiyaGames
                 Cursor.visible = (value != CursorLockMode.Locked);
             }
         }
+
+        public TransitionState State
+        {
+            get;
+            private set;
+        } = TransitionState.None;
 
         public SceneInfo LastScene
         {
@@ -134,6 +159,7 @@ namespace OmiyaGames
             }
         }
 
+        // TODO: may need to be renamed with the inclusion of loading screens.
         public SceneInfo CurrentScene
         {
             get
@@ -147,6 +173,7 @@ namespace OmiyaGames
             }
         }
 
+        // FIXME: poorly named.  Come up with something better, like "next upcoming scene"
         public SceneInfo NextScene
         {
             get
@@ -330,13 +357,19 @@ namespace OmiyaGames
 
         internal void TransitionIn(IMenu menu)
         {
+            // By default, indicate we're transitioining in
+            State = TransitionState.TransitioningIn;
+
             // Check to see if the argument for the next menu is provided
             SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
             if(transitionMenu == null)
             {
-                // If not, we're not transitioning, so run both transition-out events at the same time
+                // If not, we're not transitioning, so run both transition-in events at the same time
                 OnSceneTransitionInStart?.Invoke(menu);
                 OnSceneTransitionInEnd?.Invoke(menu);
+
+                // Indicate we're done transitioning
+                State = TransitionState.None;
             }
             else
             {
@@ -350,12 +383,18 @@ namespace OmiyaGames
                 {
                     // If transitioning ended, run the transition-out end event
                     OnSceneTransitionInEnd?.Invoke(menu);
+
+                    // Indicate we're done transitioning
+                    State = TransitionState.None;
                 }
             }
         }
 
         void TransitionOut(IMenu menu)
         {
+            // Indicate we're transitioning out of the current scene
+            State = TransitionState.TransitioningOut;
+
             // Check to see if the next scene name is provided
             if (sceneToLoad != null)
             {

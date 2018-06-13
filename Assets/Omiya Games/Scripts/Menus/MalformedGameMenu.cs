@@ -141,7 +141,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        private IEnumerator Start()
+        IEnumerator Start()
         {
             // Update build statue
             BuildState = Reason.None;
@@ -161,10 +161,10 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override void Show(Action<IMenu> stateChanged)
+        protected override void OnSetup()
         {
-            // Call base function
-            base.Show(stateChanged);
+            // Call base method
+            base.OnSetup();
 
             // Update options text
             optionsMessage.SetArguments(Singleton.Instance.WebsiteLinkShortened);

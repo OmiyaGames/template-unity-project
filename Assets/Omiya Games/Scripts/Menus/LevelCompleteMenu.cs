@@ -50,48 +50,38 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public SceneTransitionManager TransitionManager
+        protected override void OnSetup()
         {
-            get
-            {
-                return Singleton.Get<SceneTransitionManager>();
-            }
-        }
-
-        public GameSettings Settings
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>();
-            }
-        }
-
-        protected override void Start()
-        {
-            base.Start();
+            // Call base method
+            base.OnSetup();
 
             // Check if we need to disable the next level button
-            if ((defaultButton != null) && (TransitionManager.NextScene == null))
+            if ((defaultButton != null) && (SceneChanger.NextScene == null))
             {
                 defaultButton.interactable = false;
             }
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
-            // Call base function
-            base.Show(stateChanged);
+            // Call base method
+            base.OnStateChanged(from, to);
 
-            // Check if we need to unlock the next level
-            TransitionManager.UpdateUnlockedLevels();
+            // Check if we're making this menu visible
+            if(to == VisibilityState.Visible)
+            {
+                // Check if we need to unlock the next level
+                SceneChanger.UpdateUnlockedLevels();
+            }
         }
 
         public void OnNextLevelClicked()
         {
-            Hide();
-
-            // Transition to the current level
-            TransitionManager.LoadNextLevel();
+            if(IsListeningToEvents == true)
+            {
+                // Transition to the current level
+                SceneChanger.LoadNextLevel();
+            }
         }
     }
 }

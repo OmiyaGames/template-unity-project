@@ -60,7 +60,7 @@ namespace OmiyaGames.Menu
             Singleton.Get<SceneTransitionManager>().LoadScene(Singleton.Get<SceneTransitionManager>().Credits);
 
             // Change the menu to stand by
-            CurrentState = State.StandBy;
+            CurrentVisibility = VisibilityState.StandBy;
         }
     }
 }

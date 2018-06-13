@@ -47,9 +47,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         Button backButton;
 
-        bool isButtonLocked = false;
         ListButtonScript[] allLevelButtons = null;
-        GameObject lastUnlockedButton = null;
 
         public override Type MenuType
         {
@@ -63,39 +61,46 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return lastUnlockedButton;
+                GameObject returnObject = backButton.gameObject;
+                if((allLevelButtons != null) && (allLevelButtons.Length > 0))
+                {
+                    // Parse the level button array list in reverse direction
+                    for(int index = (allLevelButtons.Length - 1); index >= 0; --index)
+                    {
+                        // Check if this button is interactable
+                        if((allLevelButtons[index] != null) && (allLevelButtons[index].Button != null) && (allLevelButtons[index].Button.IsInteractable() == true))
+                        {
+                            returnObject = allLevelButtons[index].gameObject;
+                            break;
+                        }
+                    }
+                }
+                return returnObject;
             }
         }
 
-        void Start()
+        protected override void OnSetup()
         {
+            // Call base method
+            base.OnSetup();
+
             // Setup all buttons
             allLevelButtons = SetupLevelButtons(levelButtonToDuplicate);
 
             // Update button states
-            lastUnlockedButton = SetButtonsEnabled(true);
+            SetButtonsEnabled(true);
         }
 
         #region Button Events
         public void OnLevelClicked(SceneInfo level)
         {
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
-                Singleton.Get<SceneTransitionManager>().LoadScene(level);
+                SceneChanger.LoadScene(level);
 
-                // Indicate button is clicked
-                isButtonLocked = true;
-            }
-        }
-
-        public void OnBackClicked()
-        {
-            if (isButtonLocked == false)
-            {
-                CurrentState = State.Hidden;
-
-                // Indicate button is clicked
-                isButtonLocked = true;
+                // Since we're changing scenes, forcefully prevent
+                // the other buttons from listening to the events.
+                IsListeningToEvents = false;
             }
         }
         #endregion
@@ -124,16 +129,10 @@ namespace OmiyaGames.Menu
             return returnButton;
         }
 
-        protected override void OnStateChanged(State from, State to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
-
-            // If this menu is visible again, release the button lock
-            if (to == State.Visible)
-            {
-                isButtonLocked = false;
-            }
         }
 
         #region Helper Methods
@@ -209,19 +208,6 @@ namespace OmiyaGames.Menu
             }
             newButton.name = scene.DisplayName.TranslationKey;
         }
-
-        // void SetupButtonNavigation(Button newButton, Button lastButton)
-        // {
-        //     // Update the new button to navigate up to the last button
-        //     Navigation buttonNavigation = newButton.navigation;
-        //     buttonNavigation.selectOnUp = lastButton;
-        //     newButton.navigation = buttonNavigation;
-
-        //     // Update the last button to navigate down to the new button
-        //     buttonNavigation = lastButton.navigation;
-        //     buttonNavigation.selectOnDown = newButton;
-        //     lastButton.navigation = buttonNavigation;
-        // }
         #endregion
     }
 }

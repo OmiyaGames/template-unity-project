@@ -41,7 +41,8 @@ namespace OmiyaGames.Menu
     public abstract class IMenu : MonoBehaviour
     {
         public delegate void VisibilityChanged(IMenu source, VisibilityState from, VisibilityState to);
-        public event VisibilityChanged OnVisbibilityChanged;
+        public event VisibilityChanged OnBeforeVisbibilityChanged;
+        public event VisibilityChanged OnAfterVisbibilityChanged;
 
         public enum SetupState
         {
@@ -146,16 +147,28 @@ namespace OmiyaGames.Menu
 
         /// <summary>
         /// Indicates whether the Menu should be listening to the events on its own UI elements or not.
+        /// Note the getter will check multiple flags first before returning the actual state.
         /// </summary>
         /// <remarks>
-        /// It is up to the menu script itself to listen and monitor how to react to this flag changing.</remarks>
+        /// It is up to the menu script itself to listen and monitor how to react to this flag changing.
+        /// </remarks>
         public bool IsListeningToEvents
         {
             get
             {
+                // By default, return false
                 bool returnFlag = false;
-                if ((CurrentSetupState != SetupState.Ready) && (CurrentVisibility == VisibilityState.Visible))
+
+                // Make sure the menu is setup
+                if ((CurrentSetupState != SetupState.Ready)
+
+                    // Then check if this menu is actually visible
+                    && (CurrentVisibility == VisibilityState.Visible)
+
+                    // Finally, make sure we're not in the middle of transitioing to or from a new scene
+                    && (SceneChanger.State == SceneTransitionManager.TransitionState.None))
                 {
+                    // Return the current listening state
                     returnFlag = isListeningToEvents;
                 }
                 return returnFlag;
@@ -207,28 +220,21 @@ namespace OmiyaGames.Menu
             }
             internal set
             {
-                // Prevent the state from changing if it's assigned to the incorrect menu
-                if (value == VisibilityState.StandBy)
-                {
-                    if (MenuType == Type.UnmanagedMenu)
-                    {
-                        return;
-                    }
-                    else if (currentState != VisibilityState.Visible)
-                    {
-                        return;
-                    }
-                }
-
                 // Make sure the state is actually changing
-                if (currentState != value)
+                if ((currentState != value) && (IsChangeInVisibilityValid(this, currentState, value) == true))
                 {
+                    // Run the before event
+                    OnBeforeVisbibilityChanged?.Invoke(this, currentState, value);
+
                     // Grab the before and after state
                     VisibilityState lastState = currentState;
                     currentState = value;
 
                     // Run the event indicating the state changed
                     OnStateChanged(lastState, currentState);
+
+                    // Run the after event
+                    OnAfterVisbibilityChanged?.Invoke(this, lastState, currentState);
                 }
             }
         }
@@ -309,7 +315,6 @@ namespace OmiyaGames.Menu
             }
         }
 
-        #region Virtual Methods
         /// <summary>
         /// Handles the menu's visiblility changing.
         /// Called after <code>CurrentVisibility</code> has already changed.
@@ -336,11 +341,8 @@ namespace OmiyaGames.Menu
                 UpdateMenuManager(this, from, to);
             }
 
-            // Check if there are any events associated with this dialog
-            OnVisbibilityChanged?.Invoke(this, from, to);
-            onStateChangedWhileManaged?.Invoke(this, from, to);
-
             // Stop listening to managed events if this menu is made to be hidden
+            onStateChangedWhileManaged?.Invoke(this, from, to);
             if ((to == VisibilityState.Hidden) && (onStateChangedWhileManaged != null))
             {
                 onStateChangedWhileManaged = null;
@@ -354,7 +356,6 @@ namespace OmiyaGames.Menu
         {
             // Do nothing for now.
         }
-        #endregion
 
         #region Helper Methods
         void OnVisibilityChangedToVisible()
@@ -399,6 +400,32 @@ namespace OmiyaGames.Menu
                     Manager.PopFromManagedStack();
                 }
             }
+        }
+
+        static bool IsChangeInVisibilityValid(IMenu menu, VisibilityState from, VisibilityState to)
+        {
+            // By default, return false
+            bool returnFlag = false;
+
+            // Check argument "from" value
+            switch(from)
+            {
+                case VisibilityState.Hidden:
+                case VisibilityState.StandBy:
+                    // The only valid state from hidden or standby is Visible
+                    returnFlag = (to == VisibilityState.Visible);
+                    break;
+                case VisibilityState.Visible:
+                    // By default, visible can transition to all states.
+                    returnFlag = true;
+                    if (to == VisibilityState.StandBy)
+                    {
+                        // Unmanaged menus cannot be set to standby
+                        returnFlag = (menu.MenuType != Type.UnmanagedMenu);
+                    }
+                    break;
+            }
+            return returnFlag;
         }
         #endregion
     }

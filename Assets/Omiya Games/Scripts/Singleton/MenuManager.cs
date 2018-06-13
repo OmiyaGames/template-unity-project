@@ -159,7 +159,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        SceneTransitionManager TransitionManager
+        SceneTransitionManager SceneChanger
         {
             get
             {
@@ -196,41 +196,46 @@ namespace OmiyaGames.Menu
             if (transitionMenu == null)
             {
                 // If not, run the scene manager's transition-in events immediately
-                TransitionManager.TransitionIn(null);
+                SceneChanger.TransitionIn(null);
             }
             else
             {
                 // If so, run the transition menu's transition-in animation
-                transitionMenu.Hide(TransitionManager.TransitionIn);
+                transitionMenu.Hide(SceneChanger.TransitionIn);
             }
         }
 
+        // FIXME: think real hard here, do we *really* need these?
         public void SetLabelTextToReturnToMenu(TranslatedText label)
         {
             if ((label != null) && (string.IsNullOrEmpty(returnToTextTemplateTranslationKey) == false))
             {
-                label.SetTranslationKey(returnToTextTemplateTranslationKey, TransitionManager.MainMenu.DisplayName);
+                label.SetTranslationKey(returnToTextTemplateTranslationKey, SceneChanger.MainMenu.DisplayName);
             }
         }
 
+        // FIXME: think real hard here, do we *really* need these?
         public void SetLabelTextToRestartCurrentScene(TranslatedText label)
         {
             SetLabelTextTo(label, restartTextTemplateTranslationKey);
         }
 
+        // FIXME: think real hard here, do we *really* need these?
         public void SetLabelTextToCompletedCurrentScene(TranslatedText label)
         {
             SetLabelTextTo(label, completeTextTemplateTranslationKey);
         }
 
+        // FIXME: think real hard here, do we *really* need these?
         public void SetLabelTextToFailedCurrentScene(TranslatedText label)
         {
             SetLabelTextTo(label, failedTextTemplateTranslationKey);
         }
 
+        // FIXME: think real hard here, do we *really* need these?
         public void SetLabelTextToNextScene(TranslatedText label)
         {
-            SetLabelTextTo(label, nextTextTemplateTranslationKey, TransitionManager.NextScene);
+            SetLabelTextTo(label, nextTextTemplateTranslationKey, SceneChanger.NextScene);
         }
 
         public MENU GetMenu<MENU>() where MENU : IMenu
@@ -323,10 +328,10 @@ namespace OmiyaGames.Menu
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentVisibility = IMenu.VisibilityState.Visible;
                 }
-                else if (TransitionManager.CurrentScene != null)
+                else if (SceneChanger.CurrentScene != null)
                 {
                     // Lock the cursor to what the scene is set to
-                    SceneTransitionManager.CursorMode = TransitionManager.CurrentScene.LockMode;
+                    SceneTransitionManager.CursorMode = SceneChanger.CurrentScene.LockMode;
                 }
 
                 // Unselect the highlighted item
@@ -356,14 +361,16 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
+        // FIXME: Consider making static public
         void SetLabelTextTo(TranslatedText label, string templateKey)
         {
             if ((label != null) && (string.IsNullOrEmpty(templateKey) == false))
             {
-                SetLabelTextTo(label, templateKey, TransitionManager.CurrentScene);
+                SetLabelTextTo(label, templateKey, SceneChanger.CurrentScene);
             }
         }
 
+        // FIXME: Consider making static public
         void SetLabelTextTo(TranslatedText label, string templateKey, SceneInfo scene)
         {
             if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (scene != null))

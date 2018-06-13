@@ -82,9 +82,9 @@ namespace OmiyaGames.Menu
             get
             {
                 float returnHeight = -1f;
-                if((CurrentState != State.Hidden) && (panel.gameObject.activeInHierarchy == true))
+                if((CurrentVisibility != VisibilityState.Hidden) && (panel.gameObject.activeInHierarchy == true))
                 {
-                    if(CurrentState == State.Visible)
+                    if(CurrentVisibility == VisibilityState.Visible)
                     {
                         returnHeight = panel.sizeDelta.y * highlightStateYScale;
                     }
@@ -136,19 +136,19 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return (CurrentState == State.Visible);
+                return (CurrentVisibility == VisibilityState.Visible);
             }
             set
             {
-                if(CurrentState != State.Hidden)
+                if(CurrentVisibility != VisibilityState.Hidden)
                 {
                     if(value == true)
                     {
-                        CurrentState = State.Visible;
+                        CurrentVisibility = VisibilityState.Visible;
                     }
                     else
                     {
-                        CurrentState = State.StandBy;
+                        CurrentVisibility = VisibilityState.StandBy;
                     }
                 }
             }

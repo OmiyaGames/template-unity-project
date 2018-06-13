@@ -54,9 +54,10 @@ namespace OmiyaGames.Menu
         [SerializeField]
         float endDelay = 1f;
 
+        System.Action<float> checkAnyKey = null;
         float contentSize = 0, normalizedPosition = 0;
-        System.Action<float> checkInput = null;
 
+        #region Overrides
         public override Type MenuType
         {
             get
@@ -73,57 +74,33 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected virtual void Start()
+        protected override void OnSetup()
         {
+            // Call base method
+            base.OnSetup();
+
             // Start scrolling the contents
             StartCoroutine(ScrollCredits());
         }
 
-        public override void Show(System.Action<IMenu> stateChanged)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
-            // Call base function
-            base.Show(stateChanged);
+            base.OnStateChanged(from, to);
 
-            // Unlock the cursor
-            //SceneManager.CursorMode = CursorLockMode.None;
+            // Remove the binding to Singleton's update function
+            StopListeningToUpdate();
 
-            // Check if we've previously binded to the singleton's update function
-            if (checkInput != null)
+            // Check if menu is becoming visible
+            if (to == VisibilityState.Visible)
             {
-                Singleton.Instance.OnUpdate -= checkInput;
-                checkInput = null;
-            }
-
-            // Bind to Singleton's update function
-            checkInput = new System.Action<float>(CheckForAnyKey);
-            Singleton.Instance.OnUpdate += checkInput;
-        }
-
-        public override void Hide()
-        {
-            bool wasVisible = (CurrentState == State.Visible);
-
-            // Call base function
-            base.Hide();
-
-            if (wasVisible == true)
-            {
-                // Lock the cursor to what the scene is set to
-                SceneTransitionManager manager = Singleton.Get<SceneTransitionManager>();
-                //SceneManager.CursorMode = manager.CurrentScene.LockMode;
-
-                // Unbind to Singleton's update function
-                if (checkInput != null)
-                {
-                    Singleton.Instance.OnUpdate -= checkInput;
-                    checkInput = null;
-                }
-
-                // Return to the menu
-                manager.LoadMainMenu();
+                // Bind to Singleton's update function
+                checkAnyKey = new System.Action<float>(CheckForAnyKey);
+                Singleton.Instance.OnUpdate += checkAnyKey;
             }
         }
+        #endregion
 
+        #region Helper Methods
         IEnumerator ScrollCredits()
         {
             // Wait for a bit before starting the credits
@@ -154,8 +131,26 @@ namespace OmiyaGames.Menu
         {
             if(Input.anyKeyDown == true)
             {
-                Hide();
+                // Remove the binding to Singleton's update function
+                StopListeningToUpdate();
+
+                // Return to the menu
+                SceneChanger.LoadMainMenu();
             }
         }
+
+        void StopListeningToUpdate()
+        {
+            // Check if the action is not null
+            if(checkAnyKey != null)
+            {
+                // Remove the binding to Singleton's update function
+                Singleton.Instance.OnUpdate -= checkAnyKey;
+
+                // Set the action to null
+                checkAnyKey = null;
+            }
+        }
+        #endregion
     }
 }
