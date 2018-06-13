@@ -2512,7 +2512,7 @@ GameObject:
   - component: {fileID: 114559855288346742}
   - component: {fileID: 114685326708147040}
   m_Layer: 5
-  m_Name: Mute Label
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4761,7 +4761,7 @@ GameObject:
   - component: {fileID: 114199418308359708}
   - component: {fileID: 114530002274243612}
   m_Layer: 5
-  m_Name: Percent Label
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14479,7 +14479,7 @@ GameObject:
   - component: {fileID: 114631562929159024}
   - component: {fileID: 114754265721938608}
   m_Layer: 5
-  m_Name: Percent Label
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15007,7 +15007,7 @@ GameObject:
   - component: {fileID: 114647093631244122}
   - component: {fileID: 114317231570064606}
   m_Layer: 5
-  m_Name: Mute Label
+  m_Name: Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16951,6 +16951,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224352414130780316}
   - component: {fileID: 114578510762547932}
+  - component: {fileID: 225562077947699370}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -38067,9 +38068,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16e8015a58f5d5547a0d4efddaa63371, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 1
     enableMusicControls: 1
@@ -39188,9 +39190,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650b02835b645eb40ab6513aff1e7f34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 1
     enableMusicControls: 1
@@ -39655,9 +39658,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ccea8b56e12ec04594372c9f6733937, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 1
     enableMusicControls: 1
@@ -44370,9 +44374,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afa4bd772d71ea4ba18a6e52b9e8604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 0
   titleTranslationKey: Game Title
+  scrollToDefaultUi: {fileID: 0}
   defaultButton: {fileID: 114309703644669158}
 --- !u!114 &114523864836337322
 MonoBehaviour:
@@ -46042,9 +46047,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89338b44c2ae7a04489ea7432daa6554, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 0
     enableMusicControls: 1
@@ -53179,9 +53185,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e18ca0aeac737640aa40dcdf96fc82f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 1
     enableMusicControls: 1
@@ -58904,9 +58911,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba32055210b99143a4935484c278ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 0
   titleTranslationKey: Game Title
+  scrollToDefaultUi: {fileID: 0}
   yesButton: {fileID: 114107345285290812}
   noButton: {fileID: 114150171264781174}
 --- !u!114 &114883841306360896
@@ -63224,9 +63232,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 158cbe789e485b143b0959d3e637224f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultFlags:
     enableLanguageControls: 1
     enableMusicControls: 1
@@ -75766,7 +75775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 606.8936, y: 0}
   m_SizeDelta: {x: 0, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224344077292123034
@@ -77682,7 +77691,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 606.8936, y: 0}
   m_SizeDelta: {x: 0, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224417013503417092
@@ -90339,6 +90348,17 @@ CanvasGroup:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1525425170769782}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!225 &225562077947699370
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1784625797437704}
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 1
