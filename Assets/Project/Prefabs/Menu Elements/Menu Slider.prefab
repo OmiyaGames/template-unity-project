@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224253042309727174}
   - component: {fileID: 114663760350759354}
+  - component: {fileID: 225955299626358780}
   m_Layer: 5
   m_Name: Slider
   m_TagString: Untagged
@@ -516,7 +517,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 809fec2f002c0984cbc1491868e962f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableHoverSound: 1
+  enableHoverSound: 0
   customHoverSound: {fileID: 0}
   enableClickSound: 1
   customClickSound: {fileID: 0}
@@ -819,3 +820,14 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 16, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &225955299626358780
+CanvasGroup:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1443718835987772}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
