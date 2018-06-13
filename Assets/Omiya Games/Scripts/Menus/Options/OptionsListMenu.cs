@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
+    using System;
     using Settings;
 
     ///-----------------------------------------------------------------------
@@ -168,9 +169,9 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
-        void CheckResetSavedDataConfirmation(IMenu menu)
+        void CheckResetSavedDataConfirmation(IMenu source, VisibilityState from, VisibilityState to)
         {
-            if (((ConfirmationMenu)menu).IsYesSelected == true)
+            if ((source is ConfirmationMenu) && (((ConfirmationMenu)source).IsYesSelected == true))
             {
                 // Clear settings
                 Singleton.Get<GameSettings>().ClearSettings();

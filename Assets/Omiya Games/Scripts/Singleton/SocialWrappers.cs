@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-namespace OmiyaGames
+namespace OmiyaGames.SocialOnline
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="SocialManagerWrapperClasses.cs" company="Omiya Games">
+    /// <copyright file="SocialWrappers.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games

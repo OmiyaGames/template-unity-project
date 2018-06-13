@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using OmiyaGames;
+using OmiyaGames.Audio;
 
 ///-----------------------------------------------------------------------
 /// <copyright file="BackgroundMusicChanger.cs" company="Omiya Games">

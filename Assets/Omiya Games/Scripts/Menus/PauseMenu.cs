@@ -1,4 +1,4 @@
-using UnityEngine;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menu
 {
@@ -57,7 +57,7 @@ namespace OmiyaGames.Menu
         public void OnOptionsClicked()
         {
             // Open the options dialog
-            Manager.Show<OptionsMenu>();
+            Manager.Show<OptionsListMenu>();
         }
 
         public void OnResumeClicked()

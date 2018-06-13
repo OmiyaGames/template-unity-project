@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using OmiyaGames.Scenes;
 
-namespace OmiyaGames.UI
+namespace OmiyaGames.UI.Scenes
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionManagerEditor.cs" company="Omiya Games">
