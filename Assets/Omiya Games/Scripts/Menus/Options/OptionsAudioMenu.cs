@@ -40,12 +40,9 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(SoundEffect))]
+    [DisallowMultipleComponent]
     public class OptionsAudioMenu : IMenu
     {
-        // FIXME: take out the unnecessary cruft
-        public const float MinimumDisplayedVolume = 0.01f;
-        public const float MaximumDisplayedVolume = 1f;
-
         #region Serialized Containers
         [System.Serializable]
         [System.Obsolete("Will be removed shortly")]
@@ -386,12 +383,12 @@ namespace OmiyaGames.Menu
             inSetupMode = false;
         }
 
-        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        protected override void OnStateChanged(IMenu.VisibilityState from, IMenu.VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
 
-            if ((from == State.Visible) && (to == State.Hidden))
+            if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
             {
                 // Run the last action
                 if (hideAction != null)

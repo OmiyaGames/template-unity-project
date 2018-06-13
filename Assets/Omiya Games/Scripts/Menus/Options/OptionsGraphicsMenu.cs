@@ -637,12 +637,12 @@ namespace OmiyaGames.Menu
             inSetupMode = false;
         }
 
-        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        protected override void OnStateChanged(IMenu.VisibilityState from, IMenu.VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
 
-            if ((from == State.Visible) && (to == State.Hidden))
+            if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
             {
                 // Run the last action
                 if (hideAction != null)
