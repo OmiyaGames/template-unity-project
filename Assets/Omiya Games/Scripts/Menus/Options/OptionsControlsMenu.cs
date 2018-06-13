@@ -6,7 +6,7 @@ namespace OmiyaGames.Menu
     using Settings;
 
     ///-----------------------------------------------------------------------
-    /// <copyright file="OptionsMenu.cs" company="Omiya Games">
+    /// <copyright file="OptionsControlsMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -30,19 +30,18 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
+    /// <date>6/11/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that provides options.  Currently only supports changing sound
-    /// and music volume. You can retrieve this menu from the singleton script,
+    /// Menu that provides controls options.
+    /// You can retrieve this menu from the singleton script,
     /// <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(SoundEffect))]
-    [System.Obsolete("Obsolete due to largeness in scope; retaining for references purposes.")]
-    public class OptionsMenu : IMenu
+    public class OptionsControlsMenu : IMenu
     {
+        // FIXME: take out the unnecessary cruft
         public const float MinimumDisplayedVolume = 0.01f;
         public const float MaximumDisplayedVolume = 1f;
 
@@ -556,7 +555,7 @@ namespace OmiyaGames.Menu
         SoundEffect audioCache;
         bool inSetupMode = false;
 
-        System.Action<OptionsMenu> hideAction = null;
+        System.Action<OptionsControlsMenu> hideAction = null;
 
         #region Properties
         public SoundEffect TestSoundEffect
@@ -638,12 +637,12 @@ namespace OmiyaGames.Menu
             inSetupMode = false;
         }
 
-        protected override void OnStateChanged(IMenu.State from, IMenu.State to)
+        protected override void OnStateChanged(IMenu.VisibilityState from, IMenu.VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
 
-            if ((from == State.Visible) && (to == State.Hidden))
+            if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
             {
                 // Run the last action
                 if (hideAction != null)

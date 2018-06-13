@@ -284,7 +284,7 @@ namespace OmiyaGames.Menu
                     // Change the top-most menu (if any) to stand-by
                     if (NumManagedMenus > 0)
                     {
-                        managedMenusStack.Peek().CurrentState = IMenu.State.StandBy;
+                        managedMenusStack.Peek().CurrentVisibility = IMenu.VisibilityState.StandBy;
                     }
                     else
                     {
@@ -321,7 +321,7 @@ namespace OmiyaGames.Menu
                 if (NumManagedMenus > 0)
                 {
                     // Change the top-most menu into visible
-                    managedMenusStack.Peek().CurrentState = IMenu.State.Visible;
+                    managedMenusStack.Peek().CurrentVisibility = IMenu.VisibilityState.Visible;
                 }
                 else if (TransitionManager.CurrentScene != null)
                 {
@@ -432,14 +432,14 @@ namespace OmiyaGames.Menu
                 // Attempt to grab the pause menu
                 if (PauseMenu != null)
                 {
-                    if(PauseMenu.CurrentState == IMenu.State.Hidden)
+                    if(PauseMenu.CurrentVisibility == IMenu.VisibilityState.Hidden)
                     {
                         PauseMenu.Show();
 
                         // Indicate button is clicked
                         ButtonClick.Play();
                     }
-                    else if(PauseMenu.CurrentState == IMenu.State.Visible)
+                    else if(PauseMenu.CurrentVisibility == IMenu.VisibilityState.Visible)
                     {
                         PauseMenu.Hide();
 

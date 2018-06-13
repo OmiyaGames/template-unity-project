@@ -70,13 +70,13 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        protected override void OnStateChanged(State from, State to)
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Call the base method
             base.OnStateChanged(from, to);
 
             // If this menu is visible again, release the button lock
-            if (to == State.Visible)
+            if (to == VisibilityState.Visible)
             {
                 isButtonLocked = false;
             }
