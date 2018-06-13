@@ -31,44 +31,85 @@ namespace OmiyaGames
     /// <date>6/11/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// A helper script to handle updating a label in a slider.
+    /// A helper script to handle a slider and checkbox combination.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Slider))]
-    public class LabeledSlider : MonoBehaviour
+    public class SliderCheckboxCombo : MonoBehaviour
     {
-        public event System.Action<float> OnValueChanged;
+        public event System.Action<bool> OnCheckboxUpdated;
+        public event System.Action<float> OnSliderValueUpdated;
+        public event System.Action<float> OnSliderReleaseUpdated;
 
         [SerializeField]
-        TMPro.TextMeshProUGUI label;
+        Slider slider;
+        [SerializeField]
+        Toggle checkbox;
 
-        Slider sliderCache = null;
+        [Header("Slider info")]
+        [SerializeField]
+        bool conditionToEnableSlider = false;
+        [SerializeField]
+        float defaultValue = 0;
 
+        #region Properties
         public Slider Slider
         {
             get
             {
-                if(sliderCache == null)
-                {
-                    sliderCache = GetComponent<Slider>();
-                }
-                return sliderCache;
+                return slider;
+            }
+            set
+            {
+                slider = value;
             }
         }
 
-        public static string Percent(float val)
+        public Toggle Checkbox
         {
-            return val.ToString("0%");
+            get
+            {
+                return checkbox;
+            }
+            set
+            {
+                checkbox = value;
+            }
         }
 
-        // Use this for initialization
+        public float Value
+        {
+            get
+            {
+                float returnValue = defaultValue;
+                if(Slider.IsInteractable() == true)
+                {
+                    returnValue = Slider.value;
+                }
+                return returnValue;
+            }
+        }
+        #endregion
+
+        public void Setup(float volumeNormalized, bool isMute)
+        {
+            Slider.value = volumeNormalized;
+            Checkbox.isOn = isMute;
+        }
+
+        public void OnCheckboxChanged(bool isChecked)
+        {
+            Slider.interactable = (conditionToEnableSlider == isChecked);
+            OnCheckboxUpdated?.Invoke(isChecked);
+        }
+
+        public void OnSliderReleased()
+        {
+            OnSliderReleaseUpdated?.Invoke(Slider.value);
+        }
+
         public void OnSliderValueChanged(float newValue)
         {
-            if(label != null)
-            {
-                label.SetText(Percent(newValue));
-                OnValueChanged?.Invoke(newValue);
-            }
+            OnSliderReleaseUpdated?.Invoke(newValue);
         }
     }
 }

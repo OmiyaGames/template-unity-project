@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEditor;
 
-namespace OmiyaGames
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LabeledSlider.cs" company="Omiya Games">
+    /// <copyright file="OmiyaGamesUtility.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,47 +28,33 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/11/2018</date>
+    /// <date>6/12/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// A helper script to handle updating a label in a slider.
+    /// Property drawer for <code>SupportedPlatforms</code>.
     /// </summary>
-    [DisallowMultipleComponent]
-    [RequireComponent(typeof(Slider))]
-    public class LabeledSlider : MonoBehaviour
+    /// <seealso cref="SupportedPlatforms"/>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>6/12/2018</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [CustomPropertyDrawer(typeof(SupportedPlatforms))]
+    public class SupportedPlatformsEditor : PropertyDrawer
     {
-        public event System.Action<float> OnValueChanged;
-
-        [SerializeField]
-        TMPro.TextMeshProUGUI label;
-
-        Slider sliderCache = null;
-
-        public Slider Slider
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            get
-            {
-                if(sliderCache == null)
-                {
-                    sliderCache = GetComponent<Slider>();
-                }
-                return sliderCache;
-            }
-        }
-
-        public static string Percent(float val)
-        {
-            return val.ToString("0%");
-        }
-
-        // Use this for initialization
-        public void OnSliderValueChanged(float newValue)
-        {
-            if(label != null)
-            {
-                label.SetText(Percent(newValue));
-                OnValueChanged?.Invoke(newValue);
-            }
+            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsHelper.AllPlatformNames);
         }
     }
 }
