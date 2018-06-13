@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
+using OmiyaGames.Settings;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="AudioMixerReference.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -257,12 +256,12 @@ namespace OmiyaGames
             }
         }
 
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             // Do nothing
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
             // Do nothing
         }

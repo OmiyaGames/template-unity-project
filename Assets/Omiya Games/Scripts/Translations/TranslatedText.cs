@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="AudioFinder.cs" company="Omiya Games">

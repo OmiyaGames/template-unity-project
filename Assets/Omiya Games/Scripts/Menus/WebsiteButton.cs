@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -36,11 +37,13 @@ namespace OmiyaGames.Menu
     public class WebsiteButton : MonoBehaviour
     {
         [SerializeField]
-        Button button;
+        string url;
         [SerializeField]
-        TranslatedText label;
+        Button button;
 
-        string redirectTo;
+        [Header("Optional")]
+        [SerializeField]
+        TranslatedTextMeshPro label;
 
         public Button ButtonComponent
         {
@@ -50,7 +53,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public TranslatedText LabelComponent
+        public TranslatedTextMeshPro LabelComponent
         {
             get
             {
@@ -58,21 +61,29 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public string RedirectTo
+        public string Url
         {
             get
             {
-                return redirectTo;
+                return url;
             }
             set
             {
-                redirectTo = value;
+                url = value;
             }
         }
 
         public void OnClick()
         {
-            Application.OpenURL(RedirectTo);
+            OnClick(Url);
+        }
+
+        public void OnClick(string redirectTo)
+        {
+            if (string.IsNullOrEmpty(redirectTo) == false)
+            {
+                Application.OpenURL(redirectTo);
+            }
         }
     }
 }

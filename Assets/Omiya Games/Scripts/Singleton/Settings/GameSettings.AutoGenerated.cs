@@ -3,7 +3,7 @@
     /// <summary>
     /// This code is auto-generated. All changes will be overwritten!
     /// </summary>
-    public partial class GameSettings : ISingletonScript
+    public partial class GameSettings : Global.ISingletonScript
     {
         #region Private Arrays
         /// <summary>

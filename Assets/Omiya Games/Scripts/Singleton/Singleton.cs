@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using OmiyaGames.Global;
 
 namespace OmiyaGames
 {
@@ -283,15 +284,15 @@ namespace OmiyaGames
                 for (index = 0; index < allSingletonScriptsCache.Length; ++index)
                 {
                     // Run singleton awake
-                    allSingletonScriptsCache[index].SingletonInstance = Instance;
-                    allSingletonScriptsCache[index].SingletonAwake(Instance);
+                    allSingletonScriptsCache[index].IsPartOfSingleton = true;
+                    allSingletonScriptsCache[index].SingletonAwake();
                 }
             }
 
             // Go through every ISingletonScript, and run scene awake
             for (index = 0; index < allSingletonScriptsCache.Length; ++index)
             {
-                allSingletonScriptsCache[index].SceneAwake(Instance);
+                allSingletonScriptsCache[index].SceneAwake();
             }
         }
     }

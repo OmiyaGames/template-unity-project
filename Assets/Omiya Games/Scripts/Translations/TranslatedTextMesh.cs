@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="AudioFinder.cs" company="Omiya Games">
@@ -39,7 +39,6 @@ namespace OmiyaGames
     public class TranslatedTextMesh : MonoBehaviour
     {
         static readonly HashSet<TranslatedTextMesh> allTranslationScripts = new HashSet<TranslatedTextMesh>();
-        static TranslationManager parser = null;
 
         public static IEnumerable<TranslatedTextMesh> AllTranslationScripts
         {
@@ -53,11 +52,7 @@ namespace OmiyaGames
         {
             get
             {
-                if (parser == null)
-                {
-                    parser = Singleton.Get<TranslationManager>();
-                }
-                return parser;
+                return Singleton.Get<TranslationManager>();
             }
         }
 

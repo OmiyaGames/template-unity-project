@@ -36,7 +36,7 @@ namespace OmiyaGames.Settings
     /// </summary>
     /// <seealso cref="Singleton"/>
     /// <seealso cref="ISettingsRecorder"/>
-    public partial class GameSettings : ISingletonScript
+    public partial class GameSettings : Global.ISingletonScript
     {
         public enum AppStatus
         {
@@ -54,11 +54,16 @@ namespace OmiyaGames.Settings
 
         public const string VersionKey = "AppVersion";
         public static readonly ISettingsRecorder DefaultSettings = new PlayerPrefsSettingsRecorder();
-        private AppStatus status = AppStatus.Replaying;
         private bool isSettingsRetrieved = false;
 
 
         #region Properties
+        public AppStatus Status
+        {
+            get;
+            private set;
+        } = AppStatus.Replaying;
+
         public static UserScope DefaultLeaderboardUserScope
         {
             get
@@ -68,14 +73,6 @@ namespace OmiyaGames.Settings
 #else
                 return UserScope.Global;
 #endif
-            }
-        }
-
-        public AppStatus Status
-        {
-            get
-            {
-                return status;
             }
         }
 
@@ -89,13 +86,13 @@ namespace OmiyaGames.Settings
         #endregion
 
         #region Singleton Overrides
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             // Load settings
             RetrieveFromSettings();
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
         }
         #endregion
@@ -156,14 +153,14 @@ namespace OmiyaGames.Settings
             if (runEvent == true)
             {
                 // Update the app status
-                status = AppStatus.Replaying;
+                Status = AppStatus.Replaying;
                 if (currentVersion < 0)
                 {
-                    status = AppStatus.FirstTimeOpened;
+                    Status = AppStatus.FirstTimeOpened;
                 }
                 else if (currentVersion < AppVersion)
                 {
-                    status = AppStatus.RecentlyUpdated;
+                    Status = AppStatus.RecentlyUpdated;
                 }
 
                 // Run events

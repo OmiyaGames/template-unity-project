@@ -309,7 +309,7 @@ namespace OmiyaGames
             return returnDomain;
         }
 
-        public static string BuildTestMessage(StringBuilder builder, WebLocationChecker webChecker)
+        public static string BuildTestMessage(StringBuilder builder, Global.WebLocationChecker webChecker)
         {
             builder.AppendLine("Information according to the WebLocationChecker:");
 

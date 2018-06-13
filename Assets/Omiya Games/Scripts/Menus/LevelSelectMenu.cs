@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Settings;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelSelectMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)

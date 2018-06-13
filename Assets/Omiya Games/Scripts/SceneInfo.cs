@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames
 {
