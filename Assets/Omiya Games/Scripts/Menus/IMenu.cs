@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
@@ -41,10 +42,31 @@ namespace OmiyaGames.Menu
     {
         public const string StateField = "State";
 
-        public enum State
+        public enum SetupState
         {
-            Hidden  = 0,
+            NotSetup,
+            InProgress,
+            Ready
+        }
+
+        public enum VisibilityState
+        {
+            /// <summary>
+            /// Indicates menu is not show on-screen.
+            /// </summary>
+            Hidden = 0,
+            /// <summary>
+            /// Indicates menu is shown on-screen.
+            /// If the menu is managed, indicates its been pushed onto the
+            /// top of <code>MenuManager</code>'s stack.
+            /// </summary>
             Visible = 1,
+            /// <summary>
+            /// Indicates menu is not show on-screen.
+            /// State only happens to managed menus.
+            /// Indicates the menu has been pushed down from the
+            /// top of <code>MenuManager</code>'s stack.
+            /// </summary>
             StandBy = 2
         }
 
@@ -77,9 +99,10 @@ namespace OmiyaGames.Menu
         [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
         string titleTranslationKey = "";
 
-        State currentState = State.Hidden;
+        VisibilityState currentState = VisibilityState.Hidden;
         Animator animatorCache = null;
-        protected System.Action<IMenu> onStateChanged = null;
+        bool isListeningToEvents = true;
+        protected Action<IMenu> onStateChangedWhileManaged = null;
 
         #region Properties
         protected static MenuManager Manager
@@ -87,6 +110,56 @@ namespace OmiyaGames.Menu
             get
             {
                 return Singleton.Get<MenuManager>();
+            }
+        }
+
+        protected static Settings.GameSettings Settings
+        {
+            get
+            {
+                return Singleton.Get<Settings.GameSettings>();
+            }
+        }
+
+        protected static SceneTransitionManager SceneChanger
+        {
+            get
+            {
+                return Singleton.Get<SceneTransitionManager>();
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the UI is setup or not.
+        /// </summary>
+        public SetupState CurrentSetupState
+        {
+            get;
+            private set;
+        } = SetupState.NotSetup;
+
+        /// <summary>
+        /// Indicates whether the Menu should be listening to the events on its own UI elements or not.
+        /// </summary>
+        /// <remarks>
+        /// It is up to the menu script itself to listen and monitor how to react to this flag changing.</remarks>
+        public bool IsListeningToEvents
+        {
+            get
+            {
+                bool returnFlag = false;
+                if ((CurrentSetupState != SetupState.Ready) && (CurrentVisibility == VisibilityState.Visible))
+                {
+                    returnFlag = isListeningToEvents;
+                }
+                return returnFlag;
+            }
+            protected set
+            {
+                if (isListeningToEvents != value)
+                {
+                    isListeningToEvents = value;
+                }
             }
         }
 
@@ -114,7 +187,13 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public State CurrentState
+        /// <summary>
+        /// The visibility of this menu.
+        /// </summary>
+        /// <seealso cref="Show(Action<IMenu>)"/>
+        /// <seealso cref="Show()"/>
+        /// <seealso cref="Hide()"/>
+        public VisibilityState CurrentVisibility
         {
             get
             {
@@ -122,10 +201,24 @@ namespace OmiyaGames.Menu
             }
             internal set
             {
+                // Prevent the state from changing if it's assigned to the incorrect menu
+                if (value == VisibilityState.StandBy)
+                {
+                    if (MenuType == Type.UnmanagedMenu)
+                    {
+                        return;
+                    }
+                    else if (currentState != VisibilityState.Visible)
+                    {
+                        return;
+                    }
+                }
+
+                // Make sure the state is actually changing
                 if (currentState != value)
                 {
                     // Grab the before and after state
-                    State lastState = currentState;
+                    VisibilityState lastState = currentState;
                     currentState = value;
 
                     // Run the event indicating the state changed
@@ -161,71 +254,150 @@ namespace OmiyaGames.Menu
             }
         }
 
+        /// <summary>
+        /// Sets up the Menu.
+        /// </summary>
+        public void Setup()
+        {
+            // Setup controls
+            CurrentSetupState = SetupState.InProgress;
+
+            // Setup the rest of the controls
+            OnSetup();
+            CurrentSetupState = SetupState.Ready;
+        }
+
+        /// <summary>
+        /// Makes the menu visible.
+        /// </summary>
+        /// <seealso cref="Show(Action<IMenu>)"/>
+        /// <seealso cref="Hide()"/>
         public void Show()
         {
             Show(null);
         }
 
-        public virtual void Show(System.Action<IMenu> stateChanged)
+        #region Virtual Methods
+        /// <summary>
+        /// Makes the menu visible. Also provides one to assign a method to
+        /// listen to the menu changing states until it's made hidden.
+        /// </summary>
+        /// <param name="stateChangedWhileManaged"><code>Action</code></param>
+        /// <seealso cref="Show()"/>
+        /// <seealso cref="Hide()"/>
+        /// <seealso cref="Action<IMenu>"/>
+        public virtual void Show(Action<IMenu> stateChangedWhileManaged)
         {
-            onStateChanged = stateChanged;
-            CurrentState = State.Visible;
-        }
-
-        public virtual void Hide()
-        {
-            CurrentState = State.Hidden;
-            if(onStateChanged != null)
+            // Make sure the menu is Hidden
+            if(CurrentVisibility == VisibilityState.Hidden)
             {
-                onStateChanged = null;
+                // Set the run-once action
+                onStateChangedWhileManaged = stateChangedWhileManaged;
+
+                // Make the menu visible
+                CurrentVisibility = VisibilityState.Visible;
             }
         }
 
-        protected virtual void OnStateChanged(State from, State to)
+        /// <summary>
+        /// Makes the menu hidden.
+        /// </summary>
+        /// <seealso cref="Show(Action<IMenu>)"/>
+        /// <seealso cref="Hide()"/>
+        public virtual void Hide()
+        {
+            // Make sure the menu is Visible
+            if (CurrentVisibility == VisibilityState.Visible)
+            {
+                // Make the menu hidden
+                CurrentVisibility = VisibilityState.Hidden;
+            }
+        }
+
+        protected virtual void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Update the animator
             Animator.SetInteger(StateField, (int)to);
 
-            // Grab the menu manager
-            MenuManager manager = Singleton.Get<MenuManager>();
-
             // Check to see if we're visible
-            if((to == State.Visible) && (DefaultUi != null))
+            if (to == VisibilityState.Visible)
+            {
+                // Run setup when made visible
+                OnVisibilityChangedToVisible();
+            }
+
+            // Check if this is managed
+            if (MenuType != Type.UnmanagedMenu)
+            {
+                // Update the menu manager
+                UpdateMenuManager(this, from, to);
+            }
+
+            // Check if there's an action associated with this dialog
+            onStateChangedWhileManaged?.Invoke(this);
+            if (to == VisibilityState.Hidden)
+            {
+                // Stop listening to events if this menu is made to be hidden
+                if (onStateChangedWhileManaged != null)
+                {
+                    onStateChangedWhileManaged = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles setting up the UI.
+        /// </summary>
+        protected virtual void OnSetup()
+        {
+            // Do nothing for now.
+        }
+        #endregion
+
+        #region Helper Methods
+        void OnVisibilityChangedToVisible()
+        {
+            // Check if we've been setup
+            if (CurrentSetupState == SetupState.NotSetup)
+            {
+                // If not, start setting up
+                Setup();
+            }
+
+            // Check if there's a default UI
+            if (DefaultUi != null)
             {
                 // If so, update the menu manager to select the default UI
-                manager.SelectGuiGameObject(DefaultUi);
+                Manager.SelectGuiGameObject(DefaultUi);
 
                 // Check if we have scrolling to be concerned about
-                if(ScrollToDefaultUi != null)
+                if (ScrollToDefaultUi != null)
                 {
                     // FIXME: scroll to the default UI
                     //ScrollToDefaultUi.scr
                 }
             }
+        }
 
-            // Check if this is managed
-            if(MenuType != Type.UnmanagedMenu)
+        static void UpdateMenuManager(IMenu menu, VisibilityState from, VisibilityState to)
+        {
+            // Check if we're becoming visible or hidden
+            if ((from == VisibilityState.Hidden) && (to == VisibilityState.Visible))
             {
-                // Check if we're becoming visible or hidden
-                if ((from == State.Hidden) && (to == State.Visible))
+                // If we're going from hidden to visible, add this menu to the managed stack
+                // This will prompt the manager to push the last menu into stand-by
+                Manager.PushToManagedStack(menu);
+            }
+            else if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
+            {
+                // If we're going from visible to hidden, remove this menu from the managed stack
+                // This will prompt the manager to pop the last menu into visible
+                if (Manager.LastManagedMenu == menu)
                 {
-                    // If we're going from hidden to visible, add this menu to the managed stack
-                    // This will prompt the manager to push the last menu into stand-by
-                    manager.PushToManagedStack(this);
-                }
-                else if ((from == State.Visible) && (to == State.Hidden))
-                {
-                    // If we're going from visible to hidden, remove this menu from the managed stack
-                    // This will prompt the manager to pop the last menu into visible
-                    if(manager.LastManagedMenu == this)
-                    {
-                        manager.PopFromManagedStack();
-                    }
+                    Manager.PopFromManagedStack();
                 }
             }
-
-            // Check if there's an action associated with this dialog
-            onStateChanged?.Invoke(this);
         }
+        #endregion
     }
 }
