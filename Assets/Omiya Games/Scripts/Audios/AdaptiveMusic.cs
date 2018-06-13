@@ -2,7 +2,7 @@
 using UnityEngine.Audio;
 using OmiyaGames.Global;
 
-namespace OmiyaGames
+namespace OmiyaGames.Audio
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="BackgroundMusicChanger.cs" company="Omiya Games">

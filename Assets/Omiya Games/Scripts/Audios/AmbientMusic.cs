@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Audio
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="AmbientMusic.cs" company="Omiya Games">

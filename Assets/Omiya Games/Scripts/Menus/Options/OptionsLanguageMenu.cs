@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Audio;
+using OmiyaGames.Settings;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsLanguageMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -491,7 +491,7 @@ namespace OmiyaGames.Menu
 
         [Header("Language Controls")]
         [SerializeField]
-        LanguageDropDown languageDropDown;
+        Translations.LanguageDropDown languageDropDown;
         [SerializeField]
         GameObject[] languageParents;
 

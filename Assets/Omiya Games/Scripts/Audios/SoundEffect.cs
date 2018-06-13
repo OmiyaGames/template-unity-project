@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Audio
 {
     using Settings;
 

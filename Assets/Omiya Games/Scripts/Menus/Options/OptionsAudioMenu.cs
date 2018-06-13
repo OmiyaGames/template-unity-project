@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Audio;
 
 namespace OmiyaGames.Menu
 {
@@ -400,23 +401,6 @@ namespace OmiyaGames.Menu
         }
 
         #region UI events
-        public void OnLanguageSeleced(int selectedIndex)
-        {
-            if ((inSetupMode == false) && (selectedIndex >= 0))
-            {
-                // Grab the translator
-                TranslationManager translator = Singleton.Get<TranslationManager>();
-                if ((translator != null) && (selectedIndex < translator.SupportedLanguages.Count))
-                {
-                    // Change the language
-                    translator.CurrentLanguage = translator.SupportedLanguages[selectedIndex];
-                }
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
         #region Music Group
         public void OnMusicSliderChanged(float sliderValue)
         {

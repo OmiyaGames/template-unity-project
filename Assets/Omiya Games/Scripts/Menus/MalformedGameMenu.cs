@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 using System.Collections;
-using OmiyaGames.Global;
+using OmiyaGames.Web;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu

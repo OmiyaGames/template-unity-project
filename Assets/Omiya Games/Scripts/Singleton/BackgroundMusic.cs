@@ -2,11 +2,10 @@
 using UnityEngine.Audio;
 using System.Collections;
 using System;
+using OmiyaGames.Settings;
 
-namespace OmiyaGames
+namespace OmiyaGames.Audio
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="BackgroundMusic.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -155,10 +154,7 @@ namespace OmiyaGames
                 {
                     audioMixer.BackgroundMusicVolumeNormalized = settings.MusicVolume;
                 }
-                if (OnGlobalMuteChange != null)
-                {
-                    OnGlobalMuteChange(settings.IsMusicMuted);
-                }
+                OnGlobalMuteChange?.Invoke(settings.IsMusicMuted);
             }
         }
 

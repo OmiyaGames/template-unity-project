@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
+using OmiyaGames.Global;
 using OmiyaGames.Settings;
 
-namespace OmiyaGames.Global
+namespace OmiyaGames.Audio
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="AudioMixerReference.cs" company="Omiya Games">

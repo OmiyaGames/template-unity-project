@@ -3,8 +3,10 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using OmiyaGames.Audio;
 using OmiyaGames.Global;
 using OmiyaGames.Translations;
+using OmiyaGames.Scenes;
 
 namespace OmiyaGames.Menu
 {
@@ -41,7 +43,7 @@ namespace OmiyaGames.Menu
     /// <seealso cref="IMenu"/>
     /// <seealso cref="Singleton"/>
     [RequireComponent(typeof(EventSystem))]
-    public class MenuManager : Global.ISingletonScript
+    public class MenuManager : ISingletonScript
     {
         static readonly Type[] IgnoreTypes = new Type[]
         {
@@ -188,23 +190,10 @@ namespace OmiyaGames.Menu
             managedMenusStack.Clear();
 
             // Populate typeToMenuMap dictionary
-            SceneTransitionMenu transitionMenu = null;
-            PopulateTypeToMenuDictionary(typeToMenuMap, out transitionMenu);
+            PopulateTypeToMenuDictionary(typeToMenuMap);
 
             // Attempt to find a pop-up manager
             PopUps = FindObjectOfType<PopUpManager>();
-
-            // Check to see if there was a transition menu
-            if (transitionMenu == null)
-            {
-                // If not, run the scene manager's transition-in events immediately
-                SceneChanger.TransitionIn(null);
-            }
-            else
-            {
-                // If so, run the transition menu's transition-in animation
-                transitionMenu.Hide(SceneChanger.TransitionIn);
-            }
         }
 
         // FIXME: think real hard here, do we *really* need these?
@@ -250,7 +239,7 @@ namespace OmiyaGames.Menu
             return returnMenu as MENU;
         }
 
-        public MENU Show<MENU>(Action<IMenu> action = null) where MENU : IMenu
+        public MENU Show<MENU>(IMenu.VisibilityChanged action = null) where MENU : IMenu
         {
             MENU returnMenu = GetMenu<MENU>();
             if (returnMenu != null)
@@ -381,11 +370,10 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void PopulateTypeToMenuDictionary(Dictionary<Type, IMenu> typeToMenuDictionary, out SceneTransitionMenu transitionMenu)
+        void PopulateTypeToMenuDictionary(Dictionary<Type, IMenu> typeToMenuDictionary)
         {
             // Setup variables
             int index = 0;
-            transitionMenu = null;
             typeToMenuDictionary.Clear();
 
             // Populate items to ignore into the type map
@@ -411,12 +399,6 @@ namespace OmiyaGames.Menu
                         {
                             // Add the menu
                             typeToMenuDictionary.Add(menuType, menus[index]);
-
-                            // Check if this menu is a SceneTransitionMenu
-                            if (menuType == typeof(SceneTransitionMenu))
-                            {
-                                transitionMenu = (SceneTransitionMenu)menus[index];
-                            }
                         }
 
                         // Check if this is the first displayed, managed menu
