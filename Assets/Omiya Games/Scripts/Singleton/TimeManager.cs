@@ -110,7 +110,7 @@ namespace OmiyaGames.Global
         {
             defaultTimeScale = Time.timeScale;
             timeScale = Time.timeScale;
-            instance.OnRealTimeUpdate += UpdateRealtime;
+            Singleton.Instance.OnRealTimeUpdate += UpdateRealtime;
         }
 
         internal override void SceneAwake()

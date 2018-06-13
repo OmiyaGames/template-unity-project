@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using OmiyaGames.Audio;
 using OmiyaGames.Settings;
 using OmiyaGames.Translations;
+using System;
 
 namespace OmiyaGames.Menu
 {
@@ -268,9 +269,9 @@ namespace OmiyaGames.Menu
                 get
                 {
                     bool returnFlag = false;
-                    foreach(GameObject control in controlParents)
+                    foreach (GameObject control in controlParents)
                     {
-                        if(control != null)
+                        if (control != null)
                         {
                             returnFlag = control.activeSelf;
                             break;
@@ -280,9 +281,9 @@ namespace OmiyaGames.Menu
                 }
                 set
                 {
-                    foreach(GameObject control in controlParents)
+                    foreach (GameObject control in controlParents)
                     {
-                        if(control != null)
+                        if (control != null)
                         {
                             control.SetActive(value);
                         }
@@ -406,7 +407,7 @@ namespace OmiyaGames.Menu
                 OverallSensitivity.Update(xSensitivity);
                 xAxisSensitivity.Update(xSensitivity);
                 yAxisSensitivity.Update(ySensitivity);
-                
+
                 UpdateAxisSensitivityControls();
             }
 
@@ -446,7 +447,7 @@ namespace OmiyaGames.Menu
                     UpdateAxisSensitivityControls();
                 }
             }
-            
+
             public void UpdateAxisSensitivityControls()
             {
                 if (splitAxisToggle.IsActive == false)
@@ -564,7 +565,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                if(audioCache == null)
+                if (audioCache == null)
                 {
                     audioCache = GetComponent<SoundEffect>();
                 }
@@ -607,7 +608,7 @@ namespace OmiyaGames.Menu
 #endif
             }
         }
-#endregion
+        #endregion
 
         void Start()
         {
@@ -655,14 +656,14 @@ namespace OmiyaGames.Menu
             }
         }
 
-#region UI events
+        #region UI events
         public void OnLanguageSeleced(int selectedIndex)
         {
             if ((inSetupMode == false) && (selectedIndex >= 0))
             {
                 // Grab the translator
                 TranslationManager translator = Singleton.Get<TranslationManager>();
-                if((translator != null) && (selectedIndex < translator.SupportedLanguages.Count))
+                if ((translator != null) && (selectedIndex < translator.SupportedLanguages.Count))
                 {
                     // Change the language
                     translator.CurrentLanguage = translator.SupportedLanguages[selectedIndex];
@@ -673,7 +674,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-#region Music Group
+        #region Music Group
         public void OnMusicSliderChanged(float sliderValue)
         {
             if (inSetupMode == false)
@@ -697,9 +698,9 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
-#region Sound Effects Group
+        #region Sound Effects Group
         public void OnSoundEffectsSliderChanged(float sliderValue)
         {
             if (inSetupMode == false)
@@ -708,7 +709,7 @@ namespace OmiyaGames.Menu
                 soundEffectsControls.VolumePercentLabel.text = Percent(sliderValue);
             }
         }
-        
+
         public void OnSoundEffectsSliderPointerUp()
         {
             TestSoundEffect.Play();
@@ -790,9 +791,9 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
-#region Keyboard Sensitivity
+        #region Keyboard Sensitivity
         public void OnSplitKeyboardAxisToggled(bool splitAxis)
         {
             if (inSetupMode == false)
@@ -802,7 +803,7 @@ namespace OmiyaGames.Menu
 
                 // Toggle which sliders will be showing up
                 keyboardSensitivity.UpdateAxisSensitivityControls();
-                if(splitAxis == true)
+                if (splitAxis == true)
                 {
                     keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
                     keyboardSensitivity.YAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
@@ -849,9 +850,9 @@ namespace OmiyaGames.Menu
                 keyboardSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
             }
         }
-#endregion
+        #endregion
 
-#region Keyboard Inverted
+        #region Keyboard Inverted
         public void OnInvertKeyboardXAxisToggled(bool invert)
         {
             if (inSetupMode == false)
@@ -875,9 +876,9 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
-#region Mouse Sensitivity
+        #region Mouse Sensitivity
         public void OnSplitMouseAxisToggled(bool splitAxis)
         {
             if (inSetupMode == false)
@@ -887,7 +888,7 @@ namespace OmiyaGames.Menu
 
                 // Toggle which sliders will be showing up
                 mouseSensitivity.UpdateAxisSensitivityControls();
-                if(splitAxis == true)
+                if (splitAxis == true)
                 {
                     mouseSensitivity.XAxisSensitivity.SensitivitySlider.value = mouseSensitivity.OverallSensitivity.SensitivitySlider.value;
                     mouseSensitivity.YAxisSensitivity.SensitivitySlider.value = mouseSensitivity.OverallSensitivity.SensitivitySlider.value;
@@ -935,9 +936,9 @@ namespace OmiyaGames.Menu
                 mouseSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
             }
         }
-#endregion
+        #endregion
 
-#region Mouse Inverted
+        #region Mouse Inverted
         public void OnInvertMouseXAxisToggled(bool invert)
         {
             if (inSetupMode == false)
@@ -961,9 +962,9 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
-#region Scroll Wheel
+        #region Scroll Wheel
         public void OnScrollWheelSensitivityChanged(float sliderValue)
         {
             if (inSetupMode == false)
@@ -987,12 +988,12 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
         public void OnResetSavedData()
         {
             ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
-            if(menu != null)
+            if (menu != null)
             {
                 // Display confirmation dialog
                 menu.DefaultToYes = false;
@@ -1002,24 +1003,24 @@ namespace OmiyaGames.Menu
                 Manager.ButtonClick.Play();
             }
         }
-#endregion
+        #endregion
 
-#region Helper Methods
+        #region Helper Methods
         static string Percent(float val)
         {
             return val.ToString("0%");
         }
 
-        void CheckResetSavedDataConfirmation(IMenu menu)
+        void CheckResetSavedDataConfirmation(IMenu menu, VisibilityState from, VisibilityState to)
         {
-            if(((ConfirmationMenu)menu).IsYesSelected == true)
+            if (((ConfirmationMenu)menu).IsYesSelected == true)
             {
                 // Clear settings
                 settings.ClearSettings();
 
                 // Update the level select menu, if one is available
                 LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
-                if(levelSelect != null)
+                if (levelSelect != null)
                 {
                     levelSelect.SetButtonsEnabled(true);
                 }
@@ -1028,14 +1029,14 @@ namespace OmiyaGames.Menu
 
         void SetupLanguageControls()
         {
-            if(languageDropDown.IsSetup == false)
+            if (languageDropDown.IsSetup == false)
             {
                 // Setup the drop down
                 languageDropDown.Setup();
             }
 
             // Update whether the controls are visible or not
-            foreach(GameObject controls in languageParents)
+            foreach (GameObject controls in languageParents)
             {
                 controls.SetActive(AllFlags.EnableLanguageControls);
             }
@@ -1046,7 +1047,7 @@ namespace OmiyaGames.Menu
             // Update music controls
             musicControls.Update(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
             musicControls.IsActive = AllFlags.EnableMusicControls;
-            
+
             // Update sound effect controls
             soundEffectsControls.Update(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
             soundEffectsControls.IsActive = AllFlags.EnableSoundEffectControls;
@@ -1057,7 +1058,7 @@ namespace OmiyaGames.Menu
             // Update Motion Blurs controls
             smoothCameraControls.IsInverted = settings.IsSmoothCameraEnabled;
             smoothCameraControls.IsActive = AllFlags.EnableSmoothCameraToggle;
-            
+
             // Update Motion Blurs controls
             bobbingCameraControls.IsInverted = settings.IsBobbingCameraEnabled;
             bobbingCameraControls.IsActive = AllFlags.EnableBobbingCameraToggle;
@@ -1098,7 +1099,7 @@ namespace OmiyaGames.Menu
             // Activate or deactivate all controls
             keyboardXInvert.IsActive = AllFlags.EnableKeyboardInvertedControls;
             keyboardYInvert.IsActive = AllFlags.EnableKeyboardInvertedControls;
-            foreach(GameObject parent in invertKeyboardLabelsAndDividers)
+            foreach (GameObject parent in invertKeyboardLabelsAndDividers)
             {
                 parent.SetActive(AllFlags.EnableKeyboardInvertedControls);
             }
@@ -1148,6 +1149,6 @@ namespace OmiyaGames.Menu
         {
             resetAllDataParent.SetActive(AllFlags.EnableResetDataButton);
         }
-#endregion
+        #endregion
     }
 }
