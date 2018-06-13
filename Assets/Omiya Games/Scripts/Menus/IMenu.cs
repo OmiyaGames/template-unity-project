@@ -160,7 +160,7 @@ namespace OmiyaGames.Menu
                 bool returnFlag = false;
 
                 // Make sure the menu is setup
-                if ((CurrentSetupState != SetupState.Ready)
+                if ((CurrentSetupState == SetupState.Ready)
 
                     // Then check if this menu is actually visible
                     && (CurrentVisibility == VisibilityState.Visible)

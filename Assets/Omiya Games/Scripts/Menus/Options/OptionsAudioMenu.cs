@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using OmiyaGames.Audio;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsAudioMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -44,262 +41,8 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class OptionsAudioMenu : IMenu
     {
-        #region Serialized Containers
-        [System.Serializable]
-        [System.Obsolete("Will be removed shortly")]
-        public class EnableFlags
-        {
-            [SerializeField]
-            bool enableLanguageControls = true;
-            [SerializeField]
-            bool enableMusicControls = true;
-            [SerializeField]
-            bool enableSoundEffectControls = true;
-            [SerializeField]
-            bool enableSmoothCameraToggle = true;
-            [SerializeField]
-            bool enableBobbingCameraToggle = true;
-            [SerializeField]
-            bool enableMotionBlursToggle = true;
-            [SerializeField]
-            bool enableFlashingEffectsToggle = true;
-            [SerializeField]
-            bool enableBloomToggle = true;
-            [SerializeField]
-            bool enableKeyboardSensitivityControls = true;
-            [SerializeField]
-            bool enableKeyboardInvertedControls = true;
-            [SerializeField]
-            bool enableMouseSensitivityControls = true;
-            [SerializeField]
-            bool enableMouseInvertedControls = true;
-            [SerializeField]
-            bool enableScrollWheelSensitivityControls = true;
-            [SerializeField]
-            bool enableScrollWheelInvertedControls = true;
-            [SerializeField]
-            bool enableResetDataButton = true;
-
-            public bool EnableLanguageControls
-            {
-                get
-                {
-                    return enableLanguageControls;
-                }
-            }
-
-            public bool EnableMusicControls
-            {
-                get
-                {
-                    return enableMusicControls;
-                }
-            }
-
-            public bool EnableSoundEffectControls
-            {
-                get
-                {
-                    return enableSoundEffectControls;
-                }
-            }
-
-            public bool EnableMotionBlursToggle
-            {
-                get
-                {
-                    return enableMotionBlursToggle;
-                }
-            }
-
-            public bool EnableFlashingEffectsToggle
-            {
-                get
-                {
-                    return enableFlashingEffectsToggle;
-                }
-            }
-
-            public bool EnableBloomToggle
-            {
-                get
-                {
-                    return enableBloomToggle;
-                }
-            }
-
-            public bool EnableKeyboardSensitivityControls
-            {
-                get
-                {
-                    return enableKeyboardSensitivityControls;
-                }
-            }
-
-            public bool EnableKeyboardInvertedControls
-            {
-                get
-                {
-                    return enableKeyboardInvertedControls;
-                }
-            }
-
-            public bool EnableMouseSensitivityControls
-            {
-                get
-                {
-                    return enableMouseSensitivityControls;
-                }
-            }
-
-            public bool EnableMouseInvertedControls
-            {
-                get
-                {
-                    return enableMouseInvertedControls;
-                }
-            }
-
-            public bool EnableScrollWheelSensitivityControls
-            {
-                get
-                {
-                    return enableScrollWheelSensitivityControls;
-                }
-            }
-
-            public bool EnableScrollWheelInvertedControls
-            {
-                get
-                {
-                    return enableScrollWheelInvertedControls;
-                }
-            }
-
-            public bool EnableResetDataButton
-            {
-                get
-                {
-                    return enableResetDataButton;
-                }
-            }
-
-            public bool EnableSmoothCameraToggle
-            {
-                get
-                {
-                    return enableSmoothCameraToggle;
-                }
-            }
-
-            public bool EnableBobbingCameraToggle
-            {
-                get
-                {
-                    return enableBobbingCameraToggle;
-                }
-            }
-        }
-
-        [System.Serializable]
-        [System.Obsolete("Will be removed shortly")]
-        public struct AudioControls
-        {
-            [SerializeField]
-            GameObject[] controlParents;
-            [SerializeField]
-            Slider volumeSlider;
-            [SerializeField]
-            Text volumePercentLabel;
-            [SerializeField]
-            Toggle checkBoxMark;
-
-            public void Update(float volume, bool mute)
-            {
-                VolumeSlider.value = volume;
-                VolumePercentLabel.text = Percent(volume);
-                VolumeSlider.interactable = !mute;
-                CheckBoxMark.isOn = mute;
-            }
-
-            public Slider VolumeSlider
-            {
-                get
-                {
-                    return volumeSlider;
-                }
-            }
-
-            public Text VolumePercentLabel
-            {
-                get
-                {
-                    return volumePercentLabel;
-                }
-            }
-
-            public Toggle CheckBoxMark
-            {
-                get
-                {
-                    return checkBoxMark;
-                }
-            }
-
-            public float MinValue
-            {
-                get
-                {
-                    return VolumeSlider.minValue;
-                }
-            }
-
-            public float MaxValue
-            {
-                get
-                {
-                    return VolumeSlider.maxValue;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    bool returnFlag = false;
-                    foreach (GameObject control in controlParents)
-                    {
-                        if (control != null)
-                        {
-                            returnFlag = control.activeSelf;
-                            break;
-                        }
-                    }
-                    return returnFlag;
-                }
-                set
-                {
-                    foreach (GameObject control in controlParents)
-                    {
-                        if (control != null)
-                        {
-                            control.SetActive(value);
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
-
         #region Serialized Fields
         [Header("Features to Enable")]
-        [SerializeField]
-        [System.Obsolete("Will be removed shortly")]
-        EnableFlags defaultFlags;
-        [SerializeField]
-        [System.Obsolete("Will be removed shortly")]
-        EnableFlags webglFlags;
-
         [SerializeField]
         SupportedPlatforms enableMusicVolumeControls;
         [SerializeField]
@@ -307,22 +50,16 @@ namespace OmiyaGames.Menu
 
         [Header("Audio Controls")]
         [SerializeField]
-        [System.Obsolete("Will be removed shortly")]
-        AudioControls musicControls;
-        [SerializeField]
-        [System.Obsolete("Will be removed shortly")]
-        AudioControls soundEffectsControls;
-
-        [SerializeField]
         SliderCheckboxCombo musicVolumeControls;
         [SerializeField]
+        GameObject[] musicVolumeSection;
+        [SerializeField]
         SliderCheckboxCombo soundEffectsVolumeControls;
+        [SerializeField]
+        GameObject[] soundEffectsSection;
         #endregion
 
         SoundEffect audioCache;
-        bool inSetupMode = false;
-
-        System.Action<OptionsAudioMenu> hideAction = null;
 
         #region Properties
         public SoundEffect TestSoundEffect
@@ -334,14 +71,6 @@ namespace OmiyaGames.Menu
                     audioCache = GetComponent<SoundEffect>();
                 }
                 return audioCache;
-            }
-        }
-
-        GameSettings settings
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>();
             }
         }
 
@@ -357,123 +86,114 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return musicControls.VolumeSlider.gameObject;
-            }
-        }
-
-        EnableFlags AllFlags
-        {
-            get
-            {
-#if UNITY_WEBGL
-                return webglFlags;
-#else
-                return defaultFlags;
-#endif
-            }
-        }
-        #endregion
-
-        void Start()
-        {
-            // Setup controls
-            inSetupMode = true;
-
-            // Update how music controls are enabled
-            SetupAudioControls();
-            inSetupMode = false;
-        }
-
-        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
-        {
-            // Call the base method
-            base.OnStateChanged(from, to);
-
-            if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
-            {
-                // Run the last action
-                if (hideAction != null)
+                if(enableMusicVolumeControls.IsThisBuildSupported())
                 {
-                    hideAction(this);
-                    hideAction = null;
+                    return musicVolumeControls.Slider.gameObject;
+                }
+                else
+                {
+                    return soundEffectsVolumeControls.Slider.gameObject;
                 }
             }
         }
-
-        #region UI events
-        #region Music Group
-        public void OnMusicSliderChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                BackgroundMusic.GlobalVolume = sliderValue;
-                musicControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnMusicMuteToggled(bool mute)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                BackgroundMusic.GlobalMute = mute;
-
-                // disable the slider
-                musicControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
         #endregion
 
-        #region Sound Effects Group
-        public void OnSoundEffectsSliderChanged(float sliderValue)
+        protected override void OnSetup()
         {
-            if (inSetupMode == false)
-            {
-                SoundEffect.GlobalVolume = sliderValue;
-                soundEffectsControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
+            // Call base method
+            base.OnSetup();
+
+            // Setup enabling the music controls
+            SetupMusicControls();
+
+            // Setup enabling the sound effect controls
+            SetupSoundEffectControls();
         }
 
-        public void OnSoundEffectsSliderPointerUp()
+        #region UI events
+        private void OnSoundEffectsSliderReleaseUpdated(float volume)
         {
+            // Adjust the volume
+            OnSoundEffectsSliderValueUpdated(volume);
+
+            // Play the sound effect
             TestSoundEffect.Play();
         }
 
-        public void OnSoundEffectsMuteToggled(bool mute)
+        private void OnSoundEffectsSliderValueUpdated(float volume)
         {
-            if (inSetupMode == false)
+            // Adjust the volume
+            SoundEffect.GlobalVolume = volume;
+        }
+
+        private void OnSoundEffectsCheckboxUpdated(bool enableMute)
+        {
+            // Adjust mute setting
+            SoundEffect.GlobalMute = enableMute;
+
+            // Check if we're unmuted
+            if(enableMute == false)
             {
-                // Toggle mute
-                SoundEffect.GlobalMute = mute;
-
-                // disable the slider
-                soundEffectsControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
+                // Play the sound effect
+                TestSoundEffect.Play();
             }
         }
-        #endregion
+
+        private void OnMusicSliderValueUpdated(float volume)
+        {
+            // Adjust the volume
+            BackgroundMusic.GlobalVolume = volume;
+        }
+
+        private void OnMusicCheckboxUpdated(bool enableMute)
+        {
+            // Adjust mute setting
+            BackgroundMusic.GlobalMute = enableMute;
+        }
         #endregion
 
         #region Helper Methods
-        public static string Percent(float val)
+        private void SetupMusicControls()
         {
-            return val.ToString("0%");
+            // Setup enabling the music controls
+            bool enableControl = enableMusicVolumeControls.IsThisBuildSupported();
+            foreach (GameObject controls in musicVolumeSection)
+            {
+                controls.SetActive(enableControl);
+            }
+
+            if (enableControl == true)
+            {
+                // Setup controls
+                musicVolumeControls.Setup(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
+
+                // Bind to the control events
+                musicVolumeControls.OnCheckboxUpdated += OnMusicCheckboxUpdated;
+                musicVolumeControls.OnSliderValueUpdated += OnMusicSliderValueUpdated;
+                musicVolumeControls.OnSliderReleaseUpdated += OnMusicSliderValueUpdated;
+            }
         }
 
-        void SetupAudioControls()
+        private bool SetupSoundEffectControls()
         {
-            // Update music controls
-            musicControls.Update(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
-            musicControls.IsActive = AllFlags.EnableMusicControls;
+            bool enableControl = enableSoundEffectVolumeControls.IsThisBuildSupported();
+            foreach (GameObject controls in soundEffectsSection)
+            {
+                controls.SetActive(enableControl);
+            }
 
-            // Update sound effect controls
-            soundEffectsControls.Update(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
-            soundEffectsControls.IsActive = AllFlags.EnableSoundEffectControls;
+            if (enableControl == true)
+            {
+                // Setup controls
+                soundEffectsVolumeControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
+
+                // Bind to the control events
+                soundEffectsVolumeControls.OnCheckboxUpdated += OnSoundEffectsCheckboxUpdated;
+                soundEffectsVolumeControls.OnSliderValueUpdated += OnSoundEffectsSliderValueUpdated;
+                soundEffectsVolumeControls.OnSliderReleaseUpdated += OnSoundEffectsSliderReleaseUpdated;
+            }
+
+            return enableControl;
         }
         #endregion
     }

@@ -73,6 +73,16 @@ namespace OmiyaGames
             SupportedPlatforms.Android.ToString(),
         };
 
+        public static bool IsThisBuildSupported(this SupportedPlatforms currentPlatforms)
+        {
+            bool returnFlag = IsSupported(currentPlatforms, Application.platform);
+            if ((Singleton.Instance != null) && (Singleton.Instance.IsWebApp == true))
+            {
+                returnFlag = IsSupported(currentPlatforms, SupportedPlatforms.Web);
+            }
+            return returnFlag;
+        }
+
         public static bool IsSupported(this SupportedPlatforms currentPlatforms, SupportedPlatforms singlePlatform)
         {
             return (currentPlatforms & singlePlatform) != 0;

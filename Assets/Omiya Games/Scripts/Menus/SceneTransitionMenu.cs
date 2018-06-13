@@ -108,14 +108,15 @@ namespace OmiyaGames.Scenes
         {
             get
             {
+                bool returnFlag = false;
                 switch (CurrentTransition)
                 {
                     case Transition.SceneTransitionInStart:
                     case Transition.SceneTransitionOutStart:
-                        return false;
-                    default:
-                        return true;
+                        returnFlag = true;
+                        break;
                 }
+                return returnFlag;
             }
         }
 
