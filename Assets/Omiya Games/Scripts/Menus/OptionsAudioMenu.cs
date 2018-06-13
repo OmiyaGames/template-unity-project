@@ -48,6 +48,7 @@ namespace OmiyaGames.Menu
 
         #region Serialized Containers
         [System.Serializable]
+        [System.Obsolete("Will be removed shortly")]
         public class EnableFlags
         {
             [SerializeField]
@@ -203,6 +204,7 @@ namespace OmiyaGames.Menu
         }
 
         [System.Serializable]
+        [System.Obsolete("Will be removed shortly")]
         public struct AudioControls
         {
             [SerializeField]
@@ -289,212 +291,34 @@ namespace OmiyaGames.Menu
                 }
             }
         }
-
-        [System.Serializable]
-        public struct SensitivityControls
-        {
-            [SerializeField]
-            GameObject controlParent;
-            [SerializeField]
-            Slider slider;
-            [SerializeField]
-            Text percentLabel;
-
-            public void Update(float sensitivity)
-            {
-                SensitivitySlider.value = sensitivity;
-                SensitivityPercentLabel.text = Percent(sensitivity);
-            }
-
-            public Slider SensitivitySlider
-            {
-                get
-                {
-                    return slider;
-                }
-            }
-
-            public Text SensitivityPercentLabel
-            {
-                get
-                {
-                    return percentLabel;
-                }
-            }
-
-            public float MinValue
-            {
-                get
-                {
-                    return SensitivitySlider.minValue;
-                }
-            }
-
-            public float MaxValue
-            {
-                get
-                {
-                    return SensitivitySlider.maxValue;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return controlParent.activeSelf;
-                }
-                set
-                {
-                    controlParent.SetActive(value);
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct ToggleControls
-        {
-            [SerializeField]
-            GameObject controlParent;
-            [SerializeField]
-            Toggle toggle;
-
-            public bool IsInverted
-            {
-                get
-                {
-                    return toggle.isOn;
-                }
-                set
-                {
-                    toggle.isOn = value;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return controlParent.activeSelf;
-                }
-                set
-                {
-                    controlParent.SetActive(value);
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct CompoundSensitivityControls
-        {
-            [SerializeField]
-            ToggleControls splitAxisToggle;
-            [SerializeField]
-            SensitivityControls overallSensitivity;
-            [SerializeField]
-            SensitivityControls xAxisSensitivity;
-            [SerializeField]
-            SensitivityControls yAxisSensitivity;
-            [SerializeField]
-            GameObject[] labelsAndDividers;
-
-            public void Update(bool splitSensitivity, float xSensitivity, float ySensitivity)
-            {
-                splitAxisToggle.IsInverted = splitSensitivity;
-
-                OverallSensitivity.Update(xSensitivity);
-                xAxisSensitivity.Update(xSensitivity);
-                yAxisSensitivity.Update(ySensitivity);
-
-                UpdateAxisSensitivityControls();
-            }
-
-            public SensitivityControls OverallSensitivity
-            {
-                get
-                {
-                    return overallSensitivity;
-                }
-            }
-
-            public SensitivityControls XAxisSensitivity
-            {
-                get
-                {
-                    return xAxisSensitivity;
-                }
-            }
-
-            public SensitivityControls YAxisSensitivity
-            {
-                get
-                {
-                    return yAxisSensitivity;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return splitAxisToggle.IsActive;
-                }
-                set
-                {
-                    splitAxisToggle.IsActive = value;
-                    UpdateAxisSensitivityControls();
-                }
-            }
-
-            public void UpdateAxisSensitivityControls()
-            {
-                if (splitAxisToggle.IsActive == false)
-                {
-                    xAxisSensitivity.IsActive = false;
-                    yAxisSensitivity.IsActive = false;
-                    overallSensitivity.IsActive = false;
-
-                    foreach (GameObject control in labelsAndDividers)
-                    {
-                        control.SetActive(false);
-                    }
-                }
-                else
-                {
-                    if (splitAxisToggle.IsInverted == true)
-                    {
-                        xAxisSensitivity.IsActive = true;
-                        yAxisSensitivity.IsActive = true;
-                        overallSensitivity.IsActive = false;
-                    }
-                    else
-                    {
-                        overallSensitivity.IsActive = true;
-                        xAxisSensitivity.IsActive = false;
-                        yAxisSensitivity.IsActive = false;
-                    }
-
-                    foreach (GameObject control in labelsAndDividers)
-                    {
-                        control.SetActive(true);
-                    }
-                }
-            }
-        }
         #endregion
 
         #region Serialized Fields
         [Header("Features to Enable")]
         [SerializeField]
+        [System.Obsolete("Will be removed shortly")]
         EnableFlags defaultFlags;
         [SerializeField]
+        [System.Obsolete("Will be removed shortly")]
         EnableFlags webglFlags;
+
+        [SerializeField]
+        SupportedPlatforms enableMusicVolumeControls;
+        [SerializeField]
+        SupportedPlatforms enableSoundEffectVolumeControls;
 
         [Header("Audio Controls")]
         [SerializeField]
+        [System.Obsolete("Will be removed shortly")]
         AudioControls musicControls;
         [SerializeField]
+        [System.Obsolete("Will be removed shortly")]
         AudioControls soundEffectsControls;
+
+        [SerializeField]
+        SliderCheckboxCombo musicVolumeControls;
+        [SerializeField]
+        SliderCheckboxCombo soundEffectsVolumeControls;
         #endregion
 
         SoundEffect audioCache;
