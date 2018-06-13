@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="PoolingManager.cs" company="Omiya Games">
@@ -86,7 +85,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
-        public override void SingletonAwake(Singleton globalGameObject)
+        internal override void SingletonAwake()
         {
             // Cache the transform everything will be pooled to
             poolingParent = transform;
@@ -103,7 +102,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when any scene after the first one is loaded.
         /// </summary>
-        public override void SceneAwake(Singleton globalGameObject)
+        internal override void SceneAwake()
         {
             // Do nothing
         }

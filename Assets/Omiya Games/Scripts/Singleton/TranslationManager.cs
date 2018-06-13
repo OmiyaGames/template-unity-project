@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
+using TMPro;
+using OmiyaGames.Settings;
+using OmiyaGames.Global;
 
-namespace OmiyaGames
+namespace OmiyaGames.Translations
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="TranslationManager.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -328,7 +328,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
-        public override void SingletonAwake(Singleton globalGameObject)
+        internal override void SingletonAwake()
         {
             // Do nothing
         }
@@ -336,7 +336,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when any scene after the first one is loaded.
         /// </summary>
-        public override void SceneAwake(Singleton globalGameObject)
+        internal override void SceneAwake()
         {
             // Check if we've populated any translations
             if (translationDictionary.Count <= 0)
@@ -362,10 +362,7 @@ namespace OmiyaGames
                 }
 
                 // Indicate final results
-                if(Debug.isDebugBuild == true)
-                {
-                    Debug.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
-                }
+                Utility.Log("Language settings, current: " + currentLanguage + ", and default: " + defaultLanguage);
             }
         }
 

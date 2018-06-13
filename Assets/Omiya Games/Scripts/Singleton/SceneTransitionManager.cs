@@ -2,12 +2,11 @@
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
+using OmiyaGames.Menu;
+using OmiyaGames.Settings;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
-    using Menu;
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionManager.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -212,7 +211,7 @@ namespace OmiyaGames
         }
         #endregion
 
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             // Reset scene name to info dictionary
             sceneNameToInfo.Clear();
@@ -233,7 +232,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
             if(CurrentScene == null)
             {

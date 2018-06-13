@@ -38,8 +38,8 @@ namespace OmiyaGames.Settings
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A list of helper methods that writes all the
-	/// <see cref="ISettingsVersion"/> and the latest
-	/// <see cref="IStoredSetting"/> into a single,
+    /// <see cref="ISettingsVersion"/> and the latest
+    /// <see cref="IStoredSetting"/> into a single,
     /// readable C# file.
     /// </summary>
     /// <seealso cref="GameSettings"/>
@@ -96,9 +96,9 @@ namespace OmiyaGames.Settings
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.IsClass && !x.IsAbstract && versionInterface.IsAssignableFrom(x));
             string errorMessage;
-            foreach(Type versionType in types)
+            foreach (Type versionType in types)
             {
-                if(returnArgs.AddVersion(Activator.CreateInstance(versionType) as ISettingsVersionGenerator, out errorMessage) == false)
+                if (returnArgs.AddVersion(Activator.CreateInstance(versionType) as ISettingsVersionGenerator, out errorMessage) == false)
                 {
                     Debug.LogWarning(errorMessage);
                 }
@@ -152,7 +152,7 @@ namespace OmiyaGames.Settings
 
                 // Start the class
                 WriteTooltipComment(writer, numTabs, "This code is auto-generated. All changes will be overwritten!");
-                numTabs = WriteStartEncapsulation(writer, numTabs, "public partial class GameSettings : ISingletonScript");
+                numTabs = WriteStartEncapsulation(writer, numTabs, "public partial class GameSettings : Global.ISingletonScript");
 
                 // Write out the array of versions
                 WriteLine(writer, numTabs, "#region Private Arrays");
@@ -286,7 +286,7 @@ namespace OmiyaGames.Settings
         private static void WriteAllSettingsProperties(StreamWriter writer, int numTabs, SettingsGeneratorArgs settingsArgs)
         {
             // Go through each group
-            foreach(KeyValuePair<int, ICollection<SettingsGeneratorArgs.SingleSettingsInfo>> groupOfSettings in settingsArgs)
+            foreach (KeyValuePair<int, ICollection<SettingsGeneratorArgs.SingleSettingsInfo>> groupOfSettings in settingsArgs)
             {
                 // Declare region
                 writer.WriteLine();
@@ -294,7 +294,7 @@ namespace OmiyaGames.Settings
                 writer.Write(groupOfSettings.Key);
 
                 // Go through all the settings
-                foreach(SettingsGeneratorArgs.SingleSettingsInfo setting in groupOfSettings.Value)
+                foreach (SettingsGeneratorArgs.SingleSettingsInfo setting in groupOfSettings.Value)
                 {
                     // Write a line
                     writer.WriteLine();
@@ -307,11 +307,11 @@ namespace OmiyaGames.Settings
                 WriteLine(writer, numTabs, "#endregion");
             }
         }
-        
+
         private static void WriteAllUsings(StreamWriter writer, int numTabs, NamespaceGeneratorArgs namespaceArgs)
         {
             bool appendNewline = false;
-            foreach(string namespaceName in namespaceArgs)
+            foreach (string namespaceName in namespaceArgs)
             {
                 // Write tabs
                 WriteTabs(writer, numTabs);
@@ -324,7 +324,7 @@ namespace OmiyaGames.Settings
             }
 
             // Write a newline below all the usings
-            if(appendNewline == true)
+            if (appendNewline == true)
             {
                 writer.WriteLine();
             }
@@ -353,7 +353,7 @@ namespace OmiyaGames.Settings
         {
             // Write out the line and open curly braces
             WriteLine(writer, numTabs, declaration);
-            if(addNewlineAtTheEnd == true)
+            if (addNewlineAtTheEnd == true)
             {
                 WriteLine(writer, numTabs, '{');
             }

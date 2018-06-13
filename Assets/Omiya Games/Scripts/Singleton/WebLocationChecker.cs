@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebLocationChecker.cs" company="Omiya Games">
@@ -174,7 +174,7 @@ namespace OmiyaGames
         public string DownloadErrorMessage { get; private set; } = null;
         #endregion
 
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             if (Singleton.Instance.IsWebApp == true)
             {
@@ -183,7 +183,7 @@ namespace OmiyaGames
             }
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
             // Do nothing
         }

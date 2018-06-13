@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace OmiyaGames
+namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="TranslatedString.cs" company="Omiya Games">

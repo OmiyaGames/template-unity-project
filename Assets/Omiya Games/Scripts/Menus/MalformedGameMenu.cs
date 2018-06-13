@@ -2,6 +2,8 @@
 using System;
 using System.Text;
 using System.Collections;
+using OmiyaGames.Global;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -51,7 +53,7 @@ namespace OmiyaGames.Menu
     /// <description>Taro</description>
     /// <description>Initial verison.</description>
     /// 
-    /// <description>6/5/2016</description>
+    /// <description>6/5/2018</description>
     /// <description>Taro</description>
     /// <description>Moving the menu to the Main Menu scene.
     /// Scene transitionis removed.</description>
@@ -78,12 +80,6 @@ namespace OmiyaGames.Menu
             string labelTranslationKey;
             [SerializeField]
             string redirectTo;
-
-            public void UpdateButton(WebsiteButton button)
-            {
-                button.LabelComponent.TranslationKey = labelTranslationKey;
-                button.RedirectTo = redirectTo;
-            }
         }
 
         static bool IsBuildVerified

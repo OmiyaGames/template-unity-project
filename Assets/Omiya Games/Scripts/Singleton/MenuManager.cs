@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using OmiyaGames.Global;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -39,7 +41,7 @@ namespace OmiyaGames.Menu
     /// <seealso cref="IMenu"/>
     /// <seealso cref="Singleton"/>
     [RequireComponent(typeof(EventSystem))]
-    public class MenuManager : ISingletonScript
+    public class MenuManager : Global.ISingletonScript
     {
         static readonly Type[] IgnoreTypes = new Type[]
         {
@@ -168,19 +170,19 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             // Enable events
             Events.enabled = true;
 
             // Bind to update
-            instance.OnRealTimeUpdate += QueryInput;
+            Singleton.Instance.OnRealTimeUpdate += QueryInput;
 
             // Setup selection
             delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
             // Clear out all the menus
             managedMenusStack.Clear();

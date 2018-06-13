@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="TimeManager.cs" company="Omiya Games">
@@ -101,22 +101,19 @@ namespace OmiyaGames
                     }
 
                     // Shoot the pause event
-                    if(OnManuallyPausedChanged != null)
-                    {
-                        OnManuallyPausedChanged(this);
-                    }
+                    OnManuallyPausedChanged?.Invoke(this);
                 }
             }
         }
 
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             defaultTimeScale = Time.timeScale;
             timeScale = Time.timeScale;
             instance.OnRealTimeUpdate += UpdateRealtime;
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
             // Do nothing
         }

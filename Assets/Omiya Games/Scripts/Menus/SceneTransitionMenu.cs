@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionMenu.cs" company="Omiya Games">
@@ -31,14 +30,35 @@ namespace OmiyaGames.Menu
     /// <date>5/18/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that animates switching into and out of a scene.  Use the singleton script,
-    /// <code>SceneManager</code>, to animate this menu
+    /// UI that animates switching into and out of a scene.
     /// </summary>
     /// <seealso cref="SceneManager"/>
     /// <seealso cref="MenuManager"/>
-    // FIXME: frankly, this shouldn't be a menu at all.  It shares none of the attributes of a regular menu.
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>5/18/2015</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// 
+    /// <description>6/13/2018</description>
+    /// <description>Taro</description>
+    /// <description>
+    /// Taking out <code>IMenu</code> extension.
+    /// Switching the Transition to just be a regular script.
+    /// </description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     [RequireComponent(typeof(Animator))]
-    public class SceneTransitionMenu : IMenu
+    [DisallowMultipleComponent]
+    public class SceneTransitionMenu : MonoBehaviour
     {
         public enum Transition
         {
@@ -54,35 +74,11 @@ namespace OmiyaGames.Menu
         [SerializeField]
         string transitionOutTrigger = "transitionOut";
 
-        Transition currentTransition = Transition.None;
-
-        public override Type MenuType
-        {
-            get
-            {
-                return Type.UnmanagedMenu;
-            }
-        }
-
-        public override GameObject DefaultUi
-        {
-            get
-            {
-                return null;
-            }
-        }
-
         public Transition CurrentTransition
         {
-            get
-            {
-                return currentTransition;
-            }
-            private set
-            {
-                currentTransition = value;
-            }
-        }
+            get;
+            private set;
+        } = Transition.None;
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {

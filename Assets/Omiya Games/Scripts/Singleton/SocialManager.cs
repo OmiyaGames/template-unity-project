@@ -12,7 +12,7 @@ using GooglePlayGames.BasicApi;
 using UnityEngine.SocialPlatforms.GameCenter;
 #endif
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SocialManagerWrapperClasses.cs" company="Omiya Games">
@@ -219,10 +219,7 @@ namespace OmiyaGames
                 CurrentLogInState = LogInState.MiddleOfAuthenticating;
 
                 // Start authentication process
-                if (Debug.isDebugBuild == true)
-                {
-                    Debug.Log("Starting authentication!");
-                }
+                Utility.Log("Starting authentication!");
                 Social.localUser.Authenticate(OnAuthenticationComplete);
             }
             return returnIsAttemptingAuthentication;
@@ -288,7 +285,7 @@ namespace OmiyaGames
                         warningBuilder.Append(achievementKey);
                         warningBuilder.Append(" and progress ");
                         warningBuilder.Append(record);
-                        Debug.Log(warningBuilder.ToString());
+                        Utility.Log(warningBuilder.ToString());
                     }
                 }
             }
@@ -343,7 +340,7 @@ namespace OmiyaGames
                         warningBuilder.Append(leaderboardKey);
                         warningBuilder.Append(" and score ");
                         warningBuilder.Append(record);
-                        Debug.Log(warningBuilder.ToString());
+                        Utility.Log(warningBuilder.ToString());
                     }
                 }
             }
@@ -397,7 +394,7 @@ namespace OmiyaGames
         }
 
         #region Singleton Overrides
-        public override void SingletonAwake(Singleton instance)
+        internal override void SingletonAwake()
         {
             // Setup flag
             CurrentLogInState = LogInState.NotConnected;
@@ -410,12 +407,12 @@ namespace OmiyaGames
             {
                 // Sign to Singleton's update function
                 OnDestroy();
-                onUpdate = new System.Action<float>(OnEveryFrame);
-                instance.OnUpdate += onUpdate;
+                onUpdate = new Action<float>(OnEveryFrame);
+                Singleton.Instance.OnUpdate += onUpdate;
             }
         }
 
-        public override void SceneAwake(Singleton instance)
+        internal override void SceneAwake()
         {
         }
         #endregion
@@ -466,51 +463,39 @@ namespace OmiyaGames
 
                 // Indicate success
                 CurrentLogInState = LogInState.AuthenticationSuccess;
-                if (Debug.isDebugBuild == true)
-                {
-                    Debug.Log("Authentication success!");
-                }
+                Utility.Log("Authentication success!");
             }
             else
             {
                 // Indicate failure
                 CurrentLogInState = LogInState.NotConnected;
-                if (Debug.isDebugBuild == true)
-                {
-                    Debug.Log("Failed to authenticate");
-                }
+                Utility.Log("Failed to authenticate");
             }
         }
 
         void OnLeaderboardReported(bool success)
         {
             // Check if report succeeded
-            if (Debug.isDebugBuild == true)
+            if (success == true)
             {
-                if (success == true)
-                {
-                    Debug.Log("Successfully recorded to a leaderboard!");
-                }
-                else
-                {
-                    Debug.Log("Failed to record to a leaderboard...");
-                }
+                Utility.Log("Successfully recorded to a leaderboard!");
+            }
+            else
+            {
+                Utility.Log("Failed to record to a leaderboard...");
             }
         }
 
         void OnAchievementReported(bool success)
         {
             // Check if report succeeded
-            if (Debug.isDebugBuild == true)
+            if (success == true)
             {
-                if (success == true)
-                {
-                    Debug.Log("Successfully recorded to an achivement!");
-                }
-                else
-                {
-                    Debug.Log("Failed to record to an achievement...");
-                }
+                Utility.Log("Successfully recorded to an achivement!");
+            }
+            else
+            {
+                Utility.Log("Failed to record to an achievement...");
             }
         }
         #endregion
@@ -624,7 +609,7 @@ namespace OmiyaGames
                     warningBuilder.Append(record);
                     warningBuilder.Append(" and success ");
                     warningBuilder.Append(reportSuccess);
-                    Debug.Log(warningBuilder.ToString());
+                    Utility.Log(warningBuilder.ToString());
                 }
             }
             if (debug != null)

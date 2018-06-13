@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Global
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="ISingletonScript.cs" company="Omiya Games">
@@ -36,29 +36,13 @@ namespace OmiyaGames
     /// <seealso cref="Singleton"/>
     public abstract class ISingletonScript : MonoBehaviour
     {
-        Singleton singleton = null;
-
-        abstract public void SingletonAwake(Singleton instance);
-        abstract public void SceneAwake(Singleton instance);
-
-        public Singleton SingletonInstance
-        {
-            get
-            {
-                return singleton;
-            }
-            internal set
-            {
-                singleton = value;
-            }
-        }
-
         public bool IsPartOfSingleton
         {
-            get
-            {
-                return (SingletonInstance != null);
-            }
-        }
+            get;
+            internal set;
+        } = false;
+
+        internal abstract void SingletonAwake();
+        internal abstract void SceneAwake();
     }
 }
