@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-namespace OmiyaGames
+namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OmiyaGamesUtility.cs" company="Omiya Games">

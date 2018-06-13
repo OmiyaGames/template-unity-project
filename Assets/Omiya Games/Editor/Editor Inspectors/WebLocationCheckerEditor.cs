@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using OmiyaGames.Web;
 
-namespace OmiyaGames.UI
+namespace OmiyaGames.UI.Web
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebLocationCheckerEditor.cs" company="Omiya Games">

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using OmiyaGames.Menu;
+using OmiyaGames.Audio;
+using OmiyaGames.Global;
 using OmiyaGames.Settings;
 
-namespace OmiyaGames.Global
+namespace OmiyaGames.Scenes
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionManager.cs" company="Omiya Games">
@@ -44,26 +46,7 @@ namespace OmiyaGames.Global
     [DisallowMultipleComponent]
     public class SceneTransitionManager : ISingletonScript
     {
-        public event Action<IMenu> OnSceneTransitionInStart;
-        public event Action<IMenu> OnSceneTransitionInEnd;
-        public event Action<IMenu> OnSceneTransitionOutStart;
-        public event Action<IMenu> OnSceneTransitionOutEnd;
-
-        public enum TransitionState
-        {
-            /// <summary>
-            /// Not transitioning to a different scene.
-            /// </summary>
-            None,
-            /// <summary>
-            /// Transitioning into the current scene.
-            /// </summary>
-            TransitioningIn,
-            /// <summary>
-            /// Transitioning out of the current scene.
-            /// </summary>
-            TransitioningOut
-        }
+        public const float SceneLoadingProgressComplete = 0.9f;
 
         // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
@@ -82,6 +65,9 @@ namespace OmiyaGames.Global
         // FIXME: remove the cursor properties from the inspector on this scene info
         [SerializeField]
         SceneInfo credits;
+        // TODO: consider adding a loading scene
+        //[SerializeField]
+        //SceneInfo loading;
         [SerializeField]
         SceneInfo[] levels;
 
@@ -90,9 +76,12 @@ namespace OmiyaGames.Global
         CursorLockMode defaultLockMode = CursorLockMode.Locked;
 
         SceneInfo sceneToLoad = null;
+        AsyncOperation sceneLoadingInfo = null;
         readonly Dictionary<string, SceneInfo> sceneNameToInfo = new Dictionary<string, SceneInfo>();
 
         #region Properties
+        // FIXME: once the SceneInfo can make the cursor visible or not,
+        // remove this property
         public static CursorLockMode CursorMode
         {
             get
@@ -105,18 +94,6 @@ namespace OmiyaGames.Global
                 Cursor.visible = (value != CursorLockMode.Locked);
             }
         }
-
-        public TransitionState State
-        {
-            get;
-            private set;
-        } = TransitionState.None;
-
-        public SceneInfo LastScene
-        {
-            get;
-            private set;
-        } = null;
 
         public SceneInfo Splash
         {
@@ -209,6 +186,26 @@ namespace OmiyaGames.Global
                 return returnLevel;
             }
         }
+
+        /// <summary>
+        /// Indicates whether a scene is already being loaded by the manager or not.
+        /// </summary>
+        public bool IsLoadingScene
+        {
+            get
+            {
+                bool returnFlag = false;
+                if (SceneTransitionMenu.IsInMiddleOfTransitioning == true)
+                {
+                    returnFlag = true;
+                }
+                else if (sceneLoadingInfo != null)
+                {
+                    returnFlag = (sceneLoadingInfo.progress < SceneLoadingProgressComplete);
+                }
+                return returnFlag;
+            }
+        }
         #endregion
 
         internal override void SingletonAwake()
@@ -248,6 +245,9 @@ namespace OmiyaGames.Global
             {
                 Singleton.Get<TimeManager>().RevertToOriginalTime();
             }
+
+            // Remove the async operation
+            sceneLoadingInfo = null;
         }
 
         public void RevertCursorLockMode(bool allowWebplayerSettings)
@@ -298,7 +298,7 @@ namespace OmiyaGames.Global
 
         public void LoadScene(SceneInfo scene)
         {
-            // Make sure the parameter is correct
+            // Make sure the argument is correct
             if(scene == null)
             {
                 throw new ArgumentNullException("scene");
@@ -307,32 +307,19 @@ namespace OmiyaGames.Global
             {
                 throw new ArgumentException("No scene name is set", "scene");
             }
+            else if (IsLoadingScene == true)
+            {
+                throw new Exception("Cannot load the scene while another one is currently being loaded.");
+            }
 
             // Unlock the next level
             UpdateUnlockedLevels();
 
-            // Check if we need to update the last scene
-            if (CurrentScene != scene)
-            {
-                LastScene = CurrentScene;
-            }
-
             // Update which scene to load
             sceneToLoad = scene;
 
-            // Make sure we have a level to load
-            if (sceneToLoad != null)
-            {
-                // Show the level transition menu
-                SceneTransitionMenu transitionMenu = Singleton.Get<MenuManager>().Show<SceneTransitionMenu>(TransitionOut);
-
-                // Check if there's a transition menu
-                if(transitionMenu == null)
-                {
-                    // Just load the scene without the menu
-                    TransitionOut(null);
-                }
-            }
+            // Load the next scene asynchronously
+            TransitionToScene(sceneToLoad);
         }
 
         public void UpdateUnlockedLevels()
@@ -354,105 +341,43 @@ namespace OmiyaGames.Global
             }
         }
 
-        internal void TransitionIn(IMenu menu)
-        {
-            // By default, indicate we're transitioining in
-            State = TransitionState.TransitioningIn;
-
-            // Check to see if the argument for the next menu is provided
-            SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
-            if(transitionMenu == null)
-            {
-                // If not, we're not transitioning, so run both transition-in events at the same time
-                OnSceneTransitionInStart?.Invoke(menu);
-                OnSceneTransitionInEnd?.Invoke(menu);
-
-                // Indicate we're done transitioning
-                State = TransitionState.None;
-            }
-            else
-            {
-                // If so, check to see the current menu state
-                if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInStart)
-                {
-                    // If just transitioning in, run the transition-out start event
-                    OnSceneTransitionInStart?.Invoke(menu);
-                }
-                else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionInEnd)
-                {
-                    // If transitioning ended, run the transition-out end event
-                    OnSceneTransitionInEnd?.Invoke(menu);
-
-                    // Indicate we're done transitioning
-                    State = TransitionState.None;
-                }
-            }
-        }
-
-        void TransitionOut(IMenu menu)
-        {
-            // Indicate we're transitioning out of the current scene
-            State = TransitionState.TransitioningOut;
-
-            // Check to see if the next scene name is provided
-            if (sceneToLoad != null)
-            {
-                // Check to see if the argument for the next menu is provided
-                SceneTransitionMenu transitionMenu = menu as SceneTransitionMenu;
-                if(transitionMenu == null)
-                {
-                    // If not, we're not transitioning, so run both transition-out events at the same time
-                    OnSceneTransitionOutStart?.Invoke(menu);
-                    OnSceneTransitionOutEnd?.Invoke(menu);
-
-                    // Transition to the next scene
-                    TransitionToScene(loadLevelAsynchronously, sceneToLoad);
-                }
-                else
-                {
-                    // If so, check to see the current menu state
-                    if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutStart)
-                    {
-                        // If just transitioning in, run the transition-out start event
-                        OnSceneTransitionOutStart?.Invoke(menu);
-
-                        // Play the sound effect
-                        if (soundEffect != null)
-                        {
-                            soundEffect.Play();
-                        }
-                    }
-                    else if(transitionMenu.CurrentTransition == SceneTransitionMenu.Transition.SceneTransitionOutEnd)
-                    {
-                        // If transitioning ended, run the transition-out end event
-                        OnSceneTransitionOutEnd?.Invoke(menu);
-
-                        // Transition to the next scene
-                        TransitionToScene(loadLevelAsynchronously, sceneToLoad);
-                    }
-                }
-            }
-        }
-
-        static void TransitionToScene(bool loadLevelAsynchronously, SceneInfo sceneToLoad)
+        void TransitionToScene(SceneInfo sceneToLoad)
         {
             // Indicate the next scene was loaded
             Singleton.Get<PoolingManager>().DestroyAll();
 
-            // Check the async flag
-            if (loadLevelAsynchronously == true)
+            // Load the next scene asynchronously
+            // FIXME: once loading scene is in here, load that instead
+            sceneLoadingInfo = SceneManager.LoadSceneAsync(sceneToLoad.SceneFileName);
+
+            // Prevent the scene from loading automatically
+            sceneLoadingInfo.allowSceneActivation = false;
+
+            // Check if the transition menu is available
+            if (SceneTransitionMenu.Instance != null)
             {
-                // Load asynchronously
-                SceneManager.LoadSceneAsync(sceneToLoad.SceneFileName);
-            }
-            else
-            {
-                // Load synchronously
-                SceneManager.LoadScene(sceneToLoad.SceneFileName);
+                // Play the transition out animation
+                SceneTransitionMenu.Instance.TransitionOut();
             }
 
-            // Indicate this level is already in progress of loading
-            sceneToLoad = null;
+            // Monitor the progress of the scene loading
+            StartCoroutine(MonitorSceneLoading());
+        }
+
+        IEnumerator MonitorSceneLoading()
+        {
+            // Check how much progress is being made on loading the scene
+            while(IsLoadingScene == true)
+            {
+                // Wait until the scene is fully loaded
+                yield return null;
+            }
+
+            // Once all that is done, activate the scene
+            sceneLoadingInfo.allowSceneActivation = true;
+
+            // Discard the scene loading information
+            sceneLoadingInfo = null;
         }
 
         #region Editor Methods

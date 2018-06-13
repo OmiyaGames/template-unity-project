@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace OmiyaGames.Global
+namespace OmiyaGames.Web
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebLocationChecker.cs" company="Omiya Games">
@@ -68,7 +68,7 @@ namespace OmiyaGames.Global
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class WebLocationChecker : ISingletonScript
+    public class WebLocationChecker : Global.ISingletonScript
     {
         public const string RemoteDomainListHeader = "Remote Domain List";
         public enum State

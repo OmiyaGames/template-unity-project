@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Global;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu

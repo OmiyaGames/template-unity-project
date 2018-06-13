@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using OmiyaGames.Audio;
+using OmiyaGames.Settings;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsControlsMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)

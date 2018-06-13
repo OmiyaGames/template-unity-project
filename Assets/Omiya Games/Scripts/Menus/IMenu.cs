@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Global;
+using OmiyaGames.Scenes;
 
 namespace OmiyaGames.Menu
 {
@@ -166,7 +166,7 @@ namespace OmiyaGames.Menu
                     && (CurrentVisibility == VisibilityState.Visible)
 
                     // Finally, make sure we're not in the middle of transitioing to or from a new scene
-                    && (SceneChanger.State == SceneTransitionManager.TransitionState.None))
+                    && (SceneChanger.IsLoadingScene == false))
                 {
                     // Return the current listening state
                     returnFlag = isListeningToEvents;

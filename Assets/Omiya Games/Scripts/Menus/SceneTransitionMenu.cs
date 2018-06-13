@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace OmiyaGames
+namespace OmiyaGames.Scenes
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SceneTransitionMenu.cs" company="Omiya Games">
@@ -50,8 +50,8 @@ namespace OmiyaGames
     /// <description>6/13/2018</description>
     /// <description>Taro</description>
     /// <description>
-    /// Taking out <code>IMenu</code> extension.
-    /// Switching the Transition to just be a regular script.
+    /// Extending <code>MonoBehaviour</code> to remove
+    /// all the cruft from <code>IMenu</code>.
     /// </description>
     /// </item>
     /// </list>
@@ -69,29 +69,108 @@ namespace OmiyaGames
             SceneTransitionOutEnd
         }
 
+        public delegate void TransitionChanged(Transition from, Transition to);
+        public static event TransitionChanged OnBeforeTransitionChanged;
+        public static event TransitionChanged OnAfterTransitionChanged;
+
+        static Transition currentTransition = Transition.None;
+
+        public static Transition CurrentTransition
+        {
+            get
+            {
+                return currentTransition;
+            }
+            private set
+            {
+                if (currentTransition != value)
+                {
+                    // Execute event before setting value
+                    OnBeforeTransitionChanged(currentTransition, value);
+
+                    // Set the value, while caching the old one
+                    Transition lastValue = currentTransition;
+                    currentTransition = value;
+
+                    // Execute event after value is set
+                    OnAfterTransitionChanged(lastValue, currentTransition);
+                }
+            }
+        }
+
+        public static SceneTransitionMenu Instance
+        {
+            get;
+            private set;
+        } = null;
+
+        public static bool IsInMiddleOfTransitioning
+        {
+            get
+            {
+                switch (CurrentTransition)
+                {
+                    case Transition.SceneTransitionInStart:
+                    case Transition.SceneTransitionOutStart:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+        }
+
         [SerializeField]
         string transitionInTrigger = "transitionIn";
         [SerializeField]
         string transitionOutTrigger = "transitionOut";
 
-        public Transition CurrentTransition
-        {
-            get;
-            private set;
-        } = Transition.None;
+        Animator cachedAnimator = null;
 
-        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
+        public Animator Animator
         {
-            // Do nothing
-            if(to == VisibilityState.Visible)
+            get
             {
-                // Update the current transition state
-                CurrentTransition = Transition.SceneTransitionOutStart;
-
-                // Run the animation
-                Animator.SetTrigger(transitionOutTrigger);
+                if (cachedAnimator == null)
+                {
+                    cachedAnimator = GetComponent<Animator>();
+                }
+                return cachedAnimator;
             }
-            else if(to == VisibilityState.Hidden)
+        }
+
+        void Awake()
+        {
+            // Make sure this is the only instance running Awake()
+            if (Instance == null)
+            {
+                // Update the instance
+                Instance = this;
+                TransitionIn();
+            }
+            else
+            {
+                // Destroy the entire game object
+                Destroy(gameObject);
+            }
+        }
+
+        void OnDestroy()
+        {
+            // Make sure this is the script that prompted the animation to trigger
+            if (Instance == this)
+            {
+                // Clear the instance
+                Instance = null;
+
+                // Update the current transition state
+                CurrentTransition = Transition.None;
+            }
+        }
+
+        internal void TransitionIn()
+        {
+            // Make sure we're not in the middle of transitioning animation
+            if (IsInMiddleOfTransitioning == false)
             {
                 // Update the current transition state
                 CurrentTransition = Transition.SceneTransitionInStart;
@@ -101,30 +180,31 @@ namespace OmiyaGames
             }
         }
 
+        internal void TransitionOut()
+        {
+            // Make sure we're not in the middle of transitioning animation
+            if (IsInMiddleOfTransitioning == false)
+            {
+                // Update the current transition state
+                CurrentTransition = Transition.SceneTransitionOutStart;
+
+                // Run the animation
+                Animator.SetTrigger(transitionOutTrigger);
+            }
+        }
+
+        #region Animation Events
         public void OnSceneTransitionInEnd()
         {
             // Update the current transition state
             CurrentTransition = Transition.SceneTransitionInEnd;
-
-            // Check if there's an action associated with this dialog
-            if(onStateChangedWhileManaged != null)
-            {
-                onStateChangedWhileManaged(this);
-                onStateChangedWhileManaged = null;
-            }
         }
 
         public void OnSceneTransitionOutEnd()
         {
             // Update the current transition state
             CurrentTransition = Transition.SceneTransitionOutEnd;
-
-            // Check if there's an action associated with this dialog
-            if(onStateChangedWhileManaged != null)
-            {
-                onStateChangedWhileManaged(this);
-                onStateChangedWhileManaged = null;
-            }
         }
+        #endregion
     }
 }
