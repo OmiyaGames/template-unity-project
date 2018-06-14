@@ -58,7 +58,7 @@ namespace OmiyaGames.Scenes
     /// </remarks>
     [RequireComponent(typeof(Animator))]
     [DisallowMultipleComponent]
-    public class SceneTransitionMenu : MonoBehaviour
+    public class SceneTransition : MonoBehaviour
     {
         public enum Transition
         {
@@ -98,7 +98,7 @@ namespace OmiyaGames.Scenes
             }
         }
 
-        public static SceneTransitionMenu Instance
+        public static SceneTransition Instance
         {
             get;
             private set;

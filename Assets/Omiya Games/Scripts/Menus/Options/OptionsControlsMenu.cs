@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Audio;
-using OmiyaGames.Settings;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
@@ -489,44 +488,10 @@ namespace OmiyaGames.Menu
         EnableFlags defaultFlags;
         [SerializeField]
         EnableFlags webglFlags;
-
-        [Header("Language Controls")]
         [SerializeField]
-        LanguageDropDown languageDropDown;
+        SupportedPlatforms enableMusicVolumeControls;
         [SerializeField]
-        GameObject[] languageParents;
-
-        [Header("Audio Controls")]
-        [SerializeField]
-        AudioControls musicControls;
-        [SerializeField]
-        AudioControls soundEffectsControls;
-
-        [Header("Special Effects Controls")]
-        [SerializeField]
-        ToggleControls smoothCameraControls;
-        [SerializeField]
-        ToggleControls bobbingCameraControls;
-        [SerializeField]
-        ToggleControls motionBlursControls;
-        [SerializeField]
-        ToggleControls flashesControls;
-        [SerializeField]
-        ToggleControls bloomControls;
-        [SerializeField]
-        GameObject[] specialEffectsParents;
-
-        [Header("Keyboard Sensitivity")]
-        [SerializeField]
-        CompoundSensitivityControls keyboardSensitivity;
-
-        [Header("Invert Keyboard")]
-        [SerializeField]
-        ToggleControls keyboardXInvert;
-        [SerializeField]
-        ToggleControls keyboardYInvert;
-        [SerializeField]
-        GameObject[] invertKeyboardLabelsAndDividers;
+        SupportedPlatforms enableSoundEffectVolumeControls;
 
         [Header("Mouse Sensitivity")]
         [SerializeField]
@@ -540,6 +505,18 @@ namespace OmiyaGames.Menu
         [SerializeField]
         GameObject[] invertMouseLabelsAndDividers;
 
+        [Header("Keyboard Sensitivity")]
+        [SerializeField]
+        CompoundSensitivityControls keyboardSensitivity;
+
+        [Header("Invert Keyboard")]
+        [SerializeField]
+        ToggleControls keyboardXInvert;
+        [SerializeField]
+        ToggleControls keyboardYInvert;
+        [SerializeField]
+        GameObject[] invertKeyboardLabelsAndDividers;
+
         [Header("Scroll Wheel")]
         [SerializeField]
         SensitivityControls scrollWheelSensitivity;
@@ -547,10 +524,6 @@ namespace OmiyaGames.Menu
         ToggleControls scrollWheelInvert;
         [SerializeField]
         GameObject[] scrollWheelLabelsAndDividers;
-
-        [Header("Other controls")]
-        [SerializeField]
-        GameObject resetAllDataParent;
         #endregion
 
         SoundEffect audioCache;
@@ -571,14 +544,6 @@ namespace OmiyaGames.Menu
             }
         }
 
-        GameSettings settings
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>();
-            }
-        }
-
         public override Type MenuType
         {
             get
@@ -591,7 +556,8 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return musicControls.VolumeSlider.gameObject;
+                // FIXME: assign a control
+                return null;
             }
         }
 
@@ -613,15 +579,6 @@ namespace OmiyaGames.Menu
             // Setup controls
             inSetupMode = true;
 
-            // Update how the languages are enabled
-            SetupLanguageControls();
-
-            // Update how music controls are enabled
-            SetupAudioControls();
-
-            // Update how special effects controls are enabled
-            SetupSpecialEffectsControls();
-
             // Update how keyboard controls are enabled
             SetupKeyboardSensitivityControls();
             SetupInvertKeyboardControls();
@@ -632,9 +589,6 @@ namespace OmiyaGames.Menu
 
             // Update how scroll wheel controls are enabled
             SetupScrollWheelControls();
-
-            // Update whether the rest of the controls are enabled
-            SetupOtherControls();
             inSetupMode = false;
         }
 
@@ -655,6 +609,11 @@ namespace OmiyaGames.Menu
         }
 
         #region UI events
+        static string Percent(float val)
+        {
+            return val.ToString("0%");
+        }
+
         public void OnLanguageSeleced(int selectedIndex)
         {
             if ((inSetupMode == false) && (selectedIndex >= 0))
@@ -672,217 +631,13 @@ namespace OmiyaGames.Menu
             }
         }
 
-        #region Music Group
-        public void OnMusicSliderChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                BackgroundMusic.GlobalVolume = sliderValue;
-                musicControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnMusicMuteToggled(bool mute)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                BackgroundMusic.GlobalMute = mute;
-
-                // disable the slider
-                musicControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Sound Effects Group
-        public void OnSoundEffectsSliderChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                SoundEffect.GlobalVolume = sliderValue;
-                soundEffectsControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnSoundEffectsSliderPointerUp()
-        {
-            TestSoundEffect.Play();
-        }
-
-        public void OnSoundEffectsMuteToggled(bool mute)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                SoundEffect.GlobalMute = mute;
-
-                // disable the slider
-                soundEffectsControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Special Effects Group
-        public void OnEnableSmoothCameraToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsSmoothCameraEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableBobbingCameraToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsBobbingCameraEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableFlashesToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsFlashesEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableMotionBlursToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsMotionBlursEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableBloomToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsBloomEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Keyboard Sensitivity
-        public void OnSplitKeyboardAxisToggled(bool splitAxis)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardAxisSensitivitySplit = splitAxis;
-
-                // Toggle which sliders will be showing up
-                keyboardSensitivity.UpdateAxisSensitivityControls();
-                if (splitAxis == true)
-                {
-                    keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
-                    keyboardSensitivity.YAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
-                }
-                else
-                {
-                    keyboardSensitivity.OverallSensitivity.SensitivitySlider.value = keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value;
-                }
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnKeyboardOverallSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.KeyboardXAxisSensitivity = sliderValue;
-                settings.KeyboardYAxisSensitivity = sliderValue;
-                keyboardSensitivity.OverallSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnKeyboardXAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.KeyboardXAxisSensitivity = sliderValue;
-
-                keyboardSensitivity.XAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnKeyboardYAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.KeyboardYAxisSensitivity = sliderValue;
-
-                keyboardSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-        #endregion
-
-        #region Keyboard Inverted
-        public void OnInvertKeyboardXAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardXAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnInvertKeyboardYAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardYAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
         #region Mouse Sensitivity
         public void OnSplitMouseAxisToggled(bool splitAxis)
         {
             if (inSetupMode == false)
             {
                 // Store this settings
-                settings.IsMouseAxisSensitivitySplit = splitAxis;
+                Settings.IsMouseAxisSensitivitySplit = splitAxis;
 
                 // Toggle which sliders will be showing up
                 mouseSensitivity.UpdateAxisSensitivityControls();
@@ -906,8 +661,8 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Setup settings
-                settings.MouseXAxisSensitivity = sliderValue;
-                settings.MouseYAxisSensitivity = sliderValue;
+                Settings.MouseXAxisSensitivity = sliderValue;
+                Settings.MouseYAxisSensitivity = sliderValue;
 
                 mouseSensitivity.OverallSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
             }
@@ -918,7 +673,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Setup settings
-                settings.MouseXAxisSensitivity = sliderValue;
+                Settings.MouseXAxisSensitivity = sliderValue;
 
                 mouseSensitivity.XAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
             }
@@ -929,7 +684,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Setup settings
-                settings.MouseYAxisSensitivity = sliderValue;
+                Settings.MouseYAxisSensitivity = sliderValue;
 
                 mouseSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
             }
@@ -942,7 +697,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Store this settings
-                settings.IsMouseXAxisInverted = invert;
+                Settings.IsMouseXAxisInverted = invert;
 
                 // Indicate button is clicked
                 Manager.ButtonClick.Play();
@@ -954,7 +709,92 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Store this settings
-                settings.IsMouseYAxisInverted = invert;
+                Settings.IsMouseYAxisInverted = invert;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
+            }
+        }
+        #endregion
+
+        #region Keyboard Sensitivity
+        public void OnSplitKeyboardAxisToggled(bool splitAxis)
+        {
+            if (inSetupMode == false)
+            {
+                // Store this settings
+                Settings.IsKeyboardAxisSensitivitySplit = splitAxis;
+
+                // Toggle which sliders will be showing up
+                keyboardSensitivity.UpdateAxisSensitivityControls();
+                if (splitAxis == true)
+                {
+                    keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
+                    keyboardSensitivity.YAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
+                }
+                else
+                {
+                    keyboardSensitivity.OverallSensitivity.SensitivitySlider.value = keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value;
+                }
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
+            }
+        }
+
+        public void OnKeyboardOverallSensitivityChanged(float sliderValue)
+        {
+            if (inSetupMode == false)
+            {
+                // Setup settings
+                Settings.KeyboardXAxisSensitivity = sliderValue;
+                Settings.KeyboardYAxisSensitivity = sliderValue;
+                keyboardSensitivity.OverallSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
+            }
+        }
+
+        public void OnKeyboardXAxisSensitivityChanged(float sliderValue)
+        {
+            if (inSetupMode == false)
+            {
+                // Setup settings
+                Settings.KeyboardXAxisSensitivity = sliderValue;
+
+                keyboardSensitivity.XAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
+            }
+        }
+
+        public void OnKeyboardYAxisSensitivityChanged(float sliderValue)
+        {
+            if (inSetupMode == false)
+            {
+                // Setup settings
+                Settings.KeyboardYAxisSensitivity = sliderValue;
+
+                keyboardSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
+            }
+        }
+        #endregion
+
+        #region Keyboard Inverted
+        public void OnInvertKeyboardXAxisToggled(bool invert)
+        {
+            if (inSetupMode == false)
+            {
+                // Store this settings
+                Settings.IsKeyboardXAxisInverted = invert;
+
+                // Indicate button is clicked
+                Manager.ButtonClick.Play();
+            }
+        }
+
+        public void OnInvertKeyboardYAxisToggled(bool invert)
+        {
+            if (inSetupMode == false)
+            {
+                // Store this settings
+                Settings.IsKeyboardYAxisInverted = invert;
 
                 // Indicate button is clicked
                 Manager.ButtonClick.Play();
@@ -968,7 +808,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Setup settings
-                settings.ScrollWheelSensitivity = sliderValue;
+                Settings.ScrollWheelSensitivity = sliderValue;
 
                 // Update label
                 scrollWheelSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
@@ -980,7 +820,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Store this settings
-                settings.IsScrollWheelInverted = invert;
+                Settings.IsScrollWheelInverted = invert;
 
                 // Indicate button is clicked
                 Manager.ButtonClick.Play();
@@ -990,79 +830,18 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
-        static string Percent(float val)
-        {
-            return val.ToString("0%");
-        }
-
-        void SetupLanguageControls()
-        {
-            if (languageDropDown.IsSetup == false)
-            {
-                // Setup the drop down
-                languageDropDown.Setup();
-            }
-
-            // Update whether the controls are visible or not
-            foreach (GameObject controls in languageParents)
-            {
-                controls.SetActive(AllFlags.EnableLanguageControls);
-            }
-        }
-
-        void SetupAudioControls()
-        {
-            // Update music controls
-            musicControls.Update(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
-            musicControls.IsActive = AllFlags.EnableMusicControls;
-
-            // Update sound effect controls
-            soundEffectsControls.Update(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
-            soundEffectsControls.IsActive = AllFlags.EnableSoundEffectControls;
-        }
-
-        void SetupSpecialEffectsControls()
-        {
-            // Update Motion Blurs controls
-            smoothCameraControls.IsInverted = settings.IsSmoothCameraEnabled;
-            smoothCameraControls.IsActive = AllFlags.EnableSmoothCameraToggle;
-
-            // Update Motion Blurs controls
-            bobbingCameraControls.IsInverted = settings.IsBobbingCameraEnabled;
-            bobbingCameraControls.IsActive = AllFlags.EnableBobbingCameraToggle;
-
-            // Update Motion Blurs controls
-            motionBlursControls.IsInverted = settings.IsMotionBlursEnabled;
-            motionBlursControls.IsActive = AllFlags.EnableMotionBlursToggle;
-
-            // Update Flashing controls
-            flashesControls.IsInverted = settings.IsFlashesEnabled;
-            flashesControls.IsActive = AllFlags.EnableFlashingEffectsToggle;
-
-            // Update Bloom controls
-            bloomControls.IsInverted = settings.IsBloomEnabled;
-            bloomControls.IsActive = AllFlags.EnableBloomToggle;
-
-            // Update visiblilty
-            bool specialEffectsEnabled = AllFlags.EnableMotionBlursToggle && AllFlags.EnableFlashingEffectsToggle;
-            foreach (GameObject controls in specialEffectsParents)
-            {
-                controls.SetActive(specialEffectsEnabled);
-            }
-        }
-
         void SetupKeyboardSensitivityControls()
         {
             // Update keyboard sensitivity
-            keyboardSensitivity.Update(settings.IsKeyboardAxisSensitivitySplit, settings.KeyboardXAxisSensitivity, settings.KeyboardYAxisSensitivity);
+            keyboardSensitivity.Update(Settings.IsKeyboardAxisSensitivitySplit, Settings.KeyboardXAxisSensitivity, Settings.KeyboardYAxisSensitivity);
             keyboardSensitivity.IsActive = AllFlags.EnableKeyboardSensitivityControls;
         }
 
         void SetupInvertKeyboardControls()
         {
             // Update keyboard inverting controls
-            keyboardXInvert.IsInverted = settings.IsKeyboardXAxisInverted;
-            keyboardYInvert.IsInverted = settings.IsKeyboardYAxisInverted;
+            keyboardXInvert.IsInverted = Settings.IsKeyboardXAxisInverted;
+            keyboardYInvert.IsInverted = Settings.IsKeyboardYAxisInverted;
 
             // Activate or deactivate all controls
             keyboardXInvert.IsActive = AllFlags.EnableKeyboardInvertedControls;
@@ -1076,15 +855,15 @@ namespace OmiyaGames.Menu
         void SetupMouseSensitivityControls()
         {
             // Update keyboard sensitivity
-            mouseSensitivity.Update(settings.IsMouseAxisSensitivitySplit, settings.MouseXAxisSensitivity, settings.MouseYAxisSensitivity);
+            mouseSensitivity.Update(Settings.IsMouseAxisSensitivitySplit, Settings.MouseXAxisSensitivity, Settings.MouseYAxisSensitivity);
             mouseSensitivity.IsActive = AllFlags.EnableMouseSensitivityControls;
         }
 
         void SetupInvertMouseControls()
         {
             // Update keyboard inverting controls
-            mouseXInvert.IsInverted = settings.IsMouseXAxisInverted;
-            mouseYInvert.IsInverted = settings.IsMouseYAxisInverted;
+            mouseXInvert.IsInverted = Settings.IsMouseXAxisInverted;
+            mouseYInvert.IsInverted = Settings.IsMouseYAxisInverted;
 
             // Activate or deactivate all controls
             mouseXInvert.IsActive = AllFlags.EnableMouseInvertedControls;
@@ -1098,11 +877,11 @@ namespace OmiyaGames.Menu
         void SetupScrollWheelControls()
         {
             // Update scroll wheel sensitivity
-            scrollWheelSensitivity.Update(settings.ScrollWheelSensitivity);
+            scrollWheelSensitivity.Update(Settings.ScrollWheelSensitivity);
             scrollWheelSensitivity.IsActive = AllFlags.EnableScrollWheelSensitivityControls;
 
             // Update scroll wheel inverted
-            scrollWheelInvert.IsInverted = settings.IsScrollWheelInverted;
+            scrollWheelInvert.IsInverted = Settings.IsScrollWheelInverted;
             scrollWheelInvert.IsActive = AllFlags.EnableScrollWheelInvertedControls;
 
             // Update visiblilty
@@ -1111,11 +890,6 @@ namespace OmiyaGames.Menu
             {
                 controls.SetActive(specialEffectsEnabled);
             }
-        }
-
-        void SetupOtherControls()
-        {
-            resetAllDataParent.SetActive(AllFlags.EnableResetDataButton);
         }
         #endregion
     }
