@@ -41,6 +41,8 @@ namespace OmiyaGames
 
         [SerializeField]
         TMPro.TextMeshProUGUI label;
+        [SerializeField]
+        string format = "0%";
 
         Slider sliderCache = null;
 
@@ -56,17 +58,12 @@ namespace OmiyaGames
             }
         }
 
-        public static string Percent(float val)
-        {
-            return val.ToString("0%");
-        }
-
         // Use this for initialization
         public void OnSliderValueChanged(float newValue)
         {
             if(label != null)
             {
-                label.SetText(Percent(newValue));
+                label.SetText(newValue.ToString(format));
                 OnValueChanged?.Invoke(newValue);
             }
         }
