@@ -34,7 +34,7 @@ namespace OmiyaGames
     /// A helper script to handle a slider and checkbox combination.
     /// </summary>
     [DisallowMultipleComponent]
-    public class SliderCheckboxCombo : MonoBehaviour
+    public class AudioVolumeControls : MonoBehaviour
     {
         public event System.Action<bool> OnCheckboxUpdated;
         public event System.Action<float> OnSliderValueUpdated;

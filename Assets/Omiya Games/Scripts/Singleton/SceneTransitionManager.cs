@@ -41,7 +41,7 @@ namespace OmiyaGames.Scenes
     /// Where possible, it'll animate the <code>SceneTransitionMenu</code> before
     /// switching scenes.
     /// </summary>
-    /// <seealso cref="SceneTransitionMenu"/>
+    /// <seealso cref="SceneTransition"/>
     /// <seealso cref="Singleton"/>
     [DisallowMultipleComponent]
     public class SceneTransitionManager : ISingletonScript
@@ -195,7 +195,7 @@ namespace OmiyaGames.Scenes
             get
             {
                 bool returnFlag = false;
-                if (SceneTransitionMenu.IsInMiddleOfTransitioning == true)
+                if (SceneTransition.IsInMiddleOfTransitioning == true)
                 {
                     returnFlag = true;
                 }
@@ -354,10 +354,10 @@ namespace OmiyaGames.Scenes
             sceneLoadingInfo.allowSceneActivation = false;
 
             // Check if the transition menu is available
-            if (SceneTransitionMenu.Instance != null)
+            if (SceneTransition.Instance != null)
             {
                 // Play the transition out animation
-                SceneTransitionMenu.Instance.TransitionOut();
+                SceneTransition.Instance.TransitionOut();
             }
 
             // Monitor the progress of the scene loading

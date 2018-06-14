@@ -48,13 +48,15 @@ namespace OmiyaGames.Menu
         [SerializeField]
         SupportedPlatforms enableSoundEffectVolumeControls;
 
-        [Header("Audio Controls")]
+        [Header("Music Controls")]
         [SerializeField]
-        SliderCheckboxCombo musicVolumeControls;
+        AudioVolumeControls musicVolumeControls;
         [SerializeField]
         GameObject[] musicVolumeSection;
+
+        [Header("Sound Effects Controls")]
         [SerializeField]
-        SliderCheckboxCombo soundEffectsVolumeControls;
+        AudioVolumeControls soundEffectsVolumeControls;
         [SerializeField]
         GameObject[] soundEffectsSection;
         #endregion
