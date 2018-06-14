@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace OmiyaGames
+namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LabeledSlider.cs" company="Omiya Games">
+    /// <copyright file="AudioVolumeControls.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,7 +31,7 @@ namespace OmiyaGames
     /// <date>6/11/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// A helper script to handle a slider and checkbox combination.
+    /// A helper script to handle audio slider and checkbox.
     /// </summary>
     [DisallowMultipleComponent]
     public class AudioVolumeControls : MonoBehaviour
@@ -88,28 +88,50 @@ namespace OmiyaGames
                 return returnValue;
             }
         }
+
+        bool IsListeningToEvents
+        {
+            get;
+            set;
+        } = true;
         #endregion
 
         public void Setup(float volumeNormalized, bool isMute)
         {
+            // Update state
+            IsListeningToEvents = false;
+
+            // Setup controls
             Slider.value = volumeNormalized;
             Checkbox.isOn = isMute;
+
+            // Update state
+            IsListeningToEvents = true;
         }
 
         public void OnCheckboxChanged(bool isChecked)
         {
-            Slider.interactable = (conditionToEnableSlider == isChecked);
-            OnCheckboxUpdated?.Invoke(isChecked);
+            if (IsListeningToEvents == true)
+            {
+                Slider.interactable = (conditionToEnableSlider == isChecked);
+                OnCheckboxUpdated?.Invoke(isChecked);
+            }
         }
 
         public void OnSliderReleased()
         {
-            OnSliderReleaseUpdated?.Invoke(Slider.value);
+            if (IsListeningToEvents == true)
+            {
+                OnSliderReleaseUpdated?.Invoke(Slider.value);
+            }
         }
 
         public void OnSliderValueChanged(float newValue)
         {
-            OnSliderReleaseUpdated?.Invoke(newValue);
+            if (IsListeningToEvents == true)
+            {
+                OnSliderReleaseUpdated?.Invoke(newValue);
+            }
         }
     }
 }
