@@ -47,7 +47,7 @@ namespace OmiyaGames
 
         public static float GetHeight(GUIContent label, int numRows, float verticalMargin)
         {
-            if ((label != null) && (string.IsNullOrEmpty(label.text) == true))
+            if ((label != null) && (string.IsNullOrEmpty(label.text) == false))
             {
                 numRows += 1;
             }
