@@ -143,14 +143,37 @@ namespace OmiyaGames.Menu
                 invertVerticalAxisCheckbox = value;
             }
         }
+
+        public GameObject DefaultGameObject
+        {
+            get
+            {
+                GameObject defaultSlider = BothSensitivitySlider.gameObject;
+                if (SplitAxisCheckbox.isOn == true)
+                {
+                    defaultSlider = HorizontalSensitivitySlider.gameObject;
+                }
+                return defaultSlider;
+            }
+        }
         #endregion
 
-        public void Setup(bool splitAxisSensitivity)
+        public void Setup(float xAxisSensitivity, float yAxisSensitivity, bool splitAxisSensitivity, bool invertXAxis, bool invertYAxis)
         {
             // Update state
             IsListeningToEvents = false;
 
+            // Update the sensitivity toggle first
             ToggleSensitivityControls(splitAxisSensitivity, false);
+
+            // Update the sensitivity sliders
+            BothSensitivitySlider.value = xAxisSensitivity;
+            HorizontalSensitivitySlider.value = xAxisSensitivity;
+            VerticalSensitivitySlider.value = yAxisSensitivity;
+
+            // Update the inverted checkbox
+            InvertHorizontalAxisCheckbox.isOn = invertXAxis;
+            InvertVerticalAxisCheckbox.isOn = invertYAxis;
 
             // Update state
             IsListeningToEvents = true;
@@ -189,6 +212,22 @@ namespace OmiyaGames.Menu
                 OnSplitAxisCheckboxChanged?.Invoke(this, isChecked);
             }
         }
+
+        public void OnInvertHorizontalAxisCheckboxToggled(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                OnInvertHorizontalAxisCheckboxChanged?.Invoke(this, isChecked);
+            }
+        }
+
+        public void OnInvertVerticalAxisCheckboxToggled(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                OnInvertVerticalAxisCheckboxChanged?.Invoke(this, isChecked);
+            }
+        }
         #endregion
 
         #region Helper Methods
@@ -197,7 +236,7 @@ namespace OmiyaGames.Menu
             // Toggle activating controls
             HorizontalSensitivitySlider.gameObject.SetActive(isChecked == true);
             VerticalSensitivitySlider.gameObject.SetActive(isChecked == true);
-            BothSensitivitySlider.gameObject.SetActive(isChecked == true);
+            BothSensitivitySlider.gameObject.SetActive(isChecked == false);
 
             // Check if slider values needs to be updated as well
             if (updateSliders == true)
