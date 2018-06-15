@@ -30,8 +30,9 @@ namespace OmiyaGames
     /// <date>6/12/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An enum indicating supported platforms. Can be multi-selected.
+    /// An enum indicating supported platforms. Can be multi-selected in the Unity Editor.
     /// </summary>
+    /// <seealso cref="SupportPlatformsHelper"/>
     /// <remarks>
     /// Revision History:
     /// <list type="table">
@@ -51,27 +52,68 @@ namespace OmiyaGames
     public enum SupportedPlatforms {
         None = 0,
 
-        Windows =   1 << 1,
-        MacOS =     1 << 2,
-        Linux =     1 << 3,
-        Web =       1 << 4,
-        iOS =       1 << 5,
-        Android =   1 << 6,
+        // To add more plaforms, just add them to the list below,
+        // AND to the AllPlatforms value at the end.
+        Windows =   1 << 0,
+        MacOS =     1 << 1,
+        Linux =     1 << 2,
+        Web =       1 << 3,
+        iOS =       1 << 4,
+        Android =   1 << 5,
 
         AllPlatforms = Windows | MacOS | Linux | Web | iOS | Android,
     }
 
+    /// <summary>
+    /// A class full of helper and extended methods for <code>SupportPlatforms</code>.
+    /// </summary>
+    /// <seealso cref="SupportPlatforms"/>
     public static class SupportedPlatformsHelper
     {
-        public static readonly string[] AllPlatformNames = new string[]
+        /// <summary>
+        /// Gets the number of flags in <code>SupportPlatforms</code>.
+        /// It is highly recommended to cache this value.
+        /// </summary>
+        public static int NumberOfPlatforms
         {
-            SupportedPlatforms.Windows.ToString(),
-            SupportedPlatforms.MacOS.ToString(),
-            SupportedPlatforms.Linux.ToString(),
-            SupportedPlatforms.Web.ToString(),
-            SupportedPlatforms.iOS.ToString(),
-            SupportedPlatforms.Android.ToString(),
-        };
+            get
+            {
+                int returnNumber = 0;
+                int flags = (int)SupportedPlatforms.AllPlatforms;
+                while(flags != 0)
+                {
+                    // Remove the last bit
+                    flags &= (flags - (1 << 0));
+
+                    // Increment the return value;
+                    ++returnNumber;
+                }
+                return returnNumber;
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of all the platform names.
+        /// It is highly recommended to cache this value.
+        /// </summary>
+        public static string[] AllPlatformNames
+        {
+            get
+            {
+                // Setup return value
+                int numberOfPlatforms = NumberOfPlatforms;
+                string[] returnNames = new string[numberOfPlatforms];
+
+                // Iterate through all the platforms, in order
+                SupportedPlatforms convertedEnum;
+                for(int bitPosition = 0; bitPosition < numberOfPlatforms; ++bitPosition)
+                {
+                    convertedEnum = (SupportedPlatforms)(1 << bitPosition);
+                    returnNames[bitPosition] = convertedEnum.ToString();
+                }
+                return returnNames;
+            }
+        }
 
         public static bool IsThisBuildSupported(this SupportedPlatforms currentPlatforms)
         {

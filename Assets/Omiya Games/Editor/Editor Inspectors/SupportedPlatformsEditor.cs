@@ -52,9 +52,14 @@ namespace OmiyaGames.UI
     [CustomPropertyDrawer(typeof(SupportedPlatforms))]
     public class SupportedPlatformsEditor : PropertyDrawer
     {
+        static string[] allPlatformNames = null;
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsHelper.AllPlatformNames);
+            if(allPlatformNames == null)
+            {
+                allPlatformNames = SupportedPlatformsHelper.AllPlatformNames;
+            }
+            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, allPlatformNames);
         }
     }
 }
