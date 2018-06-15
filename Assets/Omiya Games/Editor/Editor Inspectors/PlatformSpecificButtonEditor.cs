@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="SupportedPlatformsEditor.cs" company="Omiya Games">
+    /// <copyright file="PlatformSpecificButtonEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,12 +28,12 @@ namespace OmiyaGames.UI
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/12/2018</date>
+    /// <date>6/15/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Property drawer for <code>SupportedPlatforms</code>.
+    /// Property drawer for <code>PlatformSpecificButton</code>.
     /// </summary>
-    /// <seealso cref="SupportedPlatforms"/>
+    /// <seealso cref="PlatformSpecificButton"/>
     /// <remarks>
     /// Revision History:
     /// <list type="table">
@@ -43,25 +43,57 @@ namespace OmiyaGames.UI
     /// <description>Description</description>
     /// </listheader>
     /// <item>
-    /// <description>6/12/2018</description>
+    /// <description>6/15/2018</description>
     /// <description>Taro</description>
     /// <description>Initial verison</description>
     /// </item>
     /// </list>
     /// </remarks>
-    [CustomPropertyDrawer(typeof(SupportedPlatforms))]
-    public class SupportedPlatformsEditor : PropertyDrawer
+    [CustomPropertyDrawer(typeof(PlatformSpecificButton))]
+    public class PlatformSpecificButtonEditor : PropertyDrawer
     {
+        const int VerticalMargin = 2;
+        const int HorizontalMargin = 6;
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return AssetUtility.GetHeight(label, 1, VerticalMargin);
+        }
+
+        // Draw the property inside the given rect
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             // Using BeginProperty / EndProperty on the parent property means that
             // prefab override logic works on the entire property.
             EditorGUI.BeginProperty(position, label, property);
 
-            // Customize the drawer
-            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsHelper.AllPlatformNames);
+            // Don't make child fields be indented
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
 
-            // End this property
+            // Draw label
+            EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            if (string.IsNullOrEmpty(label.text) == false)
+            {
+                position.y += (EditorGUIUtility.singleLineHeight + VerticalMargin);
+                EditorGUI.indentLevel = 1;
+            }
+
+            // Setup rect
+            position.height = base.GetPropertyHeight(property, label);
+            Rect fieldRect = position;
+            fieldRect.width /= 2;
+
+            // Draw the Component
+            EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("component"), GUIContent.none);
+
+            // Draw the Enabled for
+            fieldRect.x += fieldRect.width + HorizontalMargin;
+            fieldRect.width -= HorizontalMargin;
+            EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("enabledFor"), GUIContent.none);
+
+            // Set indent back to what it was
+            EditorGUI.indentLevel = indent;
             EditorGUI.EndProperty();
         }
     }

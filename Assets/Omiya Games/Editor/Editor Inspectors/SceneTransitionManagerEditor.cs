@@ -74,7 +74,7 @@ namespace OmiyaGames.UI.Scenes
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return GetHeight(!string.IsNullOrEmpty(label.text));
+            return GetHeight(label);
         }
 
         // Draw the property inside the given rect
@@ -158,14 +158,9 @@ namespace OmiyaGames.UI.Scenes
             EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative(variableName), GUIContent.none);
         }
 
-        internal static float GetHeight(bool containsPrefixLabel)
+        internal static float GetHeight(GUIContent label = null)
         {
-            int numRows = 4;
-            if(containsPrefixLabel == true)
-            {
-                numRows += 1;
-            }
-            return (EditorGUIUtility.singleLineHeight * numRows) + (VerticalMargin * (numRows - 1));
+            return AssetUtility.GetHeight(label, 4, VerticalMargin);
         }
     }
 
@@ -242,7 +237,7 @@ namespace OmiyaGames.UI.Scenes
             levelList = new ReorderableList(serializedObject, levels, true, true, true, true);
             levelList.drawHeaderCallback = DrawLevelListHeader;
             levelList.drawElementCallback = DrawLevelListElement;
-            levelList.elementHeight = SceneInfoDrawer.GetHeight(false) + VerticalMargin;
+            levelList.elementHeight = SceneInfoDrawer.GetHeight() + VerticalMargin;
         }
 
         public override void OnInspectorGUI()
@@ -278,7 +273,7 @@ namespace OmiyaGames.UI.Scenes
         {
             SerializedProperty element = levels.GetArrayElementAtIndex(index);
             rect.y += VerticalMargin;
-            rect.height = SceneInfoDrawer.GetHeight(false);
+            rect.height = SceneInfoDrawer.GetHeight();
             EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
 
