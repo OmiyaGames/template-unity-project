@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
-    using System;
     using Settings;
+    using System;
 
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsListMenu.cs" company="Omiya Games">
@@ -43,15 +43,14 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class OptionsListMenu : IMenu
     {
+        [Header("Options List")]
         [SerializeField]
-        Button defaultButton;
+        Button backButton;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("allButtons")]
+        PlatformSpecificButton[] allOptionsButtons;
 
-        /// <summary>
-        /// Flag indicating a button in this menu has already been clicked.
-        /// Since this menu leads to other menus, this flag is used to prevent double-clicking.
-        /// The value will be reset when the panel is made visible again.
-        /// </summary>
-        bool isButtonLocked = false;
+        GameObject cachedDefaultButton = null;
 
         #region Overridden Properties
         public override Type MenuType
@@ -66,20 +65,31 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return null;
+                if(cachedDefaultButton == null)
+                {
+                    foreach(PlatformSpecificButton button in allOptionsButtons)
+                    {
+                        if(button.EnabledFor.IsThisBuildSupported() == true)
+                        {
+                            cachedDefaultButton = button.Component.gameObject;
+                            break;
+                        }
+                    }
+                }
+                return cachedDefaultButton;
             }
         }
         #endregion
 
-        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
+        protected override void OnSetup()
         {
-            // Call the base method
-            base.OnStateChanged(from, to);
+            // Call base method
+            base.OnSetup();
 
-            // If this menu is visible again, release the button lock
-            if (to == VisibilityState.Visible)
+            // Setup every button
+            foreach (PlatformSpecificButton button in allOptionsButtons)
             {
-                isButtonLocked = false;
+                button.Setup();
             }
         }
 
@@ -87,72 +97,57 @@ namespace OmiyaGames.Menu
         public void OnAudioClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 // Show the audio options
                 Manager.Show<OptionsAudioMenu>();
-
-                // Indicate the button has been clicked.
-                isButtonLocked = true;
             }
         }
 
         public void OnControlsClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 // Show the controls options
                 Manager.Show<OptionsControlsMenu>();
-
-                // Indicate the button has been clicked.
-                isButtonLocked = true;
             }
         }
 
         public void OnGraphicsClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 // Show the graphics options
                 Manager.Show<OptionsGraphicsMenu>();
-
-                // Indicate the button has been clicked.
-                isButtonLocked = true;
             }
         }
 
         public void OnAccessibilityClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 // Show the accessibility options
                 Manager.Show<OptionsAccessibilityMenu>();
-
-                // Indicate the button has been clicked.
-                isButtonLocked = true;
             }
         }
 
         public void OnLanguageClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 // Show the language options
                 Manager.Show<OptionsLanguageMenu>();
-
-                // Indicate the button has been clicked.
-                isButtonLocked = true;
             }
         }
 
         public void OnResetDataClicked()
         {
             // Make sure the button isn't locked yet
-            if (isButtonLocked == false)
+            if (IsListeningToEvents == true)
             {
                 ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
                 if (menu != null)
@@ -160,9 +155,6 @@ namespace OmiyaGames.Menu
                     // Display confirmation dialog
                     menu.DefaultToYes = false;
                     menu.Show(CheckResetSavedDataConfirmation);
-
-                    // Indicate the button has been clicked.
-                    isButtonLocked = true;
                 }
             }
         }

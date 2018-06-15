@@ -44,7 +44,16 @@ namespace OmiyaGames
         {
             return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
         }
-        
+
+        public static float GetHeight(GUIContent label, int numRows, float verticalMargin)
+        {
+            if ((label != null) && (string.IsNullOrEmpty(label.text) == true))
+            {
+                numRows += 1;
+            }
+            return (EditorGUIUtility.singleLineHeight * numRows) + (verticalMargin * (numRows - 1));
+        }
+
         public static string GetLastFolderName(string path, bool pathIncludesFileName)
         {
             string returnPath = Path.GetFileName(path);

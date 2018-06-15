@@ -3,7 +3,7 @@
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="OmiyaGamesUtility.cs" company="Omiya Games">
+    /// <copyright file="SupportPlatforms.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -32,7 +32,8 @@ namespace OmiyaGames
     /// <summary>
     /// An enum indicating supported platforms. Can be multi-selected in the Unity Editor.
     /// </summary>
-    /// <seealso cref="SupportPlatformsHelper"/>
+    /// <seealso cref="SupportedPlatformsHelper"/>
+    /// <seealso cref="UI.SupportedPlatformsEditor"/>
     /// <remarks>
     /// Revision History:
     /// <list type="table">

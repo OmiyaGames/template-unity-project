@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEditor;
+using UnityEngine.UI;
 
-namespace OmiyaGames.UI
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="SupportedPlatformsEditor.cs" company="Omiya Games">
+    /// <copyright file="PlatformSpecificControl.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,12 +28,12 @@ namespace OmiyaGames.UI
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/12/2018</date>
+    /// <date>6/15/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Property drawer for <code>SupportedPlatforms</code>.
+    /// A control that comes with specifications on what platform is supported.
     /// </summary>
-    /// <seealso cref="SupportedPlatforms"/>
+    /// <seealso cref="SupportPlatforms"/>
     /// <remarks>
     /// Revision History:
     /// <list type="table">
@@ -43,26 +43,54 @@ namespace OmiyaGames.UI
     /// <description>Description</description>
     /// </listheader>
     /// <item>
-    /// <description>6/12/2018</description>
+    /// <description>6/15/2018</description>
     /// <description>Taro</description>
     /// <description>Initial verison</description>
     /// </item>
     /// </list>
     /// </remarks>
-    [CustomPropertyDrawer(typeof(SupportedPlatforms))]
-    public class SupportedPlatformsEditor : PropertyDrawer
+    [System.Serializable]
+    public class PlatformSpecificControl<C> where C : Component
     {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        [SerializeField]
+        C component;
+        [SerializeField]
+        SupportedPlatforms enabledFor;
+
+        public C Component
         {
-            // Using BeginProperty / EndProperty on the parent property means that
-            // prefab override logic works on the entire property.
-            EditorGUI.BeginProperty(position, label, property);
+            get
+            {
+                return component;
+            }
+        }
 
-            // Customize the drawer
-            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsHelper.AllPlatformNames);
+        /// <summary>
+        /// Platforms this control supports
+        /// </summary>
+        public SupportedPlatforms EnabledFor
+        {
+            get
+            {
+                return enabledFor;
+            }
+        }
 
-            // End this property
-            EditorGUI.EndProperty();
+        /// <summary>
+        /// Activates the control if supported by the current platform.
+        /// If not, deactivates it.
+        /// </summary>
+        public void Setup()
+        {
+            Component.gameObject.SetActive(EnabledFor.IsThisBuildSupported());
         }
     }
+
+    /// <summary>
+    /// A button that comes with specifications on what platform is supported.
+    /// </summary>
+    /// <seealso cref="PlatformSpecificControl<C>"/>
+    /// <seealso cref="OptionsListButtonEditor"/>
+    [System.Serializable]
+    public class PlatformSpecificButton : PlatformSpecificControl<Button> { }
 }
