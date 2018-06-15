@@ -44,21 +44,29 @@ namespace OmiyaGames.Menu
         [SerializeField]
         SupportedPlatforms enableKeyboardControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
-        SupportedPlatforms enableMouseControls = SupportedPlatforms.AllPlatforms;
+        [UnityEngine.Serialization.FormerlySerializedAs("enableMouseControls")]
+        SupportedPlatforms enableCameraSensitivityControls = SupportedPlatforms.AllPlatforms;
+        [SerializeField]
+        SupportedPlatforms enableCameraSmoothingControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
         SupportedPlatforms enableScrollWheelControls = SupportedPlatforms.AllPlatforms;
+        [SerializeField]
+        GameObject[] allDividers;
 
         [Header("Keyboard Sensitivity")]
         [SerializeField]
         ControllerSensitivityControls keyboardSensitivitySet;
-        [SerializeField]
-        GameObject keyboardToMouseDivider = null;
 
-        [Header("Mouse Sensitivity")]
+        [Header("Camera Sensitivity")]
         [SerializeField]
-        ControllerSensitivityControls mouseSensitivitySet;
+        [UnityEngine.Serialization.FormerlySerializedAs("mouseSensitivitySet")]
+        ControllerSensitivityControls cameraSensitivitySet;
+
+        [Header("Camera Smoothing")]
         [SerializeField]
-        GameObject MouseToScrollWheelDivider = null;
+        AudioVolumeControls cameraSmoothingSet;
+        [SerializeField]
+        GameObject[] cameraSmoothingControls;
 
         [Header("Scroll Wheel")]
         [SerializeField]
@@ -82,13 +90,13 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                if(enableKeyboardControls.IsThisBuildSupported() == true)
+                if (enableKeyboardControls.IsThisBuildSupported() == true)
                 {
                     return keyboardSensitivitySet.DefaultGameObject;
                 }
-                else if (enableMouseControls.IsThisBuildSupported() == true)
+                else if (enableCameraSensitivityControls.IsThisBuildSupported() == true)
                 {
-                    return mouseSensitivitySet.DefaultGameObject;
+                    return cameraSensitivitySet.DefaultGameObject;
                 }
                 else
                 {
@@ -106,24 +114,24 @@ namespace OmiyaGames.Menu
             // Update how keyboard controls are enabled
             SetupKeyboardSensitivityControls();
 
-            // Toggle displaying the divider
-            keyboardToMouseDivider.SetActive(enableKeyboardControls.IsThisBuildSupported());
+            // Update how camera controls are enabled
+            SetupCameraSensitivityControls();
 
-            // Update how mouse controls are enabled
-            SetupMouseSensitivityControls();
-
-            // Toggle displaying the divider
-            keyboardToMouseDivider.SetActive(enableMouseControls.IsThisBuildSupported() && enableScrollWheelControls.IsThisBuildSupported());
+            // Update how camera smoothing are enabled
+            SetupCameraSmoothing();
 
             // Update how scroll wheel controls are enabled
             SetupScrollWheelControls();
+
+            // Update how dividers appear
+            SetupDividers();
         }
 
         #region UI events
         #region Keyboard Controls
         void KeyboardSensitivitySet_OnInvertVerticalAxisCheckboxChanged(ControllerSensitivityControls source, bool isChecked)
         {
-            if(IsListeningToEvents == true)
+            if (IsListeningToEvents == true)
             {
                 Settings.IsKeyboardYAxisInverted = isChecked;
             }
@@ -155,7 +163,7 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Mouse Controls
-        void MouseSensitivitySet_OnInvertVerticalAxisCheckboxChanged(ControllerSensitivityControls source, bool isChecked)
+        void CameraSensitivitySet_OnInvertVerticalAxisCheckboxChanged(ControllerSensitivityControls source, bool isChecked)
         {
             if (IsListeningToEvents == true)
             {
@@ -163,7 +171,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void MouseSensitivitySet_OnInvertHorizontalAxisCheckboxChanged(ControllerSensitivityControls source, bool isChecked)
+        void CameraSensitivitySet_OnInvertHorizontalAxisCheckboxChanged(ControllerSensitivityControls source, bool isChecked)
         {
             if (IsListeningToEvents == true)
             {
@@ -171,7 +179,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void MouseSensitivitySet_OnVerticalSensitivitySlider(ControllerSensitivityControls source, float value)
+        void CameraSensitivitySet_OnVerticalSensitivitySlider(ControllerSensitivityControls source, float value)
         {
             if (IsListeningToEvents == true)
             {
@@ -179,11 +187,27 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void MouseSensitivitySet_OnHorizontalSensitivitySlider(ControllerSensitivityControls source, float value)
+        void CameraSensitivitySet_OnHorizontalSensitivitySlider(ControllerSensitivityControls source, float value)
         {
             if (IsListeningToEvents == true)
             {
                 Settings.MouseXAxisSensitivity = value;
+            }
+        }
+
+        private void CameraSmoothingSet_OnSliderValueUpdated(float value)
+        {
+            if (IsListeningToEvents == true)
+            {
+                Settings.SmoothCameraFactor = value;
+            }
+        }
+
+        private void CameraSmoothingSet_OnCheckboxUpdated(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                Settings.IsSmoothCameraEnabled = isChecked;
             }
         }
         #endregion
@@ -233,33 +257,33 @@ namespace OmiyaGames.Menu
             }
         }
 
-        void SetupMouseSensitivityControls()
+        void SetupCameraSensitivityControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableMouseControls.IsThisBuildSupported();
+            bool enabled = enableCameraSensitivityControls.IsThisBuildSupported();
 
             // Toggle the display of the controls
-            mouseSensitivitySet.gameObject.SetActive(enabled);
+            cameraSensitivitySet.gameObject.SetActive(enabled);
 
             // Check if enabled
             if (enabled == true)
             {
                 // If so, setup the UI
-                mouseSensitivitySet.Setup(Settings.MouseXAxisSensitivity, Settings.MouseYAxisSensitivity, Settings.IsMouseAxisSensitivitySplit, Settings.IsMouseXAxisInverted, Settings.IsMouseYAxisInverted);
+                cameraSensitivitySet.Setup(Settings.MouseXAxisSensitivity, Settings.MouseYAxisSensitivity, Settings.IsMouseAxisSensitivitySplit, Settings.IsMouseXAxisInverted, Settings.IsMouseYAxisInverted);
 
                 // Bind to the events on any changes to the control set
-                mouseSensitivitySet.OnBothAxisSensitivitySlider += MouseSensitivitySet_OnHorizontalSensitivitySlider;
-                mouseSensitivitySet.OnHorizontalSensitivitySlider += MouseSensitivitySet_OnHorizontalSensitivitySlider;
-                mouseSensitivitySet.OnVerticalSensitivitySlider += MouseSensitivitySet_OnVerticalSensitivitySlider;
-                mouseSensitivitySet.OnInvertHorizontalAxisCheckboxChanged += MouseSensitivitySet_OnInvertHorizontalAxisCheckboxChanged;
-                mouseSensitivitySet.OnInvertVerticalAxisCheckboxChanged += MouseSensitivitySet_OnInvertVerticalAxisCheckboxChanged;
+                cameraSensitivitySet.OnBothAxisSensitivitySlider += CameraSensitivitySet_OnHorizontalSensitivitySlider;
+                cameraSensitivitySet.OnHorizontalSensitivitySlider += CameraSensitivitySet_OnHorizontalSensitivitySlider;
+                cameraSensitivitySet.OnVerticalSensitivitySlider += CameraSensitivitySet_OnVerticalSensitivitySlider;
+                cameraSensitivitySet.OnInvertHorizontalAxisCheckboxChanged += CameraSensitivitySet_OnInvertHorizontalAxisCheckboxChanged;
+                cameraSensitivitySet.OnInvertVerticalAxisCheckboxChanged += CameraSensitivitySet_OnInvertVerticalAxisCheckboxChanged;
             }
         }
 
         void SetupScrollWheelControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableMouseControls.IsThisBuildSupported();
+            bool enabled = enableCameraSensitivityControls.IsThisBuildSupported();
 
             // Check if enabled
             if (enabled == true)
@@ -273,6 +297,64 @@ namespace OmiyaGames.Menu
             foreach (GameObject control in scrollWheelControls)
             {
                 control.SetActive(enabled);
+            }
+        }
+
+        void SetupCameraSmoothing()
+        {
+            // Check to see if we want to show camera smoothing controls
+            bool enable = enableCameraSmoothingControls.IsThisBuildSupported();
+
+            // Update the controls active state
+            foreach (GameObject controls in cameraSmoothingControls)
+            {
+                controls.SetActive(enable);
+            }
+
+            // If enabled, setup the controls
+            if (enable == true)
+            {
+                cameraSmoothingSet.Setup(Settings.SmoothCameraFactor, Settings.IsSmoothCameraEnabled);
+                cameraSmoothingSet.OnCheckboxUpdated += CameraSmoothingSet_OnCheckboxUpdated;
+                cameraSmoothingSet.OnSliderValueUpdated += CameraSmoothingSet_OnSliderValueUpdated;
+                cameraSmoothingSet.OnSliderReleaseUpdated += CameraSmoothingSet_OnSliderValueUpdated;
+            }
+        }
+
+        void SetupDividers()
+        {
+            // Grab all the supported flags
+            SupportedPlatforms[] allSupportFlags = new SupportedPlatforms[]
+            {
+                enableKeyboardControls,
+                enableCameraSensitivityControls,
+                enableCameraSmoothingControls,
+                enableScrollWheelControls
+            };
+
+            // Deactivate all dividers
+            for (int index = 0; index < allDividers.Length; ++index)
+            {
+                allDividers[index].SetActive(false);
+            }
+
+            // Loop through all the sections
+            int numVisibleControlSets = 0;
+            for (int index = 0; ((index < allSupportFlags.Length) && ((index - 1) < allDividers.Length)); ++index)
+            {
+                // Check if this control set should be made visible
+                if (allSupportFlags[index].IsThisBuildSupported() == true)
+                {
+                    // Increment the number of visible controls
+                    ++numVisibleControlSets;
+
+                    // If there are more than one controls visible...
+                    if (numVisibleControlSets > 1)
+                    {
+                        // Make the divider *above* this control visible
+                        allDividers[index - 1].SetActive(true);
+                    }
+                }
             }
         }
         #endregion

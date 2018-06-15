@@ -15,8 +15,8 @@
             new OmiyaGames.Settings.AddAudioSettings(),
             new OmiyaGames.Settings.AddLocalAnalytics(),
             new OmiyaGames.Settings.AddLanguageSettings(),
-            new LudumDare38.AddHighScores(),
-            new LudumDare38.AddOptions(),
+            new AddHighScores(),
+            new AddOptions(),
         };
 
         /// <summary>
@@ -70,9 +70,10 @@
                         AllSettingsVersions[4].GetSetting("Mouse Y-Axis Sensitivity"),
                         AllSettingsVersions[4].GetSetting("Mouse X-Axis is Inverted"),
                         AllSettingsVersions[4].GetSetting("Mouse Y-Axis is Inverted"),
+                        AllSettingsVersions[4].GetSetting("Smooth Camera Factor"),
+                        AllSettingsVersions[4].GetSetting("Is Smooth Camera Enabled"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel Sensitivity"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel is Inverted"),
-                        AllSettingsVersions[4].GetSetting("Is Smooth Camera Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Bobbing Camera Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Flashes Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Motion Blurs Enabled"),
@@ -451,6 +452,38 @@
         }
 
         /// <summary>
+        /// The smoothing factor for making the camera follow the mouse movement.
+        /// A value between 0 and 1.
+        /// The lower the value, the more tightly it tracks the mouse movement.
+        /// </summary>
+        public float SmoothCameraFactor
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// If true, enables smooth camera controls.
+        /// </summary>
+        public bool IsSmoothCameraEnabled
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Smooth Camera Enabled").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Smooth Camera Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
         /// The mouse' scroll wheel's sensitivity.
         /// A value between 0 and 1.
         /// </summary>
@@ -478,21 +511,6 @@
             internal set
             {
                 AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Scroll Wheel is Inverted").SetValue(value, Settings, AppVersion);
-            }
-        }
-
-        /// <summary>
-        /// If true, enables smooth camera controls.
-        /// </summary>
-        public bool IsSmoothCameraEnabled
-        {
-            get
-            {
-                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Smooth Camera Enabled").Value;
-            }
-            internal set
-            {
-                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Smooth Camera Enabled").SetValue(value, Settings, AppVersion);
             }
         }
 
