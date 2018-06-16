@@ -72,36 +72,20 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public override string GetterCode
+        public override PropertyWriter GetterCode
         {
             get;
             set;
-        }
+        } = null;
 
-        public override string SetterCode
+        public override PropertyWriter SetterCode
         {
             get;
             set;
-        }
+        } = null;
 
 #if UNITY_EDITOR
         public override bool CanWriteCodeToInstance
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override bool IsGetterCustomized
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public override bool IsSetterCustomized
         {
             get
             {

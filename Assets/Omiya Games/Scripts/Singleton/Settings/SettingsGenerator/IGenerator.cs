@@ -58,22 +58,6 @@ namespace OmiyaGames.Settings
         }
 
         /// <summary>
-        /// Indicates if the getter code is customized.
-        /// </summary>
-        bool IsGetterCustomized
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Indicates if the setter code is customized.
-        /// </summary>
-        bool IsSetterCustomized
-        {
-            get;
-        }
-
-        /// <summary>
         /// Writes into a reference to this generator variable.
         /// This will not create a new line
         /// </summary>

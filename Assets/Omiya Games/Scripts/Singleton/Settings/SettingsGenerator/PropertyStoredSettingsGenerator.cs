@@ -47,14 +47,14 @@ namespace OmiyaGames.Settings
         //public event ValueChange OnBeforeValueChange;
         //public event ValueChange OnAfterValueChange;
 
-        public const string DefaultGetterCode = "Value";
-        public const string DefaultSetterCode = "SetValue(value, Settings, AppVersion)";
+        public static readonly PropertyWriter DefaultGetterCode = WriteGetter;
+        public static readonly PropertyWriter DefaultSetterCode = WriteSetter;
 
         private readonly string key;
         private readonly T defaultValue;
         private string propertyName = null;
-        private string customGetterCode = null;
-        private string customSetterCode = null;
+        private PropertyWriter customGetterCode = null;
+        private PropertyWriter customSetterCode = null;
 
         public PropertyStoredSettingsGenerator(string key, T defaultValue)
         {
@@ -194,11 +194,11 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public override string GetterCode
+        public override PropertyWriter GetterCode
         {
             get
             {
-                if(IsGetterCustomized == true)
+                if(customGetterCode != null)
                 {
                     return customGetterCode;
                 }
@@ -213,11 +213,11 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public override string SetterCode
+        public override PropertyWriter SetterCode
         {
             get
             {
-                if(IsSetterCustomized == true)
+                if(customSetterCode != null)
                 {
                     return customSetterCode;
                 }
@@ -229,22 +229,6 @@ namespace OmiyaGames.Settings
             set
             {
                 customSetterCode = value;
-            }
-        }
-
-        public override bool IsGetterCustomized
-        {
-            get
-            {
-                return (customGetterCode != null);
-            }
-        }
-
-        public override bool IsSetterCustomized
-        {
-            get
-            {
-                return (customSetterCode != null);
             }
         }
 
@@ -261,14 +245,24 @@ namespace OmiyaGames.Settings
         {
             GeneratorHelper.WriteCodeToInstance(this, writer, versionArrayIndex, includeGeneric);
         }
-
-        public string GetCodeToInstance(int versionArrayIndex, bool includeGeneric)
-        {
-            System.Text.StringBuilder builder = new System.Text.StringBuilder();
-            TextWriter writer = new StringWriter(builder);
-            WriteCodeToInstance(writer, versionArrayIndex, includeGeneric);
-            return builder.ToString();
-        }
 #endif
+
+        private static void WriteGetter(GeneratorDecorator source, GeneratePropertyEventArgs args)
+        {
+            if(args != null)
+            {
+                args.WriteTabs();
+                args.WriteSingleLine("Value");
+            }
+        }
+
+        private static void WriteSetter(GeneratorDecorator source, GeneratePropertyEventArgs args)
+        {
+            if (args != null)
+            {
+                args.WriteTabs();
+                args.WriteSingleLine("SetValue(value, Settings, AppVersion)");
+            }
+        }
     }
 }
