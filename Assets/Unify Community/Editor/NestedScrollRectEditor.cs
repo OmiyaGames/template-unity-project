@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEditorInternal;
+﻿using UnityEditor;
+using UnityEditor.UI;
 
-namespace UnityEditor.UI
+namespace Community.UI
 {
     /// <summary>
     /// Editor for <code>NestedScrollRect</code>.

@@ -15,8 +15,8 @@
             new OmiyaGames.Settings.AddAudioSettings(),
             new OmiyaGames.Settings.AddLocalAnalytics(),
             new OmiyaGames.Settings.AddLanguageSettings(),
-            new AddHighScores(),
-            new AddOptions(),
+            new Project.Settings.AddHighScores(),
+            new Project.Settings.AddOptions(),
         };
 
         /// <summary>
