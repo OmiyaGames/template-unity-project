@@ -252,7 +252,7 @@ namespace OmiyaGames.Settings
             if(args != null)
             {
                 args.WriteTabs();
-                args.WriteSingleLine("Value");
+                args.WriteSingleLine(true, "Value");
             }
         }
 
@@ -261,7 +261,7 @@ namespace OmiyaGames.Settings
             if (args != null)
             {
                 args.WriteTabs();
-                args.WriteSingleLine("SetValue(value, Settings, AppVersion)");
+                args.WriteSingleLine(false, "SetValue(value, Settings, AppVersion)");
             }
         }
     }

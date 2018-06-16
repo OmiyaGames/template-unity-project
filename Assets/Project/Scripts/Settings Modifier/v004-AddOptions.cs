@@ -36,7 +36,7 @@ namespace Project.Settings
     {
         public const ushort AppVersion = 4;
         const string CameraShakePropertyName = "IsCameraShakesEnabled";
-        const string HeadBobbingPropertyName = "IsHeadBobbingOptionEnabled";
+        const string HeadBobbingOptionPropertyName = "IsHeadBobbingOptionEnabled";
 
         public override ushort Version
         {
@@ -213,14 +213,14 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Is Head Bobbing Option Enabled", false)
             {
-                PropertyName = HeadBobbingPropertyName,
+                PropertyName = HeadBobbingOptionPropertyName,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
                     "The stored value for the head bobbing checkbox in the Graphics options menu."
                 }
             },
-            new PropertyGenerator("Is Head Bobbing Enabled", typeof(IRecord<bool>))
+            new PropertyGenerator("IsHeadBobbingEnabled", typeof(bool))
             {
                 GetterCode = WriteHeadBobbingGetter,
                 TooltipDocumentation = new string[]
@@ -260,12 +260,12 @@ namespace Project.Settings
             if (args != null)
             {
                 args.WriteTabs();
-                //args.writer.Write("return HighScores.TopRecord;");
                 args.writer.Write("return ");
                 args.writer.Write(CameraShakePropertyName);
                 args.writer.Write(" && ");
-                args.writer.Write(HeadBobbingPropertyName);
+                args.writer.Write(HeadBobbingOptionPropertyName);
                 args.writer.Write(';');
+                args.writer.WriteLine();
             }
         }
     }

@@ -60,10 +60,13 @@ namespace OmiyaGames.Settings
             GameSettingsGenerator.WriteTabs(writer, numTabs);
         }
 
-        public void WriteSingleLine(string variableOrFunction)
+        public void WriteSingleLine(bool withReturn, string variableOrFunction)
         {
             // Write return
-            writer.Write("return ");
+            if(withReturn == true)
+            {
+                writer.Write("return ");
+            }
             writer.Write(instanceName);
             writer.Write('.');
             writer.Write(variableOrFunction);
