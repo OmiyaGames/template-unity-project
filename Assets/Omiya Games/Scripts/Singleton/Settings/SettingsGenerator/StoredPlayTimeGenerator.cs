@@ -119,7 +119,7 @@ namespace OmiyaGames.Settings
             if(args != null)
             {
                 args.WriteTabs();
-                args.WriteSingleLine("TotalPlayTime");
+                args.WriteSingleLine(true, "TotalPlayTime");
             }
         }
     }
