@@ -124,7 +124,11 @@ namespace OmiyaGames.Menu
             SetupScrollWheelControls();
 
             // Update how dividers appear
-            SetupDividers();
+            OptionsMenuUtility.SetupDividers(allDividers,
+                enableKeyboardControls,
+                enableCameraSensitivityControls,
+                enableCameraSmoothingControls,
+                enableScrollWheelControls);
         }
 
         #region UI events
@@ -318,43 +322,6 @@ namespace OmiyaGames.Menu
                 cameraSmoothingSet.OnCheckboxUpdated += CameraSmoothingSet_OnCheckboxUpdated;
                 cameraSmoothingSet.OnSliderValueUpdated += CameraSmoothingSet_OnSliderValueUpdated;
                 cameraSmoothingSet.OnSliderReleaseUpdated += CameraSmoothingSet_OnSliderValueUpdated;
-            }
-        }
-
-        void SetupDividers()
-        {
-            // Grab all the supported flags
-            SupportedPlatforms[] allSupportFlags = new SupportedPlatforms[]
-            {
-                enableKeyboardControls,
-                enableCameraSensitivityControls,
-                enableCameraSmoothingControls,
-                enableScrollWheelControls
-            };
-
-            // Deactivate all dividers
-            for (int index = 0; index < allDividers.Length; ++index)
-            {
-                allDividers[index].SetActive(false);
-            }
-
-            // Loop through all the sections
-            int numVisibleControlSets = 0;
-            for (int index = 0; ((index < allSupportFlags.Length) && ((index - 1) < allDividers.Length)); ++index)
-            {
-                // Check if this control set should be made visible
-                if (allSupportFlags[index].IsThisBuildSupported() == true)
-                {
-                    // Increment the number of visible controls
-                    ++numVisibleControlSets;
-
-                    // If there are more than one controls visible...
-                    if (numVisibleControlSets > 1)
-                    {
-                        // Make the divider *above* this control visible
-                        allDividers[index - 1].SetActive(true);
-                    }
-                }
             }
         }
         #endregion

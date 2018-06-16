@@ -47,6 +47,8 @@ namespace OmiyaGames.Menu
         SupportedPlatforms enableMusicVolumeControls;
         [SerializeField]
         SupportedPlatforms enableSoundEffectVolumeControls;
+        [SerializeField]
+        GameObject[] allDividers;
 
         [Header("Music Controls")]
         [SerializeField]
@@ -110,6 +112,11 @@ namespace OmiyaGames.Menu
 
             // Setup enabling the sound effect controls
             SetupSoundEffectControls();
+
+            // Update how dividers appear
+            OptionsMenuUtility.SetupDividers(allDividers,
+                enableMusicVolumeControls,
+                enableSoundEffectVolumeControls);
         }
 
         #region UI events

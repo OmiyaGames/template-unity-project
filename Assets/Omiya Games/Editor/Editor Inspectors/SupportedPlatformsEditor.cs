@@ -59,7 +59,7 @@ namespace OmiyaGames.UI
             EditorGUI.BeginProperty(position, label, property);
 
             // Customize the drawer
-            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsHelper.AllPlatformNames);
+            property.intValue = EnumFlagsDrawer.DisplayEnumFlags(position, property, label, SupportedPlatformsUtility.AllPlatformNames);
 
             // End this property
             EditorGUI.EndProperty();
