@@ -31,7 +31,7 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/11/2018</date>
+    /// <date>6/15/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Menu that provides graphics options.

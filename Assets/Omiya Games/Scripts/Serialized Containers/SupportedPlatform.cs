@@ -32,7 +32,7 @@ namespace OmiyaGames
     /// <summary>
     /// An enum indicating supported platforms. Can be multi-selected in the Unity Editor.
     /// </summary>
-    /// <seealso cref="SupportedPlatformsHelper"/>
+    /// <seealso cref="SupportedPlatformsUtility"/>
     /// <seealso cref="UI.SupportedPlatformsEditor"/>
     /// <remarks>
     /// Revision History:
@@ -69,7 +69,7 @@ namespace OmiyaGames
     /// A class full of helper and extended methods for <code>SupportPlatforms</code>.
     /// </summary>
     /// <seealso cref="SupportPlatforms"/>
-    public static class SupportedPlatformsHelper
+    public static class SupportedPlatformsUtility
     {
         /// <summary>
         /// Gets the number of flags in <code>SupportPlatforms</code>.
