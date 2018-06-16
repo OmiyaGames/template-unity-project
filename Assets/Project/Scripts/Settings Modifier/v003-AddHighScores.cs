@@ -66,6 +66,14 @@ namespace Project.Settings
             },
             new PropertyGenerator("TopScore", typeof(IRecord<int>))
             {
+                /*
+                 *                 writer.Write("return ");
+                WriteCodeToInstance(writer, versionArrayIndex, true);
+                writer.Write('.');
+                writer.Write(GetterCode);
+                writer.WriteLine(';');
+
+                 * */
                 GetterCode = "return HighScores.TopRecord;",
                 TooltipDocumentation = new string[]
                 {

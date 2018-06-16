@@ -158,7 +158,7 @@ namespace OmiyaGames.Settings
         }
 
         #region WriteCodeToInstance
-        public static void WriteCodeToInstance(IStoredSettingGenerator generator, StreamWriter writer, int versionArrayIndex, bool writeGenerator)
+        public static void WriteCodeToInstance(IStoredSettingGenerator generator, TextWriter writer, int versionArrayIndex, bool writeGenerator)
         {
             // Write accessor to an array
             WriteCodeToInstance(writer, versionArrayIndex);
@@ -182,7 +182,7 @@ namespace OmiyaGames.Settings
             writer.Write("\")");
         }
 
-        public static void WriteCodeToInstance(StreamWriter writer, int versionArrayIndex, Type settingsVersionType)
+        public static void WriteCodeToInstance(TextWriter writer, int versionArrayIndex, Type settingsVersionType)
         {
             // Write type-cast for the array
             writer.Write("((");
@@ -194,7 +194,7 @@ namespace OmiyaGames.Settings
             writer.Write(')');
         }
 
-        private static void WriteCodeToInstance(StreamWriter writer, int versionArrayIndex)
+        private static void WriteCodeToInstance(TextWriter writer, int versionArrayIndex)
         {
             // Write accessor to an array
             writer.Write("AllSettingsVersions[");

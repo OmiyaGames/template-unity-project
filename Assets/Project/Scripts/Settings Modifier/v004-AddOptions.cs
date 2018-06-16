@@ -200,13 +200,22 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             // Graphics Stuff
             /////////////////////////////////////////////////////
-            new StoredBoolGenerator("Is Bobbing Camera Enabled", false)
+            new StoredBoolGenerator("Is Screen Shakes Enabled", true)
             {
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
-                    "If true, enables bobbing camera effect."
+                    "If true, enables bloom graphic effects."
                 }
+            },
+            new StoredBoolGenerator("Is Head Bobbing Enabled", false)
+            {
+                SetterScope = AccessModifier.Internal,
+                TooltipDocumentation = new string[]
+                {
+                    "If true, enables head bobbing camera effect."
+                },
+                GetterCode = "return " + GetCodeToInstance(versionArrayIndex, true)
             },
             new StoredBoolGenerator("Is Flashes Enabled", true)
             {

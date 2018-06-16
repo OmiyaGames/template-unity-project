@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 
 namespace OmiyaGames.Settings
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="IGenerator.cs" company="Omiya Games">
+    /// <copyright file="GeneratorDecorator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -27,57 +29,29 @@ namespace OmiyaGames.Settings
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/29/2017</date>
+    /// <date>6/15/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Interface that generates a property.
+    /// Helper class that has a couple of built-in stuff to implement a <see cref="IGenerator"/> more easily.
     /// </summary>
-    public interface IGenerator : IUniqueSetting
+    public class GeneratePropertyEventArgs : EventArgs
     {
-        string PropertyName
+        public readonly TextWriter writer;
+        public readonly string instanceName;
+        public readonly int versionArrayIndex;
+
+        public int numTabs
         {
             get;
+            set;
         }
 
-#if UNITY_EDITOR
-        /// <summary>
-        /// Writes into a file properties and/or methods for
-        /// accessing this setting.
-        /// Naturally, this will create a new line.
-        /// </summary>
-        void WriteCodeToAccessSetting(TextWriter writer, int startingNumberOfTabs, int versionArrayIndex);
-
-        /// <summary>
-        /// Indicates if
-        /// <see cref="WriteCodeToInstance(TextWriter, int, bool)"/>
-        /// will actually write anything.
-        /// </summary>
-        bool CanWriteCodeToInstance
+        public GeneratePropertyEventArgs(TextWriter writer, int numTabs, string instanceName, int versionArrayIndex)
         {
-            get;
+            this.writer = writer;
+            this.numTabs = numTabs;
+            this.instanceName = instanceName;
+            this.versionArrayIndex = versionArrayIndex;
         }
-
-        /// <summary>
-        /// Indicates if the getter code is customized.
-        /// </summary>
-        bool IsGetterCustomized
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Indicates if the setter code is customized.
-        /// </summary>
-        bool IsSetterCustomized
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Writes into a reference to this generator variable.
-        /// This will not create a new line
-        /// </summary>
-        void WriteCodeToInstance(TextWriter writer, int versionArrayIndex, bool includeGeneric);
-#endif
     }
 }

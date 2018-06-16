@@ -93,7 +93,23 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public override void WriteCodeToInstance(StreamWriter writer, int versionArrayIndex, bool includeGeneric)
+        public override bool IsGetterCustomized
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool IsSetterCustomized
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override void WriteCodeToInstance(TextWriter writer, int versionArrayIndex, bool includeGeneric)
         {
             // Do nothing!
         }
