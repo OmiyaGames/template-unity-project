@@ -75,9 +75,9 @@
                         AllSettingsVersions[4].GetSetting("Scroll Wheel is Inverted"),
                         AllSettingsVersions[4].GetSetting("Is Camera Shakes Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Head Bobbing Option Enabled"),
-                        AllSettingsVersions[4].GetSetting("Is Flashes Enabled"),
+                        AllSettingsVersions[4].GetSetting("Is Screen Flashes Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Motion Blurs Enabled"),
-                        AllSettingsVersions[4].GetSetting("Is Bloom Enabled"),
+                        AllSettingsVersions[4].GetSetting("Is Bloom Effect Enabled"),
                         #endregion
                     };
                 }
@@ -536,15 +536,15 @@
         /// <summary>
         /// If true, enables flashing graphic effects.
         /// </summary>
-        public bool IsFlashesEnabled
+        public bool IsScreenFlashesEnabled
         {
             get
             {
-                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Flashes Enabled").Value;
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Screen Flashes Enabled").Value;
             }
             internal set
             {
-                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Flashes Enabled").SetValue(value, Settings, AppVersion);
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Screen Flashes Enabled").SetValue(value, Settings, AppVersion);
             }
         }
 
@@ -566,15 +566,15 @@
         /// <summary>
         /// If true, enables bloom graphic effects.
         /// </summary>
-        public bool IsBloomEnabled
+        public bool IsBloomEffectEnabled
         {
             get
             {
-                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bloom Enabled").Value;
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bloom Effect Enabled").Value;
             }
             internal set
             {
-                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bloom Enabled").SetValue(value, Settings, AppVersion);
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bloom Effect Enabled").SetValue(value, Settings, AppVersion);
             }
         }
         #endregion

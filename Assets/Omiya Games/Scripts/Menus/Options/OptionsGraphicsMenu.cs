@@ -110,7 +110,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         ToggleSet motionBlursControls;
         [SerializeField]
-        ToggleSet flashesControls;
+        ToggleSet screenFlashesControls;
         [SerializeField]
         ToggleSet bloomControls;
         #endregion
@@ -154,7 +154,7 @@ namespace OmiyaGames.Menu
                         cameraShakeControls,
                         bobbingCameraControls,
                         motionBlursControls,
-                        flashesControls,
+                        screenFlashesControls,
                         bloomControls
                     };
                 }
@@ -174,14 +174,68 @@ namespace OmiyaGames.Menu
                 controls.Setup();
             }
 
-            // FIXME: setup checkbox state
-            //cameraShakeControls.
+            // Setup checkbox isOn state
+            cameraShakeControls.Checkbox.isOn = Settings.IsCameraShakesEnabled;
+            bobbingCameraControls.Checkbox.isOn = Settings.IsHeadBobbingOptionEnabled;
+            motionBlursControls.Checkbox.isOn = Settings.IsMotionBlursEnabled;
+            screenFlashesControls.Checkbox.isOn = Settings.IsScreenFlashesEnabled;
+            bloomControls.Checkbox.isOn = Settings.IsBloomEffectEnabled;
+
+            // Setup checkbox interactable state
+            bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
 
             // Setup whether to disable bobbing camera or not
             bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
         }
 
         #region UI Events
+        public void OnCameraShakeClicked(bool isChecked)
+        {
+            if(IsListeningToEvents == true)
+            {
+                // Update settings
+                Settings.IsCameraShakesEnabled = isChecked;
+
+                // Update bobbing head interactable state
+                bobbingCameraControls.Checkbox.interactable = isChecked;
+            }
+        }
+
+        public void OnHeadBobbingClicked(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Update settings
+                Settings.IsHeadBobbingOptionEnabled = isChecked;
+            }
+        }
+
+        public void OnMotionBlursClicked(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Update settings
+                Settings.IsMotionBlursEnabled = isChecked;
+            }
+        }
+
+        public void OnScreenFlashesClicked(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Update settings
+                Settings.IsScreenFlashesEnabled = isChecked;
+            }
+        }
+
+        public void OnBloomClicked(bool isChecked)
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Update settings
+                Settings.IsBloomEffectEnabled = isChecked;
+            }
+        }
         #endregion
     }
 }
