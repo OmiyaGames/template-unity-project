@@ -228,7 +228,7 @@ namespace Project.Settings
                     "If true, enables head bobbing camera effect."
                 },
             },
-            new StoredBoolGenerator("Is Flashes Enabled", true)
+            new StoredBoolGenerator("Is Screen Flashes Enabled", true)
             {
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -244,7 +244,7 @@ namespace Project.Settings
                     "If true, enables motion blur graphic effects."
                 }
             },
-            new StoredBoolGenerator("Is Bloom Enabled", true)
+            new StoredBoolGenerator("Is Bloom Effect Enabled", true)
             {
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]

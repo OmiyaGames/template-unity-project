@@ -747,7 +747,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Toggle mute
-                settings.IsFlashesEnabled = enable;
+                settings.IsScreenFlashesEnabled = enable;
 
                 // Indicate button is clicked
                 Manager.ButtonClick.Play();
@@ -771,7 +771,7 @@ namespace OmiyaGames.Menu
             if (inSetupMode == false)
             {
                 // Toggle mute
-                settings.IsBloomEnabled = enable;
+                settings.IsBloomEffectEnabled = enable;
 
                 // Indicate button is clicked
                 Manager.ButtonClick.Play();
@@ -1023,11 +1023,11 @@ namespace OmiyaGames.Menu
             motionBlursControls.IsActive = AllFlags.EnableMotionBlursToggle;
 
             // Update Flashing controls
-            flashesControls.IsInverted = settings.IsFlashesEnabled;
+            flashesControls.IsInverted = settings.IsScreenFlashesEnabled;
             flashesControls.IsActive = AllFlags.EnableFlashingEffectsToggle;
 
             // Update Bloom controls
-            bloomControls.IsInverted = settings.IsBloomEnabled;
+            bloomControls.IsInverted = settings.IsBloomEffectEnabled;
             bloomControls.IsActive = AllFlags.EnableBloomToggle;
 
             // Update visiblilty
