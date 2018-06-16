@@ -53,5 +53,21 @@ namespace OmiyaGames.Settings
             this.instanceName = instanceName;
             this.versionArrayIndex = versionArrayIndex;
         }
+
+        public void WriteTabs()
+        {
+            // Write tabs
+            GameSettingsGenerator.WriteTabs(writer, numTabs);
+        }
+
+        public void WriteSingleLine(string variableOrFunction)
+        {
+            // Write return
+            writer.Write("return ");
+            writer.Write(instanceName);
+            writer.Write('.');
+            writer.Write(variableOrFunction);
+            writer.WriteLine(';');
+        }
     }
 }

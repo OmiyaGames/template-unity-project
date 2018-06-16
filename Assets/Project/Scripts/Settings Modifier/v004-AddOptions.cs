@@ -35,6 +35,8 @@ namespace Project.Settings
     public class AddOptions : SettingsVersionGeneratorDecorator
     {
         public const ushort AppVersion = 4;
+        const string CameraShakePropertyName = "IsCameraShakesEnabled";
+        const string HeadBobbingPropertyName = "IsHeadBobbingOptionEnabled";
 
         public override ushort Version
         {
@@ -200,22 +202,31 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             // Graphics Stuff
             /////////////////////////////////////////////////////
-            new StoredBoolGenerator("Is Screen Shakes Enabled", true)
+            new StoredBoolGenerator("Is Camera Shakes Enabled", true)
             {
+                PropertyName = CameraShakePropertyName,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
                     "If true, enables bloom graphic effects."
                 }
             },
-            new StoredBoolGenerator("Is Head Bobbing Enabled", false)
+            new StoredBoolGenerator("Is Head Bobbing Option Enabled", false)
             {
+                PropertyName = HeadBobbingPropertyName,
                 SetterScope = AccessModifier.Internal,
+                TooltipDocumentation = new string[]
+                {
+                    "The stored value for the head bobbing checkbox in the Graphics options menu."
+                }
+            },
+            new PropertyGenerator("Is Head Bobbing Enabled", typeof(IRecord<bool>))
+            {
+                GetterCode = WriteHeadBobbingGetter,
                 TooltipDocumentation = new string[]
                 {
                     "If true, enables head bobbing camera effect."
                 },
-                GetterCode = "return " + GetCodeToInstance(versionArrayIndex, true)
             },
             new StoredBoolGenerator("Is Flashes Enabled", true)
             {
@@ -242,6 +253,20 @@ namespace Project.Settings
                 }
             },
             };
+        }
+
+        private void WriteHeadBobbingGetter(GeneratorDecorator source, GeneratePropertyEventArgs args)
+        {
+            if (args != null)
+            {
+                args.WriteTabs();
+                //args.writer.Write("return HighScores.TopRecord;");
+                args.writer.Write("return ");
+                args.writer.Write(CameraShakePropertyName);
+                args.writer.Write(" && ");
+                args.writer.Write(HeadBobbingPropertyName);
+                args.writer.Write(';');
+            }
         }
     }
 }

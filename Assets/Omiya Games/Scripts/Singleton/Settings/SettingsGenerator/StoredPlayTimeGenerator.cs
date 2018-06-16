@@ -46,7 +46,7 @@ namespace OmiyaGames.Settings
             base(propertyName, typeof(TimeSpan))
         {
             this.key = key;
-            GetterCode = "TotalPlayTime";
+            GetterCode = WriteGetter;
         }
 
         #region Properties
@@ -66,7 +66,7 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public override string SetterCode
+        public override PropertyWriter SetterCode
         {
             get
             {
@@ -74,10 +74,7 @@ namespace OmiyaGames.Settings
             }
             set
             {
-                if (string.IsNullOrEmpty(value) == false)
-                {
-                    throw new NotImplementedException("Cannot set the Setter");
-                }
+                throw new NotImplementedException("Cannot set the Setter");
             }
         }
         #endregion
@@ -116,5 +113,14 @@ namespace OmiyaGames.Settings
         }
 #endif
         #endregion
+
+        private void WriteGetter(GeneratorDecorator source, GeneratePropertyEventArgs args)
+        {
+            if(args != null)
+            {
+                args.WriteTabs();
+                args.WriteSingleLine("TotalPlayTime");
+            }
+        }
     }
 }

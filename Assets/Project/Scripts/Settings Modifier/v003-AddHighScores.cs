@@ -1,5 +1,4 @@
-﻿using System;
-using OmiyaGames.Settings;
+﻿using OmiyaGames.Settings;
 
 namespace Project.Settings
 {
@@ -37,6 +36,7 @@ namespace Project.Settings
     {
         public const ushort AppVersion = 3;
         public const int MaxListSize = 10;
+        const string HighScoresPropertyName = "HighScores";
 
         public override ushort Version
         {
@@ -58,7 +58,7 @@ namespace Project.Settings
             {
             new SortedRecordSettingGenerator<int>("Local High Scores", new SortedIntRecords(MaxListSize, true))
             {
-                PropertyName = "HighScores",
+                PropertyName = HighScoresPropertyName,
                 TooltipDocumentation = new string[]
                 {
                     "List of highest scores"
@@ -66,34 +66,10 @@ namespace Project.Settings
             },
             new PropertyGenerator("TopScore", typeof(IRecord<int>))
             {
-                /*
-                 *                 writer.Write("return ");
-                WriteCodeToInstance(writer, versionArrayIndex, true);
-                writer.Write('.');
-                writer.Write(GetterCode);
-                writer.WriteLine(';');
-
-                 * */
-                GetterCode = "return HighScores.TopRecord;",
+                GetterCode = GeneratorDecorator.CreatePropertyWriter(HighScoresPropertyName, "TopRecord"),
                 TooltipDocumentation = new string[]
                 {
-                    "Gets the top score from <seealso cref=\"HighScores\"/>"
-                },
-            },
-            new SortedRecordSettingGenerator<float>("Local Best Times", new SortedFloatRecords(MaxListSize, true, ParseDuration))
-            {
-                PropertyName = "BestSurvivalTimes",
-                TooltipDocumentation = new string[]
-                {
-                    "List of longest survival times"
-                },
-            },
-            new PropertyGenerator("TopSurvivalTime", typeof(IRecord<float>))
-            {
-                GetterCode = "return BestSurvivalTimes.TopRecord;",
-                TooltipDocumentation = new string[]
-                {
-                    "Gets the top time from <seealso cref=\"BestSurvivalTimes\"/>"
+                    "Gets the top score from <seealso cref=\"" + HighScoresPropertyName + "\"/>"
                 },
             },
             new StoredStringGenerator("Last Entered Name", string.Empty)
@@ -106,23 +82,6 @@ namespace Project.Settings
                 },
             }
             };
-        }
-
-        private bool ParseDuration(string record, int appVersion, out float newRecord)
-        {
-            bool recordingSuccessful = false;
-            newRecord = 0f;
-
-            if (appVersion <= 0)
-            {
-                TimeSpan spanOfTime;
-                if (TimeSpan.TryParse(record, out spanOfTime) == true)
-                {
-                    newRecord = (float)spanOfTime.TotalSeconds;
-                    recordingSuccessful = true;
-                }
-            }
-            return recordingSuccessful;
         }
     }
 }

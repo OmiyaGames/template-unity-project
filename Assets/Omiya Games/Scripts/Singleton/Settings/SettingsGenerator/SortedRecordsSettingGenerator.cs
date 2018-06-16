@@ -56,7 +56,7 @@ namespace OmiyaGames.Settings
             settings.SetString(Key, Value.ToString());
         }
 
-        public override string SetterCode
+        public override PropertyWriter SetterCode
         {
             get
             {

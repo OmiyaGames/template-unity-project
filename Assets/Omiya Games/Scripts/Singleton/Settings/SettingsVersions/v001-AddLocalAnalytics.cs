@@ -36,6 +36,7 @@
     {
         public const ushort AppVersion = 1;
         public const int DefaultNumLevelsUnlocked = 1;
+        public const string DefaultNumLevelsUnlockedName = "DefaultNumLevelsUnlocked";
 
         public override ushort Version
         {
@@ -65,9 +66,9 @@
                         "The number of levels unlocked."
                     },
                 },
-                new PropertyGenerator("DefaultNumLevelsUnlocked", typeof(int))
+                new PropertyGenerator(DefaultNumLevelsUnlockedName, typeof(int))
                 {
-                    GetterCode = "return " + typeof(AddLocalAnalytics).Name + ".DefaultNumLevelsUnlocked;",
+                    GetterCode = GeneratorDecorator.CreatePropertyWriter(typeof(AddLocalAnalytics).Name, DefaultNumLevelsUnlockedName),
                     TooltipDocumentation = new string[]
                     {
                         "Default number of levels unlocked."
