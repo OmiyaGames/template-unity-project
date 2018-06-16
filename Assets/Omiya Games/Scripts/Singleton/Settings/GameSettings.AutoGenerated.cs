@@ -55,7 +55,6 @@
 
                         #region ISingleSettings from version 3
                         AllSettingsVersions[3].GetSetting("Local High Scores"),
-                        AllSettingsVersions[3].GetSetting("Local Best Times"),
                         AllSettingsVersions[3].GetSetting("Last Entered Name"),
                         #endregion
 
@@ -74,7 +73,8 @@
                         AllSettingsVersions[4].GetSetting("Is Smooth Camera Enabled"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel Sensitivity"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel is Inverted"),
-                        AllSettingsVersions[4].GetSetting("Is Bobbing Camera Enabled"),
+                        AllSettingsVersions[4].GetSetting("Is Camera Shakes Enabled"),
+                        AllSettingsVersions[4].GetSetting("Is Head Bobbing Option Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Flashes Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Motion Blurs Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Bloom Enabled"),
@@ -251,28 +251,6 @@
             get
             {
                 return HighScores.TopRecord;
-            }
-        }
-
-        /// <summary>
-        /// List of longest survival times
-        /// </summary>
-        public OmiyaGames.Settings.ISortedRecords<float> BestSurvivalTimes
-        {
-            get
-            {
-                return AllSettingsVersions[3].GetGenerator<OmiyaGames.Settings.SortedRecordSettingGenerator<float>>("Local Best Times").Value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the top time from <seealso cref="BestSurvivalTimes"/>
-        /// </summary>
-        public OmiyaGames.Settings.IRecord<float> TopSurvivalTime
-        {
-            get
-            {
-                return BestSurvivalTimes.TopRecord;
             }
         }
 
@@ -515,17 +493,43 @@
         }
 
         /// <summary>
-        /// If true, enables bobbing camera effect.
+        /// If true, enables bloom graphic effects.
         /// </summary>
-        public bool IsBobbingCameraEnabled
+        public bool IsCameraShakesEnabled
         {
             get
             {
-                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bobbing Camera Enabled").Value;
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Camera Shakes Enabled").Value;
             }
             internal set
             {
-                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bobbing Camera Enabled").SetValue(value, Settings, AppVersion);
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Camera Shakes Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// The stored value for the head bobbing checkbox in the Graphics options menu.
+        /// </summary>
+        public bool IsHeadBobbingOptionEnabled
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Head Bobbing Option Enabled").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Head Bobbing Option Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// If true, enables head bobbing camera effect.
+        /// </summary>
+        public bool IsHeadBobbingEnabled
+        {
+            get
+            {
+                return IsCameraShakesEnabled && IsHeadBobbingOptionEnabled;
             }
         }
 

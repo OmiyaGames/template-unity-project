@@ -742,18 +742,6 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public void OnEnableBobbingCameraToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsBobbingCameraEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
         public void OnEnableFlashesToggled(bool enable)
         {
             if (inSetupMode == false)
@@ -1028,7 +1016,6 @@ namespace OmiyaGames.Menu
             smoothCameraControls.IsActive = AllFlags.EnableSmoothCameraToggle;
 
             // Update Motion Blurs controls
-            bobbingCameraControls.IsInverted = settings.IsBobbingCameraEnabled;
             bobbingCameraControls.IsActive = AllFlags.EnableBobbingCameraToggle;
 
             // Update Motion Blurs controls
