@@ -80,7 +80,7 @@ namespace OmiyaGames.Settings
         /// <summary>
         /// Writes the default constructor of this decorator.
         /// </summary>
-        public virtual void WriteCodeForConstructor(StreamWriter writer, int numTabs)
+        public virtual void WriteCodeForConstructor(TextWriter writer, int numTabs)
         {
             GameSettingsGenerator.WriteStartOfLine(writer, numTabs, "new ");
             writer.Write(GetType());

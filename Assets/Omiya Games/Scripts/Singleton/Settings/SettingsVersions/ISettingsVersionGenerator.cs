@@ -38,7 +38,7 @@ namespace OmiyaGames.Settings
     public interface ISettingsVersionGenerator : ISettingsVersion
     {
 #if UNITY_EDITOR
-        void WriteCodeForConstructor(StreamWriter writer, int startingNumberOfTabs);
+        void WriteCodeForConstructor(TextWriter writer, int startingNumberOfTabs);
 
         void UpdateNamespaceArgs(NamespaceGeneratorArgs args);
 

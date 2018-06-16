@@ -127,7 +127,7 @@ namespace OmiyaGames.Settings
         }
 
 #if UNITY_EDITOR
-        public virtual void WriteCodeToAccessSetting(StreamWriter writer, int numTabs, int versionArrayIndex)
+        public virtual void WriteCodeToAccessSetting(TextWriter writer, int numTabs, int versionArrayIndex)
         {
             StringBuilder builder = new StringBuilder();
             AccessModifier defaultScope;
@@ -140,15 +140,16 @@ namespace OmiyaGames.Settings
             numTabs = GameSettingsGenerator.WriteStartEncapsulation(writer, numTabs, GetCodeForPropertyDeclaration(builder, out defaultScope));
 
             // Check if we should write the getter
+            GeneratePropertyEventArgs args = new GeneratePropertyEventArgs(writer, numTabs, GetCodeToInstance(builder, versionArrayIndex, true), versionArrayIndex);
             if ((GetterScope != AccessModifier.None) && (string.IsNullOrEmpty(GetterCode) == false))
             {
-                WriteCodeForGetter(writer, numTabs, builder, defaultScope, versionArrayIndex);
+                WriteCodeForGetter(args, builder, defaultScope);
             }
 
             // Check if we should write the setter
             if ((SetterScope != AccessModifier.None) && (string.IsNullOrEmpty(SetterCode) == false))
             {
-                WriteCodeForSetter(writer, numTabs, builder, defaultScope, versionArrayIndex);
+                WriteCodeForSetter(args, builder, defaultScope);
             }
 
             // End the property
@@ -160,7 +161,25 @@ namespace OmiyaGames.Settings
             get;
         }
 
-        public abstract void WriteCodeToInstance(StreamWriter writer, int versionArrayIndex, bool includeGeneric);
+        public abstract bool IsGetterCustomized
+        {
+            get;
+        }
+
+        public abstract bool IsSetterCustomized
+        {
+            get;
+        }
+
+        public abstract void WriteCodeToInstance(TextWriter writer, int versionArrayIndex, bool includeGeneric);
+
+        protected string GetCodeToInstance(StringBuilder builder, int versionArrayIndex, bool includeGeneric)
+        {
+            builder.Clear();
+            TextWriter writer = new StringWriter(builder);
+            WriteCodeToInstance(writer, versionArrayIndex, includeGeneric);
+            return builder.ToString();
+        }
 
         protected string GetCodeForPropertyDeclaration(StringBuilder builder, out AccessModifier defaultScope)
         {
@@ -195,9 +214,9 @@ namespace OmiyaGames.Settings
             builder.Append(' ');
         }
 
-        protected void WriteCodeForGetter(StreamWriter writer, int numTabs, StringBuilder builder, AccessModifier defaultScope, int versionArrayIndex)
+        protected void WriteCodeForGetter(GeneratePropertyEventArgs args, StringBuilder builder, AccessModifier defaultScope)
         {
-            builder.Length = 0;
+            builder.Clear();
 
             // Start get
             if (GetterScope != defaultScope)
@@ -205,32 +224,32 @@ namespace OmiyaGames.Settings
                 AppendScopeToStringBuilder(builder, GetterScope);
             }
             builder.Append("get");
-            numTabs = GameSettingsGenerator.WriteStartEncapsulation(writer, numTabs, builder.ToString());
+            args.numTabs = GameSettingsGenerator.WriteStartEncapsulation(args.writer, args.numTabs, builder.ToString());
 
             // Check if instance will be written
-            GameSettingsGenerator.WriteTabs(writer, numTabs);
-            if (CanWriteCodeToInstance == true)
+            GameSettingsGenerator.WriteTabs(args.writer, args.numTabs);
+            if ((CanWriteCodeToInstance == true) && (IsGetterCustomized == true))
             {
                 // Write return
-                writer.Write("return ");
-                WriteCodeToInstance(writer, versionArrayIndex, true);
-                writer.Write('.');
-                writer.Write(GetterCode);
-                writer.WriteLine(';');
+                args.writer.Write("return ");
+                WriteCodeToInstance(args.writer, args.versionArrayIndex, true);
+                args.writer.Write('.');
+                args.writer.Write(GetterCode);
+                args.writer.WriteLine(';');
             }
             else
             {
                 // Otherwise, plop the getter code directly
-                writer.WriteLine(GetterCode);
+                args.writer.WriteLine(GetterCode);
             }
 
             // End the property
-            GameSettingsGenerator.WriteEndEncapsulation(writer, numTabs);
+            GameSettingsGenerator.WriteEndEncapsulation(args.writer, args.numTabs);
         }
 
-        protected void WriteCodeForSetter(StreamWriter writer, int numTabs, StringBuilder builder, AccessModifier defaultScope, int versionArrayIndex)
+        protected void WriteCodeForSetter(GeneratePropertyEventArgs args, StringBuilder builder, AccessModifier defaultScope)
         {
-            builder.Length = 0;
+            builder.Clear();
 
             // Start set
             if (SetterScope != defaultScope)
@@ -238,26 +257,26 @@ namespace OmiyaGames.Settings
                 AppendScopeToStringBuilder(builder, SetterScope);
             }
             builder.Append("set");
-            numTabs = GameSettingsGenerator.WriteStartEncapsulation(writer, numTabs, builder.ToString());
+            args.numTabs = GameSettingsGenerator.WriteStartEncapsulation(args.writer, args.numTabs, builder.ToString());
 
             // Write value
-            GameSettingsGenerator.WriteTabs(writer, numTabs);
-            if (CanWriteCodeToInstance == true)
+            GameSettingsGenerator.WriteTabs(args.writer, args.numTabs);
+            if ((CanWriteCodeToInstance == true) && (IsSetterCustomized == true))
             {
                 // Write return
-                WriteCodeToInstance(writer, versionArrayIndex, true);
-                writer.Write('.');
-                writer.Write(SetterCode);
-                writer.WriteLine(';');
+                WriteCodeToInstance(args.writer, args.versionArrayIndex, true);
+                args.writer.Write('.');
+                args.writer.Write(SetterCode);
+                args.writer.WriteLine(';');
             }
             else
             {
                 // Otherwise, plop the getter code directly
-                writer.WriteLine(SetterCode);
+                args.writer.WriteLine(SetterCode);
             }
 
             // End the property
-            GameSettingsGenerator.WriteEndEncapsulation(writer, numTabs);
+            GameSettingsGenerator.WriteEndEncapsulation(args.writer, args.numTabs);
         }
 #endif
     }

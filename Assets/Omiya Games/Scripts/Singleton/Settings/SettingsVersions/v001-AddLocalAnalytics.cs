@@ -67,7 +67,7 @@
                 },
                 new PropertyGenerator("DefaultNumLevelsUnlocked", typeof(int))
                 {
-                    GetterCode = "return AddLocalAnalytics.DefaultNumLevelsUnlocked;",
+                    GetterCode = "return " + typeof(AddLocalAnalytics).Name + ".DefaultNumLevelsUnlocked;",
                     TooltipDocumentation = new string[]
                     {
                         "Default number of levels unlocked."

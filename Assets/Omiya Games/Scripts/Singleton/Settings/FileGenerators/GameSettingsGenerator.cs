@@ -106,32 +106,32 @@ namespace OmiyaGames.Settings
             return returnArgs;
         }
 
-        public static void WriteLine(StreamWriter writer, int numTabs, string line)
+        public static void WriteLine(TextWriter writer, int numTabs, string line)
         {
             WriteTabs(writer, numTabs);
             writer.WriteLine(line);
         }
 
-        public static void WriteLine(StreamWriter writer, int numTabs, char letter)
+        public static void WriteLine(TextWriter writer, int numTabs, char letter)
         {
             WriteTabs(writer, numTabs);
             writer.WriteLine(letter);
 
         }
 
-        public static void WriteStartOfLine(StreamWriter writer, int numTabs, string line)
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, string line)
         {
             WriteTabs(writer, numTabs);
             writer.Write(line);
         }
 
-        public static void WriteStartOfLine(StreamWriter writer, int numTabs, char letter)
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, char letter)
         {
             WriteTabs(writer, numTabs);
             writer.Write(letter);
         }
 
-        public static void WriteTabs(StreamWriter writer, int numTabs)
+        public static void WriteTabs(TextWriter writer, int numTabs)
         {
             for (int index = 0; index < numTabs; ++index)
             {
@@ -142,7 +142,7 @@ namespace OmiyaGames.Settings
         public static void WriteCode(VersionGeneratorArgs versionsArgs, NamespaceGeneratorArgs usingsArgs, SettingsGeneratorArgs settingsArgs)
         {
             int numTabs = 0;
-            using (StreamWriter writer = new StreamWriter(GameSettingsFullPath, false, Encoding.UTF8))
+            using (TextWriter writer = new StreamWriter(GameSettingsFullPath, false, Encoding.UTF8))
             {
                 // List out the namespace we're using
                 WriteAllUsings(writer, numTabs, usingsArgs);
@@ -179,7 +179,7 @@ namespace OmiyaGames.Settings
             AssetDatabase.ImportAsset(GameSettingsUnityPath, ImportAssetOptions.ForceUpdate);
         }
 
-        private static void WriteAllSettingsVersions(StreamWriter writer, int numTabs, VersionGeneratorArgs versionsArgs)
+        private static void WriteAllSettingsVersions(TextWriter writer, int numTabs, VersionGeneratorArgs versionsArgs)
         {
             // Write the comment for AllSettingsVersions
             WriteTooltipComment(writer, numTabs, "Array of all the <see cref=\"ISettingsVersion\"/> detected in this project.", "Used as reference in the properties.");
@@ -199,7 +199,7 @@ namespace OmiyaGames.Settings
             numTabs = WriteEndEncapsulation(writer, numTabs, true);
         }
 
-        private static void WriteAllSingleSettings(StreamWriter writer, int numTabs, SettingsGeneratorArgs settingsArgs)
+        private static void WriteAllSingleSettings(TextWriter writer, int numTabs, SettingsGeneratorArgs settingsArgs)
         {
             // Write the comment for allSingleSettings
             WriteTooltipComment(writer, numTabs, "Array cache used by <see cref=\"AllSingleSettings\"/>.");
@@ -263,7 +263,7 @@ namespace OmiyaGames.Settings
             numTabs = WriteEndEncapsulation(writer, numTabs);
         }
 
-        private static void WriteAppVersionProperty(StreamWriter writer, int numTabs)
+        private static void WriteAppVersionProperty(TextWriter writer, int numTabs)
         {
             WriteTooltipComment(writer, numTabs, "The latest version number stored in settings.", "This is the size of <see cref=\"AllSettingsVersions\"/>");
 
@@ -283,7 +283,7 @@ namespace OmiyaGames.Settings
             numTabs = WriteEndEncapsulation(writer, numTabs);
         }
 
-        private static void WriteAllSettingsProperties(StreamWriter writer, int numTabs, SettingsGeneratorArgs settingsArgs)
+        private static void WriteAllSettingsProperties(TextWriter writer, int numTabs, SettingsGeneratorArgs settingsArgs)
         {
             // Go through each group
             foreach (KeyValuePair<int, ICollection<SettingsGeneratorArgs.SingleSettingsInfo>> groupOfSettings in settingsArgs)
@@ -308,7 +308,7 @@ namespace OmiyaGames.Settings
             }
         }
 
-        private static void WriteAllUsings(StreamWriter writer, int numTabs, NamespaceGeneratorArgs namespaceArgs)
+        private static void WriteAllUsings(TextWriter writer, int numTabs, NamespaceGeneratorArgs namespaceArgs)
         {
             bool appendNewline = false;
             foreach (string namespaceName in namespaceArgs)
@@ -330,7 +330,7 @@ namespace OmiyaGames.Settings
             }
         }
 
-        public static void WriteTooltipComment(StreamWriter writer, int numTabs, params string[] comments)
+        public static void WriteTooltipComment(TextWriter writer, int numTabs, params string[] comments)
         {
             // Start summary comment
             WriteLine(writer, numTabs, "/// <summary>");
@@ -349,7 +349,7 @@ namespace OmiyaGames.Settings
             WriteLine(writer, numTabs, "/// </summary>");
         }
 
-        public static int WriteStartEncapsulation(StreamWriter writer, int numTabs, string declaration, bool addNewlineAtTheEnd = true)
+        public static int WriteStartEncapsulation(TextWriter writer, int numTabs, string declaration, bool addNewlineAtTheEnd = true)
         {
             // Write out the line and open curly braces
             WriteLine(writer, numTabs, declaration);
@@ -374,7 +374,7 @@ namespace OmiyaGames.Settings
             return numTabs;
         }
 
-        public static int WriteEndEncapsulation(StreamWriter writer, int numTabs, bool addSemicolonAtTheEnd = false)
+        public static int WriteEndEncapsulation(TextWriter writer, int numTabs, bool addSemicolonAtTheEnd = false)
         {
             // Calculate the next tab count
             --numTabs;
