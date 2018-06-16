@@ -86,14 +86,14 @@ namespace OmiyaGames.Scenes
                 if (currentTransition != value)
                 {
                     // Execute event before setting value
-                    OnBeforeTransitionChanged(currentTransition, value);
+                    OnBeforeTransitionChanged?.Invoke(currentTransition, value);
 
                     // Set the value, while caching the old one
                     Transition lastValue = currentTransition;
                     currentTransition = value;
 
                     // Execute event after value is set
-                    OnAfterTransitionChanged(lastValue, currentTransition);
+                    OnAfterTransitionChanged?.Invoke(lastValue, currentTransition);
                 }
             }
         }
