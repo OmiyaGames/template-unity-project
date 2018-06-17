@@ -129,13 +129,20 @@ namespace OmiyaGames.Menu
                 IsListeningToEvents = false;
                 if (((ConfirmationMenu)source).IsYesSelected == true)
                 {
+                    // Update the check state
+                    currentSelectedCheckbox.Checkbox.isOn = true;
+                    lastSelectedCheckbox.Checkbox.isOn = false;
+
                     // Indicate that the current language is the current checkbox
                     lastSelectedCheckbox = currentSelectedCheckbox;
                 }
                 else
                 {
                     // Turn on the last checkbox instead
+                    currentSelectedCheckbox.Checkbox.isOn = false;
                     lastSelectedCheckbox.Checkbox.isOn = true;
+
+                    // Switch the current checkbox to the last one
                     currentSelectedCheckbox = lastSelectedCheckbox;
 
                     // Switch the language to the last selected language
@@ -162,9 +169,13 @@ namespace OmiyaGames.Menu
                 SetupToggle(clonedToggle, Translations.SupportedLanguages[index], nameBuilder);
             }
 
-            // Setup the last and current toggles
-            languageToControlMap.TryGetValue(Translations.CurrentLanguage, out currentSelectedCheckbox);
-            lastSelectedCheckbox = currentSelectedCheckbox;
+            // Setup the currently selected toggle
+            if(languageToControlMap.TryGetValue(Translations.CurrentLanguage, out currentSelectedCheckbox) == true)
+            {
+                // Setup the last selected toggle
+                lastSelectedCheckbox = currentSelectedCheckbox;
+                currentSelectedCheckbox.Checkbox.isOn = true;
+            }
         }
 
         private LanguageToggle DuplicateToggle(LanguageToggle toggleToDuplicate)

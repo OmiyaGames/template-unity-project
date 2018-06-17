@@ -75,14 +75,13 @@ namespace OmiyaGames.Translations
         TextMeshProUGUI label = null;
         object[] arguments = null;
         string originalString = null;
-        System.Action<float> bindedToSingleton = null;
 
         #region Properties
         public bool IsTranslating
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && (Parser.ContainsKey(TranslationKey) == true);
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && Parser.IsSetup && Parser.ContainsKey(TranslationKey);
             }
         }
 
@@ -135,7 +134,7 @@ namespace OmiyaGames.Translations
                 }
 
                 // Update the label
-                UpdateLabelOnNextFrame();
+                UpdateLabel();
             }
         }
 
@@ -202,6 +201,12 @@ namespace OmiyaGames.Translations
                 UpdateFont();
             }
         }
+
+        public bool IsDisplayingLatestText
+        {
+            get;
+            private set;
+        } = false;
         #endregion
 
         void Start()
@@ -212,7 +217,10 @@ namespace OmiyaGames.Translations
                 allTranslationScripts.Add(this);
 
                 // Update the label
-                UpdateLabelOnNextFrame();
+                if (IsDisplayingLatestText == false)
+                {
+                    UpdateLabelNow();
+                }
             }
         }
 
@@ -223,11 +231,13 @@ namespace OmiyaGames.Translations
                 // Remove this script from the dictionary
                 allTranslationScripts.Remove(this);
             }
-            if(bindedToSingleton != null)
+        }
+
+        void OnEnable()
+        {
+            if((IsTranslating == true) && (IsDisplayingLatestText == false))
             {
-                // Unbind to OnUpdate
-                Singleton.Instance.OnUpdate -= bindedToSingleton;
-                bindedToSingleton = null;
+                UpdateLabelNow();
             }
         }
 
@@ -246,13 +256,10 @@ namespace OmiyaGames.Translations
         /// </summary>
         public void UpdateLabel()
         {
-            if(enabled == true)
+            IsDisplayingLatestText = false;
+            if (isActiveAndEnabled == true)
             {
                 UpdateLabelNow();
-            }
-            else
-            {
-                UpdateLabelOnNextFrame();
             }
         }
 
@@ -265,7 +272,7 @@ namespace OmiyaGames.Translations
             arguments = args;
 
             // Update the label
-            UpdateLabelOnNextFrame();
+            UpdateLabel();
         }
 
         #region Helper Methods
@@ -278,15 +285,6 @@ namespace OmiyaGames.Translations
                 {
                     Label.font = map.GetFontAsset(fontKey);
                 }
-            }
-        }
-
-        void UpdateLabelOnNextFrame()
-        {
-            if((Singleton.Instance != null) && (bindedToSingleton == null))
-            {
-                bindedToSingleton = new System.Action<float>(OnEveryFrame);
-                Singleton.Instance.OnUpdate += bindedToSingleton;
             }
         }
 
@@ -315,25 +313,9 @@ namespace OmiyaGames.Translations
 
             // Set the label's font
             UpdateFont();
-        }
 
-        /// <summary>
-        /// Event called every frame
-        /// </summary>
-        void OnEveryFrame(float deltaTime)
-        {
-            if(enabled == true)
-            {
-                // Update label
-                UpdateLabelNow();
-
-                // Unbind to OnUpdate
-                if (bindedToSingleton != null)
-                {
-                    Singleton.Instance.OnUpdate -= bindedToSingleton;
-                    bindedToSingleton = null;
-                }
-            }
+            // Indicate the label has been updated
+            IsDisplayingLatestText = true;
         }
         #endregion
     }
