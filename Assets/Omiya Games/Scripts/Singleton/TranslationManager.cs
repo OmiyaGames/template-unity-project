@@ -75,6 +75,7 @@ namespace OmiyaGames.Translations
     public class TranslationManager : ISingletonScript
     {
         public delegate void LanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage);
+        public event LanguageChanged OnBeforeLanguageChanged;
         public event LanguageChanged OnAfterLanguageChanged;
 
         [System.Serializable]
@@ -384,7 +385,10 @@ namespace OmiyaGames.Translations
         /// Gets the list of langauges identified in the most recent parse.
         /// </summary>
         /// <returns>The supported languages.</returns>
-        public List<string> SupportedLanguages { get; } = new List<string>();
+        public List<string> SupportedLanguages
+        {
+            get;
+        } = new List<string>();
 
         /// <summary>
         /// Gets the default language.
@@ -432,10 +436,7 @@ namespace OmiyaGames.Translations
                         Singleton.Get<GameSettings>().Language = currentLanguage;
 
                         // Call the event that the langauge changed
-                        if(OnAfterLanguageChanged != null)
-                        {
-                            OnAfterLanguageChanged(this, lastLanguage, currentLanguage);
-                        }
+                        OnAfterLanguageChanged?.Invoke(this, lastLanguage, currentLanguage);
                     }
                     else
                     {
@@ -566,6 +567,13 @@ namespace OmiyaGames.Translations
                 }
             }
             foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
+            {
+                if (label != null)
+                {
+                    label.UpdateLabel();
+                }
+            }
+            foreach (TranslatedTextMeshPro label in TranslatedTextMeshPro.AllTranslationScripts)
             {
                 if (label != null)
                 {

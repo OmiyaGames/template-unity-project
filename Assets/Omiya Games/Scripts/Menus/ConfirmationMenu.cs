@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 namespace OmiyaGames.Menu
 {
@@ -60,9 +61,15 @@ namespace OmiyaGames.Menu
     {
         [Header("Confirmation Menu")]
         [SerializeField]
+        Translations.TranslatedTextMeshPro messageLabel;
+        [SerializeField]
         Button yesButton;
         [SerializeField]
         Button noButton;
+
+        float selectDefaultAfterSeconds = -1f, timeDialogShown = -1f;
+        int lastDisplayedSeconds = 0;
+        System.Action<float> autoSelectAction = null;
 
         #region Properties
         public bool IsYesSelected
@@ -99,24 +106,144 @@ namespace OmiyaGames.Menu
                 return Type.ManagedMenu;
             }
         }
+
+        public int DisplayedTime
+        {
+            get
+            {
+                return Mathf.CeilToInt(selectDefaultAfterSeconds - (Time.realtimeSinceStartup - timeDialogShown));
+            }
+        }
         #endregion
+
+        private void OnDestroy()
+        {
+            if(autoSelectAction != null)
+            {
+                Singleton.Instance.OnRealTimeUpdate -= autoSelectAction;
+                autoSelectAction = null;
+            }
+        }
+
+        protected override void OnStateChanged(VisibilityState from, VisibilityState to)
+        {
+            // Call base method
+            base.OnStateChanged(from, to);
+
+            // Check if we're hiding
+            if(to != VisibilityState.Visible)
+            {
+                // Reset all variables
+                selectDefaultAfterSeconds = -1f;
+                lastDisplayedSeconds = 0;
+
+                // Unbind to event, if any
+                OnDestroy();
+            }
+            else if (selectDefaultAfterSeconds > 0)
+            {
+                // Unbind to event, if any
+                OnDestroy();
+
+                // Grab the time in which this dialog became visible
+                timeDialogShown = Time.realtimeSinceStartup;
+
+                // Bind to update
+                autoSelectAction = new System.Action<float>(UpdateLabelWithTime);
+                Singleton.Instance.OnRealTimeUpdate += autoSelectAction;
+            }
+        }
+
+        /// <summary>
+        /// Sets up the dialog with the proper message and time on when to select the default dialog selection
+        /// </summary>
+        /// <param name="messageTranslatedKey"></param>
+        /// <param name="automaticallySelectDefaultAfterSeconds"></param>
+        public void UpdateDialog(string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f)
+        {
+            // Setup the timer
+            selectDefaultAfterSeconds = -1;
+            if (automaticallySelectDefaultAfterSeconds > 0)
+            {
+                selectDefaultAfterSeconds = automaticallySelectDefaultAfterSeconds;
+            }
+
+            // Setup the label
+            if (string.IsNullOrEmpty(messageTranslatedKey) == true)
+            {
+                // Simply remove the message label entirely
+                messageLabel.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Activate the message label
+                messageLabel.gameObject.SetActive(true);
+                if(selectDefaultAfterSeconds > 0)
+                {
+                    // Update the label with time
+                    lastDisplayedSeconds = DisplayedTime;
+                    messageLabel.SetTranslationKey(messageTranslatedKey, lastDisplayedSeconds);
+                }
+                else
+                {
+                    // Update label, no time
+                    messageLabel.TranslationKey = messageTranslatedKey;
+                }
+            }
+        }
 
         public void OnYesClicked()
         {
-            // Indicate Yes was selected
-            IsYesSelected = true;
+            if(IsListeningToEvents == true)
+            {
+                // Indicate Yes was selected
+                IsYesSelected = true;
 
-            // Hide the dialog
-            Hide();
+                // Hide the dialog
+                Hide();
+            }
         }
 
         public void OnNoClicked()
         {
-            // Indicate No was selected
-            IsYesSelected = false;
+            if (IsListeningToEvents == true)
+            {
+                // Indicate No was selected
+                IsYesSelected = false;
 
-            // Hide the dialog
-            Hide();
+                // Hide the dialog
+                Hide();
+            }
+        }
+
+        void UpdateLabelWithTime(float deltaRealTIme)
+        {
+            // Check if we still have time left
+            if ((Time.realtimeSinceStartup - timeDialogShown) < selectDefaultAfterSeconds)
+            {
+                // Get the ceiling of select-default duration, subtracted by how much time has passed.
+                int currentDisplaySeconds = DisplayedTime;
+
+                // Check if this is different from what's displayed
+                if (currentDisplaySeconds != lastDisplayedSeconds)
+                {
+                    // Update the message label with the new unit
+                    messageLabel.SetArguments(currentDisplaySeconds);
+
+                    // Update current display
+                    lastDisplayedSeconds = currentDisplaySeconds;
+                }
+            }
+            else if (DefaultToYes == true)
+            {
+                // If time's up, "click" the default button
+                OnYesClicked();
+            }
+            else
+            {
+                // If time's up, "click" the default button
+                OnNoClicked();
+            }
         }
     }
 }

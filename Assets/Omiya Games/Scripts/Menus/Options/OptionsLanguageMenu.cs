@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using OmiyaGames.Audio;
-using OmiyaGames.Settings;
+using System.Text;
+using System.Collections.Generic;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
@@ -42,543 +41,21 @@ namespace OmiyaGames.Menu
     [RequireComponent(typeof(Animator))]
     public class OptionsLanguageMenu : IMenu
     {
-        // FIXME: take out the unnecessary cruft
-        public const float MinimumDisplayedVolume = 0.01f;
-        public const float MaximumDisplayedVolume = 1f;
-
-        #region Serialized Containers
-        [System.Serializable]
-        public class EnableFlags
-        {
-            [SerializeField]
-            bool enableLanguageControls = true;
-            [SerializeField]
-            bool enableMusicControls = true;
-            [SerializeField]
-            bool enableSoundEffectControls = true;
-            [SerializeField]
-            bool enableSmoothCameraToggle = true;
-            [SerializeField]
-            bool enableBobbingCameraToggle = true;
-            [SerializeField]
-            bool enableMotionBlursToggle = true;
-            [SerializeField]
-            bool enableFlashingEffectsToggle = true;
-            [SerializeField]
-            bool enableBloomToggle = true;
-            [SerializeField]
-            bool enableKeyboardSensitivityControls = true;
-            [SerializeField]
-            bool enableKeyboardInvertedControls = true;
-            [SerializeField]
-            bool enableMouseSensitivityControls = true;
-            [SerializeField]
-            bool enableMouseInvertedControls = true;
-            [SerializeField]
-            bool enableScrollWheelSensitivityControls = true;
-            [SerializeField]
-            bool enableScrollWheelInvertedControls = true;
-            [SerializeField]
-            bool enableResetDataButton = true;
-
-            public bool EnableLanguageControls
-            {
-                get
-                {
-                    return enableLanguageControls;
-                }
-            }
-
-            public bool EnableMusicControls
-            {
-                get
-                {
-                    return enableMusicControls;
-                }
-            }
-
-            public bool EnableSoundEffectControls
-            {
-                get
-                {
-                    return enableSoundEffectControls;
-                }
-            }
-
-            public bool EnableMotionBlursToggle
-            {
-                get
-                {
-                    return enableMotionBlursToggle;
-                }
-            }
-
-            public bool EnableFlashingEffectsToggle
-            {
-                get
-                {
-                    return enableFlashingEffectsToggle;
-                }
-            }
-
-            public bool EnableBloomToggle
-            {
-                get
-                {
-                    return enableBloomToggle;
-                }
-            }
-
-            public bool EnableKeyboardSensitivityControls
-            {
-                get
-                {
-                    return enableKeyboardSensitivityControls;
-                }
-            }
-
-            public bool EnableKeyboardInvertedControls
-            {
-                get
-                {
-                    return enableKeyboardInvertedControls;
-                }
-            }
-
-            public bool EnableMouseSensitivityControls
-            {
-                get
-                {
-                    return enableMouseSensitivityControls;
-                }
-            }
-
-            public bool EnableMouseInvertedControls
-            {
-                get
-                {
-                    return enableMouseInvertedControls;
-                }
-            }
-
-            public bool EnableScrollWheelSensitivityControls
-            {
-                get
-                {
-                    return enableScrollWheelSensitivityControls;
-                }
-            }
-
-            public bool EnableScrollWheelInvertedControls
-            {
-                get
-                {
-                    return enableScrollWheelInvertedControls;
-                }
-            }
-
-            public bool EnableResetDataButton
-            {
-                get
-                {
-                    return enableResetDataButton;
-                }
-            }
-
-            public bool EnableSmoothCameraToggle
-            {
-                get
-                {
-                    return enableSmoothCameraToggle;
-                }
-            }
-
-            public bool EnableBobbingCameraToggle
-            {
-                get
-                {
-                    return enableBobbingCameraToggle;
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct AudioControls
-        {
-            [SerializeField]
-            GameObject[] controlParents;
-            [SerializeField]
-            Slider volumeSlider;
-            [SerializeField]
-            Text volumePercentLabel;
-            [SerializeField]
-            Toggle checkBoxMark;
-
-            public void Update(float volume, bool mute)
-            {
-                VolumeSlider.value = volume;
-                VolumePercentLabel.text = Percent(volume);
-                VolumeSlider.interactable = !mute;
-                CheckBoxMark.isOn = mute;
-            }
-
-            public Slider VolumeSlider
-            {
-                get
-                {
-                    return volumeSlider;
-                }
-            }
-
-            public Text VolumePercentLabel
-            {
-                get
-                {
-                    return volumePercentLabel;
-                }
-            }
-
-            public Toggle CheckBoxMark
-            {
-                get
-                {
-                    return checkBoxMark;
-                }
-            }
-
-            public float MinValue
-            {
-                get
-                {
-                    return VolumeSlider.minValue;
-                }
-            }
-
-            public float MaxValue
-            {
-                get
-                {
-                    return VolumeSlider.maxValue;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    bool returnFlag = false;
-                    foreach (GameObject control in controlParents)
-                    {
-                        if (control != null)
-                        {
-                            returnFlag = control.activeSelf;
-                            break;
-                        }
-                    }
-                    return returnFlag;
-                }
-                set
-                {
-                    foreach (GameObject control in controlParents)
-                    {
-                        if (control != null)
-                        {
-                            control.SetActive(value);
-                        }
-                    }
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct SensitivityControls
-        {
-            [SerializeField]
-            GameObject controlParent;
-            [SerializeField]
-            Slider slider;
-            [SerializeField]
-            Text percentLabel;
-
-            public void Update(float sensitivity)
-            {
-                SensitivitySlider.value = sensitivity;
-                SensitivityPercentLabel.text = Percent(sensitivity);
-            }
-
-            public Slider SensitivitySlider
-            {
-                get
-                {
-                    return slider;
-                }
-            }
-
-            public Text SensitivityPercentLabel
-            {
-                get
-                {
-                    return percentLabel;
-                }
-            }
-
-            public float MinValue
-            {
-                get
-                {
-                    return SensitivitySlider.minValue;
-                }
-            }
-
-            public float MaxValue
-            {
-                get
-                {
-                    return SensitivitySlider.maxValue;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return controlParent.activeSelf;
-                }
-                set
-                {
-                    controlParent.SetActive(value);
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct ToggleControls
-        {
-            [SerializeField]
-            GameObject controlParent;
-            [SerializeField]
-            Toggle toggle;
-
-            public bool IsInverted
-            {
-                get
-                {
-                    return toggle.isOn;
-                }
-                set
-                {
-                    toggle.isOn = value;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return controlParent.activeSelf;
-                }
-                set
-                {
-                    controlParent.SetActive(value);
-                }
-            }
-        }
-
-        [System.Serializable]
-        public struct CompoundSensitivityControls
-        {
-            [SerializeField]
-            ToggleControls splitAxisToggle;
-            [SerializeField]
-            SensitivityControls overallSensitivity;
-            [SerializeField]
-            SensitivityControls xAxisSensitivity;
-            [SerializeField]
-            SensitivityControls yAxisSensitivity;
-            [SerializeField]
-            GameObject[] labelsAndDividers;
-
-            public void Update(bool splitSensitivity, float xSensitivity, float ySensitivity)
-            {
-                splitAxisToggle.IsInverted = splitSensitivity;
-
-                OverallSensitivity.Update(xSensitivity);
-                xAxisSensitivity.Update(xSensitivity);
-                yAxisSensitivity.Update(ySensitivity);
-
-                UpdateAxisSensitivityControls();
-            }
-
-            public SensitivityControls OverallSensitivity
-            {
-                get
-                {
-                    return overallSensitivity;
-                }
-            }
-
-            public SensitivityControls XAxisSensitivity
-            {
-                get
-                {
-                    return xAxisSensitivity;
-                }
-            }
-
-            public SensitivityControls YAxisSensitivity
-            {
-                get
-                {
-                    return yAxisSensitivity;
-                }
-            }
-
-            public bool IsActive
-            {
-                get
-                {
-                    return splitAxisToggle.IsActive;
-                }
-                set
-                {
-                    splitAxisToggle.IsActive = value;
-                    UpdateAxisSensitivityControls();
-                }
-            }
-
-            public void UpdateAxisSensitivityControls()
-            {
-                if (splitAxisToggle.IsActive == false)
-                {
-                    xAxisSensitivity.IsActive = false;
-                    yAxisSensitivity.IsActive = false;
-                    overallSensitivity.IsActive = false;
-
-                    foreach (GameObject control in labelsAndDividers)
-                    {
-                        control.SetActive(false);
-                    }
-                }
-                else
-                {
-                    if (splitAxisToggle.IsInverted == true)
-                    {
-                        xAxisSensitivity.IsActive = true;
-                        yAxisSensitivity.IsActive = true;
-                        overallSensitivity.IsActive = false;
-                    }
-                    else
-                    {
-                        overallSensitivity.IsActive = true;
-                        xAxisSensitivity.IsActive = false;
-                        yAxisSensitivity.IsActive = false;
-                    }
-
-                    foreach (GameObject control in labelsAndDividers)
-                    {
-                        control.SetActive(true);
-                    }
-                }
-            }
-        }
-        #endregion
-
-        #region Serialized Fields
-        [Header("Features to Enable")]
-        [SerializeField]
-        EnableFlags defaultFlags;
-        [SerializeField]
-        EnableFlags webglFlags;
+        const string appendName = " Checkbox";
 
         [Header("Language Controls")]
         [SerializeField]
-        Translations.LanguageDropDown languageDropDown;
+        LanguageToggle languageCheckbox;
         [SerializeField]
-        GameObject[] languageParents;
+        string confirmTranslationsKey = "Options Language Change Confirm";
+        [SerializeField]
+        [Range(5f, 60f)]
+        float revertAfterSeconds = 20f;
 
-        [Header("Audio Controls")]
-        [SerializeField]
-        AudioControls musicControls;
-        [SerializeField]
-        AudioControls soundEffectsControls;
-
-        [Header("Special Effects Controls")]
-        [SerializeField]
-        ToggleControls smoothCameraControls;
-        [SerializeField]
-        ToggleControls bobbingCameraControls;
-        [SerializeField]
-        ToggleControls motionBlursControls;
-        [SerializeField]
-        ToggleControls flashesControls;
-        [SerializeField]
-        ToggleControls bloomControls;
-        [SerializeField]
-        GameObject[] specialEffectsParents;
-
-        [Header("Keyboard Sensitivity")]
-        [SerializeField]
-        CompoundSensitivityControls keyboardSensitivity;
-
-        [Header("Invert Keyboard")]
-        [SerializeField]
-        ToggleControls keyboardXInvert;
-        [SerializeField]
-        ToggleControls keyboardYInvert;
-        [SerializeField]
-        GameObject[] invertKeyboardLabelsAndDividers;
-
-        [Header("Mouse Sensitivity")]
-        [SerializeField]
-        CompoundSensitivityControls mouseSensitivity;
-
-        [Header("Invert Mouse")]
-        [SerializeField]
-        ToggleControls mouseXInvert;
-        [SerializeField]
-        ToggleControls mouseYInvert;
-        [SerializeField]
-        GameObject[] invertMouseLabelsAndDividers;
-
-        [Header("Scroll Wheel")]
-        [SerializeField]
-        SensitivityControls scrollWheelSensitivity;
-        [SerializeField]
-        ToggleControls scrollWheelInvert;
-        [SerializeField]
-        GameObject[] scrollWheelLabelsAndDividers;
-
-        [Header("Other controls")]
-        [SerializeField]
-        GameObject resetAllDataParent;
-        #endregion
-
-        SoundEffect audioCache;
-        bool inSetupMode = false;
-
-        System.Action<OptionsLanguageMenu> hideAction = null;
+        LanguageToggle currentSelectedCheckbox = null, lastSelectedCheckbox = null;
+        readonly Dictionary<string, LanguageToggle> languageToControlMap = new Dictionary<string, LanguageToggle>();
 
         #region Properties
-        public SoundEffect TestSoundEffect
-        {
-            get
-            {
-                if (audioCache == null)
-                {
-                    audioCache = GetComponent<SoundEffect>();
-                }
-                return audioCache;
-            }
-        }
-
-        GameSettings settings
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>();
-            }
-        }
-
         public override Type MenuType
         {
             get
@@ -591,519 +68,134 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return musicControls.VolumeSlider.gameObject;
+                GameObject returnControl = null;
+                LanguageToggle toggle;
+                if ((languageToControlMap.TryGetValue(Translations.CurrentLanguage, out toggle) == true) && (toggle != null) && (toggle.Checkbox != null))
+                {
+                    returnControl = toggle.Checkbox.gameObject;
+                }
+                return returnControl;
             }
         }
 
-        EnableFlags AllFlags
+        TranslationManager Translations
         {
             get
             {
-#if UNITY_WEBGL
-                return webglFlags;
-#else
-                return defaultFlags;
-#endif
+                return Singleton.Get<TranslationManager>();
             }
         }
         #endregion
 
-        void Start()
+        protected override void OnSetup()
         {
-            // Setup controls
-            inSetupMode = true;
+            // Call base method
+            base.OnSetup();
 
-            // Update how the languages are enabled
-            SetupLanguageControls();
-
-            // Update how music controls are enabled
-            SetupAudioControls();
-
-            // Update how special effects controls are enabled
-            SetupSpecialEffectsControls();
-
-            // Update how keyboard controls are enabled
-            SetupKeyboardSensitivityControls();
-            SetupInvertKeyboardControls();
-
-            // Update how mouse controls are enabled
-            SetupMouseSensitivityControls();
-            SetupInvertMouseControls();
-
-            // Update how scroll wheel controls are enabled
-            SetupScrollWheelControls();
-
-            // Update whether the rest of the controls are enabled
-            SetupOtherControls();
-            inSetupMode = false;
+            // Make sure the arguments are set correctly
+            if (languageCheckbox != null)
+            {
+                GenerateLanguageCheckboxes();
+            }
         }
 
-        protected override void OnStateChanged(IMenu.VisibilityState from, IMenu.VisibilityState to)
+        private void LanguageCheckbox_OnChecked(LanguageToggle obj)
         {
-            // Call the base method
-            base.OnStateChanged(from, to);
-
-            if ((from == VisibilityState.Visible) && (to == VisibilityState.Hidden))
+            if((obj != null) && (IsListeningToEvents == true))
             {
-                // Run the last action
-                if (hideAction != null)
+                // Update the toggle to select
+                currentSelectedCheckbox = obj;
+
+                // Change the language
+                Translations.CurrentLanguage = currentSelectedCheckbox.Language;
+
+                // Grab the confirmation menu
+                ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
+                if (menu != null)
                 {
-                    hideAction(this);
-                    hideAction = null;
+                    // Display confirmation dialog
+                    menu.DefaultToYes = false;
+                    menu.UpdateDialog(confirmTranslationsKey, revertAfterSeconds);
+                    menu.Show(ConfirmationMenu_OnButtonClicked);
                 }
             }
         }
 
-        #region UI events
-        public void OnLanguageSeleced(int selectedIndex)
+        private void ConfirmationMenu_OnButtonClicked(IMenu source, VisibilityState from, VisibilityState to)
         {
-            if ((inSetupMode == false) && (selectedIndex >= 0))
+            if((source is ConfirmationMenu) && (to == VisibilityState.Hidden))
             {
-                // Grab the translator
-                TranslationManager translator = Singleton.Get<TranslationManager>();
-                if ((translator != null) && (selectedIndex < translator.SupportedLanguages.Count))
+                // Stop listening to events while monitoring the user confirmation
+                IsListeningToEvents = false;
+                if (((ConfirmationMenu)source).IsYesSelected == true)
                 {
-                    // Change the language
-                    translator.CurrentLanguage = translator.SupportedLanguages[selectedIndex];
-                }
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        #region Music Group
-        public void OnMusicSliderChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                BackgroundMusic.GlobalVolume = sliderValue;
-                musicControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnMusicMuteToggled(bool mute)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                BackgroundMusic.GlobalMute = mute;
-
-                // disable the slider
-                musicControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Sound Effects Group
-        public void OnSoundEffectsSliderChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                SoundEffect.GlobalVolume = sliderValue;
-                soundEffectsControls.VolumePercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnSoundEffectsSliderPointerUp()
-        {
-            TestSoundEffect.Play();
-        }
-
-        public void OnSoundEffectsMuteToggled(bool mute)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                SoundEffect.GlobalMute = mute;
-
-                // disable the slider
-                soundEffectsControls.VolumeSlider.interactable = !mute;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Special Effects Group
-        public void OnEnableSmoothCameraToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsSmoothCameraEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableFlashesToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsScreenFlashesEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableMotionBlursToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsMotionBlursEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnEnableBloomToggled(bool enable)
-        {
-            if (inSetupMode == false)
-            {
-                // Toggle mute
-                settings.IsBloomEffectEnabled = enable;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Keyboard Sensitivity
-        public void OnSplitKeyboardAxisToggled(bool splitAxis)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardAxisSensitivitySplit = splitAxis;
-
-                // Toggle which sliders will be showing up
-                keyboardSensitivity.UpdateAxisSensitivityControls();
-                if (splitAxis == true)
-                {
-                    keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
-                    keyboardSensitivity.YAxisSensitivity.SensitivitySlider.value = keyboardSensitivity.OverallSensitivity.SensitivitySlider.value;
+                    // Indicate that the current language is the current checkbox
+                    lastSelectedCheckbox = currentSelectedCheckbox;
                 }
                 else
                 {
-                    keyboardSensitivity.OverallSensitivity.SensitivitySlider.value = keyboardSensitivity.XAxisSensitivity.SensitivitySlider.value;
+                    // Turn on the last checkbox instead
+                    lastSelectedCheckbox.Checkbox.isOn = true;
+                    currentSelectedCheckbox = lastSelectedCheckbox;
+
+                    // Switch the language to the last selected language
+                    Translations.CurrentLanguage = lastSelectedCheckbox.Language;
                 }
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
+                IsListeningToEvents = true;
             }
         }
 
-        public void OnKeyboardOverallSensitivityChanged(float sliderValue)
+        private void GenerateLanguageCheckboxes()
         {
-            if (inSetupMode == false)
+            // Setup the first button
+            StringBuilder nameBuilder = new StringBuilder();
+            SetupToggle(languageCheckbox, Translations.SupportedLanguages[0], nameBuilder);
+
+            // Setup the rest of the buttons
+            LanguageToggle clonedToggle;
+            for (int index = 1; index < Translations.SupportedLanguages.Count; ++index)
             {
-                // Setup settings
-                settings.KeyboardXAxisSensitivity = sliderValue;
-                settings.KeyboardYAxisSensitivity = sliderValue;
-                keyboardSensitivity.OverallSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
+                // Duplicate the toggle
+                clonedToggle = DuplicateToggle(languageCheckbox);
 
-        public void OnKeyboardXAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.KeyboardXAxisSensitivity = sliderValue;
-
-                keyboardSensitivity.XAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnKeyboardYAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.KeyboardYAxisSensitivity = sliderValue;
-
-                keyboardSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-        #endregion
-
-        #region Keyboard Inverted
-        public void OnInvertKeyboardXAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardXAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnInvertKeyboardYAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsKeyboardYAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Mouse Sensitivity
-        public void OnSplitMouseAxisToggled(bool splitAxis)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsMouseAxisSensitivitySplit = splitAxis;
-
-                // Toggle which sliders will be showing up
-                mouseSensitivity.UpdateAxisSensitivityControls();
-                if (splitAxis == true)
-                {
-                    mouseSensitivity.XAxisSensitivity.SensitivitySlider.value = mouseSensitivity.OverallSensitivity.SensitivitySlider.value;
-                    mouseSensitivity.YAxisSensitivity.SensitivitySlider.value = mouseSensitivity.OverallSensitivity.SensitivitySlider.value;
-                }
-                else
-                {
-                    mouseSensitivity.OverallSensitivity.SensitivitySlider.value = mouseSensitivity.XAxisSensitivity.SensitivitySlider.value;
-                }
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnMouseOverallSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.MouseXAxisSensitivity = sliderValue;
-                settings.MouseYAxisSensitivity = sliderValue;
-
-                mouseSensitivity.OverallSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnMouseXAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.MouseXAxisSensitivity = sliderValue;
-
-                mouseSensitivity.XAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnMouseYAxisSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.MouseYAxisSensitivity = sliderValue;
-
-                mouseSensitivity.YAxisSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-        #endregion
-
-        #region Mouse Inverted
-        public void OnInvertMouseXAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsMouseXAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-
-        public void OnInvertMouseYAxisToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsMouseYAxisInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-
-        #region Scroll Wheel
-        public void OnScrollWheelSensitivityChanged(float sliderValue)
-        {
-            if (inSetupMode == false)
-            {
-                // Setup settings
-                settings.ScrollWheelSensitivity = sliderValue;
-
-                // Update label
-                scrollWheelSensitivity.SensitivityPercentLabel.text = Percent(sliderValue);
-            }
-        }
-
-        public void OnInvertScrollWheelToggled(bool invert)
-        {
-            if (inSetupMode == false)
-            {
-                // Store this settings
-                settings.IsScrollWheelInverted = invert;
-
-                // Indicate button is clicked
-                Manager.ButtonClick.Play();
-            }
-        }
-        #endregion
-        #endregion
-
-        #region Helper Methods
-        static string Percent(float val)
-        {
-            return val.ToString("0%");
-        }
-
-        void SetupLanguageControls()
-        {
-            if (languageDropDown.IsSetup == false)
-            {
-                // Setup the drop down
-                languageDropDown.Setup();
+                // Setup the toggle
+                SetupToggle(clonedToggle, Translations.SupportedLanguages[index], nameBuilder);
             }
 
-            // Update whether the controls are visible or not
-            foreach (GameObject controls in languageParents)
-            {
-                controls.SetActive(AllFlags.EnableLanguageControls);
-            }
+            // Setup the last and current toggles
+            languageToControlMap.TryGetValue(Translations.CurrentLanguage, out currentSelectedCheckbox);
+            lastSelectedCheckbox = currentSelectedCheckbox;
         }
 
-        void SetupAudioControls()
+        private LanguageToggle DuplicateToggle(LanguageToggle toggleToDuplicate)
         {
-            // Update music controls
-            musicControls.Update(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
-            musicControls.IsActive = AllFlags.EnableMusicControls;
+            // Clone the object
+            GameObject clonedObject = Instantiate<GameObject>(toggleToDuplicate.gameObject);
 
-            // Update sound effect controls
-            soundEffectsControls.Update(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
-            soundEffectsControls.IsActive = AllFlags.EnableSoundEffectControls;
+            // Setup the transform
+            clonedObject.transform.SetParent(toggleToDuplicate.transform.parent);
+            clonedObject.transform.localRotation = Quaternion.identity;
+            clonedObject.transform.localScale = Vector3.one;
+            clonedObject.transform.SetAsLastSibling();
+
+            // Setup the component
+            return clonedObject.GetComponent<LanguageToggle>();
         }
 
-        void SetupSpecialEffectsControls()
+        private void SetupToggle(LanguageToggle clonedToggle, string languageName, StringBuilder nameBuilder)
         {
-            // Update Motion Blurs controls
-            smoothCameraControls.IsInverted = settings.IsSmoothCameraEnabled;
-            smoothCameraControls.IsActive = AllFlags.EnableSmoothCameraToggle;
+            // Setup the toggle
+            clonedToggle.Language = languageName;
+            clonedToggle.OnChecked += LanguageCheckbox_OnChecked;
 
-            // Update Motion Blurs controls
-            bobbingCameraControls.IsActive = AllFlags.EnableBobbingCameraToggle;
+            // Changing the name of the toggles
+            nameBuilder.Clear();
+            nameBuilder.Append(clonedToggle.Language);
+            nameBuilder.Append(appendName);
+            clonedToggle.name = nameBuilder.ToString();
 
-            // Update Motion Blurs controls
-            motionBlursControls.IsInverted = settings.IsMotionBlursEnabled;
-            motionBlursControls.IsActive = AllFlags.EnableMotionBlursToggle;
-
-            // Update Flashing controls
-            flashesControls.IsInverted = settings.IsScreenFlashesEnabled;
-            flashesControls.IsActive = AllFlags.EnableFlashingEffectsToggle;
-
-            // Update Bloom controls
-            bloomControls.IsInverted = settings.IsBloomEffectEnabled;
-            bloomControls.IsActive = AllFlags.EnableBloomToggle;
-
-            // Update visiblilty
-            bool specialEffectsEnabled = AllFlags.EnableMotionBlursToggle && AllFlags.EnableFlashingEffectsToggle;
-            foreach (GameObject controls in specialEffectsParents)
-            {
-                controls.SetActive(specialEffectsEnabled);
-            }
+            // Add the toggle to the dictionary
+            languageToControlMap.Add(languageName, clonedToggle);
         }
-
-        void SetupKeyboardSensitivityControls()
-        {
-            // Update keyboard sensitivity
-            keyboardSensitivity.Update(settings.IsKeyboardAxisSensitivitySplit, settings.KeyboardXAxisSensitivity, settings.KeyboardYAxisSensitivity);
-            keyboardSensitivity.IsActive = AllFlags.EnableKeyboardSensitivityControls;
-        }
-
-        void SetupInvertKeyboardControls()
-        {
-            // Update keyboard inverting controls
-            keyboardXInvert.IsInverted = settings.IsKeyboardXAxisInverted;
-            keyboardYInvert.IsInverted = settings.IsKeyboardYAxisInverted;
-
-            // Activate or deactivate all controls
-            keyboardXInvert.IsActive = AllFlags.EnableKeyboardInvertedControls;
-            keyboardYInvert.IsActive = AllFlags.EnableKeyboardInvertedControls;
-            foreach (GameObject parent in invertKeyboardLabelsAndDividers)
-            {
-                parent.SetActive(AllFlags.EnableKeyboardInvertedControls);
-            }
-        }
-
-        void SetupMouseSensitivityControls()
-        {
-            // Update keyboard sensitivity
-            mouseSensitivity.Update(settings.IsMouseAxisSensitivitySplit, settings.MouseXAxisSensitivity, settings.MouseYAxisSensitivity);
-            mouseSensitivity.IsActive = AllFlags.EnableMouseSensitivityControls;
-        }
-
-        void SetupInvertMouseControls()
-        {
-            // Update keyboard inverting controls
-            mouseXInvert.IsInverted = settings.IsMouseXAxisInverted;
-            mouseYInvert.IsInverted = settings.IsMouseYAxisInverted;
-
-            // Activate or deactivate all controls
-            mouseXInvert.IsActive = AllFlags.EnableMouseInvertedControls;
-            mouseYInvert.IsActive = AllFlags.EnableMouseInvertedControls;
-            foreach (GameObject parent in invertMouseLabelsAndDividers)
-            {
-                parent.SetActive(AllFlags.EnableMouseInvertedControls);
-            }
-        }
-
-        void SetupScrollWheelControls()
-        {
-            // Update scroll wheel sensitivity
-            scrollWheelSensitivity.Update(settings.ScrollWheelSensitivity);
-            scrollWheelSensitivity.IsActive = AllFlags.EnableScrollWheelSensitivityControls;
-
-            // Update scroll wheel inverted
-            scrollWheelInvert.IsInverted = settings.IsScrollWheelInverted;
-            scrollWheelInvert.IsActive = AllFlags.EnableScrollWheelInvertedControls;
-
-            // Update visiblilty
-            bool specialEffectsEnabled = AllFlags.EnableScrollWheelSensitivityControls && AllFlags.EnableScrollWheelInvertedControls;
-            foreach (GameObject controls in scrollWheelLabelsAndDividers)
-            {
-                controls.SetActive(specialEffectsEnabled);
-            }
-        }
-
-        void SetupOtherControls()
-        {
-            resetAllDataParent.SetActive(AllFlags.EnableResetDataButton);
-        }
-        #endregion
     }
 }
