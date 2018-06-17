@@ -117,8 +117,15 @@ namespace OmiyaGames.Menu
                 quitButton.gameObject.SetActive(false);
             }
 
+            // Setup default button
+            SetupStartButton();
+            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
+        }
+
+        public void SetupStartButton()
+        {
             // Setup the start button
-            if(IsStartingOnFirstLevel == true)
+            if (IsStartingOnFirstLevel == true)
             {
                 // Update which button to activate
                 startButton.gameObject.SetActive(true);
@@ -136,9 +143,6 @@ namespace OmiyaGames.Menu
                 // Select the level select button by default
                 defaultButton = levelSelectButton.gameObject;
             }
-
-            // Setup default button
-            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
         }
 
         #region Button Events

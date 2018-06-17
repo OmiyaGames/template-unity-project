@@ -215,6 +215,7 @@ namespace Project.Settings
             {
                 PropertyName = HeadBobbingOptionPropertyName,
                 SetterScope = AccessModifier.Internal,
+                GetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
                     "The stored value for the head bobbing checkbox in the Graphics options menu."

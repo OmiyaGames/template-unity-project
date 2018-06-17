@@ -3,9 +3,6 @@ using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-    using System;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsListMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -49,6 +46,8 @@ namespace OmiyaGames.Menu
         [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("allButtons")]
         PlatformSpecificButton[] allOptionsButtons;
+        [SerializeField]
+        string resetDataMessage = "Options Reset Message";
 
         GameObject cachedDefaultButton = null;
 
@@ -154,6 +153,7 @@ namespace OmiyaGames.Menu
                 {
                     // Display confirmation dialog
                     menu.DefaultToYes = false;
+                    menu.UpdateDialog(resetDataMessage);
                     menu.Show(CheckResetSavedDataConfirmation);
                 }
             }
@@ -163,10 +163,17 @@ namespace OmiyaGames.Menu
         #region Helper Methods
         void CheckResetSavedDataConfirmation(IMenu source, VisibilityState from, VisibilityState to)
         {
-            if ((source is ConfirmationMenu) && (((ConfirmationMenu)source).IsYesSelected == true))
+            if ((source is ConfirmationMenu) && (to == VisibilityState.Hidden) && (((ConfirmationMenu)source).IsYesSelected == true))
             {
                 // Clear settings
-                Singleton.Get<GameSettings>().ClearSettings();
+                Settings.ClearSettings();
+
+                // Update the start menu, if one is available
+                StartMenu start = Manager.GetMenu<StartMenu>();
+                if (start != null)
+                {
+                    start.SetupStartButton();
+                }
 
                 // Update the level select menu, if one is available
                 LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();

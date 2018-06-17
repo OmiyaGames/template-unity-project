@@ -75,7 +75,7 @@ namespace OmiyaGames.Translations
         TextMeshProUGUI label = null;
         object[] arguments = null;
         string originalString = null;
-        bool bindedToSingleton = false;
+        System.Action<float> bindedToSingleton = null;
 
         #region Properties
         public bool IsTranslating
@@ -223,11 +223,11 @@ namespace OmiyaGames.Translations
                 // Remove this script from the dictionary
                 allTranslationScripts.Remove(this);
             }
-            if(bindedToSingleton == true)
+            if(bindedToSingleton != null)
             {
                 // Unbind to OnUpdate
-                bindedToSingleton = false;
-                Singleton.Instance.OnUpdate -= OnEveryFrame;
+                Singleton.Instance.OnUpdate -= bindedToSingleton;
+                bindedToSingleton = null;
             }
         }
 
@@ -283,10 +283,10 @@ namespace OmiyaGames.Translations
 
         void UpdateLabelOnNextFrame()
         {
-            if((bindedToSingleton == false) && (Singleton.Instance != null))
+            if((Singleton.Instance != null) && (bindedToSingleton == null))
             {
-                Singleton.Instance.OnUpdate += OnEveryFrame;
-                bindedToSingleton = true;
+                bindedToSingleton = new System.Action<float>(OnEveryFrame);
+                Singleton.Instance.OnUpdate += bindedToSingleton;
             }
         }
 
@@ -328,8 +328,11 @@ namespace OmiyaGames.Translations
                 UpdateLabelNow();
 
                 // Unbind to OnUpdate
-                bindedToSingleton = false;
-                Singleton.Instance.OnUpdate -= OnEveryFrame;
+                if (bindedToSingleton != null)
+                {
+                    Singleton.Instance.OnUpdate -= bindedToSingleton;
+                    bindedToSingleton = null;
+                }
             }
         }
         #endregion
