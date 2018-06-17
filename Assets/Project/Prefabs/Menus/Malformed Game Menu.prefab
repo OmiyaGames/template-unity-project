@@ -315,9 +315,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11f5277d7a39a4d4e9e86a6f710c1b99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 1
   titleTranslationKey: 
+  scrollToDefaultUi: {fileID: 0}
   defaultUi: {fileID: 114105903657142146}
   optionsMessage: {fileID: 114415465882897134}
   websiteLinkId: website
@@ -726,7 +727,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ddd481141321ed94abb4abfc99554090, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -1189,6 +1190,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resizeWidth: 1
   resizeHeight: 0
+  repositionX: 0
+  repositionY: 0
 --- !u!114 &114469687611873136
 MonoBehaviour:
   m_ObjectHideFlags: 1

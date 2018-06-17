@@ -116,9 +116,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a44fe557e840722429e88af469500ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollToDefaultUi: {fileID: 0}
+  stateField: State
   showBackground: 0
   titleTranslationKey: Game Title
+  scrollToDefaultUi: {fileID: 0}
   levelContent: {fileID: 22494998}
   levelButtonToDuplicate: {fileID: 114014978841383268}
   backButton: {fileID: 114455773040949038}
@@ -536,7 +537,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ddd481141321ed94abb4abfc99554090, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -1214,6 +1215,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resizeWidth: 1
   resizeHeight: 0
+  repositionX: 0
+  repositionY: 0
 --- !u!114 &114758451054672634
 MonoBehaviour:
   m_ObjectHideFlags: 1
