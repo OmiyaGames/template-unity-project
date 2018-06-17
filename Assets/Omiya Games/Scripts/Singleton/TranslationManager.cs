@@ -414,6 +414,9 @@ namespace OmiyaGames.Translations
                     // Check if this language is supported
                     if (SupportedLanguages.Contains(value) == true)
                     {
+                        // Call event
+                        OnBeforeLanguageChanged?.Invoke(this, currentLanguage, value);
+
                         // Set the language
                         string lastLanguage = currentLanguage;
                         currentLanguage = value;
