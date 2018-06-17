@@ -510,13 +510,13 @@
         /// <summary>
         /// The stored value for the head bobbing checkbox in the Graphics options menu.
         /// </summary>
-        public bool IsHeadBobbingOptionEnabled
+        internal bool IsHeadBobbingOptionEnabled
         {
             get
             {
                 return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Head Bobbing Option Enabled").Value;
             }
-            internal set
+            set
             {
                 AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Head Bobbing Option Enabled").SetValue(value, Settings, AppVersion);
             }
