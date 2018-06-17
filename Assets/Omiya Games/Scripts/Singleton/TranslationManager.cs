@@ -284,6 +284,11 @@ namespace OmiyaGames.Translations
             }
         }
 
+        [Header("Runtime Behavior")]
+        [Tooltip("If true, keys that has missing values (an empty cell) will be replaced by their counterpart from the default language, or the left-most text if even that is missing.")]
+        [SerializeField]
+        bool retrieveDefaultsAsBackup = true;
+
         [Header("CSV File")]
         [Tooltip("Set this variable if the CSV file is a text asset that isn't in the Resources folder.")]
         [SerializeField]
@@ -303,11 +308,6 @@ namespace OmiyaGames.Translations
         [Tooltip("Maps a font to a header in the CSV file.")]
         [SerializeField]
         FontMap[] fontMap = null;
-
-        [Header("Runtime Behavior")]
-        [Tooltip("If true, keys that has missing values (an empty cell) will be replaced by their counterpart from the default language, or the left-most text if even that is missing.")]
-        [SerializeField]
-        bool retrieveDefaultsAsBackup = true;
 
         /// <summary>
         /// Currently selected langauge. Defaults to the first language encountered in the file.
