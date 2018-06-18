@@ -35,7 +35,7 @@ namespace Project.Settings
     public class AddOptions : SettingsVersionGeneratorDecorator
     {
         public const ushort AppVersion = 4;
-        public const float DefaultCameraSmoothFactor = 0f;
+        public const float DefaultCameraSmoothFactor = 0.25f;
         public const float DefaultScale = 1f;
         public const float DefaultSensitivity = 0.5f;
 
@@ -121,11 +121,14 @@ namespace Project.Settings
             }
         }
 
+        /// <summary>
+        /// Provides Camera Smooth Factor.  Returns a negative value if not set
+        /// </summary>
         public static float CameraSmoothFactor
         {
             get
             {
-                float returnSmoothFactor = DefaultCameraSmoothFactor;
+                float returnSmoothFactor = -1f;
                 if (IsSmoothCameraEnabledProperty.Value == true)
                 {
                     returnSmoothFactor = SmoothCameraFactorOptionProperty.Value;

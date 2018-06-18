@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OmiyaGames.Translations
@@ -209,18 +210,21 @@ namespace OmiyaGames.Translations
         } = false;
         #endregion
 
-        void Start()
+        IEnumerator Start()
         {
-            if (IsTranslating == true)
-            {
-                // Add this script to the dictionary
-                allTranslationScripts.Add(this);
+            // Add this script to the dictionary
+            allTranslationScripts.Add(this);
 
-                // Update the label
-                if (IsDisplayingLatestText == false)
-                {
-                    UpdateLabelNow();
-                }
+            // Wait until translation is available
+            while (IsTranslating == false)
+            {
+                yield return null;
+            }
+
+            // Update the label
+            if (IsDisplayingLatestText == false)
+            {
+                UpdateLabelNow();
             }
         }
 
