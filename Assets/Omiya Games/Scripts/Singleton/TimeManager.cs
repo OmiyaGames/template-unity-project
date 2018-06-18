@@ -40,8 +40,6 @@ namespace OmiyaGames.Global
         public event System.Action<TimeManager> OnManuallyPausedChanged;
 
         [SerializeField]
-        float defaultTimeScale = 1f;
-        [SerializeField]
         float defaultHitPauseDuration = 0.2f;
 
         float timeScale = 1f,
@@ -49,14 +47,6 @@ namespace OmiyaGames.Global
             slowDownDuration = 1f;
         bool isManuallyPaused = false,
             isTimeScaleTemporarilyChanged = false;
-
-        public float OriginalTimeScale
-        {
-            get
-            {
-                return defaultTimeScale;
-            }
-        }
 
         public float TimeScale
         {
@@ -108,7 +98,6 @@ namespace OmiyaGames.Global
 
         internal override void SingletonAwake()
         {
-            defaultTimeScale = Time.timeScale;
             timeScale = Time.timeScale;
             Singleton.Instance.OnRealTimeUpdate += UpdateRealtime;
         }
@@ -118,10 +107,10 @@ namespace OmiyaGames.Global
             // Do nothing
         }
 
-        public void RevertToOriginalTime()
+        public void RevertToCustomTimeScale()
         {
             IsManuallyPaused = false;
-            TimeScale = OriginalTimeScale;
+            TimeScale = Singleton.Get<Settings.GameSettings>().CustomTimeScale;
         }
 
         public void HitPause()

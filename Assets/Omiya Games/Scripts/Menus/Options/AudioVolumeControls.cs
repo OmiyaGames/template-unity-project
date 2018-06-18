@@ -104,6 +104,7 @@ namespace OmiyaGames.Menu
             // Setup controls
             Slider.value = volumeNormalized;
             Checkbox.isOn = isMute;
+            UpdateSliderInteractable(isMute);
 
             // Update state
             IsListeningToEvents = true;
@@ -113,7 +114,7 @@ namespace OmiyaGames.Menu
         {
             if (IsListeningToEvents == true)
             {
-                Slider.interactable = (conditionToEnableSlider == isChecked);
+                UpdateSliderInteractable(isChecked);
                 OnCheckboxUpdated?.Invoke(isChecked);
             }
         }
@@ -132,6 +133,11 @@ namespace OmiyaGames.Menu
             {
                 OnSliderReleaseUpdated?.Invoke(newValue);
             }
+        }
+
+        private void UpdateSliderInteractable(bool isChecked)
+        {
+            Slider.interactable = (conditionToEnableSlider == isChecked);
         }
     }
 }

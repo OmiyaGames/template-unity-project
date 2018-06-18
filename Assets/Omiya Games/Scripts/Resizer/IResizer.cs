@@ -53,6 +53,37 @@ namespace OmiyaGames
     [DisallowMultipleComponent]
     public abstract class IResizer : MonoBehaviour
     {
+        public delegate void ResizeMultiplierChanged(float lastMultiplier, float newMultiplier);
+        public static event ResizeMultiplierChanged OnBeforeResizeMultiplierChanged;
+        public static event ResizeMultiplierChanged OnAfterResizeMultiplierChanged;
+
+        static GameSettings Settings
+        {
+            get
+            {
+                return Singleton.Get<GameSettings>();
+            }
+        }
+
+        public static float ResizeMultiplier
+        {
+            get
+            {
+                return Settings.TextSizeMultiplier;
+            }
+            set
+            {
+                // Call before event
+                OnBeforeResizeMultiplierChanged?.Invoke(Settings.TextSizeMultiplier, value);
+
+                // Change the text size
+                float lastMultiplier = Settings.TextSizeMultiplier;
+                Settings.TextSizeMultiplier = value;
+
+                // Call after event
+                OnAfterResizeMultiplierChanged?.Invoke(lastMultiplier, Settings.TextSizeMultiplier);
+            }
+        }
         // FIXME: do something!
     }
 }

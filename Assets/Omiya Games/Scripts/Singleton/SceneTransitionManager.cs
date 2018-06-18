@@ -243,7 +243,7 @@ namespace OmiyaGames.Scenes
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
-                Singleton.Get<TimeManager>().RevertToOriginalTime();
+                Singleton.Get<TimeManager>().RevertToCustomTimeScale();
             }
 
             // Remove the async operation
