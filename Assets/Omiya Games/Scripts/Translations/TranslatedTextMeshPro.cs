@@ -40,6 +40,7 @@ namespace OmiyaGames.Translations
     [DisallowMultipleComponent]
     public class TranslatedTextMeshPro : MonoBehaviour
     {
+        // TODO: consider binding this script to the translation manager's event
         static readonly HashSet<TranslatedTextMeshPro> allTranslationScripts = new HashSet<TranslatedTextMeshPro>();
 
         public static IEnumerable<TranslatedTextMeshPro> AllTranslationScripts
@@ -313,7 +314,7 @@ namespace OmiyaGames.Translations
             }
 
             // Set the label's text
-            Label.text = displayString;
+            Label.SetText(displayString);
 
             // Set the label's font
             UpdateFont();
