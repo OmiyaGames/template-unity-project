@@ -203,7 +203,7 @@ namespace OmiyaGames.Menu
         {
             if (IsListeningToEvents == true)
             {
-                Settings.SmoothCameraFactor = value;
+                Settings.SmoothCameraFactorOption = value;
             }
         }
 
@@ -318,7 +318,7 @@ namespace OmiyaGames.Menu
             // If enabled, setup the controls
             if (enable == true)
             {
-                cameraSmoothingSet.Setup(Settings.SmoothCameraFactor, Settings.IsSmoothCameraEnabled);
+                cameraSmoothingSet.Setup(Settings.SmoothCameraFactorOption, Settings.IsSmoothCameraEnabled);
                 cameraSmoothingSet.OnCheckboxUpdated += CameraSmoothingSet_OnCheckboxUpdated;
                 cameraSmoothingSet.OnSliderValueUpdated += CameraSmoothingSet_OnSliderValueUpdated;
                 cameraSmoothingSet.OnSliderReleaseUpdated += CameraSmoothingSet_OnSliderValueUpdated;
