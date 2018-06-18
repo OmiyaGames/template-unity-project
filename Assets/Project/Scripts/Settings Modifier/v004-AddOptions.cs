@@ -35,9 +35,84 @@ namespace Project.Settings
     public class AddOptions : SettingsVersionGeneratorDecorator
     {
         public const ushort AppVersion = 4;
-        const string CameraShakePropertyName = "IsCameraShakesEnabled";
-        const string HeadBobbingOptionPropertyName = "IsHeadBobbingOptionEnabled";
+        public const float DefaultCameraSmoothFactor = 0f;
+        public const float DefaultScale = 1f;
+        public const float DefaultSensitivity = 0.5f;
 
+        const string CameraSmoothFactorPropertyName = "CameraSmoothFactor";
+        const string IsHeadingBobbingEnabledPropertyName = "IsHeadBobbingEnabled";
+        const string CustomTimeScalePropertyName = "CustomTimeScale";
+
+        /////////////////////////////////////////////////////
+        // Mouse Stuff
+        /////////////////////////////////////////////////////
+        static readonly StoredFloatGenerator SmoothCameraFactorOptionProperty = new StoredFloatGenerator("Smooth Camera Factor Option", DefaultCameraSmoothFactor)
+        {
+            Processor = Clamp<float>.Get(0, 1),
+            GetterScope = AccessModifier.Internal,
+            SetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "The smoothing factor for making the camera follow the mouse movement.",
+                    "A value between 0 and 1.",
+                    "The lower the value, the more tightly it tracks the mouse movement."
+                }
+        };
+        static readonly StoredBoolGenerator IsSmoothCameraEnabledProperty = new StoredBoolGenerator("Is Smooth Camera Enabled", false)
+        {
+            SetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "If true, enables smooth camera controls."
+                }
+        };
+
+        /////////////////////////////////////////////////////
+        // Graphics Stuff
+        /////////////////////////////////////////////////////
+        static readonly StoredBoolGenerator IsCameraShakesEnabledProperty = new StoredBoolGenerator("Is Camera Shakes Enabled", true)
+        {
+            SetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "If true, enables bloom graphic effects."
+                }
+        };
+        static readonly StoredBoolGenerator IsHeadBobbingOptionEnabledProperty = new StoredBoolGenerator("Is Head Bobbing Option Enabled", false)
+        {
+            SetterScope = AccessModifier.Internal,
+            GetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "The stored value for the head bobbing checkbox in the Graphics options menu."
+                }
+        };
+
+        /////////////////////////////////////////////////////
+        // Accessibility Stuff
+        /////////////////////////////////////////////////////
+        static readonly StoredFloatGenerator CustomTimeScaleOptionProperty = new StoredFloatGenerator("Custom Time Scale Option", DefaultScale)
+        {
+            Processor = Clamp<float>.Get(0, 1),
+            GetterScope = AccessModifier.Internal,
+            SetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "The smoothing factor for making the camera follow the mouse movement.",
+                    "A value between 0 and 1.",
+                    "The lower the value, the more tightly it tracks the mouse movement."
+                }
+        };
+        static readonly StoredBoolGenerator IsCustomTimeScaleEnabledProperty = new StoredBoolGenerator("Is Custom Time Scale Enabled", false)
+        {
+            SetterScope = AccessModifier.Internal,
+            TooltipDocumentation = new string[]
+                {
+                    "If true, enables smooth camera controls."
+                }
+        };
+
+        #region Properties
         public override ushort Version
         {
             get
@@ -45,6 +120,49 @@ namespace Project.Settings
                 return AppVersion;
             }
         }
+
+        public static float CameraSmoothFactor
+        {
+            get
+            {
+                float returnSmoothFactor = DefaultCameraSmoothFactor;
+                if (IsSmoothCameraEnabledProperty.Value == true)
+                {
+                    returnSmoothFactor = SmoothCameraFactorOptionProperty.Value;
+                }
+                return returnSmoothFactor;
+            }
+        }
+
+        public static bool IsHeadBobbingEnabled
+        {
+            get
+            {
+                return IsCameraShakesEnabledProperty.Value && IsHeadBobbingOptionEnabledProperty.Value;
+            }
+        }
+
+        public static float CustomTimeScale
+        {
+            get
+            {
+                float returnScale = DefaultScale;
+                if (IsCustomTimeScaleEnabledProperty.Value == true)
+                {
+                    returnScale = CustomTimeScaleOptionProperty.Value;
+                }
+                return returnScale;
+            }
+        }
+
+        static string ClassName
+        {
+            get
+            {
+                return typeof(AddOptions).FullName;
+            }
+        }
+        #endregion
 
         protected override string[] GetKeysToRemove()
         {
@@ -68,7 +186,7 @@ namespace Project.Settings
                     "If true, splits the keyboard's X- and Y-axis' sensitivity"
                 }
             },
-            new StoredFloatGenerator("Keyboard X-Axis Sensitivity", 0.5f)
+            new StoredFloatGenerator("Keyboard X-Axis Sensitivity", DefaultSensitivity)
             {
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
@@ -78,7 +196,7 @@ namespace Project.Settings
                     "A value between 0 and 1."
                 }
             },
-            new StoredFloatGenerator("Keyboard Y-Axis Sensitivity", 0.5f)
+            new StoredFloatGenerator("Keyboard Y-Axis Sensitivity", DefaultSensitivity)
             {
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
@@ -119,7 +237,7 @@ namespace Project.Settings
                     "If true, splits the mouse's X- and Y-axis' sensitivity"
                 }
             },
-            new StoredFloatGenerator("Mouse X-Axis Sensitivity", 0.5f)
+            new StoredFloatGenerator("Mouse X-Axis Sensitivity", DefaultSensitivity)
             {
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
@@ -129,7 +247,7 @@ namespace Project.Settings
                     "A value between 0 and 1."
                 }
             },
-            new StoredFloatGenerator("Mouse Y-Axis Sensitivity", 0.5f)
+            new StoredFloatGenerator("Mouse Y-Axis Sensitivity", DefaultSensitivity)
             {
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
@@ -158,29 +276,20 @@ namespace Project.Settings
                     "If true, inverts the keyboard's Y-axis."
                 }
             },
-            new StoredFloatGenerator("Smooth Camera Factor", 0.25f)
+            SmoothCameraFactorOptionProperty,
+            IsSmoothCameraEnabledProperty,
+            new PropertyGenerator(CameraSmoothFactorPropertyName, typeof(float))
             {
-                Processor = Clamp<float>.Get(0, 1),
-                SetterScope = AccessModifier.Internal,
+                GetterCode = GeneratorDecorator.CreatePropertyWriter(ClassName, CameraSmoothFactorPropertyName),
                 TooltipDocumentation = new string[]
                 {
-                    "The smoothing factor for making the camera follow the mouse movement.",
-                    "A value between 0 and 1.",
-                    "The lower the value, the more tightly it tracks the mouse movement."
-                }
-            },
-            new StoredBoolGenerator("Is Smooth Camera Enabled", false)
-            {
-                SetterScope = AccessModifier.Internal,
-                TooltipDocumentation = new string[]
-                {
-                    "If true, enables smooth camera controls."
-                }
+                    "The amount to apply the camera smoothing. Zero indicates instant-snapping to mouse."
+                },
             },
             /////////////////////////////////////////////////////
             // Scroll Wheel Stuff
             /////////////////////////////////////////////////////
-            new StoredFloatGenerator("Scroll Wheel Sensitivity", 0.5f)
+            new StoredFloatGenerator("Scroll Wheel Sensitivity", DefaultSensitivity)
             {
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
@@ -202,28 +311,11 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             // Graphics Stuff
             /////////////////////////////////////////////////////
-            new StoredBoolGenerator("Is Camera Shakes Enabled", true)
+            IsCameraShakesEnabledProperty,
+            IsHeadBobbingOptionEnabledProperty,
+            new PropertyGenerator(IsHeadingBobbingEnabledPropertyName, typeof(bool))
             {
-                PropertyName = CameraShakePropertyName,
-                SetterScope = AccessModifier.Internal,
-                TooltipDocumentation = new string[]
-                {
-                    "If true, enables bloom graphic effects."
-                }
-            },
-            new StoredBoolGenerator("Is Head Bobbing Option Enabled", false)
-            {
-                PropertyName = HeadBobbingOptionPropertyName,
-                SetterScope = AccessModifier.Internal,
-                GetterScope = AccessModifier.Internal,
-                TooltipDocumentation = new string[]
-                {
-                    "The stored value for the head bobbing checkbox in the Graphics options menu."
-                }
-            },
-            new PropertyGenerator("IsHeadBobbingEnabled", typeof(bool))
-            {
-                GetterCode = WriteHeadBobbingGetter,
+                GetterCode = GeneratorDecorator.CreatePropertyWriter(ClassName, IsHeadingBobbingEnabledPropertyName),
                 TooltipDocumentation = new string[]
                 {
                     "If true, enables head bobbing camera effect."
@@ -253,21 +345,29 @@ namespace Project.Settings
                     "If true, enables bloom graphic effects."
                 }
             },
-            };
-        }
-
-        private void WriteHeadBobbingGetter(GeneratorDecorator source, GeneratePropertyEventArgs args)
-        {
-            if (args != null)
+            /////////////////////////////////////////////////////
+            // Accessibility Stuff
+            /////////////////////////////////////////////////////
+            new StoredFloatGenerator("Text Size Multiplier", DefaultScale)
             {
-                args.WriteTabs();
-                args.writer.Write("return ");
-                args.writer.Write(CameraShakePropertyName);
-                args.writer.Write(" && ");
-                args.writer.Write(HeadBobbingOptionPropertyName);
-                args.writer.Write(';');
-                args.writer.WriteLine();
-            }
+                Processor = Clamp<float>.Get(0.5f, 1.5f),
+                SetterScope = AccessModifier.Internal,
+                TooltipDocumentation = new string[]
+                {
+                    "Multiplier on how much the font size of a text should change."
+                }
+            },
+            CustomTimeScaleOptionProperty,
+            IsCustomTimeScaleEnabledProperty,
+            new PropertyGenerator(CustomTimeScalePropertyName, typeof(float))
+            {
+                GetterCode = GeneratorDecorator.CreatePropertyWriter(ClassName, CustomTimeScalePropertyName),
+                TooltipDocumentation = new string[]
+                {
+                    "The default global time scale for the game."
+                },
+            },
+            };
         }
     }
 }

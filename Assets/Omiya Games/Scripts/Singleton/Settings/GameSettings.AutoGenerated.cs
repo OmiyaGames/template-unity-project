@@ -69,7 +69,7 @@
                         AllSettingsVersions[4].GetSetting("Mouse Y-Axis Sensitivity"),
                         AllSettingsVersions[4].GetSetting("Mouse X-Axis is Inverted"),
                         AllSettingsVersions[4].GetSetting("Mouse Y-Axis is Inverted"),
-                        AllSettingsVersions[4].GetSetting("Smooth Camera Factor"),
+                        AllSettingsVersions[4].GetSetting("Smooth Camera Factor Option"),
                         AllSettingsVersions[4].GetSetting("Is Smooth Camera Enabled"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel Sensitivity"),
                         AllSettingsVersions[4].GetSetting("Scroll Wheel is Inverted"),
@@ -78,6 +78,9 @@
                         AllSettingsVersions[4].GetSetting("Is Screen Flashes Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Motion Blurs Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Bloom Effect Enabled"),
+                        AllSettingsVersions[4].GetSetting("Text Size Multiplier"),
+                        AllSettingsVersions[4].GetSetting("Custom Time Scale Option"),
+                        AllSettingsVersions[4].GetSetting("Is Custom Time Scale Enabled"),
                         #endregion
                     };
                 }
@@ -434,15 +437,15 @@
         /// A value between 0 and 1.
         /// The lower the value, the more tightly it tracks the mouse movement.
         /// </summary>
-        public float SmoothCameraFactor
+        internal float SmoothCameraFactorOption
         {
             get
             {
-                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor").Value;
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor Option").Value;
             }
-            internal set
+            set
             {
-                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor").SetValue(value, Settings, AppVersion);
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Smooth Camera Factor Option").SetValue(value, Settings, AppVersion);
             }
         }
 
@@ -458,6 +461,17 @@
             internal set
             {
                 AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Smooth Camera Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// The amount to apply the camera smoothing. Zero indicates instant-snapping to mouse.
+        /// </summary>
+        public float CameraSmoothFactor
+        {
+            get
+            {
+                return Project.Settings.AddOptions.CameraSmoothFactor;
             }
         }
 
@@ -529,7 +543,7 @@
         {
             get
             {
-                return IsCameraShakesEnabled && IsHeadBobbingOptionEnabled;
+                return Project.Settings.AddOptions.IsHeadBobbingEnabled;
             }
         }
 
@@ -575,6 +589,64 @@
             internal set
             {
                 AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Bloom Effect Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// Multiplier on how much the font size of a text should change.
+        /// </summary>
+        public float TextSizeMultiplier
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Text Size Multiplier").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Text Size Multiplier").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// The smoothing factor for making the camera follow the mouse movement.
+        /// A value between 0 and 1.
+        /// The lower the value, the more tightly it tracks the mouse movement.
+        /// </summary>
+        internal float CustomTimeScaleOption
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Custom Time Scale Option").Value;
+            }
+            set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Custom Time Scale Option").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// If true, enables smooth camera controls.
+        /// </summary>
+        public bool IsCustomTimeScaleEnabled
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Custom Time Scale Enabled").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Custom Time Scale Enabled").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// The default global time scale for the game.
+        /// </summary>
+        public float CustomTimeScale
+        {
+            get
+            {
+                return Project.Settings.AddOptions.CustomTimeScale;
             }
         }
         #endregion
