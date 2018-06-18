@@ -93,7 +93,7 @@ namespace Project.Settings
         /////////////////////////////////////////////////////
         static readonly StoredFloatGenerator CustomTimeScaleOptionProperty = new StoredFloatGenerator("Custom Time Scale Option", DefaultScale)
         {
-            Processor = Clamp<float>.Get(0, 1),
+            Processor = Clamp<float>.Get(0, 2),
             GetterScope = AccessModifier.Internal,
             SetterScope = AccessModifier.Internal,
             TooltipDocumentation = new string[]

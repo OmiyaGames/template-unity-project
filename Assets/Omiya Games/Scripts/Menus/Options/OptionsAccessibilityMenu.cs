@@ -93,6 +93,14 @@ namespace OmiyaGames.Menu
                 return returnUi;
             }
         }
+
+        public Global.TimeManager TimeManager
+        {
+            get
+            {
+                return Singleton.Get<Global.TimeManager>();
+            }
+        }
         #endregion
 
         protected override void OnSetup()
@@ -100,13 +108,13 @@ namespace OmiyaGames.Menu
             // Call base method
             base.OnSetup();
 
-            // FIXME: setup sliders
-            //timeScaleSlider.Setup();
+            // Setup sliders
+            textSizeSlider.value = IResizer.ResizeMultiplier;
+            timeScaleSlider.Setup(Settings.CustomTimeScaleOption, Settings.IsCustomTimeScaleEnabled);
 
             // Setup reset buttons
-            // FIXME: fix these arguments to match the settings.
-            //UpdateResetTimeScaleButton(false, defaultTimeScale);
-            //UpdateResetTextSizeButton(defaultTextSize);
+            UpdateResetTimeScaleButton(Settings.IsCustomTimeScaleEnabled, Settings.CustomTimeScaleOption);
+            UpdateResetTextSizeButton(IResizer.ResizeMultiplier);
 
             // Setup control events
             timeScaleSlider.OnCheckboxUpdated += TimeScaleSlider_OnCheckboxUpdated;
@@ -133,7 +141,6 @@ namespace OmiyaGames.Menu
             {
                 // Reset the time scale slider to default
                 timeScaleSlider.Slider.value = defaultTimeScale;
-                timeScaleSlider.Checkbox.isOn = false;
             }
         }
 
@@ -144,11 +151,13 @@ namespace OmiyaGames.Menu
                 // Check slider value
                 if (Mathf.Approximately(percent, defaultTextSize) == false)
                 {
-                    // FIXME: Set the text size on TextSizeResizer
+                    // Set the text size on TextSizeResizer
+                    IResizer.ResizeMultiplier = percent;
                 }
                 else
                 {
-                    // FIXME: Set the text size on TextSizeResizer to default
+                    // Set the text size on TextSizeResizer to default
+                    IResizer.ResizeMultiplier = 1f;
                 }
 
                 // Check slider value
@@ -160,6 +169,12 @@ namespace OmiyaGames.Menu
         {
             if (IsListeningToEvents == true)
             {
+                // Update settings
+                Settings.IsCustomTimeScaleEnabled = isChecked;
+
+                // Update timescale
+                TimeManager.RevertToCustomTimeScale();
+
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(isChecked, timeScaleSlider.Slider.value);
             }
@@ -172,12 +187,17 @@ namespace OmiyaGames.Menu
                 // Check slider value
                 if (Mathf.Approximately(percent, defaultTimeScale) == false)
                 {
-                    // FIXME: Set the time scale on time manager to slider
+                    // Set the time scale on time manager to slider
+                    Settings.CustomTimeScaleOption = percent;
                 }
                 else
                 {
-                    // FIXME: Set the time scale on time manager to default
+                    // Set the time scale on time manager to default
+                    Settings.CustomTimeScaleOption = defaultTimeScale;
                 }
+
+                // Update timescale
+                TimeManager.RevertToCustomTimeScale();
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);
