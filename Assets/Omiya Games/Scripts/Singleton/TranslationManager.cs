@@ -74,9 +74,19 @@ namespace OmiyaGames.Translations
     [DisallowMultipleComponent]
     public class TranslationManager : ISingletonScript
     {
+        // FIXME: add a static delegate stacking setup methods.
+        // Also add a static function where one passes in a setup method.
+        // If the translation manager is already setup, run that method directly.
+        // Otherwise, queue it to the static delegate until we have verification it's setup.
+
         public delegate void LanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage);
         public event LanguageChanged OnBeforeLanguageChanged;
         public event LanguageChanged OnAfterLanguageChanged;
+
+        /// <summary>
+        /// A queue of setup methods that needs to run when setup of the translation manager is finished.
+        /// </summary>
+        private static event System.Action<TranslationManager> OnReady = null;
 
         [System.Serializable]
         public struct LanguageMap
@@ -313,6 +323,7 @@ namespace OmiyaGames.Translations
         /// Currently selected langauge. Defaults to the first language encountered in the file.
         /// </summary>
         string currentLanguage = "";
+        bool isReady = false;
 
         readonly Dictionary<SystemLanguage, string> headerDictionary = new Dictionary<SystemLanguage, string>();
         readonly Dictionary<string, FontMap> fontDictionary = new Dictionary<string, FontMap>();
@@ -332,13 +343,13 @@ namespace OmiyaGames.Translations
         internal override void SceneAwake()
         {
             // Check if we've populated any translations
-            if (IsSetup == false)
+            if (IsReady == false)
             {
                 // Parse the file
                 ParseFile();
 
                 // Indicate final results
-                IsSetup = true;
+                IsReady = true;
             }
         }
         #endregion
@@ -366,11 +377,33 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public bool IsSetup
+        /// <summary>
+        /// Indicates whether the translation manager is setup or not.
+        /// </summary>
+        public bool IsReady
         {
-            get;
-            private set;
-        } = false;
+            get
+            {
+                return isReady;
+            }
+            private set
+            {
+                if(isReady != value)
+                {
+                    isReady = value;
+
+                    //  Check if setup is done
+                    if((isReady == true) && (OnReady != null))
+                    {
+                        // Run event
+                        OnReady(this);
+
+                        // Empty the method stack
+                        OnReady = null;
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the list of langauges identified in the most recent parse.
@@ -533,6 +566,28 @@ namespace OmiyaGames.Translations
             return GetTranslatedString(DefaultTranslationDictionary, translationKey);
         }
 
+        public static void RunWhenReady(System.Action<TranslationManager> setupMethod)
+        {
+            // Make sure there's an actual method to push to the event list
+            if(setupMethod != null)
+            {
+                // First verify that an instance of TranslationManager exists,
+                // and it's ready for use.
+                TranslationManager singleton = Singleton.Get<TranslationManager>();
+                if((singleton != null) && (singleton.IsReady == true))
+                {
+                    // If the translation manager is ready,
+                    // run the setup method immediately
+                    setupMethod(singleton);
+                }
+                else
+                {
+                    // If not, push the method to the events list
+                    OnReady += setupMethod;
+                }
+            }
+        }
+
         #region Helper Methods
         static void UpdateLabels()
         {
@@ -545,13 +600,6 @@ namespace OmiyaGames.Translations
                 }
             }
             foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
-            {
-                if (label != null)
-                {
-                    label.UpdateLabel();
-                }
-            }
-            foreach (TranslatedTextMeshPro label in TranslatedTextMeshPro.AllTranslationScripts)
             {
                 if (label != null)
                 {
@@ -658,7 +706,7 @@ namespace OmiyaGames.Translations
             List<Dictionary<string, string>> data = CSVReader.Read(loadFileAsset);
 
             // Check if this manager is properly setup
-            if (IsSetup == false)
+            if (IsReady == false)
             {
                 // If not, setup the defaults
                 SetupDefaults(data);

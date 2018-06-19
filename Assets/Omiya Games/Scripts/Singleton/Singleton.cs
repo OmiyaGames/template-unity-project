@@ -100,14 +100,21 @@ namespace OmiyaGames
             Type retrieveType = typeof(COMPONENT);
             if (Instance != null)
             {
+                // Check if the component is in the cache
                 if (Instance.mCacheRetrievedComponent.ContainsKey(retrieveType) == true)
                 {
+                    // If so, return that
                     returnObject = Instance.mCacheRetrievedComponent[retrieveType] as COMPONENT;
                 }
                 else
                 {
+                    // Attempt to grab a component from children
                     returnObject = Instance.GetComponentInChildren<COMPONENT>();
-                    Instance.mCacheRetrievedComponent.Add(retrieveType, returnObject);
+                    if(returnObject != null)
+                    {
+                        // If return object is not null, cache it
+                        Instance.mCacheRetrievedComponent.Add(retrieveType, returnObject);
+                    }
                 }
             }
             return returnObject;
