@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using TMPro;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace OmiyaGames.Translations
 {
@@ -40,15 +38,13 @@ namespace OmiyaGames.Translations
     [DisallowMultipleComponent]
     public class TranslatedTextMeshPro : MonoBehaviour
     {
-        // TODO: consider binding this script to the translation manager's event
-        static readonly HashSet<TranslatedTextMeshPro> allTranslationScripts = new HashSet<TranslatedTextMeshPro>();
-
-        public static IEnumerable<TranslatedTextMeshPro> AllTranslationScripts
+        public enum State
         {
-            get
-            {
-                return allTranslationScripts;
-            }
+            NeedSetup,
+            WaitingForSetup,
+            NeedUpdate,
+            WaitingForUpdate,
+            Ready
         }
 
         private static TranslationManager Parser
@@ -77,13 +73,14 @@ namespace OmiyaGames.Translations
         TextMeshProUGUI label = null;
         object[] arguments = null;
         string originalString = null;
+        TranslationManager.LanguageChanged langaugeChangedEvent = null;
 
         #region Properties
         public bool IsTranslating
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && Parser.IsSetup && Parser.ContainsKey(TranslationKey);
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && Parser.IsReady && Parser.ContainsKey(TranslationKey);
             }
         }
 
@@ -119,21 +116,6 @@ namespace OmiyaGames.Translations
                 // Update variables
                 translationKey = value;
                 originalString = null;
-
-                // Update dictionary
-                if (IsTranslating == true)
-                {
-                    // Add this script to the dictionary
-                    if (allTranslationScripts.Contains(this) == false)
-                    {
-                        allTranslationScripts.Add(this);
-                    }
-                }
-                else if (allTranslationScripts.Contains(this) == true)
-                {
-                    // Remove this script from the dictionary
-                    allTranslationScripts.Remove(this);
-                }
 
                 // Update the label
                 UpdateLabel();
@@ -204,45 +186,35 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public bool IsDisplayingLatestText
+        public State CurrentState
         {
             get;
             private set;
-        } = false;
+        } = State.NeedSetup;
         #endregion
 
-        IEnumerator Start()
+        void OnEnable()
         {
-            // Add this script to the dictionary
-            allTranslationScripts.Add(this);
-
-            // Wait until translation is available
-            while (IsTranslating == false)
+            if(CurrentState == State.NeedSetup)
             {
-                yield return null;
+                CurrentState = State.WaitingForSetup;
+                TranslationManager.RunWhenReady(SetupLabelNow);
             }
-
-            // Update the label
-            if (IsDisplayingLatestText == false)
+            else if(CurrentState == State.NeedUpdate)
             {
-                UpdateLabelNow();
+                CurrentState = State.WaitingForUpdate;
+                UpdateLabelNow(Parser);
             }
         }
 
         void OnDestroy()
         {
-            if (IsTranslating == true)
+            // Check if we've binded to an event before, and if so, the source is still available
+            if((Parser != null) && (langaugeChangedEvent != null))
             {
-                // Remove this script from the dictionary
-                allTranslationScripts.Remove(this);
-            }
-        }
-
-        void OnEnable()
-        {
-            if((IsTranslating == true) && (IsDisplayingLatestText == false))
-            {
-                UpdateLabelNow();
+                // Unbind to the event
+                Parser.OnAfterLanguageChanged -= langaugeChangedEvent;
+                langaugeChangedEvent = null;
             }
         }
 
@@ -261,10 +233,10 @@ namespace OmiyaGames.Translations
         /// </summary>
         public void UpdateLabel()
         {
-            IsDisplayingLatestText = false;
+            CurrentState = State.NeedUpdate;
             if (isActiveAndEnabled == true)
             {
-                UpdateLabelNow();
+                UpdateLabelNow(Parser);
             }
         }
 
@@ -281,6 +253,67 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
+        void SetupLabelNow(TranslationManager parser)
+        {
+            // Confirm the parser is ready
+            if ((parser != null) && (parser.IsReady == true))
+            {
+                // Unbind to the last event
+                OnDestroy();
+
+                // Bind to the parser's event
+                langaugeChangedEvent = new TranslationManager.LanguageChanged(AfterLanguageChanged);
+                parser.OnAfterLanguageChanged += langaugeChangedEvent;
+            }
+
+            // Update the label
+            UpdateLabelNow(parser);
+        }
+
+        void UpdateLabelNow(TranslationManager parser)
+        {
+            // Confirm the parser is ready
+            if ((parser != null) && (parser.IsReady == true))
+            {
+                // Check if the original string needs to be updated
+                if (string.IsNullOrEmpty(originalString) == true)
+                {
+                    // Update the original string
+                    originalString = CurrentText;
+                    if (IsTranslating == true)
+                    {
+                        originalString = parser[TranslationKey];
+                    }
+                }
+
+                // Check if there's any formatting involved
+                string displayString = originalString;
+                if ((arguments != null) && (arguments.Length > 0))
+                {
+                    // Format the string based on the translation and arguments
+                    displayString = string.Format(displayString, arguments);
+                }
+
+                // Set the label's text
+                Label.SetText(displayString);
+
+                // Set the label's font
+                UpdateFont();
+
+                // Indicate the label has been updated
+                CurrentState = State.Ready;
+            }
+        }
+
+        void AfterLanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage)
+        {
+            // Remove the original string, as it's no longer the correct language.
+            originalString = null;
+
+            // Update the label
+            UpdateLabel();
+        }
+
         void UpdateFont()
         {
             if (Parser != null)
@@ -291,36 +324,6 @@ namespace OmiyaGames.Translations
                     Label.font = map.GetFontAsset(fontKey);
                 }
             }
-        }
-
-        void UpdateLabelNow()
-        {
-            // Check if the original string needs to be updated
-            if ((Parser != null) && (string.IsNullOrEmpty(originalString) == true))
-            {
-                originalString = CurrentText;
-                if (IsTranslating == true)
-                {
-                    originalString = Parser[TranslationKey];
-                }
-            }
-
-            // Check if there's any formatting involved
-            string displayString = originalString;
-            if ((arguments != null) && (arguments.Length > 0))
-            {
-                // Format the string based on the translation and arguments
-                displayString = string.Format(displayString, arguments);
-            }
-
-            // Set the label's text
-            Label.SetText(displayString);
-
-            // Set the label's font
-            UpdateFont();
-
-            // Indicate the label has been updated
-            IsDisplayingLatestText = true;
         }
         #endregion
     }
