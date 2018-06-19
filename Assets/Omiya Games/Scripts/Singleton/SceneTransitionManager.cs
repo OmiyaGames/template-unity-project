@@ -201,7 +201,7 @@ namespace OmiyaGames.Scenes
                 }
                 else if (sceneLoadingInfo != null)
                 {
-                    returnFlag = (sceneLoadingInfo.progress < SceneLoadingProgressComplete);
+                    returnFlag = (Mathf.Approximately(sceneLoadingInfo.progress, SceneLoadingProgressComplete) == false) && (sceneLoadingInfo.progress < SceneLoadingProgressComplete);
                 }
                 return returnFlag;
             }
@@ -373,11 +373,14 @@ namespace OmiyaGames.Scenes
                 yield return null;
             }
 
-            // Once all that is done, activate the scene
-            sceneLoadingInfo.allowSceneActivation = true;
+            if (sceneLoadingInfo != null)
+            {
+                // Once all that is done, activate the scene
+                sceneLoadingInfo.allowSceneActivation = true;
 
-            // Discard the scene loading information
-            sceneLoadingInfo = null;
+                // Discard the scene loading information
+                sceneLoadingInfo = null;
+            }
         }
 
         #region Editor Methods
