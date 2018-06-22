@@ -382,13 +382,13 @@ namespace Project.Settings
                     "Multiplier on how much the font size of a text should change."
                 }
             },
-            new StoredBoolGenerator("Is Invulnerability Mode Enabled", false)
+            new StoredBoolGenerator("Is Invincibility Mode Enabled", false)
             {
                 IsValueRetainedOnClear = true,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
-                    "If true, enables invulnerability mode; this accessibility feature prevents the player's health from decreasing!"
+                    "If true, enables invincibility mode; this accessibility feature prevents the player's health from decreasing!"
                 }
             },
             CustomTimeScaleOptionProperty,
