@@ -79,6 +79,7 @@
                         AllSettingsVersions[4].GetSetting("Is Motion Blurs Enabled"),
                         AllSettingsVersions[4].GetSetting("Is Bloom Effect Enabled"),
                         AllSettingsVersions[4].GetSetting("Text Size Multiplier"),
+                        AllSettingsVersions[4].GetSetting("Is Invulnerability Mode Enabled"),
                         AllSettingsVersions[4].GetSetting("Custom Time Scale Option"),
                         AllSettingsVersions[4].GetSetting("Is Custom Time Scale Enabled"),
                         #endregion
@@ -604,6 +605,21 @@
             internal set
             {
                 AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredFloatGenerator>("Text Size Multiplier").SetValue(value, Settings, AppVersion);
+            }
+        }
+
+        /// <summary>
+        /// If true, enables invulnerability mode; this accessibility feature prevents the player's health from decreasing!
+        /// </summary>
+        public bool IsInvulnerabilityModeEnabled
+        {
+            get
+            {
+                return AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Invulnerability Mode Enabled").Value;
+            }
+            internal set
+            {
+                AllSettingsVersions[4].GetGenerator<OmiyaGames.Settings.StoredBoolGenerator>("Is Invulnerability Mode Enabled").SetValue(value, Settings, AppVersion);
             }
         }
 

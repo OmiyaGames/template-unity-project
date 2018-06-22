@@ -74,6 +74,7 @@ namespace Project.Settings
             },
             new StoredStringGenerator("Last Entered Name", string.Empty)
             {
+                IsValueRetainedOnClear = true,
                 TooltipDocumentation = new string[]
                 {
                     "The name the player entered last time they got a new high score.",
