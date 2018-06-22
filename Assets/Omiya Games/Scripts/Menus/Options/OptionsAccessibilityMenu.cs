@@ -47,6 +47,8 @@ namespace OmiyaGames.Menu
         [SerializeField]
         SupportedPlatforms enableTextSize = SupportedPlatforms.AllPlatforms;
         [SerializeField]
+        SupportedPlatforms enableInvincibility = SupportedPlatforms.AllPlatforms;
+        [SerializeField]
         SupportedPlatforms enableTimeScale = SupportedPlatforms.AllPlatforms;
         [SerializeField]
         GameObject[] dividers;
@@ -58,6 +60,10 @@ namespace OmiyaGames.Menu
         Slider textSizeSlider;
         [SerializeField]
         Button resetTextSize;
+
+        [Header("Text Size Controls")]
+        [SerializeField]
+        Toggle invincibilityEnabler;
 
         [Header("Time Scale Controls")]
         [SerializeField]
@@ -115,6 +121,7 @@ namespace OmiyaGames.Menu
             // Setup reset buttons
             UpdateResetTimeScaleButton(Settings.IsCustomTimeScaleEnabled, Settings.CustomTimeScaleOption);
             UpdateResetTextSizeButton(IResizer.ResizeMultiplier);
+            invincibilityEnabler.isOn = Settings.IsInvincibilityModeEnabled;
 
             // Setup control events
             timeScaleSlider.OnCheckboxUpdated += TimeScaleSlider_OnCheckboxUpdated;
@@ -122,7 +129,7 @@ namespace OmiyaGames.Menu
             timeScaleSlider.OnSliderReleaseUpdated += TimeScaleSlider_OnSliderValueUpdated;
 
             // Setup dividers
-            OptionsMenuUtility.SetupDividers(dividers, enableTextSize, enableTimeScale);
+            OptionsMenuUtility.SetupDividers(dividers, enableTextSize, enableInvincibility, enableTimeScale);
         }
 
         #region UI events
@@ -141,6 +148,15 @@ namespace OmiyaGames.Menu
             {
                 // Reset the time scale slider to default
                 timeScaleSlider.Slider.value = defaultTimeScale;
+            }
+        }
+
+        public void OnInvincibilityToggled(bool isChecked)
+        {
+            if(IsListeningToEvents == true)
+            {
+                // Set the settings
+                Settings.IsInvincibilityModeEnabled = isChecked;
             }
         }
 
