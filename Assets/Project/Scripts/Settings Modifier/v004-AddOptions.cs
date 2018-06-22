@@ -48,6 +48,7 @@ namespace Project.Settings
         /////////////////////////////////////////////////////
         static readonly StoredFloatGenerator SmoothCameraFactorOptionProperty = new StoredFloatGenerator("Smooth Camera Factor Option", DefaultCameraSmoothFactor)
         {
+            IsValueRetainedOnClear = true,
             Processor = Clamp<float>.Get(0, 1),
             GetterScope = AccessModifier.Internal,
             SetterScope = AccessModifier.Internal,
@@ -60,6 +61,7 @@ namespace Project.Settings
         };
         static readonly StoredBoolGenerator IsSmoothCameraEnabledProperty = new StoredBoolGenerator("Is Smooth Camera Enabled", false)
         {
+            IsValueRetainedOnClear = true,
             SetterScope = AccessModifier.Internal,
             TooltipDocumentation = new string[]
                 {
@@ -72,6 +74,7 @@ namespace Project.Settings
         /////////////////////////////////////////////////////
         static readonly StoredBoolGenerator IsCameraShakesEnabledProperty = new StoredBoolGenerator("Is Camera Shakes Enabled", true)
         {
+            IsValueRetainedOnClear = true,
             SetterScope = AccessModifier.Internal,
             TooltipDocumentation = new string[]
                 {
@@ -80,6 +83,7 @@ namespace Project.Settings
         };
         static readonly StoredBoolGenerator IsHeadBobbingOptionEnabledProperty = new StoredBoolGenerator("Is Head Bobbing Option Enabled", false)
         {
+            IsValueRetainedOnClear = true,
             SetterScope = AccessModifier.Internal,
             GetterScope = AccessModifier.Internal,
             TooltipDocumentation = new string[]
@@ -93,6 +97,7 @@ namespace Project.Settings
         /////////////////////////////////////////////////////
         static readonly StoredFloatGenerator CustomTimeScaleOptionProperty = new StoredFloatGenerator("Custom Time Scale Option", DefaultScale)
         {
+            IsValueRetainedOnClear = true,
             Processor = Clamp<float>.Get(0, 2),
             GetterScope = AccessModifier.Internal,
             SetterScope = AccessModifier.Internal,
@@ -105,6 +110,7 @@ namespace Project.Settings
         };
         static readonly StoredBoolGenerator IsCustomTimeScaleEnabledProperty = new StoredBoolGenerator("Is Custom Time Scale Enabled", false)
         {
+            IsValueRetainedOnClear = true,
             SetterScope = AccessModifier.Internal,
             TooltipDocumentation = new string[]
                 {
@@ -183,6 +189,7 @@ namespace Project.Settings
             new StoredBoolGenerator("Split Keyboard Axis", false)
             {
                 PropertyName = "IsKeyboardAxisSensitivitySplit",
+                IsValueRetainedOnClear = true,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
@@ -191,6 +198,7 @@ namespace Project.Settings
             },
             new StoredFloatGenerator("Keyboard X-Axis Sensitivity", DefaultSensitivity)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -201,6 +209,7 @@ namespace Project.Settings
             },
             new StoredFloatGenerator("Keyboard Y-Axis Sensitivity", DefaultSensitivity)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -212,6 +221,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Keyboard X-Axis is Inverted", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsKeyboardXAxisInverted",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -221,6 +231,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Keyboard Y-Axis is Inverted", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsKeyboardYAxisInverted",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -233,6 +244,7 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             new StoredBoolGenerator("Split Mouse Axis", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsMouseAxisSensitivitySplit",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -242,6 +254,7 @@ namespace Project.Settings
             },
             new StoredFloatGenerator("Mouse X-Axis Sensitivity", DefaultSensitivity)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -252,6 +265,7 @@ namespace Project.Settings
             },
             new StoredFloatGenerator("Mouse Y-Axis Sensitivity", DefaultSensitivity)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -263,6 +277,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Mouse X-Axis is Inverted", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsMouseXAxisInverted",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -272,6 +287,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Mouse Y-Axis is Inverted", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsMouseYAxisInverted",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -294,6 +310,7 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             new StoredFloatGenerator("Scroll Wheel Sensitivity", DefaultSensitivity)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0, 1),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -304,6 +321,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Scroll Wheel is Inverted", false)
             {
+                IsValueRetainedOnClear = true,
                 PropertyName = "IsScrollWheelInverted",
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
@@ -326,6 +344,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Is Screen Flashes Enabled", true)
             {
+                IsValueRetainedOnClear = true,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
@@ -334,6 +353,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Is Motion Blurs Enabled", true)
             {
+                IsValueRetainedOnClear = true,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
@@ -342,6 +362,7 @@ namespace Project.Settings
             },
             new StoredBoolGenerator("Is Bloom Effect Enabled", true)
             {
+                IsValueRetainedOnClear = true,
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
@@ -353,11 +374,21 @@ namespace Project.Settings
             /////////////////////////////////////////////////////
             new StoredFloatGenerator("Text Size Multiplier", DefaultScale)
             {
+                IsValueRetainedOnClear = true,
                 Processor = Clamp<float>.Get(0.5f, 1.5f),
                 SetterScope = AccessModifier.Internal,
                 TooltipDocumentation = new string[]
                 {
                     "Multiplier on how much the font size of a text should change."
+                }
+            },
+            new StoredBoolGenerator("Is Invulnerability Mode Enabled", false)
+            {
+                IsValueRetainedOnClear = true,
+                SetterScope = AccessModifier.Internal,
+                TooltipDocumentation = new string[]
+                {
+                    "If true, enables invulnerability mode; this accessibility feature prevents the player's health from decreasing!"
                 }
             },
             CustomTimeScaleOptionProperty,

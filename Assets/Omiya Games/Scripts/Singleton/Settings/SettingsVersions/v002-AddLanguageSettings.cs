@@ -54,6 +54,7 @@
             {
                 new StoredStringGenerator("Language", string.Empty)
                 {
+                    IsValueRetainedOnClear = true,
                     SetterScope = AccessModifier.Internal,
                     TooltipDocumentation = new string[]
                     {

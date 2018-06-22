@@ -87,6 +87,9 @@ namespace OmiyaGames.Settings
             }
         }
 
+        /// <summary>
+        /// Allows a value to be saved even after data is reset.
+        /// </summary>
         public bool IsValueRetainedOnClear
         {
             get;
