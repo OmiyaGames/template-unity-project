@@ -110,22 +110,24 @@ namespace OmiyaGames.Menu
         {
             // Set all buttons
             GameObject returnButton = backButton.gameObject;
-            GameSettings gameSettings = Singleton.Get<GameSettings>();
-            for (int index = 0; index < allLevelButtons.Length; ++index)
+            if (IsListeningToEvents == true)
             {
-                // Make the button interactable if it's unlocked
-                if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
+                GameSettings gameSettings = Singleton.Get<GameSettings>();
+                for (int index = 0; index < allLevelButtons.Length; ++index)
                 {
-                    allLevelButtons[index].Button.interactable = true;
-                    returnButton = allLevelButtons[index].gameObject;
+                    // Make the button interactable if it's unlocked
+                    if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
+                    {
+                        allLevelButtons[index].Button.interactable = true;
+                        returnButton = allLevelButtons[index].gameObject;
+                    }
+                    else
+                    {
+                        allLevelButtons[index].Button.interactable = false;
+                    }
                 }
-                else
-                {
-                    allLevelButtons[index].Button.interactable = false;
-                }
+                backButton.interactable = enabled;
             }
-            backButton.interactable = enabled;
-
             // Return the last interactable button
             return returnButton;
         }
