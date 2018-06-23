@@ -90,12 +90,21 @@ namespace OmiyaGames.Menu
             // Remove the binding to Singleton's update function
             StopListeningToUpdate();
 
-            // Check if menu is becoming visible
             if (to == VisibilityState.Visible)
             {
+                // If menu is becoming visible
                 // Bind to Singleton's update function
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
                 Singleton.Instance.OnUpdate += checkAnyKey;
+            }
+            else if(to == VisibilityState.Hidden)
+            {
+                // If menu is hidden
+                // Remove the binding to Singleton's update function
+                StopListeningToUpdate();
+
+                // Return to the menu
+                SceneChanger.LoadMainMenu();
             }
         }
         #endregion
@@ -131,11 +140,7 @@ namespace OmiyaGames.Menu
         {
             if(Input.anyKeyDown == true)
             {
-                // Remove the binding to Singleton's update function
-                StopListeningToUpdate();
-
-                // Return to the menu
-                SceneChanger.LoadMainMenu();
+                Hide();
             }
         }
 
