@@ -37,7 +37,7 @@ namespace OmiyaGames.Menu
     /// script, <code>MenuManager</code>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
-    // FIXME: convert to Loading Screen, as Splash Screen is to be removed.
+    // FIXME: convert to Loading Screen.  Consider taking in the MalformedGameMenu as a way to verify whether game has loaded or not.
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
     public class SplashMenu : IMenu

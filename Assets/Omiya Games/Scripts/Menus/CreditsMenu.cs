@@ -54,6 +54,10 @@ namespace OmiyaGames.Menu
         [SerializeField]
         float endDelay = 1f;
 
+        [Header("Background Settings")]
+        [SerializeField]
+        BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
+
         System.Action<float> checkAnyKey = null;
         float contentSize = 0, normalizedPosition = 0;
 
@@ -71,6 +75,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return defaultButton.gameObject;
+            }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background;
             }
         }
 

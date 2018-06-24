@@ -78,6 +78,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return BackgroundMenu.BackgroundType.SolidColor;
+            }
+        }
+
         TranslationManager Translations
         {
             get
@@ -115,7 +123,7 @@ namespace OmiyaGames.Menu
                 {
                     // Display confirmation dialog
                     menu.DefaultToYes = false;
-                    menu.UpdateDialog(confirmTranslationsKey, revertAfterSeconds);
+                    menu.UpdateDialog(this, confirmTranslationsKey, revertAfterSeconds);
                     menu.Show(ConfirmationMenu_OnButtonClicked);
                 }
             }

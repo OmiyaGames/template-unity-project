@@ -49,7 +49,9 @@ namespace OmiyaGames.Menu
         Button backButton;
 
         ListButtonScript[] allLevelButtons = null;
+        BackgroundSettings background = new BackgroundSettings();
 
+        #region Properties
         public override Type MenuType
         {
             get
@@ -78,6 +80,54 @@ namespace OmiyaGames.Menu
                 }
                 return returnObject;
             }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background.BackgroundState;
+            }
+        }
+
+        public override string TitleTranslationKey
+        {
+            get
+            {
+                return background.TitleTranslationKey;
+            }
+        }
+
+        public override object[] TitleTranslationArgs
+        {
+            get
+            {
+                return background.TitleTranslationArgs;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// Sets up the dialog background based off of another menu.
+        /// </summary>
+        public void UpdateDialog(IMenu copyBackgroundSettings)
+        {
+            // Check the parameter
+            if (copyBackgroundSettings != null)
+            {
+                background.CopySettings(copyBackgroundSettings);
+            }
+        }
+
+        /// <summary>
+        /// Sets up the dialog with the proper message and time on when to select the default dialog selection
+        /// </summary>
+        /// <param name="messageTranslatedKey"></param>
+        /// <param name="automaticallySelectDefaultAfterSeconds"></param>
+        public void UpdateDialog(BackgroundMenu.BackgroundType backgroundType = DefaultBackround, string titleTranslationKey = null, params object[] titleTranslationArgs)
+        {
+            // Update background
+            background.Update(backgroundType, titleTranslationKey, titleTranslationArgs);
         }
 
         protected override void OnSetup()

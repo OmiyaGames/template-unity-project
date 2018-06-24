@@ -51,8 +51,16 @@ namespace OmiyaGames.Menu
 
         public void OnOptionsClicked()
         {
-            // Open the options dialog
-            Singleton.Get<MenuManager>().Show<OptionsListMenu>();
+            if (IsListeningToEvents == true)
+            {
+                // Open the options dialog
+                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
+                if (menu != null)
+                {
+                    menu.UpdateDialog(this);
+                    menu.Show();
+                }
+            }
         }
 
         public void OnCreditsClicked()

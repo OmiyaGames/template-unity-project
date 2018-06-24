@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="StartMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -68,8 +66,16 @@ namespace OmiyaGames.Menu
         [SerializeField]
         Button quitButton;
 
+        [Header("Background Settings")]
+        [SerializeField]
+        BackgroundMenu.BackgroundType showBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
+        string titleTranslationKey = "Title";
+
         GameObject defaultButton = null;
 
+        #region Properties
         public override Type MenuType
         {
             get
@@ -83,6 +89,22 @@ namespace OmiyaGames.Menu
             get
             {
                 return defaultButton;
+            }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return showBackground;
+            }
+        }
+
+        public override string TitleTranslationKey
+        {
+            get
+            {
+                return titleTranslationKey;
             }
         }
 
@@ -104,6 +126,7 @@ namespace OmiyaGames.Menu
                 }
             }
         }
+        #endregion
 
         protected override void OnSetup()
         {
@@ -169,7 +192,12 @@ namespace OmiyaGames.Menu
             if (IsListeningToEvents == true)
             {
                 // Open the Level Select menu
-                Manager.Show<LevelSelectMenu>();
+                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
+                if (levelSelect != null)
+                {
+                    levelSelect.UpdateDialog(this);
+                    levelSelect.Show();
+                }
 
                 // Indicate we've clicked on a button
                 defaultButton = levelSelectButton.gameObject;
@@ -181,11 +209,16 @@ namespace OmiyaGames.Menu
             // Make sure the menu is active
             if (IsListeningToEvents == true)
             {
-                // Open the options menu
-                Manager.Show<OptionsListMenu>();
+                // Open the options dialog
+                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
+                if (menu != null)
+                {
+                    menu.UpdateDialog(this);
+                    menu.Show();
 
-                // Indicate we've clicked on a button
-                defaultButton = optionsButton.gameObject;
+                    // Indicate we've clicked on a button
+                    defaultButton = optionsButton.gameObject;
+                }
             }
         }
 
