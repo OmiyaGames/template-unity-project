@@ -40,6 +40,8 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     public class LevelSelectMenu : IMenu
     {
+        const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
+
         [Header("Level Select")]
         [SerializeField]
         RectTransform levelContent;
@@ -124,7 +126,7 @@ namespace OmiyaGames.Menu
         /// </summary>
         /// <param name="messageTranslatedKey"></param>
         /// <param name="automaticallySelectDefaultAfterSeconds"></param>
-        public void UpdateDialog(BackgroundMenu.BackgroundType backgroundType = DefaultBackround, string titleTranslationKey = null, params object[] titleTranslationArgs)
+        public void UpdateDialog(BackgroundMenu.BackgroundType backgroundType = DefaultBackground, string titleTranslationKey = null, params object[] titleTranslationArgs)
         {
             // Update background
             background.Update(backgroundType, titleTranslationKey, titleTranslationArgs);

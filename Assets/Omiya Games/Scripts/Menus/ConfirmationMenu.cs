@@ -58,7 +58,7 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class ConfirmationMenu : IMenu
     {
-        const BackgroundMenu.BackgroundType DefaultBackround = BackgroundMenu.BackgroundType.GradientRightToLeft;
+        const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
 
         [Header("Confirmation Menu")]
         [SerializeField]
@@ -201,7 +201,7 @@ namespace OmiyaGames.Menu
         /// </summary>
         /// <param name="messageTranslatedKey"></param>
         /// <param name="automaticallySelectDefaultAfterSeconds"></param>
-        public void UpdateDialog(string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f, BackgroundMenu.BackgroundType backgroundType = DefaultBackround, string titleTranslationKey = null, params object[] titleTranslationArgs)
+        public void UpdateDialog(string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f, BackgroundMenu.BackgroundType backgroundType = DefaultBackground, string titleTranslationKey = null, params object[] titleTranslationArgs)
         {
             // Setup the timer
             selectDefaultAfterSeconds = -1;
