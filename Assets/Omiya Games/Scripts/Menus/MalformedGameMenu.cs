@@ -107,6 +107,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         string domainDoesNotMatchMessageTranslationKey;
 
+        #region Properties
         public override Type MenuType
         {
             get
@@ -123,6 +124,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return BackgroundMenu.BackgroundType.SolidColor;
+            }
+        }
+
         public Reason BuildState
         {
             get;
@@ -136,6 +145,7 @@ namespace OmiyaGames.Menu
                 return Singleton.Get<WebLocationChecker>();
             }
         }
+        #endregion
 
         IEnumerator Start()
         {

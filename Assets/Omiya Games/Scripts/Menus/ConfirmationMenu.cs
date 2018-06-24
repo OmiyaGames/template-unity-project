@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace OmiyaGames.Menu
 {
@@ -59,6 +58,8 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class ConfirmationMenu : IMenu
     {
+        const BackgroundMenu.BackgroundType DefaultBackround = BackgroundMenu.BackgroundType.GradientRightToLeft;
+
         [Header("Confirmation Menu")]
         [SerializeField]
         Translations.TranslatedTextMeshPro messageLabel;
@@ -67,6 +68,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         Button noButton;
 
+        BackgroundSettings background = new BackgroundSettings();
         float selectDefaultAfterSeconds = -1f, timeDialogShown = -1f;
         int lastDisplayedSeconds = 0;
         System.Action<float> autoSelectAction = null;
@@ -104,6 +106,30 @@ namespace OmiyaGames.Menu
             get
             {
                 return Type.ManagedMenu;
+            }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background.BackgroundState;
+            }
+        }
+
+        public override string TitleTranslationKey
+        {
+            get
+            {
+                return background.TitleTranslationKey;
+            }
+        }
+
+        public override object[] TitleTranslationArgs
+        {
+            get
+            {
+                return background.TitleTranslationArgs;
             }
         }
 
@@ -155,11 +181,27 @@ namespace OmiyaGames.Menu
         }
 
         /// <summary>
+        /// Sets up the dialog background based off of another menu.
+        /// </summary>
+        public void UpdateDialog(IMenu copyBackgroundSettings, string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f)
+        {
+            // Check the parameter
+            if(copyBackgroundSettings != null)
+            {
+                UpdateDialog(messageTranslatedKey, automaticallySelectDefaultAfterSeconds, copyBackgroundSettings.Background, copyBackgroundSettings.TitleTranslationKey, copyBackgroundSettings.TitleTranslationArgs);
+            }
+            else
+            {
+                UpdateDialog(messageTranslatedKey, automaticallySelectDefaultAfterSeconds);
+            }
+        }
+
+        /// <summary>
         /// Sets up the dialog with the proper message and time on when to select the default dialog selection
         /// </summary>
         /// <param name="messageTranslatedKey"></param>
         /// <param name="automaticallySelectDefaultAfterSeconds"></param>
-        public void UpdateDialog(string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f)
+        public void UpdateDialog(string messageTranslatedKey = null, float automaticallySelectDefaultAfterSeconds = -1f, BackgroundMenu.BackgroundType backgroundType = DefaultBackround, string titleTranslationKey = null, params object[] titleTranslationArgs)
         {
             // Setup the timer
             selectDefaultAfterSeconds = -1;
@@ -190,6 +232,9 @@ namespace OmiyaGames.Menu
                     messageLabel.TranslationKey = messageTranslatedKey;
                 }
             }
+
+            // Update background
+            background.Update(backgroundType, titleTranslationKey, titleTranslationArgs);
         }
 
         public void OnYesClicked()

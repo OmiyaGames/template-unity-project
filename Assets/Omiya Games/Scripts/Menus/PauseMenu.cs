@@ -48,22 +48,25 @@ namespace OmiyaGames.Menu
 
         void OnApplicationPause(bool isPaused)
         {
-            if ((isPaused == true) && (Singleton.Get<TimeManager>().IsManuallyPaused == false))
+            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (Singleton.Get<TimeManager>().IsManuallyPaused == false))
             {
                 Show();
             }
         }
 
+        #region Button Events
         public void OnOptionsClicked()
         {
-            // Open the options dialog
-            Manager.Show<OptionsListMenu>();
-        }
-
-        public void OnResumeClicked()
-        {
-            // Hide the pause menu
-            Hide();
+            if (IsListeningToEvents == true)
+            {
+                // Open the options dialog
+                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
+                if (menu != null)
+                {
+                    menu.UpdateDialog(this);
+                    menu.Show();
+                }
+            }
         }
 
         public void OnHowToPlayClicked()
@@ -76,5 +79,24 @@ namespace OmiyaGames.Menu
             // FIXME: show high scores
             //Manager.Show<HowToPlayMenu>();
         }
+
+        public void OnLevelSelectClicked()
+        {
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
+            {
+                // Open the Level Select menu
+                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
+                if (levelSelect != null)
+                {
+                    levelSelect.UpdateDialog(this);
+                    levelSelect.Show();
+                }
+
+                // FIXME: Indicate we've clicked on a button
+                //defaultButton = levelSelectButton.gameObject;
+            }
+        }
+        #endregion
     }
 }

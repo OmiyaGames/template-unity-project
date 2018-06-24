@@ -104,6 +104,14 @@ namespace OmiyaGames.Menu
                 }
             }
         }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return BackgroundMenu.BackgroundType.SolidColor;
+            }
+        }
         #endregion
 
         protected override void OnSetup()
