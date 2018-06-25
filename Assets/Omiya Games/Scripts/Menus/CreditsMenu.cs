@@ -54,6 +54,10 @@ namespace OmiyaGames.Menu
         [SerializeField]
         float endDelay = 1f;
 
+        [Header("Background Settings")]
+        [SerializeField]
+        BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
+
         System.Action<float> checkAnyKey = null;
         float contentSize = 0, normalizedPosition = 0;
 
@@ -74,6 +78,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background;
+            }
+        }
+
         protected override void OnSetup()
         {
             // Call base method
@@ -90,12 +102,21 @@ namespace OmiyaGames.Menu
             // Remove the binding to Singleton's update function
             StopListeningToUpdate();
 
-            // Check if menu is becoming visible
             if (to == VisibilityState.Visible)
             {
+                // If menu is becoming visible
                 // Bind to Singleton's update function
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
                 Singleton.Instance.OnUpdate += checkAnyKey;
+            }
+            else if(to == VisibilityState.Hidden)
+            {
+                // If menu is hidden
+                // Remove the binding to Singleton's update function
+                StopListeningToUpdate();
+
+                // Return to the menu
+                SceneChanger.LoadMainMenu();
             }
         }
         #endregion
@@ -124,18 +145,23 @@ namespace OmiyaGames.Menu
 
             // Wait for a bit before hiding the credits
             yield return new WaitForSeconds(endDelay);
+
+            // Make sure we're listening to events
+            while (IsListeningToEvents == false)
+            {
+                // Wait for a frame
+                yield return null;
+            }
+
+            // Hide
             Hide();
         }
 
         void CheckForAnyKey(float deltaTime)
         {
-            if(Input.anyKeyDown == true)
+            if((IsListeningToEvents == true) && (Input.anyKeyDown == true))
             {
-                // Remove the binding to Singleton's update function
-                StopListeningToUpdate();
-
-                // Return to the menu
-                SceneChanger.LoadMainMenu();
+                Hide();
             }
         }
 

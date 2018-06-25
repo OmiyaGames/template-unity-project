@@ -100,6 +100,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return BackgroundMenu.BackgroundType.SolidColor;
+            }
+        }
+
         public Global.TimeManager TimeManager
         {
             get

@@ -84,9 +84,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 0
-  titleTranslationKey: Game Title
-  scrollToDefaultUi: {fileID: 0}
   startBehavior: 0
   startButton: {fileID: 114054180523251846}
   levelSelectButton: {fileID: 114143599188990186}
@@ -95,6 +92,8 @@ MonoBehaviour:
   highScoresButton: {fileID: 114140941727894006}
   creditsButton: {fileID: 114562391801988364}
   quitButton: {fileID: 114825494450203146}
+  showBackground: 3
+  titleTranslationKey: Game Title
 --- !u!222 &22241036
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -3248,8 +3247,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114994190200069412}
   m_HandleRect: {fileID: 224030540674267582}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4377,7 +4376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000015258789}
+  m_AnchoredPosition: {x: 0, y: -0.00000053921707}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224818148825767616
