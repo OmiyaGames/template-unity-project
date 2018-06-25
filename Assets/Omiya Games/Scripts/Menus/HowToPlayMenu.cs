@@ -5,6 +5,7 @@ namespace OmiyaGames.Menu
 {
     public class HowToPlayMenu : IMenu
     {
+        [Header("How to Play Settings")]
         [SerializeField]
         Button backButton;
 
@@ -24,9 +25,20 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public void OnBackClicked()
+        public override BackgroundMenu.BackgroundType Background
         {
-            Hide();
+            get
+            {
+                return BackgroundMenu.BackgroundType.SolidColor;
+            }
+        }
+
+        public override string TitleTranslationKey
+        {
+            get
+            {
+                return null;
+            }
         }
     }
 }

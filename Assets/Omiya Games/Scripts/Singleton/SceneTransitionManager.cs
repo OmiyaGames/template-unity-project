@@ -299,7 +299,7 @@ namespace OmiyaGames.Scenes
         public void LoadScene(SceneInfo scene)
         {
             // Make sure the argument is correct
-            if(scene == null)
+            if (scene == null)
             {
                 throw new ArgumentNullException("scene");
             }

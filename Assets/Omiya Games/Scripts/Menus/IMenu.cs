@@ -90,21 +90,61 @@ namespace OmiyaGames.Menu
             UnmanagedMenu
         }
 
+        protected struct BackgroundSettings
+        {
+            public BackgroundMenu.BackgroundType BackgroundState
+            {
+                get;
+                set;
+            }
+
+            public string TitleTranslationKey
+            {
+                get;
+                set;
+            }
+
+            public object[] TitleTranslationArgs
+            {
+                get;
+                set;
+            }
+
+            public bool IsVisible
+            {
+                get
+                {
+                    bool returnFlag = false;
+                    if (BackgroundState != BackgroundMenu.BackgroundType.Hidden)
+                    {
+                        returnFlag = true;
+                    }
+                    else if (string.IsNullOrEmpty(TitleTranslationKey) == false)
+                    {
+                        returnFlag = true;
+                    }
+                    return returnFlag;
+                }
+            }
+
+            public void Update(BackgroundMenu.BackgroundType backgroundType, string titleTranslationKey = null, params object[] titleTranslationArgs)
+            {
+                BackgroundState = backgroundType;
+                TitleTranslationKey = titleTranslationKey;
+                TitleTranslationArgs = titleTranslationArgs;
+            }
+
+            public void CopySettings(IMenu copyFrom)
+            {
+                BackgroundState = copyFrom.Background;
+                TitleTranslationKey = copyFrom.TitleTranslationKey;
+                TitleTranslationArgs = copyFrom.TitleTranslationArgs;
+            }
+        }
+
         [Header("Animator Info")]
         [SerializeField]
         string stateField = "State";
-
-        [Header("Background Settings")]
-        [SerializeField]
-        bool showBackground = true;
-        [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
-        string titleTranslationKey = "";
-
-        [Header("Default UI")]
-        [SerializeField]
-        [Tooltip("Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.")]
-        ScrollRect scrollToDefaultUi = null;
 
         VisibilityState currentState = VisibilityState.Hidden;
         Animator animatorCache = null;
@@ -194,15 +234,47 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected ScrollRect ScrollToDefaultUi
+        /// <summary>
+        /// Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.
+        /// </summary>
+        public virtual ScrollRect ScrollToDefaultUi
         {
             get
             {
-                return scrollToDefaultUi;
+                return null;
             }
-            set
+        }
+
+        /// <summary>
+        /// The type of background to display behind this menu.
+        /// </summary>
+        public virtual BackgroundMenu.BackgroundType Background
+        {
+            get
             {
-                scrollToDefaultUi = value;
+                return BackgroundMenu.BackgroundType.Hidden;
+            }
+        }
+
+        /// <summary>
+        /// The translation key for the title to display in this menu.
+        /// </summary>
+        public virtual string TitleTranslationKey
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// The translation arguments for the title to display in this menu (in the situation the translation text expects them, e.g. containing {0}).
+        /// </summary>
+        public virtual object[] TitleTranslationArgs
+        {
+            get
+            {
+                return null;
             }
         }
 
@@ -240,30 +312,20 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
+        /// <summary>
+        /// Indicates whether this menu is managed or not.
+        /// </summary>
         public abstract Type MenuType
         {
             get;
         }
 
+        /// <summary>
+        /// The default UI to highlight.
+        /// </summary>
         public abstract GameObject DefaultUi
         {
             get;
-        }
-
-        public virtual bool ShowBackground
-        {
-            get
-            {
-                return showBackground;
-            }
-        }
-
-        public virtual string TitleTranslationKey
-        {
-            get
-            {
-                return titleTranslationKey;
-            }
         }
 
         /// <summary>
@@ -304,11 +366,19 @@ namespace OmiyaGames.Menu
         /// Makes the menu hidden.
         /// </summary>
         /// <seealso cref="Show(Action<IMenu>)"/>
-        /// <seealso cref="Hide()"/>
+        /// <seealso cref="Hide(bool)"/>
         public void Hide()
         {
-            // Make sure the menu is Visible
-            if (CurrentVisibility == VisibilityState.Visible)
+            Hide(false);
+        }
+
+        /// <summary>
+        /// Makes the menu hidden.
+        /// </summary>
+        public void Hide(bool force)
+        {
+            // Make sure the menu is Visible, and listening to events/being forced to be hidden.
+            if ((CurrentVisibility == VisibilityState.Visible) && ((IsListeningToEvents == true) || (force == true)))
             {
                 // Make the menu hidden
                 CurrentVisibility = VisibilityState.Hidden;

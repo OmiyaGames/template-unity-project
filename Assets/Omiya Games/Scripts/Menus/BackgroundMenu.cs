@@ -58,35 +58,12 @@ namespace OmiyaGames.Menu
     [RequireComponent(typeof(Animator))]
     public class BackgroundMenu : IMenu
     {
-        struct SharedStateInfo
+        public enum BackgroundType
         {
-            public bool IsBackgroundVisible
-            {
-                get;
-                set;
-            }
-            public string TitleTranslationKey
-            {
-                get;
-                set;
-            }
-
-            public bool IsVisible
-            {
-                get
-                {
-                    bool returnFlag = false;
-                    if(IsBackgroundVisible == true)
-                    {
-                        returnFlag = true;
-                    }
-                    else if(string.IsNullOrEmpty(TitleTranslationKey) == false)
-                    {
-                        returnFlag = true;
-                    }
-                    return returnFlag;
-                }
-            }
+            Hidden =                0,
+            SolidColor =            1,
+            GradientLeftToRight =   2,
+            GradientRightToLeft =   3,
         }
 
         [SerializeField]
@@ -104,14 +81,14 @@ namespace OmiyaGames.Menu
 
         [Header("Animations")]
         [SerializeField]
-        public string backgroundVisibilityField = "Background Visible";
+        public string backgroundTypeField = "Background Type";
         [SerializeField]
         public string titleVisibilityField = "Title Visible";
         [SerializeField]
         public string changeTitleTrigger = "Change Title";
 
         System.Action<MenuManager> onMenuNumberChanged = null;
-        SharedStateInfo nextState = new SharedStateInfo();
+        BackgroundSettings nextState = new BackgroundSettings();
 
         public override Type MenuType
         {
@@ -178,7 +155,7 @@ namespace OmiyaGames.Menu
             // Change the translation key
             if (string.IsNullOrEmpty(nextState.TitleTranslationKey) == false)
             {
-                titleLabel.TranslationKey = nextState.TitleTranslationKey;
+                titleLabel.SetTranslationKey(nextState.TitleTranslationKey, nextState.TitleTranslationArgs);
             }
         }
 
@@ -190,8 +167,9 @@ namespace OmiyaGames.Menu
             if (menu != null)
             {
                 // Setup the next state of the background
-                nextState.IsBackgroundVisible = menu.ShowBackground;
+                nextState.BackgroundState = menu.Background;
                 nextState.TitleTranslationKey = menu.TitleTranslationKey;
+                nextState.TitleTranslationArgs = menu.TitleTranslationArgs;
 
                 // Indicate whether we want to show the background
                 if (nextState.IsVisible == true)
@@ -230,32 +208,23 @@ namespace OmiyaGames.Menu
 
         void AnimateTitleVisibility()
         {
-            if (string.IsNullOrEmpty(nextState.TitleTranslationKey) == false)
-            {
-                // Check if the title is already visible
-                if (Animator.GetBool(titleVisibilityField) == true)
-                {
-                    // If so, check if the strings are different
-                    if(string.Equals(titleLabel.TranslationKey, nextState.TitleTranslationKey) == false)
-                    {
-                        // If so, trigger the animation of changing the title;
-                        // the animation will trigger changing the label.
-                        Animator.SetTrigger(changeTitleTrigger);
-                    }
-
-                    // Otherwise do nothing.
-                }
-                else
-                {
-                    // Change the title text, then make it visible
-                    titleLabel.TranslationKey = nextState.TitleTranslationKey;
-                    Animator.SetBool(titleVisibilityField, true);
-                }
-            }
-            else
+            if (string.IsNullOrEmpty(nextState.TitleTranslationKey) == true)
             {
                 // If not, hide the title
                 Animator.SetBool(titleVisibilityField, false);
+            }
+            else if (Animator.GetBool(titleVisibilityField) == false)
+            {
+                // Check if the title is hidden
+                // Change the title text, then make it visible
+                titleLabel.SetTranslationKey(nextState.TitleTranslationKey, nextState.TitleTranslationArgs);
+                Animator.SetBool(titleVisibilityField, true);
+            }
+            else if ((string.Equals(titleLabel.TranslationKey, nextState.TitleTranslationKey) == false) || (titleLabel.Arguments != nextState.TitleTranslationArgs))
+            {
+                // If the strings are different;
+                // the animation will trigger changing the label.
+                Animator.SetTrigger(changeTitleTrigger);
             }
         }
 
@@ -265,14 +234,14 @@ namespace OmiyaGames.Menu
             if (state == VisibilityState.Visible)
             {
                 // Update the background visibility
-                Animator.SetBool(backgroundVisibilityField, nextState.IsBackgroundVisible);
+                Animator.SetInteger(backgroundTypeField, (int)nextState.BackgroundState);
 
                 // Check whether to show the title
                 AnimateTitleVisibility();
             }
             else
             {
-                Animator.SetBool(backgroundVisibilityField, false);
+                Animator.SetInteger(backgroundTypeField, (int)BackgroundType.Hidden);
                 Animator.SetBool(titleVisibilityField, false);
             }
         }
