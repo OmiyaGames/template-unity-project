@@ -145,12 +145,21 @@ namespace OmiyaGames.Menu
 
             // Wait for a bit before hiding the credits
             yield return new WaitForSeconds(endDelay);
+
+            // Make sure we're listening to events
+            while (IsListeningToEvents == false)
+            {
+                // Wait for a frame
+                yield return null;
+            }
+
+            // Hide
             Hide();
         }
 
         void CheckForAnyKey(float deltaTime)
         {
-            if(Input.anyKeyDown == true)
+            if((IsListeningToEvents == true) && (Input.anyKeyDown == true))
             {
                 Hide();
             }
