@@ -366,11 +366,19 @@ namespace OmiyaGames.Menu
         /// Makes the menu hidden.
         /// </summary>
         /// <seealso cref="Show(Action<IMenu>)"/>
-        /// <seealso cref="Hide()"/>
+        /// <seealso cref="Hide(bool)"/>
         public void Hide()
         {
-            // Make sure the menu is Visible
-            if (CurrentVisibility == VisibilityState.Visible)
+            Hide(false);
+        }
+
+        /// <summary>
+        /// Makes the menu hidden.
+        /// </summary>
+        public void Hide(bool force)
+        {
+            // Make sure the menu is Visible, and listening to events/being forced to be hidden.
+            if ((CurrentVisibility == VisibilityState.Visible) && ((IsListeningToEvents == true) || (force == true)))
             {
                 // Make the menu hidden
                 CurrentVisibility = VisibilityState.Hidden;
