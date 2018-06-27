@@ -279,6 +279,28 @@ namespace OmiyaGames.Menu
         }
 
         /// <summary>
+        /// Indicates whether one can pause while this menu is in the MenuManager stack.
+        /// </summary>
+        public virtual bool IsPausingEnabledWhileVisible
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether one can show pop-ups while this menu is in the MenuManager stack.
+        /// </summary>
+        public virtual bool IsPopUpEnabledWhileVisible
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// The visibility of this menu.
         /// </summary>
         /// <seealso cref="Show(Action<IMenu>)"/>

@@ -51,7 +51,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class UiEventAudio : MonoBehaviour, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
+    public class UiEventAudio : MonoBehaviour, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -70,6 +70,10 @@ namespace OmiyaGames.Menu
         [Header("Scroll Settings")]
         [SerializeField]
         ScrollRect parentScrollView = null;
+
+        [Header("Mouse-down Settings")]
+        [SerializeField]
+        bool updateCursorState = false;
 
         #region Properties
         public bool IsHighlighted
@@ -153,6 +157,14 @@ namespace OmiyaGames.Menu
                 return Singleton.Get<MenuManager>();
             }
         }
+
+        Scenes.SceneTransitionManager SceneChanger
+        {
+            get
+            {
+                return Singleton.Get<Scenes.SceneTransitionManager>();
+            }
+        }
         #endregion
 
         #region Unity Events
@@ -225,6 +237,14 @@ namespace OmiyaGames.Menu
         {
             // Reset state of UI
             Reset();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if(updateCursorState == true)
+            {
+                SceneChanger.RevertCursorLockMode();
+            }
         }
         #endregion
 

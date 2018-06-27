@@ -90,10 +90,30 @@ namespace OmiyaGames.Scenes
             }
             set
             {
+                // Check the platforms
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX
+                // For the platforms that support CursorLockMode.Confined, just set the value.
                 Cursor.lockState = value;
+#else
+                // For the platforms that do NOT support CursorLockMode.Confined, make that the exception.
+                if(value == CursorLockMode.Confined)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                }
+                else
+                {
+                    Cursor.lockState = value;
+                }
+#endif
                 Cursor.visible = (value != CursorLockMode.Locked);
             }
         }
+
+        public static CursorLockMode LastCursorMode
+        {
+            get;
+            private set;
+        } = CursorLockMode.None;
 
         public SceneInfo Splash
         {
@@ -238,7 +258,7 @@ namespace OmiyaGames.Scenes
             }
 
             // Update the cursor locking
-            RevertCursorLockMode(true);
+            RevertCursorLockMode();
 
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
@@ -250,7 +270,7 @@ namespace OmiyaGames.Scenes
             sceneLoadingInfo = null;
         }
 
-        public void RevertCursorLockMode(bool allowWebplayerSettings)
+        public void RevertCursorLockMode()
         {
             CursorLockMode mode = defaultLockMode;
             if (CurrentScene != null)
@@ -341,6 +361,9 @@ namespace OmiyaGames.Scenes
         {
             // Indicate the next scene was loaded
             Singleton.Get<PoolingManager>().DestroyAll();
+
+            // Grab the last cursor mode
+            LastCursorMode = CursorMode;
 
             // Load the next scene asynchronously
             // FIXME: once loading scene is in here, load that instead
