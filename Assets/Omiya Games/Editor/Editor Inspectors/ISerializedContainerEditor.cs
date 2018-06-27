@@ -75,9 +75,14 @@ namespace OmiyaGames.UI
             return AssetUtility.GetHeight(label, GetNumLinesToDraw(property, label), VerticalMargin);
         }
 
-        public bool ShowLabel(GUIContent label)
+        public static bool ShowLabel(GUIContent label)
         {
             return (string.IsNullOrEmpty(label.text) == false);
+        }
+
+        public static void MoveDownOneLine(ref Rect singleLineRect)
+        {
+            singleLineRect.y += singleLineRect.height + VerticalMargin;
         }
     }
 }

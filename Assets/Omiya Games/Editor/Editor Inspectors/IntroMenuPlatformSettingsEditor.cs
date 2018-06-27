@@ -44,19 +44,20 @@ namespace OmiyaGames.UI
         {
             // Draw fields - passs GUIContent.none to each so they are drawn without labels
             EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("showCustomMessage"));
-            singleLineRect.y += singleLineRect.height;
+
+            MoveDownOneLine(ref singleLineRect);
             EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("showMouseLockMessageLabel"));
-            singleLineRect.y += singleLineRect.height;
+
+            MoveDownOneLine(ref singleLineRect);
             EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("background"));
 
             // Setup duration
+            MoveDownOneLine(ref singleLineRect);
             SerializedProperty startState = property.FindPropertyRelative(StartStateName);
-            singleLineRect.y += singleLineRect.height;
             EditorGUI.PropertyField(singleLineRect, startState);
             if (startState.enumValueIndex == (int)LevelIntroMenu.StateOnStart.DisplayForDuration)
             {
-                singleLineRect.y += singleLineRect.height;
-                //EditorGUI.Slider
+                MoveDownOneLine(ref singleLineRect);
                 EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("displayDuration"));
             }
         }
