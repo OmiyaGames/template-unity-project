@@ -9,7 +9,7 @@ GameObject:
   m_Component:
   - component: {fileID: 22498224}
   m_Layer: 5
-  m_Name: Options Menu
+  m_Name: Options Menus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10027,6 +10027,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114051700134340134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11233,6 +11234,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114091816821320460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11296,6 +11298,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114098981065077502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11585,6 +11588,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114114009309374596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -11783,6 +11787,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114121904259203394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12019,6 +12024,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114132509870619162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -12667,6 +12673,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114160920201595584
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13600,6 +13607,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114198024862623686
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -13994,6 +14002,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114210542272997226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15351,6 +15360,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114261389588025814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15421,6 +15431,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114267129284022046
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15464,6 +15475,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114272800884926298
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -15811,6 +15823,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114281866866625360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16487,6 +16500,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114311553252417426
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -16628,6 +16642,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114316553858276688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -17034,6 +17049,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114335704169372476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -18451,9 +18467,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   languageCheckbox: {fileID: 114191479021393270}
   confirmTranslationsKey: Options Language Change Confirm
   revertAfterSeconds: 20
@@ -19216,9 +19229,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   enableKeyboardControls: 15
   enableCameraSensitivityControls: 15
   enableCameraSmoothingControls: 63
@@ -19503,9 +19513,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   cameraShakeControls:
     enableFor: -1
     checkbox: {fileID: 114717032096538750}
@@ -19875,6 +19882,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114440817489114580
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -19904,6 +19912,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114443945207502086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20280,6 +20289,7 @@ MonoBehaviour:
   enableClickSound: 0
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114455748972342452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -20908,6 +20918,7 @@ MonoBehaviour:
   enableClickSound: 0
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114471586986812594
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21211,6 +21222,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114486444033411064
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21523,6 +21535,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114499896871610870
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -21653,6 +21666,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114504688190635084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22164,9 +22178,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 0
-  titleTranslationKey: Game Title
-  scrollToDefaultUi: {fileID: 0}
   backButton: {fileID: 114610015533770102}
   allOptionsButtons:
   - component: {fileID: 114309703644669158}
@@ -22211,6 +22222,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114526156674082794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22395,6 +22407,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114534908863464610
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22746,6 +22759,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114549533860145760
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -22899,6 +22913,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114559204015481576
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -23546,6 +23561,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114578438305845876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -24700,6 +24716,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114617348428378430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -24797,6 +24814,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114629628605097680
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -25141,6 +25159,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114637245040768216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -25221,6 +25240,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114647789856483198
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -25295,6 +25315,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114652377671993442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -26150,6 +26171,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114687263234994120
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -26452,6 +26474,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114700745197124314
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -27152,6 +27175,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114725212104733292
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -27369,6 +27393,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114733949400021856
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -27701,9 +27726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   enableMusicVolumeControls: -1
   enableSoundEffectVolumeControls: -1
   allDividers:
@@ -28263,6 +28285,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114758663604145794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -29811,6 +29834,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114833332801080742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -30247,9 +30271,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   messageLabel: {fileID: 114542555997127268}
   yesButton: {fileID: 114107345285290812}
   noButton: {fileID: 114150171264781174}
@@ -31018,6 +31039,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114913130809736312
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31192,6 +31214,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114924803163089924
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31349,6 +31372,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114928795964833364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31392,6 +31416,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114936410375626202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -31436,6 +31461,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!114 &114944052635606604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -32652,6 +32678,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114514401527154246}
+  updateCursorState: 0
 --- !u!114 &114979704754091666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -32917,9 +32944,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  showBackground: 1
-  titleTranslationKey: 
-  scrollToDefaultUi: {fileID: 0}
   enableTextSize: -1
   enableInvincibility: -1
   enableTimeScale: -1
@@ -33060,6 +33084,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 0}
+  updateCursorState: 0
 --- !u!222 &222001458929413460
 CanvasRenderer:
   m_ObjectHideFlags: 1
