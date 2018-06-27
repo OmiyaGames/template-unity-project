@@ -296,7 +296,7 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return false;
+                return (MenuType != Type.UnmanagedMenu);
             }
         }
 

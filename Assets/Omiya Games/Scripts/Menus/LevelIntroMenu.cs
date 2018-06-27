@@ -204,14 +204,6 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override bool IsPopUpEnabledWhileVisible
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public PlatformSettings CurrentSettings
         {
             get
@@ -250,7 +242,7 @@ namespace OmiyaGames.Menu
             // Setup all labels, if available
             if ((levelNameLabel != null) && (SceneChanger.CurrentScene != null))
             {
-                levelNameLabel.TranslationKey = SceneChanger.CurrentScene.DisplayName.TranslationKey;
+                levelNameLabel.SetTranslationKey(SceneChanger.CurrentScene.DisplayName);
             }
 
             // Show the start button if pause is implemented.
