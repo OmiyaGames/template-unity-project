@@ -108,20 +108,17 @@ namespace Project
 
         public void OnPauseClicked()
         {
-            MenuManager manager = Singleton.Get<MenuManager>();
-            manager.Show<PauseMenu>();
+            Singleton.Get<MenuManager>().Show<PauseMenu>();
         }
 
         public void OnFailedClicked()
         {
-            MenuManager manager = Singleton.Get<MenuManager>();
-            manager.Show<LevelFailedMenu>();
+            Singleton.Get<MenuManager>().Show<LevelFailedMenu>();
         }
 
         public void OnCompleteClicked()
         {
-            MenuManager manager = Singleton.Get<MenuManager>();
-            manager.Show<LevelCompleteMenu>();
+            Singleton.Get<MenuManager>().Show<LevelCompleteMenu>();
         }
 
         public void OnSoundClicked()
@@ -131,6 +128,12 @@ namespace Project
             {
                 sound.Play();
             }
+        }
+
+        public void OnNextLevelClicked()
+        {
+            // Transition to the current level
+            Singleton.Get<OmiyaGames.Scenes.SceneTransitionManager>().LoadNextLevel();
         }
     }
 }

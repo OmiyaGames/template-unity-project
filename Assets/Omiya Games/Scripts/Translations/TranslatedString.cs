@@ -35,7 +35,7 @@ namespace OmiyaGames.Translations
     /// based on settings.
     /// </summary>
     [Serializable]
-    public struct TranslatedString 
+    public class TranslatedString
     {
         [SerializeField]
         readonly string key;

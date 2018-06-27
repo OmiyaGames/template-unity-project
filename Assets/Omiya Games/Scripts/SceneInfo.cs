@@ -51,7 +51,7 @@ namespace OmiyaGames
         [Tooltip("See TimeManager to set the scene's timescale.")]
         bool revertTimeScale = true;
 
-        TranslatedString? translatedDisplayName = null;
+        TranslatedString translatedDisplayName = null;
         Scene? reference = null;
         string sceneName = null;
         int ordinal = 0;
@@ -105,11 +105,11 @@ namespace OmiyaGames
         {
             get
             {
-                if(translatedDisplayName.HasValue == false)
+                if(translatedDisplayName == null)
                 {
                     translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
                 }
-                return translatedDisplayName.Value;
+                return translatedDisplayName;
             }
         }
 
