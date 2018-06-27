@@ -45,8 +45,8 @@ namespace OmiyaGames
         string displayName = "";
         [SerializeField]
         CursorLockMode cursorMode = CursorLockMode.None;
-        [SerializeField]
-        CursorLockMode cursorModeWeb = CursorLockMode.None;
+        //[SerializeField]
+        //CursorLockMode cursorModeWeb = CursorLockMode.None;
         [SerializeField]
         [Tooltip("See TimeManager to set the scene's timescale.")]
         bool revertTimeScale = true;
@@ -63,7 +63,6 @@ namespace OmiyaGames
             displayName = displayNameTranslationKey;
             revertTimeScale = revertTime;
             cursorMode = lockMode;
-            cursorModeWeb = lockMode;
             ordinal = index;
 
             // Setup translation variable
@@ -135,13 +134,26 @@ namespace OmiyaGames
             }
         }
 
-        public CursorLockMode LockModeWeb
-        {
-            get
-            {
-                return cursorModeWeb;
-            }
-        }
+        //public CursorLockMode LockModeWeb
+        //{
+        //    get
+        //    {
+        //        return cursorModeWeb;
+        //    }
+        //}
+
+        //public CursorLockMode CurrentLockMode
+        //{
+        //    get
+        //    {
+        //        CursorLockMode returnLock = LockMode;
+        //        if(Singleton.Instance.IsWebApp == true)
+        //        {
+        //            returnLock = LockModeWeb;
+        //        }
+        //        return returnLock;
+        //    }
+        //}
 
         public bool RevertTimeScale
         {

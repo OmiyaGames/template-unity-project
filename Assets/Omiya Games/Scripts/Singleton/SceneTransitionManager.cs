@@ -256,10 +256,6 @@ namespace OmiyaGames.Scenes
             if (CurrentScene != null)
             {
                 mode = CurrentScene.LockMode;
-                if ((allowWebplayerSettings == true) && (Singleton.Instance.IsWebApp == true))
-                {
-                    mode = CurrentScene.LockModeWeb;
-                }
             }
             CursorMode = mode;
         }
