@@ -39,28 +39,125 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     public class LevelIntroMenu : IMenu
     {
+        public enum StateOnStart
+        {
+            Hidden,
+            PauseOnStart,
+            DisplayForDuration
+        }
+
+        public enum MouseState
+        {
+            Both,
+            OnlyIfMouseIsLocked,
+            OnlyIfMouseIsUnlocked
+        }
+
+        #region Helper Containers
+        [System.Serializable]
+        public class PlatformSettings
+        {
+            [SerializeField]
+            bool showCustomMessage;
+            [SerializeField]
+            bool showMouseLockMessageLabel;
+            [SerializeField]
+            BackgroundMenu.BackgroundType background;
+            [SerializeField]
+            [UnityEngine.Serialization.FormerlySerializedAs("startState")]
+            StateOnStart startState;
+            [SerializeField]
+            [Range(0.1f, 20f)]
+            float displayDuration;
+
+            public StateOnStart StartState
+            {
+                get
+                {
+                    return startState;
+                }
+            }
+
+            public bool ShowCustomMessage
+            {
+                get
+                {
+                    return showCustomMessage;
+                }
+            }
+
+            public bool ShowMouseLockMessageLabel
+            {
+                get
+                {
+                    return showMouseLockMessageLabel;
+                }
+            }
+
+            public float DisplayDuration
+            {
+                get
+                {
+                    return displayDuration;
+                }
+            }
+        }
+
+        [System.Serializable]
+        public class CustomPlatformSettings : PlatformSettings
+        {
+            [SerializeField]
+            SupportedPlatforms platform;
+            [SerializeField]
+            MouseState mouseLockState;
+
+            public SupportedPlatforms Platform
+            {
+                get
+                {
+                    return platform;
+                }
+            }
+
+            public MouseState MouseLockState
+            {
+                get
+                {
+                    return mouseLockState;
+                }
+            }
+        }
+        #endregion
+
         [Header("Components")]
         [SerializeField]
-        Button defaultButton = null;
+        TranslatedTextMeshPro levelNameLabel = null;
         [SerializeField]
-        TranslatedText levelNameLabel = null;
+        [UnityEngine.Serialization.FormerlySerializedAs("defaultButton")]
+        Button startButton = null;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("messageLabel")]
+        TranslatedTextMeshPro customMessageLabel = null;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("WebGlNoteLabel")]
+        TranslatedTextMeshPro mouseLockMessageLabel = null;
 
-        [Header("Behavior")]
+        [Header("Platform Settings")]
         [SerializeField]
-        bool pauseOnStart = false;
+        PlatformSettings defaultSettings;
         [SerializeField]
-        bool onlyAppearOnWebplayer = false;
-        [SerializeField]
-        bool requireClickToStart = false;
+        CustomPlatformSettings[] otherPlatformSettings;
 
         System.Action<float> checkAnyKey = null;
+        PlatformSettings cachedSettings = null;
 
+        #region Properties
         public override Type MenuType
         {
             get
             {
                 Type returnType = Type.ManagedMenu;
-                if ((Singleton.Instance.IsWebApp == true) || (onlyAppearOnWebplayer == false))
+                if (CurrentSettings.StartState != StateOnStart.Hidden)
                 {
                     returnType = Type.DefaultManagedMenu;
                 }
@@ -72,9 +169,39 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return defaultButton.gameObject;
+                GameObject returnObject = null;
+                if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
+                {
+                    returnObject = startButton.gameObject;
+                }
+                return returnObject;
             }
         }
+
+        public PlatformSettings CurrentSettings
+        {
+            get
+            {
+                if (cachedSettings == null)
+                {
+                    cachedSettings = defaultSettings;
+                    if ((otherPlatformSettings != null) && (otherPlatformSettings.Length > 0))
+                    {
+                        foreach (CustomPlatformSettings settings in otherPlatformSettings)
+                        {
+                            // FIXME: check the mouse state on WebGL...somehow
+                            if ((settings != null) && (settings.Platform.IsThisBuildSupported() == true))
+                            {
+                                cachedSettings = settings;
+                                break;
+                            }
+                        }
+                    }
+                }
+                return cachedSettings;
+            }
+        }
+        #endregion
 
         protected override void OnSetup()
         {
@@ -86,6 +213,15 @@ namespace OmiyaGames.Menu
             {
                 levelNameLabel.TranslationKey = SceneChanger.CurrentScene.DisplayName.TranslationKey;
             }
+
+            // Show the start button if pause is implemented.
+            startButton.gameObject.SetActive(CurrentSettings.StartState == StateOnStart.PauseOnStart);
+
+            // Show the custom message if pause is implemented.
+            customMessageLabel.gameObject.SetActive(CurrentSettings.ShowCustomMessage);
+
+            // Show the custom message if pause is implemented.
+            mouseLockMessageLabel.gameObject.SetActive(CurrentSettings.ShowMouseLockMessageLabel);
         }
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
@@ -93,6 +229,8 @@ namespace OmiyaGames.Menu
             // Call base method
             base.OnStateChanged(from, to);
 
+            // Unbind to Singleton's update function
+            StopListeningToUpdate();
             if (to == VisibilityState.Visible)
             {
                 OnShow();
@@ -106,18 +244,11 @@ namespace OmiyaGames.Menu
         void OnShow()
         {
             // Check if we should stop time
-            if (pauseOnStart == true)
+            if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Stop time
                 Singleton.Get<TimeManager>().IsManuallyPaused = true;
-            }
 
-            // Unbind to Singleton's update function
-            StopListeningToUpdate();
-
-            // Check if we need to click
-            if (requireClickToStart == false)
-            {
                 // Bind to Singleton's update function
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
                 Singleton.Instance.OnUpdate += checkAnyKey;
@@ -127,14 +258,17 @@ namespace OmiyaGames.Menu
         void OnHide()
         {
             // Check if we should stop time
-            if (pauseOnStart == true)
+            if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Resume the time
                 Singleton.Get<TimeManager>().IsManuallyPaused = false;
-            }
 
-            // Unbind to Singleton's update function
-            StopListeningToUpdate();
+                // Update the cursor mode
+                if ((SceneChanger != null) && (SceneChanger.CurrentScene != null))
+                {
+                    Scenes.SceneTransitionManager.CursorMode = SceneChanger.CurrentScene.LockMode;
+                }
+            }
         }
 
         void StopListeningToUpdate()
@@ -152,7 +286,7 @@ namespace OmiyaGames.Menu
 
         void CheckForAnyKey(float deltaTime)
         {
-            if (Input.anyKeyDown == true)
+            if ((IsListeningToEvents == true) && (Input.anyKeyDown == true))
             {
                 Hide();
             }
