@@ -51,7 +51,7 @@ namespace OmiyaGames
             {
                 numRows += 1;
             }
-            return (EditorGUIUtility.singleLineHeight * numRows) + (verticalMargin * (numRows - 1));
+            return (EditorGUIUtility.singleLineHeight + verticalMargin) * numRows;
         }
 
         public static string GetLastFolderName(string path, bool pathIncludesFileName)

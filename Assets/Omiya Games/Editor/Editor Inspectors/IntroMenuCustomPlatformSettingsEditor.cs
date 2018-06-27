@@ -42,11 +42,11 @@ namespace OmiyaGames.UI
         {
             // Draw platforms
             EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("platform"));
-            singleLineRect.y += singleLineRect.height;
+            MoveDownOneLine(ref singleLineRect);
             EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("mouseLockState"));
 
             // Draw the rest from base class
-            singleLineRect.y += singleLineRect.height;
+            MoveDownOneLine(ref singleLineRect);
             base.DrawAllControls(property, singleLineRect);
         }
 
