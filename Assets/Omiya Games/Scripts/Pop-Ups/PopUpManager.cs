@@ -307,7 +307,7 @@ namespace OmiyaGames.Menu
                 clone = Instantiate<GameObject>(dialogInstace.gameObject);
 
                 // Setup the dialog properly
-                clone.transform.SetParent(transform, false);
+                clone.transform.SetParent(dialogInstace.transform.parent, false);
                 clone.name = string.Format(dialogName, index);
 
                 // Grab the script from the dialog
