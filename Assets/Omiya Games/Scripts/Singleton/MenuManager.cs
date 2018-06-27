@@ -170,6 +170,19 @@ namespace OmiyaGames.Menu
                 return Singleton.Get<SceneTransitionManager>();
             }
         }
+
+        public bool IsPausingEnabled
+        {
+            get
+            {
+                bool returnFlag = true;
+                if ((managedMenusStack.Count > 0) && (managedMenusStack.Peek() != null))
+                {
+                    returnFlag = managedMenusStack.Peek().IsPausingEnabledWhileVisible;
+                }
+                return returnFlag;
+            }
+        }
         #endregion
 
         internal override void SingletonAwake()
@@ -319,10 +332,10 @@ namespace OmiyaGames.Menu
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentVisibility = IMenu.VisibilityState.Visible;
                 }
-                else if (SceneChanger.CurrentScene != null)
+                else
                 {
                     // Lock the cursor to what the scene is set to
-                    SceneTransitionManager.CursorMode = SceneChanger.CurrentScene.LockMode;
+                    SceneChanger.RevertCursorLockMode();
                 }
 
                 // Unselect the highlighted item
@@ -418,7 +431,7 @@ namespace OmiyaGames.Menu
         void QueryInput(float unscaledDeltaTime)
         {
             // Detect input for pause button (make sure no managed dialogs are shown, either).
-            if((NumManagedMenus <= 0) && (Input.GetButtonDown(PauseInput) == true))
+            if((Input.GetButtonDown(PauseInput) == true) && (IsPausingEnabled == true))
             {
                 // Attempt to grab the pause menu
                 if (PauseMenu != null)

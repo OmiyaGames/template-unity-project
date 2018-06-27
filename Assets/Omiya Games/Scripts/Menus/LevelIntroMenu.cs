@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using OmiyaGames.Translations;
 using OmiyaGames.Global;
 
@@ -49,7 +50,6 @@ namespace OmiyaGames.Menu
         public enum MouseState
         {
             Both,
-            OnlyIfMouseIsLocked,
             OnlyIfMouseIsUnlocked
         }
 
@@ -101,6 +101,14 @@ namespace OmiyaGames.Menu
                     return displayDuration;
                 }
             }
+
+            public BackgroundMenu.BackgroundType Background
+            {
+                get
+                {
+                    return background;
+                }
+            }
         }
 
         [System.Serializable]
@@ -133,14 +141,14 @@ namespace OmiyaGames.Menu
         [SerializeField]
         TranslatedTextMeshPro levelNameLabel = null;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("defaultButton")]
-        Button startButton = null;
-        [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("messageLabel")]
         TranslatedTextMeshPro customMessageLabel = null;
         [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("WebGlNoteLabel")]
         TranslatedTextMeshPro mouseLockMessageLabel = null;
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("defaultButton")]
+        Button startButton = null;
 
         [Header("Platform Settings")]
         [SerializeField]
@@ -156,12 +164,14 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                Type returnType = Type.ManagedMenu;
-                if (CurrentSettings.StartState != StateOnStart.Hidden)
+                switch(CurrentSettings.StartState)
                 {
-                    returnType = Type.DefaultManagedMenu;
+                    case StateOnStart.DisplayForDuration:
+                    case StateOnStart.PauseOnStart:
+                        return Type.DefaultManagedMenu;
+                    default:
+                        return Type.ManagedMenu;
                 }
-                return returnType;
             }
         }
 
@@ -178,20 +188,49 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return CurrentSettings.Background;
+            }
+        }
+
+        public override bool IsPausingEnabledWhileVisible
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override bool IsPopUpEnabledWhileVisible
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public PlatformSettings CurrentSettings
         {
             get
             {
                 if (cachedSettings == null)
                 {
+                    // Grab default setting
                     cachedSettings = defaultSettings;
+
+                    // Check if there are any other settings
                     if ((otherPlatformSettings != null) && (otherPlatformSettings.Length > 0))
                     {
+                        // Go through all settings
                         foreach (CustomPlatformSettings settings in otherPlatformSettings)
                         {
-                            // FIXME: check the mouse state on WebGL...somehow
-                            if ((settings != null) && (settings.Platform.IsThisBuildSupported() == true))
+                            // Verify if this settings is the current platform
+                            if (IsSettingsApplicable(settings) == true)
                             {
+                                // Return this setting immediately
                                 cachedSettings = settings;
                                 break;
                             }
@@ -253,6 +292,17 @@ namespace OmiyaGames.Menu
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
                 Singleton.Instance.OnUpdate += checkAnyKey;
             }
+            else
+            {
+                // Since no interactive buttons are shown on-screen, revert cursor mode
+                SceneChanger.RevertCursorLockMode();
+
+                // Check if we want to auto-hide
+                if (CurrentSettings.StartState == StateOnStart.DisplayForDuration)
+                {
+                    StartCoroutine(DelayCallingHide(CurrentSettings.DisplayDuration));
+                }
+            }
         }
 
         void OnHide()
@@ -262,12 +312,6 @@ namespace OmiyaGames.Menu
             {
                 // Resume the time
                 Singleton.Get<TimeManager>().IsManuallyPaused = false;
-
-                // Update the cursor mode
-                if ((SceneChanger != null) && (SceneChanger.CurrentScene != null))
-                {
-                    Scenes.SceneTransitionManager.CursorMode = SceneChanger.CurrentScene.LockMode;
-                }
             }
         }
 
@@ -290,6 +334,41 @@ namespace OmiyaGames.Menu
             {
                 Hide();
             }
+        }
+
+        bool IsSettingsApplicable(CustomPlatformSettings settings)
+        {
+            // Check setting is not null, and supported
+            bool returnFlag = false;
+            if ((settings != null) && (settings.Platform.IsThisBuildSupported() == true))
+            {
+                if (settings.MouseLockState == MouseState.Both)
+                {
+                    // Switch the flag to true
+                    returnFlag = true;
+                }
+                else
+                {
+                    // Check if the current scene is supposed to have the cursor locked, and wasn't locked from the previous scene
+                    returnFlag = ((SceneChanger != null) && (SceneChanger.CurrentScene != null) && (SceneChanger.CurrentScene.LockMode == CursorLockMode.Locked) && (Scenes.SceneTransitionManager.LastCursorMode != CursorLockMode.Locked));
+                }
+            }
+            return returnFlag;
+        }
+
+        IEnumerator DelayCallingHide(float autoHideAfterSeconds)
+        {
+            // Wait for a couple of seconds
+            yield return new WaitForSeconds(autoHideAfterSeconds);
+
+            // Make sure we're not in standby, if somehow this menu ended up in the MenuManager stack
+            while(CurrentVisibility == VisibilityState.StandBy)
+            {
+                yield return null;
+            }
+
+            // Hide the menu.
+            Hide();
         }
     }
 }
