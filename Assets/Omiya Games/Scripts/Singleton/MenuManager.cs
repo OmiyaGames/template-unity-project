@@ -209,8 +209,7 @@ namespace OmiyaGames.Menu
             PopUps = FindObjectOfType<PopUpManager>();
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToReturnToMenu(TranslatedText label)
+        public void SetLabelTextToReturnToMenu(TranslatedTextMeshPro label)
         {
             if ((label != null) && (string.IsNullOrEmpty(returnToTextTemplateTranslationKey) == false))
             {
@@ -218,26 +217,22 @@ namespace OmiyaGames.Menu
             }
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToRestartCurrentScene(TranslatedText label)
+        public void SetLabelTextToRestartCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, restartTextTemplateTranslationKey);
+            SetLabelTextTo(label, restartTextTemplateTranslationKey, SceneChanger);
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToCompletedCurrentScene(TranslatedText label)
+        public void SetLabelTextToCompletedCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, completeTextTemplateTranslationKey);
+            SetLabelTextTo(label, completeTextTemplateTranslationKey, SceneChanger);
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToFailedCurrentScene(TranslatedText label)
+        public void SetLabelTextToFailedCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, failedTextTemplateTranslationKey);
+            SetLabelTextTo(label, failedTextTemplateTranslationKey, SceneChanger);
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToNextScene(TranslatedText label)
+        public void SetLabelTextToNextScene(TranslatedTextMeshPro label)
         {
             SetLabelTextTo(label, nextTextTemplateTranslationKey, SceneChanger.NextScene);
         }
@@ -365,17 +360,15 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
-        // FIXME: Consider making static public
-        void SetLabelTextTo(TranslatedText label, string templateKey)
+        public static void SetLabelTextTo(TranslatedTextMeshPro label, string templateKey, SceneTransitionManager manager)
         {
-            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false))
+            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (manager != null))
             {
-                SetLabelTextTo(label, templateKey, SceneChanger.CurrentScene);
+                SetLabelTextTo(label, templateKey, manager.CurrentScene);
             }
         }
 
-        // FIXME: Consider making static public
-        void SetLabelTextTo(TranslatedText label, string templateKey, SceneInfo scene)
+        public static void SetLabelTextTo(TranslatedTextMeshPro label, string templateKey, SceneInfo scene)
         {
             if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (scene != null))
             {

@@ -70,36 +70,36 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return defaultButton.gameObject;
+                return CurrentDefaultUi;
             }
         }
 
-        protected override void OnSetup()
+        protected GameObject CurrentDefaultUi
         {
-            // Call base method
-            base.OnSetup();
-
-            // FIXME: think real hard here, do we *really* need these?
-            Manager.SetLabelTextToCompletedCurrentScene(completeLabel);
-            Manager.SetLabelTextToFailedCurrentScene(failedLabel);
-            Manager.SetLabelTextToNextScene(nextSceneLabel);
-            Manager.SetLabelTextToRestartCurrentScene(restartLabel);
-            Manager.SetLabelTextToReturnToMenu(returnToMenuLabel);
+            get;
+            set;
         }
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
+            // Check if this menu is going from hidden to visible
+            if ((from == VisibilityState.Hidden) && (to == VisibilityState.Visible))
+            {
+                // Set the Default UI to the default button
+                CurrentDefaultUi = defaultButton.gameObject;
+            }
+
             // Call base method
             base.OnStateChanged(from, to);
 
             if (PauseOnShow == true)
             {
-                if(to == VisibilityState.Visible)
+                if (to == VisibilityState.Visible)
                 {
                     // Stop time
                     Singleton.Get<TimeManager>().IsManuallyPaused = true;
                 }
-                else if(to == VisibilityState.Hidden)
+                else if (to == VisibilityState.Hidden)
                 {
                     // Resume the time
                     Singleton.Get<TimeManager>().IsManuallyPaused = false;
@@ -107,22 +107,35 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public void OnNextLevelClicked()
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Transition to the next level
+                SceneChanger.LoadNextLevel();
+                Hide();
+            }
+        }
+
         public void OnRestartClicked()
         {
-            Hide();
-
-            // Transition to the current level
-            SceneChanger.ReloadCurrentScene();
+            if (IsListeningToEvents == true)
+            {
+                // FIXME: Notify the player that they'll lose their unsaved progress.
+                // Transition to the current level
+                SceneChanger.ReloadCurrentScene();
+                Hide();
+            }
         }
 
         public void OnReturnToMenuClicked()
         {
             if(IsListeningToEvents == true)
             {
+                // FIXME: Notify the player that they'll lose their unsaved progress.
                 // Transition to the menu
                 SceneChanger.LoadMainMenu();
-
-                IsListeningToEvents = false;
+                Hide();
             }
         }
     }

@@ -1,4 +1,7 @@
+using UnityEngine;
+using UnityEngine.UI;
 using OmiyaGames.Global;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -38,12 +41,47 @@ namespace OmiyaGames.Menu
     /// <seealso cref="TimeManager"/>
     public class PauseMenu : ISceneChangingMenu
     {
+        [Header("Pause Menu")]
+        [SerializeField]
+        BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
+        [SerializeField]
+        TranslatedTextMeshPro mRestartLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mReturnToMenuLabel = null;
+
+        [Header("Buttons")]
+        [SerializeField]
+        Button optionsButton = null;
+        [SerializeField]
+        Button howToPlayButton = null;
+        [SerializeField]
+        Button highScoresButton = null;
+        [SerializeField]
+        Button levelSelectButton = null;
+
         public override bool PauseOnShow
         {
             get
             {
                 return true;
             }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background;
+            }
+        }
+
+        protected override void OnSetup()
+        {
+            base.OnSetup();
+
+            // Update labels
+            Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
+            Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
         }
 
         void OnApplicationPause(bool isPaused)
@@ -66,18 +104,33 @@ namespace OmiyaGames.Menu
                     menu.UpdateDialog(this);
                     menu.Show();
                 }
+
+                // Set the default UI
+                CurrentDefaultUi = optionsButton.gameObject;
             }
         }
 
         public void OnHowToPlayClicked()
         {
-            Manager.Show<HowToPlayMenu>();
+            if(IsListeningToEvents == true)
+            {
+                Manager.Show<HowToPlayMenu>();
+
+                // Set the default UI
+                CurrentDefaultUi = howToPlayButton.gameObject;
+            }
         }
 
         public void OnHighScoresClicked()
         {
-            // FIXME: show high scores
-            //Manager.Show<HowToPlayMenu>();
+            if (IsListeningToEvents == true)
+            {
+                // FIXME: show high scores
+                //Manager.Show<HighScoresMenu>();
+
+                // Set the default UI
+                CurrentDefaultUi = highScoresButton.gameObject;
+            }
         }
 
         public void OnLevelSelectClicked()
@@ -93,8 +146,8 @@ namespace OmiyaGames.Menu
                     levelSelect.Show();
                 }
 
-                // FIXME: Indicate we've clicked on a button
-                //defaultButton = levelSelectButton.gameObject;
+                // Set the default UI
+                CurrentDefaultUi = levelSelectButton.gameObject;
             }
         }
         #endregion
