@@ -186,7 +186,7 @@ namespace OmiyaGames.Menu
                 newDialog.ID = NextId;
 
                 // Update dialog text
-                newDialog.Label.text = text;
+                newDialog.Label.CurrentText = text;
                 allLoggedTexts.Add(newDialog.ID, text);
 
                 // Update the dialog's transform
@@ -402,7 +402,7 @@ namespace OmiyaGames.Menu
                             newDialog.ID = info.Key;
 
                             // Update dialog text
-                            newDialog.Label.text = info.Value;
+                            newDialog.Label.CurrentText = info.Value;
 
                             // Update the dialog's transform
                             newDialog.CachedTransform.SetAsFirstSibling();
