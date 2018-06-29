@@ -48,7 +48,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         LanguageToggle languageCheckbox;
 
-        LanguageToggle currentSelectedCheckbox = null, lastSelectedCheckbox = null;
+        LanguageToggle currentSelectedCheckbox = null;
         readonly Dictionary<string, LanguageToggle> languageToControlMap = new Dictionary<string, LanguageToggle>();
 
         #region Properties
@@ -136,7 +136,6 @@ namespace OmiyaGames.Menu
             if(languageToControlMap.TryGetValue(Translations.CurrentLanguage, out currentSelectedCheckbox) == true)
             {
                 // Setup the last selected toggle
-                lastSelectedCheckbox = currentSelectedCheckbox;
                 currentSelectedCheckbox.Checkbox.isOn = true;
             }
         }
