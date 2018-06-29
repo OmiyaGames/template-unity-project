@@ -81,10 +81,14 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                GameObject returnObject = defaultButton.gameObject;
+                GameObject returnObject = null;
                 if (CurrentDefaultUi != null)
                 {
                     returnObject = CurrentDefaultUi;
+                }
+                else if(defaultButton != null)
+                {
+                    returnObject = defaultButton.gameObject;
                 }
                 return returnObject;
             }
@@ -111,7 +115,7 @@ namespace OmiyaGames.Menu
             if ((from == VisibilityState.Hidden) && (to == VisibilityState.Visible))
             {
                 // Set the Default UI to the default button
-                CurrentDefaultUi = defaultButton.gameObject;
+                CurrentDefaultUi = null;
             }
 
             // Call base method
