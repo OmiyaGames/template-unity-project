@@ -133,11 +133,7 @@ namespace OmiyaGames.UI.Scenes
             position.y += (position.height + VerticalMargin);
 
             // Draw Cursor label
-            DrawTextField(position, property, "Cursor Lock Mode (App)", "cursorMode", CursorModeLabelWidth);
-
-            // Dock the rest of the fields down a bit
-            position.y += (position.height + VerticalMargin);
-            DrawTextField(position, property, "Cursor Lock Mode (Web)", "cursorModeWeb", CursorModeLabelWidth);
+            DrawTextField(position, property, "Cursor Lock Mode", "cursorMode", CursorModeLabelWidth);
 
             // Set indent back to what it was
             EditorGUI.indentLevel = indent;
@@ -160,7 +156,7 @@ namespace OmiyaGames.UI.Scenes
 
         internal static float GetHeight(GUIContent label = null)
         {
-            return AssetUtility.GetHeight(label, 4, VerticalMargin);
+            return AssetUtility.GetHeight(label, 3, VerticalMargin);
         }
     }
 
@@ -200,7 +196,6 @@ namespace OmiyaGames.UI.Scenes
     {
         const float VerticalMargin = 2;
 
-        SerializedProperty loadLevelAsynchronously;
         SerializedProperty soundEffect;
         SerializedProperty splash;
         SerializedProperty mainMenu;
@@ -226,7 +221,6 @@ namespace OmiyaGames.UI.Scenes
         public void OnEnable()
         {
             // Grab all serialized properties
-            loadLevelAsynchronously = serializedObject.FindProperty("loadLevelAsynchronously");
             soundEffect = serializedObject.FindProperty("soundEffect");
             splash = serializedObject.FindProperty("splash");
             mainMenu = serializedObject.FindProperty("mainMenu");
@@ -243,7 +237,6 @@ namespace OmiyaGames.UI.Scenes
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(loadLevelAsynchronously, true);
             EditorGUILayout.PropertyField(soundEffect, true);
             EditorGUILayout.PropertyField(splash, true);
             EditorGUILayout.PropertyField(mainMenu, true);

@@ -39,18 +39,14 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    public class OptionsLanguageMenu : IMenu
+    [DisallowMultipleComponent]
+    public class OptionsLanguageMenu : IOptionsMenu
     {
         const string appendName = " Checkbox";
 
         [Header("Language Controls")]
         [SerializeField]
         LanguageToggle languageCheckbox;
-        [SerializeField]
-        string confirmTranslationsKey = "Options Language Change Confirm";
-        [SerializeField]
-        [Range(5f, 60f)]
-        float revertAfterSeconds = 20f;
 
         LanguageToggle currentSelectedCheckbox = null, lastSelectedCheckbox = null;
         readonly Dictionary<string, LanguageToggle> languageToControlMap = new Dictionary<string, LanguageToggle>();
@@ -116,47 +112,6 @@ namespace OmiyaGames.Menu
 
                 // Change the language
                 Translations.CurrentLanguage = currentSelectedCheckbox.Language;
-
-                // Grab the confirmation menu
-                ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
-                if (menu != null)
-                {
-                    // Display confirmation dialog
-                    menu.DefaultToYes = false;
-                    menu.UpdateDialog(this, confirmTranslationsKey, revertAfterSeconds);
-                    menu.Show(ConfirmationMenu_OnButtonClicked);
-                }
-            }
-        }
-
-        private void ConfirmationMenu_OnButtonClicked(IMenu source, VisibilityState from, VisibilityState to)
-        {
-            if((source is ConfirmationMenu) && (to == VisibilityState.Hidden))
-            {
-                // Stop listening to events while monitoring the user confirmation
-                IsListeningToEvents = false;
-                if (((ConfirmationMenu)source).IsYesSelected == true)
-                {
-                    // Update the check state
-                    currentSelectedCheckbox.Checkbox.isOn = true;
-                    lastSelectedCheckbox.Checkbox.isOn = false;
-
-                    // Indicate that the current language is the current checkbox
-                    lastSelectedCheckbox = currentSelectedCheckbox;
-                }
-                else
-                {
-                    // Turn on the last checkbox instead
-                    currentSelectedCheckbox.Checkbox.isOn = false;
-                    lastSelectedCheckbox.Checkbox.isOn = true;
-
-                    // Switch the current checkbox to the last one
-                    currentSelectedCheckbox = lastSelectedCheckbox;
-
-                    // Switch the language to the last selected language
-                    Translations.CurrentLanguage = lastSelectedCheckbox.Language;
-                }
-                IsListeningToEvents = true;
             }
         }
 

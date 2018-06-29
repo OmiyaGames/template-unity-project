@@ -51,8 +51,6 @@ namespace OmiyaGames.Scenes
         // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
-        bool loadLevelAsynchronously = true;
-        [SerializeField]
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
@@ -90,10 +88,30 @@ namespace OmiyaGames.Scenes
             }
             set
             {
+                // Check the platforms
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX
+                // For the platforms that support CursorLockMode.Confined, just set the value.
                 Cursor.lockState = value;
+#else
+                // For the platforms that do NOT support CursorLockMode.Confined, make that the exception.
+                if(value == CursorLockMode.Confined)
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                }
+                else
+                {
+                    Cursor.lockState = value;
+                }
+#endif
                 Cursor.visible = (value != CursorLockMode.Locked);
             }
         }
+
+        public static CursorLockMode LastCursorMode
+        {
+            get;
+            private set;
+        } = CursorLockMode.None;
 
         public SceneInfo Splash
         {
@@ -238,7 +256,7 @@ namespace OmiyaGames.Scenes
             }
 
             // Update the cursor locking
-            RevertCursorLockMode(true);
+            RevertCursorLockMode();
 
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
@@ -250,16 +268,12 @@ namespace OmiyaGames.Scenes
             sceneLoadingInfo = null;
         }
 
-        public void RevertCursorLockMode(bool allowWebplayerSettings)
+        public void RevertCursorLockMode()
         {
             CursorLockMode mode = defaultLockMode;
             if (CurrentScene != null)
             {
                 mode = CurrentScene.LockMode;
-                if ((allowWebplayerSettings == true) && (Singleton.Instance.IsWebApp == true))
-                {
-                    mode = CurrentScene.LockModeWeb;
-                }
             }
             CursorMode = mode;
         }
@@ -313,7 +327,7 @@ namespace OmiyaGames.Scenes
             }
 
             // Unlock the next level
-            UpdateUnlockedLevels();
+            UnlockNextLevel();
 
             // Update which scene to load
             sceneToLoad = scene;
@@ -322,8 +336,14 @@ namespace OmiyaGames.Scenes
             TransitionToScene(sceneToLoad);
         }
 
-        public void UpdateUnlockedLevels()
+        /// <summary>
+        /// Attempts to unlock the next level, if it hasn't been unlocked already.
+        /// </summary>
+        /// <returns>True if a new level is unlocked.</returns>
+        public bool UnlockNextLevel()
         {
+            bool isNewLevelUnlocked = false;
+
             // Check which level to unlock
             int nextLevelUnlocked = CurrentScene.Ordinal;
             if (NextScene != null)
@@ -338,13 +358,18 @@ namespace OmiyaGames.Scenes
             {
                 // Unlock this level
                 settings.NumLevelsUnlocked = nextLevelUnlocked;
+                isNewLevelUnlocked = true;
             }
+            return isNewLevelUnlocked;
         }
 
         void TransitionToScene(SceneInfo sceneToLoad)
         {
             // Indicate the next scene was loaded
             Singleton.Get<PoolingManager>().DestroyAll();
+
+            // Grab the last cursor mode
+            LastCursorMode = CursorMode;
 
             // Load the next scene asynchronously
             // FIXME: once loading scene is in here, load that instead
@@ -358,6 +383,7 @@ namespace OmiyaGames.Scenes
             {
                 // Play the transition out animation
                 SceneTransition.Instance.TransitionOut();
+                soundEffect.Play();
             }
 
             // Monitor the progress of the scene loading

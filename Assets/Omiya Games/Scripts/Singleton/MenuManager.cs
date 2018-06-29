@@ -70,9 +70,6 @@ namespace OmiyaGames.Menu
         [Tooltip("Template for any menus with button text indicating game over")]
         [SerializeField]
         string failedTextTemplateTranslationKey = "Level Failed Title";
-        [Tooltip("Template for any menus with button text indicating a scene was completed")]
-        [SerializeField]
-        string nextTextTemplateTranslationKey = "Proceed Button";
 
         [Header("Sound Templates")]
         [SerializeField]
@@ -170,6 +167,19 @@ namespace OmiyaGames.Menu
                 return Singleton.Get<SceneTransitionManager>();
             }
         }
+
+        public bool IsPausingEnabled
+        {
+            get
+            {
+                bool returnFlag = true;
+                if ((managedMenusStack.Count > 0) && (managedMenusStack.Peek() != null))
+                {
+                    returnFlag = managedMenusStack.Peek().IsPausingEnabledWhileVisible;
+                }
+                return returnFlag;
+            }
+        }
         #endregion
 
         internal override void SingletonAwake()
@@ -196,8 +206,7 @@ namespace OmiyaGames.Menu
             PopUps = FindObjectOfType<PopUpManager>();
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToReturnToMenu(TranslatedText label)
+        public void SetLabelTextToReturnToMenu(TranslatedTextMeshPro label)
         {
             if ((label != null) && (string.IsNullOrEmpty(returnToTextTemplateTranslationKey) == false))
             {
@@ -205,28 +214,19 @@ namespace OmiyaGames.Menu
             }
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToRestartCurrentScene(TranslatedText label)
+        public void SetLabelTextToRestartCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, restartTextTemplateTranslationKey);
+            SetLabelTextTo(label, restartTextTemplateTranslationKey, SceneChanger);
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToCompletedCurrentScene(TranslatedText label)
+        public void SetLabelTextToCompletedCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, completeTextTemplateTranslationKey);
+            SetLabelTextTo(label, completeTextTemplateTranslationKey, SceneChanger);
         }
 
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToFailedCurrentScene(TranslatedText label)
+        public void SetLabelTextToFailedCurrentScene(TranslatedTextMeshPro label)
         {
-            SetLabelTextTo(label, failedTextTemplateTranslationKey);
-        }
-
-        // FIXME: think real hard here, do we *really* need these?
-        public void SetLabelTextToNextScene(TranslatedText label)
-        {
-            SetLabelTextTo(label, nextTextTemplateTranslationKey, SceneChanger.NextScene);
+            SetLabelTextTo(label, failedTextTemplateTranslationKey, SceneChanger);
         }
 
         public MENU GetMenu<MENU>() where MENU : IMenu
@@ -319,10 +319,10 @@ namespace OmiyaGames.Menu
                     // Change the top-most menu into visible
                     managedMenusStack.Peek().CurrentVisibility = IMenu.VisibilityState.Visible;
                 }
-                else if (SceneChanger.CurrentScene != null)
+                else
                 {
                     // Lock the cursor to what the scene is set to
-                    SceneTransitionManager.CursorMode = SceneChanger.CurrentScene.LockMode;
+                    SceneChanger.RevertCursorLockMode();
                 }
 
                 // Unselect the highlighted item
@@ -352,17 +352,15 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Helper Methods
-        // FIXME: Consider making static public
-        void SetLabelTextTo(TranslatedText label, string templateKey)
+        public static void SetLabelTextTo(TranslatedTextMeshPro label, string templateKey, SceneTransitionManager manager)
         {
-            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false))
+            if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (manager != null))
             {
-                SetLabelTextTo(label, templateKey, SceneChanger.CurrentScene);
+                SetLabelTextTo(label, templateKey, manager.CurrentScene);
             }
         }
 
-        // FIXME: Consider making static public
-        void SetLabelTextTo(TranslatedText label, string templateKey, SceneInfo scene)
+        public static void SetLabelTextTo(TranslatedTextMeshPro label, string templateKey, SceneInfo scene)
         {
             if ((label != null) && (string.IsNullOrEmpty(templateKey) == false) && (scene != null))
             {
@@ -418,7 +416,7 @@ namespace OmiyaGames.Menu
         void QueryInput(float unscaledDeltaTime)
         {
             // Detect input for pause button (make sure no managed dialogs are shown, either).
-            if((NumManagedMenus <= 0) && (Input.GetButtonDown(PauseInput) == true))
+            if((Input.GetButtonDown(PauseInput) == true) && (IsPausingEnabled == true))
             {
                 // Attempt to grab the pause menu
                 if (PauseMenu != null)

@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEditor;
+using OmiyaGames.Menu;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="HowToPlayMenu.cs" company="Omiya Games">
+    /// <copyright file="IntroMenuCustomPlatformSettingsEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2018 Omiya Games
+    /// Copyright (c) 2014-2016 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -28,52 +29,31 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/29/2018</date>
+    /// <date>6/26/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that provides a tutorial and/or on how to play the game.
-    /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
+    /// An editor script for <code>LevelIntroMenu.CustomPlatformSettings</code>.
     /// </summary>
-    /// <seealso cref="MenuManager"/>
-    [RequireComponent(typeof(Animator))]
-    [DisallowMultipleComponent]
-    public class HowToPlayMenu : IMenu
+    /// <seealso cref="LevelIntroMenu.CustomPlatformSettings"/>
+    [CustomPropertyDrawer(typeof(LevelIntroMenu.CustomPlatformSettings))]
+    public class IntroMenuCustomPlatformSettingsEditor : IntroMenuPlatformSettingsEditor
     {
-        [Header("How to Play Settings")]
-        [SerializeField]
-        Button backButton;
-
-        public override GameObject DefaultUi
+        protected override void DrawAllControls(SerializedProperty property, Rect singleLineRect)
         {
-            get
-            {
-                return backButton.gameObject;
-            }
+            // Draw platforms
+            EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("platform"));
+            MoveDownOneLine(ref singleLineRect);
+            EditorGUI.PropertyField(singleLineRect, property.FindPropertyRelative("mouseLockState"));
+
+            // Draw the rest from base class
+            MoveDownOneLine(ref singleLineRect);
+            base.DrawAllControls(property, singleLineRect);
         }
 
-        public override Type MenuType
+        protected override int GetNumLinesToDraw(SerializedProperty property, GUIContent label)
         {
-            get
-            {
-                return Type.ManagedMenu;
-            }
-        }
-
-        public override BackgroundMenu.BackgroundType Background
-        {
-            get
-            {
-                return BackgroundMenu.BackgroundType.SolidColor;
-            }
-        }
-
-        public override string TitleTranslationKey
-        {
-            get
-            {
-                return null;
-            }
+            // Add one more line
+            return base.GetNumLinesToDraw(property, label) + 2;
         }
     }
 }

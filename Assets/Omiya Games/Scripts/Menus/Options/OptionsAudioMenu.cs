@@ -39,7 +39,7 @@ namespace OmiyaGames.Menu
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(SoundEffect))]
     [DisallowMultipleComponent]
-    public class OptionsAudioMenu : IMenu
+    public class OptionsAudioMenu : IOptionsMenu
     {
         #region Serialized Fields
         [Header("Features to Enable")]
@@ -122,7 +122,7 @@ namespace OmiyaGames.Menu
             SetupSoundEffectControls();
 
             // Update how dividers appear
-            OptionsMenuUtility.SetupDividers(allDividers,
+            SetupDividers(allDividers,
                 enableMusicVolumeControls,
                 enableSoundEffectVolumeControls);
         }
