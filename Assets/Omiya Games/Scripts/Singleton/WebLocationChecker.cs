@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace OmiyaGames.Web
 {
@@ -85,6 +86,11 @@ namespace OmiyaGames.Web
             Text,
             AcceptedDomainListAssetBundle
         }
+
+#if UNITY_EDITOR || UNITY_WEBGL
+        [DllImport("__Internal")]
+        private static extern void RedirectTo(string url);
+#endif
 
         ///<summary>
         /// If it is a webplayer, then the domain must contain any
@@ -417,17 +423,12 @@ namespace OmiyaGames.Web
 
         void ForceRedirect(StringBuilder buf)
         {
+#if UNITY_EDITOR || UNITY_WEBGL
             if (string.IsNullOrEmpty(redirectURL) == false)
             {
-                // Create a redirect javascript command
-                buf.Length = 0;
-                buf.Append("window.top.location='");
-                buf.Append(redirectURL);
-                buf.Append("';");
-
-                // Evaluate the javascript
-                Application.ExternalEval(buf.ToString());
+                RedirectTo(redirectURL);
             }
+#endif
         }
 
         string GenerateRemoteDomainList(StringBuilder buf)
