@@ -70,9 +70,6 @@ namespace OmiyaGames.Menu
         [Tooltip("Template for any menus with button text indicating game over")]
         [SerializeField]
         string failedTextTemplateTranslationKey = "Level Failed Title";
-        [Tooltip("Template for any menus with button text indicating a scene was completed")]
-        [SerializeField]
-        string nextTextTemplateTranslationKey = "Proceed Button";
 
         [Header("Sound Templates")]
         [SerializeField]
@@ -230,11 +227,6 @@ namespace OmiyaGames.Menu
         public void SetLabelTextToFailedCurrentScene(TranslatedTextMeshPro label)
         {
             SetLabelTextTo(label, failedTextTemplateTranslationKey, SceneChanger);
-        }
-
-        public void SetLabelTextToNextScene(TranslatedTextMeshPro label)
-        {
-            SetLabelTextTo(label, nextTextTemplateTranslationKey, SceneChanger.NextScene);
         }
 
         public MENU GetMenu<MENU>() where MENU : IMenu
