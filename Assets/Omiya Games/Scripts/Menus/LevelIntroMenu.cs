@@ -140,8 +140,8 @@ namespace OmiyaGames.Menu
         [Header("Components")]
         [SerializeField]
         TranslatedTextMeshPro levelNameLabel = null;
-        [SerializeField]
-        GameObject divider = null;
+        //[SerializeField]
+        //GameObject divider = null;
         [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("messageLabel")]
         TranslatedTextMeshPro customMessageLabel = null;
@@ -257,7 +257,7 @@ namespace OmiyaGames.Menu
             mouseLockMessageLabel.gameObject.SetActive(CurrentSettings.ShowMouseLockMessageLabel);
 
             // Show divider if custom or mouse lock message is up
-            divider.SetActive(CurrentSettings.ShowCustomMessage || CurrentSettings.ShowMouseLockMessageLabel);
+            //divider.SetActive(CurrentSettings.ShowCustomMessage || CurrentSettings.ShowMouseLockMessageLabel);
         }
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
