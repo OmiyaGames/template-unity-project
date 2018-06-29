@@ -37,7 +37,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    public class StartMenu : IMenu
+    public class StartMenu : ISceneChangingMenu
     {
         public enum LevelSelectButtonBehavior
         {
@@ -49,31 +49,13 @@ namespace OmiyaGames.Menu
         [Header("Start Menu")]
         [SerializeField]
         LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
-
-        [Header("Buttons")]
-        [SerializeField]
-        Button startButton;
-        [SerializeField]
-        Button levelSelectButton;
-        [SerializeField]
-        Button howToPlayButton;
-        [SerializeField]
-        Button optionsButton;
-        [SerializeField]
-        Button highScoresButton;
         [SerializeField]
         Button creditsButton;
         [SerializeField]
         Button quitButton;
-
-        [Header("Background Settings")]
-        [SerializeField]
-        BackgroundMenu.BackgroundType showBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
         [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
         string titleTranslationKey = "Title";
-
-        GameObject defaultButton = null;
 
         #region Properties
         public override Type MenuType
@@ -84,19 +66,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
-        {
-            get
-            {
-                return defaultButton;
-            }
-        }
-
         public override BackgroundMenu.BackgroundType Background
         {
             get
             {
-                return showBackground;
+                return background;
             }
         }
 
@@ -105,6 +79,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return titleTranslationKey;
+            }
+        }
+
+        public override bool PauseOnShow
+        {
+            get
+            {
+                return false;
             }
         }
 
@@ -142,7 +124,6 @@ namespace OmiyaGames.Menu
 
             // Setup default button
             SetupStartButton();
-            Singleton.Get<MenuManager>().SelectGuiGameObject(defaultButton);
         }
 
         public void SetupStartButton()
@@ -151,20 +132,20 @@ namespace OmiyaGames.Menu
             if (IsStartingOnFirstLevel == true)
             {
                 // Update which button to activate
-                startButton.gameObject.SetActive(true);
+                defaultButton.gameObject.SetActive(true);
                 levelSelectButton.gameObject.SetActive(false);
 
                 // Select the start button by default
-                defaultButton = startButton.gameObject;
+                CurrentDefaultUi = defaultButton.gameObject;
             }
             else
             {
                 // Update which button to activate
-                startButton.gameObject.SetActive(false);
+                defaultButton.gameObject.SetActive(false);
                 levelSelectButton.gameObject.SetActive(true);
 
                 // Select the level select button by default
-                defaultButton = levelSelectButton.gameObject;
+                CurrentDefaultUi = levelSelectButton.gameObject;
             }
         }
 
@@ -178,47 +159,7 @@ namespace OmiyaGames.Menu
                 SceneChanger.LoadNextLevel();
 
                 // Indicate button is clicked
-                defaultButton = startButton.gameObject;
-
-                // Since we're changing scenes, forcefully prevent
-                // the other buttons from listening to the events.
-                IsListeningToEvents = false;
-            }
-        }
-
-        public void OnLevelSelectClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // Open the Level Select menu
-                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
-                if (levelSelect != null)
-                {
-                    levelSelect.UpdateDialog(this);
-                    levelSelect.Show();
-                }
-
-                // Indicate we've clicked on a button
-                defaultButton = levelSelectButton.gameObject;
-            }
-        }
-
-        public void OnOptionsClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // Open the options dialog
-                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
-                if (menu != null)
-                {
-                    menu.UpdateDialog(this);
-                    menu.Show();
-
-                    // Indicate we've clicked on a button
-                    defaultButton = optionsButton.gameObject;
-                }
+                CurrentDefaultUi = defaultButton.gameObject;
             }
         }
 
@@ -231,37 +172,11 @@ namespace OmiyaGames.Menu
                 SceneChanger.LoadScene(SceneChanger.Credits);
 
                 // Indicate we've clicked on a button
-                defaultButton = creditsButton.gameObject;
+                CurrentDefaultUi = creditsButton.gameObject;
 
                 // Since we're changing scenes, forcefully prevent
                 // the other buttons from listening to the events.
                 IsListeningToEvents = false;
-            }
-        }
-
-        public void OnHowToPlayClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // Open the how to play menu
-                Manager.Show<HowToPlayMenu>();
-
-                // Indicate we've clicked on a button
-                defaultButton = howToPlayButton.gameObject;
-            }
-        }
-
-        public void OnHighScoresClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // FIXME: Open the high scores menu
-                //Manager.Show<HighScoresMenu>();
-
-                // Indicate we've clicked on a button
-                defaultButton = highScoresButton.gameObject;
             }
         }
 
@@ -274,7 +189,7 @@ namespace OmiyaGames.Menu
                 Application.Quit();
 
                 // Indicate we've clicked on a button
-                defaultButton = quitButton.gameObject;
+                CurrentDefaultUi = quitButton.gameObject;
 
                 // Since we're closing the application, forcefully prevent
                 // the other buttons from listening to the events.

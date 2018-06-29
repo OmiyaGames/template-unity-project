@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Global;
-using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -37,25 +36,37 @@ namespace OmiyaGames.Menu
     /// </summary>
     public abstract class ISceneChangingMenu : IMenu
     {
-        [Header("Components")]
+        [Header("Common Settings")]
+        [SerializeField]
+        [UnityEngine.Serialization.FormerlySerializedAs("showBackground")]
+        protected BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
+        [SerializeField]
+        ScrollRect scrollMenu;
+
+        [Header("Buttons")]
         [SerializeField]
         protected Button defaultButton = null;
-
-        // FIXME: think real hard here, do we *really* need these?
         [SerializeField]
-        protected TranslatedText completeLabel = null;
+        protected Button optionsButton = null;
         [SerializeField]
-        protected TranslatedText failedLabel = null;
+        protected Button howToPlayButton = null;
         [SerializeField]
-        protected TranslatedText nextSceneLabel = null;
+        protected Button highScoresButton = null;
         [SerializeField]
-        protected TranslatedText restartLabel = null;
-        [SerializeField]
-        protected TranslatedText returnToMenuLabel = null;
+        protected Button levelSelectButton = null;
 
         abstract public bool PauseOnShow
         {
             get;
+        }
+
+        #region Non-abstract Properties
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background;
+            }
         }
 
         public override Type MenuType
@@ -70,7 +81,20 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                return CurrentDefaultUi;
+                GameObject returnObject = defaultButton.gameObject;
+                if (CurrentDefaultUi != null)
+                {
+                    returnObject = CurrentDefaultUi;
+                }
+                return returnObject;
+            }
+        }
+
+        public override ScrollRect ScrollToDefaultUi
+        {
+            get
+            {
+                return scrollMenu;
             }
         }
 
@@ -79,6 +103,7 @@ namespace OmiyaGames.Menu
             get;
             set;
         }
+        #endregion
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
@@ -107,6 +132,7 @@ namespace OmiyaGames.Menu
             }
         }
 
+        #region Button Events
         public void OnNextLevelClicked()
         {
             if (IsListeningToEvents == true)
@@ -138,5 +164,64 @@ namespace OmiyaGames.Menu
                 Hide();
             }
         }
+
+        public void OnOptionsClicked()
+        {
+            if (IsListeningToEvents == true)
+            {
+                // Open the options dialog
+                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
+                if (menu != null)
+                {
+                    menu.UpdateDialog(this);
+                    menu.Show();
+                }
+
+                // Set the default UI
+                CurrentDefaultUi = optionsButton.gameObject;
+            }
+        }
+
+        public void OnHowToPlayClicked()
+        {
+            if (IsListeningToEvents == true)
+            {
+                Manager.Show<HowToPlayMenu>();
+
+                // Set the default UI
+                CurrentDefaultUi = howToPlayButton.gameObject;
+            }
+        }
+
+        public void OnHighScoresClicked()
+        {
+            if (IsListeningToEvents == true)
+            {
+                // FIXME: show high scores
+                //Manager.Show<HighScoresMenu>();
+
+                // Set the default UI
+                CurrentDefaultUi = highScoresButton.gameObject;
+            }
+        }
+
+        public void OnLevelSelectClicked()
+        {
+            // Make sure the menu is active
+            if (IsListeningToEvents == true)
+            {
+                // Open the Level Select menu
+                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
+                if (levelSelect != null)
+                {
+                    levelSelect.UpdateDialog(this);
+                    levelSelect.Show();
+                }
+
+                // Set the default UI
+                CurrentDefaultUi = levelSelectButton.gameObject;
+            }
+        }
+        #endregion
     }
 }

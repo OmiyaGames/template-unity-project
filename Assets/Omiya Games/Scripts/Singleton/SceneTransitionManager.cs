@@ -51,8 +51,6 @@ namespace OmiyaGames.Scenes
         // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
-        bool loadLevelAsynchronously = true;
-        [SerializeField]
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
@@ -329,7 +327,7 @@ namespace OmiyaGames.Scenes
             }
 
             // Unlock the next level
-            UpdateUnlockedLevels();
+            UnlockNextLevel();
 
             // Update which scene to load
             sceneToLoad = scene;
@@ -338,8 +336,14 @@ namespace OmiyaGames.Scenes
             TransitionToScene(sceneToLoad);
         }
 
-        public void UpdateUnlockedLevels()
+        /// <summary>
+        /// Attempts to unlock the next level, if it hasn't been unlocked already.
+        /// </summary>
+        /// <returns>True if a new level is unlocked.</returns>
+        public bool UnlockNextLevel()
         {
+            bool isNewLevelUnlocked = false;
+
             // Check which level to unlock
             int nextLevelUnlocked = CurrentScene.Ordinal;
             if (NextScene != null)
@@ -354,7 +358,9 @@ namespace OmiyaGames.Scenes
             {
                 // Unlock this level
                 settings.NumLevelsUnlocked = nextLevelUnlocked;
+                isNewLevelUnlocked = true;
             }
+            return isNewLevelUnlocked;
         }
 
         void TransitionToScene(SceneInfo sceneToLoad)

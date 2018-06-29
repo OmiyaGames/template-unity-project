@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using OmiyaGames.Scenes;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -37,9 +37,15 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     public class LevelFailedMenu : ISceneChangingMenu
     {
-        [Header("Behavior")]
+        [Header("Level Failed Menu")]
         [SerializeField]
         bool pauseGameOnShow = false;
+        [SerializeField]
+        TranslatedTextMeshPro mLevelFailedLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mRestartLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mReturnToMenuLabel = null;
 
         public override bool PauseOnShow
         {
@@ -49,27 +55,22 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public void OnOptionsClicked()
+        public override BackgroundMenu.BackgroundType Background
         {
-            if (IsListeningToEvents == true)
+            get
             {
-                // Open the options dialog
-                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
-                if (menu != null)
-                {
-                    menu.UpdateDialog(this);
-                    menu.Show();
-                }
+                return background;
             }
         }
 
-        public void OnCreditsClicked()
+        protected override void OnSetup()
         {
-            // Transition to the credits
-            Singleton.Get<SceneTransitionManager>().LoadScene(Singleton.Get<SceneTransitionManager>().Credits);
+            base.OnSetup();
 
-            // Change the menu to stand by
-            CurrentVisibility = VisibilityState.StandBy;
+            // Update labels
+            Manager.SetLabelTextToFailedCurrentScene(mLevelFailedLabel);
+            Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
+            Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
         }
     }
 }

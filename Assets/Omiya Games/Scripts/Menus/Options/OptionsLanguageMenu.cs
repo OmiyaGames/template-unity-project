@@ -39,6 +39,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
+    [DisallowMultipleComponent]
     public class OptionsLanguageMenu : IMenu
     {
         const string appendName = " Checkbox";
@@ -116,47 +117,6 @@ namespace OmiyaGames.Menu
 
                 // Change the language
                 Translations.CurrentLanguage = currentSelectedCheckbox.Language;
-
-                // Grab the confirmation menu
-                ConfirmationMenu menu = Manager.GetMenu<ConfirmationMenu>();
-                if (menu != null)
-                {
-                    // Display confirmation dialog
-                    menu.DefaultToYes = false;
-                    menu.UpdateDialog(this, confirmTranslationsKey, revertAfterSeconds);
-                    menu.Show(ConfirmationMenu_OnButtonClicked);
-                }
-            }
-        }
-
-        private void ConfirmationMenu_OnButtonClicked(IMenu source, VisibilityState from, VisibilityState to)
-        {
-            if((source is ConfirmationMenu) && (to == VisibilityState.Hidden))
-            {
-                // Stop listening to events while monitoring the user confirmation
-                IsListeningToEvents = false;
-                if (((ConfirmationMenu)source).IsYesSelected == true)
-                {
-                    // Update the check state
-                    currentSelectedCheckbox.Checkbox.isOn = true;
-                    lastSelectedCheckbox.Checkbox.isOn = false;
-
-                    // Indicate that the current language is the current checkbox
-                    lastSelectedCheckbox = currentSelectedCheckbox;
-                }
-                else
-                {
-                    // Turn on the last checkbox instead
-                    currentSelectedCheckbox.Checkbox.isOn = false;
-                    lastSelectedCheckbox.Checkbox.isOn = true;
-
-                    // Switch the current checkbox to the last one
-                    currentSelectedCheckbox = lastSelectedCheckbox;
-
-                    // Switch the language to the last selected language
-                    Translations.CurrentLanguage = lastSelectedCheckbox.Language;
-                }
-                IsListeningToEvents = true;
             }
         }
 
