@@ -40,7 +40,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    public class OptionsAccessibilityMenu : IMenu
+    public class OptionsAccessibilityMenu : IOptionsMenu
     {
         #region Serialized Fields
         [Header("Features to Enable")]
@@ -137,7 +137,7 @@ namespace OmiyaGames.Menu
             timeScaleSlider.OnSliderReleaseUpdated += TimeScaleSlider_OnSliderValueUpdated;
 
             // Setup dividers
-            OptionsMenuUtility.SetupDividers(dividers, enableTextSize, enableInvincibility, enableTimeScale);
+            SetupDividers(dividers, enableTextSize, enableInvincibility, enableTimeScale);
         }
 
         #region UI events

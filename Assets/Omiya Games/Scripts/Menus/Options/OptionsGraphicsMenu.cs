@@ -37,7 +37,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    public class OptionsGraphicsMenu : IMenu
+    public class OptionsGraphicsMenu : IOptionsMenu
     {
         [System.Serializable]
         public struct ToggleSet
