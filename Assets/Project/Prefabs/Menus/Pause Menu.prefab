@@ -53,6 +53,7 @@ MonoBehaviour:
   nextSceneLabel: {fileID: 0}
   restartLabel: {fileID: 0}
   returnToMenuLabel: {fileID: 0}
+  background: 3
   mRestartLabel: {fileID: 114176516755598324}
   mReturnToMenuLabel: {fileID: 114463582235443482}
   optionsButton: {fileID: 114678118030521394}
@@ -281,7 +282,7 @@ GameObject:
   - component: {fileID: 114639302692997176}
   - component: {fileID: 114454679489140456}
   m_Layer: 5
-  m_Name: How to Play Button
+  m_Name: Tutorial Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1166,7 +1167,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11486022}
-        m_MethodName: 
+        m_MethodName: OnHighScoresClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1239,7 +1240,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: How to Play
+  m_text: Tutorial
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5a0a9b0a47e21b7478dd51583ce7edd4, type: 2}
   m_sharedMaterial: {fileID: 21687855418224584, guid: 5a0a9b0a47e21b7478dd51583ce7edd4,
@@ -2977,7 +2978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translationKey: High Scores Button
   fontKey: 
 --- !u!114 &114706298582137124
 MonoBehaviour:
@@ -3030,7 +3031,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11486022}
-        m_MethodName: 
+        m_MethodName: OnHowToPlayClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3322,7 +3323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translationKey: Tutorial Button
   fontKey: 
 --- !u!114 &114847918570743140
 MonoBehaviour:
@@ -3974,7 +3975,7 @@ RectTransform:
   m_GameObject: {fileID: 1704614101847302}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99999803, y: 0.99999803, z: 0.99999803}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224689462715155244}
   m_Father: {fileID: 224721812007907990}
@@ -4177,7 +4178,7 @@ RectTransform:
   m_GameObject: {fileID: 1360714357792064}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99999803, y: 0.99999803, z: 0.99999803}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224620932046627088}
   m_Father: {fileID: 224721812007907990}
