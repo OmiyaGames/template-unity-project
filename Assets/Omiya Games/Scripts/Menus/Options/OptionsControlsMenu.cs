@@ -37,7 +37,7 @@ namespace OmiyaGames.Menu
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
-    public class OptionsControlsMenu : IMenu
+    public class OptionsControlsMenu : IOptionsMenu
     {
         #region Serialized Fields
         [Header("Features to Enable")]
@@ -132,7 +132,7 @@ namespace OmiyaGames.Menu
             SetupScrollWheelControls();
 
             // Update how dividers appear
-            OptionsMenuUtility.SetupDividers(allDividers,
+            SetupDividers(allDividers,
                 enableKeyboardControls,
                 enableCameraSensitivityControls,
                 enableCameraSmoothingControls,

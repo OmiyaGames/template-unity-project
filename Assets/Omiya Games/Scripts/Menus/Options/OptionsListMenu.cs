@@ -38,13 +38,11 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
     [DisallowMultipleComponent]
-    public class OptionsListMenu : IMenu
+    public class OptionsListMenu : IOptionsMenu
     {
         const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
 
         [Header("Options List")]
-        [SerializeField]
-        ScrollRect scrollMenu;
         [SerializeField]
         Button backButton;
         [SerializeField]
@@ -105,14 +103,6 @@ namespace OmiyaGames.Menu
             get
             {
                 return background.TitleTranslationArgs;
-            }
-        }
-
-        public override ScrollRect ScrollToDefaultUi
-        {
-            get
-            {
-                return scrollMenu;
             }
         }
         #endregion

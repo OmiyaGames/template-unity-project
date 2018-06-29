@@ -40,18 +40,13 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
     [DisallowMultipleComponent]
-    public class OptionsLanguageMenu : IMenu
+    public class OptionsLanguageMenu : IOptionsMenu
     {
         const string appendName = " Checkbox";
 
         [Header("Language Controls")]
         [SerializeField]
         LanguageToggle languageCheckbox;
-        [SerializeField]
-        string confirmTranslationsKey = "Options Language Change Confirm";
-        [SerializeField]
-        [Range(5f, 60f)]
-        float revertAfterSeconds = 20f;
 
         LanguageToggle currentSelectedCheckbox = null, lastSelectedCheckbox = null;
         readonly Dictionary<string, LanguageToggle> languageToControlMap = new Dictionary<string, LanguageToggle>();
