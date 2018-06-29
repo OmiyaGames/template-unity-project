@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using OmiyaGames.Global;
 using OmiyaGames.Translations;
 
@@ -43,21 +42,9 @@ namespace OmiyaGames.Menu
     {
         [Header("Pause Menu")]
         [SerializeField]
-        BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
-        [SerializeField]
         TranslatedTextMeshPro mRestartLabel = null;
         [SerializeField]
         TranslatedTextMeshPro mReturnToMenuLabel = null;
-
-        [Header("Buttons")]
-        [SerializeField]
-        Button optionsButton = null;
-        [SerializeField]
-        Button howToPlayButton = null;
-        [SerializeField]
-        Button highScoresButton = null;
-        [SerializeField]
-        Button levelSelectButton = null;
 
         public override bool PauseOnShow
         {
@@ -91,65 +78,5 @@ namespace OmiyaGames.Menu
                 Show();
             }
         }
-
-        #region Button Events
-        public void OnOptionsClicked()
-        {
-            if (IsListeningToEvents == true)
-            {
-                // Open the options dialog
-                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
-                if (menu != null)
-                {
-                    menu.UpdateDialog(this);
-                    menu.Show();
-                }
-
-                // Set the default UI
-                CurrentDefaultUi = optionsButton.gameObject;
-            }
-        }
-
-        public void OnHowToPlayClicked()
-        {
-            if(IsListeningToEvents == true)
-            {
-                Manager.Show<HowToPlayMenu>();
-
-                // Set the default UI
-                CurrentDefaultUi = howToPlayButton.gameObject;
-            }
-        }
-
-        public void OnHighScoresClicked()
-        {
-            if (IsListeningToEvents == true)
-            {
-                // FIXME: show high scores
-                //Manager.Show<HighScoresMenu>();
-
-                // Set the default UI
-                CurrentDefaultUi = highScoresButton.gameObject;
-            }
-        }
-
-        public void OnLevelSelectClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // Open the Level Select menu
-                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
-                if (levelSelect != null)
-                {
-                    levelSelect.UpdateDialog(this);
-                    levelSelect.Show();
-                }
-
-                // Set the default UI
-                CurrentDefaultUi = levelSelectButton.gameObject;
-            }
-        }
-        #endregion
     }
 }

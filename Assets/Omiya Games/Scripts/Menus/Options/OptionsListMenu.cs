@@ -44,6 +44,8 @@ namespace OmiyaGames.Menu
 
         [Header("Options List")]
         [SerializeField]
+        ScrollRect scrollMenu;
+        [SerializeField]
         Button backButton;
         [SerializeField]
         [UnityEngine.Serialization.FormerlySerializedAs("allButtons")]
@@ -103,6 +105,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return background.TitleTranslationArgs;
+            }
+        }
+
+        public override ScrollRect ScrollToDefaultUi
+        {
+            get
+            {
+                return scrollMenu;
             }
         }
         #endregion
