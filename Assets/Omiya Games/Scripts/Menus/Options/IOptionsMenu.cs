@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Audio;
-using OmiyaGames.Settings;
-using OmiyaGames.Translations;
-using System;
 
 namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="OptionsMenu.cs" company="Omiya Games">
+    /// <copyright file="IOptionsMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -32,23 +28,42 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/15/2018</date>
+    /// <date>6/29/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Helper methods for options-related menus.
+    /// A Helper script for other options menu.
     /// </summary>
-    /// <seealso cref="IMenu"/>
-    public static class OptionsMenuUtility
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>6/29/2018</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [DisallowMultipleComponent]
+    public abstract class IOptionsMenu : IMenu
     {
+        [Header("Common Options Controls")]
+        [SerializeField]
+        ScrollRect scrollMenu;
+
         public static void SetupDividers(GameObject[] allDividers, params SupportedPlatforms[] allSupportFlags)
         {
             // Make sure all arguments are populated
-            if((allDividers != null) && (allDividers.Length > 0) && (allSupportFlags != null) && (allSupportFlags.Length > 0))
+            if ((allDividers != null) && (allDividers.Length > 0) && (allSupportFlags != null) && (allSupportFlags.Length > 0))
             {
                 // Throw errors if the number of elements are not what's expected
                 if (allDividers.Length != (allSupportFlags.Length - 1))
                 {
-                    throw new ArgumentException("Expected argument allDividers' length to be one less than the length of allSupportedFlags.");
+                    throw new System.ArgumentException("Expected argument allDividers' length to be one less than the length of allSupportedFlags.");
                 }
 
                 // Deactivate all dividers
@@ -75,6 +90,14 @@ namespace OmiyaGames.Menu
                         }
                     }
                 }
+            }
+        }
+
+        public override ScrollRect ScrollToDefaultUi
+        {
+            get
+            {
+                return scrollMenu;
             }
         }
     }

@@ -71,8 +71,6 @@ namespace OmiyaGames.Menu
 
         [Header("Labels")]
         [SerializeField]
-        bool showLabels = true;
-        [SerializeField]
         TranslatedTextMeshPro titleLabel = null;
         [SerializeField]
         VersionLabel versionLabel = null;

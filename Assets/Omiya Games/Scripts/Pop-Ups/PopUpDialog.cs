@@ -37,7 +37,7 @@ namespace OmiyaGames.Menu
     public class PopUpDialog : IMenu
     {
         [SerializeField]
-        Text label;
+        Translations.TranslatedTextMeshPro label;
         [SerializeField]
         RectTransform panel;
 
@@ -57,7 +57,7 @@ namespace OmiyaGames.Menu
             set;
         }
 
-        public Text Label
+        public Translations.TranslatedTextMeshPro Label
         {
             get
             {

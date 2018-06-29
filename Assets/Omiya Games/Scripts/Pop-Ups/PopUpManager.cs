@@ -83,10 +83,14 @@ namespace OmiyaGames.Menu
 
         // A queue of all texts logged, along with their associated ID
         readonly SortedDictionary<ulong, string> allLoggedTexts = new SortedDictionary<ulong, string>(new DescendingOrder());
+        // FIXME: re-exmine how to prevent pop-ups from appearing, but somehow queue them
+        //readonly List<PopUpDialog> delayedShowDialogs = new List<PopUpDialog>();
 
         // Lists of visible and hidden dialogs
         List<PopUpDialog> visibleDialogs = null;
         Queue<PopUpDialog> hiddenDialogs = null;
+        // FIXME: re-exmine how to prevent pop-ups from appearing, but somehow queue them
+        //System.Action<float> everyFrame = null;
 
         public int MaximumNumberOfDialogs
         {
@@ -107,6 +111,23 @@ namespace OmiyaGames.Menu
                     uniqueId = (InvalidId + 1);
                 }
                 return returnId;
+            }
+        }
+
+        public bool IsPopUpEnabled
+        {
+            get
+            {
+                bool returnFlag = true;
+                if(Singleton.Get<MenuManager>() != null)
+                {
+                    IMenu checkToShowPopUp = Singleton.Get<MenuManager>().LastManagedMenu;
+                    if ((checkToShowPopUp != null) && (checkToShowPopUp.IsPopUpEnabledWhileVisible == false))
+                    {
+                        returnFlag = false;
+                    }
+                }
+                return returnFlag;
             }
         }
 
@@ -165,7 +186,7 @@ namespace OmiyaGames.Menu
                 newDialog.ID = NextId;
 
                 // Update dialog text
-                newDialog.Label.text = text;
+                newDialog.Label.CurrentText = text;
                 allLoggedTexts.Add(newDialog.ID, text);
 
                 // Update the dialog's transform
@@ -175,6 +196,24 @@ namespace OmiyaGames.Menu
 
                 // Show the dialog
                 newDialog.Show();
+                //// Check if pop-ups are supposed to be visible
+                //if (IsPopUpEnabled == true)
+                //{
+                //    // Show the dialog
+                //    newDialog.Show();
+                //}
+                //else
+                //{
+                //    // Queue the dialog to show later
+                //    delayedShowDialogs.Add(newDialog);
+                //    if (everyFrame == null)
+                //    {
+                //        everyFrame = new System.Action<float>(EveryFrame);
+                //        Singleton.Instance.OnUpdate += everyFrame;
+                //    }
+                //}
+
+                // Keep track of the new dialog
                 visibleDialogs.Insert(0, newDialog);
 
                 // Check to see if we reached the max number of dialogs
@@ -215,6 +254,17 @@ namespace OmiyaGames.Menu
                     {
                         // Run the hide animation
                         HideDialog(visibleDialogs[index]);
+                        //int neato = delayedShowDialogs.FindIndex(visibleDialogs[index]);
+                        //if (delayedShowDialogs.Contains(visibleDialogs[index]) == false)
+                        //{
+                        //    // Run the hide animation
+                        //    HideDialog(visibleDialogs[index]);
+                        //}
+                        //else
+                        //{
+                        //    // Remove the dialog from the delay queue.
+                        //    delayedShowDialogs.Remove(visibleDialogs[index]);
+                        //}
 
                         // Remove the dialog from the list
                         visibleDialogs.RemoveAt(index);
@@ -252,6 +302,7 @@ namespace OmiyaGames.Menu
 
                 // Clear out the visible dialog list
                 visibleDialogs.Clear();
+                //delayedShowDialogs.Clear();
             }
         }
 
@@ -307,7 +358,7 @@ namespace OmiyaGames.Menu
                 clone = Instantiate<GameObject>(dialogInstace.gameObject);
 
                 // Setup the dialog properly
-                clone.transform.SetParent(transform, false);
+                clone.transform.SetParent(dialogInstace.transform.parent, false);
                 clone.name = string.Format(dialogName, index);
 
                 // Grab the script from the dialog
@@ -351,7 +402,7 @@ namespace OmiyaGames.Menu
                             newDialog.ID = info.Key;
 
                             // Update dialog text
-                            newDialog.Label.text = info.Value;
+                            newDialog.Label.CurrentText = info.Value;
 
                             // Update the dialog's transform
                             newDialog.CachedTransform.SetAsFirstSibling();
@@ -419,6 +470,40 @@ namespace OmiyaGames.Menu
             }
             return returnYPos;
         }
+
+        //void EveryFrame(float deltaTime)
+        //{
+        //    if(everyFrame != null)
+        //    {
+        //        if(delayedShowDialogs.Count > 0)
+        //        {
+        //            if (IsPopUpEnabled == true)
+        //            {
+        //                // Show all the dialogs
+        //                foreach(PopUpDialog dialog in delayedShowDialogs)
+        //                {
+        //                    if(dialog != null)
+        //                    {
+        //                        dialog.Show();
+        //                    }
+        //                }
+
+        //                // Clear the list, now that the dialogs are shown
+        //                delayedShowDialogs.Clear();
+
+        //                // Unbind to update
+        //                Singleton.Instance.OnUpdate -= everyFrame;
+        //                everyFrame = null;
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            Singleton.Instance.OnUpdate -= everyFrame;
+        //            everyFrame = null;
+        //        }
+        //    }
+        //}
         #endregion
     }
 }

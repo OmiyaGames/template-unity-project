@@ -38,7 +38,7 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
     [DisallowMultipleComponent]
-    public class OptionsListMenu : IMenu
+    public class OptionsListMenu : IOptionsMenu
     {
         const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
 

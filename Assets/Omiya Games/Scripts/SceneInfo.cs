@@ -46,12 +46,10 @@ namespace OmiyaGames
         [SerializeField]
         CursorLockMode cursorMode = CursorLockMode.None;
         [SerializeField]
-        CursorLockMode cursorModeWeb = CursorLockMode.None;
-        [SerializeField]
         [Tooltip("See TimeManager to set the scene's timescale.")]
         bool revertTimeScale = true;
 
-        TranslatedString? translatedDisplayName = null;
+        TranslatedString translatedDisplayName = null;
         Scene? reference = null;
         string sceneName = null;
         int ordinal = 0;
@@ -63,7 +61,6 @@ namespace OmiyaGames
             displayName = displayNameTranslationKey;
             revertTimeScale = revertTime;
             cursorMode = lockMode;
-            cursorModeWeb = lockMode;
             ordinal = index;
 
             // Setup translation variable
@@ -106,11 +103,11 @@ namespace OmiyaGames
         {
             get
             {
-                if(translatedDisplayName.HasValue == false)
+                if(translatedDisplayName == null)
                 {
                     translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
                 }
-                return translatedDisplayName.Value;
+                return translatedDisplayName;
             }
         }
 
@@ -135,13 +132,26 @@ namespace OmiyaGames
             }
         }
 
-        public CursorLockMode LockModeWeb
-        {
-            get
-            {
-                return cursorModeWeb;
-            }
-        }
+        //public CursorLockMode LockModeWeb
+        //{
+        //    get
+        //    {
+        //        return cursorModeWeb;
+        //    }
+        //}
+
+        //public CursorLockMode CurrentLockMode
+        //{
+        //    get
+        //    {
+        //        CursorLockMode returnLock = LockMode;
+        //        if(Singleton.Instance.IsWebApp == true)
+        //        {
+        //            returnLock = LockModeWeb;
+        //        }
+        //        return returnLock;
+        //    }
+        //}
 
         public bool RevertTimeScale
         {

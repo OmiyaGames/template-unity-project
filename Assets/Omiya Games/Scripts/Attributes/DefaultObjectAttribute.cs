@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using System;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="HowToPlayMenu.cs" company="Omiya Games">
+    /// <copyright file="DefaultObjectAttribute.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,52 +28,38 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/29/2018</date>
+    /// <date>6/26/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that provides a tutorial and/or on how to play the game.
-    /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
+    /// Creates a checkbox in the editor.
+    /// If unchecked, this value is set to null.
+    /// If checked, reveals an object field, allowing the user to change this value.
     /// </summary>
-    /// <seealso cref="MenuManager"/>
-    [RequireComponent(typeof(Animator))]
-    [DisallowMultipleComponent]
-    public class HowToPlayMenu : IMenu
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>6/26/2018</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
+    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+    public class DefaultObjectAttribute : PropertyAttribute
     {
-        [Header("How to Play Settings")]
-        [SerializeField]
-        Button backButton;
-
-        public override GameObject DefaultUi
+        /// <summary>
+        /// Creates a checkbox in the editor.
+        /// If unchecked, this value is set to null.
+        /// If checked, reveals an object field, allowing the user to change this value.
+        /// </summary>
+        public DefaultObjectAttribute()
         {
-            get
-            {
-                return backButton.gameObject;
-            }
-        }
-
-        public override Type MenuType
-        {
-            get
-            {
-                return Type.ManagedMenu;
-            }
-        }
-
-        public override BackgroundMenu.BackgroundType Background
-        {
-            get
-            {
-                return BackgroundMenu.BackgroundType.SolidColor;
-            }
-        }
-
-        public override string TitleTranslationKey
-        {
-            get
-            {
-                return null;
-            }
         }
     }
 }

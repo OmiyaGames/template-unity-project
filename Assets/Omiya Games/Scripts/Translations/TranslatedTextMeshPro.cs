@@ -221,6 +221,17 @@ namespace OmiyaGames.Translations
         /// <summary>
         /// Sets the arguments, if the text contains any "{0}" or similar values embedded in it.
         /// </summary>
+        public void SetTranslationKey(TranslatedString translation)
+        {
+            if(translation != null)
+            {
+                SetTranslationKey(translation.TranslationKey, translation.Values);
+            }
+        }
+
+        /// <summary>
+        /// Sets the arguments, if the text contains any "{0}" or similar values embedded in it.
+        /// </summary>
         public void SetTranslationKey(string translationKey, params object[] args)
         {
             // Update the member variable

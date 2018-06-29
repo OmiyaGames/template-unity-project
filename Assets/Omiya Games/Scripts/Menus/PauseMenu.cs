@@ -1,4 +1,6 @@
+using UnityEngine;
 using OmiyaGames.Global;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -38,12 +40,35 @@ namespace OmiyaGames.Menu
     /// <seealso cref="TimeManager"/>
     public class PauseMenu : ISceneChangingMenu
     {
+        [Header("Pause Menu")]
+        [SerializeField]
+        TranslatedTextMeshPro mRestartLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mReturnToMenuLabel = null;
+
         public override bool PauseOnShow
         {
             get
             {
                 return true;
             }
+        }
+
+        public override BackgroundMenu.BackgroundType Background
+        {
+            get
+            {
+                return background;
+            }
+        }
+
+        protected override void OnSetup()
+        {
+            base.OnSetup();
+
+            // Update labels
+            Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
+            Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
         }
 
         void OnApplicationPause(bool isPaused)
@@ -53,50 +78,5 @@ namespace OmiyaGames.Menu
                 Show();
             }
         }
-
-        #region Button Events
-        public void OnOptionsClicked()
-        {
-            if (IsListeningToEvents == true)
-            {
-                // Open the options dialog
-                OptionsListMenu menu = Manager.GetMenu<OptionsListMenu>();
-                if (menu != null)
-                {
-                    menu.UpdateDialog(this);
-                    menu.Show();
-                }
-            }
-        }
-
-        public void OnHowToPlayClicked()
-        {
-            Manager.Show<HowToPlayMenu>();
-        }
-
-        public void OnHighScoresClicked()
-        {
-            // FIXME: show high scores
-            //Manager.Show<HowToPlayMenu>();
-        }
-
-        public void OnLevelSelectClicked()
-        {
-            // Make sure the menu is active
-            if (IsListeningToEvents == true)
-            {
-                // Open the Level Select menu
-                LevelSelectMenu levelSelect = Manager.GetMenu<LevelSelectMenu>();
-                if (levelSelect != null)
-                {
-                    levelSelect.UpdateDialog(this);
-                    levelSelect.Show();
-                }
-
-                // FIXME: Indicate we've clicked on a button
-                //defaultButton = levelSelectButton.gameObject;
-            }
-        }
-        #endregion
     }
 }

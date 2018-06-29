@@ -84,15 +84,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateField: State
-  startBehavior: 0
-  startButton: {fileID: 114054180523251846}
-  levelSelectButton: {fileID: 114143599188990186}
-  howToPlayButton: {fileID: 114587174101183974}
+  background: 3
+  scrollMenu: {fileID: 114501261572247204}
+  defaultButton: {fileID: 114054180523251846}
   optionsButton: {fileID: 114564752612614848}
+  howToPlayButton: {fileID: 114587174101183974}
   highScoresButton: {fileID: 114140941727894006}
+  levelSelectButton: {fileID: 114143599188990186}
+  startBehavior: 0
   creditsButton: {fileID: 114562391801988364}
   quitButton: {fileID: 114825494450203146}
-  showBackground: 3
   titleTranslationKey: Game Title
 --- !u!222 &22241036
 CanvasRenderer:
@@ -1941,6 +1942,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114392646368829688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2190,6 +2192,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114444357102556692
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2206,6 +2209,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114450143972082652
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3052,6 +3056,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114700821786742398
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3138,6 +3143,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114741048086545484
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3176,6 +3182,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114764001565141912
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3247,7 +3254,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114994190200069412}
   m_HandleRect: {fileID: 224030540674267582}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3298,6 +3305,7 @@ MonoBehaviour:
   enableClickSound: 1
   customClickSound: {fileID: 0}
   parentScrollView: {fileID: 114501261572247204}
+  updateCursorState: 0
 --- !u!114 &114825494450203146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4376,7 +4384,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00000053921707}
+  m_AnchoredPosition: {x: 0, y: 0.000045853056}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224818148825767616

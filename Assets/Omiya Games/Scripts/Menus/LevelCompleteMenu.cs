@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelCompleteMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -38,9 +37,15 @@ namespace OmiyaGames.Menu
     /// <seealso cref="MenuManager"/>
     public class LevelCompleteMenu : ISceneChangingMenu
     {
-        [Header("Behavior")]
+        [Header("Level Complete Menu")]
         [SerializeField]
         bool pauseGameOnShow = false;
+        [SerializeField]
+        TranslatedTextMeshPro mLevelCompleteLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mRestartLabel = null;
+        [SerializeField]
+        TranslatedTextMeshPro mReturnToMenuLabel = null;
 
         public override bool PauseOnShow
         {
@@ -55,6 +60,11 @@ namespace OmiyaGames.Menu
             // Call base method
             base.OnSetup();
 
+            // Update labels
+            Manager.SetLabelTextToCompletedCurrentScene(mLevelCompleteLabel);
+            Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
+            Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
+
             // Check if we need to disable the next level button
             if ((defaultButton != null) && (SceneChanger.NextScene == null))
             {
@@ -67,20 +77,15 @@ namespace OmiyaGames.Menu
             // Call base method
             base.OnStateChanged(from, to);
 
-            // Check if we're making this menu visible
-            if(to == VisibilityState.Visible)
+            // Check if we're making this menu visible and unlocked a new level
+            if ((from == VisibilityState.Hidden) && (to == VisibilityState.Visible) && (SceneChanger.UnlockNextLevel() == true))
             {
-                // Check if we need to unlock the next level
-                SceneChanger.UpdateUnlockedLevels();
-            }
-        }
-
-        public void OnNextLevelClicked()
-        {
-            if(IsListeningToEvents == true)
-            {
-                // Transition to the current level
-                SceneChanger.LoadNextLevel();
+                // Update the level select menu as well
+                LevelSelectMenu levelMenu = Manager.GetMenu<LevelSelectMenu>();
+                if (levelMenu != null)
+                {
+                    levelMenu.SetButtonsEnabled(true);
+                }
             }
         }
     }

@@ -174,8 +174,7 @@ namespace OmiyaGames.UI
             {
                 property.objectReferenceValue = null;
             }
-
-            if (!property.hasMultipleDifferentValues && (show == true))
+            else if (!property.hasMultipleDifferentValues && (show == true))
             {
                 // Object field
                 EditorGUIUtility.labelWidth = 4; // Small invisible label area for drag zone functionality

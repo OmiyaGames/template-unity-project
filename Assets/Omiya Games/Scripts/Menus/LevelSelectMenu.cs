@@ -44,6 +44,8 @@ namespace OmiyaGames.Menu
 
         [Header("Level Select")]
         [SerializeField]
+        ScrollRect scrollMenu;
+        [SerializeField]
         RectTransform levelContent;
         [SerializeField]
         ListButtonScript levelButtonToDuplicate;
@@ -105,6 +107,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return background.TitleTranslationArgs;
+            }
+        }
+
+        public override ScrollRect ScrollToDefaultUi
+        {
+            get
+            {
+                return scrollMenu;
             }
         }
         #endregion
