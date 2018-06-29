@@ -43,8 +43,6 @@ namespace OmiyaGames.Menu
         [SerializeField]
         TranslatedTextMeshPro mLevelCompleteLabel = null;
         [SerializeField]
-        TranslatedTextMeshPro mNextLevelLabel = null;
-        [SerializeField]
         TranslatedTextMeshPro mRestartLabel = null;
         [SerializeField]
         TranslatedTextMeshPro mReturnToMenuLabel = null;
@@ -63,7 +61,6 @@ namespace OmiyaGames.Menu
             base.OnSetup();
 
             // Update labels
-            Manager.SetLabelTextToNextScene(mNextLevelLabel);
             Manager.SetLabelTextToCompletedCurrentScene(mLevelCompleteLabel);
             Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
             Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);

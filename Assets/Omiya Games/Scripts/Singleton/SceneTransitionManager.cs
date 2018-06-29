@@ -383,6 +383,7 @@ namespace OmiyaGames.Scenes
             {
                 // Play the transition out animation
                 SceneTransition.Instance.TransitionOut();
+                soundEffect.Play();
             }
 
             // Monitor the progress of the scene loading

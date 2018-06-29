@@ -867,10 +867,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae10422860f3943a5840385d54699e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  retrieveDefaultsAsBackup: 1
   loadFileAsset: {fileID: 4900000, guid: d2e58b55fb3f2a44b9f3ac03d9583ec3, type: 3}
   loadFileName: 
   keyHeader: Keys
-  defaultLanguage: 
   systemLanguageToHeaderMap:
   - language: 10
     header: English (USA)
@@ -893,41 +893,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b59fc91b7d8e9924bbdda8bc4c92860b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadLevelAsynchronously: 1
   soundEffect: {fileID: 11492550}
   splash:
     scenePath: Assets/Project/Scenes/Menus/Splash.unity
     displayName: Splash
     cursorMode: 0
-    cursorModeWeb: 0
     revertTimeScale: 1
   mainMenu:
     scenePath: Assets/Project/Scenes/Menus/Main Menu.unity
     displayName: Main Menu
     cursorMode: 0
-    cursorModeWeb: 0
     revertTimeScale: 1
   credits:
     scenePath: Assets/Project/Scenes/Menus/Credits.unity
     displayName: Credits
     cursorMode: 0
-    cursorModeWeb: 0
     revertTimeScale: 1
   levels:
   - scenePath: Assets/Project/Scenes/Level 1.unity
     displayName: Level Button
     cursorMode: 0
-    cursorModeWeb: 0
     revertTimeScale: 1
   - scenePath: Assets/Project/Scenes/Level 2.unity
     displayName: Level Button
     cursorMode: 0
-    cursorModeWeb: 0
-    revertTimeScale: 1
-  - scenePath: Assets/Project/Scenes/Level 3.unity
-    displayName: Level Button
-    cursorMode: 0
-    cursorModeWeb: 0
     revertTimeScale: 1
   defaultLockMode: 1
 --- !u!114 &11428920
@@ -1006,7 +995,6 @@ MonoBehaviour:
   restartTextTemplateTranslationKey: Restart Button
   completeTextTemplateTranslationKey: Level Complete Title
   failedTextTemplateTranslationKey: Level Failed Title
-  nextTextTemplateTranslationKey: Proceed Button
   buttonClickSound: {fileID: 114949480182540056}
   buttonHoverSound: {fileID: 11410914}
 --- !u!114 &11484574
@@ -1073,7 +1061,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 163abccb43f295e4689a98e63247ec27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultTimeScale: 1
   defaultHitPauseDuration: 0.2
 --- !u!1001 &100100000
 Prefab:
