@@ -86,17 +86,17 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override UnityEngine.UI.Selectable DefaultUi
         {
             get
             {
                 if(enableMusicVolumeControls.IsThisBuildSupported())
                 {
-                    return musicVolumeControls.Slider.gameObject;
+                    return musicVolumeControls.Slider;
                 }
                 else
                 {
-                    return soundEffectsVolumeControls.Slider.gameObject;
+                    return soundEffectsVolumeControls.Slider;
                 }
             }
         }

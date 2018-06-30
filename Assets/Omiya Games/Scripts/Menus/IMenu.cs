@@ -345,7 +345,7 @@ namespace OmiyaGames.Menu
         /// <summary>
         /// The default UI to highlight.
         /// </summary>
-        public abstract GameObject DefaultUi
+        public abstract Selectable DefaultUi
         {
             get;
         }
@@ -463,7 +463,7 @@ namespace OmiyaGames.Menu
             if (DefaultUi != null)
             {
                 // If so, update the menu manager to select the default UI
-                Manager.SelectGuiGameObject(DefaultUi);
+                Manager.SelectGui(DefaultUi);
 
                 // Check if we have scrolling to be concerned about
                 if (ScrollToDefaultUi != null)

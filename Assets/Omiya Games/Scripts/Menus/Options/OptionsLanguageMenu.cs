@@ -60,15 +60,15 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override UnityEngine.UI.Selectable DefaultUi
         {
             get
             {
-                GameObject returnControl = null;
+                UnityEngine.UI.Selectable returnControl = null;
                 LanguageToggle toggle;
                 if ((languageToControlMap.TryGetValue(Translations.CurrentLanguage, out toggle) == true) && (toggle != null) && (toggle.Checkbox != null))
                 {
-                    returnControl = toggle.Checkbox.gameObject;
+                    returnControl = toggle.Checkbox;
                 }
                 return returnControl;
             }

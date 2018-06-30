@@ -51,7 +51,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         string resetDataMessage = "Options Reset Message";
 
-        GameObject cachedDefaultButton = null;
+        Selectable cachedDefaultButton = null;
         BackgroundSettings background = new BackgroundSettings();
 
         #region Overridden Properties
@@ -63,7 +63,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
@@ -73,7 +73,7 @@ namespace OmiyaGames.Menu
                     {
                         if(button.EnabledFor.IsThisBuildSupported() == true)
                         {
-                            cachedDefaultButton = button.Component.gameObject;
+                            cachedDefaultButton = button.Component;
                             break;
                         }
                     }

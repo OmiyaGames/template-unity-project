@@ -83,18 +83,18 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                GameObject returnUi = null;
+                Selectable returnUi = null;
                 if (enableTextSize.IsThisBuildSupported() == true)
                 {
-                    returnUi = textSizeSlider.gameObject;
+                    returnUi = textSizeSlider;
                 }
                 else if (enableTimeScale.IsThisBuildSupported() == true)
                 {
-                    returnUi = timeScaleSlider.Checkbox.gameObject;
+                    returnUi = timeScaleSlider.Checkbox;
                 }
                 return returnUi;
             }
