@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
+using OmiyaGames.Settings;
 
 namespace OmiyaGames
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="IResizer.cs" company="Omiya Games">
     /// The MIT License (MIT)
