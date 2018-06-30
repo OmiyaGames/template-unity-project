@@ -160,10 +160,6 @@ namespace OmiyaGames.Menu
             if (IsListeningToEvents == true)
             {
                 SceneChanger.LoadScene(level);
-
-                // Since we're changing scenes, forcefully prevent
-                // the other buttons from listening to the events.
-                IsListeningToEvents = false;
             }
         }
         #endregion
@@ -172,24 +168,21 @@ namespace OmiyaGames.Menu
         {
             // Set all buttons
             GameObject returnButton = backButton.gameObject;
-            if (IsListeningToEvents == true)
+            for (int index = 0; index < allLevelButtons.Length; ++index)
             {
-                GameSettings gameSettings = Singleton.Get<GameSettings>();
-                for (int index = 0; index < allLevelButtons.Length; ++index)
+                // Make the button interactable if it's unlocked
+                if ((enabled == true) && (index < Settings.NumLevelsUnlocked))
                 {
-                    // Make the button interactable if it's unlocked
-                    if ((enabled == true) && (index < gameSettings.NumLevelsUnlocked))
-                    {
-                        allLevelButtons[index].Button.interactable = true;
-                        returnButton = allLevelButtons[index].gameObject;
-                    }
-                    else
-                    {
-                        allLevelButtons[index].Button.interactable = false;
-                    }
+                    allLevelButtons[index].Button.interactable = true;
+                    returnButton = allLevelButtons[index].gameObject;
                 }
-                backButton.interactable = enabled;
+                else
+                {
+                    allLevelButtons[index].Button.interactable = false;
+                }
             }
+            backButton.interactable = enabled;
+
             // Return the last interactable button
             return returnButton;
         }
