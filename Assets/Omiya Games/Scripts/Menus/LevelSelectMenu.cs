@@ -64,11 +64,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                GameObject returnObject = backButton.gameObject;
+                Selectable returnObject = backButton;
                 if((allLevelButtons != null) && (allLevelButtons.Length > 0))
                 {
                     // Parse the level button array list in reverse direction
@@ -77,7 +77,7 @@ namespace OmiyaGames.Menu
                         // Check if this button is interactable
                         if((allLevelButtons[index] != null) && (allLevelButtons[index].Button != null) && (allLevelButtons[index].Button.IsInteractable() == true))
                         {
-                            returnObject = allLevelButtons[index].gameObject;
+                            returnObject = allLevelButtons[index].Button;
                             break;
                         }
                     }

@@ -87,17 +87,17 @@ namespace OmiyaGames.Menu
             set;
         } = false;
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
                 if (DefaultToYes == true)
                 {
-                    return yesButton.gameObject;
+                    return yesButton;
                 }
                 else
                 {
-                    return noButton.gameObject;
+                    return noButton;
                 }
             }
         }

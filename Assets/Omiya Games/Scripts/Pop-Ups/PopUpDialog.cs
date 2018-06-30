@@ -105,11 +105,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                return label.gameObject;
+                return null;
             }
         }
 

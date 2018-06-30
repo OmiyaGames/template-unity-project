@@ -77,18 +77,18 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                GameObject returnObject = null;
+                Selectable returnObject = null;
                 if (CurrentDefaultUi != null)
                 {
                     returnObject = CurrentDefaultUi;
                 }
                 else if(defaultButton != null)
                 {
-                    returnObject = defaultButton.gameObject;
+                    returnObject = defaultButton;
                 }
                 return returnObject;
             }
@@ -102,7 +102,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        protected GameObject CurrentDefaultUi
+        protected Selectable CurrentDefaultUi
         {
             get;
             set;
@@ -182,7 +182,7 @@ namespace OmiyaGames.Menu
                 }
 
                 // Set the default UI
-                CurrentDefaultUi = optionsButton.gameObject;
+                CurrentDefaultUi = optionsButton;
             }
         }
 
@@ -193,7 +193,7 @@ namespace OmiyaGames.Menu
                 Manager.Show<HowToPlayMenu>();
 
                 // Set the default UI
-                CurrentDefaultUi = howToPlayButton.gameObject;
+                CurrentDefaultUi = howToPlayButton;
             }
         }
 
@@ -205,7 +205,7 @@ namespace OmiyaGames.Menu
                 //Manager.Show<HighScoresMenu>();
 
                 // Set the default UI
-                CurrentDefaultUi = highScoresButton.gameObject;
+                CurrentDefaultUi = highScoresButton;
             }
         }
 
@@ -223,7 +223,7 @@ namespace OmiyaGames.Menu
                 }
 
                 // Set the default UI
-                CurrentDefaultUi = levelSelectButton.gameObject;
+                CurrentDefaultUi = levelSelectButton;
             }
         }
         #endregion
