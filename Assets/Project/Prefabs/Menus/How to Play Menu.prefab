@@ -300,6 +300,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!95 &95796753216585070
 Animator:
   serializedVersion: 3
@@ -317,6 +318,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114032612878734696
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -328,6 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f81835aa3ad47a4cb1583a0fd709cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateField: State
   backButton: {fileID: 114657512680880958}
 --- !u!114 &114110531232642988
 MonoBehaviour:
@@ -1167,7 +1170,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224936624848916814

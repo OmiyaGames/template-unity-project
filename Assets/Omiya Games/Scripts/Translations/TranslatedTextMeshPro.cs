@@ -35,6 +35,7 @@ namespace OmiyaGames.Translations
     /// </summary>
     /// <seealso cref="TextMeshProUGUI"/>
     [RequireComponent(typeof(TextMeshProUGUI))]
+    [RequireComponent(typeof(TextMeshProResizer))]
     [DisallowMultipleComponent]
     public class TranslatedTextMeshPro : MonoBehaviour
     {
