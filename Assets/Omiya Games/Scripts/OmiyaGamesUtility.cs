@@ -409,19 +409,31 @@ namespace OmiyaGames
             {
                 // FIXME: Good news!  This moves the content transform to have the child control to the top of the scroll rect.
                 // We just need to actually center it!
-                Transform transformNeato = parentScrollRect.content.transform;
-                float selectionPosition = childControl.anchoredPosition.y + (childControl.rect.height / 2f);
+
+                // Setup some member variables
+                float selectionPosition = 0f;
+                RectTransform checkTransform = childControl;
+                RectTransform contentTransform = parentScrollRect.content.transform as RectTransform;
+
+                // Calculate the child control's Y-position relative to the ScrollRect's content
+                while ((checkTransform != null) && (checkTransform != contentTransform))
+                {
+                    selectionPosition += checkTransform.anchoredPosition.y;
+                    checkTransform = checkTransform.parent as RectTransform;
+                }
+                selectionPosition += (childControl.rect.height / 2f);
                 selectionPosition *= -1f;
 
                 debugLine.Append("selectionPosition: ");
                 debugLine.AppendLine(selectionPosition.ToString());
 
-                Vector3 neato = transformNeato.localPosition;
-                neato.y = selectionPosition;
-                transformNeato.localPosition = neato;
+                // Directly set the position of the ScrollRect's content
+                Vector3 scrollPosition = contentTransform.localPosition;
+                scrollPosition.y = selectionPosition;
+                contentTransform.localPosition = scrollPosition;
 
                 debugLine.Append("neato: ");
-                debugLine.AppendLine(neato.ToString());
+                debugLine.AppendLine(scrollPosition.ToString());
 
                 Log(debugLine.ToString());
             }
@@ -433,20 +445,6 @@ namespace OmiyaGames
                     // Neato
                 }
             }
-        }
-
-        private static float GetScrollOffset(float position, float listAnchorPosition, float targetLength, float maskLength)
-        {
-            if (position < listAnchorPosition + (targetLength / 2))
-            {
-                return (listAnchorPosition + maskLength) - (position - targetLength);
-            }
-            else if (position + targetLength > listAnchorPosition + maskLength)
-            {
-                return (listAnchorPosition + maskLength) - (position + targetLength);
-            }
-
-            return 0;
         }
     }
 }
