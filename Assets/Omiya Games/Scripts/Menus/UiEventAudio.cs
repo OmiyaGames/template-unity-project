@@ -257,8 +257,8 @@ namespace OmiyaGames.Menu
             // Check if we have the scroll view open
             if(ParentScrollView != null)
             {
-                // TODO: check if this selected button is visible in scroll view
-                //ParentScrollView.scr
+                // Scroll to this control
+                Utility.ScrollVerticallyTo(ParentScrollView, transform as RectTransform);
             }
         }
 
