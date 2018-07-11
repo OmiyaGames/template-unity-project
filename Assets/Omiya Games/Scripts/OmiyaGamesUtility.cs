@@ -181,7 +181,7 @@ namespace OmiyaGames
         public static void ShuffleList<H>(IList<H> list, int upTo = -1)
         {
             // Check if we want to shuffle the entire list
-            if((upTo < 0) || (upTo > list.Count))
+            if ((upTo < 0) || (upTo > list.Count))
             {
                 upTo = list.Count;
             }
@@ -189,11 +189,11 @@ namespace OmiyaGames
             // Go through every list element
             H swapObject = default(H);
             int index = 0, randomIndex = 0;
-            for(; index < upTo; ++index)
+            for (; index < upTo; ++index)
             {
                 // Swap a random element
                 randomIndex = Random.Range(0, list.Count);
-                if(index != randomIndex)
+                if (index != randomIndex)
                 {
                     swapObject = list[index];
                     list[index] = list[randomIndex];
@@ -210,7 +210,7 @@ namespace OmiyaGames
             for (; focusIndex < list.Count; ++focusIndex)
             {
                 // Start the loop with the next element the next element
-                for(compareIndex = (focusIndex + 1); compareIndex < list.Count; ++compareIndex)
+                for (compareIndex = (focusIndex + 1); compareIndex < list.Count; ++compareIndex)
                 {
                     // Check if the elements are the same
                     if (comparer == null)
@@ -279,11 +279,11 @@ namespace OmiyaGames
             // Search for an *.asset file
             string[] allAssets = bundle.GetAllAssetNames();
             string firstAsset = null;
-            if(allAssets != null)
+            if (allAssets != null)
             {
-                for(int index = 0; index < allAssets.Length; ++index)
+                for (int index = 0; index < allAssets.Length; ++index)
                 {
-                    if((string.IsNullOrEmpty(allAssets[index]) == false) &&
+                    if ((string.IsNullOrEmpty(allAssets[index]) == false) &&
                         (Path.GetExtension(allAssets[index]) == FileExtensionScriptableObject) &&
                         ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
                     {
@@ -294,14 +294,14 @@ namespace OmiyaGames
             }
 
             // Check if an asset is found
-            if(string.IsNullOrEmpty(firstAsset) == false)
+            if (string.IsNullOrEmpty(firstAsset) == false)
             {
                 try
                 {
                     // Convert it to an AcceptedDomainList
                     returnDomain = bundle.LoadAsset<DomainList>(firstAsset);
                 }
-                catch(System.Exception)
+                catch (System.Exception)
                 {
                     returnDomain = null;
                 }
@@ -388,48 +388,65 @@ namespace OmiyaGames
             return builder.ToString();
         }
 
-        private static float GetVerticallyOffsetFromViewport(UnityEngine.UI.ScrollRect parentScrollRect, RectTransform childControl)
-        {
-            float returnOffset = 0f;
-            if ((parentScrollRect != null) && (childControl != null))
-            {
-                //parentScrollRect.viewport
-            }
-            return returnOffset;
-        }
-
         public static void ScrollVerticallyTo(UnityEngine.UI.ScrollRect parentScrollRect, RectTransform childControl, bool centerTo = false)
         {
             if ((parentScrollRect != null) && (childControl != null))
             {
-                // FIXME: Remove these lines
-                centerTo = true;
+                // FIXME: Remove this line and any compilation errors
                 StringBuilder debugLine = new StringBuilder();
 
-                // FIXME: Good news!  This moves the content transform to have the child control to the top of the scroll rect.
-                // We just need to actually center it!
+                // Setup some local variables
                 RectTransform contentTransform = (RectTransform)parentScrollRect.content.transform;
                 RectTransform viewportTransform = (RectTransform)parentScrollRect.viewport.transform;
 
-                // Setup some member variables
-                float selectionPosition = GetScrollToPosition(contentTransform, viewportTransform, childControl, centerTo);
+                // FIXME: Check whether we need to scroll or not, and if so, in which snapping direction
+                ScrollSnap snapTo = ScrollSnap.CenterToChild;
+                if(centerTo == false)
+                {
+                    snapTo = GetVerticallyOffsetFromViewport(contentTransform, viewportTransform, childControl, debugLine);
+                }
 
-                debugLine.Append("selectionPosition: ");
-                debugLine.AppendLine(selectionPosition.ToString());
+                // Check whether we want to scroll or not
+                if (snapTo != ScrollSnap.None)
+                {
+                    // Blah
+                    float selectionPosition = GetScrollToPosition(contentTransform, viewportTransform, childControl, snapTo);
 
-                // Directly set the position of the ScrollRect's content
-                Vector3 scrollPosition = contentTransform.localPosition;
-                scrollPosition.y = selectionPosition;
-                contentTransform.localPosition = scrollPosition;
+                    debugLine.Append("selectionPosition: ");
+                    debugLine.AppendLine(selectionPosition.ToString());
 
-                debugLine.Append("neato: ");
-                debugLine.AppendLine(scrollPosition.ToString());
+                    // FIXME: Clamp the selection position value
+
+                    // Directly set the position of the ScrollRect's content
+                    Vector3 scrollPosition = contentTransform.localPosition;
+                    scrollPosition.y = selectionPosition;
+                    contentTransform.localPosition = scrollPosition;
+
+                    debugLine.Append("neato: ");
+                    debugLine.AppendLine(scrollPosition.ToString());
+                }
 
                 Log(debugLine.ToString());
             }
         }
 
-        private static float GetScrollToPosition(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, bool centerTo)
+        private enum ScrollSnap
+        {
+            None = -1,
+            CenterToChild = 0,
+            TopOfChild,
+            BottomOfChild
+        }
+
+        private static ScrollSnap GetVerticallyOffsetFromViewport(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, StringBuilder debugLine = null)
+        {
+            ScrollSnap returnOffset = ScrollSnap.None;
+
+            // FIXME: check if the control is actually on the scroll rect viewport
+            return returnOffset;
+        }
+
+        private static float GetScrollToPosition(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, ScrollSnap snapTo)
         {
             float selectionPosition = 0f;
             RectTransform checkTransform = childControl;
@@ -441,17 +458,22 @@ namespace OmiyaGames
                 checkTransform = checkTransform.parent as RectTransform;
             }
 
-            // FIXME: the following calculation leads the control to appear at the top of the screen
-            if(centerTo == true)
+            // Check the snap-to algorithm
+            if (snapTo == ScrollSnap.TopOfChild)
             {
-                // Shift the scroll position to the center of the screen
-                selectionPosition += (viewportTransform.rect.height / 2f);
+                // Shift the scroll position to the top of the scrollrect
+                selectionPosition += (childControl.rect.height / 2f);
+            }
+            else if (snapTo == ScrollSnap.BottomOfChild)
+            {
+                // Shift the scroll position to the bottom of the scrollrect
+                selectionPosition += viewportTransform.rect.height;
+                selectionPosition -= (childControl.rect.height / 2f);
             }
             else
             {
-                // FIXME: the following calculation leads the control to appear at the top of the screen
-                selectionPosition += (childControl.rect.height / 2f);
-                // FIXME: we need the bottom of the screen
+                // Shift the scroll position to the center of the scrollrect
+                selectionPosition += (viewportTransform.rect.height / 2f);
             }
             selectionPosition *= -1f;
             return selectionPosition;
