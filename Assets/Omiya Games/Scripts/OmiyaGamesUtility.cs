@@ -395,32 +395,35 @@ namespace OmiyaGames
                 // FIXME: Remove this line and any compilation errors
                 StringBuilder debugLine = new StringBuilder();
 
-                // Setup some local variables
-                RectTransform contentTransform = (RectTransform)parentScrollRect.content.transform;
-                RectTransform viewportTransform = (RectTransform)parentScrollRect.viewport.transform;
-
                 // FIXME: Check whether we need to scroll or not, and if so, in which snapping direction
-                ScrollSnap snapTo = ScrollSnap.CenterToChild;
-                if(centerTo == false)
+                ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
+                float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
+                if (centerTo == false)
                 {
-                    snapTo = GetVerticallyOffsetFromViewport(contentTransform, viewportTransform, childControl, debugLine);
+                    Vector2 viewportBounds = GetVerticalBounds(parentScrollRect.content, childControl, debugLine);
+                    snapTo = GetVerticalSnapping(selectionPosition, ref viewportBounds, childControl, debugLine);
                 }
 
                 // Check whether we want to scroll or not
-                if (snapTo != ScrollSnap.None)
+                if (snapTo != ScrollVerticalSnap.None)
                 {
-                    // Blah
-                    float selectionPosition = GetScrollToPosition(contentTransform, viewportTransform, childControl, snapTo);
+                    // Grab the position to scroll to
+                    selectionPosition = GetScrollToPosition(selectionPosition, parentScrollRect.viewport, childControl, snapTo);
 
-                    debugLine.Append("selectionPosition: ");
+                    debugLine.Append("selectionPosition, before clamp: ");
                     debugLine.AppendLine(selectionPosition.ToString());
 
                     // FIXME: Clamp the selection position value
+                    float maxPosition = (parentScrollRect.content.rect.height - parentScrollRect.viewport.rect.height);
+                    selectionPosition = Mathf.Clamp(selectionPosition, 0, maxPosition);
+
+                    debugLine.Append("selectionPosition, after clamp: ");
+                    debugLine.AppendLine(selectionPosition.ToString());
 
                     // Directly set the position of the ScrollRect's content
-                    Vector3 scrollPosition = contentTransform.localPosition;
+                    Vector3 scrollPosition = parentScrollRect.content.localPosition;
                     scrollPosition.y = selectionPosition;
-                    contentTransform.localPosition = scrollPosition;
+                    parentScrollRect.content.localPosition = scrollPosition;
 
                     debugLine.Append("neato: ");
                     debugLine.AppendLine(scrollPosition.ToString());
@@ -430,7 +433,7 @@ namespace OmiyaGames
             }
         }
 
-        private enum ScrollSnap
+        private enum ScrollVerticalSnap
         {
             None = -1,
             CenterToChild = 0,
@@ -438,15 +441,76 @@ namespace OmiyaGames
             BottomOfChild
         }
 
-        private static ScrollSnap GetVerticallyOffsetFromViewport(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, StringBuilder debugLine = null)
+        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, StringBuilder debugLine = null)
         {
-            ScrollSnap returnOffset = ScrollSnap.None;
+            ScrollVerticalSnap returnOffset = ScrollVerticalSnap.None;
 
-            // FIXME: check if the control is actually on the scroll rect viewport
+            // Check if viewport is smaller than content
+            float viewportHeight = viewportTransform.rect.height;
+            if (viewportTransform.rect.height > viewportHeight)
+            {
+                // FIXME: check if the control is actually on the scroll rect viewport
+                float topOfChildControl = childControlPosition;
+                topOfChildControl += (childControl.rect.height * (1 - childControl.pivot.y));
+                if (debugLine != null)
+                {
+                    debugLine.Append("topOfChildControl: ");
+                    debugLine.AppendLine(topOfChildControl.ToString());
+                }
+
+                float bottomOfChildControl = childControlPosition;
+                bottomOfChildControl -= (childControl.rect.height * childControl.pivot.y);
+                if (debugLine != null)
+                {
+                    debugLine.Append("bottomOfChildControl: ");
+                    debugLine.AppendLine(bottomOfChildControl.ToString());
+                }
+
+                // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
+                if (Mathf.Abs(topOfChildControl) < contentTransform.localPosition.y)
+                {
+                    returnOffset = ScrollVerticalSnap.TopOfChild;
+                }
+                else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.localPosition.y + viewportHeight))
+                {
+                    returnOffset = ScrollVerticalSnap.BottomOfChild;
+                }
+            }
+
+            if (debugLine != null)
+            {
+                debugLine.Append("GetVerticalSnapping(): ");
+                debugLine.AppendLine(returnOffset.ToString());
+            }
             return returnOffset;
         }
 
-        private static float GetScrollToPosition(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, ScrollSnap snapTo)
+        private static float GetScrollToPosition(float childControlPosition, RectTransform viewportTransform, RectTransform childControl, ScrollVerticalSnap snapTo)
+        {
+            // Check the snap-to algorithm
+            if (snapTo == ScrollVerticalSnap.TopOfChild)
+            {
+                // Shift the scroll position to the top of the scrollrect
+                childControlPosition += (childControl.rect.height * (1 - childControl.pivot.y));
+            }
+            else if (snapTo == ScrollVerticalSnap.BottomOfChild)
+            {
+                // Shift the scroll position to the bottom of the scrollrect
+                childControlPosition += viewportTransform.rect.height;
+                childControlPosition -= (childControl.rect.height * childControl.pivot.y);
+            }
+            else
+            {
+                // Shift the scroll position to the center of the scrollrect
+                childControlPosition += (viewportTransform.rect.height / 2f);
+                childControlPosition += (childControl.rect.height / 2f);
+                childControlPosition -= (childControl.rect.height * childControl.pivot.y);
+            }
+            childControlPosition *= -1f;
+            return childControlPosition;
+        }
+
+        public static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, RectTransform childControl)
         {
             float selectionPosition = 0f;
             RectTransform checkTransform = childControl;
@@ -458,25 +522,12 @@ namespace OmiyaGames
                 checkTransform = checkTransform.parent as RectTransform;
             }
 
-            // Check the snap-to algorithm
-            if (snapTo == ScrollSnap.TopOfChild)
-            {
-                // Shift the scroll position to the top of the scrollrect
-                selectionPosition += (childControl.rect.height / 2f);
-            }
-            else if (snapTo == ScrollSnap.BottomOfChild)
-            {
-                // Shift the scroll position to the bottom of the scrollrect
-                selectionPosition += viewportTransform.rect.height;
-                selectionPosition -= (childControl.rect.height / 2f);
-            }
-            else
-            {
-                // Shift the scroll position to the center of the scrollrect
-                selectionPosition += (viewportTransform.rect.height / 2f);
-            }
-            selectionPosition *= -1f;
             return selectionPosition;
+        }
+
+        private static float GetCenterY(RectTransform childControl)
+        {
+            return childControl.rect.height * (1 - childControl.pivot.y);
         }
     }
 }
