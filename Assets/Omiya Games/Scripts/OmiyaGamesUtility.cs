@@ -400,29 +400,19 @@ namespace OmiyaGames
 
         public static void ScrollVerticallyTo(UnityEngine.UI.ScrollRect parentScrollRect, RectTransform childControl, bool centerTo = false)
         {
-            // FIXME: Remove these lines
-            centerTo = true;
-            StringBuilder debugLine = new StringBuilder();
-
-            // Check if we need to center to the child
-            if (centerTo == true)
+            if ((parentScrollRect != null) && (childControl != null))
             {
+                // FIXME: Remove these lines
+                centerTo = true;
+                StringBuilder debugLine = new StringBuilder();
+
                 // FIXME: Good news!  This moves the content transform to have the child control to the top of the scroll rect.
                 // We just need to actually center it!
+                RectTransform contentTransform = (RectTransform)parentScrollRect.content.transform;
+                RectTransform viewportTransform = (RectTransform)parentScrollRect.viewport.transform;
 
                 // Setup some member variables
-                float selectionPosition = 0f;
-                RectTransform checkTransform = childControl;
-                RectTransform contentTransform = parentScrollRect.content.transform as RectTransform;
-
-                // Calculate the child control's Y-position relative to the ScrollRect's content
-                while ((checkTransform != null) && (checkTransform != contentTransform))
-                {
-                    selectionPosition += checkTransform.anchoredPosition.y;
-                    checkTransform = checkTransform.parent as RectTransform;
-                }
-                selectionPosition += (childControl.rect.height / 2f);
-                selectionPosition *= -1f;
+                float selectionPosition = GetScrollToPosition(contentTransform, viewportTransform, childControl, centerTo);
 
                 debugLine.Append("selectionPosition: ");
                 debugLine.AppendLine(selectionPosition.ToString());
@@ -437,14 +427,34 @@ namespace OmiyaGames
 
                 Log(debugLine.ToString());
             }
+        }
+
+        private static float GetScrollToPosition(RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, bool centerTo)
+        {
+            float selectionPosition = 0f;
+            RectTransform checkTransform = childControl;
+
+            // Calculate the child control's Y-position relative to the ScrollRect's content
+            while ((checkTransform != null) && (checkTransform != contentTransform))
+            {
+                selectionPosition += checkTransform.anchoredPosition.y;
+                checkTransform = checkTransform.parent as RectTransform;
+            }
+
+            // FIXME: the following calculation leads the control to appear at the top of the screen
+            if(centerTo == true)
+            {
+                // Shift the scroll position to the center of the screen
+                selectionPosition += (viewportTransform.rect.height / 2f);
+            }
             else
             {
-                float childOffsetBy = GetVerticallyOffsetFromViewport(parentScrollRect, childControl);
-                if (Mathf.Approximately(childOffsetBy, 0f) == false)
-                {
-                    // Neato
-                }
+                // FIXME: the following calculation leads the control to appear at the top of the screen
+                selectionPosition += (childControl.rect.height / 2f);
+                // FIXME: we need the bottom of the screen
             }
+            selectionPosition *= -1f;
+            return selectionPosition;
         }
     }
 }
