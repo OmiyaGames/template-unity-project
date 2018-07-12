@@ -400,8 +400,7 @@ namespace OmiyaGames
                 float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
                 if (centerTo == false)
                 {
-                    Vector2 viewportBounds = GetVerticalBounds(parentScrollRect.content, childControl, debugLine);
-                    snapTo = GetVerticalSnapping(selectionPosition, ref viewportBounds, childControl, debugLine);
+                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl, debugLine);
                 }
 
                 // Check whether we want to scroll or not
@@ -447,7 +446,7 @@ namespace OmiyaGames
 
             // Check if viewport is smaller than content
             float viewportHeight = viewportTransform.rect.height;
-            if (viewportTransform.rect.height > viewportHeight)
+            if (contentTransform.rect.height > viewportHeight)
             {
                 // FIXME: check if the control is actually on the scroll rect viewport
                 float topOfChildControl = childControlPosition;
