@@ -392,15 +392,12 @@ namespace OmiyaGames
         {
             if ((parentScrollRect != null) && (childControl != null))
             {
-                // FIXME: Remove this line and any compilation errors
-                StringBuilder debugLine = new StringBuilder();
-
-                // FIXME: Check whether we need to scroll or not, and if so, in which snapping direction
+                // Check whether we need to scroll or not, and if so, in which snapping direction
                 ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
                 float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
                 if (centerTo == false)
                 {
-                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl, debugLine);
+                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl);
                 }
 
                 // Check whether we want to scroll or not
@@ -409,26 +406,15 @@ namespace OmiyaGames
                     // Grab the position to scroll to
                     selectionPosition = GetScrollToPosition(selectionPosition, parentScrollRect.viewport, childControl, snapTo);
 
-                    debugLine.Append("selectionPosition, before clamp: ");
-                    debugLine.AppendLine(selectionPosition.ToString());
-
-                    // FIXME: Clamp the selection position value
+                    // Clamp the selection position value
                     float maxPosition = (parentScrollRect.content.rect.height - parentScrollRect.viewport.rect.height);
                     selectionPosition = Mathf.Clamp(selectionPosition, 0, maxPosition);
-
-                    debugLine.Append("selectionPosition, after clamp: ");
-                    debugLine.AppendLine(selectionPosition.ToString());
 
                     // Directly set the position of the ScrollRect's content
                     Vector3 scrollPosition = parentScrollRect.content.anchoredPosition;
                     scrollPosition.y = selectionPosition;
                     parentScrollRect.content.anchoredPosition = scrollPosition;
-
-                    debugLine.Append("neato: ");
-                    debugLine.AppendLine(scrollPosition.ToString());
                 }
-
-                Log(debugLine.ToString());
             }
         }
 
@@ -440,7 +426,7 @@ namespace OmiyaGames
             BottomOfChild
         }
 
-        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl, StringBuilder debugLine = null)
+        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl)
         {
             ScrollVerticalSnap returnOffset = ScrollVerticalSnap.None;
 
@@ -448,50 +434,23 @@ namespace OmiyaGames
             float viewportHeight = viewportTransform.rect.height;
             if (contentTransform.rect.height > viewportHeight)
             {
-                // FIXME: check if the control is actually on the scroll rect viewport
+                // Calculate top of child
                 float topOfChildControl = childControlPosition;
                 topOfChildControl += (childControl.rect.height * (1 - childControl.pivot.y));
-                if (debugLine != null)
-                {
-                    debugLine.Append("topOfChildControl: ");
-                    debugLine.AppendLine(topOfChildControl.ToString());
-                }
 
+                // Calculate bottom of child
                 float bottomOfChildControl = childControlPosition;
                 bottomOfChildControl -= (childControl.rect.height * childControl.pivot.y);
-                if (debugLine != null)
-                {
-                    debugLine.Append("bottomOfChildControl: ");
-                    debugLine.AppendLine(bottomOfChildControl.ToString());
-                }
 
                 // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
                 if (Mathf.Abs(topOfChildControl) < contentTransform.anchoredPosition.y)
                 {
                     returnOffset = ScrollVerticalSnap.TopOfChild;
-                    if (debugLine != null)
-                    {
-                        debugLine.Append("contentTransform.anchoredPosition.y: ");
-                        debugLine.Append(contentTransform.anchoredPosition.y);
-                        debugLine.AppendLine();
-                    }
                 }
                 else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.anchoredPosition.y + viewportHeight))
                 {
                     returnOffset = ScrollVerticalSnap.BottomOfChild;
-                    if (debugLine != null)
-                    {
-                        debugLine.Append("(contentTransform.anchoredPosition.y + viewportHeight): ");
-                        debugLine.Append(contentTransform.anchoredPosition.y + viewportHeight);
-                        debugLine.AppendLine();
-                    }
                 }
-            }
-
-            if (debugLine != null)
-            {
-                debugLine.Append("GetVerticalSnapping(): ");
-                debugLine.AppendLine(returnOffset.ToString());
             }
             return returnOffset;
         }
@@ -534,11 +493,6 @@ namespace OmiyaGames
             }
 
             return selectionPosition;
-        }
-
-        private static float GetCenterY(RectTransform childControl)
-        {
-            return childControl.rect.height * (1 - childControl.pivot.y);
         }
     }
 }
