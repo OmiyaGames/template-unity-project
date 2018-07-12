@@ -67,6 +67,7 @@ namespace OmiyaGames.Menu
         [Tooltip("Customizes the click sound for the UI; if set to none, the default click sound set in MenuManager plays.")]
         SoundEffect customClickSound = null;
 
+        // TODO: consider taking this out; it's rather out-of-place given the script's role.
         [Header("Scroll Settings")]
         [SerializeField]
         ScrollRect parentScrollView = null;
