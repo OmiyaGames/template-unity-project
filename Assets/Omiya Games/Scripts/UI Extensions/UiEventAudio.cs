@@ -51,7 +51,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class UiEventAudio : MonoBehaviour, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
+    public class UiEventAudio : UiEventNavigation, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -250,7 +250,7 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Select Events
-        public void OnSelect(BaseEventData eventData)
+        public override void OnSelect(BaseEventData eventData)
         {
             // Play hover
             OnHoverPlaySound();
@@ -261,6 +261,7 @@ namespace OmiyaGames.Menu
                 // Scroll to this control
                 Utility.ScrollVerticallyTo(ParentScrollView, transform as RectTransform);
             }
+            base.OnSelect(eventData);
         }
 
         public void OnDeselect(BaseEventData eventData)
