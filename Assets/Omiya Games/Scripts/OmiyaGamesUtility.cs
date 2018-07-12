@@ -420,9 +420,9 @@ namespace OmiyaGames
                     debugLine.AppendLine(selectionPosition.ToString());
 
                     // Directly set the position of the ScrollRect's content
-                    Vector3 scrollPosition = parentScrollRect.content.localPosition;
+                    Vector3 scrollPosition = parentScrollRect.content.anchoredPosition;
                     scrollPosition.y = selectionPosition;
-                    parentScrollRect.content.localPosition = scrollPosition;
+                    parentScrollRect.content.anchoredPosition = scrollPosition;
 
                     debugLine.Append("neato: ");
                     debugLine.AppendLine(scrollPosition.ToString());
@@ -466,13 +466,25 @@ namespace OmiyaGames
                 }
 
                 // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
-                if (Mathf.Abs(topOfChildControl) < contentTransform.localPosition.y)
+                if (Mathf.Abs(topOfChildControl) < contentTransform.anchoredPosition.y)
                 {
                     returnOffset = ScrollVerticalSnap.TopOfChild;
+                    if (debugLine != null)
+                    {
+                        debugLine.Append("contentTransform.anchoredPosition.y: ");
+                        debugLine.Append(contentTransform.anchoredPosition.y);
+                        debugLine.AppendLine();
+                    }
                 }
-                else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.localPosition.y + viewportHeight))
+                else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.anchoredPosition.y + viewportHeight))
                 {
                     returnOffset = ScrollVerticalSnap.BottomOfChild;
+                    if (debugLine != null)
+                    {
+                        debugLine.Append("(contentTransform.anchoredPosition.y + viewportHeight): ");
+                        debugLine.Append(contentTransform.anchoredPosition.y + viewportHeight);
+                        debugLine.AppendLine();
+                    }
                 }
             }
 
@@ -509,7 +521,7 @@ namespace OmiyaGames
             return childControlPosition;
         }
 
-        public static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, RectTransform childControl)
+        private static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, RectTransform childControl)
         {
             float selectionPosition = 0f;
             RectTransform checkTransform = childControl;
