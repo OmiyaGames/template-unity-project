@@ -67,11 +67,6 @@ namespace OmiyaGames.Menu
         [Tooltip("Customizes the click sound for the UI; if set to none, the default click sound set in MenuManager plays.")]
         SoundEffect customClickSound = null;
 
-        // TODO: consider taking this out; it's rather out-of-place given the script's role.
-        [Header("Scroll Settings")]
-        [SerializeField]
-        ScrollRect parentScrollView = null;
-
         [Header("Mouse-down Settings")]
         [SerializeField]
         bool updateCursorState = false;
@@ -128,18 +123,6 @@ namespace OmiyaGames.Menu
             set
             {
                 customClickSound = value;
-            }
-        }
-
-        public ScrollRect ParentScrollView
-        {
-            get
-            {
-                return parentScrollView;
-            }
-            set
-            {
-                parentScrollView = value;
             }
         }
 
@@ -254,13 +237,6 @@ namespace OmiyaGames.Menu
         {
             // Play hover
             OnHoverPlaySound();
-
-            // Check if we have the scroll view open
-            if(ParentScrollView != null)
-            {
-                // Scroll to this control
-                Utility.ScrollVerticallyTo(ParentScrollView, transform as RectTransform);
-            }
             base.OnSelect(eventData);
         }
 

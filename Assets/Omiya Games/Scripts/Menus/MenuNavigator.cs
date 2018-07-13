@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using OmiyaGames.Audio;
 
 namespace OmiyaGames.Menu
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="UiEventAudio.cs" company="Omiya Games">
+    /// <copyright file="MenuNavigator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -62,5 +61,252 @@ namespace OmiyaGames.Menu
         UiEventNavigation[] uiElementsBelowScrollable;
 
         UiEventNavigation lastSelectedElement = null;
+        System.Action<UiEventNavigation, BaseEventData> scrollableSelected = null;
+        System.Action<UiEventNavigation, bool> scrollableEnableAndActiveChanged = null;
+
+        Scrollbar VerticalScrollbar
+        {
+            get
+            {
+                Scrollbar returnScrollbar = null;
+                if ((scrollable != null) && (scrollable.vertical == true))
+                {
+                    // Grab the scroll bar
+                    returnScrollbar = scrollable.verticalScrollbar;
+
+                    // Check if the scrollbar is usable
+                    if ((returnScrollbar != null) && (scrollable.viewport.rect.height >= scrollable.content.rect.height))
+                    {
+                        returnScrollbar = null;
+                    }
+                }
+                return returnScrollbar;
+            }
+        }
+
+        public void BindToEvents()
+        {
+            OnDestroy();
+            scrollableSelected = new System.Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterSelect);
+            scrollableEnableAndActiveChanged = new System.Action<UiEventNavigation, bool>(MenuNavigator_OnAfterEnabledAndActiveChanged);
+            foreach(UiEventNavigation element in uiElementsInScrollable)
+            {
+                element.OnAfterSelect += scrollableSelected;
+                element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
+            }
+        }
+
+        public void UpdateNavigation()
+        {
+            // Cache the top-most and bottom-most element
+            UiEventNavigation topMostElement = null;
+            UiEventNavigation lastElement = null;
+
+            // Setup navigating to UI Elements in the scrollable area
+            foreach (UiEventNavigation nextElement in uiElementsInScrollable)
+            {
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true))
+                {
+                    SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
+                }
+            }
+
+            // Setup navigating to the horizontal scroll bar
+            Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
+
+            // Setup navigating to UI Elements below the scrollable area
+            foreach (UiEventNavigation nextElement in uiElementsBelowScrollable)
+            {
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true))
+                {
+                    SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
+                    horizontalScrollbar = null;
+                }
+            }
+
+            // Finally, allow looping controls
+            if ((topMostElement != null) && (lastElement != null))
+            {
+                SetNextNavigation(lastElement, topMostElement.Selectable);
+                SetPreviousNavigation(lastElement.Selectable, topMostElement);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if(scrollableSelected != null)
+            {
+                foreach (UiEventNavigation element in uiElementsInScrollable)
+                {
+                    element.OnAfterSelect -= scrollableSelected;
+                }
+                scrollableSelected = null;
+            }
+            if (scrollableEnableAndActiveChanged != null)
+            {
+                foreach (UiEventNavigation element in uiElementsInScrollable)
+                {
+                    element.OnAfterEnabledAndActiveChanged -= scrollableEnableAndActiveChanged;
+                }
+                scrollableEnableAndActiveChanged = null;
+            }
+        }
+
+        #region UpdateNavigation Helper Methods
+        private static void SetupUiElementsBelowScrollable(UiEventNavigation nextElement, Scrollbar horizontalScrollbar, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
+        {
+            // Check if this is the top-most element
+            if (topMostElement == null)
+            {
+                // If so, set the variable
+                topMostElement = nextElement;
+            }
+
+            // Check if there's an element above this
+            ResetNavigation(nextElement.Selectable);
+            SetNextNavigation(lastElement, nextElement.Selectable);
+            if (horizontalScrollbar != null)
+            {
+                // If the horizontal scroll bar is above these elements, setup navigation to that first
+                SetPreviousNavigation(horizontalScrollbar, nextElement);
+            }
+            else if (lastElement != null)
+            {
+                // If last element is available, setup that element
+                SetPreviousNavigation(lastElement.Selectable, nextElement);
+            }
+            lastElement = nextElement;
+        }
+
+        private Scrollbar SetupHorizontalScrollBar(UiEventNavigation lastElement)
+        {
+            Scrollbar horizontalScrollbar = null;
+            if ((lastElement != null) && (scrollable != null) && (scrollable.horizontal == true) && (scrollable.horizontalScrollbar != null) && (scrollable.viewport.rect.width < scrollable.content.rect.width))
+            {
+                horizontalScrollbar = scrollable.horizontalScrollbar;
+                SetNextNavigation(lastElement, horizontalScrollbar);
+
+                // Grab the current navigation values
+                Navigation newNavigation = horizontalScrollbar.navigation;
+
+                // Customize the navigation
+                newNavigation.mode = Navigation.Mode.Explicit;
+                newNavigation.selectOnUp = lastElement.Selectable;
+                horizontalScrollbar.navigation = newNavigation;
+            }
+
+            return horizontalScrollbar;
+        }
+
+        private void SetupUiElementsInScrollable(UiEventNavigation nextElement, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
+        {
+            // Check if this is the top-most element
+            if (topMostElement == null)
+            {
+                // If so, set the variable
+                topMostElement = nextElement;
+            }
+
+            // Check if there's an element above this
+            ResetNavigation(nextElement.Selectable);
+            SetNextNavigation(lastElement, nextElement.Selectable, VerticalScrollbar);
+            if (lastElement != null)
+            {
+                SetPreviousNavigation(lastElement.Selectable, nextElement, VerticalScrollbar);
+            }
+            lastElement = nextElement;
+        }
+
+        private static void SetNextNavigation(UiEventNavigation lastElement, Selectable currentElement, Scrollbar verticalScrollbar = null)
+        {
+            // Check if the last and current element is available
+            if (lastElement != null)
+            {
+                // Grab the last navigation values
+                Navigation newNavigation = lastElement.Selectable.navigation;
+
+                // Customize the navigation
+                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Up) != 0)
+                {
+                    newNavigation.selectOnUp = currentElement;
+                }
+                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Down) != 0)
+                {
+                    newNavigation.selectOnDown = currentElement;
+                }
+                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Left) != 0)
+                {
+                    newNavigation.selectOnLeft = currentElement;
+                }
+                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Right) != 0)
+                {
+                    newNavigation.selectOnRight = currentElement;
+                }
+                else if (verticalScrollbar != null)
+                {
+                    // If right-direction navigation isn't overridden, and a scrollbar is provided,
+                    // navigate to the scroll on right
+                    newNavigation.selectOnRight = verticalScrollbar;
+                }
+                lastElement.Selectable.navigation = newNavigation;
+            }
+        }
+
+        private static void SetPreviousNavigation(Selectable lastElement, UiEventNavigation currentElement, Scrollbar verticalScrollbar = null)
+        {
+            // Check if the last and current element is available
+            if (currentElement != null)
+            {
+                // Grab the current navigation values
+                Navigation newNavigation = currentElement.Selectable.navigation;
+
+                // Customize the navigation
+                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Up) != 0)
+                {
+                    newNavigation.selectOnUp = lastElement;
+                }
+                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Down) != 0)
+                {
+                    newNavigation.selectOnDown = lastElement;
+                }
+                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Left) != 0)
+                {
+                    newNavigation.selectOnLeft = lastElement;
+                }
+                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Right) != 0)
+                {
+                    newNavigation.selectOnRight = lastElement;
+                }
+                currentElement.Selectable.navigation = newNavigation;
+            }
+        }
+
+        private static void ResetNavigation(Selectable currentElement)
+        {
+            Navigation newNavigation = currentElement.navigation;
+
+            // Customize the navigation
+            newNavigation.mode = Navigation.Mode.Explicit;
+            newNavigation.selectOnUp = null;
+            newNavigation.selectOnDown = null;
+            newNavigation.selectOnLeft = null;
+            newNavigation.selectOnRight = null;
+        }
+        #endregion
+
+        private void MenuNavigator_OnAfterEnabledAndActiveChanged(UiEventNavigation source, bool arg)
+        {
+            UpdateNavigation();
+        }
+
+        private void MenuNavigator_OnAfterSelect(UiEventNavigation source, BaseEventData arg)
+        {
+            // Check if we have the scroll view open
+            if (scrollable != null)
+            {
+                // Scroll to this control
+                Utility.ScrollVerticallyTo(scrollable, source.transform as RectTransform);
+            }
+        }
     }
 }

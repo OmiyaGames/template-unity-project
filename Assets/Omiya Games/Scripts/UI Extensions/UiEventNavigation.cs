@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Community.UI;
 
 namespace OmiyaGames.Menu
 {
@@ -49,11 +51,28 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(Selectable))]
     public class UiEventNavigation : MonoBehaviour, ISelectHandler
     {
+        public enum Direction
+        {
+            Up =    1 << 0,
+            Down =  1 << 1,
+            Left =  1 << 2,
+            Right = 1 << 3,
+        }
+
         public event System.Action<UiEventNavigation, BaseEventData> OnAfterSelect;
         public event System.Action<UiEventNavigation, bool> OnAfterEnabledAndActiveChanged;
 
+        [SerializeField]
+        [EnumFlags]
+        Direction toPreviousUi = Direction.Up;
+        [SerializeField]
+        [EnumFlags]
+        Direction toNextUi = Direction.Down;
+
+        Selectable selectable = null;
         RectTransform rectTransform = null;
 
         public RectTransform RectTransform
@@ -65,6 +84,44 @@ namespace OmiyaGames.Menu
                     rectTransform = transform as RectTransform;
                 }
                 return rectTransform;
+            }
+        }
+
+        public Selectable Selectable
+        {
+            get
+            {
+                if(selectable == null)
+                {
+                    selectable = GetComponent<Selectable>();
+                }
+                return selectable;
+            }
+        }
+
+        public Direction ToPreviousUi
+        {
+            get
+            {
+                return toPreviousUi;
+            }
+
+            set
+            {
+                toPreviousUi = value;
+            }
+        }
+
+        public Direction ToNextUi
+        {
+            get
+            {
+                return toNextUi;
+            }
+
+            set
+            {
+                toNextUi = value;
             }
         }
 
