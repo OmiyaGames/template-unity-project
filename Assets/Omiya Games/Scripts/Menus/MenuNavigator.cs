@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
+using System;
 
 namespace OmiyaGames.Menu
 {
@@ -60,9 +62,66 @@ namespace OmiyaGames.Menu
         [SerializeField]
         UiEventNavigation[] uiElementsBelowScrollable;
 
-        UiEventNavigation lastSelectedElement = null;
-        System.Action<UiEventNavigation, BaseEventData> scrollableSelected = null;
-        System.Action<UiEventNavigation, bool> scrollableEnableAndActiveChanged = null;
+        Action<UiEventNavigation, BaseEventData> scrollableSelected = null;
+        Action<UiEventNavigation, bool> scrollableEnableAndActiveChanged = null;
+        readonly HashSet<UiEventNavigation> uiElementsInScrollableSet = new HashSet<UiEventNavigation>();
+
+        #region Properties
+        public UiEventNavigation LastSelectedElement
+        {
+            get;
+            private set;
+        } = null;
+
+        public HashSet<UiEventNavigation> UiElementsInScrollableSet
+        {
+            get
+            {
+                if(uiElementsInScrollableSet.Count != UiElementsBelowScrollable.Length)
+                {
+                    uiElementsInScrollableSet.Clear();
+                    foreach(UiEventNavigation scrollableElement in UiElementsBelowScrollable)
+                    {
+                        if((scrollableElement != null) && (uiElementsInScrollableSet.Contains(scrollableElement) == false))
+                        {
+                            uiElementsInScrollableSet.Add(scrollableElement);
+                        }
+                    }
+                }
+                return uiElementsInScrollableSet;
+            }
+        }
+
+        public UiEventNavigation[] UiElementsInScrollable
+        {
+            get
+            {
+                return uiElementsInScrollable;
+            }
+            set
+            {
+                if(uiElementsInScrollable != value)
+                {
+                    OnDestroy();
+                    uiElementsInScrollable = value;
+                }
+            }
+        }
+
+        public UiEventNavigation[] UiElementsBelowScrollable
+        {
+            get
+            {
+                return uiElementsBelowScrollable;
+            }
+            set
+            {
+                if (uiElementsBelowScrollable != value)
+                {
+                    uiElementsBelowScrollable = value;
+                }
+            }
+        }
 
         Scrollbar VerticalScrollbar
         {
@@ -83,13 +142,14 @@ namespace OmiyaGames.Menu
                 return returnScrollbar;
             }
         }
+        #endregion
 
         public void BindToEvents()
         {
             OnDestroy();
-            scrollableSelected = new System.Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterSelect);
-            scrollableEnableAndActiveChanged = new System.Action<UiEventNavigation, bool>(MenuNavigator_OnAfterEnabledAndActiveChanged);
-            foreach(UiEventNavigation element in uiElementsInScrollable)
+            scrollableSelected = new Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterSelect);
+            scrollableEnableAndActiveChanged = new Action<UiEventNavigation, bool>(MenuNavigator_OnAfterEnabledAndActiveChanged);
+            foreach (UiEventNavigation element in UiElementsInScrollable)
             {
                 element.OnAfterSelect += scrollableSelected;
                 element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
@@ -103,9 +163,10 @@ namespace OmiyaGames.Menu
             UiEventNavigation lastElement = null;
 
             // Setup navigating to UI Elements in the scrollable area
-            foreach (UiEventNavigation nextElement in uiElementsInScrollable)
+            foreach (UiEventNavigation nextElement in UiElementsInScrollable)
             {
-                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true))
+                // TODO: Testing to see what happens to navigation if certain elements are not active
+                if ((nextElement != null)/* && (nextElement.isActiveAndEnabled == true)*/)
                 {
                     SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
                 }
@@ -115,9 +176,10 @@ namespace OmiyaGames.Menu
             Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
 
             // Setup navigating to UI Elements below the scrollable area
-            foreach (UiEventNavigation nextElement in uiElementsBelowScrollable)
+            foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
             {
-                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true))
+                // TODO: Testing to see what happens to navigation if certain elements are not active
+                if ((nextElement != null)/* && (nextElement.isActiveAndEnabled == true)*/)
                 {
                     SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
                     horizontalScrollbar = null;
@@ -132,11 +194,37 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public void ScrollToLastSelectedElement(Selectable defaultElement)
+        {
+            // Make sure the last selected element is within the scrollable list
+            if ((LastSelectedElement != null) && (UiElementsInScrollableSet.Contains(LastSelectedElement) == true))
+            {
+                // Change the default element to the last selected one
+                defaultElement = LastSelectedElement.Selectable;
+            }
+
+            // Scroll to this element
+            ScrollToSelectable(defaultElement);
+        }
+
+        public void ScrollToSelectable(Selectable selectable)
+        {
+            // Check if we have the scroll view open
+            if ((scrollable != null) && (selectable != null))
+            {
+                // Scroll to this control
+                Utility.ScrollVerticallyTo(scrollable, (selectable.transform as RectTransform), true);
+
+                // Highlight this element
+                Singleton.Get<MenuManager>().SelectGui(selectable);
+            }
+        }
+
         private void OnDestroy()
         {
-            if(scrollableSelected != null)
+            if (scrollableSelected != null)
             {
-                foreach (UiEventNavigation element in uiElementsInScrollable)
+                foreach (UiEventNavigation element in UiElementsInScrollable)
                 {
                     element.OnAfterSelect -= scrollableSelected;
                 }
@@ -144,7 +232,7 @@ namespace OmiyaGames.Menu
             }
             if (scrollableEnableAndActiveChanged != null)
             {
-                foreach (UiEventNavigation element in uiElementsInScrollable)
+                foreach (UiEventNavigation element in UiElementsInScrollable)
                 {
                     element.OnAfterEnabledAndActiveChanged -= scrollableEnableAndActiveChanged;
                 }
@@ -291,9 +379,13 @@ namespace OmiyaGames.Menu
             newNavigation.selectOnDown = null;
             newNavigation.selectOnLeft = null;
             newNavigation.selectOnRight = null;
+
+            // Set the navigation values
+            currentElement.navigation = newNavigation;
         }
         #endregion
 
+        #region Event Listeners
         private void MenuNavigator_OnAfterEnabledAndActiveChanged(UiEventNavigation source, bool arg)
         {
             UpdateNavigation();
@@ -307,6 +399,88 @@ namespace OmiyaGames.Menu
                 // Scroll to this control
                 Utility.ScrollVerticallyTo(scrollable, source.transform as RectTransform);
             }
+            LastSelectedElement = source;
         }
+        #endregion
+
+#if UNITY_EDITOR
+        [ContextMenu("Setup Fields")]
+        void SetupFields()
+        {
+            scrollable = GetComponentInChildren<ScrollRect>(true);
+            UiEventNavigation[] allUiElements = GetComponentsInChildren<UiEventNavigation>(true);
+
+            List<UiEventNavigation> uiElementsInScrollableList = new List<UiEventNavigation>();
+            List<UiEventNavigation> uiElementsBelowScrollableList = new List<UiEventNavigation>();
+            foreach(UiEventNavigation uiElement in allUiElements)
+            {
+                if(scrollable != null)
+                {
+                    // Go up the hierarch of this element and see if this element is a child of the scrollable
+                    Transform check = uiElement.transform;
+                    while ((check != null) && (check != transform) && (check != scrollable.transform))
+                    {
+                        check = check.parent;
+                    }
+
+                    if (check == scrollable.transform)
+                    {
+                        uiElementsInScrollableList.Add(uiElement);
+                    }
+                    else
+                    {
+                        uiElementsBelowScrollableList.Add(uiElement);
+                    }
+                }
+                else
+                {
+                    uiElementsBelowScrollableList.Add(uiElement);
+                }
+            }
+
+            uiElementsInScrollableList.Sort(UiElementsSorter);
+            UiElementsInScrollable = uiElementsInScrollableList.ToArray();
+            uiElementsBelowScrollableList.Sort(UiElementsSorter);
+            UiElementsBelowScrollable = uiElementsBelowScrollableList.ToArray();
+        }
+
+        private int UiElementsSorter(UiEventNavigation left, UiEventNavigation right)
+        {
+            // Take priority on right by default
+            int returnNum = 1;
+            if ((left != null) && (right != null))
+            {
+                // Check difference in vertical placement of 2 elements
+                Vector2 leftPlacement = left.RectTransform.rect.min;
+                Vector2 rightPlacement = right.RectTransform.rect.min;
+                if (Mathf.Approximately(leftPlacement.y, rightPlacement.y) == true)
+                {
+                    if (Mathf.Approximately(leftPlacement.x, rightPlacement.x) == true)
+                    {
+                        returnNum = 0;
+                    }
+                    else if (leftPlacement.x < rightPlacement.x)
+                    {
+                        returnNum = -1;
+                    }
+                }
+                else if (leftPlacement.y < rightPlacement.y)
+                {
+                    returnNum = -1;
+                }
+            }
+            else if (left != null)
+            {
+                // Take priority on left
+                returnNum = -1;
+            }
+            else if(right == null)
+            {
+                // If both null, they're equal
+                returnNum = 0;
+            }
+            return returnNum;
+        }
+#endif
     }
 }

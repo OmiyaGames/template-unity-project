@@ -63,6 +63,8 @@ namespace OmiyaGames.Menu
 
         [Header("Confirmation Menu")]
         [SerializeField]
+        MenuNavigator navigator;
+        [SerializeField]
         Translations.TranslatedTextMeshPro messageLabel;
         [SerializeField]
         Button yesButton;
@@ -131,6 +133,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return background.TitleTranslationArgs;
+            }
+        }
+
+        public override MenuNavigator Navigator
+        {
+            get
+            {
+                return navigator;
             }
         }
 
