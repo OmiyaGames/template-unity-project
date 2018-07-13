@@ -51,7 +51,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class UiEventAudio : UiEventNavigation, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
+    public class UiEventAudio : UiEventNavigation, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler, IPointerDownHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -248,10 +248,13 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        public void OnSubmit(BaseEventData eventData)
+        public override void OnSubmit(BaseEventData eventData)
         {
             // Play clicking sound
             PlayClickSound();
+
+            // Run Base Method
+            base.OnSubmit(eventData);
         }
         #endregion
 
