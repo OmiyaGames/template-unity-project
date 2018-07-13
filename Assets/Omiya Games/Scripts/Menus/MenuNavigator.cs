@@ -55,6 +55,8 @@ namespace OmiyaGames.Menu
     [RequireComponent(typeof(IMenu))]
     public class MenuNavigator : MonoBehaviour
     {
+        // FIXME: somehow add a UI that handles changes in the scrollbar,
+        // and updates the scrollbar navigation to left to the center element on the scrollrect.
         [SerializeField]
         ScrollRect scrollable;
         [SerializeField]
@@ -62,8 +64,11 @@ namespace OmiyaGames.Menu
         [SerializeField]
         UiEventNavigation[] uiElementsBelowScrollable;
 
+        IMenu cachedMenu = null;
         Action<UiEventNavigation, BaseEventData> scrollableSelected = null;
         Action<UiEventNavigation, bool> scrollableEnableAndActiveChanged = null;
+        Action<UiEventNavigation, BaseEventData> scrollableSubmitted = null;
+        Action<UiEventNavigation, BaseEventData> scrollableCancelled = null;
         readonly HashSet<UiEventNavigation> uiElementsInScrollableSet = new HashSet<UiEventNavigation>();
 
         #region Properties
@@ -77,12 +82,12 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                if(uiElementsInScrollableSet.Count != UiElementsBelowScrollable.Length)
+                if (uiElementsInScrollableSet.Count != UiElementsBelowScrollable.Length)
                 {
                     uiElementsInScrollableSet.Clear();
-                    foreach(UiEventNavigation scrollableElement in UiElementsBelowScrollable)
+                    foreach (UiEventNavigation scrollableElement in UiElementsBelowScrollable)
                     {
-                        if((scrollableElement != null) && (uiElementsInScrollableSet.Contains(scrollableElement) == false))
+                        if ((scrollableElement != null) && (uiElementsInScrollableSet.Contains(scrollableElement) == false))
                         {
                             uiElementsInScrollableSet.Add(scrollableElement);
                         }
@@ -100,7 +105,7 @@ namespace OmiyaGames.Menu
             }
             set
             {
-                if(uiElementsInScrollable != value)
+                if (uiElementsInScrollable != value)
                 {
                     OnDestroy();
                     uiElementsInScrollable = value;
@@ -142,17 +147,42 @@ namespace OmiyaGames.Menu
                 return returnScrollbar;
             }
         }
+
+        IMenu Menu
+        {
+            get
+            {
+                if (cachedMenu == null)
+                {
+                    cachedMenu = GetComponent<IMenu>();
+                }
+                return cachedMenu;
+            }
+        }
         #endregion
 
         public void BindToEvents()
         {
+            // Unbind to previous events
             OnDestroy();
+
+            // Setup actions
             scrollableSelected = new Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterSelect);
             scrollableEnableAndActiveChanged = new Action<UiEventNavigation, bool>(MenuNavigator_OnAfterEnabledAndActiveChanged);
+            scrollableSubmitted = new Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterSubmit);
+            scrollableCancelled = new Action<UiEventNavigation, BaseEventData>(MenuNavigator_OnAfterCancel);
+
+            // Bind to events
             foreach (UiEventNavigation element in UiElementsInScrollable)
             {
                 element.OnAfterSelect += scrollableSelected;
                 element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
+                element.OnAfterSubmit += scrollableSubmitted;
+                element.OnAfterCancel += scrollableCancelled;
+            }
+            foreach (UiEventNavigation element in uiElementsBelowScrollable)
+            {
+                element.OnAfterCancel += scrollableCancelled;
             }
         }
 
@@ -165,8 +195,8 @@ namespace OmiyaGames.Menu
             // Setup navigating to UI Elements in the scrollable area
             foreach (UiEventNavigation nextElement in UiElementsInScrollable)
             {
-                // TODO: Testing to see what happens to navigation if certain elements are not active
-                if ((nextElement != null)/* && (nextElement.isActiveAndEnabled == true)*/)
+                // Enable navigation to elements that are active
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
                 {
                     SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
                 }
@@ -178,8 +208,8 @@ namespace OmiyaGames.Menu
             // Setup navigating to UI Elements below the scrollable area
             foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
             {
-                // TODO: Testing to see what happens to navigation if certain elements are not active
-                if ((nextElement != null)/* && (nextElement.isActiveAndEnabled == true)*/)
+                // Enable navigation to elements that are active
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
                 {
                     SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
                     horizontalScrollbar = null;
@@ -224,19 +254,24 @@ namespace OmiyaGames.Menu
         {
             if (scrollableSelected != null)
             {
+                // Unbind to events
                 foreach (UiEventNavigation element in UiElementsInScrollable)
                 {
                     element.OnAfterSelect -= scrollableSelected;
-                }
-                scrollableSelected = null;
-            }
-            if (scrollableEnableAndActiveChanged != null)
-            {
-                foreach (UiEventNavigation element in UiElementsInScrollable)
-                {
                     element.OnAfterEnabledAndActiveChanged -= scrollableEnableAndActiveChanged;
+                    element.OnAfterSubmit -= scrollableSubmitted;
+                    element.OnAfterCancel -= scrollableCancelled;
                 }
+                foreach (UiEventNavigation element in uiElementsBelowScrollable)
+                {
+                    element.OnAfterCancel -= scrollableCancelled;
+                }
+
+                // Reset variables
+                scrollableSelected = null;
                 scrollableEnableAndActiveChanged = null;
+                scrollableSubmitted = null;
+                scrollableCancelled = null;
             }
         }
 
@@ -300,7 +335,7 @@ namespace OmiyaGames.Menu
             SetNextNavigation(lastElement, nextElement.Selectable, VerticalScrollbar);
             if (lastElement != null)
             {
-                SetPreviousNavigation(lastElement.Selectable, nextElement, VerticalScrollbar);
+                SetPreviousNavigation(lastElement.Selectable, nextElement);
             }
             lastElement = nextElement;
         }
@@ -313,7 +348,7 @@ namespace OmiyaGames.Menu
                 // Grab the last navigation values
                 Navigation newNavigation = lastElement.Selectable.navigation;
 
-                // Customize the navigation
+                // Customize the navigation for vertical
                 if ((lastElement.ToNextUi & UiEventNavigation.Direction.Up) != 0)
                 {
                     newNavigation.selectOnUp = currentElement;
@@ -322,25 +357,31 @@ namespace OmiyaGames.Menu
                 {
                     newNavigation.selectOnDown = currentElement;
                 }
-                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Left) != 0)
+
+                // Check if element is not a slider
+                if ((lastElement.Selectable is Slider) == false)
                 {
-                    newNavigation.selectOnLeft = currentElement;
-                }
-                if ((lastElement.ToNextUi & UiEventNavigation.Direction.Right) != 0)
-                {
-                    newNavigation.selectOnRight = currentElement;
-                }
-                else if (verticalScrollbar != null)
-                {
-                    // If right-direction navigation isn't overridden, and a scrollbar is provided,
-                    // navigate to the scroll on right
-                    newNavigation.selectOnRight = verticalScrollbar;
+                    // Customize the navigation for horizontal
+                    if ((lastElement.ToNextUi & UiEventNavigation.Direction.Left) != 0)
+                    {
+                        newNavigation.selectOnLeft = currentElement;
+                    }
+                    if ((lastElement.ToNextUi & UiEventNavigation.Direction.Right) != 0)
+                    {
+                        newNavigation.selectOnRight = currentElement;
+                    }
+                    else if (verticalScrollbar != null)
+                    {
+                        // If right-direction navigation isn't overridden, and a scrollbar is provided,
+                        // navigate to the scroll on right
+                        newNavigation.selectOnRight = verticalScrollbar;
+                    }
                 }
                 lastElement.Selectable.navigation = newNavigation;
             }
         }
 
-        private static void SetPreviousNavigation(Selectable lastElement, UiEventNavigation currentElement, Scrollbar verticalScrollbar = null)
+        private static void SetPreviousNavigation(Selectable lastElement, UiEventNavigation currentElement)
         {
             // Check if the last and current element is available
             if (currentElement != null)
@@ -348,7 +389,7 @@ namespace OmiyaGames.Menu
                 // Grab the current navigation values
                 Navigation newNavigation = currentElement.Selectable.navigation;
 
-                // Customize the navigation
+                // Customize the navigation for vertical
                 if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Up) != 0)
                 {
                     newNavigation.selectOnUp = lastElement;
@@ -357,13 +398,18 @@ namespace OmiyaGames.Menu
                 {
                     newNavigation.selectOnDown = lastElement;
                 }
-                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Left) != 0)
+
+                // Check if element is not a slider
+                if ((currentElement.Selectable is Slider) == false)
                 {
-                    newNavigation.selectOnLeft = lastElement;
-                }
-                if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Right) != 0)
-                {
-                    newNavigation.selectOnRight = lastElement;
+                    if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Left) != 0)
+                    {
+                        newNavigation.selectOnLeft = lastElement;
+                    }
+                    if ((currentElement.ToPreviousUi & UiEventNavigation.Direction.Right) != 0)
+                    {
+                        newNavigation.selectOnRight = lastElement;
+                    }
                 }
                 currentElement.Selectable.navigation = newNavigation;
             }
@@ -401,6 +447,26 @@ namespace OmiyaGames.Menu
             }
             LastSelectedElement = source;
         }
+
+        private void MenuNavigator_OnAfterSubmit(UiEventNavigation source, BaseEventData arg)
+        {
+            // Check if submitting to this menu causes some UI to be enabled/disabled
+            if ((source != null) && (source.DoesSubmitChangesInteractable == true))
+            {
+                // If so, update navigation UI
+                UpdateNavigation();
+            }
+        }
+
+        private void MenuNavigator_OnAfterCancel(UiEventNavigation source, BaseEventData arg)
+        {
+            // Make sure the menu is managed and NOT the default
+            if ((Menu != null) && (Menu.MenuType == IMenu.Type.ManagedMenu))
+            {
+                // Hide the menu
+                Menu.Hide();
+            }
+        }
         #endregion
 
 #if UNITY_EDITOR
@@ -412,9 +478,9 @@ namespace OmiyaGames.Menu
 
             List<UiEventNavigation> uiElementsInScrollableList = new List<UiEventNavigation>();
             List<UiEventNavigation> uiElementsBelowScrollableList = new List<UiEventNavigation>();
-            foreach(UiEventNavigation uiElement in allUiElements)
+            foreach (UiEventNavigation uiElement in allUiElements)
             {
-                if(scrollable != null)
+                if (scrollable != null)
                 {
                     // Go up the hierarch of this element and see if this element is a child of the scrollable
                     Transform check = uiElement.transform;
@@ -474,7 +540,7 @@ namespace OmiyaGames.Menu
                 // Take priority on left
                 returnNum = -1;
             }
-            else if(right == null)
+            else if (right == null)
             {
                 // If both null, they're equal
                 returnNum = 0;

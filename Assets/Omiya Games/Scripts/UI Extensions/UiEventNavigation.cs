@@ -52,7 +52,7 @@ namespace OmiyaGames.Menu
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Selectable))]
-    public class UiEventNavigation : MonoBehaviour, ISelectHandler
+    public class UiEventNavigation : MonoBehaviour, ISelectHandler, ISubmitHandler, ICancelHandler
     {
         public enum Direction
         {
@@ -63,6 +63,8 @@ namespace OmiyaGames.Menu
         }
 
         public event System.Action<UiEventNavigation, BaseEventData> OnAfterSelect;
+        public event System.Action<UiEventNavigation, BaseEventData> OnAfterSubmit;
+        public event System.Action<UiEventNavigation, BaseEventData> OnAfterCancel;
         public event System.Action<UiEventNavigation, bool> OnAfterEnabledAndActiveChanged;
 
         [SerializeField]
@@ -71,6 +73,8 @@ namespace OmiyaGames.Menu
         [SerializeField]
         [EnumFlags]
         Direction toNextUi = Direction.Down;
+        [SerializeField]
+        bool onSubmitChangesInteractable = false;
 
         Selectable selectable = null;
         RectTransform rectTransform = null;
@@ -125,6 +129,14 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public bool DoesSubmitChangesInteractable
+        {
+            get
+            {
+                return onSubmitChangesInteractable;
+            }
+        }
+
         public virtual void OnSelect(BaseEventData eventData)
         {
             OnAfterSelect?.Invoke(this, eventData);
@@ -138,6 +150,16 @@ namespace OmiyaGames.Menu
         public virtual void OnDisable()
         {
             OnAfterEnabledAndActiveChanged?.Invoke(this, false);
+        }
+
+        public virtual void OnSubmit(BaseEventData eventData)
+        {
+            OnAfterSubmit?.Invoke(this, eventData);
+        }
+
+        public virtual void OnCancel(BaseEventData eventData)
+        {
+            OnAfterCancel?.Invoke(this, eventData);
         }
     }
 }
