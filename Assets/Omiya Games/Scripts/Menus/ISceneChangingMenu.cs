@@ -41,7 +41,7 @@ namespace OmiyaGames.Menu
         [UnityEngine.Serialization.FormerlySerializedAs("showBackground")]
         protected BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
         [SerializeField]
-        ScrollRect scrollMenu;
+        MenuNavigator navigator;
 
         [Header("Buttons")]
         [SerializeField]
@@ -94,11 +94,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override ScrollRect ScrollToDefaultUi
+        public override MenuNavigator Navigator
         {
             get
             {
-                return scrollMenu;
+                return navigator;
             }
         }
 

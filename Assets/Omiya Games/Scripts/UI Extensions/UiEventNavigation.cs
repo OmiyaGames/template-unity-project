@@ -93,7 +93,7 @@ namespace OmiyaGames.Menu
             {
                 if(selectable == null)
                 {
-                    selectable = GetComponent<Selectable>();
+                    selectable = GetComponentInChildren<Selectable>(true);
                 }
                 return selectable;
             }

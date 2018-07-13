@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Settings;
 using OmiyaGames.Scenes;
 using OmiyaGames.Translations;
 
@@ -44,7 +43,7 @@ namespace OmiyaGames.Menu
 
         [Header("Level Select")]
         [SerializeField]
-        ScrollRect scrollMenu;
+        MenuNavigator navigator;
         [SerializeField]
         RectTransform levelContent;
         [SerializeField]
@@ -110,11 +109,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override ScrollRect ScrollToDefaultUi
+        public override MenuNavigator Navigator
         {
             get
             {
-                return scrollMenu;
+                return navigator;
             }
         }
         #endregion
@@ -144,14 +143,16 @@ namespace OmiyaGames.Menu
 
         protected override void OnSetup()
         {
-            // Call base method
-            base.OnSetup();
-
             // Setup all buttons
             allLevelButtons = SetupLevelButtons(levelButtonToDuplicate);
 
             // Update button states
             SetButtonsEnabled(true);
+
+            // Setup Navigator
+
+            // Call base method
+            base.OnSetup();
         }
 
         #region Button Events

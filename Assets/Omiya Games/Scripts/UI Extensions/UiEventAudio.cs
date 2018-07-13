@@ -152,9 +152,10 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Unity Events
-        void OnDisable()
+        public override void OnDisable()
         {
             Reset();
+            base.OnDisable();
         }
         #endregion
 

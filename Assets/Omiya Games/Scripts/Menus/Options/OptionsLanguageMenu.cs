@@ -93,14 +93,22 @@ namespace OmiyaGames.Menu
 
         protected override void OnSetup()
         {
-            // Call base method
-            base.OnSetup();
-
             // Make sure the arguments are set correctly
             if (languageCheckbox != null)
             {
-                GenerateLanguageCheckboxes();
+                // Generate the checkboxes
+                UiEventNavigation[] allLanguageToggles = GenerateLanguageCheckboxes();
+
+                // Check if the navigator is available
+                if (Navigator != null)
+                {
+                    // Setup the navigator
+                    Navigator.UiElementsInScrollable = allLanguageToggles;
+                }
             }
+
+            // Call base method
+            base.OnSetup();
         }
 
         private void LanguageCheckbox_OnChecked(LanguageToggle obj)
@@ -115,11 +123,15 @@ namespace OmiyaGames.Menu
             }
         }
 
-        private void GenerateLanguageCheckboxes()
+        private UiEventNavigation[] GenerateLanguageCheckboxes()
         {
+            // Setup return variable
+            UiEventNavigation[] returnToggles = new UiEventNavigation[Translations.SupportedLanguages.Count];
+
             // Setup the first button
             StringBuilder nameBuilder = new StringBuilder();
             SetupToggle(languageCheckbox, Translations.SupportedLanguages[0], nameBuilder);
+            returnToggles[0] = languageCheckbox.Navigation;
 
             // Setup the rest of the buttons
             LanguageToggle clonedToggle;
@@ -130,6 +142,7 @@ namespace OmiyaGames.Menu
 
                 // Setup the toggle
                 SetupToggle(clonedToggle, Translations.SupportedLanguages[index], nameBuilder);
+                returnToggles[index] = clonedToggle.Navigation;
             }
 
             // Setup the currently selected toggle
@@ -138,6 +151,7 @@ namespace OmiyaGames.Menu
                 // Setup the last selected toggle
                 currentSelectedCheckbox.Checkbox.isOn = true;
             }
+            return returnToggles;
         }
 
         private LanguageToggle DuplicateToggle(LanguageToggle toggleToDuplicate)
