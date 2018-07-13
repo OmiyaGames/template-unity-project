@@ -188,39 +188,45 @@ namespace OmiyaGames.Menu
 
         public void UpdateNavigation()
         {
-            // Cache the top-most and bottom-most element
-            UiEventNavigation topMostElement = null;
-            UiEventNavigation lastElement = null;
-
-            // Setup navigating to UI Elements in the scrollable area
-            foreach (UiEventNavigation nextElement in UiElementsInScrollable)
+            if (Menu.CurrentVisibility == IMenu.VisibilityState.Visible)
             {
-                // Enable navigation to elements that are active
-                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                // Cache the top-most and bottom-most element
+                UiEventNavigation topMostElement = null;
+                UiEventNavigation lastElement = null;
+
+                // Setup navigating to UI Elements in the scrollable area
+                foreach (UiEventNavigation nextElement in UiElementsInScrollable)
                 {
-                    SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
+                    // Enable navigation to elements that are active
+                    if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                    {
+                        SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
+                    }
                 }
-            }
 
-            // Setup navigating to the horizontal scroll bar
-            Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
+                // Setup navigating to the horizontal scroll bar
+                Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
 
-            // Setup navigating to UI Elements below the scrollable area
-            foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
-            {
-                // Enable navigation to elements that are active
-                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                // Setup navigating to UI Elements below the scrollable area
+                foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
                 {
-                    SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
-                    horizontalScrollbar = null;
+                    // Enable navigation to elements that are active
+                    if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                    {
+                        SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
+                        horizontalScrollbar = null;
+                    }
                 }
-            }
 
-            // Finally, allow looping controls
-            if ((topMostElement != null) && (lastElement != null))
-            {
-                SetNextNavigation(lastElement, topMostElement.Selectable);
-                SetPreviousNavigation(lastElement.Selectable, topMostElement);
+                // Finally, allow looping controls
+                if ((topMostElement != null) && (lastElement != null))
+                {
+                    SetNextNavigation(lastElement, topMostElement.Selectable);
+                    SetPreviousNavigation(lastElement.Selectable, topMostElement);
+                }
+
+                // Double-check if the currently selected UI is active and interactable
+                GuaranteUiElementIsSelected();
             }
         }
 
@@ -239,11 +245,16 @@ namespace OmiyaGames.Menu
 
         public void ScrollToSelectable(Selectable selectable)
         {
+            ScrollToSelectable(selectable, true);
+        }
+
+        private void ScrollToSelectable(Selectable selectable, bool forceCenter)
+        {
             // Check if we have the scroll view open
             if ((scrollable != null) && (selectable != null))
             {
                 // Scroll to this control
-                Utility.ScrollVerticallyTo(scrollable, (selectable.transform as RectTransform), true);
+                Utility.ScrollVerticallyTo(scrollable, (selectable.transform as RectTransform), forceCenter);
 
                 // Highlight this element
                 Singleton.Get<MenuManager>().SelectGui(selectable);
@@ -428,6 +439,34 @@ namespace OmiyaGames.Menu
 
             // Set the navigation values
             currentElement.navigation = newNavigation;
+        }
+
+        private void GuaranteUiElementIsSelected()
+        {
+            if (LastSelectedElement != null)
+            {
+                // If not, go back up until an active control is found
+                Selectable nextElement = LastSelectedElement.Selectable;
+                Navigation navigation;
+                while ((nextElement != null) && ((nextElement.isActiveAndEnabled == false) || (nextElement.interactable == false)))
+                {
+                    navigation = nextElement.navigation;
+                    if (navigation.mode == Navigation.Mode.Explicit)
+                    {
+                        nextElement = navigation.selectOnUp;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // If one is found, select this element automatically
+                if (nextElement != null)
+                {
+                    ScrollToSelectable(nextElement, false);
+                }
+            }
         }
         #endregion
 
