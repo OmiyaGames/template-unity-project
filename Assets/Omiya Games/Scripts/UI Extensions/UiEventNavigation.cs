@@ -161,5 +161,11 @@ namespace OmiyaGames.Menu
         {
             OnAfterCancel?.Invoke(this, eventData);
         }
+
+        public void OnSliderValueChanged(float value)
+        {
+            // Goofy hack; pretend the slider made a submission
+            OnSubmit(null);
+        }
     }
 }

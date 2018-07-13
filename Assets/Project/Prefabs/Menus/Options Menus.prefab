@@ -10657,8 +10657,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114871422410932350}
   m_HandleRect: {fileID: 224866223509835550}
   m_Direction: 2
-  m_Value: 0.9999997
-  m_Size: 0.6412632
+  m_Value: 1
+  m_Size: 0.7478552
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -15607,8 +15607,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toPreviousUi: 1
-  toNextUi: 2
-  onSubmitChangesInteractable: 0
+  toNextUi: 10
+  onSubmitChangesInteractable: 1
   enableHoverSound: 1
   customHoverSound: {fileID: 0}
   enableClickSound: 1
@@ -20137,7 +20137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toPreviousUi: 1
   toNextUi: 2
-  onSubmitChangesInteractable: 0
+  onSubmitChangesInteractable: 1
   enableHoverSound: 1
   customHoverSound: {fileID: 0}
   enableClickSound: 1
@@ -20492,6 +20492,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 114991813873348022}
         m_MethodName: OnTextSizeSliderChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114559128763132094}
+        m_MethodName: OnSliderValueChanged
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -23260,7 +23271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toPreviousUi: 1
   toNextUi: 2
-  onSubmitChangesInteractable: 0
+  onSubmitChangesInteractable: 1
   enableHoverSound: 0
   customHoverSound: {fileID: 0}
   enableClickSound: 1
@@ -37304,7 +37315,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 1124.17}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224185371055193558
@@ -38389,8 +38400,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -528.9044}
-  m_SizeDelta: {x: 692, y: 720.8889}
+  m_AnchoredPosition: {x: 346, y: -588.81824}
+  m_SizeDelta: {x: 692, y: 840.71643}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224315237166545970
 RectTransform:
@@ -39022,7 +39033,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -976.1889}
+  m_AnchoredPosition: {x: 346, y: -1096.0164}
   m_SizeDelta: {x: 126.41, y: 81.68001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224392427864329512
@@ -42358,7 +42369,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -912.3489}
+  m_AnchoredPosition: {x: 346, y: -1032.1764}
   m_SizeDelta: {x: 692, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224821349313776044
@@ -42917,7 +42928,7 @@ RectTransform:
   m_Father: {fileID: 224164564191684952}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.3587368}
+  m_AnchorMin: {x: 0, y: 0.2521448}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
