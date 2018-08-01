@@ -59,6 +59,7 @@ namespace OmiyaGames
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
+        public const string TimeStampPrint = "HH:mm:ss.ffff GMTzz";
         public static readonly string[] stripStartOfUrl = new string[]
         {
             "https://www.",
@@ -233,10 +234,14 @@ namespace OmiyaGames
             }
         }
 
-        public static void Log(string message)
+        public static void Log(string message, bool showTimestamp = true)
         {
 #if DEBUG
             // Only do something if we're in debug mode
+            if(showTimestamp == true)
+            {
+                message = '<' + System.DateTime.Now.ToString(TimeStampPrint) + "> " + message;
+            }
             Debug.Log(message);
 #endif
         }
@@ -386,113 +391,6 @@ namespace OmiyaGames
 
             // Return URL
             return builder.ToString();
-        }
-
-        public static void ScrollVerticallyTo(UnityEngine.UI.ScrollRect parentScrollRect, RectTransform childControl, bool centerTo = false)
-        {
-            if ((parentScrollRect != null) && (childControl != null))
-            {
-                // Check whether we need to scroll or not, and if so, in which snapping direction
-                ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
-                float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
-                if (centerTo == false)
-                {
-                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl);
-                }
-
-                // Check whether we want to scroll or not
-                if (snapTo != ScrollVerticalSnap.None)
-                {
-                    // Grab the position to scroll to
-                    selectionPosition = GetScrollToPosition(selectionPosition, parentScrollRect.viewport, childControl, snapTo);
-
-                    // Clamp the selection position value
-                    float maxPosition = (parentScrollRect.content.rect.height - parentScrollRect.viewport.rect.height);
-                    selectionPosition = Mathf.Clamp(selectionPosition, 0, maxPosition);
-
-                    // Directly set the position of the ScrollRect's content
-                    Vector3 scrollPosition = parentScrollRect.content.anchoredPosition;
-                    scrollPosition.y = selectionPosition;
-                    parentScrollRect.content.anchoredPosition = scrollPosition;
-                }
-            }
-        }
-
-        private enum ScrollVerticalSnap
-        {
-            None = -1,
-            CenterToChild = 0,
-            TopOfChild,
-            BottomOfChild
-        }
-
-        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, RectTransform childControl)
-        {
-            ScrollVerticalSnap returnOffset = ScrollVerticalSnap.None;
-
-            // Check if viewport is smaller than content
-            float viewportHeight = viewportTransform.rect.height;
-            if (contentTransform.rect.height > viewportHeight)
-            {
-                // Calculate top of child
-                float topOfChildControl = childControlPosition;
-                topOfChildControl += (childControl.rect.height * (1 - childControl.pivot.y));
-
-                // Calculate bottom of child
-                float bottomOfChildControl = childControlPosition;
-                bottomOfChildControl -= (childControl.rect.height * childControl.pivot.y);
-
-                // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
-                if (Mathf.Abs(topOfChildControl) < contentTransform.anchoredPosition.y)
-                {
-                    returnOffset = ScrollVerticalSnap.TopOfChild;
-                }
-                else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.anchoredPosition.y + viewportHeight))
-                {
-                    returnOffset = ScrollVerticalSnap.BottomOfChild;
-                }
-            }
-            return returnOffset;
-        }
-
-        private static float GetScrollToPosition(float childControlPosition, RectTransform viewportTransform, RectTransform childControl, ScrollVerticalSnap snapTo)
-        {
-            // Check the snap-to algorithm
-            if (snapTo == ScrollVerticalSnap.TopOfChild)
-            {
-                // Shift the scroll position to the top of the scrollrect
-                childControlPosition += (childControl.rect.height * (1 - childControl.pivot.y));
-            }
-            else if (snapTo == ScrollVerticalSnap.BottomOfChild)
-            {
-                // Shift the scroll position to the bottom of the scrollrect
-                childControlPosition += viewportTransform.rect.height;
-                childControlPosition -= (childControl.rect.height * childControl.pivot.y);
-            }
-            else
-            {
-                // Shift the scroll position to the center of the scrollrect
-                childControlPosition += (viewportTransform.rect.height / 2f);
-                childControlPosition += (childControl.rect.height / 2f);
-                childControlPosition -= (childControl.rect.height * childControl.pivot.y);
-            }
-            childControlPosition *= -1f;
-            return childControlPosition;
-        }
-
-        private static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, RectTransform childControl)
-        {
-            float selectionPosition = 0f;
-            RectTransform checkTransform = childControl;
-
-            // Calculate the child control's Y-position relative to the ScrollRect's content
-            while ((checkTransform != null) && (checkTransform != contentTransform))
-            {
-                selectionPosition += checkTransform.anchoredPosition.y;
-                checkTransform = checkTransform.parent as RectTransform;
-            }
-
-            return selectionPosition;
         }
     }
 }

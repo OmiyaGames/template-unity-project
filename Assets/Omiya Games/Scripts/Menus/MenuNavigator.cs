@@ -163,6 +163,7 @@ namespace OmiyaGames.Menu
 
         public void BindToEvents()
         {
+            //Utility.Log("Start==> BindToEvents(): " + name);
             // Unbind to previous events
             OnDestroy();
 
@@ -176,23 +177,29 @@ namespace OmiyaGames.Menu
             foreach (UiEventNavigation element in UiElementsInScrollable)
             {
                 element.OnAfterSelect += scrollableSelected;
+                // FIXME: look into getting rid of this line, due to it calling the setup function far too much.
                 element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
                 element.OnAfterSubmit += scrollableSubmitted;
                 element.OnAfterCancel += scrollableCancelled;
             }
             foreach (UiEventNavigation element in uiElementsBelowScrollable)
             {
+                // FIXME: look into getting rid of this line, due to it calling the setup function far too much.
+                element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
                 element.OnAfterCancel += scrollableCancelled;
             }
+            //Utility.Log("End====> BindToEvents(): " + name);
         }
 
         public void UpdateNavigation()
         {
+            //Utility.Log("Start==> UpdateNavigation(): " + name);
             if (Menu.CurrentVisibility == IMenu.VisibilityState.Visible)
             {
                 // Cache the top-most and bottom-most element
                 UiEventNavigation topMostElement = null;
                 UiEventNavigation lastElement = null;
+                int allElements = 0;
 
                 // Setup navigating to UI Elements in the scrollable area
                 foreach (UiEventNavigation nextElement in UiElementsInScrollable)
@@ -201,11 +208,16 @@ namespace OmiyaGames.Menu
                     if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
                     {
                         SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
+                        ++allElements;
                     }
                 }
 
                 // Setup navigating to the horizontal scroll bar
                 Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
+                if(horizontalScrollbar != null)
+                {
+                    ++allElements;
+                }
 
                 // Setup navigating to UI Elements below the scrollable area
                 foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
@@ -214,6 +226,7 @@ namespace OmiyaGames.Menu
                     if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
                     {
                         SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
+                        ++allElements;
                         horizontalScrollbar = null;
                     }
                 }
@@ -226,55 +239,64 @@ namespace OmiyaGames.Menu
                 }
 
                 // Double-check if the currently selected UI is active and interactable
-                GuaranteUiElementIsSelected();
+                GuaranteUiElementIsSelected(allElements);
             }
+            //Utility.Log("End====> UpdateNavigation(): " + name);
         }
 
-        public void ScrollToLastSelectedElement(Selectable defaultElement)
+        public void ScrollToLastSelectedElement(UiEventNavigation defaultElement)
         {
             // Make sure the last selected element is within the scrollable list
             if ((LastSelectedElement != null) && (UiElementsInScrollableSet.Contains(LastSelectedElement) == true))
             {
                 // Change the default element to the last selected one
-                defaultElement = LastSelectedElement.Selectable;
+                defaultElement = LastSelectedElement;
             }
 
             // Scroll to this element
             ScrollToSelectable(defaultElement);
         }
 
-        public void ScrollToSelectable(Selectable selectable)
+        public void ScrollToSelectable(UiEventNavigation selectable)
         {
             ScrollToSelectable(selectable, true);
         }
 
-        private void ScrollToSelectable(Selectable selectable, bool forceCenter)
+        private void ScrollToSelectable(UiEventNavigation selectable, bool forceCenter)
         {
             // Check if we have the scroll view open
             if ((scrollable != null) && (selectable != null))
             {
                 // Scroll to this control
-                Utility.ScrollVerticallyTo(scrollable, (selectable.transform as RectTransform), forceCenter);
+                ScrollVerticallyTo(scrollable, selectable, forceCenter);
 
                 // Highlight this element
-                Singleton.Get<MenuManager>().SelectGui(selectable);
+                MenuManager manager = Singleton.Get<MenuManager>();
+                if(manager != null)
+                {
+                    manager.SelectGui(selectable.Selectable);
+                }
             }
         }
 
         private void OnDestroy()
         {
+            //Utility.Log("Start==> OnDestroy(): " + name);
             if (scrollableSelected != null)
             {
                 // Unbind to events
                 foreach (UiEventNavigation element in UiElementsInScrollable)
                 {
                     element.OnAfterSelect -= scrollableSelected;
+                    // FIXME: look into getting rid of this line, due to it calling the setup function far too much.
                     element.OnAfterEnabledAndActiveChanged -= scrollableEnableAndActiveChanged;
                     element.OnAfterSubmit -= scrollableSubmitted;
                     element.OnAfterCancel -= scrollableCancelled;
                 }
                 foreach (UiEventNavigation element in uiElementsBelowScrollable)
                 {
+                    // FIXME: look into getting rid of this line, due to it calling the setup function far too much.
+                    element.OnAfterEnabledAndActiveChanged -= scrollableEnableAndActiveChanged;
                     element.OnAfterCancel -= scrollableCancelled;
                 }
 
@@ -284,11 +306,13 @@ namespace OmiyaGames.Menu
                 scrollableSubmitted = null;
                 scrollableCancelled = null;
             }
+            //Utility.Log("End====> OnDestroy(): " + name);
         }
 
         #region UpdateNavigation Helper Methods
         private static void SetupUiElementsBelowScrollable(UiEventNavigation nextElement, Scrollbar horizontalScrollbar, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
         {
+            //Utility.Log("Start==> SetupUiElementsBelowScrollable()");
             // Check if this is the top-most element
             if (topMostElement == null)
             {
@@ -310,10 +334,12 @@ namespace OmiyaGames.Menu
                 SetPreviousNavigation(lastElement.Selectable, nextElement);
             }
             lastElement = nextElement;
+            //Utility.Log("End====> SetupUiElementsBelowScrollable()");
         }
 
         private Scrollbar SetupHorizontalScrollBar(UiEventNavigation lastElement)
         {
+            //Utility.Log("Start==> SetupHorizontalScrollBar(): " + name);
             Scrollbar horizontalScrollbar = null;
             if ((lastElement != null) && (scrollable != null) && (scrollable.horizontal == true) && (scrollable.horizontalScrollbar != null) && (scrollable.viewport.rect.width < scrollable.content.rect.width))
             {
@@ -328,12 +354,13 @@ namespace OmiyaGames.Menu
                 newNavigation.selectOnUp = lastElement.Selectable;
                 horizontalScrollbar.navigation = newNavigation;
             }
-
+            //Utility.Log("End====> SetupHorizontalScrollBar(): " + name);
             return horizontalScrollbar;
         }
 
         private void SetupUiElementsInScrollable(UiEventNavigation nextElement, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
         {
+            //Utility.Log("Start==> SetupUiElementsInScrollable(): " + name);
             // Check if this is the top-most element
             if (topMostElement == null)
             {
@@ -349,10 +376,12 @@ namespace OmiyaGames.Menu
                 SetPreviousNavigation(lastElement.Selectable, nextElement);
             }
             lastElement = nextElement;
+            //Utility.Log("End====> SetupUiElementsInScrollable(): " + name);
         }
 
         private static void SetNextNavigation(UiEventNavigation lastElement, Selectable currentElement, Scrollbar verticalScrollbar = null)
         {
+            //Utility.Log("Start==> SetNextNavigation()");
             // Check if the last and current element is available
             if (lastElement != null)
             {
@@ -390,10 +419,12 @@ namespace OmiyaGames.Menu
                 }
                 lastElement.Selectable.navigation = newNavigation;
             }
+            //Utility.Log("End====> SetNextNavigation()");
         }
 
         private static void SetPreviousNavigation(Selectable lastElement, UiEventNavigation currentElement)
         {
+            //Utility.Log("Start==> SetPreviousNavigation()");
             // Check if the last and current element is available
             if (currentElement != null)
             {
@@ -424,10 +455,12 @@ namespace OmiyaGames.Menu
                 }
                 currentElement.Selectable.navigation = newNavigation;
             }
+            //Utility.Log("End====> SetPreviousNavigation()");
         }
 
         private static void ResetNavigation(Selectable currentElement)
         {
+            //Utility.Log("Start==> ResetNavigation()");
             Navigation newNavigation = currentElement.navigation;
 
             // Customize the navigation
@@ -439,16 +472,18 @@ namespace OmiyaGames.Menu
 
             // Set the navigation values
             currentElement.navigation = newNavigation;
+            //Utility.Log("End====> ResetNavigation()");
         }
 
-        private void GuaranteUiElementIsSelected()
+        private void GuaranteUiElementIsSelected(int fullSize)
         {
+            //Utility.Log("Start==> GuaranteUiElementIsSelected()");
             if (LastSelectedElement != null)
             {
                 // If not, go back up until an active control is found
                 Selectable nextElement = LastSelectedElement.Selectable;
                 Navigation navigation;
-                while ((nextElement != null) && ((nextElement.isActiveAndEnabled == false) || (nextElement.interactable == false)))
+                while ((nextElement != null) && (fullSize > 0) && ((nextElement.isActiveAndEnabled == false) || (nextElement.interactable == false)))
                 {
                     navigation = nextElement.navigation;
                     if (navigation.mode == Navigation.Mode.Explicit)
@@ -459,52 +494,66 @@ namespace OmiyaGames.Menu
                     {
                         break;
                     }
+                    --fullSize;
                 }
 
                 // If one is found, select this element automatically
                 if (nextElement != null)
                 {
-                    ScrollToSelectable(nextElement, false);
+                    UiEventNavigation uiNavigation = nextElement.GetComponent<UiEventNavigation>();
+                    if(uiNavigation != null)
+                    {
+                        ScrollToSelectable(uiNavigation, false);
+                    }
                 }
             }
+            //Utility.Log("End====> GuaranteUiElementIsSelected()");
         }
         #endregion
 
         #region Event Listeners
         private void MenuNavigator_OnAfterEnabledAndActiveChanged(UiEventNavigation source, bool arg)
         {
+            //Utility.Log("Start==> MenuNavigator_OnAfterEnabledAndActiveChanged(): " + source.name);
             UpdateNavigation();
+            //Utility.Log("End====> MenuNavigator_OnAfterEnabledAndActiveChanged(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterSelect(UiEventNavigation source, BaseEventData arg)
         {
+            //Utility.Log("Start==> MenuNavigator_OnAfterSelect(): " + source.name);
             // Check if we have the scroll view open
             if (scrollable != null)
             {
                 // Scroll to this control
-                Utility.ScrollVerticallyTo(scrollable, source.transform as RectTransform);
+                ScrollVerticallyTo(scrollable, source);
             }
             LastSelectedElement = source;
+            //Utility.Log("End====> MenuNavigator_OnAfterSelect(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterSubmit(UiEventNavigation source, BaseEventData arg)
         {
+            //Utility.Log("Start==> MenuNavigator_OnAfterSubmit(): " + source.name);
             // Check if submitting to this menu causes some UI to be enabled/disabled
             if ((source != null) && (source.DoesSubmitChangesInteractable == true))
             {
                 // If so, update navigation UI
                 UpdateNavigation();
             }
+            //Utility.Log("End====> MenuNavigator_OnAfterSubmit(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterCancel(UiEventNavigation source, BaseEventData arg)
         {
+            //Utility.Log("Start==> MenuNavigator_OnAfterCancel(): " + source.name);
             // Make sure the menu is managed and NOT the default
             if ((Menu != null) && (Menu.MenuType == IMenu.Type.ManagedMenu))
             {
                 // Hide the menu
                 Menu.Hide();
             }
+            //Utility.Log("End====> MenuNavigator_OnAfterCancel(): " + source.name);
         }
         #endregion
 
@@ -587,5 +636,132 @@ namespace OmiyaGames.Menu
             return returnNum;
         }
 #endif
+        #region Scrolling Helper Methods
+        private enum ScrollVerticalSnap
+        {
+            None = -1,
+            CenterToChild = 0,
+            TopOfChild,
+            BottomOfChild
+        }
+
+        public static void ScrollVerticallyTo(ScrollRect parentScrollRect, UiEventNavigation childControl, bool centerTo = false)
+        {
+            if ((parentScrollRect != null) && (childControl != null) && (childControl.Selectable != null))
+            {
+                // Check whether we need to scroll or not, and if so, in which snapping direction
+                ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
+                float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
+                if (centerTo == false)
+                {
+                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl);
+                }
+
+                // Check whether we want to scroll or not
+                if (snapTo != ScrollVerticalSnap.None)
+                {
+                    // Grab the position to scroll to
+                    selectionPosition = GetScrollToPosition(selectionPosition, parentScrollRect.viewport, childControl, snapTo);
+
+                    // Clamp the selection position value
+                    float maxPosition = (parentScrollRect.content.rect.height - parentScrollRect.viewport.rect.height);
+                    selectionPosition = Mathf.Clamp(selectionPosition, 0, maxPosition);
+
+                    // Directly set the position of the ScrollRect's content
+                    Vector3 scrollPosition = parentScrollRect.content.anchoredPosition;
+                    scrollPosition.y = selectionPosition;
+                    parentScrollRect.content.anchoredPosition = scrollPosition;
+                    Utility.Log(scrollPosition.ToString());
+                }
+            }
+        }
+
+        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, UiEventNavigation childControl)
+        {
+            ScrollVerticalSnap returnOffset = ScrollVerticalSnap.None;
+
+            // Check if viewport is smaller than content
+            float viewportHeight = viewportTransform.rect.height;
+            if (contentTransform.rect.height > viewportHeight)
+            {
+                // Calculate top of child
+                float topOfChildControl = childControlPosition;
+                topOfChildControl += GetTopOffsetOfChildControl(childControl);
+
+                // Calculate bottom of child
+                float bottomOfChildControl = childControlPosition;
+                bottomOfChildControl -= GetBottomOffsetOfChildControl(childControl);
+
+                // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
+                if (Mathf.Abs(topOfChildControl) < contentTransform.anchoredPosition.y)
+                {
+                    returnOffset = ScrollVerticalSnap.TopOfChild;
+                }
+                else if (Mathf.Abs(bottomOfChildControl) > (contentTransform.anchoredPosition.y + viewportHeight))
+                {
+                    returnOffset = ScrollVerticalSnap.BottomOfChild;
+                }
+            }
+            return returnOffset;
+        }
+
+        private static float GetScrollToPosition(float childControlPosition, RectTransform viewportTransform, UiEventNavigation childControl, ScrollVerticalSnap snapTo)
+        {
+            // Check the snap-to algorithm
+            if (snapTo == ScrollVerticalSnap.TopOfChild)
+            {
+                // Shift the scroll position to the top of the scrollrect
+                childControlPosition += GetTopOffsetOfChildControl(childControl);
+            }
+            else if (snapTo == ScrollVerticalSnap.BottomOfChild)
+            {
+                // Shift the scroll position to the bottom of the scrollrect
+                childControlPosition += viewportTransform.rect.height;
+                childControlPosition -= GetBottomOffsetOfChildControl(childControl);
+            }
+            else
+            {
+                // Shift the scroll position to the center of the scrollrect
+                childControlPosition += (viewportTransform.rect.height / 2f);
+                childControlPosition += GetMiddleOfChildControl(childControl);
+                childControlPosition -= GetBottomOffsetOfChildControl(childControl);
+            }
+            childControlPosition *= -1f;
+            return childControlPosition;
+        }
+
+        private static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, UiEventNavigation childControl)
+        {
+            float selectionPosition = 0f;
+            RectTransform checkTransform = (RectTransform)childControl.Selectable.transform;
+
+            // Calculate the child control's Y-position relative to the ScrollRect's content
+            while ((checkTransform != null) && (checkTransform != contentTransform))
+            {
+                selectionPosition += checkTransform.anchoredPosition.y;
+                checkTransform = checkTransform.parent as RectTransform;
+            }
+
+            return selectionPosition;
+        }
+
+        private static float GetTopOffsetOfChildControl(UiEventNavigation childControl)
+        {
+            RectTransform checkTransform = childControl.UpperBoundToScrollTo;
+            return (checkTransform.rect.height * (1 - checkTransform.pivot.y));
+        }
+
+        private static float GetBottomOffsetOfChildControl(UiEventNavigation childControl)
+        {
+            RectTransform checkTransform = childControl.LowerBoundToScrollTo;
+            return (checkTransform.rect.height * checkTransform.pivot.y);
+        }
+
+        private static float GetMiddleOfChildControl(UiEventNavigation childControl)
+        {
+            RectTransform checkTransform = childControl.RectTransform;
+            return (checkTransform.rect.height / 2f);
+        }
+        #endregion
     }
 }
