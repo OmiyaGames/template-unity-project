@@ -67,6 +67,7 @@ namespace OmiyaGames.Menu
         public event System.Action<UiEventNavigation, BaseEventData> OnAfterCancel;
         public event System.Action<UiEventNavigation, bool> OnAfterEnabledAndActiveChanged;
 
+        [Header("Navigation")]
         [SerializeField]
         [EnumFlags]
         Direction toPreviousUi = Direction.Up;
@@ -75,6 +76,12 @@ namespace OmiyaGames.Menu
         Direction toNextUi = Direction.Down;
         [SerializeField]
         bool onSubmitChangesInteractable = false;
+
+        [Header("Bounds")]
+        [SerializeField]
+        RectTransform upperBoundToScrollTo;
+        [SerializeField]
+        RectTransform lowerBoundToScrollTo;
 
         Selectable selectable = null;
         RectTransform rectTransform = null;
@@ -100,6 +107,36 @@ namespace OmiyaGames.Menu
                     selectable = GetComponentInChildren<Selectable>(true);
                 }
                 return selectable;
+            }
+        }
+
+        public RectTransform UpperBoundToScrollTo
+        {
+            get
+            {
+                if(upperBoundToScrollTo != null)
+                {
+                    return upperBoundToScrollTo;
+                }
+                else
+                {
+                    return RectTransform;
+                }
+            }
+        }
+
+        public RectTransform LowerBoundToScrollTo
+        {
+            get
+            {
+                if (lowerBoundToScrollTo != null)
+                {
+                    return lowerBoundToScrollTo;
+                }
+                else
+                {
+                    return RectTransform;
+                }
             }
         }
 

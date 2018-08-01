@@ -473,15 +473,19 @@ namespace OmiyaGames.Menu
                 // Check if we have scrolling to be concerned about
                 if (Navigator != null)
                 {
-                    if(from == VisibilityState.Hidden)
+                    UiEventNavigation uiToNavigateTo = DefaultUi.GetComponent<UiEventNavigation>();
+                    if (uiToNavigateTo != null)
                     {
-                        // Scroll to the default UI
-                        Navigator.ScrollToSelectable(DefaultUi);
-                    }
-                    else
-                    {
-                        // Scroll to the last selected element
-                        Navigator.ScrollToLastSelectedElement(DefaultUi);
+                        if (from == VisibilityState.Hidden)
+                        {
+                            // Scroll to the default UI
+                            Navigator.ScrollToSelectable(uiToNavigateTo);
+                        }
+                        else
+                        {
+                            // Scroll to the last selected element
+                            Navigator.ScrollToLastSelectedElement(uiToNavigateTo);
+                        }
                     }
                 }
             }
