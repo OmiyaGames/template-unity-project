@@ -59,7 +59,10 @@ namespace OmiyaGames
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
+#if DEBUG
         public const string TimeStampPrint = "HH:mm:ss.ffff GMTzz";
+        public const bool IsTimeStampPrintedByDefault = true;
+#endif
         public static readonly string[] stripStartOfUrl = new string[]
         {
             "https://www.",
@@ -234,11 +237,11 @@ namespace OmiyaGames
             }
         }
 
-        public static void Log(string message, bool showTimestamp = true)
+        public static void Log(string message, bool showTimestamp = IsTimeStampPrintedByDefault)
         {
 #if DEBUG
             // Only do something if we're in debug mode
-            if(showTimestamp == true)
+            if (showTimestamp == true)
             {
                 message = '<' + System.DateTime.Now.ToString(TimeStampPrint) + "> " + message;
             }

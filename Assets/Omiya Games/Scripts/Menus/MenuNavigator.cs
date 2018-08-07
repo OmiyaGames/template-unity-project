@@ -163,7 +163,6 @@ namespace OmiyaGames.Menu
 
         public void BindToEvents()
         {
-            //Utility.Log("Start==> BindToEvents(): " + name);
             // Unbind to previous events
             OnDestroy();
 
@@ -188,12 +187,10 @@ namespace OmiyaGames.Menu
                 element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
                 element.OnAfterCancel += scrollableCancelled;
             }
-            //Utility.Log("End====> BindToEvents(): " + name);
         }
 
         public void UpdateNavigation()
         {
-            //Utility.Log("Start==> UpdateNavigation(): " + name);
             if (Menu.CurrentVisibility == IMenu.VisibilityState.Visible)
             {
                 // Cache the top-most and bottom-most element
@@ -241,7 +238,6 @@ namespace OmiyaGames.Menu
                 // Double-check if the currently selected UI is active and interactable
                 GuaranteUiElementIsSelected(allElements);
             }
-            //Utility.Log("End====> UpdateNavigation(): " + name);
         }
 
         public void ScrollToLastSelectedElement(UiEventNavigation defaultElement)
@@ -281,7 +277,6 @@ namespace OmiyaGames.Menu
 
         private void OnDestroy()
         {
-            //Utility.Log("Start==> OnDestroy(): " + name);
             if (scrollableSelected != null)
             {
                 // Unbind to events
@@ -306,13 +301,11 @@ namespace OmiyaGames.Menu
                 scrollableSubmitted = null;
                 scrollableCancelled = null;
             }
-            //Utility.Log("End====> OnDestroy(): " + name);
         }
 
         #region UpdateNavigation Helper Methods
         private static void SetupUiElementsBelowScrollable(UiEventNavigation nextElement, Scrollbar horizontalScrollbar, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
         {
-            //Utility.Log("Start==> SetupUiElementsBelowScrollable()");
             // Check if this is the top-most element
             if (topMostElement == null)
             {
@@ -334,12 +327,10 @@ namespace OmiyaGames.Menu
                 SetPreviousNavigation(lastElement.Selectable, nextElement);
             }
             lastElement = nextElement;
-            //Utility.Log("End====> SetupUiElementsBelowScrollable()");
         }
 
         private Scrollbar SetupHorizontalScrollBar(UiEventNavigation lastElement)
         {
-            //Utility.Log("Start==> SetupHorizontalScrollBar(): " + name);
             Scrollbar horizontalScrollbar = null;
             if ((lastElement != null) && (scrollable != null) && (scrollable.horizontal == true) && (scrollable.horizontalScrollbar != null) && (scrollable.viewport.rect.width < scrollable.content.rect.width))
             {
@@ -354,13 +345,11 @@ namespace OmiyaGames.Menu
                 newNavigation.selectOnUp = lastElement.Selectable;
                 horizontalScrollbar.navigation = newNavigation;
             }
-            //Utility.Log("End====> SetupHorizontalScrollBar(): " + name);
             return horizontalScrollbar;
         }
 
         private void SetupUiElementsInScrollable(UiEventNavigation nextElement, ref UiEventNavigation lastElement, ref UiEventNavigation topMostElement)
         {
-            //Utility.Log("Start==> SetupUiElementsInScrollable(): " + name);
             // Check if this is the top-most element
             if (topMostElement == null)
             {
@@ -376,12 +365,10 @@ namespace OmiyaGames.Menu
                 SetPreviousNavigation(lastElement.Selectable, nextElement);
             }
             lastElement = nextElement;
-            //Utility.Log("End====> SetupUiElementsInScrollable(): " + name);
         }
 
         private static void SetNextNavigation(UiEventNavigation lastElement, Selectable currentElement, Scrollbar verticalScrollbar = null)
         {
-            //Utility.Log("Start==> SetNextNavigation()");
             // Check if the last and current element is available
             if (lastElement != null)
             {
@@ -419,12 +406,10 @@ namespace OmiyaGames.Menu
                 }
                 lastElement.Selectable.navigation = newNavigation;
             }
-            //Utility.Log("End====> SetNextNavigation()");
         }
 
         private static void SetPreviousNavigation(Selectable lastElement, UiEventNavigation currentElement)
         {
-            //Utility.Log("Start==> SetPreviousNavigation()");
             // Check if the last and current element is available
             if (currentElement != null)
             {
@@ -455,12 +440,10 @@ namespace OmiyaGames.Menu
                 }
                 currentElement.Selectable.navigation = newNavigation;
             }
-            //Utility.Log("End====> SetPreviousNavigation()");
         }
 
         private static void ResetNavigation(Selectable currentElement)
         {
-            //Utility.Log("Start==> ResetNavigation()");
             Navigation newNavigation = currentElement.navigation;
 
             // Customize the navigation
@@ -472,12 +455,10 @@ namespace OmiyaGames.Menu
 
             // Set the navigation values
             currentElement.navigation = newNavigation;
-            //Utility.Log("End====> ResetNavigation()");
         }
 
         private void GuaranteUiElementIsSelected(int fullSize)
         {
-            //Utility.Log("Start==> GuaranteUiElementIsSelected()");
             if (LastSelectedElement != null)
             {
                 // If not, go back up until an active control is found
@@ -507,21 +488,17 @@ namespace OmiyaGames.Menu
                     }
                 }
             }
-            //Utility.Log("End====> GuaranteUiElementIsSelected()");
         }
         #endregion
 
         #region Event Listeners
         private void MenuNavigator_OnAfterEnabledAndActiveChanged(UiEventNavigation source, bool arg)
         {
-            //Utility.Log("Start==> MenuNavigator_OnAfterEnabledAndActiveChanged(): " + source.name);
             UpdateNavigation();
-            //Utility.Log("End====> MenuNavigator_OnAfterEnabledAndActiveChanged(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterSelect(UiEventNavigation source, BaseEventData arg)
         {
-            //Utility.Log("Start==> MenuNavigator_OnAfterSelect(): " + source.name);
             // Check if we have the scroll view open
             if (scrollable != null)
             {
@@ -529,31 +506,26 @@ namespace OmiyaGames.Menu
                 ScrollVerticallyTo(scrollable, source);
             }
             LastSelectedElement = source;
-            //Utility.Log("End====> MenuNavigator_OnAfterSelect(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterSubmit(UiEventNavigation source, BaseEventData arg)
         {
-            //Utility.Log("Start==> MenuNavigator_OnAfterSubmit(): " + source.name);
             // Check if submitting to this menu causes some UI to be enabled/disabled
             if ((source != null) && (source.DoesSubmitChangesInteractable == true))
             {
                 // If so, update navigation UI
                 UpdateNavigation();
             }
-            //Utility.Log("End====> MenuNavigator_OnAfterSubmit(): " + source.name);
         }
 
         private void MenuNavigator_OnAfterCancel(UiEventNavigation source, BaseEventData arg)
         {
-            //Utility.Log("Start==> MenuNavigator_OnAfterCancel(): " + source.name);
             // Make sure the menu is managed and NOT the default
             if ((Menu != null) && (Menu.MenuType == IMenu.Type.ManagedMenu))
             {
                 // Hide the menu
                 Menu.Hide();
             }
-            //Utility.Log("End====> MenuNavigator_OnAfterCancel(): " + source.name);
         }
         #endregion
 
@@ -650,8 +622,9 @@ namespace OmiyaGames.Menu
             if ((parentScrollRect != null) && (childControl != null) && (childControl.Selectable != null))
             {
                 // Check whether we need to scroll or not, and if so, in which snapping direction
+                Utility.Log("ScrollVerticallyTo(): " + childControl.name);
                 ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
-                float selectionPosition = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
+                float selectionPosition = ScrollingHelper.GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
                 if (centerTo == false)
                 {
                     snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl);
@@ -671,7 +644,7 @@ namespace OmiyaGames.Menu
                     Vector3 scrollPosition = parentScrollRect.content.anchoredPosition;
                     scrollPosition.y = selectionPosition;
                     parentScrollRect.content.anchoredPosition = scrollPosition;
-                    Utility.Log(scrollPosition.ToString());
+                    Utility.Log("ScrollVerticallyTo(): " + scrollPosition.ToString());
                 }
             }
         }
@@ -693,6 +666,8 @@ namespace OmiyaGames.Menu
                 bottomOfChildControl -= GetBottomOffsetOfChildControl(childControl);
 
                 // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
+                Utility.Log("childControl: " + topOfChildControl + ", " + bottomOfChildControl);
+                Utility.Log("contentTransform.anchoredPosition: " + contentTransform.anchoredPosition.y + ", " + (contentTransform.anchoredPosition.y + viewportHeight));
                 if (Mathf.Abs(topOfChildControl) < contentTransform.anchoredPosition.y)
                 {
                     returnOffset = ScrollVerticalSnap.TopOfChild;
@@ -701,7 +676,11 @@ namespace OmiyaGames.Menu
                 {
                     returnOffset = ScrollVerticalSnap.BottomOfChild;
                 }
+
+
+                    returnOffset = ScrollVerticalSnap.TopOfChild;
             }
+            Utility.Log("GetVerticalSnapping(): " + returnOffset);
             return returnOffset;
         }
 
@@ -715,6 +694,10 @@ namespace OmiyaGames.Menu
             }
             else if (snapTo == ScrollVerticalSnap.BottomOfChild)
             {
+                Utility.Log("GetScrollToPosition(): " + childControlPosition + ", " + viewportTransform.rect.height + ", " + GetBottomOffsetOfChildControl(childControl));
+                //94.17139
+
+
                 // Shift the scroll position to the bottom of the scrollrect
                 childControlPosition += viewportTransform.rect.height;
                 childControlPosition -= GetBottomOffsetOfChildControl(childControl);
@@ -727,40 +710,35 @@ namespace OmiyaGames.Menu
                 childControlPosition -= GetBottomOffsetOfChildControl(childControl);
             }
             childControlPosition *= -1f;
+            Utility.Log("GetScrollToPosition(): " + childControlPosition);
             return childControlPosition;
-        }
-
-        private static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, UiEventNavigation childControl)
-        {
-            float selectionPosition = 0f;
-            RectTransform checkTransform = (RectTransform)childControl.Selectable.transform;
-
-            // Calculate the child control's Y-position relative to the ScrollRect's content
-            while ((checkTransform != null) && (checkTransform != contentTransform))
-            {
-                selectionPosition += checkTransform.anchoredPosition.y;
-                checkTransform = checkTransform.parent as RectTransform;
-            }
-
-            return selectionPosition;
         }
 
         private static float GetTopOffsetOfChildControl(UiEventNavigation childControl)
         {
-            RectTransform checkTransform = childControl.UpperBoundToScrollTo;
-            return (checkTransform.rect.height * (1 - checkTransform.pivot.y));
+            RectTransform checkTransform = childControl.RectTransform;
+            float returnOffset = (checkTransform.rect.height * (1 - checkTransform.pivot.y));
+            //if(childControl.RectTransform != childControl.UpperBoundToScrollTo)
+            //{
+            //    returnOffset += Mathf.Abs(childControl.UpperBoundToScrollTo.anchoredPosition.y - childControl.RectTransform.anchoredPosition.y);
+            //}
+            return returnOffset;
         }
 
         private static float GetBottomOffsetOfChildControl(UiEventNavigation childControl)
         {
-            RectTransform checkTransform = childControl.LowerBoundToScrollTo;
-            return (checkTransform.rect.height * checkTransform.pivot.y);
+            RectTransform checkTransform = childControl.RectTransform;
+            float returnOffset = (checkTransform.rect.height * checkTransform.pivot.y);
+            //if (childControl.RectTransform != childControl.LowerBoundToScrollTo)
+            //{
+            //    returnOffset += Mathf.Abs(childControl.LowerBoundToScrollTo.anchoredPosition.y - childControl.RectTransform.anchoredPosition.y);
+            //}
+            return returnOffset;
         }
 
         private static float GetMiddleOfChildControl(UiEventNavigation childControl)
         {
-            RectTransform checkTransform = childControl.RectTransform;
-            return (checkTransform.rect.height / 2f);
+            return (childControl.RectTransform.rect.height / 2f);
         }
         #endregion
     }
