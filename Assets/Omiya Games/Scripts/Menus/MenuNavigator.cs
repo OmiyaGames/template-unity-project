@@ -264,7 +264,7 @@ namespace OmiyaGames.Menu
             if ((scrollable != null) && (selectable != null))
             {
                 // Scroll to this control
-                ScrollVerticallyTo(scrollable, selectable, forceCenter);
+                ScrollVerticallyTo(scrollable, selectable, boundsCache, forceCenter);
 
                 // Highlight this element
                 MenuManager manager = Singleton.Get<MenuManager>();
@@ -617,24 +617,56 @@ namespace OmiyaGames.Menu
             BottomOfChild
         }
 
-        public static void ScrollVerticallyTo(ScrollRect parentScrollRect, UiEventNavigation childControl, bool centerTo = false)
+        public struct SingleAxisBounds
+        {
+            public readonly float max;
+            public readonly float middle;
+            public readonly float min;
+
+            public SingleAxisBounds(float max, float middle, float min)
+            {
+                this.max = max;
+                this.middle = middle;
+                this.min = min;
+            }
+        }
+
+        private static readonly Dictionary<UiEventNavigation, SingleAxisBounds> boundsCache = new Dictionary<UiEventNavigation, SingleAxisBounds>();
+
+        public static void ScrollVerticallyTo(ScrollRect parentScrollRect, UiEventNavigation childControl, Dictionary<UiEventNavigation, SingleAxisBounds> cacheDict = null, bool centerTo = false)
         {
             if ((parentScrollRect != null) && (childControl != null) && (childControl.Selectable != null))
             {
-                // Check whether we need to scroll or not, and if so, in which snapping direction
                 Utility.Log("ScrollVerticallyTo(): " + childControl.name);
+
+                // Check the cache, and see if the bounds for this child control already exists
+                SingleAxisBounds childBounds;
+                if ((cacheDict == null) || (cacheDict.TryGetValue(childControl, out childBounds) == false))
+                {
+                    // Calculate the top and bottom position of the the control
+                    float topPos, centerPos, bottomPos;
+                    centerPos = ScrollingHelper.GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl, out topPos, out bottomPos);
+                    childBounds = new SingleAxisBounds(topPos, centerPos, bottomPos);
+
+                    // Cache these values
+                    if (cacheDict != null)
+                    {
+                        cacheDict.Add(childControl, childBounds);
+                    }
+                }
+
+                // Check whether we need to scroll or not, and if so, in which snapping direction
                 ScrollVerticalSnap snapTo = ScrollVerticalSnap.CenterToChild;
-                float selectionPosition = ScrollingHelper.GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl);
                 if (centerTo == false)
                 {
-                    snapTo = GetVerticalSnapping(selectionPosition, parentScrollRect.content, parentScrollRect.viewport, childControl);
+                    snapTo = GetVerticalSnapping(parentScrollRect.content, parentScrollRect.viewport, ref childBounds);
                 }
 
                 // Check whether we want to scroll or not
                 if (snapTo != ScrollVerticalSnap.None)
                 {
                     // Grab the position to scroll to
-                    selectionPosition = GetScrollToPosition(selectionPosition, parentScrollRect.viewport, childControl, snapTo);
+                    float selectionPosition = GetScrollToPosition(parentScrollRect.viewport, snapTo, ref childBounds);
 
                     // Clamp the selection position value
                     float maxPosition = (parentScrollRect.content.rect.height - parentScrollRect.viewport.rect.height);
@@ -649,22 +681,16 @@ namespace OmiyaGames.Menu
             }
         }
 
-        private static ScrollVerticalSnap GetVerticalSnapping(float childControlPosition, RectTransform contentTransform, RectTransform viewportTransform, UiEventNavigation childControl)
+        private static ScrollVerticalSnap GetVerticalSnapping(RectTransform contentTransform, RectTransform viewportTransform, ref SingleAxisBounds childBounds)
         {
             ScrollVerticalSnap returnOffset = ScrollVerticalSnap.None;
+            float topOfChildControl = childBounds.max;
+            float bottomOfChildControl = childBounds.min;
 
             // Check if viewport is smaller than content
             float viewportHeight = viewportTransform.rect.height;
             if (contentTransform.rect.height > viewportHeight)
             {
-                // Calculate top of child
-                float topOfChildControl = childControlPosition;
-                topOfChildControl += GetTopOffsetOfChildControl(childControl);
-
-                // Calculate bottom of child
-                float bottomOfChildControl = childControlPosition;
-                bottomOfChildControl -= GetBottomOffsetOfChildControl(childControl);
-
                 // Based on these values, determine whether to snap to the top or bottom of out-of-view child control
                 Utility.Log("childControl: " + topOfChildControl + ", " + bottomOfChildControl);
                 Utility.Log("contentTransform.anchoredPosition: " + contentTransform.anchoredPosition.y + ", " + (contentTransform.anchoredPosition.y + viewportHeight));
@@ -676,69 +702,38 @@ namespace OmiyaGames.Menu
                 {
                     returnOffset = ScrollVerticalSnap.BottomOfChild;
                 }
-
-
-                    returnOffset = ScrollVerticalSnap.TopOfChild;
             }
             Utility.Log("GetVerticalSnapping(): " + returnOffset);
             return returnOffset;
         }
 
-        private static float GetScrollToPosition(float childControlPosition, RectTransform viewportTransform, UiEventNavigation childControl, ScrollVerticalSnap snapTo)
+        private static float GetScrollToPosition(RectTransform viewportTransform, ScrollVerticalSnap snapTo, ref SingleAxisBounds childBounds)
         {
+            // By default, snap to the top of the child control
+            float childControlPosition = childBounds.max;
+
             // Check the snap-to algorithm
-            if (snapTo == ScrollVerticalSnap.TopOfChild)
+            if (snapTo == ScrollVerticalSnap.BottomOfChild)
             {
-                // Shift the scroll position to the top of the scrollrect
-                childControlPosition += GetTopOffsetOfChildControl(childControl);
-            }
-            else if (snapTo == ScrollVerticalSnap.BottomOfChild)
-            {
-                Utility.Log("GetScrollToPosition(): " + childControlPosition + ", " + viewportTransform.rect.height + ", " + GetBottomOffsetOfChildControl(childControl));
-                //94.17139
-
-
                 // Shift the scroll position to the bottom of the scrollrect
-                childControlPosition += viewportTransform.rect.height;
-                childControlPosition -= GetBottomOffsetOfChildControl(childControl);
+                childControlPosition = viewportTransform.rect.height;
+                childControlPosition -= childBounds.min;
+                Utility.Log("GetScrollToPosition(" + snapTo.ToString() + "): " + viewportTransform.rect.height + " - " + childBounds.min + " = " + childControlPosition);
             }
-            else
+            else if (snapTo == ScrollVerticalSnap.CenterToChild)
             {
                 // Shift the scroll position to the center of the scrollrect
-                childControlPosition += (viewportTransform.rect.height / 2f);
-                childControlPosition += GetMiddleOfChildControl(childControl);
-                childControlPosition -= GetBottomOffsetOfChildControl(childControl);
+                childControlPosition = (viewportTransform.rect.height / 2f);
+                childControlPosition += childBounds.middle;
+                childControlPosition -= childBounds.min;
+            }
+            else if(snapTo == ScrollVerticalSnap.TopOfChild)
+            {
+                Utility.Log("GetScrollToPosition(" + snapTo.ToString() + "): " + childControlPosition);
             }
             childControlPosition *= -1f;
             Utility.Log("GetScrollToPosition(): " + childControlPosition);
             return childControlPosition;
-        }
-
-        private static float GetTopOffsetOfChildControl(UiEventNavigation childControl)
-        {
-            RectTransform checkTransform = childControl.RectTransform;
-            float returnOffset = (checkTransform.rect.height * (1 - checkTransform.pivot.y));
-            //if(childControl.RectTransform != childControl.UpperBoundToScrollTo)
-            //{
-            //    returnOffset += Mathf.Abs(childControl.UpperBoundToScrollTo.anchoredPosition.y - childControl.RectTransform.anchoredPosition.y);
-            //}
-            return returnOffset;
-        }
-
-        private static float GetBottomOffsetOfChildControl(UiEventNavigation childControl)
-        {
-            RectTransform checkTransform = childControl.RectTransform;
-            float returnOffset = (checkTransform.rect.height * checkTransform.pivot.y);
-            //if (childControl.RectTransform != childControl.LowerBoundToScrollTo)
-            //{
-            //    returnOffset += Mathf.Abs(childControl.LowerBoundToScrollTo.anchoredPosition.y - childControl.RectTransform.anchoredPosition.y);
-            //}
-            return returnOffset;
-        }
-
-        private static float GetMiddleOfChildControl(UiEventNavigation childControl)
-        {
-            return (childControl.RectTransform.rect.height / 2f);
         }
         #endregion
     }
