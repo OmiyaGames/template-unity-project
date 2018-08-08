@@ -3,8 +3,6 @@ using TMPro;
 
 namespace OmiyaGames
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="TranslationManager.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -30,7 +28,7 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/5/2018</date>
+    /// <date>6/29/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Resizes a TextMeshPro label.
@@ -48,15 +46,79 @@ namespace OmiyaGames
     /// <description>Taro</description>
     /// <description>Initial verison</description>
     /// </item>
+    /// <item>
+    /// <description>6/5/2018</description>
+    /// <description>Taro</description>
+    /// <description>Actual implementation.</description>
+    /// </item>
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(TextMeshProUGUI))]
     public class TextMeshProResizer : IResizer
     {
-        // FIXME: do something!
-        void Start()
-        {
+        TextMeshProUGUI label = null;
+        float originalFontSize = -1f;
+        ResizeMultiplierChanged lastAction = null;
 
+        public TextMeshProUGUI Label
+        {
+            get
+            {
+                if(label == null)
+                {
+                    label = GetComponent<TextMeshProUGUI>();
+                }
+                return label;
+            }
+        }
+
+        public float OriginalFontSize
+        {
+            get
+            {
+                if (originalFontSize < 0)
+                {
+                    originalFontSize = Label.fontSize;
+                }
+                return originalFontSize;
+            }
+        }
+
+        private void OnEnable()
+        {
+            // Update the font size if the multiplier is not set to 1
+            UpdateLabelSize();
+
+            // Bind to the resize event
+            if(lastAction == null)
+            {
+                lastAction = new ResizeMultiplierChanged(UpdateLabelSize);
+                OnAfterResizeMultiplierChanged += lastAction;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if(lastAction != null)
+            {
+                OnAfterResizeMultiplierChanged -= lastAction;
+                lastAction = null;
+            }
+        }
+
+        public void UpdateLabelSize()
+        {
+            // Do NOT attempt to resize the text if it's set to auto-size
+            if ((isActiveAndEnabled == true) && (Label != null) && (Label.enableAutoSizing == false))
+            {
+                Label.fontSize = OriginalFontSize * ResizeMultiplier;
+            }
+        }
+
+        private void UpdateLabelSize(float lastMultiplier, float newMultiplier)
+        {
+            UpdateLabelSize();
         }
     }
 }

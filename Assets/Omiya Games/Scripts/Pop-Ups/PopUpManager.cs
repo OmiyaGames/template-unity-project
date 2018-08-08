@@ -67,7 +67,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         float spacing = 10f;
 
-        // FIXME: handle animating
+        // TODO: handle animating
         [Header("Required Components")]
         [SerializeField]
         PopUpDialog dialogInstace;
@@ -83,13 +83,13 @@ namespace OmiyaGames.Menu
 
         // A queue of all texts logged, along with their associated ID
         readonly SortedDictionary<ulong, string> allLoggedTexts = new SortedDictionary<ulong, string>(new DescendingOrder());
-        // FIXME: re-exmine how to prevent pop-ups from appearing, but somehow queue them
+        // TODO: re-examine how to prevent pop-ups from appearing, but somehow queue them
         //readonly List<PopUpDialog> delayedShowDialogs = new List<PopUpDialog>();
 
         // Lists of visible and hidden dialogs
         List<PopUpDialog> visibleDialogs = null;
         Queue<PopUpDialog> hiddenDialogs = null;
-        // FIXME: re-exmine how to prevent pop-ups from appearing, but somehow queue them
+        // TODO: re-examine how to prevent pop-ups from appearing, but somehow queue them
         //System.Action<float> everyFrame = null;
 
         public int MaximumNumberOfDialogs

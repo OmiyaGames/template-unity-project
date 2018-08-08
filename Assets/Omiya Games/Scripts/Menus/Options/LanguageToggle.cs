@@ -41,6 +41,8 @@ namespace OmiyaGames.Menu
 
         [SerializeField]
         TMPro.TextMeshProUGUI label;
+        [SerializeField]
+        UiEventNavigation navigation;
 
         string language = null;
         Toggle cachedCheckbox = null;
@@ -67,6 +69,14 @@ namespace OmiyaGames.Menu
                     cachedCheckbox = GetComponent<Toggle>();
                 }
                 return cachedCheckbox;
+            }
+        }
+
+        public UiEventNavigation Navigation
+        {
+            get
+            {
+                return navigation;
             }
         }
 

@@ -77,7 +77,7 @@ namespace OmiyaGames.Menu
         [SerializeField]
         SoundEffect buttonHoverSound = null;
 
-        WaitForSeconds delaySelection = null;
+        WaitForSecondsRealtime delaySelection = null;
         readonly Dictionary<Type, IMenu> typeToMenuMap = new Dictionary<Type, IMenu>();
         readonly Stack<IMenu> managedMenusStack = new Stack<IMenu>();
 
@@ -191,7 +191,7 @@ namespace OmiyaGames.Menu
             Singleton.Instance.OnRealTimeUpdate += QueryInput;
 
             // Setup selection
-            delaySelection = new WaitForSeconds(delaySelectingDefaultUiBy);
+            delaySelection = new WaitForSecondsRealtime(delaySelectingDefaultUiBy);
         }
 
         internal override void SceneAwake()
@@ -259,7 +259,7 @@ namespace OmiyaGames.Menu
             return returnMenu;
         }
 
-        public void SelectGuiGameObject(GameObject guiElement)
+        public void SelectGui(UnityEngine.UI.Selectable guiElement)
         {
             StartCoroutine(DelaySelection(guiElement));
         }
@@ -439,13 +439,20 @@ namespace OmiyaGames.Menu
             }
         }
 
-        IEnumerator DelaySelection(GameObject guiElement)
+        IEnumerator DelaySelection(UnityEngine.UI.Selectable guiElement)
         {
-            yield return delaySelection;
-
-            if(Events.currentSelectedGameObject == null)
+            if (guiElement != null)
             {
-                Events.SetSelectedGameObject(guiElement);
+                yield return delaySelection;
+
+                if (Events.currentSelectedGameObject == null)
+                {
+                    guiElement.Select();
+                    guiElement.OnSelect(null);
+
+                    yield return null;
+                    Events.SetSelectedGameObject(guiElement.gameObject);
+                }
             }
         }
         #endregion

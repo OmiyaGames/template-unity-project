@@ -136,7 +136,7 @@ namespace OmiyaGames.Menu
                 levelSelectButton.gameObject.SetActive(false);
 
                 // Select the start button by default
-                CurrentDefaultUi = defaultButton.gameObject;
+                CurrentDefaultUi = defaultButton;
             }
             else
             {
@@ -145,7 +145,7 @@ namespace OmiyaGames.Menu
                 levelSelectButton.gameObject.SetActive(true);
 
                 // Select the level select button by default
-                CurrentDefaultUi = levelSelectButton.gameObject;
+                CurrentDefaultUi = levelSelectButton;
             }
         }
 
@@ -159,7 +159,7 @@ namespace OmiyaGames.Menu
                 SceneChanger.LoadNextLevel();
 
                 // Indicate button is clicked
-                CurrentDefaultUi = defaultButton.gameObject;
+                CurrentDefaultUi = defaultButton;
             }
         }
 
@@ -172,7 +172,7 @@ namespace OmiyaGames.Menu
                 SceneChanger.LoadScene(SceneChanger.Credits);
 
                 // Indicate we've clicked on a button
-                CurrentDefaultUi = creditsButton.gameObject;
+                CurrentDefaultUi = creditsButton;
 
                 // Since we're changing scenes, forcefully prevent
                 // the other buttons from listening to the events.
@@ -189,7 +189,7 @@ namespace OmiyaGames.Menu
                 Application.Quit();
 
                 // Indicate we've clicked on a button
-                CurrentDefaultUi = quitButton.gameObject;
+                CurrentDefaultUi = quitButton;
 
                 // Since we're closing the application, forcefully prevent
                 // the other buttons from listening to the events.

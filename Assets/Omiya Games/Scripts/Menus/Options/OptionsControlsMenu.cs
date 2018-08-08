@@ -86,21 +86,21 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
                 if (enableKeyboardControls.IsThisBuildSupported() == true)
                 {
-                    return keyboardSensitivitySet.DefaultGameObject;
+                    return keyboardSensitivitySet.DefaultSelectable;
                 }
                 else if (enableCameraSensitivityControls.IsThisBuildSupported() == true)
                 {
-                    return cameraSensitivitySet.DefaultGameObject;
+                    return cameraSensitivitySet.DefaultSelectable;
                 }
                 else
                 {
-                    return scrollWheelSensitivity.gameObject;
+                    return scrollWheelSensitivity.Slider;
                 }
             }
         }

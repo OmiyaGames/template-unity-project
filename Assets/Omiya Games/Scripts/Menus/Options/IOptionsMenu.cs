@@ -53,7 +53,7 @@ namespace OmiyaGames.Menu
     {
         [Header("Common Options Controls")]
         [SerializeField]
-        ScrollRect scrollMenu;
+        MenuNavigator navigator;
 
         public static void SetupDividers(GameObject[] allDividers, params SupportedPlatforms[] allSupportFlags)
         {
@@ -93,11 +93,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override ScrollRect ScrollToDefaultUi
+        public override MenuNavigator Navigator
         {
             get
             {
-                return scrollMenu;
+                return navigator;
             }
         }
     }

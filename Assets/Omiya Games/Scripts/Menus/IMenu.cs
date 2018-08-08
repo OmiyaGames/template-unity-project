@@ -237,7 +237,7 @@ namespace OmiyaGames.Menu
         /// <summary>
         /// Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.
         /// </summary>
-        public virtual ScrollRect ScrollToDefaultUi
+        public virtual MenuNavigator Navigator
         {
             get
             {
@@ -345,7 +345,7 @@ namespace OmiyaGames.Menu
         /// <summary>
         /// The default UI to highlight.
         /// </summary>
-        public abstract GameObject DefaultUi
+        public abstract Selectable DefaultUi
         {
             get;
         }
@@ -423,7 +423,7 @@ namespace OmiyaGames.Menu
             if (to == VisibilityState.Visible)
             {
                 // Run setup when made visible
-                OnVisibilityChangedToVisible();
+                OnVisibilityChangedToVisible(from);
             }
 
             // Check if this is managed
@@ -446,11 +446,16 @@ namespace OmiyaGames.Menu
         /// </summary>
         protected virtual void OnSetup()
         {
-            // Do nothing for now.
+            // Setup the navigator, if one is assigned.
+            if(Navigator != null)
+            {
+                Navigator.BindToEvents();
+                Navigator.UpdateNavigation();
+            }
         }
 
         #region Helper Methods
-        void OnVisibilityChangedToVisible()
+        void OnVisibilityChangedToVisible(VisibilityState from)
         {
             // Check if we've been setup
             if (CurrentSetupState == SetupState.NotSetup)
@@ -463,13 +468,25 @@ namespace OmiyaGames.Menu
             if (DefaultUi != null)
             {
                 // If so, update the menu manager to select the default UI
-                Manager.SelectGuiGameObject(DefaultUi);
+                Manager.SelectGui(DefaultUi);
 
                 // Check if we have scrolling to be concerned about
-                if (ScrollToDefaultUi != null)
+                if (Navigator != null)
                 {
-                    // FIXME: scroll to the default UI
-                    //ScrollToDefaultUi.scr
+                    UiEventNavigation uiToNavigateTo = DefaultUi.GetComponent<UiEventNavigation>();
+                    if (uiToNavigateTo != null)
+                    {
+                        if (from == VisibilityState.Hidden)
+                        {
+                            // Scroll to the default UI
+                            Navigator.ScrollToSelectable(uiToNavigateTo);
+                        }
+                        else
+                        {
+                            // Scroll to the last selected element
+                            Navigator.ScrollToLastSelectedElement(uiToNavigateTo);
+                        }
+                    }
                 }
             }
         }

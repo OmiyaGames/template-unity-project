@@ -116,11 +116,11 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override UnityEngine.UI.Selectable DefaultUi
         {
             get
             {
-                return defaultUi.gameObject;
+                return defaultUi;
             }
         }
 
