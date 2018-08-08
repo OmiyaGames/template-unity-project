@@ -59,6 +59,10 @@ namespace OmiyaGames
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
+#if DEBUG
+        public const string TimeStampPrint = "HH:mm:ss.ffff GMTzz";
+        public const bool IsTimeStampPrintedByDefault = true;
+#endif
         public static readonly string[] stripStartOfUrl = new string[]
         {
             "https://www.",
@@ -181,7 +185,7 @@ namespace OmiyaGames
         public static void ShuffleList<H>(IList<H> list, int upTo = -1)
         {
             // Check if we want to shuffle the entire list
-            if((upTo < 0) || (upTo > list.Count))
+            if ((upTo < 0) || (upTo > list.Count))
             {
                 upTo = list.Count;
             }
@@ -189,11 +193,11 @@ namespace OmiyaGames
             // Go through every list element
             H swapObject = default(H);
             int index = 0, randomIndex = 0;
-            for(; index < upTo; ++index)
+            for (; index < upTo; ++index)
             {
                 // Swap a random element
                 randomIndex = Random.Range(0, list.Count);
-                if(index != randomIndex)
+                if (index != randomIndex)
                 {
                     swapObject = list[index];
                     list[index] = list[randomIndex];
@@ -210,7 +214,7 @@ namespace OmiyaGames
             for (; focusIndex < list.Count; ++focusIndex)
             {
                 // Start the loop with the next element the next element
-                for(compareIndex = (focusIndex + 1); compareIndex < list.Count; ++compareIndex)
+                for (compareIndex = (focusIndex + 1); compareIndex < list.Count; ++compareIndex)
                 {
                     // Check if the elements are the same
                     if (comparer == null)
@@ -233,10 +237,14 @@ namespace OmiyaGames
             }
         }
 
-        public static void Log(string message)
+        public static void Log(string message, bool showTimestamp = IsTimeStampPrintedByDefault)
         {
 #if DEBUG
             // Only do something if we're in debug mode
+            if (showTimestamp == true)
+            {
+                message = '<' + System.DateTime.Now.ToString(TimeStampPrint) + "> " + message;
+            }
             Debug.Log(message);
 #endif
         }
@@ -279,11 +287,11 @@ namespace OmiyaGames
             // Search for an *.asset file
             string[] allAssets = bundle.GetAllAssetNames();
             string firstAsset = null;
-            if(allAssets != null)
+            if (allAssets != null)
             {
-                for(int index = 0; index < allAssets.Length; ++index)
+                for (int index = 0; index < allAssets.Length; ++index)
                 {
-                    if((string.IsNullOrEmpty(allAssets[index]) == false) &&
+                    if ((string.IsNullOrEmpty(allAssets[index]) == false) &&
                         (Path.GetExtension(allAssets[index]) == FileExtensionScriptableObject) &&
                         ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
                     {
@@ -294,14 +302,14 @@ namespace OmiyaGames
             }
 
             // Check if an asset is found
-            if(string.IsNullOrEmpty(firstAsset) == false)
+            if (string.IsNullOrEmpty(firstAsset) == false)
             {
                 try
                 {
                     // Convert it to an AcceptedDomainList
                     returnDomain = bundle.LoadAsset<DomainList>(firstAsset);
                 }
-                catch(System.Exception)
+                catch (System.Exception)
                 {
                     returnDomain = null;
                 }

@@ -461,7 +461,12 @@ Prefab:
     - target: {fileID: 224457668004366086, guid: 1f32799849f380b4a8466f96067994b7,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000077768666
+      value: 0.00024414062
+      objectReference: {fileID: 0}
+    - target: {fileID: 224176730215243818, guid: 1f32799849f380b4a8466f96067994b7,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1f32799849f380b4a8466f96067994b7, type: 2}
@@ -729,16 +734,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114916393450631938, guid: 5c48fcaa0038d944f91d06c1f9b98156,
-        type: 2}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114916393450631938, guid: 5c48fcaa0038d944f91d06c1f9b98156,
-        type: 2}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 114568019251144024, guid: 5c48fcaa0038d944f91d06c1f9b98156,
         type: 2}
       propertyPath: m_havePropertiesChanged
@@ -749,24 +744,14 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 22402130, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 22402130, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 22402130, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 22402130, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 114916393450631938, guid: 5c48fcaa0038d944f91d06c1f9b98156,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 148998, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
-      propertyPath: m_IsActive
+    - target: {fileID: 114916393450631938, guid: 5c48fcaa0038d944f91d06c1f9b98156,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

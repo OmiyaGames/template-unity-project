@@ -44,11 +44,11 @@ namespace OmiyaGames.Menu
         [SerializeField]
         Button backButton;
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                return backButton.gameObject;
+                return backButton;
             }
         }
 

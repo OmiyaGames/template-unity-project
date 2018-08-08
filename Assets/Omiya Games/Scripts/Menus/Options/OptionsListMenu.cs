@@ -46,12 +46,22 @@ namespace OmiyaGames.Menu
         [SerializeField]
         Button backButton;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("allButtons")]
-        PlatformSpecificButton[] allOptionsButtons;
+        PlatformSpecificButton audioButton;
+        [SerializeField]
+        PlatformSpecificButton controlsButton;
+        [SerializeField]
+        PlatformSpecificButton graphicsButton;
+        [SerializeField]
+        PlatformSpecificButton accessibilityButton;
+        [SerializeField]
+        PlatformSpecificButton languageButton;
+        [SerializeField]
+        PlatformSpecificButton resetDataButton;
         [SerializeField]
         string resetDataMessage = "Options Reset Message";
 
-        GameObject cachedDefaultButton = null;
+        Selectable cachedDefaultButton = null;
+        PlatformSpecificButton[] cachedAllButtons = null;
         BackgroundSettings background = new BackgroundSettings();
 
         #region Overridden Properties
@@ -63,17 +73,21 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                if(cachedDefaultButton == null)
+                if(CurrentDefaultUi != null)
                 {
-                    foreach(PlatformSpecificButton button in allOptionsButtons)
+                    return CurrentDefaultUi;
+                }
+                else if(cachedDefaultButton == null)
+                {
+                    foreach(PlatformSpecificButton button in AllButtons)
                     {
                         if(button.EnabledFor.IsThisBuildSupported() == true)
                         {
-                            cachedDefaultButton = button.Component.gameObject;
+                            cachedDefaultButton = button.Component;
                             break;
                         }
                     }
@@ -107,16 +121,43 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
+        Selectable CurrentDefaultUi
+        {
+            get;
+            set;
+        } = null;
+
+        PlatformSpecificButton[] AllButtons
+        {
+            get
+            {
+                if(cachedAllButtons == null)
+                {
+                    cachedAllButtons = new PlatformSpecificButton[]
+                    {
+                        audioButton,
+                        controlsButton,
+                        graphicsButton,
+                        accessibilityButton,
+                        languageButton,
+                        resetDataButton
+                    };
+                }
+                return cachedAllButtons;
+            }
+        }
+
         protected override void OnSetup()
         {
             // Call base method
             base.OnSetup();
 
             // Setup every button
-            foreach (PlatformSpecificButton button in allOptionsButtons)
+            foreach (PlatformSpecificButton button in AllButtons)
             {
                 button.Setup();
             }
+            CurrentDefaultUi = null;
         }
 
         /// <summary>
@@ -128,6 +169,7 @@ namespace OmiyaGames.Menu
             if (copyBackgroundSettings != null)
             {
                 background.CopySettings(copyBackgroundSettings);
+                CurrentDefaultUi = null;
             }
         }
 
@@ -150,6 +192,9 @@ namespace OmiyaGames.Menu
             {
                 // Show the audio options
                 Manager.Show<OptionsAudioMenu>();
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = audioButton.Component;
             }
         }
 
@@ -160,6 +205,9 @@ namespace OmiyaGames.Menu
             {
                 // Show the controls options
                 Manager.Show<OptionsControlsMenu>();
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = controlsButton.Component;
             }
         }
 
@@ -170,6 +218,9 @@ namespace OmiyaGames.Menu
             {
                 // Show the graphics options
                 Manager.Show<OptionsGraphicsMenu>();
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = graphicsButton.Component;
             }
         }
 
@@ -180,6 +231,9 @@ namespace OmiyaGames.Menu
             {
                 // Show the accessibility options
                 Manager.Show<OptionsAccessibilityMenu>();
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = accessibilityButton.Component;
             }
         }
 
@@ -190,6 +244,9 @@ namespace OmiyaGames.Menu
             {
                 // Show the language options
                 Manager.Show<OptionsLanguageMenu>();
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = languageButton.Component;
             }
         }
 
@@ -206,6 +263,9 @@ namespace OmiyaGames.Menu
                     menu.UpdateDialog(this, resetDataMessage);
                     menu.Show(CheckResetSavedDataConfirmation);
                 }
+
+                // Indicate this button was clicked
+                CurrentDefaultUi = resetDataButton.Component;
             }
         }
         #endregion

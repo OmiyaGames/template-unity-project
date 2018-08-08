@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using OmiyaGames.Audio;
 
@@ -51,7 +50,7 @@ namespace OmiyaGames.Menu
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public class UiEventAudio : MonoBehaviour, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
+    public class UiEventAudio : UiEventNavigation, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler, IPointerDownHandler
     {
         [Header("Hover Settings")]
         [SerializeField]
@@ -66,10 +65,6 @@ namespace OmiyaGames.Menu
         [SerializeField]
         [Tooltip("Customizes the click sound for the UI; if set to none, the default click sound set in MenuManager plays.")]
         SoundEffect customClickSound = null;
-
-        [Header("Scroll Settings")]
-        [SerializeField]
-        ScrollRect parentScrollView = null;
 
         [Header("Mouse-down Settings")]
         [SerializeField]
@@ -130,18 +125,6 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public ScrollRect ParentScrollView
-        {
-            get
-            {
-                return parentScrollView;
-            }
-            set
-            {
-                parentScrollView = value;
-            }
-        }
-
         EventSystem Highlighter
         {
             get
@@ -168,9 +151,10 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Unity Events
-        void OnDisable()
+        public override void OnDisable()
         {
             Reset();
+            base.OnDisable();
         }
         #endregion
 
@@ -249,17 +233,11 @@ namespace OmiyaGames.Menu
         #endregion
 
         #region Select Events
-        public void OnSelect(BaseEventData eventData)
+        public override void OnSelect(BaseEventData eventData)
         {
             // Play hover
             OnHoverPlaySound();
-
-            // Check if we have the scroll view open
-            if(ParentScrollView != null)
-            {
-                // TODO: check if this selected button is visible in scroll view
-                //ParentScrollView.scr
-            }
+            base.OnSelect(eventData);
         }
 
         public void OnDeselect(BaseEventData eventData)
@@ -269,10 +247,13 @@ namespace OmiyaGames.Menu
         }
         #endregion
 
-        public void OnSubmit(BaseEventData eventData)
+        public override void OnSubmit(BaseEventData eventData)
         {
             // Play clicking sound
             PlayClickSound();
+
+            // Run Base Method
+            base.OnSubmit(eventData);
         }
         #endregion
 

@@ -123,16 +123,16 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                GameObject returnUi = null;
+                Selectable returnUi = null;
                 foreach(ToggleSet controls in AllControls)
                 {
                     if(controls.IsEnabled == true)
                     {
-                        returnUi = controls.Checkbox.gameObject;
+                        returnUi = controls.Checkbox;
                         break;
                     }
                 }

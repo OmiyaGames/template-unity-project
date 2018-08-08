@@ -63,6 +63,8 @@ namespace OmiyaGames.Menu
 
         [Header("Confirmation Menu")]
         [SerializeField]
+        MenuNavigator navigator;
+        [SerializeField]
         Translations.TranslatedTextMeshPro messageLabel;
         [SerializeField]
         Button yesButton;
@@ -87,17 +89,17 @@ namespace OmiyaGames.Menu
             set;
         } = false;
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
                 if (DefaultToYes == true)
                 {
-                    return yesButton.gameObject;
+                    return yesButton;
                 }
                 else
                 {
-                    return noButton.gameObject;
+                    return noButton;
                 }
             }
         }
@@ -131,6 +133,14 @@ namespace OmiyaGames.Menu
             get
             {
                 return background.TitleTranslationArgs;
+            }
+        }
+
+        public override MenuNavigator Navigator
+        {
+            get
+            {
+                return navigator;
             }
         }
 

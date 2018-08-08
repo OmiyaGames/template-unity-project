@@ -144,14 +144,14 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public GameObject DefaultGameObject
+        public Selectable DefaultSelectable
         {
             get
             {
-                GameObject defaultSlider = BothSensitivitySlider.gameObject;
+                Selectable defaultSlider = BothSensitivitySlider;
                 if (SplitAxisCheckbox.isOn == true)
                 {
-                    defaultSlider = HorizontalSensitivitySlider.gameObject;
+                    defaultSlider = HorizontalSensitivitySlider;
                 }
                 return defaultSlider;
             }

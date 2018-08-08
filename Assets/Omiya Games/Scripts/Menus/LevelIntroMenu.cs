@@ -177,14 +177,14 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override GameObject DefaultUi
+        public override Selectable DefaultUi
         {
             get
             {
-                GameObject returnObject = null;
+                Selectable returnObject = null;
                 if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
                 {
-                    returnObject = startButton.gameObject;
+                    returnObject = startButton;
                 }
                 return returnObject;
             }
