@@ -15,17 +15,19 @@ namespace OmiyaGames.Menu
             return selectionPosition;
         }
 
-        public static void GetVerticalAnchoredPositionInContent(RectTransform contentTransform, UiEventNavigation childControl, out float top, out float bottom)
+        public static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, UiEventNavigation childControl, out float top, out float bottom)
         {
             top = 0f;
             bottom = 0f;
+            float returnCenter = 0f;
             if ((childControl != null) && (childControl.Selectable != null))
             {
                 // Calculate as normal
                 GetVerticalAnchoredPositionInContent(contentTransform, ((RectTransform)childControl.Selectable.transform), out top, out bottom);
+                returnCenter = (top + bottom) / 2f;
 
                 // Grab new top value
-                if(childControl.UpperBoundToScrollTo != null)
+                if (childControl.UpperBoundToScrollTo != null)
                 {
                     float dummyBottom;
                     GetVerticalAnchoredPositionInContent(contentTransform, childControl.UpperBoundToScrollTo, out top, out dummyBottom);
@@ -38,6 +40,7 @@ namespace OmiyaGames.Menu
                     GetVerticalAnchoredPositionInContent(contentTransform, childControl.LowerBoundToScrollTo, out dummyTop, out bottom);
                 }
             }
+            return returnCenter;
         }
 
         public static float GetVerticalAnchoredPositionInContent(RectTransform contentTransform, RectTransform childControl)
@@ -55,23 +58,18 @@ namespace OmiyaGames.Menu
             {
                 // Calculate the child control's Y-position relative to the ScrollRect's content
                 RectTransform checkControl = childControl;
-                Rect localPos;
+                float offset;
                 while ((checkControl != null) && (checkControl != contentTransform))
                 {
-                    localPos = checkControl.rect;
-                    Utility.Log(checkControl.name + "'s rect: "
-                        + localPos.ToString()
-                        + " [min: " + localPos.yMin
-                        + ", max: " + localPos.yMax
-                        + ", anchor: " + checkControl.anchoredPosition.y + ']');
-                    top += localPos.yMin;
+                    offset = checkControl.anchoredPosition.y + (checkControl.rect.height * checkControl.pivot.y);
+                    Utility.Log(checkControl.name + "'s offset: " + offset.ToString());
+                    top += offset;
 
                     // Get the parent of the control
                     checkControl = checkControl.parent as RectTransform;
                 }
                 //Utility.Log("GetVerticalAnchoredPositionInContent(): " + selectionPosition);
-                localPos = childControl.rect;
-                bottom = top - localPos.height;
+                bottom = top - childControl.rect.height;
             }
         }
     }

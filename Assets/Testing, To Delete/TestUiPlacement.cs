@@ -23,11 +23,11 @@ namespace OmiyaGames.Menu
         void Start()
         {
             Vector2 anchor = middle.anchoredPosition;
-            float topPos, bottomPos;
-            ScrollingHelper.GetVerticalAnchoredPositionInContent(contentTransform, childControl, out topPos, out bottomPos);
+            float topPos, bottomPos, centerPos;
+            centerPos = ScrollingHelper.GetVerticalAnchoredPositionInContent(contentTransform, childControl, out topPos, out bottomPos);
 
             // Setup positions
-            anchor.y = (topPos + bottomPos) / 2f;
+            anchor.y = centerPos;
             middle.anchoredPosition = anchor;
             anchor.y = topPos;
             top.anchoredPosition = anchor;
