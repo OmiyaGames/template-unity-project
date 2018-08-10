@@ -189,6 +189,7 @@ namespace OmiyaGames.Menu
 
             // Bind to update
             Singleton.Instance.OnRealTimeUpdate += QueryInput;
+            Singleton.Instance.OnRealTimeUpdate += QueryUiSelected;
 
             // Setup selection
             delaySelection = new WaitForSecondsRealtime(delaySelectingDefaultUiBy);
@@ -436,6 +437,15 @@ namespace OmiyaGames.Menu
                         ButtonClick.Play();
                     }
                 }
+            }
+        }
+
+        void QueryUiSelected(float unscaledDeltaTime)
+        {
+            // Detect whether a menu is visible, and if so, any UI are selected
+            if ((PeekFromManagedStack() != null) && (Events.currentSelectedGameObject == null))
+            {
+                PeekFromManagedStack().ScrollToDefaultUi(false);
             }
         }
 

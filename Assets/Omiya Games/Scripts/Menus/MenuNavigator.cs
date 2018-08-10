@@ -94,9 +94,16 @@ namespace OmiyaGames.Menu
         {
             get
             {
-                if (uiElementsInScrollableSet.Count != UiElementsBelowScrollable.Length)
+                if (uiElementsInScrollableSet.Count <= 0)
                 {
                     uiElementsInScrollableSet.Clear();
+                    foreach (UiEventNavigation scrollableElement in UiElementsInScrollable)
+                    {
+                        if ((scrollableElement != null) && (uiElementsInScrollableSet.Contains(scrollableElement) == false))
+                        {
+                            uiElementsInScrollableSet.Add(scrollableElement);
+                        }
+                    }
                     foreach (UiEventNavigation scrollableElement in UiElementsBelowScrollable)
                     {
                         if ((scrollableElement != null) && (uiElementsInScrollableSet.Contains(scrollableElement) == false))
@@ -222,7 +229,7 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public void ScrollToLastSelectedElement(UiEventNavigation defaultElement)
+        public UiEventNavigation ScrollToLastSelectedElement(UiEventNavigation defaultElement, bool forceCenter)
         {
             // Make sure the last selected element is within the scrollable list
             if ((LastSelectedElement != null) && (UiElementsInScrollableSet.Contains(LastSelectedElement) == true))
@@ -232,15 +239,11 @@ namespace OmiyaGames.Menu
             }
 
             // Scroll to this element
-            ScrollToSelectable(defaultElement);
+            ScrollToSelectable(defaultElement, forceCenter);
+            return defaultElement;
         }
 
-        public void ScrollToSelectable(UiEventNavigation selectable)
-        {
-            ScrollToSelectable(selectable, true);
-        }
-
-        private void ScrollToSelectable(UiEventNavigation selectable, bool forceCenter)
+        public void ScrollToSelectable(UiEventNavigation selectable, bool forceCenter)
         {
             // Check if we have the scroll view open
             if ((scrollable != null) && (selectable != null))
