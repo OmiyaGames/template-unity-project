@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace OmiyaGames.Menu
 {
@@ -55,6 +56,8 @@ namespace OmiyaGames.Menu
     [RequireComponent(typeof(IMenu))]
     public class MenuNavigator : MonoBehaviour
     {
+        const float EvaluatingNavigationDuration = 0.1f;
+
         [SerializeField]
         ScrollRect scrollable;
         [SerializeField]
@@ -64,16 +67,18 @@ namespace OmiyaGames.Menu
 
         [Header("Selection")]
         [SerializeField]
-        // FIXME: somehow add a UI that handles changes in the scrollbar,
+        // TODO: somehow add a UI that handles changes in the scrollbar,
         // and updates the scrollbar navigation to left to the center element on the scrollrect.
         // Once that feature is enabled, remove this variable.
         bool enableNavigatingToSlider = false;
 
         IMenu cachedMenu = null;
+        Coroutine nextFrame = null;
         Action<UiEventNavigation, BaseEventData> scrollableSelected = null;
         Action<UiEventNavigation, bool> scrollableEnableAndActiveChanged = null;
         Action<UiEventNavigation, BaseEventData> scrollableSubmitted = null;
         Action<UiEventNavigation, BaseEventData> scrollableCancelled = null;
+        WaitForSecondsRealtime delayUpdatingNavigation = null;
         readonly HashSet<UiEventNavigation> uiElementsInScrollableSet = new HashSet<UiEventNavigation>();
         readonly Dictionary<UiEventNavigation, ScrollingHelper.SingleAxisBounds> boundsCache = new Dictionary<UiEventNavigation, ScrollingHelper.SingleAxisBounds>();
         readonly HashSet<Selectable> pastElements = new HashSet<Selectable>();
@@ -166,6 +171,18 @@ namespace OmiyaGames.Menu
                 return cachedMenu;
             }
         }
+
+        WaitForSecondsRealtime DelayUpdatingNavigation
+        {
+            get
+            {
+                if(delayUpdatingNavigation == null)
+                {
+                    delayUpdatingNavigation = new WaitForSecondsRealtime(EvaluatingNavigationDuration);
+                }
+                return delayUpdatingNavigation;
+            }
+        }
         #endregion
 
         public void BindToEvents()
@@ -190,7 +207,7 @@ namespace OmiyaGames.Menu
             }
             foreach (UiEventNavigation element in uiElementsBelowScrollable)
             {
-                // FIXME: look into getting rid of this line, due to it calling the setup function far too much.
+                // TODO: look into getting rid of this line, due to it calling the setup function far too much.
                 element.OnAfterEnabledAndActiveChanged += scrollableEnableAndActiveChanged;
                 element.OnAfterCancel += scrollableCancelled;
             }
@@ -198,45 +215,10 @@ namespace OmiyaGames.Menu
 
         public void UpdateNavigation()
         {
-            if (Menu.CurrentVisibility == IMenu.VisibilityState.Visible)
+            if ((nextFrame == null) && (isActiveAndEnabled == true) && (gameObject.activeInHierarchy == true))
             {
-                // Cache the top-most and bottom-most element
-                UiEventNavigation topMostElement = null;
-                UiEventNavigation lastElement = null;
-
-                // Setup navigating to UI Elements in the scrollable area
-                foreach (UiEventNavigation nextElement in UiElementsInScrollable)
-                {
-                    // Enable navigation to elements that are active
-                    if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
-                    {
-                        SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
-                    }
-                }
-
-                // Setup navigating to the horizontal scroll bar
-                Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
-
-                // Setup navigating to UI Elements below the scrollable area
-                foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
-                {
-                    // Enable navigation to elements that are active
-                    if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
-                    {
-                        SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
-                        horizontalScrollbar = null;
-                    }
-                }
-
-                // Finally, allow looping controls
-                if ((topMostElement != null) && (lastElement != null))
-                {
-                    SetNextNavigation(lastElement, topMostElement.Selectable);
-                    SetPreviousNavigation(lastElement.Selectable, topMostElement);
-                }
-
-                // Double-check if the currently selected UI is active and interactable
-                GuaranteeUiElementIsSelected(pastElements);
+                // If so, update navigation UI
+                nextFrame = StartCoroutine(UpdateNavigationOnNextFrame());
             }
         }
 
@@ -268,7 +250,7 @@ namespace OmiyaGames.Menu
 
                 // Highlight this element
                 MenuManager manager = Singleton.Get<MenuManager>();
-                if(manager != null)
+                if (manager != null)
                 {
                     manager.SelectGui(selectable.Selectable);
                 }
@@ -277,6 +259,8 @@ namespace OmiyaGames.Menu
 
         private void OnDestroy()
         {
+            nextFrame = null;
+
             if (scrollableSelected != null)
             {
                 // Unbind to events
@@ -492,7 +476,7 @@ namespace OmiyaGames.Menu
                 if (nextElement != null)
                 {
                     UiEventNavigation uiNavigation = nextElement.GetComponent<UiEventNavigation>();
-                    if(uiNavigation != null)
+                    if (uiNavigation != null)
                     {
                         ScrollToSelectable(uiNavigation, false);
                     }
@@ -504,7 +488,11 @@ namespace OmiyaGames.Menu
         #region Event Listeners
         private void MenuNavigator_OnAfterEnabledAndActiveChanged(UiEventNavigation source, bool arg)
         {
-            UpdateNavigation();
+            // Check if the menu is enabled
+            if(arg == true)
+            {
+                UpdateNavigation();
+            }
         }
 
         private void MenuNavigator_OnAfterSelect(UiEventNavigation source, BaseEventData arg)
@@ -521,7 +509,7 @@ namespace OmiyaGames.Menu
         private void MenuNavigator_OnAfterSubmit(UiEventNavigation source, BaseEventData arg)
         {
             // Check if submitting to this menu causes some UI to be enabled/disabled
-            if ((source != null) && (source.DoesSubmitChangesInteractable == true))
+            if ((source != null) && (source.DoesSubmitChangesInteractable == true) && (nextFrame == null))
             {
                 // If so, update navigation UI
                 UpdateNavigation();
@@ -536,6 +524,72 @@ namespace OmiyaGames.Menu
                 // Hide the menu
                 Menu.Hide();
             }
+        }
+        #endregion
+
+        #region Update Navigation Helpers
+        public IEnumerator UpdateNavigationOnNextFrame()
+        {
+            // Wait for at least one frame
+            yield return DelayUpdatingNavigation;
+
+            // Make sure the menu is visible and the coroutine is still marked as running before continuing
+            while ((Menu.CurrentVisibility != IMenu.VisibilityState.Visible) && (nextFrame != null) && (isActiveAndEnabled == true) && (gameObject.activeInHierarchy == true))
+            {
+                // Wait for at least one frame
+                yield return null;
+            }
+
+            // Check if this menu is visible, and the coroutine is still under evaluation
+            if ((Menu.CurrentVisibility == IMenu.VisibilityState.Visible) && (nextFrame != null) && (isActiveAndEnabled == true) && (gameObject.activeInHierarchy == true))
+            {
+                // Update the navigation
+                UpdateUiNavigation();
+
+                // Indicate we don't need to evaluate this anymore
+                nextFrame = null;
+            }
+        }
+
+        private void UpdateUiNavigation()
+        {
+            // Cache the top-most and bottom-most element
+            UiEventNavigation topMostElement = null;
+            UiEventNavigation lastElement = null;
+
+            // Setup navigating to UI Elements in the scrollable area
+            foreach (UiEventNavigation nextElement in UiElementsInScrollable)
+            {
+                // Enable navigation to elements that are active
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                {
+                    SetupUiElementsInScrollable(nextElement, ref lastElement, ref topMostElement);
+                }
+            }
+
+            // Setup navigating to the horizontal scroll bar
+            Scrollbar horizontalScrollbar = SetupHorizontalScrollBar(lastElement);
+
+            // Setup navigating to UI Elements below the scrollable area
+            foreach (UiEventNavigation nextElement in UiElementsBelowScrollable)
+            {
+                // Enable navigation to elements that are active
+                if ((nextElement != null) && (nextElement.isActiveAndEnabled == true) && (nextElement.Selectable.interactable == true))
+                {
+                    SetupUiElementsBelowScrollable(nextElement, horizontalScrollbar, ref lastElement, ref topMostElement);
+                    horizontalScrollbar = null;
+                }
+            }
+
+            // Finally, allow looping controls
+            if ((topMostElement != null) && (lastElement != null))
+            {
+                SetNextNavigation(lastElement, topMostElement.Selectable);
+                SetPreviousNavigation(lastElement.Selectable, topMostElement);
+            }
+
+            // Double-check if the currently selected UI is active and interactable
+            GuaranteeUiElementIsSelected(pastElements);
         }
         #endregion
 
