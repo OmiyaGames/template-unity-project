@@ -407,6 +407,11 @@ namespace OmiyaGames.Menu
             }
         }
 
+        public void ScrollToDefaultUi(bool forceCenter)
+        {
+            ScrollToDefaultUi(VisibilityState.Visible, forceCenter);
+        }
+
         /// <summary>
         /// Handles the menu's visiblility changing.
         /// Called after <code>CurrentVisibility</code> has already changed.
@@ -423,7 +428,7 @@ namespace OmiyaGames.Menu
             if (to == VisibilityState.Visible)
             {
                 // Run setup when made visible
-                OnVisibilityChangedToVisible(from);
+                OnVisibilityChangedToVisible(from, true);
             }
 
             // Check if this is managed
@@ -455,7 +460,7 @@ namespace OmiyaGames.Menu
         }
 
         #region Helper Methods
-        void OnVisibilityChangedToVisible(VisibilityState from)
+        void OnVisibilityChangedToVisible(VisibilityState from, bool forceCenter)
         {
             // Check if we've been setup
             if (CurrentSetupState == SetupState.NotSetup)
@@ -465,11 +470,13 @@ namespace OmiyaGames.Menu
             }
 
             // Check if there's a default UI
+            ScrollToDefaultUi(from, forceCenter);
+        }
+
+        void ScrollToDefaultUi(VisibilityState from, bool forceCenter)
+        {
             if (DefaultUi != null)
             {
-                // If so, update the menu manager to select the default UI
-                Manager.SelectGui(DefaultUi);
-
                 // Check if we have scrolling to be concerned about
                 if (Navigator != null)
                 {
@@ -479,14 +486,32 @@ namespace OmiyaGames.Menu
                         if (from == VisibilityState.Hidden)
                         {
                             // Scroll to the default UI
-                            Navigator.ScrollToSelectable(uiToNavigateTo);
+                            Navigator.ScrollToSelectable(uiToNavigateTo, forceCenter);
+
+                            // If so, update the menu manager to select the default UI
+                            Manager.SelectGui(DefaultUi);
                         }
                         else
                         {
                             // Scroll to the last selected element
-                            Navigator.ScrollToLastSelectedElement(uiToNavigateTo);
+                            uiToNavigateTo = Navigator.ScrollToLastSelectedElement(uiToNavigateTo, forceCenter);
+                            if((uiToNavigateTo !=null) && (uiToNavigateTo.Selectable != null))
+                            {
+                                // Select the last selected UI
+                                Manager.SelectGui(uiToNavigateTo.Selectable);
+                            }
+                            else
+                            {
+                                // If so, update the menu manager to select the default UI
+                                Manager.SelectGui(DefaultUi);
+                            }
                         }
                     }
+                }
+                else
+                {
+                    // If so, update the menu manager to select the default UI
+                    Manager.SelectGui(DefaultUi);
                 }
             }
         }

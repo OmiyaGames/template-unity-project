@@ -107,7 +107,7 @@ namespace OmiyaGames.Menu
                 {
                     // Calculate the top and bottom position of the the control
                     float topPos, centerPos, bottomPos;
-                    centerPos = ScrollingHelper.GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl, out topPos, out bottomPos);
+                    centerPos = GetVerticalAnchoredPositionInContent(parentScrollRect.content, childControl, out topPos, out bottomPos);
                     childBounds = new SingleAxisBounds(topPos, centerPos, bottomPos);
 
                     // Cache these values
