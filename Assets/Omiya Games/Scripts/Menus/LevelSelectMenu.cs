@@ -42,8 +42,8 @@ namespace OmiyaGames.Menu
         const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
 
         [Header("Level Select")]
-        [SerializeField]
-        MenuNavigator navigator;
+        //[SerializeField]
+        //MenuNavigator navigator;
         [SerializeField]
         RectTransform levelContent;
         [SerializeField]
@@ -109,13 +109,13 @@ namespace OmiyaGames.Menu
             }
         }
 
-        public override MenuNavigator Navigator
-        {
-            get
-            {
-                return navigator;
-            }
-        }
+        //public override MenuNavigator Navigator
+        //{
+        //    get
+        //    {
+        //        return navigator;
+        //    }
+        //}
         #endregion
 
         /// <summary>
