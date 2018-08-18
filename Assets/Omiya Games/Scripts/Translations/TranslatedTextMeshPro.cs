@@ -285,7 +285,7 @@ namespace OmiyaGames.Translations
         void UpdateLabelNow(TranslationManager parser)
         {
             // Confirm the parser is ready
-            if ((parser != null) && (parser.IsReady == true))
+            if ((parser != null) && (parser.IsReady == true) && (string.IsNullOrEmpty(translationKey) == false))
             {
                 // Check if the original string needs to be updated
                 if (string.IsNullOrEmpty(originalString) == true)

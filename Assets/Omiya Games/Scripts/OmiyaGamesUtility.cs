@@ -59,10 +59,8 @@ namespace OmiyaGames
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
-#if DEBUG
         public const string TimeStampPrint = "HH:mm:ss.ffff GMTzz";
         public const bool IsTimeStampPrintedByDefault = true;
-#endif
         public static readonly string[] stripStartOfUrl = new string[]
         {
             "https://www.",
