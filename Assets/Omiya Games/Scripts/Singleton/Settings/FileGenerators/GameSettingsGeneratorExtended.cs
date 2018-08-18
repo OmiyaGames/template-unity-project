@@ -1,10 +1,15 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Settings
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="HowToPlayMenu.cs" company="Omiya Games">
+    /// <copyright file="GameSettingsGenerator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,59 +33,51 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/29/2018</date>
+    /// <date>5/17/2017</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that provides a tutorial and/or on how to play the game.
-    /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
+    /// A list of helper methods that writes all the
+    /// <see cref="ISettingsVersion"/> and the latest
+    /// <see cref="IStoredSetting"/> into a single,
+    /// readable C# file.
     /// </summary>
-    /// <seealso cref="MenuManager"/>
-    [RequireComponent(typeof(Animator))]
-    [DisallowMultipleComponent]
-    public class HowToPlayMenu : IMenu
+    /// <seealso cref="GameSettings"/>
+    /// <seealso cref="ISettingsVersion"/>
+    public static partial class GameSettingsGenerator
     {
-        [Header("How to Play Settings")]
-        [SerializeField]
-        Button backButton;
-        [SerializeField]
-        TMPro.TextMeshProUGUI decription;
+        public const string Tabs = "    ";
 
-        public override Selectable DefaultUi
+        public static void WriteLine(TextWriter writer, int numTabs, string line)
         {
-            get
-            {
-                return backButton;
-            }
+            WriteTabs(writer, numTabs);
+            writer.WriteLine(line);
         }
 
-        public override Type MenuType
+        public static void WriteLine(TextWriter writer, int numTabs, char letter)
         {
-            get
-            {
-                return Type.ManagedMenu;
-            }
+            WriteTabs(writer, numTabs);
+            writer.WriteLine(letter);
+
         }
 
-        public override BackgroundMenu.BackgroundType Background
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, string line)
         {
-            get
-            {
-                return BackgroundMenu.BackgroundType.SolidColor;
-            }
+            WriteTabs(writer, numTabs);
+            writer.Write(line);
         }
 
-        public override string TitleTranslationKey
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, char letter)
         {
-            get
-            {
-                return null;
-            }
+            WriteTabs(writer, numTabs);
+            writer.Write(letter);
         }
 
-        //protected override void OnSetup()
-        //{
-        //    base.OnSetup();
-        //}
+        public static void WriteTabs(TextWriter writer, int numTabs)
+        {
+            for (int index = 0; index < numTabs; ++index)
+            {
+                writer.Write(Tabs);
+            }
+        }
     }
 }

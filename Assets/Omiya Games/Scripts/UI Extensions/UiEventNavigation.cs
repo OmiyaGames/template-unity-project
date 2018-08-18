@@ -69,10 +69,14 @@ namespace OmiyaGames.Menu
 
         [Header("Navigation")]
         [SerializeField]
+#if UNITY_EDITOR
         [EnumFlags]
+#endif
         Direction toPreviousUi = Direction.Up;
         [SerializeField]
+#if UNITY_EDITOR
         [EnumFlags]
+#endif
         Direction toNextUi = Direction.Down;
         [SerializeField]
         bool onSubmitChangesInteractable = false;

@@ -39,11 +39,7 @@ namespace OmiyaGames.Settings
     public abstract class ISortedRecords<T> : IEnumerable<IRecord<T>> where T : IComparable<T>
     {
         public const char ScoreDivider = '\n';
-
-        private readonly IComparer<IRecord<T>> comparer;
-        private readonly int maxCapacity;
         private readonly List<IRecord<T>> records;
-        private readonly IRecord<T>.TryConvertOldRecord converter;
 
         #region Helper Classes
         public class DescendingOrder : Comparer<IRecord<T>>
@@ -68,29 +64,29 @@ namespace OmiyaGames.Settings
         {
             if(isSortedInDescendingOrder == false)
             {
-                comparer = new AsecendingOrder();
+                Comparer = new AsecendingOrder();
             }
         }
 
         public ISortedRecords(int maxCapacity, IComparer<IRecord<T>> comparer, IRecord<T>.TryConvertOldRecord converter)
         {
             // Setup member variables
-            this.converter = converter;
-            this.maxCapacity = maxCapacity;
+            Converter = converter;
+            MaxCapacity = maxCapacity;
 
             // Setup the list
-            records = new List<IRecord<T>>(this.maxCapacity);
+            records = new List<IRecord<T>>(MaxCapacity);
 
             // Check if a comparer is defined
             if (comparer != null)
             {
                 // If so, use it
-                this.comparer = comparer;
+                Comparer = comparer;
             }
             else
             {
                 // If not, choose descending automatically
-                this.comparer = new DescendingOrder();
+                Comparer = new DescendingOrder();
             }
         }
         #endregion
@@ -98,18 +94,12 @@ namespace OmiyaGames.Settings
         #region Properties
         public IComparer<IRecord<T>> Comparer
         {
-            get
-            {
-                return comparer;
-            }
+            get;
         }
 
         public int MaxCapacity
         {
-            get
-            {
-                return maxCapacity;
-            }
+            get;
         }
 
         public int Count
@@ -122,10 +112,7 @@ namespace OmiyaGames.Settings
 
         public IRecord<T>.TryConvertOldRecord Converter
         {
-            get
-            {
-                return converter;
-            }
+            get;
         }
 
         public IRecord<T> this[int index]
@@ -176,7 +163,7 @@ namespace OmiyaGames.Settings
             for (int index = 0; index < Count; ++index)
             {
                 // Check if this record is greater than a previously-stored record
-                if (comparer.Compare(newRecord, this[index]) >= 0)
+                if (Comparer.Compare(newRecord, this[index]) >= 0)
                 {
                     // If so, return this rank
                     returnRank = index;
@@ -188,7 +175,7 @@ namespace OmiyaGames.Settings
             if (returnRank >= 0)
             {
                 // If it does, check if we need to trim excess
-                while (Count >= maxCapacity)
+                while (Count >= MaxCapacity)
                 {
                     records.RemoveAt(Count - 1);
                 }

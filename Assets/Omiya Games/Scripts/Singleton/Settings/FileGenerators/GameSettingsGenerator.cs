@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 using System.Linq;
@@ -44,10 +43,9 @@ namespace OmiyaGames.Settings
     /// </summary>
     /// <seealso cref="GameSettings"/>
     /// <seealso cref="ISettingsVersion"/>
-    public static class GameSettingsGenerator
+    public static partial class GameSettingsGenerator
     {
-        public const string Tabs = "    ";
-
+#if UNITY_EDITOR
         public static string GameSettingsFullPath
         {
             get
@@ -104,39 +102,6 @@ namespace OmiyaGames.Settings
                 }
             }
             return returnArgs;
-        }
-
-        public static void WriteLine(TextWriter writer, int numTabs, string line)
-        {
-            WriteTabs(writer, numTabs);
-            writer.WriteLine(line);
-        }
-
-        public static void WriteLine(TextWriter writer, int numTabs, char letter)
-        {
-            WriteTabs(writer, numTabs);
-            writer.WriteLine(letter);
-
-        }
-
-        public static void WriteStartOfLine(TextWriter writer, int numTabs, string line)
-        {
-            WriteTabs(writer, numTabs);
-            writer.Write(line);
-        }
-
-        public static void WriteStartOfLine(TextWriter writer, int numTabs, char letter)
-        {
-            WriteTabs(writer, numTabs);
-            writer.Write(letter);
-        }
-
-        public static void WriteTabs(TextWriter writer, int numTabs)
-        {
-            for (int index = 0; index < numTabs; ++index)
-            {
-                writer.Write(Tabs);
-            }
         }
 
         public static void WriteCode(VersionGeneratorArgs versionsArgs, NamespaceGeneratorArgs usingsArgs, SettingsGeneratorArgs settingsArgs)
@@ -396,6 +361,6 @@ namespace OmiyaGames.Settings
             // Return the next tab count
             return numTabs;
         }
+#endif
     }
 }
-#endif
