@@ -43,6 +43,12 @@ namespace OmiyaGames.Menu
         [Header("How to Play Settings")]
         [SerializeField]
         Button backButton;
+        [SerializeField]
+        TMPro.TextMeshProUGUI decription;
+        [SerializeField]
+        Project.GameDifficulty scanner;
+
+        string originalString;
 
         public override Selectable DefaultUi
         {
@@ -74,6 +80,16 @@ namespace OmiyaGames.Menu
             {
                 return null;
             }
+        }
+
+        protected override void OnSetup()
+        {
+            base.OnSetup();
+            if(string.IsNullOrEmpty(originalString) == true)
+            {
+                originalString = decription.text;
+            }
+            decription.text = string.Format(originalString, scanner.BlocksInARow);
         }
     }
 }

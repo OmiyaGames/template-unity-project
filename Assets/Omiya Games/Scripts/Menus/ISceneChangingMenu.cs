@@ -201,8 +201,8 @@ namespace OmiyaGames.Menu
         {
             if (IsListeningToEvents == true)
             {
-                // FIXME: show high scores
-                //Manager.Show<HighScoresMenu>();
+                // Show high scores
+                Manager.Show<HighScoresMenu>();
 
                 // Set the default UI
                 CurrentDefaultUi = highScoresButton;

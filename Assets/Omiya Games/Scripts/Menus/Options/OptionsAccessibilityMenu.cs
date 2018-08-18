@@ -60,10 +60,14 @@ namespace OmiyaGames.Menu
         Slider textSizeSlider;
         [SerializeField]
         Button resetTextSize;
+        [SerializeField]
+        GameObject[] textSizeControls;
 
-        [Header("Text Size Controls")]
+        [Header("Invincibility Controls")]
         [SerializeField]
         Toggle invincibilityEnabler;
+        [SerializeField]
+        GameObject[] invincibilityControls;
 
         [Header("Time Scale Controls")]
         [SerializeField]
@@ -72,6 +76,8 @@ namespace OmiyaGames.Menu
         AudioVolumeControls timeScaleSlider;
         [SerializeField]
         Button resetTimeScale;
+        [SerializeField]
+        GameObject[] timeScaleControls;
         #endregion
 
         #region Properties
@@ -136,8 +142,22 @@ namespace OmiyaGames.Menu
             timeScaleSlider.OnSliderValueUpdated += TimeScaleSlider_OnSliderValueUpdated;
             timeScaleSlider.OnSliderReleaseUpdated += TimeScaleSlider_OnSliderValueUpdated;
 
+            // Setup control visibility
+            UpdateControlVisibility(textSizeControls, enableTextSize);
+            UpdateControlVisibility(invincibilityControls, enableInvincibility);
+            UpdateControlVisibility(timeScaleControls, enableTimeScale);
+
             // Setup dividers
             SetupDividers(dividers, enableTextSize, enableInvincibility, enableTimeScale);
+        }
+
+        private static void UpdateControlVisibility(GameObject[] controls, SupportedPlatforms support)
+        {
+            bool active = support.IsThisBuildSupported();
+            foreach (GameObject control in controls)
+            {
+                control.SetActive(active);
+            }
         }
 
         #region UI events

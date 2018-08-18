@@ -234,7 +234,7 @@ namespace OmiyaGames.Global
                         set.Key.SetActive(false);
                         if (set.Value != null)
                         {
-                            set.Value.OnDestroy(this);
+                            set.Value.AfterDeactivate(this);
                         }
                     }
                 }

@@ -76,10 +76,15 @@ namespace OmiyaGames
 
         public void OnDestroy()
         {
-            OnDestroy(null);
+            AfterDeactivate(null);
         }
 
-        public virtual void OnDestroy(PoolingManager manager)
+        public void OnDisable()
+        {
+            AfterDeactivate(null);
+        }
+
+        public virtual void AfterDeactivate(PoolingManager manager)
         {
 
         }

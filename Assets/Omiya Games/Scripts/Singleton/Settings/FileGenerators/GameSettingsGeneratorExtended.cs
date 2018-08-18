@@ -1,11 +1,15 @@
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
-using OmiyaGames.Global;
-using OmiyaGames.Translations;
+using UnityEditor;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Settings
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="PauseMenu.cs" company="Omiya Games">
+    /// <copyright file="GameSettingsGenerator.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -29,53 +33,50 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
+    /// <date>5/17/2017</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Menu that appears when you press the pause button (based on the "Pause"
-    /// Input Manager field). You can also retrieve this menu from the singleton
-    /// script, <code>MenuManager</code>.
+    /// A list of helper methods that writes all the
+    /// <see cref="ISettingsVersion"/> and the latest
+    /// <see cref="IStoredSetting"/> into a single,
+    /// readable C# file.
     /// </summary>
-    /// <seealso cref="MenuManager"/>
-    /// <seealso cref="TimeManager"/>
-    public class PauseMenu : ISceneChangingMenu
+    /// <seealso cref="GameSettings"/>
+    /// <seealso cref="ISettingsVersion"/>
+    public static partial class GameSettingsGenerator
     {
-        [Header("Pause Menu")]
-        [SerializeField]
-        TranslatedTextMeshPro mRestartLabel = null;
-        [SerializeField]
-        TranslatedTextMeshPro mReturnToMenuLabel = null;
+        public const string Tabs = "    ";
 
-        public override bool PauseOnShow
+        public static void WriteLine(TextWriter writer, int numTabs, string line)
         {
-            get
-            {
-                return true;
-            }
+            WriteTabs(writer, numTabs);
+            writer.WriteLine(line);
         }
 
-        public override BackgroundMenu.BackgroundType Background
+        public static void WriteLine(TextWriter writer, int numTabs, char letter)
         {
-            get
-            {
-                return background;
-            }
+            WriteTabs(writer, numTabs);
+            writer.WriteLine(letter);
+
         }
 
-        protected override void OnSetup()
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, string line)
         {
-            base.OnSetup();
-
-            // Update labels
-            Manager.SetLabelTextToRestartCurrentScene(mRestartLabel);
-            Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
+            WriteTabs(writer, numTabs);
+            writer.Write(line);
         }
 
-        void OnApplicationPause(bool isPaused)
+        public static void WriteStartOfLine(TextWriter writer, int numTabs, char letter)
         {
-            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (Singleton.Get<TimeManager>().IsManuallyPaused == false))
+            WriteTabs(writer, numTabs);
+            writer.Write(letter);
+        }
+
+        public static void WriteTabs(TextWriter writer, int numTabs)
+        {
+            for (int index = 0; index < numTabs; ++index)
             {
-                Show();
+                writer.Write(Tabs);
             }
         }
     }
