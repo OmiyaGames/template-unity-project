@@ -36,7 +36,6 @@ namespace OmiyaGames.Translations
     /// </summary>
     /// <seealso cref="TranslatedTextMeshPro"/>
     [RequireComponent(typeof(Text))]
-    [System.Obsolete("Obsolete in favor of TranslatedTextMeshPro")]
     public class TranslatedText : MonoBehaviour
     {
         static readonly HashSet<TranslatedText> allTranslationScripts = new HashSet<TranslatedText>();
