@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="AudioFinder.cs" company="Omiya Games">
+    /// <copyright file="TranslatedText.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -34,41 +34,34 @@ namespace OmiyaGames.Translations
     /// <summary>
     /// Set translation text.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>6/1/2018</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// <item>
+    /// <description>9/11/2018</description>
+    /// <description>Taro</description>
+    /// <description>Implementing abstraction</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     /// <seealso cref="TranslatedTextMeshPro"/>
     [RequireComponent(typeof(Text))]
-    public class TranslatedText : MonoBehaviour
+    [DisallowMultipleComponent]
+    public class TranslatedText : ITranslatedLabel<Text, FontStyle>
     {
-        static readonly HashSet<TranslatedText> allTranslationScripts = new HashSet<TranslatedText>();
-
-        public enum LetterFormatting
-        {
-            None,
-            UpperCase,
-            LowerCase
-        }
-
-        public static IEnumerable<TranslatedText> AllTranslationScripts
-        {
-            get
-            {
-                return allTranslationScripts;
-            }
-        }
-
-        private static TranslationManager Parser
-        {
-            get
-            {
-                return Singleton.Get<TranslationManager>();
-            }
-        }
-
-        /// <summary>
-        /// The key to the CSVLanguageParser.
-        /// </summary>
         [SerializeField]
-        [Tooltip("The key to the CSVLanguageParser.")]
-        string translationKey = "";
+        [Tooltip("(Optional) If checked, sets the font based on the label's style.")]
+        bool changeFontOnStyle = false;
 
         [Header("Optional Formatting")]
         [SerializeField]
@@ -78,132 +71,7 @@ namespace OmiyaGames.Translations
         [Tooltip("(Optional) Any extra formatting one might want to add to a translated text (e.g. \"<b>{0}</b>\" will create a bolded text). Leave it blank for no formatting.")]
         LetterFormatting letterFormatting = LetterFormatting.None;
 
-        [Header("Optional Font Adjustments")]
-        [SerializeField]
-        [Tooltip("(Optional) Name of the font key, set in the Translation Manager.")]
-        string fontKey = "";
-        [SerializeField]
-        [Tooltip("(Optional) If checked, sets the font based on the label's style.")]
-        bool changeFontOnStyle = false;
-
-        /// <summary>
-        /// The attached label.
-        /// </summary>
-        Text label = null;
-        object[] arguments = null;
-        string originalString = null;
-        bool bindedToSingleton = false;
-
         #region Properties
-        public bool IsTranslating
-        {
-            get
-            {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && (Parser.ContainsKey(TranslationKey) == true);
-            }
-        }
-
-        /// <summary>
-        /// Gets the <c>Text</c> component.
-        /// </summary>
-        /// <value>The label.</value>
-        public Text Label
-        {
-            get
-            {
-                if (label == null)
-                {
-                    // Grab the label component
-                    label = GetComponent<Text>();
-                }
-                return label;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the translation key, defined on the left-most column of the translation CSV file under <code>TranslationManager</code>.
-        /// This property will overwrite <code>CurrentText</code> property.
-        /// </summary>
-        public string TranslationKey
-        {
-            get
-            {
-                return translationKey;
-            }
-            set
-            {
-                // Update variables
-                translationKey = value;
-                originalString = null;
-
-                // Update dictionary
-                if (IsTranslating == true)
-                {
-                    // Add this script to the dictionary
-                    if (allTranslationScripts.Contains(this) == false)
-                    {
-                        allTranslationScripts.Add(this);
-                    }
-                }
-                else if (allTranslationScripts.Contains(this) == true)
-                {
-                    // Remove this script from the dictionary
-                    allTranslationScripts.Remove(this);
-                }
-
-                // Update the label
-                UpdateLabelOnNextFrame();
-            }
-        }
-
-        /// <summary>
-        /// Get or sets the arguments, if the text contains any "{0}" or similar values embedded in it.
-        /// </summary>
-        public object[] Arguments
-        {
-            get
-            {
-                return arguments;
-            }
-            set
-            {
-                SetArguments(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the label's text directly.
-        /// This property will set <code>TranslationKey</code> property to null.
-        /// </summary>
-        public string CurrentText
-        {
-            get
-            {
-                return Label.text;
-            }
-            set
-            {
-                Label.text = value;
-                TranslationKey = null;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the style of the label's font directly.
-        /// </summary>
-        public FontStyle CurrentStyle
-        {
-            get
-            {
-                return Label.fontStyle;
-            }
-            set
-            {
-                Label.fontStyle = value;
-                UpdateFont();
-            }
-        }
-
         /// <summary>
         /// Gets or sets the letter styling (e.g. all-uppercase, all-lowercase, or custom).
         /// </summary>
@@ -216,23 +84,7 @@ namespace OmiyaGames.Translations
             set
             {
                 letterFormatting = value;
-                UpdateLabelOnNextFrame();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the font key, described under the <code>TranslationManager</code> for each language's font settings.
-        /// </summary>
-        public string FontKey
-        {
-            get
-            {
-                return fontKey;
-            }
-            set
-            {
-                fontKey = value;
-                UpdateFont();
+                UpdateLabel();
             }
         }
 
@@ -250,120 +102,58 @@ namespace OmiyaGames.Translations
             set
             {
                 extraFormatting = value;
-                UpdateLabelOnNextFrame();  
+                UpdateLabel();
             }
         }
         #endregion
 
-        void Start()
+        /// <summary>
+        /// Gets or sets the style of the label's font directly.
+        /// Override to adjust the behavior of this script.
+        /// </summary>
+        public override FontStyle LabelFontStyle
         {
-            if (IsTranslating == true)
+            get
             {
-                // Add this script to the dictionary
-                allTranslationScripts.Add(this);
-
-                // Update the label
-                UpdateLabelOnNextFrame();
+                return Label.fontStyle;
             }
-        }
-
-        void OnDestroy()
-        {
-            if (IsTranslating == true)
+            set
             {
-                // Remove this script from the dictionary
-                allTranslationScripts.Remove(this);
-            }
-            if(bindedToSingleton == true)
-            {
-                // Unbind to OnUpdate
-                bindedToSingleton = false;
-                Singleton.Instance.OnUpdate -= OnEveryFrame;
+                Label.fontStyle = value;
             }
         }
 
         /// <summary>
-        /// Sets the arguments, if the text contains any "{0}" or similar values embedded in it.
+        /// Gets or sets the text of the label directly.
+        /// Override to adjust the behavior of this script.
         /// </summary>
-        public void SetTranslationKey(string translationKey, params object[] args)
+        protected override string LabelText
         {
-            // Update the member variable
-            arguments = args;
-            TranslationKey = translationKey;
+            get
+            {
+                return Label.text;
+            }
+            set
+            {
+                Label.text = value;
+            }
         }
 
-        /// <summary>
-        /// Forces the label's text to be updated based on the new arguments
-        /// </summary>
-        public void UpdateLabel()
+        protected override void UpdateFont(TranslationManager.FontMap fontMap, string fontKey)
         {
-            if(enabled == true)
+            if (changeFontOnStyle == true)
             {
-                UpdateLabelNow();
+                Label.font = fontMap.GetFont(fontKey, Label.fontStyle);
             }
             else
             {
-                UpdateLabelOnNextFrame();
+                Label.font = fontMap.GetFont(fontKey);
             }
         }
 
-        /// <summary>
-        /// Sets the arguments, if the text contains any "{0}" or similar values embedded in it.
-        /// </summary>
-        public void SetArguments(params object[] args)
+        protected override string GetDisplayString(string originalString)
         {
-            // Update the member variable
-            arguments = args;
-
-            // Update the label
-            UpdateLabelOnNextFrame();
-        }
-
-        #region Helper Methods
-        void UpdateFont()
-        {
-            TranslationManager.FontMap map = Parser.CurrentLanguageFont;
-            if(map != null)
-            {
-                if(changeFontOnStyle == true)
-                {
-                    Label.font = map.GetFont(fontKey, Label.fontStyle);
-                }
-                else
-                {
-                    Label.font = map.GetFont(fontKey);
-                }
-            }
-        }
-
-        void UpdateLabelOnNextFrame()
-        {
-            if(bindedToSingleton == false)
-            {
-                Singleton.Instance.OnUpdate += OnEveryFrame;
-                bindedToSingleton = true;
-            }
-        }
-
-        void UpdateLabelNow()
-        {
-            // Check if the original string needs to be updated
-            if (string.IsNullOrEmpty(originalString) == true)
-            {
-                originalString = CurrentText;
-                if (IsTranslating == true)
-                {
-                    originalString = Parser[TranslationKey];
-                }
-            }
-
-            // Check if there's any formatting involved
-            string displayString = originalString;
-            if ((arguments != null) && (arguments.Length > 0))
-            {
-                // Format the string based on the translation and arguments
-                displayString = string.Format(displayString, arguments);
-            }
+            string displayString = base.GetDisplayString(originalString);
             if (string.IsNullOrEmpty(extraFormatting) == false)
             {
                 // Format the string based on extra formatting
@@ -379,29 +169,7 @@ namespace OmiyaGames.Translations
                     displayString = displayString.ToLower();
                     break;
             }
-
-            // Set the label's text
-            Label.text = displayString;
-
-            // Set the label's font
-            UpdateFont();
+            return displayString;
         }
-
-        /// <summary>
-        /// Event called every frame
-        /// </summary>
-        void OnEveryFrame(float deltaTime)
-        {
-            if(enabled == true)
-            {
-                // Update label
-                UpdateLabelNow();
-
-                // Unbind to OnUpdate
-                bindedToSingleton = false;
-                Singleton.Instance.OnUpdate -= OnEveryFrame;
-            }
-        }
-        #endregion
     }
 }

@@ -51,6 +51,13 @@ namespace OmiyaGames.Translations
     [DisallowMultipleComponent]
     public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour where LABEL : ILayoutElement
     {
+        public enum LetterFormatting
+        {
+            None,
+            UpperCase,
+            LowerCase
+        }
+
         public enum State
         {
             NeedSetup,
@@ -73,12 +80,12 @@ namespace OmiyaGames.Translations
         /// </summary>
         [SerializeField]
         [Tooltip("The key to the CSVLanguageParser.")]
-        string translationKey = "";
+        protected string translationKey = "";
 
         [Header("Optional Font Adjustments")]
         [SerializeField]
         [Tooltip("(Optional) Name of the font key, set in the Translation Manager.")]
-        string fontKey = "";
+        protected string fontKey = "";
 
         /// <summary>
         /// The attached label.
@@ -206,7 +213,6 @@ namespace OmiyaGames.Translations
         }
         #endregion
 
-        #region Abstract Properties and Methods
         /// <summary>
         /// Gets or sets the style of the label's font directly.
         /// Override to adjust the behavior of this script.
@@ -228,7 +234,6 @@ namespace OmiyaGames.Translations
         }
 
         protected abstract void UpdateFont(TranslationManager.FontMap fontMap, string fontKey);
-        #endregion
 
         #region Unity Events
         public void OnEnable()
@@ -302,6 +307,17 @@ namespace OmiyaGames.Translations
             UpdateLabel();
         }
 
+        protected virtual string GetDisplayString(string originalString)
+        {
+            string displayString = originalString;
+            if ((arguments != null) && (arguments.Length > 0))
+            {
+                // Format the string based on the translation and arguments
+                displayString = string.Format(displayString, arguments);
+            }
+            return displayString;
+        }
+
         #region Helper Methods
         private void SetupLabelNow(TranslationManager parser)
         {
@@ -336,16 +352,8 @@ namespace OmiyaGames.Translations
                     }
                 }
 
-                // Check if there's any formatting involved
-                string displayString = originalString;
-                if ((arguments != null) && (arguments.Length > 0))
-                {
-                    // Format the string based on the translation and arguments
-                    displayString = string.Format(displayString, arguments);
-                }
-
                 // Set the label's text
-                LabelText = displayString;
+                LabelText = GetDisplayString(originalString);
 
                 // Set the label's font
                 UpdateFont(parser);
