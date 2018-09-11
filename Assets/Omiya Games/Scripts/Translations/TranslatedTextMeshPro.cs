@@ -93,7 +93,7 @@ namespace OmiyaGames.Translations
 
         protected override void UpdateFont(TranslationManager.FontMap fontMap, string fontKey)
         {
-            Label.font = fontMap.GetFontAsset(fontKey);
+            Label.font = fontMap.GetFontTextMeshPro(fontKey);
         }
     }
 }

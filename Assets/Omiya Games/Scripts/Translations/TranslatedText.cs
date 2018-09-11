@@ -55,6 +55,7 @@ namespace OmiyaGames.Translations
     /// </list>
     /// </remarks>
     /// <seealso cref="TranslatedTextMeshPro"/>
+    /// <seealso cref="ITranslatedLabel{LABEL, STYLE}"/>
     [RequireComponent(typeof(Text))]
     [DisallowMultipleComponent]
     public class TranslatedText : ITranslatedLabel<Text, FontStyle>
@@ -143,11 +144,11 @@ namespace OmiyaGames.Translations
         {
             if (changeFontOnStyle == true)
             {
-                Label.font = fontMap.GetFont(fontKey, Label.fontStyle);
+                Label.font = fontMap.GetFontUgui(fontKey, Label.fontStyle);
             }
             else
             {
-                Label.font = fontMap.GetFont(fontKey);
+                Label.font = fontMap.GetFontUgui(fontKey);
             }
         }
 

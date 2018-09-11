@@ -253,7 +253,7 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            public Dictionary<string, FontAssetDetails> OtherFontAssets
+            public Dictionary<string, FontAssetDetails> OtherTextMeshProFonts
             {
                 get
                 {
@@ -269,7 +269,7 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            public Font GetFont(string name, FontStyle style = FontStyle.Normal)
+            public Font GetFontUgui(string name, FontStyle style = FontStyle.Normal)
             {
                 Font returnFont = DefaultFont;
 
@@ -282,12 +282,12 @@ namespace OmiyaGames.Translations
                 return returnFont;
             }
 
-            public TMP_FontAsset GetFontAsset(string name)
+            public TMP_FontAsset GetFontTextMeshPro(string name)
             {
                 TMP_FontAsset returnFont = DefaultFontAsset;
-                if (OtherFontAssets.ContainsKey(name) == true)
+                if (OtherTextMeshProFonts.ContainsKey(name) == true)
                 {
-                    returnFont = OtherFontAssets[name].Font;
+                    returnFont = OtherTextMeshProFonts[name].Font;
                 }
                 return returnFont;
             }
@@ -588,18 +588,6 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
-        static void UpdateLabels()
-        {
-            /* Update any Text labels */
-            foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
-            {
-                if (label != null)
-                {
-                    label.UpdateLabel();
-                }
-            }
-        }
-
         static void SetupTranslationDictionary(Dictionary<string, string> dictionaryToPopulate, List<Dictionary<string, string>> data, string keyHeader, string firstLanguageHeader, params string[] backupLanguageHeaders)
         {
             // Setup loop variables
@@ -706,9 +694,6 @@ namespace OmiyaGames.Translations
 
             // Get the current translations
             SetupTranslationDictionary(CurrentTranslationDictionary, data, keyHeader, currentLanguage);
-
-            // Update the labels
-            UpdateLabels();
         }
 
         void SetupDefaults(List<Dictionary<string, string>> data)
