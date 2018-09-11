@@ -49,7 +49,7 @@ namespace OmiyaGames.Translations
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour where LABEL : ILayoutElement
+    public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour where LABEL : Component
     {
         public enum LetterFormatting
         {
