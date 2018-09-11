@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using TMPro;
 
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="TranslationManager.cs" company="Omiya Games">
+    /// <copyright file="ILabelResizer.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,10 +27,10 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/29/2018</date>
+    /// <date>9/11/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Resizes a TextMeshPro label.
+    /// Automatically resizes the font size of a label component based on settings.
     /// </summary>
     /// <remarks>
     /// Revision History:
@@ -42,41 +41,75 @@ namespace OmiyaGames
     /// <description>Description</description>
     /// </listheader>
     /// <item>
-    /// <description>6/5/2018</description>
-    /// <description>Taro</description>
-    /// <description>Initial verison</description>
-    /// </item>
-    /// <item>
-    /// <description>6/5/2018</description>
-    /// <description>Taro</description>
-    /// <description>Actual implementation.</description>
-    /// </item>
-    /// <item>
     /// <description>9/11/2018</description>
     /// <description>Taro</description>
-    /// <description>Added abstraction.</description>
+    /// <description>Initial verison</description>
     /// </item>
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(TextMeshProUGUI))]
-    public class TextMeshProResizer : ILabelResizer<TextMeshProUGUI>
+    public abstract class ILabelResizer<LABEL> : IResizer where LABEL : UnityEngine.UI.ILayoutElement
     {
-        public override float FontSize
+        LABEL label = default(LABEL);
+        float originalFontSize = -1f;
+        ResizeMultiplierChanged lastAction = null;
+
+        public LABEL Label
         {
             get
             {
-                return Label.fontSize;
+                if (label == null)
+                {
+                    label = GetComponent<LABEL>();
+                }
+                return label;
             }
         }
 
-        public override void UpdateLabelSize()
+        public float OriginalFontSize
         {
-            // Do NOT attempt to resize the text if it's set to auto-size
-            if ((isActiveAndEnabled == true) && (Label != null) && (Label.enableAutoSizing == false))
+            get
             {
-                Label.fontSize = OriginalFontSize * ResizeMultiplier;
+                if (originalFontSize < 0)
+                {
+                    originalFontSize = FontSize;
+                }
+                return originalFontSize;
             }
+        }
+
+        public abstract float FontSize
+        {
+            get;
+        }
+
+        public void OnEnable()
+        {
+            // Update the font size if the multiplier is not set to 1
+            UpdateLabelSize();
+
+            // Bind to the resize event
+            if (lastAction == null)
+            {
+                lastAction = new ResizeMultiplierChanged(UpdateLabelSize);
+                OnAfterResizeMultiplierChanged += lastAction;
+            }
+        }
+
+        public void OnDestroy()
+        {
+            if (lastAction != null)
+            {
+                OnAfterResizeMultiplierChanged -= lastAction;
+                lastAction = null;
+            }
+        }
+
+        public abstract void UpdateLabelSize();
+
+        private void UpdateLabelSize(float lastMultiplier, float newMultiplier)
+        {
+            UpdateLabelSize();
         }
     }
 }
