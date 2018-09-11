@@ -56,7 +56,6 @@ namespace OmiyaGames.Translations
     /// <seealso cref="TextMeshProUGUI"/>
     /// <seealso cref="ITranslatedLabel{LABEL, STYLE}"/>
     [RequireComponent(typeof(TextMeshProUGUI))]
-    [RequireComponent(typeof(TextMeshProResizer))]
     [DisallowMultipleComponent]
     public class TranslatedTextMeshPro : ITranslatedLabel<TextMeshProUGUI, FontStyles>
     {
