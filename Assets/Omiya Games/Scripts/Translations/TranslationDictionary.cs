@@ -232,7 +232,35 @@ namespace OmiyaGames.Translations
 
         public List<TranslationCollection> UpdateSerializedTranslations()
         {
-            // FIXME: use the information filled in in allTranslations dictionary to update translations list
+            // Grab a soft-copy of all translations
+            Dictionary<string, Dictionary<string, string>> translationCopy = AllTranslations;
+
+            // Clear the translations list (this needs to happen AFTER calling AllTranslations' getter)
+            translations.Clear();
+
+            // Go through all the keys
+            TranslationCollection collectionToAdd;
+            LanguageTextPair pairToAdd;
+            foreach (KeyValuePair<string, Dictionary<string, string>> collection in translationCopy)
+            {
+                // Create a new collection of translations
+                collectionToAdd = new TranslationCollection(collection.Key);
+
+                // Go through all translations
+                foreach(KeyValuePair<string, string> pair in collection.Value)
+                {
+                    // Create a new pair
+                    pairToAdd = new LanguageTextPair(pair.Key, pair.Value);
+
+                    // Add the pair to the collection
+                    collectionToAdd.AllTranslations.Add(pairToAdd);
+                }
+
+                // Add new collection to the list
+                translations.Add(collectionToAdd);
+            }
+
+            // Return the updated translations list
             return translations;
         }
     }
