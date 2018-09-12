@@ -38,8 +38,9 @@ namespace OmiyaGames
     /// </summary>
     public static class AssetUtility
     {
-        static readonly StringBuilder tempBuilder = new StringBuilder();
-        
+        public const string CreateScriptableObjectAtFolder = "Assets/";
+        public const string ManifestFileExtension = ".manifest";
+
         public static float SingleLineHeight(float verticalMargin)
         {
             return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
@@ -103,38 +104,31 @@ namespace OmiyaGames
             return returnGuid;
         }
 
-        public static DomainList GenerateAcceptedDomainList(string folderName, string fileName, string[] content, out string pathOfAsset)
+        public static string SaveAsAssetBundle(ScriptableObject newAsset, string newFolderName, string newFileName, string bundleId, StringBuilder builder)
         {
-            return GenerateAcceptedDomainList(tempBuilder, folderName, fileName, content, null, out pathOfAsset);
+            // Generate the asset bundle at the Assets folder
+            string pathOfAsset = GenerateScriptableObject(newAsset, newFileName, bundleId, builder);
+            GenerateAssetBundle(bundleId, pathOfAsset);
+
+            // Move the created asset bundle to the designated location
+            MoveAssetBundleTo(builder, pathOfAsset, newFolderName, newFileName, bundleId);
+            return pathOfAsset;
         }
 
-        public static DomainList GenerateAcceptedDomainList(string folderName, string fileName, string[] content, string bundleId, out string pathOfAsset)
+        #region SaveAsAssetBundle helpers
+        private static string GenerateScriptableObject(ScriptableObject newAsset, string fileName, string bundleId, StringBuilder builder)
         {
-            return GenerateAcceptedDomainList(tempBuilder, folderName, fileName, content, bundleId, out pathOfAsset);
-        }
-
-        public static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
-        {
-            return GenerateAcceptedDomainList(builder, folderName, fileName, content, null, out pathOfAsset);
-        }
-
-        public static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, string bundleId, out string pathOfAsset)
-        {
-            DomainList returnAsset = ScriptableObject.CreateInstance<DomainList>();
-            returnAsset.name = fileName;
-            returnAsset.Domains = content;
-
             // Generate a path to create an AcceptedDomainList
-            builder.Length = 0;
-            builder.Append(Path.Combine(folderName, fileName));
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, fileName));
             builder.Append(Utility.FileExtensionScriptableObject);
-            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
+            string pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
 
             // Create the AcceptedDomainList at the assigned path
-            AssetDatabase.CreateAsset(returnAsset, pathOfAsset);
+            AssetDatabase.CreateAsset(newAsset, pathOfAsset);
 
             // Set its asset bundle name
-            if(string.IsNullOrEmpty(bundleId) == false)
+            if (string.IsNullOrEmpty(bundleId) == false)
             {
                 AssetImporter.GetAtPath(pathOfAsset).assetBundleName = bundleId;
             }
@@ -142,10 +136,10 @@ namespace OmiyaGames
             // Save and refresh this asset
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            return returnAsset;
+            return pathOfAsset;
         }
 
-        public static void GenerateAssetBundle(string folderName, string bundleId, params string[] objectPaths)
+        private static void GenerateAssetBundle(string bundleId, params string[] objectPaths)
         {
             // Create the array of bundle build details.
             AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
@@ -154,11 +148,59 @@ namespace OmiyaGames
             buildMap[0].assetNames = objectPaths;
 
             // Put the bundles in folderName
-            BuildPipeline.BuildAssetBundles(folderName, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
+            BuildPipeline.BuildAssetBundles(CreateScriptableObjectAtFolder, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
 
             // Save and refresh this asset
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+
+        private static void MoveAssetBundleTo(StringBuilder builder, string pathOfAsset, string newFolderName, string newFileName, string bundleId)
+        {
+            // Clean-up the rest of the assets
+            CleanUpFiles(builder, pathOfAsset, bundleId);
+
+            // Create a new folder if one doesn't exist
+            CreateFolderRecursively(newFolderName);
+
+            // Generate paths for the old file, to move to the new one
+            string newPath = Path.Combine(newFolderName, newFileName);
+            pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, bundleId);
+
+            // Move the asset to the folder designated by the user
+            FileUtil.ReplaceFile(pathOfAsset, newPath);
+            FileUtil.DeleteFileOrDirectory(pathOfAsset);
+
+            // Refresh the project window
+            AssetDatabase.Refresh();
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(newPath);
+        }
+
+        private static void CleanUpFiles(StringBuilder builder, string acceptedDomainListObjectPath, string bundleId)
+        {
+            // Clean-up the acceptedDomainListObject
+            FileUtil.DeleteFileOrDirectory(acceptedDomainListObjectPath);
+
+            // Clean-up the asset bundle for this folder
+            string fileName = Path.GetFileName(Path.GetDirectoryName(CreateScriptableObjectAtFolder));
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, fileName));
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up the manifest files for this folder
+            builder.Append(ManifestFileExtension);
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up the manifest files for this folder
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, bundleId));
+            builder.Append(ManifestFileExtension);
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up unused bundle IDs
+            AssetDatabase.RemoveAssetBundleName(bundleId, false);
+        }
+        #endregion
     }
 }
