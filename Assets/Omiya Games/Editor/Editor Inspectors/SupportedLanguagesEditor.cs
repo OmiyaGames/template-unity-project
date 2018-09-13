@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using System.Text;
 using System.IO;
 using OmiyaGames.Translations;
 
@@ -42,8 +41,12 @@ namespace OmiyaGames.UI.Translations
     public class SupportedLanguagesEditor : Editor
     {
         public const string DefaultFileName = "New Supported Languages" + Utility.FileExtensionScriptableObject;
+        const float VerticalMargin = 2;
 
-        // FIXME: setup a new list
+        // Member variables
+        SerializedProperty previewLanguageInIndex;
+        SerializedProperty supportedLanguages;
+        ReorderableList supportedLanguagesList;
 
         [MenuItem("Omiya Games/Create/Supported Languages")]
         private static void CreateSupportedLanguages()
@@ -60,15 +63,95 @@ namespace OmiyaGames.UI.Translations
             ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
         }
 
-        private void OnEnable()
+        /// <summary>
+        /// Draws a popup mapping an int-property to a supported language.
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="property"></param>
+        /// <param name="target"></param>
+        public static void DrawSupportedLanguages(string label, SerializedProperty property, SupportedLanguages target)
         {
-            // FIXME: setup a new list
+            property.intValue = EditorGUILayout.Popup(label, property.intValue, GetAllLanguageNames(target));
         }
 
         public override void OnInspectorGUI()
         {
-            // FIXME: show a regular editable list of strings
-            base.OnInspectorGUI();
+            // Update the serialized object
+            serializedObject.Update();
+
+            // Display the language to preview
+            EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+            DrawSupportedLanguages("Language", previewLanguageInIndex, (SupportedLanguages)target);
+
+            // Display list of languages
+            EditorGUILayout.Space();
+            supportedLanguagesList.DoLayoutList();
+
+            // Apply modifications
+            serializedObject.ApplyModifiedProperties();
         }
+
+        private void OnEnable()
+        {
+            // Grab all properties
+            previewLanguageInIndex = serializedObject.FindProperty("previewLanguageInIndex");
+            supportedLanguages = serializedObject.FindProperty("supportedLanguages");
+
+            // Setup a new list
+            supportedLanguagesList = new ReorderableList(serializedObject, supportedLanguages, true, true, true, true);
+            supportedLanguagesList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
+            supportedLanguagesList.drawElementCallback = DrawObjectsToPreloadListElement;
+            supportedLanguagesList.elementHeight = AssetUtility.GetHeight(null, 2, VerticalMargin) + VerticalMargin;
+        }
+
+        #region Helper Methods
+        void DrawObjectsToPreloadListHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "Supported Languages", EditorStyles.boldLabel);
+        }
+
+        void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            // Grab the relevant element
+            SerializedProperty element = supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
+
+            // Adjust rect to the first line
+            rect.y += VerticalMargin;
+            rect.height = EditorGUIUtility.singleLineHeight;
+
+            // Display language name
+            SerializedProperty property = element.FindPropertyRelative("languageName");
+            EditorGUI.PropertyField(rect, property);
+
+            // Adjust rect to the second line
+            rect.y += VerticalMargin;
+            rect.y += rect.height;
+            rect.width /= 2f;
+
+            // Draw checkbox
+            property = element.FindPropertyRelative("isSystemDefault");
+            property.boolValue = EditorGUI.Toggle(rect, "Map To System Language", property.boolValue);
+            if (property.boolValue == true)
+            {
+                // Adjust rect to the second line
+                rect.x += rect.width;
+
+                // Draw enum
+                property = element.FindPropertyRelative("mapTo");
+                System.Enum selectedLanguage= EditorGUI.EnumPopup(rect, (SystemLanguage)property.enumValueIndex);
+                property.enumValueIndex = System.Convert.ToInt32(selectedLanguage);
+            }
+        }
+
+        static string[] GetAllLanguageNames(SupportedLanguages target)
+        {
+            string[] returnNames = new string[target.NumberOfLanguages];
+            for (int index = 0; index < returnNames.Length; ++index)
+            {
+                returnNames[index] = target[index];
+            }
+            return returnNames;
+        }
+        #endregion
     }
 }
