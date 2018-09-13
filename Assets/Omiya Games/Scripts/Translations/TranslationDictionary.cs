@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
 
@@ -184,28 +183,7 @@ namespace OmiyaGames.Translations
                 // Check if the dictionary is initialized
                 if(allTranslations == null)
                 {
-                    // If not, setup the dictionary (we know the fianl capacity)
-                    allTranslations = new Dictionary<string, Dictionary<string, string>>(translations.Count);
-
-                    // Populate the dictionary
-                    Dictionary<string, string> toAdd = null;
-                    foreach (TranslationCollection collection in translations)
-                    {
-                        if(allTranslations.ContainsKey(collection.Key) == false)
-                        {
-                            // Create a new dictionary
-                            toAdd = new Dictionary<string, string>(collection.AllTranslations.Count);
-
-                            // Add all the pairs
-                            foreach(LanguageTextPair pair in collection.AllTranslations)
-                            {
-                                toAdd.Add(pair.Language, pair.Text);
-                            }
-
-                            // Add this dictionary to the final collection
-                            allTranslations.Add(collection.Key, toAdd);
-                        }
-                    }
+                    RepopulateAllTranslations();
                 }
                 return allTranslations;
             }
@@ -262,6 +240,37 @@ namespace OmiyaGames.Translations
 
             // Return the updated translations list
             return translations;
+        }
+
+        public Dictionary<string, Dictionary<string, string>> RepopulateAllTranslations()
+        {
+            // Setup or clear the dictionary
+            if (allTranslations == null)
+            {
+                allTranslations = new Dictionary<string, Dictionary<string, string>>(translations.Count);
+            }
+            allTranslations.Clear();
+
+            // Populate the dictionary
+            Dictionary<string, string> toAdd = null;
+            foreach (TranslationCollection collection in translations)
+            {
+                if (allTranslations.ContainsKey(collection.Key) == false)
+                {
+                    // Create a new dictionary
+                    toAdd = new Dictionary<string, string>(collection.AllTranslations.Count);
+
+                    // Add all the pairs
+                    foreach (LanguageTextPair pair in collection.AllTranslations)
+                    {
+                        toAdd.Add(pair.Language, pair.Text);
+                    }
+
+                    // Add this dictionary to the final collection
+                    allTranslations.Add(collection.Key, toAdd);
+                }
+            }
+            return allTranslations;
         }
     }
 }
