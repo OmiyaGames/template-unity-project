@@ -32,7 +32,7 @@ namespace OmiyaGames.UI.Translations
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>9/12/2015</date>
+    /// <date>9/12/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// An editor to allow editing <code>TranslationDictionary</code> scripts.
@@ -42,25 +42,20 @@ namespace OmiyaGames.UI.Translations
     public class TranslationDictionaryEditor : Editor
     {
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
-        public const string BundleId = "translation";
 
-        [MenuItem("Omiya Games/Create Translation Dictionary")]
+        [MenuItem("Omiya Games/Create/Translation Dictionary")]
         private static void CreateTranslationDictionary()
         {
+            // Setup asset
+            TranslationDictionary newAsset = ScriptableObject.CreateInstance<TranslationDictionary>();
+
+            // Setup path to file
             string folderName = AssetUtility.GetSelectedFolder();
-            StringBuilder builder = new StringBuilder();
-
-            // Check if file already exists
             string pathOfAsset = Path.Combine(folderName, DefaultFileName);
-            if (AssetUtility.ConfirmFileIsWriteable(pathOfAsset, DefaultFileName) == true)
-            {
-                // Setup asset
-                TranslationDictionary newAsset = ScriptableObject.CreateInstance<TranslationDictionary>();
-                newAsset.name = DefaultFileName;
+            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
 
-                // Generate the asset bundle
-                AssetUtility.SaveAsAssetBundle(newAsset, folderName, DefaultFileName, BundleId, builder);
-            }
+            // Create the asset, and prompt the user to rename it
+            ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
         }
 
         private void OnEnable()
