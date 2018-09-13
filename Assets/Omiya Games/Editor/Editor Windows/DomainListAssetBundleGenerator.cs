@@ -72,7 +72,7 @@ namespace OmiyaGames
             }
         }
 
-        [MenuItem("Omiya Games/Domain List Generator")]
+        [MenuItem("Omiya Games/Open Window/Domain List Generator")]
         static void Initialize()
         {
             DomainListAssetBundleGenerator window = GetWindow<DomainListAssetBundleGenerator>(title: "Domain List Generator");
