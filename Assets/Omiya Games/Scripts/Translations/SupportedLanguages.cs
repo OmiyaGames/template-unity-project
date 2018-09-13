@@ -67,7 +67,6 @@ namespace OmiyaGames.Translations
         };
 
         Dictionary<string, int> languageToIndexMap = null;
-        Language? defaultLangauge = null;
 
         #region Properties
         /// <summary>
