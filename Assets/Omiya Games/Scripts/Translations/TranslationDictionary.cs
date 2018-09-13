@@ -8,7 +8,14 @@ namespace OmiyaGames.Translations
     {
         public const byte DefaultNumberOfLanguages = 3;
 
-        public enum DefaultText
+        public enum KeyNotFoundDefaults
+        {
+            Null,
+            EmptyString,
+            PresetMessage
+        }
+
+        public enum TranslationNotFoundDefaults
         {
             Null,
             EmptyString,
@@ -134,13 +141,13 @@ namespace OmiyaGames.Translations
 
         [Header("Behavior When Key Is Not Found")]
         [SerializeField]
-        DefaultText defaultToWhenKeyNotFound = DefaultText.PresetMessage;
+        KeyNotFoundDefaults defaultToWhenKeyNotFound = KeyNotFoundDefaults.PresetMessage;
         [SerializeField]
         string presetMessageWhenKeyNotFound = "<Key Not Found>";
 
         [Header("Behavior When Translation Is Not Found")]
         [SerializeField]
-        DefaultText defaultToWhenTranslationNotFound = DefaultText.PresetMessage;
+        TranslationNotFoundDefaults defaultToWhenTranslationNotFound = TranslationNotFoundDefaults.PresetMessage;
         [SerializeField]
         string presetMessageWhenTranslationNotFound = "<Translation Not Found>";
         [SerializeField]
@@ -193,7 +200,7 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public DefaultText DefaultToWhenKeyNotFound
+        public KeyNotFoundDefaults DefaultToWhenKeyNotFound
         {
             get
             {
@@ -218,7 +225,7 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public DefaultText DefaultToWhenTranslationNotFound
+        public TranslationNotFoundDefaults DefaultToWhenTranslationNotFound
         {
             get
             {
@@ -386,11 +393,11 @@ namespace OmiyaGames.Translations
             string returnText = null;
             switch (DefaultToWhenKeyNotFound)
             {
-                case DefaultText.PresetMessage:
+                case KeyNotFoundDefaults.PresetMessage:
                     returnText = PresetMessageWhenKeyNotFound;
                     break;
 
-                case DefaultText.EmptyString:
+                case KeyNotFoundDefaults.EmptyString:
                     returnText = string.Empty;
                     break;
             }
@@ -404,20 +411,20 @@ namespace OmiyaGames.Translations
             string returnText = null;
 
             // Keep track of what we need to default to
-            DefaultText defaultTo = DefaultToWhenTranslationNotFound;
+            TranslationNotFoundDefaults defaultTo = DefaultToWhenTranslationNotFound;
             switch (defaultTo)
             {
-                case DefaultText.DefaultLanguageOrPresetMessage:
+                case TranslationNotFoundDefaults.DefaultLanguageOrPresetMessage:
                     // Pretend to be a preset message before analyzing whether a default translation is available or not
-                    defaultTo = DefaultText.PresetMessage;
-                    goto case DefaultText.DefaultLanguageOrNull;
+                    defaultTo = TranslationNotFoundDefaults.PresetMessage;
+                    goto case TranslationNotFoundDefaults.DefaultLanguageOrNull;
 
-                case DefaultText.DefaultLanguageOrEmptyString:
+                case TranslationNotFoundDefaults.DefaultLanguageOrEmptyString:
                     // Pretend to be an empty string before analyzing whether a default translation is available or not
-                    defaultTo = DefaultText.EmptyString;
-                    goto case DefaultText.DefaultLanguageOrNull;
+                    defaultTo = TranslationNotFoundDefaults.EmptyString;
+                    goto case TranslationNotFoundDefaults.DefaultLanguageOrNull;
 
-                case DefaultText.DefaultLanguageOrNull:
+                case TranslationNotFoundDefaults.DefaultLanguageOrNull:
                     // Check if the default language has a translation
                     if (HasTranslation(key, DefaultLanguageWhenTranslationNotFound) == true)
                     {
@@ -425,7 +432,7 @@ namespace OmiyaGames.Translations
                         returnText = AllTranslations[key][DefaultLanguageWhenTranslationNotFound];
 
                         // Flag the variable so it skips the next check
-                        defaultTo = DefaultText.DefaultLanguageOrNull;
+                        defaultTo = TranslationNotFoundDefaults.DefaultLanguageOrNull;
                     }
                     break;
             }
@@ -433,11 +440,11 @@ namespace OmiyaGames.Translations
             // Check the second time whether there's anything to default to.
             switch (defaultTo)
             {
-                case DefaultText.PresetMessage:
+                case TranslationNotFoundDefaults.PresetMessage:
                     returnText = PresetMessageWhenTranslationNotFound;
                     break;
 
-                case DefaultText.EmptyString:
+                case TranslationNotFoundDefaults.EmptyString:
                     returnText = string.Empty;
                     break;
             }
