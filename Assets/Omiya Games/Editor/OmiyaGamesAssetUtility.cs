@@ -40,6 +40,7 @@ namespace OmiyaGames
     {
         public const string CreateScriptableObjectAtFolder = "Assets/";
         public const string ManifestFileExtension = ".manifest";
+        public const string ConfirmationDialogTitle = "Overwrite File?";
 
         public static float SingleLineHeight(float verticalMargin)
         {
@@ -104,14 +105,63 @@ namespace OmiyaGames
             return returnGuid;
         }
 
+        public static string GetSelectedFolder()
+        {
+            string returnPath = null;
+
+            // Check if there's a selected object
+            var obj = Selection.activeObject;
+            if (obj != null)
+            {
+                returnPath = AssetDatabase.GetAssetPath(obj.GetInstanceID());
+                if((string.IsNullOrEmpty(returnPath) == false) && (Directory.Exists(returnPath) == false))
+                {
+                    returnPath = Path.GetDirectoryName(returnPath);
+                }
+            }
+
+            if (string.IsNullOrEmpty(returnPath) == true)
+            {
+                returnPath = CreateScriptableObjectAtFolder;
+            }
+            return returnPath;
+        }
+
+        public static bool ConfirmFileIsWriteable(string pathOfAsset, string nameOfFile)
+        {
+            // Check to see if file exists
+            bool isBuildConfirmed = true;
+            if (File.Exists(pathOfAsset) == true)
+            {
+                // Create a message to indicate to the user
+                StringBuilder builder = new StringBuilder();
+                builder.Append("File \"");
+                builder.Append(nameOfFile);
+                builder.Append("\" already exists. Are you sure you want to overwrite this file?");
+
+                // Bring up a pop-up confirming the file will be overwritten
+                isBuildConfirmed = EditorUtility.DisplayDialog(ConfirmationDialogTitle, builder.ToString(), "Yes", "No");
+            }
+            return isBuildConfirmed;
+        }
+
         public static string SaveAsAssetBundle(ScriptableObject newAsset, string newFolderName, string newFileName, string bundleId, StringBuilder builder)
         {
             // Generate the asset bundle at the Assets folder
             string pathOfAsset = GenerateScriptableObject(newAsset, newFileName, bundleId, builder);
             GenerateAssetBundle(bundleId, pathOfAsset);
 
-            // Move the created asset bundle to the designated location
-            MoveAssetBundleTo(builder, pathOfAsset, newFolderName, newFileName, bundleId);
+            // Clean-up the rest of the assets
+            CleanUpFiles(builder, pathOfAsset, bundleId);
+
+            if (string.IsNullOrEmpty(newFolderName) == false)
+            {
+                // Create a new folder if one doesn't exist
+                CreateFolderRecursively(newFolderName);
+
+                // Move the created asset bundle to the designated location
+                MoveAssetBundleTo(builder, pathOfAsset, newFolderName, newFileName, bundleId);
+            }
             return pathOfAsset;
         }
 
@@ -157,12 +207,6 @@ namespace OmiyaGames
 
         private static void MoveAssetBundleTo(StringBuilder builder, string pathOfAsset, string newFolderName, string newFileName, string bundleId)
         {
-            // Clean-up the rest of the assets
-            CleanUpFiles(builder, pathOfAsset, bundleId);
-
-            // Create a new folder if one doesn't exist
-            CreateFolderRecursively(newFolderName);
-
             // Generate paths for the old file, to move to the new one
             string newPath = Path.Combine(newFolderName, newFileName);
             pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, bundleId);
