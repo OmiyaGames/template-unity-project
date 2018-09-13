@@ -43,6 +43,10 @@ namespace OmiyaGames.UI.Translations
     {
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
 
+        private UnityEditor.IMGUI.Controls.SearchField searchField = null;
+        private string lastSearchedString = null, newSearchString = null;
+        private Vector2 scrollPosition = Vector2.zero;
+
         [MenuItem("Omiya Games/Create/Translation Dictionary")]
         private static void CreateTranslationDictionary()
         {
@@ -60,13 +64,48 @@ namespace OmiyaGames.UI.Translations
 
         private void OnEnable()
         {
-            
+            // Setup search field
+            searchField = new UnityEditor.IMGUI.Controls.SearchField();
         }
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            // Calculate area for the search bar
+            Rect area = GUILayoutUtility.GetRect(1, 1, 18, 18, GUILayout.ExpandWidth(true));
+            GUILayout.BeginHorizontal();
 
+            // Draw the search bar
+            newSearchString = searchField.OnGUI(area, lastSearchedString);
+
+            // Close the vertical layout
+            EditorGUILayout.EndHorizontal();
+
+            // Check if we're searching for something
+            if (string.IsNullOrEmpty(newSearchString) == false)
+            {
+                // If we are, start a scroll view
+                scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+
+                // Draw the search results
+                DrawSearchResults();
+
+                // End the scroll view
+                EditorGUILayout.EndScrollView();
+            }
+            else
+            {
+                // FIXME: show a regular editable list of strings
+                base.OnInspectorGUI();
+            }
+
+            // Swap the search strings
+            lastSearchedString = newSearchString;
+        }
+
+        private void DrawSearchResults()
+        {
+            // FIXME: show the actual entry, editable, and add a button to remove it
+            // print some stuff for testing purposes
             EditorGUILayout.HelpBox("TEsting....", MessageType.Info);
         }
     }
