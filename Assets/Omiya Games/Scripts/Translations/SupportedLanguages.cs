@@ -15,18 +15,22 @@ namespace OmiyaGames.Translations
             [SerializeField]
             string languageName;
             [SerializeField]
-            SystemLanguage? systemDefault;
+            bool isSystemDefault;
+            [SerializeField]
+            SystemLanguage mapTo;
 
             public Language(string languageName, SystemLanguage systemDefault)
             {
                 this.languageName = languageName;
-                this.systemDefault = systemDefault;
+                isSystemDefault = true;
+                mapTo = systemDefault;
             }
 
             public Language(string languageName)
             {
                 this.languageName = languageName;
-                this.systemDefault = null;
+                isSystemDefault = false;
+                mapTo = DefaultLanguageSystem;
             }
 
             public string LanguageName
@@ -35,25 +39,21 @@ namespace OmiyaGames.Translations
                 {
                     return languageName;
                 }
-                set
-                {
-                    languageName = value;
-                }
             }
 
-            /// <summary>
-            /// Sets to this languageName by default if <code>Application.systemLanguage</code> is set to this enum value.
-            /// Can be null if not intended to be a default of any language, e.g. if there are multiple English variations (USA, UK, AUS), and only one of them is meant to be default.
-            /// </summary>
-            public SystemLanguage? SystemDefault
+            public bool IsSystemDefault
             {
                 get
                 {
-                    return systemDefault;
+                    return isSystemDefault;
                 }
-                set
+            }
+
+            public SystemLanguage LanguageMappedTo
+            {
+                get
                 {
-                    systemDefault = value;
+                    return mapTo;
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace OmiyaGames.Translations
             for (int i = 0; i < supportedLanguages.Length; ++i)
             {
                 // Make sure the language has a language it supports
-                if ((supportedLanguages[i].SystemDefault.HasValue == true) && (supportedLanguages[i].SystemDefault.Value == systemDefault))
+                if ((supportedLanguages[i].IsSystemDefault == true) && (supportedLanguages[i].LanguageMappedTo == systemDefault))
                 {
                     // If so, return this language
                     index = i;
