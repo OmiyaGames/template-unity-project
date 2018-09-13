@@ -8,30 +8,40 @@ namespace OmiyaGames.Translations
     {
         public const byte DefaultNumberOfLanguages = 3;
 
+        public enum DefaultText
+        {
+            Null,
+            EmptyString,
+            PresetMessage,
+            DefaultLanguageOrNull,
+            DefaultLanguageOrEmptyString,
+            DefaultLanguageOrPresetMessage
+        }
+
         [Serializable]
         public struct LanguageTextPair
         {
             [SerializeField]
-            string language;
+            int languageIndex;
             [SerializeField]
             [TextArea]
             string text;
 
-            public LanguageTextPair(string language, string text)
+            public LanguageTextPair(int languageIndex, string text)
             {
-                this.language = language;
+                this.languageIndex = languageIndex;
                 this.text = text;
             }
 
-            public string Language
+            public int LanguageIndex
             {
                 get
                 {
-                    return language;
+                    return languageIndex;
                 }
                 set
                 {
-                    language = value;
+                    languageIndex = value;
                 }
             }
 
@@ -118,6 +128,25 @@ namespace OmiyaGames.Translations
             }
         }
 
+        [Header("Required Components")]
+        [SerializeField]
+        SupportedLanguages supportedLanguages = null;
+
+        [Header("Behavior When Key Is Not Found")]
+        [SerializeField]
+        DefaultText defaultToWhenKeyNotFound = DefaultText.PresetMessage;
+        [SerializeField]
+        string presetMessageWhenKeyNotFound = "<Key Not Found>";
+
+        [Header("Behavior When Translation Is Not Found")]
+        [SerializeField]
+        DefaultText defaultToWhenTranslationNotFound = DefaultText.PresetMessage;
+        [SerializeField]
+        string presetMessageWhenTranslationNotFound = "<Translation Not Found>";
+        [SerializeField]
+        int defaultLanguageWhenTranslationNotFound = 0;
+
+        [Header("Translations")]
         [SerializeField]
         List<TranslationCollection> translations = null;
 
@@ -125,50 +154,103 @@ namespace OmiyaGames.Translations
         /// A dictionary embedded in the dictionary. The top-most keys are keys to translations;
         /// next tier keys are languages; and values of the embedded tier are the text itself.
         /// </summary>
-        Dictionary<string, Dictionary<string, string>> allTranslations = null;
+        Dictionary<string, Dictionary<int, string>> allTranslations = null;
 
         #region Properties
+        public string this[string key, int languageIndex]
+        {
+            get
+            {
+                return GetTranslation(key, languageIndex);
+            }
+            set
+            {
+                AddOrSetTranslation(key, languageIndex, value);
+            }
+        }
+
         public string this[string key, string language]
         {
             get
             {
-                string returnText = null;
-                if (AllTranslations.ContainsKey(key) == true)
-                {
-                    returnText = GetDefaultText(key);
-                    if (AllTranslations[key].ContainsKey(language) == true)
-                    {
-                        returnText = AllTranslations[key][language];
-                    }
-                }
-                return returnText;
+                return this[key, SupportedLanguages[language]];
             }
             set
             {
-                if ((AllTranslations.ContainsKey(key) == true) && (AllTranslations[key].ContainsKey(language) == true))
-                {
-                    AllTranslations[key][language] = value;
-                }
+                this[key, SupportedLanguages[language]] = value;
             }
         }
 
-        public string this[string key]
+        public SupportedLanguages SupportedLanguages
         {
             get
             {
-                return this[key, Translator.CurrentLanguage];
+                return supportedLanguages;
             }
             set
             {
-                this[key, Translator.CurrentLanguage] = value;
+                supportedLanguages = value;
             }
         }
 
-        static TranslationManager Translator
+        public DefaultText DefaultToWhenKeyNotFound
         {
             get
             {
-                return Singleton.Get<TranslationManager>();
+                return defaultToWhenKeyNotFound;
+            }
+            set
+            {
+                defaultToWhenKeyNotFound = value;
+            }
+        }
+
+        public string PresetMessageWhenKeyNotFound
+        {
+            get
+            {
+                return presetMessageWhenKeyNotFound;
+            }
+
+            set
+            {
+                presetMessageWhenKeyNotFound = value;
+            }
+        }
+
+        public DefaultText DefaultToWhenTranslationNotFound
+        {
+            get
+            {
+                return defaultToWhenTranslationNotFound;
+            }
+            set
+            {
+                defaultToWhenTranslationNotFound = value;
+            }
+        }
+
+        public string PresetMessageWhenTranslationNotFound
+        {
+            get
+            {
+                return presetMessageWhenTranslationNotFound;
+            }
+            set
+            {
+                presetMessageWhenTranslationNotFound = value;
+            }
+        }
+
+        public int DefaultLanguageWhenTranslationNotFound
+        {
+            get
+            {
+                return defaultLanguageWhenTranslationNotFound;
+            }
+            set
+            {
+                defaultLanguageWhenTranslationNotFound = value;
             }
         }
 
@@ -176,12 +258,12 @@ namespace OmiyaGames.Translations
         /// A dictionary embedded in the dictionary. The top-most keys are keys to translations;
         /// next tier keys are languages; and values of the embedded tier are the text itself.
         /// </summary>
-        public Dictionary<string, Dictionary<string, string>> AllTranslations
+        private Dictionary<string, Dictionary<int, string>> AllTranslations
         {
             get
             {
                 // Check if the dictionary is initialized
-                if(allTranslations == null)
+                if (allTranslations == null)
                 {
                     RepopulateAllTranslations();
                 }
@@ -190,28 +272,10 @@ namespace OmiyaGames.Translations
         }
         #endregion
 
-        public string GetDefaultText(string key)
-        {
-            string returnText = null;
-            if (AllTranslations.ContainsKey(key) == true)
-            {
-                foreach(string firstLanguage in AllTranslations[key].Keys)
-                {
-                    returnText = AllTranslations[key][firstLanguage];
-                    break;
-                }
-                if (AllTranslations[key].ContainsKey(Translator.DefaultLanguage) == true)
-                {
-                    returnText = AllTranslations[key][Translator.DefaultLanguage];
-                }
-            }
-            return returnText;
-        }
-
         public List<TranslationCollection> UpdateSerializedTranslations()
         {
             // Grab a soft-copy of all translations
-            Dictionary<string, Dictionary<string, string>> translationCopy = AllTranslations;
+            Dictionary<string, Dictionary<int, string>> translationCopy = AllTranslations;
 
             // Clear the translations list (this needs to happen AFTER calling AllTranslations' getter)
             translations.Clear();
@@ -219,13 +283,13 @@ namespace OmiyaGames.Translations
             // Go through all the keys
             TranslationCollection collectionToAdd;
             LanguageTextPair pairToAdd;
-            foreach (KeyValuePair<string, Dictionary<string, string>> collection in translationCopy)
+            foreach (KeyValuePair<string, Dictionary<int, string>> collection in translationCopy)
             {
                 // Create a new collection of translations
                 collectionToAdd = new TranslationCollection(collection.Key);
 
                 // Go through all translations
-                foreach(KeyValuePair<string, string> pair in collection.Value)
+                foreach(KeyValuePair<int, string> pair in collection.Value)
                 {
                     // Create a new pair
                     pairToAdd = new LanguageTextPair(pair.Key, pair.Value);
@@ -242,28 +306,28 @@ namespace OmiyaGames.Translations
             return translations;
         }
 
-        public Dictionary<string, Dictionary<string, string>> RepopulateAllTranslations()
+        public Dictionary<string, Dictionary<int, string>> RepopulateAllTranslations()
         {
             // Setup or clear the dictionary
             if (allTranslations == null)
             {
-                allTranslations = new Dictionary<string, Dictionary<string, string>>(translations.Count);
+                allTranslations = new Dictionary<string, Dictionary<int, string>>(translations.Count);
             }
             allTranslations.Clear();
 
             // Populate the dictionary
-            Dictionary<string, string> toAdd = null;
+            Dictionary<int, string> toAdd = null;
             foreach (TranslationCollection collection in translations)
             {
                 if (allTranslations.ContainsKey(collection.Key) == false)
                 {
                     // Create a new dictionary
-                    toAdd = new Dictionary<string, string>(collection.AllTranslations.Count);
+                    toAdd = new Dictionary<int, string>(collection.AllTranslations.Count);
 
                     // Add all the pairs
                     foreach (LanguageTextPair pair in collection.AllTranslations)
                     {
-                        toAdd.Add(pair.Language, pair.Text);
+                        toAdd.Add(pair.LanguageIndex, pair.Text);
                     }
 
                     // Add this dictionary to the final collection
@@ -272,5 +336,138 @@ namespace OmiyaGames.Translations
             }
             return allTranslations;
         }
+
+        public bool HasKey(string key)
+        {
+            return AllTranslations.ContainsKey(key);
+        }
+
+        public bool HasTranslation(string key, int languageIndex)
+        {
+            bool returnFlag = HasKey(key);
+            if(returnFlag == true)
+            {
+                returnFlag = AllTranslations[key].ContainsKey(languageIndex);
+            }
+            return returnFlag;
+        }
+
+        public bool HasTranslation(string key, string language)
+        {
+            return HasTranslation(key, SupportedLanguages[language]);
+        }
+
+        #region Helper Methods
+        private string GetTranslation(string key, int languageIndex)
+        {
+            // Check if key or translation is available
+            string returnText = null;
+            if (HasKey(key) == false)
+            {
+                // Key is not available, return a default
+                returnText = GetDefaultKeyNotFoundText();
+            }
+            else if (HasTranslation(key, languageIndex) == false)
+            {
+                // Translation is not available, return a default
+                returnText = GetDefaultTranslationNotFoundText(key);
+            }
+            else
+            {
+                // Grab the actual text
+                returnText = AllTranslations[key][languageIndex];
+            }
+            return returnText;
+        }
+
+        private string GetDefaultKeyNotFoundText()
+        {
+            // By default, return null
+            string returnText = null;
+            switch (DefaultToWhenKeyNotFound)
+            {
+                case DefaultText.PresetMessage:
+                    returnText = PresetMessageWhenKeyNotFound;
+                    break;
+
+                case DefaultText.EmptyString:
+                    returnText = string.Empty;
+                    break;
+            }
+
+            return returnText;
+        }
+
+        private string GetDefaultTranslationNotFoundText(string key)
+        {
+            // By default, return null
+            string returnText = null;
+
+            // Keep track of what we need to default to
+            DefaultText defaultTo = DefaultToWhenTranslationNotFound;
+            switch (defaultTo)
+            {
+                case DefaultText.DefaultLanguageOrPresetMessage:
+                    // Pretend to be a preset message before analyzing whether a default translation is available or not
+                    defaultTo = DefaultText.PresetMessage;
+                    goto case DefaultText.DefaultLanguageOrNull;
+
+                case DefaultText.DefaultLanguageOrEmptyString:
+                    // Pretend to be an empty string before analyzing whether a default translation is available or not
+                    defaultTo = DefaultText.EmptyString;
+                    goto case DefaultText.DefaultLanguageOrNull;
+
+                case DefaultText.DefaultLanguageOrNull:
+                    // Check if the default language has a translation
+                    if (HasTranslation(key, DefaultLanguageWhenTranslationNotFound) == true)
+                    {
+                        // If so, return that text
+                        returnText = AllTranslations[key][DefaultLanguageWhenTranslationNotFound];
+
+                        // Flag the variable so it skips the next check
+                        defaultTo = DefaultText.DefaultLanguageOrNull;
+                    }
+                    break;
+            }
+
+            // Check the second time whether there's anything to default to.
+            switch (defaultTo)
+            {
+                case DefaultText.PresetMessage:
+                    returnText = PresetMessageWhenTranslationNotFound;
+                    break;
+
+                case DefaultText.EmptyString:
+                    returnText = string.Empty;
+                    break;
+            }
+
+            return returnText;
+        }
+
+        private void AddOrSetTranslation(string key, int languageIndex, string text)
+        {
+            // Grab a dictionary of translations from the argument, "key"
+            Dictionary<int, string> translationsForKey;
+            if(AllTranslations.TryGetValue(key, out translationsForKey) == false)
+            {
+                // Add a new dictionary for this key
+                translationsForKey = new Dictionary<int, string>(SupportedLanguages.NumberOfLanguages);
+                AllTranslations.Add(key, translationsForKey);
+            }
+
+            // Check if the language is already added into the dictionary of translations
+            if(translationsForKey.ContainsKey(languageIndex) == true)
+            {
+                // If so, update the text
+                translationsForKey[languageIndex] = text;
+            }
+            else
+            {
+                // If not, add the new language and text
+                translationsForKey.Add(languageIndex, text);
+            }
+        }
+        #endregion
     }
 }
