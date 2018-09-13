@@ -127,11 +127,11 @@ namespace OmiyaGames
             return returnPath;
         }
 
-        public static bool ConfirmFileIsWriteable(string pathOfAsset, string nameOfFile)
+        public static bool ConfirmFileIsWriteable(string pathOfAsset, string nameOfFile, bool showWindow = true)
         {
             // Check to see if file exists
-            bool isBuildConfirmed = true;
-            if (File.Exists(pathOfAsset) == true)
+            bool isBuildConfirmed = (File.Exists(pathOfAsset) == false);
+            if ((isBuildConfirmed == false) && (showWindow == true))
             {
                 // Create a message to indicate to the user
                 StringBuilder builder = new StringBuilder();
