@@ -139,13 +139,13 @@ namespace OmiyaGames.Translations
         [SerializeField]
         SupportedLanguages supportedLanguages = null;
 
-        [Header("Behavior When Key Is Not Found")]
+        [Header("When Key Is Not Found...")]
         [SerializeField]
         KeyNotFoundDefaults defaultToWhenKeyNotFound = KeyNotFoundDefaults.PresetMessage;
         [SerializeField]
         string presetMessageWhenKeyNotFound = "<Key Not Found>";
 
-        [Header("Behavior When Translation Is Not Found")]
+        [Header("When Translation For a Language Is Not Found...")]
         [SerializeField]
         TranslationNotFoundDefaults defaultToWhenTranslationNotFound = TranslationNotFoundDefaults.PresetMessage;
         [SerializeField]
