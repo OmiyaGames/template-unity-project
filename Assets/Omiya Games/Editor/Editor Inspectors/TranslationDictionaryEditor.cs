@@ -46,6 +46,8 @@ namespace OmiyaGames.UI.Translations
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
         const float VerticalMargin = 2;
         static readonly GUIContent DefaultTextToLabel = new GUIContent("Default Text To");
+        static readonly GUIContent PresetMessageLabel = new GUIContent("Preset Message");
+        const string DefaultLanguageLabel = "Default Language";
 
         #region Member Variables
         // Serialized properties and graphical wrappers
@@ -53,11 +55,15 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty defaultToWhenKeyNotFound;
         SerializedProperty presetMessageWhenKeyNotFound;
         SerializedProperty defaultToWhenTranslationNotFound;
-        SerializedProperty presetMessageWhenTranslationNotFound;
         SerializedProperty defaultLanguageWhenTranslationNotFound;
-        
+        SerializedProperty presetMessageWhenTranslationNotFound;
+
         // Defaults field
-        AnimBool showDefaultConfigurations;
+        AnimBool showErrorMessage = null;
+        AnimBool showDefaultConfigurations = null;
+        AnimBool showPresetMessageForKeyNotFound = null;
+        AnimBool showDefaultLanguageForTranslationNotFound = null;
+        AnimBool showPresetMessageForTranslationNotFound = null;
 
         // Transations list
         SerializedProperty translations;
@@ -99,54 +105,55 @@ namespace OmiyaGames.UI.Translations
             defaultLanguageWhenTranslationNotFound = serializedObject.FindProperty("defaultLanguageWhenTranslationNotFound");
 
             // Setup animations
-            showDefaultConfigurations = new AnimBool(false);
-            showDefaultConfigurations.valueChanged.AddListener(Repaint);
+            CreateBool(ref showErrorMessage);
+            CreateBool(ref showDefaultConfigurations);
+            CreateBool(ref showPresetMessageForKeyNotFound);
+            CreateBool(ref showDefaultLanguageForTranslationNotFound);
+            CreateBool(ref showPresetMessageForTranslationNotFound);
 
             // Setup transations list
             translations = serializedObject.FindProperty("translations");
-            translationsList = new ReorderableList(serializedObject, translations, true, false, true, true);
+            translationsList = new ReorderableList(serializedObject, translations, true, true, true, true);
+            translationsList.drawHeaderCallback = DrawTranslationsListHeader;
             translationsList.drawElementCallback = DrawTranslationsListElement;
             translationsList.elementHeightCallback = CalculateTranslationsListElement;
+            translationsList.onAddCallback = OnAddTranslation;
+            translationsList.onRemoveCallback = OnRemoveTranslation;
+            translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
 
             // Setup search field
             searchField = new SearchField();
             recalculateSearchResult = true;
         }
 
-        protected virtual void OnDisable()
+        private void OnDisable()
         {
-            showDefaultConfigurations.valueChanged.RemoveListener(Repaint);
+            DestroyBool(ref showErrorMessage);
+            DestroyBool(ref showDefaultConfigurations);
+            DestroyBool(ref showPresetMessageForKeyNotFound);
+            DestroyBool(ref showDefaultLanguageForTranslationNotFound);
+            DestroyBool(ref showPresetMessageForTranslationNotFound);
         }
 
         public override void OnInspectorGUI()
         {
-            // FIXME: draw a warning if the supported langauges are not set
-            // Check if the supported language is not set
-            if(supportedLanguages.objectReferenceValue == null)
-            {
-                // If so, indicate an error
-                EditorGUILayout.HelpBox("Field \"Supported Languages\" must be set first!", MessageType.Error);
+            // Update the serialized object
+            serializedObject.Update();
 
-                // Reset search terms
-                newSearchString = null;
-                lastSearchedString = null;
-            }
-
-            // Draw support langauge field
-            DrawConfigurationFields();
-            EditorGUILayout.Space();
+            // Draw support language field
+            DrawSupportedLanguageField();
+            DrawDefaultBehaviorsFields();
 
             // Draw the search bar at the top of the inspector
             GUI.enabled = (supportedLanguages.objectReferenceValue != null);
             DrawSearchBar();
-            GUI.enabled = true;
             EditorGUILayout.Space();
 
             // Check if we're searching for something
             if (string.IsNullOrEmpty(newSearchString) == true)
             {
-                // Draw member variables
-                DrawMemberVariables();
+                // Draw re-ordable list of translations
+                translationsList.DoLayoutList();
 
                 // Indicate the search result needs to be re-calculated
                 recalculateSearchResult = true;
@@ -154,7 +161,7 @@ namespace OmiyaGames.UI.Translations
             else
             {
                 // Check if there's a difference in what we're searching
-                if(newSearchString != lastSearchedString)
+                if (newSearchString != lastSearchedString)
                 {
                     // Indicate the search result needs to be re-calculated
                     recalculateSearchResult = true;
@@ -164,8 +171,12 @@ namespace OmiyaGames.UI.Translations
                 DrawSearchResults();
             }
 
-            // Swap the search strings
+            // Reset all variables
             lastSearchedString = newSearchString;
+            GUI.enabled = true;
+
+            // Apply changes to the serializedProperty - always do this at the end of OnInspectorGUI.
+            serializedObject.ApplyModifiedProperties();
         }
         #endregion
 
@@ -185,34 +196,126 @@ namespace OmiyaGames.UI.Translations
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawConfigurationFields()
+        private void DrawDefaultBehaviorsFields()
+        {
+            // Draw the Toggle Group
+            showDefaultConfigurations.target = EditorGUILayout.Foldout(showDefaultConfigurations.target, "Default Behaviors");
+            using (EditorGUILayout.FadeGroupScope defaultBehaviorsGroup = new EditorGUILayout.FadeGroupScope(showDefaultConfigurations.faded))
+            {
+                if (defaultBehaviorsGroup.visible == true)
+                {
+                    // Indent
+                    ++EditorGUI.indentLevel;
+
+                    // Show controls for default behaviors for missing keys
+                    DrawDefaultsWhenKeyIsNotFound();
+                    EditorGUILayout.Space();
+
+                    // Show controls for default behaviors for missing translations
+                    DrawDefaultsWhenTranslationForLanguageIsNotFound();
+
+                    // Undo indentation
+                    --EditorGUI.indentLevel;
+                }
+            }
+        }
+
+        private void DrawDefaultsWhenKeyIsNotFound()
+        {
+            EditorGUILayout.LabelField("When Key Is Not Found...", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(defaultToWhenKeyNotFound, DefaultTextToLabel);
+
+            // Check if we want to show the Preset Message field
+            showPresetMessageForKeyNotFound.target = (defaultToWhenKeyNotFound.enumValueIndex == ((int)TranslationDictionary.KeyNotFoundDefaults.PresetMessage));
+
+            // Draw the preset message field
+            using (EditorGUILayout.FadeGroupScope presetMessageGroup = new EditorGUILayout.FadeGroupScope(showPresetMessageForKeyNotFound.faded))
+            {
+                if (presetMessageGroup.visible == true)
+                {
+                    // Show preset message field
+                    EditorGUILayout.PropertyField(presetMessageWhenKeyNotFound, PresetMessageLabel);
+                }
+            }
+        }
+
+        private void DrawDefaultsWhenTranslationForLanguageIsNotFound()
+        {
+            EditorGUILayout.LabelField("When Translation For a Language Is Not Found...", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(defaultToWhenTranslationNotFound, DefaultTextToLabel);
+
+            // Check if we want to show the Default Language field
+            bool showField = false;
+            if (supportedLanguages.objectReferenceValue != null)
+            {
+                switch (defaultToWhenTranslationNotFound.enumValueIndex)
+                {
+                    case (int)TranslationDictionary.TranslationNotFoundDefaults.DefaultLanguageOrNull:
+                    case (int)TranslationDictionary.TranslationNotFoundDefaults.DefaultLanguageOrEmptyString:
+                    case (int)TranslationDictionary.TranslationNotFoundDefaults.DefaultLanguageOrPresetMessage:
+                        showField = true;
+
+                        break;
+                }
+            }
+            showDefaultLanguageForTranslationNotFound.target = showField;
+
+            // Draw the default language field
+            using (EditorGUILayout.FadeGroupScope defaultLanguageGroup = new EditorGUILayout.FadeGroupScope(showDefaultLanguageForTranslationNotFound.faded))
+            {
+                if ((defaultLanguageGroup.visible == true) && (showField == true))
+                {
+                    // Show default language field
+                    SupportedLanguagesEditor.DrawSupportedLanguages(DefaultLanguageLabel, defaultLanguageWhenTranslationNotFound, ((SupportedLanguages)supportedLanguages.objectReferenceValue));
+                }
+            }
+
+            // Check if we want to show the Preset Message field
+            showField = false;
+            switch (defaultToWhenTranslationNotFound.enumValueIndex)
+            {
+                case (int)TranslationDictionary.TranslationNotFoundDefaults.PresetMessage:
+                case (int)TranslationDictionary.TranslationNotFoundDefaults.DefaultLanguageOrPresetMessage:
+                    showField = true;
+                    break;
+            }
+            showPresetMessageForTranslationNotFound.target = showField;
+
+            // Draw the preset message field
+            using (EditorGUILayout.FadeGroupScope presetMessageGroup = new EditorGUILayout.FadeGroupScope(showPresetMessageForTranslationNotFound.faded))
+            {
+                if (presetMessageGroup.visible == true)
+                {
+                    // Show preset message field
+                    EditorGUILayout.PropertyField(presetMessageWhenTranslationNotFound, PresetMessageLabel);
+                }
+            }
+        }
+
+        private void DrawSupportedLanguageField()
         {
             // Draw supported languages
             EditorGUILayout.LabelField("Configuration", EditorStyles.boldLabel);
+
+            // Check if the supported language is not set
+            showErrorMessage.target = (supportedLanguages.objectReferenceValue == null);
+
+            // Error message group
+            using (EditorGUILayout.FadeGroupScope errorMessageGroup = new EditorGUILayout.FadeGroupScope(showErrorMessage.faded))
+            {
+                if (errorMessageGroup.visible == true)
+                {
+                    // If so, indicate an error
+                    EditorGUILayout.HelpBox("Field \"Supported Languages\" must be set first!", MessageType.Error);
+
+                    // Reset search terms
+                    newSearchString = null;
+                    lastSearchedString = null;
+                }
+            }
+
             // Prevent scene objects from being set to this field
             supportedLanguages.objectReferenceValue = EditorGUILayout.ObjectField("Supported Languages", supportedLanguages.objectReferenceValue, typeof(SupportedLanguages), false);
-
-            // Draw the Toggle Group
-            showDefaultConfigurations.target = EditorGUILayout.Foldout(showDefaultConfigurations.target, "Default Behavior");
-            if (EditorGUILayout.BeginFadeGroup(showDefaultConfigurations.faded) == true)
-            {
-                // Show header, "When Translation Key Is Not Found..."
-                EditorGUILayout.PropertyField(defaultToWhenKeyNotFound, DefaultTextToLabel);
-
-                // Show header, "When Translation Key Is Not Found..."
-                EditorGUILayout.PropertyField(defaultToWhenTranslationNotFound, DefaultTextToLabel);
-            }
-            EditorGUILayout.EndFadeGroup();
-        }
-
-        private void DrawMemberVariables()
-        {
-            // Update whether the rest of the UI should be enabled or not
-            GUI.enabled = (supportedLanguages.objectReferenceValue != null);
-            GUI.enabled = true;
-
-            // FIXME: show a regular editable list of strings
-            base.OnInspectorGUI();
         }
 
         private void DrawSearchResults()
@@ -221,7 +324,7 @@ namespace OmiyaGames.UI.Translations
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
             // Check if we need to search for a new set of results
-            if(recalculateSearchResult == true)
+            if (recalculateSearchResult == true)
             {
                 // FIXME: calculate which translations matches the search result
             }
@@ -236,12 +339,19 @@ namespace OmiyaGames.UI.Translations
             recalculateSearchResult = true;
         }
 
+        private void DrawTranslationsListHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "All Translations", EditorStyles.boldLabel);
+        }
+
         private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             // Grab the relevant element
             SerializedProperty element = translationsList.serializedProperty.GetArrayElementAtIndex(index);
 
             // FIXME: draw the element...somehow
+            rect.y += VerticalMargin;
+            EditorGUI.LabelField(rect, "Just Testing...");
         }
 
         private float CalculateTranslationsListElement(int index)
@@ -251,6 +361,68 @@ namespace OmiyaGames.UI.Translations
 
             // FIXME: calculate the height of the element...somehow
             return EditorGUIUtility.singleLineHeight;
+        }
+
+        private void CreateBool(ref AnimBool boolAnimation)
+        {
+            // Destroy the last animation, if any
+            DestroyBool(ref boolAnimation);
+
+            // Setup new animation
+            boolAnimation = new AnimBool(false);
+            boolAnimation.valueChanged.AddListener(Repaint);
+        }
+
+        private void DestroyBool(ref AnimBool boolAnimation)
+        {
+            if (boolAnimation != null)
+            {
+                boolAnimation.valueChanged.RemoveListener(Repaint);
+                boolAnimation = null;
+            }
+        }
+
+        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
+        {
+            UpdateTranslationListStatus(list, Mathf.Min(oldIndex, newIndex));
+        }
+
+        private void OnAddTranslation(ReorderableList list)
+        {
+            AddEntryFromTranslationListStatus(list);
+            ReorderableList.defaultBehaviours.DoAddButton(list);
+            UpdateTranslationListStatus(list, list.index);
+        }
+
+        private void OnRemoveTranslation(ReorderableList list)
+        {
+            RemoveEntryFromTranslationListStatus(list);
+            ReorderableList.defaultBehaviours.DoRemoveButton(list);
+            UpdateTranslationListStatus(list, list.index);
+        }
+
+        private void UpdateTranslationListStatus(ReorderableList list, int startIndex)
+        {
+            if ((startIndex >= 0) && (startIndex < list.count))
+            {
+                // FIXME: do not resize the TranslationListStatus,
+                // but do update it to the latest info starting from startIndex to count.
+                Debug.Log("UpdateTranslationListStatus(" + startIndex + ')');
+            }
+        }
+
+        private void AddEntryFromTranslationListStatus(ReorderableList list)
+        {
+            // FIXME: Add one new entry to the end of TranslationListStatus.
+            Debug.Log("AddEntryFromTranslationListStatus()");
+        }
+
+        private void RemoveEntryFromTranslationListStatus(ReorderableList list)
+        {
+            // FIXME: Remove an entry of TranslationListStatus.
+            // Make sure to remove the key if index matches.
+            int removedIndex = list.index;
+            Debug.Log("RemoveEntryFromTranslationListStatus(" + removedIndex + ')');
         }
     }
 }
