@@ -99,18 +99,18 @@ namespace OmiyaGames.UI.Translations
 
             // Setup a new list
             supportedLanguagesList = new ReorderableList(serializedObject, supportedLanguages, true, true, true, true);
-            supportedLanguagesList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
-            supportedLanguagesList.drawElementCallback = DrawObjectsToPreloadListElement;
+            supportedLanguagesList.drawHeaderCallback = DrawSupportedLanguagesListHeader;
+            supportedLanguagesList.drawElementCallback = DrawSupportedLangaugesListElement;
             supportedLanguagesList.elementHeight = AssetUtility.GetHeight(null, 2, VerticalMargin) + VerticalMargin;
         }
 
         #region Helper Methods
-        void DrawObjectsToPreloadListHeader(Rect rect)
+        void DrawSupportedLanguagesListHeader(Rect rect)
         {
             EditorGUI.LabelField(rect, "Supported Languages", EditorStyles.boldLabel);
         }
 
-        void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
+        void DrawSupportedLangaugesListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             // Grab the relevant element
             SerializedProperty element = supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
