@@ -138,20 +138,16 @@ namespace OmiyaGames.Translations
         [Header("Required Components")]
         [SerializeField]
         SupportedLanguages supportedLanguages = null;
-
-        [Header("When Key Is Not Found...")]
         [SerializeField]
         KeyNotFoundDefaults defaultToWhenKeyNotFound = KeyNotFoundDefaults.PresetMessage;
         [SerializeField]
         string presetMessageWhenKeyNotFound = "<Key Not Found>";
-
-        [Header("When Translation For a Language Is Not Found...")]
         [SerializeField]
         TranslationNotFoundDefaults defaultToWhenTranslationNotFound = TranslationNotFoundDefaults.PresetMessage;
         [SerializeField]
-        string presetMessageWhenTranslationNotFound = "<Translation Not Found>";
-        [SerializeField]
         int defaultLanguageWhenTranslationNotFound = 0;
+        [SerializeField]
+        string presetMessageWhenTranslationNotFound = "<Translation Not Found>";
 
         [Header("Translations")]
         [SerializeField]
