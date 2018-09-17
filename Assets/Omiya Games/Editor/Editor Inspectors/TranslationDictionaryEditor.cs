@@ -45,6 +45,8 @@ namespace OmiyaGames.UI.Translations
     {
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
         const float VerticalMargin = 2;
+        const float KeyLength = 30f;
+
         static readonly GUIContent DefaultTextToLabel = new GUIContent("Default Text To");
         static readonly GUIContent PresetMessageLabel = new GUIContent("Preset Message");
         const string DefaultLanguageLabel = "Default Language";
@@ -69,8 +71,10 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty translations;
         ReorderableList translationsList;
 
+        // TODO: when I find the time, add Search Fields for finding and removing/editing translations.
+        // For now, it's a bit complicated since it'll require some sort of async system to create a smoother experience.
         // Search variables
-        SearchField searchField = null;
+        //SearchField searchField = null;
         string lastSearchedString = null, newSearchString = null;
         bool recalculateSearchResult = false;
 
@@ -116,13 +120,13 @@ namespace OmiyaGames.UI.Translations
             translationsList = new ReorderableList(serializedObject, translations, true, true, true, true);
             translationsList.drawHeaderCallback = DrawTranslationsListHeader;
             translationsList.drawElementCallback = DrawTranslationsListElement;
-            translationsList.elementHeightCallback = CalculateTranslationsListElement;
+            translationsList.elementHeightCallback = CalculateTranslationsListElementHeight;
             translationsList.onAddCallback = OnAddTranslation;
             translationsList.onRemoveCallback = OnRemoveTranslation;
             translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
 
             // Setup search field
-            searchField = new SearchField();
+            //searchField = new SearchField();
             recalculateSearchResult = true;
         }
 
@@ -180,20 +184,22 @@ namespace OmiyaGames.UI.Translations
         }
         #endregion
 
+        #region Helper Methods
         private void DrawSearchBar()
         {
-            // Draw a label indicating what the search bar does
-            EditorGUILayout.LabelField("Search For Translation", EditorStyles.boldLabel);
+            // TODO: when bringing back the search bar, bring this back
+            //// Draw a label indicating what the search bar does
+            //EditorGUILayout.LabelField("Search For Translation", EditorStyles.boldLabel);
 
-            // Calculate area for the search bar
-            Rect area = GUILayoutUtility.GetRect(1, 1, 18, 18, GUILayout.ExpandWidth(true));
-            GUILayout.BeginHorizontal();
+            //// Calculate area for the search bar
+            //Rect area = GUILayoutUtility.GetRect(1, 1, 18, 18, GUILayout.ExpandWidth(true));
+            //GUILayout.BeginHorizontal();
 
-            // Draw the search bar
-            newSearchString = searchField.OnGUI(area, lastSearchedString);
+            //// Draw the search bar
+            //newSearchString = searchField.OnGUI(area, lastSearchedString);
 
-            // Close the vertical layout
-            EditorGUILayout.EndHorizontal();
+            //// Close the vertical layout
+            //EditorGUILayout.EndHorizontal();
         }
 
         private void DrawDefaultBehaviorsFields()
@@ -346,21 +352,36 @@ namespace OmiyaGames.UI.Translations
 
         private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
+            float originalX = rect.x;
+            float originalWidth = rect.width;
+
             // Grab the relevant element
             SerializedProperty element = translationsList.serializedProperty.GetArrayElementAtIndex(index);
 
             // FIXME: draw the element...somehow
             rect.y += VerticalMargin;
-            EditorGUI.LabelField(rect, "Just Testing...");
+            rect.height = EditorGUIUtility.singleLineHeight;
+            rect.width = KeyLength;
+
+            // Draw the key label
+            EditorGUI.LabelField(rect, "Key");
+
+            // Draw the key text field
+            rect.x += rect.width + VerticalMargin;
+            rect.width = originalWidth - KeyLength;
+            SerializedProperty property = element.FindPropertyRelative("key");
+            property.stringValue = EditorGUI.TextField(rect, property.stringValue);
         }
 
-        private float CalculateTranslationsListElement(int index)
+        private float CalculateTranslationsListElementHeight(int index)
         {
             // Grab the relevant element
             SerializedProperty element = translationsList.serializedProperty.GetArrayElementAtIndex(index);
 
             // FIXME: calculate the height of the element...somehow
-            return EditorGUIUtility.singleLineHeight;
+            float height = EditorGUIUtility.singleLineHeight;
+            height += VerticalMargin * 3f;
+            return height;
         }
 
         private void CreateBool(ref AnimBool boolAnimation)
@@ -380,6 +401,14 @@ namespace OmiyaGames.UI.Translations
                 boolAnimation.valueChanged.RemoveListener(Repaint);
                 boolAnimation = null;
             }
+        }
+
+        private static float GetHelpBoxHeight(string text)
+        {
+            var content = new GUIContent(text);
+            var style = GUI.skin.GetStyle("helpbox");
+
+            return style.CalcHeight(content, EditorGUIUtility.currentViewWidth);
         }
 
         private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
@@ -424,5 +453,6 @@ namespace OmiyaGames.UI.Translations
             int removedIndex = list.index;
             Debug.Log("RemoveEntryFromTranslationListStatus(" + removedIndex + ')');
         }
+        #endregion
     }
 }
