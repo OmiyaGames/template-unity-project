@@ -66,37 +66,6 @@ namespace OmiyaGames.Translations
         }
 
         [Serializable]
-        public struct SystemToLanguagePair
-        {
-            [SerializeField]
-            SystemLanguage system;
-            [SerializeField]
-            string language;
-
-            public SystemToLanguagePair(SystemLanguage system, string language)
-            {
-                this.system = system;
-                this.language = language;
-            }
-
-            public SystemLanguage System
-            {
-                get
-                {
-                    return system;
-                }
-            }
-
-            public string Language
-            {
-                get
-                {
-                    return language;
-                }
-            }
-        }
-
-        [Serializable]
         public struct TranslationCollection
         {
             [SerializeField]
