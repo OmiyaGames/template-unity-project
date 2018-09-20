@@ -5,6 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using System.Text;
 using System.IO;
+using System.Collections.Generic;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.UI.Translations
@@ -44,8 +45,6 @@ namespace OmiyaGames.UI.Translations
     public class TranslationDictionaryEditor : Editor
     {
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
-        const float VerticalMargin = 2;
-        const float KeyLength = 30f;
 
         static readonly GUIContent DefaultTextToLabel = new GUIContent("Default Text To");
         static readonly GUIContent PresetMessageLabel = new GUIContent("Preset Message");
@@ -80,6 +79,8 @@ namespace OmiyaGames.UI.Translations
 
         // Search Result scroll positions
         Vector2 scrollPosition = Vector2.zero;
+        readonly List<TranslationStatus> translationStatus = new List<TranslationStatus>();
+        readonly Dictionary<string, int> frequencyInKeyAppearance = new Dictionary<string, int>();
         #endregion
 
         [MenuItem("Omiya Games/Create/Translation Dictionary")]
@@ -109,11 +110,11 @@ namespace OmiyaGames.UI.Translations
             defaultLanguageWhenTranslationNotFound = serializedObject.FindProperty("defaultLanguageWhenTranslationNotFound");
 
             // Setup animations
-            CreateBool(ref showErrorMessage);
-            CreateBool(ref showDefaultConfigurations);
-            CreateBool(ref showPresetMessageForKeyNotFound);
-            CreateBool(ref showDefaultLanguageForTranslationNotFound);
-            CreateBool(ref showPresetMessageForTranslationNotFound);
+            EditorUtility.CreateBool(this, ref showErrorMessage);
+            EditorUtility.CreateBool(this, ref showDefaultConfigurations);
+            EditorUtility.CreateBool(this, ref showPresetMessageForKeyNotFound);
+            EditorUtility.CreateBool(this, ref showDefaultLanguageForTranslationNotFound);
+            EditorUtility.CreateBool(this, ref showPresetMessageForTranslationNotFound);
 
             // Setup transations list
             translations = serializedObject.FindProperty("translations");
@@ -125,6 +126,15 @@ namespace OmiyaGames.UI.Translations
             translationsList.onRemoveCallback = OnRemoveTranslation;
             translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
 
+            // Populate the status list
+            translationStatus.Clear();
+            frequencyInKeyAppearance.Clear();
+            for (int index = 0; index < translationsList.count; ++index)
+            {
+                AddEntryFromTranslationListStatus(translationsList, index);
+            }
+            UpdateTranslationListStatus(translationsList, 0);
+
             // Setup search field
             //searchField = new SearchField();
             recalculateSearchResult = true;
@@ -132,11 +142,13 @@ namespace OmiyaGames.UI.Translations
 
         private void OnDisable()
         {
-            DestroyBool(ref showErrorMessage);
-            DestroyBool(ref showDefaultConfigurations);
-            DestroyBool(ref showPresetMessageForKeyNotFound);
-            DestroyBool(ref showDefaultLanguageForTranslationNotFound);
-            DestroyBool(ref showPresetMessageForTranslationNotFound);
+            EditorUtility.DestroyBool(this, ref showErrorMessage);
+            EditorUtility.DestroyBool(this, ref showDefaultConfigurations);
+            EditorUtility.DestroyBool(this, ref showPresetMessageForKeyNotFound);
+            EditorUtility.DestroyBool(this, ref showDefaultLanguageForTranslationNotFound);
+            EditorUtility.DestroyBool(this, ref showPresetMessageForTranslationNotFound);
+            translationStatus.Clear();
+            frequencyInKeyAppearance.Clear();
         }
 
         public override void OnInspectorGUI()
@@ -352,63 +364,14 @@ namespace OmiyaGames.UI.Translations
 
         private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            float originalX = rect.x;
-            float originalWidth = rect.width;
-
-            // Grab the relevant element
-            SerializedProperty element = translationsList.serializedProperty.GetArrayElementAtIndex(index);
-
-            // FIXME: draw the element...somehow
-            rect.y += VerticalMargin;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            rect.width = KeyLength;
-
-            // Draw the key label
-            EditorGUI.LabelField(rect, "Key");
-
-            // Draw the key text field
-            rect.x += rect.width + VerticalMargin;
-            rect.width = originalWidth - KeyLength;
-            SerializedProperty property = element.FindPropertyRelative("key");
-            property.stringValue = EditorGUI.TextField(rect, property.stringValue);
+            UpdateTranslationListStatus(translationsList, index);
+            translationStatus[index].DrawGui(rect, frequencyInKeyAppearance);
         }
 
         private float CalculateTranslationsListElementHeight(int index)
         {
-            // Grab the relevant element
-            SerializedProperty element = translationsList.serializedProperty.GetArrayElementAtIndex(index);
-
-            // FIXME: calculate the height of the element...somehow
-            float height = EditorGUIUtility.singleLineHeight;
-            height += VerticalMargin * 3f;
-            return height;
-        }
-
-        private void CreateBool(ref AnimBool boolAnimation)
-        {
-            // Destroy the last animation, if any
-            DestroyBool(ref boolAnimation);
-
-            // Setup new animation
-            boolAnimation = new AnimBool(false);
-            boolAnimation.valueChanged.AddListener(Repaint);
-        }
-
-        private void DestroyBool(ref AnimBool boolAnimation)
-        {
-            if (boolAnimation != null)
-            {
-                boolAnimation.valueChanged.RemoveListener(Repaint);
-                boolAnimation = null;
-            }
-        }
-
-        private static float GetHelpBoxHeight(string text)
-        {
-            var content = new GUIContent(text);
-            var style = GUI.skin.GetStyle("helpbox");
-
-            return style.CalcHeight(content, EditorGUIUtility.currentViewWidth);
+            UpdateTranslationListStatus(translationsList, index);
+            return translationStatus[index].CalculateHeight(frequencyInKeyAppearance);
         }
 
         private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
@@ -418,41 +381,91 @@ namespace OmiyaGames.UI.Translations
 
         private void OnAddTranslation(ReorderableList list)
         {
-            AddEntryFromTranslationListStatus(list);
             ReorderableList.defaultBehaviours.DoAddButton(list);
+            AddEntryFromTranslationListStatus(list, list.index);
             UpdateTranslationListStatus(list, list.index);
         }
 
         private void OnRemoveTranslation(ReorderableList list)
         {
-            RemoveEntryFromTranslationListStatus(list);
+            RemoveEntryFromTranslationListStatus(list, list.index);
             ReorderableList.defaultBehaviours.DoRemoveButton(list);
             UpdateTranslationListStatus(list, list.index);
         }
 
         private void UpdateTranslationListStatus(ReorderableList list, int startIndex)
         {
+            //Debug.Log("UpdateTranslationListStatus(" + startIndex + ')');
+
+            // Check if the list size matches bet
+            if (list.count > translationStatus.Count)
+            {
+                // Update the start index to the size of translation list if it's smaller than the actual GUI
+                startIndex = Mathf.Min(startIndex, translationStatus.Count);
+
+                // Add statuses if the status list size does not match the list count
+                while (list.count > translationStatus.Count)
+                {
+                    AddEntryFromTranslationListStatus(translationsList, translationStatus.Count);
+                }
+            }
+            else if (list.count < translationStatus.Count)
+            {
+                // Remove a couple of list elements
+                while (list.count < translationStatus.Count)
+                {
+                    // Removing from the tail-end is more efficient!
+                    RemoveEntryFromTranslationListStatus(translationsList, (translationStatus.Count - 1));
+                }
+            }
+
+            // HACK: Not sure why the frequency dictionary is not drawing properly, but here it is
+            startIndex = 0;
+            frequencyInKeyAppearance.Clear();
+
+            // Make sure the start index value is valid
             if ((startIndex >= 0) && (startIndex < list.count))
             {
                 // FIXME: do not resize the TranslationListStatus,
                 // but do update it to the latest info starting from startIndex to count.
-                Debug.Log("UpdateTranslationListStatus(" + startIndex + ')');
+
+                // Go through the list, starting at startIndex
+                for (int index = startIndex; index < translationStatus.Count; ++index)
+                {
+                    // Udpate neato based on element
+                    translationStatus[index].Update(list.serializedProperty.GetArrayElementAtIndex(index));
+                    TranslationStatus.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
+                }
             }
         }
 
-        private void AddEntryFromTranslationListStatus(ReorderableList list)
+        private void AddEntryFromTranslationListStatus(ReorderableList list, int index)
         {
-            // FIXME: Add one new entry to the end of TranslationListStatus.
-            Debug.Log("AddEntryFromTranslationListStatus()");
+            // FIXME: add a new status at the end of the list
+            Debug.Log("AddEntryFromTranslationListStatus(" + index + ')');
+            SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(index);
+            TranslationStatus status = new TranslationStatus(this, element);
+            translationStatus.Add(status);
+
+            // Check the element's key
+            TranslationStatus.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, status.KeyProperty.stringValue);
         }
 
-        private void RemoveEntryFromTranslationListStatus(ReorderableList list)
+        private void RemoveEntryFromTranslationListStatus(ReorderableList list, int index)
         {
             // FIXME: Remove an entry of TranslationListStatus.
             // Make sure to remove the key if index matches.
-            int removedIndex = list.index;
-            Debug.Log("RemoveEntryFromTranslationListStatus(" + removedIndex + ')');
+            Debug.Log("RemoveEntryFromTranslationListStatus(" + index + ')');
+
+            // Check the element's key
+            translationStatus[index].Dispose();
+            TranslationStatus.RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
+
+            // Remove the status on the list index
+            translationStatus.RemoveAt(index);
         }
+
+        
         #endregion
     }
 }
