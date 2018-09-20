@@ -101,7 +101,7 @@ namespace OmiyaGames.UI.Translations
             supportedLanguagesList = new ReorderableList(serializedObject, supportedLanguages, true, true, true, true);
             supportedLanguagesList.drawHeaderCallback = DrawSupportedLanguagesListHeader;
             supportedLanguagesList.drawElementCallback = DrawSupportedLangaugesListElement;
-            supportedLanguagesList.elementHeight = AssetUtility.GetHeight(null, 2, VerticalMargin) + VerticalMargin;
+            supportedLanguagesList.elementHeight = EditorUtility.GetHeight(null, 2, VerticalMargin) + VerticalMargin;
         }
 
         #region Helper Methods

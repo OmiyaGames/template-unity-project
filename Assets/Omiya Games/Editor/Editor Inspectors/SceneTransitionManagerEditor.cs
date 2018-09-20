@@ -156,7 +156,7 @@ namespace OmiyaGames.UI.Scenes
 
         internal static float GetHeight(GUIContent label = null)
         {
-            return AssetUtility.GetHeight(label, 3, VerticalMargin);
+            return EditorUtility.GetHeight(label, 3, VerticalMargin);
         }
     }
 

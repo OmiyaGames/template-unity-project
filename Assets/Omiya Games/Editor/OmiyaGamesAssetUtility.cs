@@ -42,20 +42,6 @@ namespace OmiyaGames
         public const string ManifestFileExtension = ".manifest";
         public const string ConfirmationDialogTitle = "Overwrite File?";
 
-        public static float SingleLineHeight(float verticalMargin)
-        {
-            return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
-        }
-
-        public static float GetHeight(GUIContent label, int numRows, float verticalMargin)
-        {
-            if ((label != null) && (string.IsNullOrEmpty(label.text) == false))
-            {
-                numRows += 1;
-            }
-            return (EditorGUIUtility.singleLineHeight + verticalMargin) * numRows;
-        }
-
         public static string GetLastFolderName(string path, bool pathIncludesFileName)
         {
             string returnPath = Path.GetFileName(path);
@@ -140,7 +126,7 @@ namespace OmiyaGames
                 builder.Append("\" already exists. Are you sure you want to overwrite this file?");
 
                 // Bring up a pop-up confirming the file will be overwritten
-                isBuildConfirmed = EditorUtility.DisplayDialog(ConfirmationDialogTitle, builder.ToString(), "Yes", "No");
+                isBuildConfirmed = UnityEditor.EditorUtility.DisplayDialog(ConfirmationDialogTitle, builder.ToString(), "Yes", "No");
             }
             return isBuildConfirmed;
         }
@@ -217,7 +203,7 @@ namespace OmiyaGames
 
             // Refresh the project window
             AssetDatabase.Refresh();
-            EditorUtility.FocusProjectWindow();
+            UnityEditor.EditorUtility.FocusProjectWindow();
             Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(newPath);
         }
 
