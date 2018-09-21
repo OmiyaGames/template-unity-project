@@ -45,24 +45,23 @@ namespace OmiyaGames.UI.Translations
 
         readonly Editor editor;
         SerializedProperty element;
-        //readonly AnimBool showHelpBox;
-        //readonly AnimBool showPreview;
+        readonly AnimBool showHelpBox;
+        readonly AnimBool showPreview;
 
         public TranslationStatus(Editor editor, SerializedProperty element)
         {
             // Setup member variables
             this.editor = editor;
             Element = element;
-            //Width = EditorGUIUtility.currentViewWidth;
 
             // Setup the bools
-            //EditorUtility.CreateBool(editor, ref showHelpBox);
-            //EditorUtility.CreateBool(editor, ref showPreview);
+            EditorUtility.CreateBool(editor, ref showHelpBox);
+            EditorUtility.CreateBool(editor, ref showPreview);
         }
 
-        //public AnimBool ShowHelpBox => showHelpBox;
+        public AnimBool ShowHelpBox => showHelpBox;
 
-        //public AnimBool ShowPreview => showPreview;
+        public AnimBool ShowPreview => showPreview;
 
         public SerializedProperty KeyProperty
         {
@@ -74,6 +73,7 @@ namespace OmiyaGames.UI.Translations
         /// This is a hack variable.  Can't think of a better way to retrieve the width of the inside of the reorderablelist
         /// </summary>
         private float Width { get; set; }
+        private string LastMessage { get; set; }
 
         public SerializedProperty Element
         {
@@ -101,12 +101,11 @@ namespace OmiyaGames.UI.Translations
             height += VerticalMargin * 3f;
 
             // Check if we're showing a warning
-            string message = GetWarning(frequencyInKeyAppearance);
-            if(string.IsNullOrEmpty(message) == false)
+            if(((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true)))
             {
                 // If so, calculate the height of this warning
                 height += VerticalSpace;
-                height += GetHelpBoxHeight(message, Width)/* * ShowHelpBox.faded*/;
+                height += GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
             }
             return height;
         }
@@ -166,25 +165,21 @@ namespace OmiyaGames.UI.Translations
         private bool DrawWarningMessage(ref Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
         {
             // Adjust the bools
-            string message = GetWarning(frequencyInKeyAppearance);
-            bool isShown = false;
-            if (string.IsNullOrEmpty(message) == false)
-            {
-                //ShowHelpBox.target = true;
-                isShown = true;
-            }
+            LastMessage = GetWarning(frequencyInKeyAppearance);
+            ShowHelpBox.target = (string.IsNullOrEmpty(LastMessage) == false);
 
-            //bool isShown = ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true));
+            bool isShown = ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true));
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = GetHelpBoxHeight(message, rect.width)/* * ShowHelpBox.faded*/;
-                rect.height = helpBoxHeight;
+                float helpBoxHeight = GetHelpBoxHeight(LastMessage, rect.width);
+                rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning
-                //GUI.BeginGroup(rect);
-                EditorGUI.HelpBox(rect, message, MessageType.Warning);
-                //GUI.EndGroup();
+                GUI.BeginGroup(rect);
+                Rect helpBox = new Rect(0, 0, rect.width, helpBoxHeight);
+                EditorGUI.HelpBox(helpBox, LastMessage, MessageType.Warning);
+                GUI.EndGroup();
 
                 // Adjust the rectangle
                 rect.y += helpBoxHeight;

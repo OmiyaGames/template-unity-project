@@ -196,6 +196,50 @@ namespace OmiyaGames.UI.Translations
         }
         #endregion
 
+        #region Draw List Events
+        private void DrawTranslationsListHeader(Rect rect)
+        {
+            EditorGUI.LabelField(rect, "All Translations", EditorStyles.boldLabel);
+        }
+
+        private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            if (translationsList.count != translationStatus.Count)
+            {
+                UpdateTranslationListStatus(translationsList, index);
+            }
+            translationStatus[index].DrawGui(rect, frequencyInKeyAppearance);
+        }
+
+        private float CalculateTranslationsListElementHeight(int index)
+        {
+            if (translationsList.count != translationStatus.Count)
+            {
+                UpdateTranslationListStatus(translationsList, index);
+            }
+            return translationStatus[index].CalculateHeight(frequencyInKeyAppearance);
+        }
+
+        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
+        {
+            UpdateTranslationListStatus(list, Mathf.Min(oldIndex, newIndex));
+        }
+
+        private void OnAddTranslation(ReorderableList list)
+        {
+            ReorderableList.defaultBehaviours.DoAddButton(list);
+            AddEntryFromTranslationListStatus(list, list.index);
+            UpdateTranslationListStatus(list, list.index);
+        }
+
+        private void OnRemoveTranslation(ReorderableList list)
+        {
+            RemoveEntryFromTranslationListStatus(list, list.index);
+            ReorderableList.defaultBehaviours.DoRemoveButton(list);
+            UpdateTranslationListStatus(list, list.index);
+        }
+        #endregion
+
         #region Helper Methods
         private void DrawSearchBar()
         {
@@ -357,42 +401,6 @@ namespace OmiyaGames.UI.Translations
             recalculateSearchResult = true;
         }
 
-        private void DrawTranslationsListHeader(Rect rect)
-        {
-            EditorGUI.LabelField(rect, "All Translations", EditorStyles.boldLabel);
-        }
-
-        private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            UpdateTranslationListStatus(translationsList, index);
-            translationStatus[index].DrawGui(rect, frequencyInKeyAppearance);
-        }
-
-        private float CalculateTranslationsListElementHeight(int index)
-        {
-            UpdateTranslationListStatus(translationsList, index);
-            return translationStatus[index].CalculateHeight(frequencyInKeyAppearance);
-        }
-
-        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
-        {
-            UpdateTranslationListStatus(list, Mathf.Min(oldIndex, newIndex));
-        }
-
-        private void OnAddTranslation(ReorderableList list)
-        {
-            ReorderableList.defaultBehaviours.DoAddButton(list);
-            AddEntryFromTranslationListStatus(list, list.index);
-            UpdateTranslationListStatus(list, list.index);
-        }
-
-        private void OnRemoveTranslation(ReorderableList list)
-        {
-            RemoveEntryFromTranslationListStatus(list, list.index);
-            ReorderableList.defaultBehaviours.DoRemoveButton(list);
-            UpdateTranslationListStatus(list, list.index);
-        }
-
         private void UpdateTranslationListStatus(ReorderableList list, int startIndex)
         {
             //Debug.Log("UpdateTranslationListStatus(" + startIndex + ')');
@@ -442,30 +450,28 @@ namespace OmiyaGames.UI.Translations
         private void AddEntryFromTranslationListStatus(ReorderableList list, int index)
         {
             // FIXME: add a new status at the end of the list
-            Debug.Log("AddEntryFromTranslationListStatus(" + index + ')');
+            //Debug.Log("AddEntryFromTranslationListStatus(" + index + ')');
             SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(index);
             TranslationStatus status = new TranslationStatus(this, element);
             translationStatus.Add(status);
 
             // Check the element's key
-            TranslationStatus.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, status.KeyProperty.stringValue);
+            //TranslationStatus.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, status.KeyProperty.stringValue);
         }
 
         private void RemoveEntryFromTranslationListStatus(ReorderableList list, int index)
         {
             // FIXME: Remove an entry of TranslationListStatus.
             // Make sure to remove the key if index matches.
-            Debug.Log("RemoveEntryFromTranslationListStatus(" + index + ')');
+            //Debug.Log("RemoveEntryFromTranslationListStatus(" + index + ')');
 
             // Check the element's key
             translationStatus[index].Dispose();
-            TranslationStatus.RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
+            //TranslationStatus.RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
 
             // Remove the status on the list index
             translationStatus.RemoveAt(index);
         }
-
-        
         #endregion
     }
 }
