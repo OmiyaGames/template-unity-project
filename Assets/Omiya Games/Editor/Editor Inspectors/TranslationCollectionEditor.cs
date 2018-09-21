@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace OmiyaGames.UI.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="TranslationStatus.cs" company="Omiya Games">
+    /// <copyright file="TranslationCollectionEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -89,6 +89,7 @@ namespace OmiyaGames.UI.Translations
                 translationsList.onAddCallback = OnAddTranslation;
                 translationsList.onRemoveCallback = OnRemoveTranslation;
                 translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
+                translationsList.headerHeight = VerticalSpace;
             }
         }
 
