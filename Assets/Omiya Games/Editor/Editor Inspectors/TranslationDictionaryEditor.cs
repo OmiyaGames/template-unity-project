@@ -266,18 +266,12 @@ namespace OmiyaGames.UI.Translations
             {
                 if (defaultBehaviorsGroup.visible == true)
                 {
-                    // Indent
-                    ++EditorGUI.indentLevel;
-
                     // Show controls for default behaviors for missing keys
                     DrawDefaultsWhenKeyIsNotFound();
                     EditorGUILayout.Space();
 
                     // Show controls for default behaviors for missing translations
                     DrawDefaultsWhenTranslationForLanguageIsNotFound();
-
-                    // Undo indentation
-                    --EditorGUI.indentLevel;
                 }
             }
         }
@@ -328,7 +322,19 @@ namespace OmiyaGames.UI.Translations
                 if ((defaultLanguageGroup.visible == true) && (showField == true))
                 {
                     // Show default language field
+                    EditorGUI.BeginChangeCheck();
                     SupportedLanguagesEditor.DrawSupportedLanguages(DefaultLanguageLabel, defaultLanguageWhenTranslationNotFound, ((SupportedLanguages)supportedLanguages.objectReferenceValue));
+                    if(EditorGUI.EndChangeCheck() == true)
+                    {
+                        SupportedLanguages newLanguage = ((SupportedLanguages)supportedLanguages.objectReferenceValue);
+                        if (newLanguage != null)
+                        {
+                            foreach (TranslationCollectionEditor editor in translationStatus)
+                            {
+                                editor.SupportedLanguages = newLanguage;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -452,7 +458,7 @@ namespace OmiyaGames.UI.Translations
             // FIXME: add a new status at the end of the list
             //Debug.Log("AddEntryFromTranslationListStatus(" + index + ')');
             SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(index);
-            TranslationCollectionEditor status = new TranslationCollectionEditor(this, element);
+            TranslationCollectionEditor status = new TranslationCollectionEditor(this, element, ((SupportedLanguages)supportedLanguages.objectReferenceValue));
             translationStatus.Add(status);
 
             // Check the element's key

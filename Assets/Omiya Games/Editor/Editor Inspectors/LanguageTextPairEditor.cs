@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
 using System.Collections.Generic;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -31,72 +31,87 @@ namespace OmiyaGames.UI.Translations
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>9/20/2018</date>
+    /// <date>9/21/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// TODO.
+    /// Helper editor class to display <code>TranslationDictionary.LanguageTextPair</code>.
     /// </summary>
     /// <seealso cref="TranslationDictionaryEditor"/>
+    /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
     public class LanguageTextPairEditor : System.IDisposable
     {
+        const float MinHelpBoxHeight = 30f;
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
-        const float MinHelpBoxHeight = 30f;
+        const float ExpandLength = 60f;
+        static GUIStyle wrappedTextArea = null;
+
 
         readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
-        readonly AnimBool showAllTranslationsList;
-        SerializedProperty allTranslationsProperty;
-        ReorderableList translationsList;
-        readonly Dictionary<int, int> languageFrequency = new Dictionary<int, int>();
+        readonly AnimBool expandToggle;
 
-        public LanguageTextPairEditor(Editor editor, SerializedProperty element)
+        public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;
+            this.SupportedLanguages = supportedLanguages;
             Element = element;
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
-            EditorUtility.CreateBool(editor, ref showAllTranslationsList);
+            EditorUtility.CreateBool(editor, ref expandToggle);
         }
 
         #region Properties
+        public static GUIStyle WrappedTextArea
+        {
+            get
+            {
+                if (wrappedTextArea == null)
+                {
+                    wrappedTextArea = new GUIStyle(EditorStyles.textArea);
+                    wrappedTextArea.wordWrap = true;
+                }
+                return wrappedTextArea;
+            }
+        }
+
+        public static float PreviewHeight
+        {
+            get
+            {
+                return EditorGUIUtility.singleLineHeight * 2f;
+            }
+        }
+
         public AnimBool ShowHelpBox => showHelpBox;
+        public AnimBool ExpandToggle => expandToggle;
 
-        public AnimBool ShowAllTranslationsList => showAllTranslationsList;
-
-        public SerializedProperty KeyProperty
+        public SerializedProperty LanguageIndexProperty
         {
             get;
             private set;
         }
 
-        public SerializedProperty AllTranslationsProperty
+        public SerializedProperty TextProperty
         {
-            get
-            {
-                return allTranslationsProperty;
-            }
-            private set
-            {
-                allTranslationsProperty = value;
-                translationsList = new ReorderableList(Element.serializedObject, allTranslationsProperty, true, false, true, true);
-                translationsList.drawElementCallback = DrawTranslationsListElement;
-                translationsList.elementHeightCallback = CalculateTranslationsListElementHeight;
-                translationsList.onAddCallback = OnAddTranslation;
-                translationsList.onRemoveCallback = OnRemoveTranslation;
-                translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
-            }
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// This is a hack variable.  Can't think of a better way to retrieve the width of the inside of the reorderablelist
-        /// </summary>
-        private float Width { get; set; }
-        private string LastMessage { get; set; }
+        private string LastMessage
+        {
+            get;
+            set;
+        }
+        private float Width
+        {
+            get;
+            set;
+        }
 
         public SerializedProperty Element
         {
@@ -108,9 +123,15 @@ namespace OmiyaGames.UI.Translations
             {
                 // Setup properties
                 element = value;
-                KeyProperty = element.FindPropertyRelative("key");
-                AllTranslationsProperty = element.FindPropertyRelative("allTranslations");
+                LanguageIndexProperty = element.FindPropertyRelative("languageIndex");
+                TextProperty = element.FindPropertyRelative("text");
             }
+        }
+
+        public SupportedLanguages SupportedLanguages
+        {
+            get;
+            set;
         }
         #endregion
 
@@ -119,7 +140,7 @@ namespace OmiyaGames.UI.Translations
             Element = element;
         }
 
-        public float CalculateHeight(Dictionary<string, int> frequencyInKeyAppearance)
+        public float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Calculate the key height
             float height = VerticalMargin;
@@ -127,94 +148,85 @@ namespace OmiyaGames.UI.Translations
             height += VerticalSpace;
 
             // Check if we're showing a warning
-            if((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
+            if ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
+                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width, MinHelpBoxHeight) * ShowHelpBox.faded;
                 height += VerticalSpace;
             }
 
             // Add one for the fold-out
             height += EditorGUIUtility.singleLineHeight;
 
-            // Check if we're showing the translations
-            if ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true))
-            {
-                // If so, calculate the height of translations
-                height += translationsList.GetHeight() * ShowAllTranslationsList.faded;
-                height += VerticalMargin;
-            }
+            // If so, calculate the height of translations
+            bool isExpandable;
+            height += GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
+            height += VerticalMargin;
             height += VerticalMargin;
             return height;
         }
 
-        public void DrawGui(Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
+        public void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Update the width variable
             Width = rect.width;
 
             // Draw the key field
             rect.y += VerticalMargin;
-            DrawKeyField(ref rect, frequencyInKeyAppearance);
+            DrawKeyField(ref rect, frequencyInLanguageAppearance);
 
             // Draw the warning, if any
             rect.y += VerticalSpace;
-            if(DrawWarningMessage(ref rect, frequencyInKeyAppearance) == true)
+            if (DrawWarningMessage(ref rect, frequencyInLanguageAppearance) == true)
             {
                 // If there are, add an extra margin
                 rect.y += VerticalSpace;
             }
 
             // Draw the translation list
-            DrawAllTranslations(ref rect);
+            DrawText(ref rect);
         }
 
-        public static void AddKeyToFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
+        public static void AddLanguageToFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
         {
             // Make sure argument is correct
-            if (frequencyInKeyAppearance != null)
+            if (frequencyInLanguageAppearance != null)
             {
-                if (string.IsNullOrEmpty(key) == false)
+                // Add this key to the dictionary
+                if (frequencyInLanguageAppearance.ContainsKey(key) == false)
                 {
-                    // Add this key to the dictionary
-                    if (frequencyInKeyAppearance.ContainsKey(key) == false)
-                    {
-                        frequencyInKeyAppearance.Add(key, 1);
-                    }
-                    else
-                    {
-                        frequencyInKeyAppearance[key] += 1;
-                    }
+                    frequencyInLanguageAppearance.Add(key, 1);
+                }
+                else
+                {
+                    frequencyInLanguageAppearance[key] += 1;
                 }
             }
         }
 
-        public static void RemoveKeyFromFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
+        public static void RemoveLanguageFromFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
         {
             // Make sure argument is correct
-            if (frequencyInKeyAppearance != null)
+            if ((frequencyInLanguageAppearance != null) && (frequencyInLanguageAppearance.ContainsKey(key) == true))
             {
-                if ((string.IsNullOrEmpty(key) == true) && (frequencyInKeyAppearance.ContainsKey(key) == true))
+                // Remove this key from the dictionary
+                frequencyInLanguageAppearance[key] -= 1;
+                if (frequencyInLanguageAppearance[key] <= 0)
                 {
-                    // Remove this key from the dictionary
-                    frequencyInKeyAppearance[key] -= 1;
-                    if (frequencyInKeyAppearance[key] <= 0)
-                    {
-                        // Remove the key if the value is below 0
-                        frequencyInKeyAppearance.Remove(key);
-                    }
+                    // Remove the key if the value is below 0
+                    frequencyInLanguageAppearance.Remove(key);
                 }
             }
         }
 
         public void Dispose()
         {
+            //expandToggle.valueChanged.RemoveListener(editor.Repaint);
             //showHelpBox.valueChanged.RemoveListener(editor.Repaint);
-            //showPreview.valueChanged.RemoveListener(editor.Repaint);
         }
 
         #region Helper Methods
-        private void DrawKeyField(ref Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
+        private void DrawKeyField(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Hold onto the original rect position
             float originalX = rect.x;
@@ -225,20 +237,24 @@ namespace OmiyaGames.UI.Translations
             rect.width = KeyLength;
 
             // Draw the key label
-            EditorGUI.LabelField(rect, "Key");
+            EditorGUI.LabelField(rect, "Language");
 
             // Draw the key text field
             rect.x += rect.width + VerticalSpace;
             rect.width = originalWidth - (KeyLength + VerticalSpace);
-            string oldKey = KeyProperty.stringValue;
-            KeyProperty.stringValue = EditorGUI.TextField(rect, oldKey);
+            int oldLanguageIndex = LanguageIndexProperty.intValue;
+            LanguageIndexProperty.intValue = SupportedLanguagesEditor.DrawSupportedLanguages(rect, LanguageIndexProperty, SupportedLanguages);
 
             // Check if there's a difference
-            if (oldKey != KeyProperty.stringValue)
+            if (oldLanguageIndex != LanguageIndexProperty.intValue)
             {
                 // Update dictionary
-                RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, oldKey);
-                AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
+                RemoveLanguageFromFrequencyDictionary(frequencyInLanguageAppearance, oldLanguageIndex);
+                AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndexProperty.intValue);
+
+                // Testing...
+                Element.serializedObject.ApplyModifiedProperties();
+                Element.serializedObject.Update();
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -248,17 +264,17 @@ namespace OmiyaGames.UI.Translations
             rect.width = originalWidth;
         }
 
-        private bool DrawWarningMessage(ref Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
+        private bool DrawWarningMessage(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Adjust the bools
-            LastMessage = GetWarning(frequencyInKeyAppearance);
+            LastMessage = GetWarning(frequencyInLanguageAppearance);
             ShowHelpBox.target = (string.IsNullOrEmpty(LastMessage) == false);
 
             bool isShown = ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true));
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = GetHelpBoxHeight(LastMessage, rect.width);
+                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width, MinHelpBoxHeight);
                 rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning
@@ -273,89 +289,76 @@ namespace OmiyaGames.UI.Translations
             return isShown;
         }
 
-        private bool DrawAllTranslations(ref Rect rect)
+        private void DrawText(ref Rect rect)
         {
-            bool isFoldedOut = false;
+            float originalX = rect.x;
+            float originalWidth = rect.width;
 
-            // Draw the fold out
+            // Draw the label of the field
+            rect.width = KeyLength;
             rect.height = EditorGUIUtility.singleLineHeight;
-            ShowAllTranslationsList.target = EditorGUI.Foldout(rect, ShowAllTranslationsList.target, "Translations");
+            EditorGUI.LabelField(rect, "Text");
+
+            // Calculate the toggle bound (to be used later)
+            rect.x += originalWidth - ExpandLength;
+            rect.width = originalWidth - ExpandLength;
+            Rect expandToggleRect = new Rect(rect);
+
+            // Calculate range of warning
+            rect.x = originalX;
+            rect.width = originalWidth;
             rect.y += rect.height;
+            string oldText = TextProperty.stringValue;
+            bool isExpandable;
+            rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
 
-            // Check if we want to draw the list
-            isFoldedOut = ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true));
-            if(isFoldedOut == true)
-            {
-                // Calculate range of warning
-                float previewHeight = translationsList.GetHeight();
-                rect.height = previewHeight * ShowAllTranslationsList.faded;
+            // Draw the translations list
+            TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
 
-                // Draw the translations list
-                GUI.BeginGroup(rect);
-                Rect previewBox = new Rect(0, 0, rect.width, previewHeight);
-                translationsList.DoList(previewBox);
-                GUI.EndGroup();
+            // Draw the toggle, enabled only if the area is expandable
+            GUI.enabled = isExpandable;
+            ExpandToggle.target = EditorGUI.ToggleLeft(expandToggleRect, "Expand", ExpandToggle.target);
+            GUI.enabled = true;
 
-                // Adjust the rectangle
-                rect.y += rect.height;
-            }
-            return isFoldedOut;
+            // Adjust the rectangle
+            rect.y += rect.height;
         }
 
-        private string GetWarning(Dictionary<string, int> frequencyInKeyAppearance)
+        private string GetWarning(Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Check what warning to display
             string message = null;
-            if (string.IsNullOrEmpty(KeyProperty.stringValue) == true)
+            int langaugeIndex = LanguageIndexProperty.intValue;
+            if ((langaugeIndex < 0) || (langaugeIndex >= SupportedLanguages.NumberOfLanguages))
             {
-                message = "Key cannot be an empty string.";
+                message = "Language is not set to a valid value.";
             }
-            else if (frequencyInKeyAppearance[KeyProperty.stringValue] > 1)
+            else if (frequencyInLanguageAppearance[langaugeIndex] > 1)
             {
-                message = "Multiple keys with the same name exists in this set.";
+                message = "Multiple texts for the same language exists in this set.";
             }
 
             return message;
         }
 
-        private static float GetHelpBoxHeight(string text, float viewWidth)
+        private static float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
         {
             var content = new GUIContent(text);
-            var style = GUI.skin.GetStyle("helpbox");
 
-            return Mathf.Max(MinHelpBoxHeight, style.CalcHeight(content, viewWidth));
-        }
-        #endregion
-
-        #region ReorderableList
-        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void OnRemoveTranslation(ReorderableList list)
-        {
-            ReorderableList.defaultBehaviours.DoRemoveButton(list);
-        }
-
-        private void OnAddTranslation(ReorderableList list)
-        {
-            ReorderableList.defaultBehaviours.DoAddButton(list);
-        }
-
-        private float CalculateTranslationsListElementHeight(int index)
-        {
-            return EditorGUIUtility.singleLineHeight + VerticalMargin * 3;
-        }
-
-        private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
-        {
-            rect.y += VerticalMargin;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(rect, "Testing...");
-            //throw new NotImplementedException();
+            // Get the minimum and maximum measurement
+            float min = PreviewHeight;
+            float max = WrappedTextArea.CalcHeight(content, viewWidth);
+            if (max < min)
+            {
+                isExpandable = false;
+                return max;
+            }
+            else
+            {
+                isExpandable = true;
+                return Mathf.Lerp(min, max, fadeValue);
+            }
         }
         #endregion
     }
 }
-

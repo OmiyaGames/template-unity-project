@@ -74,6 +74,17 @@ namespace OmiyaGames.UI.Translations
             property.intValue = EditorGUILayout.Popup(label, property.intValue, GetAllLanguageNames(target));
         }
 
+        /// <summary>
+        /// Draws a popup mapping an int-property to a supported language.
+        /// </summary>
+        /// <param name="label"></param>
+        /// <param name="property"></param>
+        /// <param name="target"></param>
+        public static int DrawSupportedLanguages(Rect rect, SerializedProperty property, SupportedLanguages target)
+        {
+            return EditorGUI.Popup(rect, property.intValue, GetAllLanguageNames(target));
+        }
+
         public override void OnInspectorGUI()
         {
             // Update the serialized object
