@@ -50,6 +50,14 @@ namespace OmiyaGames
             return (EditorGUIUtility.singleLineHeight + verticalMargin) * numRows;
         }
 
+        public static float GetHelpBoxHeight(string text, float viewWidth, float minHeight)
+        {
+            var content = new GUIContent(text);
+            var style = GUI.skin.GetStyle("helpbox");
+
+            return Mathf.Max(minHeight, style.CalcHeight(content, viewWidth));
+        }
+
         public static void CreateBool(Editor editor, ref AnimBool boolAnimation)
         {
             // Destroy the last animation, if any

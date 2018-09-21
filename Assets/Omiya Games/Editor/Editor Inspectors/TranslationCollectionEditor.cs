@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using System.Collections.Generic;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -34,15 +35,17 @@ namespace OmiyaGames.UI.Translations
     /// <date>9/20/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// TODO.
+    /// Helper editor class to display <code>TranslationDictionary.TranslationCollection</code>.
     /// </summary>
     /// <seealso cref="TranslationDictionaryEditor"/>
+    /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.TranslationCollection"/>
     public class TranslationCollectionEditor : System.IDisposable
     {
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
         const float MinHelpBoxHeight = 30f;
+        const float ExpandTranslationsLeft = 14f;
 
         readonly Editor editor;
         SerializedProperty element;
@@ -51,12 +54,15 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty allTranslationsProperty;
         ReorderableList translationsList;
         readonly Dictionary<int, int> languageFrequency = new Dictionary<int, int>();
+        readonly List<LanguageTextPairEditor> allTranslationsEditors = new List<LanguageTextPairEditor>();
+        SupportedLanguages supportedLanguages;
 
-        public TranslationCollectionEditor(Editor editor, SerializedProperty element)
+        public TranslationCollectionEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;
             Element = element;
+            this.supportedLanguages = supportedLanguages;
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
@@ -96,8 +102,33 @@ namespace OmiyaGames.UI.Translations
         /// <summary>
         /// This is a hack variable.  Can't think of a better way to retrieve the width of the inside of the reorderablelist
         /// </summary>
-        private float Width { get; set; }
-        private string LastMessage { get; set; }
+        private float Width
+        {
+            get;
+            set;
+        }
+
+        private string LastMessage
+        {
+            get;
+            set;
+        }
+
+        public SupportedLanguages SupportedLanguages
+        {
+            get
+            {
+                return supportedLanguages;
+            }
+            set
+            {
+                supportedLanguages = value;
+                foreach(LanguageTextPairEditor editor in allTranslationsEditors)
+                {
+                    editor.SupportedLanguages = supportedLanguages;
+                }
+            }
+        }
 
         public SerializedProperty Element
         {
@@ -111,6 +142,7 @@ namespace OmiyaGames.UI.Translations
                 element = value;
                 KeyProperty = element.FindPropertyRelative("key");
                 AllTranslationsProperty = element.FindPropertyRelative("allTranslations");
+                allTranslationsEditors.Clear();
             }
         }
         #endregion
@@ -128,10 +160,10 @@ namespace OmiyaGames.UI.Translations
             height += VerticalSpace;
 
             // Check if we're showing a warning
-            if((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
+            if ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
+                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width, MinHelpBoxHeight) * ShowHelpBox.faded;
                 height += VerticalSpace;
             }
 
@@ -160,7 +192,7 @@ namespace OmiyaGames.UI.Translations
 
             // Draw the warning, if any
             rect.y += VerticalSpace;
-            if(DrawWarningMessage(ref rect, frequencyInKeyAppearance) == true)
+            if (DrawWarningMessage(ref rect, frequencyInKeyAppearance) == true)
             {
                 // If there are, add an extra margin
                 rect.y += VerticalSpace;
@@ -240,6 +272,10 @@ namespace OmiyaGames.UI.Translations
                 // Update dictionary
                 RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, oldKey);
                 AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
+
+                // Testing...
+                Element.serializedObject.ApplyModifiedProperties();
+                Element.serializedObject.Update();
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -259,7 +295,7 @@ namespace OmiyaGames.UI.Translations
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = GetHelpBoxHeight(LastMessage, rect.width);
+                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width, MinHelpBoxHeight);
                 rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning
@@ -285,19 +321,26 @@ namespace OmiyaGames.UI.Translations
 
             // Check if we want to draw the list
             isFoldedOut = ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true));
-            if(isFoldedOut == true)
+            if (isFoldedOut == true)
             {
-                // Calculate range of warning
+                // Expand the list to the left
+                rect.width += ExpandTranslationsLeft;
+                rect.x -= ExpandTranslationsLeft;
+
+                // Calculate range of list
                 float previewHeight = translationsList.GetHeight();
                 rect.height = previewHeight * ShowAllTranslationsList.faded;
 
                 // Draw the translations list
                 GUI.BeginGroup(rect);
                 Rect previewBox = new Rect(0, 0, rect.width, previewHeight);
+                UpdateAllTranslationsEditors();
                 translationsList.DoList(previewBox);
                 GUI.EndGroup();
 
                 // Adjust the rectangle
+                rect.width -= ExpandTranslationsLeft;
+                rect.x += ExpandTranslationsLeft;
                 rect.y += rect.height;
             }
             return isFoldedOut;
@@ -318,14 +361,6 @@ namespace OmiyaGames.UI.Translations
 
             return message;
         }
-
-        private static float GetHelpBoxHeight(string text, float viewWidth)
-        {
-            var content = new GUIContent(text);
-            var style = GUI.skin.GetStyle("helpbox");
-
-            return Mathf.Max(MinHelpBoxHeight, style.CalcHeight(content, viewWidth));
-        }
         #endregion
 
         #region ReorderableList
@@ -337,26 +372,54 @@ namespace OmiyaGames.UI.Translations
         private void OnRemoveTranslation(ReorderableList list)
         {
             ReorderableList.defaultBehaviours.DoRemoveButton(list);
+            UpdateAllTranslationsEditors();
         }
 
         private void OnAddTranslation(ReorderableList list)
         {
             ReorderableList.defaultBehaviours.DoAddButton(list);
+            UpdateAllTranslationsEditors();
         }
 
         private float CalculateTranslationsListElementHeight(int index)
         {
-            return EditorGUIUtility.singleLineHeight + VerticalMargin * 3;
+            if(translationsList.count != allTranslationsEditors.Count)
+            {
+                UpdateAllTranslationsEditors();
+            }
+            return allTranslationsEditors[index].CalculateHeight(languageFrequency);
         }
 
         private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
-            rect.y += VerticalMargin;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(rect, "Testing...");
-            //throw new NotImplementedException();
+            if (translationsList.count != allTranslationsEditors.Count)
+            {
+                UpdateAllTranslationsEditors();
+            }
+            allTranslationsEditors[index].DrawGui(rect, languageFrequency);
         }
         #endregion
+
+        void UpdateAllTranslationsEditors()
+        {
+            SerializedProperty element;
+            while (translationsList.count > allTranslationsEditors.Count)
+            {
+                element = translationsList.serializedProperty.GetArrayElementAtIndex(allTranslationsEditors.Count);
+                allTranslationsEditors.Add(new LanguageTextPairEditor(editor, element, SupportedLanguages));
+            }
+            while (translationsList.count < allTranslationsEditors.Count)
+            {
+                allTranslationsEditors[allTranslationsEditors.Count - 1].Dispose();
+                allTranslationsEditors.RemoveAt(allTranslationsEditors.Count - 1);
+            }
+
+            languageFrequency.Clear();
+            foreach(LanguageTextPairEditor editor in allTranslationsEditors)
+            {
+                LanguageTextPairEditor.AddLanguageToFrequencyDictionary(languageFrequency, editor.LanguageIndexProperty.intValue);
+            }
+        }
     }
 }
 
