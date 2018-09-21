@@ -1,7 +1,8 @@
-﻿using UnityEditor;
+﻿using UnityEngine;
+using UnityEditor;
 using UnityEditor.AnimatedValues;
+using UnityEditorInternal;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -36,7 +37,7 @@ namespace OmiyaGames.UI.Translations
     /// TODO.
     /// </summary>
     /// <seealso cref="TranslationDictionaryEditor"/>
-    public class TranslationStatus : System.IDisposable
+    public class TranslationCollectionEditor : System.IDisposable
     {
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
@@ -46,9 +47,12 @@ namespace OmiyaGames.UI.Translations
         readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
-        readonly AnimBool showPreview;
+        readonly AnimBool showAllTranslationsList;
+        SerializedProperty allTranslationsProperty;
+        ReorderableList translationsList;
+        readonly Dictionary<int, int> languageFrequency = new Dictionary<int, int>();
 
-        public TranslationStatus(Editor editor, SerializedProperty element)
+        public TranslationCollectionEditor(Editor editor, SerializedProperty element)
         {
             // Setup member variables
             this.editor = editor;
@@ -56,17 +60,36 @@ namespace OmiyaGames.UI.Translations
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
-            EditorUtility.CreateBool(editor, ref showPreview);
+            EditorUtility.CreateBool(editor, ref showAllTranslationsList);
         }
 
+        #region Properties
         public AnimBool ShowHelpBox => showHelpBox;
 
-        public AnimBool ShowPreview => showPreview;
+        public AnimBool ShowAllTranslationsList => showAllTranslationsList;
 
         public SerializedProperty KeyProperty
         {
             get;
             private set;
+        }
+
+        public SerializedProperty AllTranslationsProperty
+        {
+            get
+            {
+                return allTranslationsProperty;
+            }
+            private set
+            {
+                allTranslationsProperty = value;
+                translationsList = new ReorderableList(Element.serializedObject, allTranslationsProperty, true, false, true, true);
+                translationsList.drawElementCallback = DrawTranslationsListElement;
+                translationsList.elementHeightCallback = CalculateTranslationsListElementHeight;
+                translationsList.onAddCallback = OnAddTranslation;
+                translationsList.onRemoveCallback = OnRemoveTranslation;
+                translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
+            }
         }
 
         /// <summary>
@@ -86,8 +109,10 @@ namespace OmiyaGames.UI.Translations
                 // Setup properties
                 element = value;
                 KeyProperty = element.FindPropertyRelative("key");
+                AllTranslationsProperty = element.FindPropertyRelative("allTranslations");
             }
         }
+        #endregion
 
         public void Update(SerializedProperty element)
         {
@@ -97,22 +122,35 @@ namespace OmiyaGames.UI.Translations
         public float CalculateHeight(Dictionary<string, int> frequencyInKeyAppearance)
         {
             // Calculate the key height
-            float height = EditorGUIUtility.singleLineHeight;
-            height += VerticalMargin * 3f;
+            float height = VerticalMargin;
+            height += EditorGUIUtility.singleLineHeight;
+            height += VerticalSpace;
 
             // Check if we're showing a warning
-            if(((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true)))
+            if((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += VerticalSpace;
                 height += GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
+                height += VerticalSpace;
             }
+
+            // Add one for the fold-out
+            height += EditorGUIUtility.singleLineHeight;
+
+            // Check if we're showing the translations
+            if ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true))
+            {
+                // If so, calculate the height of translations
+                height += translationsList.GetHeight() * ShowAllTranslationsList.faded;
+                height += VerticalMargin;
+            }
+            height += VerticalMargin;
             return height;
         }
 
         public void DrawGui(Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
         {
-            // FIXME: draw the element...somehow
+            // Update the width variable
             Width = rect.width;
 
             // Draw the key field
@@ -123,11 +161,59 @@ namespace OmiyaGames.UI.Translations
             rect.y += VerticalSpace;
             if(DrawWarningMessage(ref rect, frequencyInKeyAppearance) == true)
             {
-                // If there are, 
+                // If there are, add an extra margin
                 rect.y += VerticalSpace;
+            }
+
+            // Draw the translation list
+            DrawAllTranslations(ref rect);
+        }
+
+        public static void AddKeyToFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
+        {
+            // Make sure argument is correct
+            if (frequencyInKeyAppearance != null)
+            {
+                if (string.IsNullOrEmpty(key) == false)
+                {
+                    // Add this key to the dictionary
+                    if (frequencyInKeyAppearance.ContainsKey(key) == false)
+                    {
+                        frequencyInKeyAppearance.Add(key, 1);
+                    }
+                    else
+                    {
+                        frequencyInKeyAppearance[key] += 1;
+                    }
+                }
             }
         }
 
+        public static void RemoveKeyFromFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
+        {
+            // Make sure argument is correct
+            if (frequencyInKeyAppearance != null)
+            {
+                if ((string.IsNullOrEmpty(key) == true) && (frequencyInKeyAppearance.ContainsKey(key) == true))
+                {
+                    // Remove this key from the dictionary
+                    frequencyInKeyAppearance[key] -= 1;
+                    if (frequencyInKeyAppearance[key] <= 0)
+                    {
+                        // Remove the key if the value is below 0
+                        frequencyInKeyAppearance.Remove(key);
+                    }
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            //showHelpBox.valueChanged.RemoveListener(editor.Repaint);
+            //showPreview.valueChanged.RemoveListener(editor.Repaint);
+        }
+
+        #region Helper Methods
         private void DrawKeyField(ref Rect rect, Dictionary<string, int> frequencyInKeyAppearance)
         {
             // Hold onto the original rect position
@@ -182,53 +268,38 @@ namespace OmiyaGames.UI.Translations
                 GUI.EndGroup();
 
                 // Adjust the rectangle
-                rect.y += helpBoxHeight;
+                rect.y += rect.height;
             }
             return isShown;
         }
 
-        public static void AddKeyToFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
+        private bool DrawAllTranslations(ref Rect rect)
         {
-            // Make sure argument is correct
-            if (frequencyInKeyAppearance != null)
-            {
-                if (string.IsNullOrEmpty(key) == false)
-                {
-                    // Add this key to the dictionary
-                    if (frequencyInKeyAppearance.ContainsKey(key) == false)
-                    {
-                        frequencyInKeyAppearance.Add(key, 1);
-                    }
-                    else
-                    {
-                        frequencyInKeyAppearance[key] += 1;
-                    }
-                }
-            }
-        }
+            bool isFoldedOut = false;
 
-        public static void RemoveKeyFromFrequencyDictionary(Dictionary<string, int> frequencyInKeyAppearance, string key)
-        {
-            // Make sure argument is correct
-            if (frequencyInKeyAppearance != null)
-            {
-                if ((string.IsNullOrEmpty(key) == true) && (frequencyInKeyAppearance.ContainsKey(key) == true))
-                {
-                    // Remove this key from the dictionary
-                    frequencyInKeyAppearance[key] -= 1;
-                    if (frequencyInKeyAppearance[key] <= 0)
-                    {
-                        // Remove the key if the value is below 0
-                        frequencyInKeyAppearance.Remove(key);
-                    }
-                }
-            }
-        }
+            // Draw the fold out
+            rect.height = EditorGUIUtility.singleLineHeight;
+            ShowAllTranslationsList.target = EditorGUI.Foldout(rect, ShowAllTranslationsList.target, "Translations");
+            rect.y += rect.height;
 
-        public void Dispose()
-        {
-            //showHelpBox.valueChanged.RemoveListener(editor.Repaint);
-            //showPreview.valueChanged.RemoveListener(editor.Repaint);
+            // Check if we want to draw the list
+            isFoldedOut = ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true));
+            if(isFoldedOut == true)
+            {
+                // Calculate range of warning
+                float previewHeight = translationsList.GetHeight();
+                rect.height = previewHeight * ShowAllTranslationsList.faded;
+
+                // Draw the translations list
+                GUI.BeginGroup(rect);
+                Rect previewBox = new Rect(0, 0, rect.width, previewHeight);
+                translationsList.DoList(previewBox);
+                GUI.EndGroup();
+
+                // Adjust the rectangle
+                rect.y += rect.height;
+            }
+            return isFoldedOut;
         }
 
         private string GetWarning(Dictionary<string, int> frequencyInKeyAppearance)
@@ -254,6 +325,37 @@ namespace OmiyaGames.UI.Translations
 
             return Mathf.Max(MinHelpBoxHeight, style.CalcHeight(content, viewWidth));
         }
+        #endregion
+
+        #region ReorderableList
+        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void OnRemoveTranslation(ReorderableList list)
+        {
+            ReorderableList.defaultBehaviours.DoRemoveButton(list);
+        }
+
+        private void OnAddTranslation(ReorderableList list)
+        {
+            ReorderableList.defaultBehaviours.DoAddButton(list);
+        }
+
+        private float CalculateTranslationsListElementHeight(int index)
+        {
+            return EditorGUIUtility.singleLineHeight + VerticalMargin * 3;
+        }
+
+        private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            rect.y += VerticalMargin;
+            rect.height = EditorGUIUtility.singleLineHeight;
+            EditorGUI.LabelField(rect, "Testing...");
+            //throw new NotImplementedException();
+        }
+        #endregion
     }
 }
 

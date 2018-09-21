@@ -79,7 +79,7 @@ namespace OmiyaGames.UI.Translations
 
         // Search Result scroll positions
         Vector2 scrollPosition = Vector2.zero;
-        readonly List<TranslationStatus> translationStatus = new List<TranslationStatus>();
+        readonly List<TranslationCollectionEditor> translationStatus = new List<TranslationCollectionEditor>();
         readonly Dictionary<string, int> frequencyInKeyAppearance = new Dictionary<string, int>();
         #endregion
 
@@ -442,7 +442,7 @@ namespace OmiyaGames.UI.Translations
                 {
                     // Udpate neato based on element
                     translationStatus[index].Update(list.serializedProperty.GetArrayElementAtIndex(index));
-                    TranslationStatus.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
+                    TranslationCollectionEditor.AddKeyToFrequencyDictionary(frequencyInKeyAppearance, translationStatus[index].KeyProperty.stringValue);
                 }
             }
         }
@@ -452,7 +452,7 @@ namespace OmiyaGames.UI.Translations
             // FIXME: add a new status at the end of the list
             //Debug.Log("AddEntryFromTranslationListStatus(" + index + ')');
             SerializedProperty element = list.serializedProperty.GetArrayElementAtIndex(index);
-            TranslationStatus status = new TranslationStatus(this, element);
+            TranslationCollectionEditor status = new TranslationCollectionEditor(this, element);
             translationStatus.Add(status);
 
             // Check the element's key
