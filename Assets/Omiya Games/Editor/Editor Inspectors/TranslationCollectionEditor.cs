@@ -94,7 +94,7 @@ namespace OmiyaGames.UI.Translations
                 translationsList.elementHeightCallback = CalculateTranslationsListElementHeight;
                 translationsList.onAddCallback = OnAddTranslation;
                 translationsList.onRemoveCallback = OnRemoveTranslation;
-                translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
+                //translationsList.onReorderCallbackWithDetails = OnReorderTranslationList;
                 translationsList.headerHeight = VerticalSpace;
             }
         }
@@ -267,15 +267,11 @@ namespace OmiyaGames.UI.Translations
             KeyProperty.stringValue = EditorGUI.TextField(rect, oldKey);
 
             // Check if there's a difference
-            if (oldKey != KeyProperty.stringValue)
+            if (KeyProperty.stringValue != oldKey)
             {
                 // Update dictionary
                 RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, oldKey);
                 AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
-
-                // Testing...
-                Element.serializedObject.ApplyModifiedProperties();
-                Element.serializedObject.Update();
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -364,10 +360,10 @@ namespace OmiyaGames.UI.Translations
         #endregion
 
         #region ReorderableList
-        private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
-        {
-            //throw new NotImplementedException();
-        }
+        //private void OnReorderTranslationList(ReorderableList list, int oldIndex, int newIndex)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         private void OnRemoveTranslation(ReorderableList list)
         {

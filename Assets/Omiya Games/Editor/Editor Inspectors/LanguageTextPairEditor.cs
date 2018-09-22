@@ -45,8 +45,8 @@ namespace OmiyaGames.UI.Translations
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
         const float ExpandLength = 60f;
+        const float ExpandTranslationsLeft = 14f;
         static GUIStyle wrappedTextArea = null;
-
 
         readonly Editor editor;
         SerializedProperty element;
@@ -160,7 +160,9 @@ namespace OmiyaGames.UI.Translations
 
             // If so, calculate the height of translations
             bool isExpandable;
-            height += GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
+            float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
+            Debug.Log(textAreaHeight);
+            height += textAreaHeight;
             height += VerticalMargin;
             height += VerticalMargin;
             return height;
@@ -168,19 +170,16 @@ namespace OmiyaGames.UI.Translations
 
         public void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
-            // Update the width variable
-            Width = rect.width;
-
             // Draw the key field
             rect.y += VerticalMargin;
             DrawKeyField(ref rect, frequencyInLanguageAppearance);
 
             // Draw the warning, if any
-            rect.y += VerticalSpace;
+            //rect.y += VerticalSpace;
             if (DrawWarningMessage(ref rect, frequencyInLanguageAppearance) == true)
             {
                 // If there are, add an extra margin
-                rect.y += VerticalSpace;
+                //rect.y += VerticalSpace;
             }
 
             // Draw the translation list
@@ -242,19 +241,19 @@ namespace OmiyaGames.UI.Translations
             // Draw the key text field
             rect.x += rect.width + VerticalSpace;
             rect.width = originalWidth - (KeyLength + VerticalSpace);
+            EditorGUI.BeginChangeCheck();
             int oldLanguageIndex = LanguageIndexProperty.intValue;
             LanguageIndexProperty.intValue = SupportedLanguagesEditor.DrawSupportedLanguages(rect, LanguageIndexProperty, SupportedLanguages);
 
             // Check if there's a difference
-            if (oldLanguageIndex != LanguageIndexProperty.intValue)
+            if (LanguageIndexProperty.intValue != oldLanguageIndex)
             {
                 // Update dictionary
                 RemoveLanguageFromFrequencyDictionary(frequencyInLanguageAppearance, oldLanguageIndex);
                 AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndexProperty.intValue);
 
                 // Testing...
-                Element.serializedObject.ApplyModifiedProperties();
-                Element.serializedObject.Update();
+                editor.serializedObject.ApplyModifiedProperties();
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -266,6 +265,9 @@ namespace OmiyaGames.UI.Translations
 
         private bool DrawWarningMessage(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
+            // Update the width variable
+            Width = rect.width;
+
             // Adjust the bools
             LastMessage = GetWarning(frequencyInLanguageAppearance);
             ShowHelpBox.target = (string.IsNullOrEmpty(LastMessage) == false);
@@ -295,6 +297,7 @@ namespace OmiyaGames.UI.Translations
             float originalWidth = rect.width;
 
             // Draw the label of the field
+            rect.x = originalX - ExpandTranslationsLeft;
             rect.width = KeyLength;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.LabelField(rect, "Text");
@@ -304,10 +307,13 @@ namespace OmiyaGames.UI.Translations
             rect.width = originalWidth - ExpandLength;
             Rect expandToggleRect = new Rect(rect);
 
-            // Calculate range of warning
-            rect.x = originalX;
-            rect.width = originalWidth;
+            // Offset the text area
+            rect.x = originalX - ExpandTranslationsLeft;
+            rect.width = originalWidth + ExpandTranslationsLeft;
+            Width = rect.width;
             rect.y += rect.height;
+
+            // Calculate range of warning
             string oldText = TextProperty.stringValue;
             bool isExpandable;
             rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
@@ -321,6 +327,8 @@ namespace OmiyaGames.UI.Translations
             GUI.enabled = true;
 
             // Adjust the rectangle
+            rect.x = originalX;
+            rect.width = originalWidth;
             rect.y += rect.height;
         }
 
