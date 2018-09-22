@@ -18,18 +18,24 @@ MonoBehaviour:
   defaultLanguageWhenTranslationNotFound: 0
   presetMessageWhenTranslationNotFound: <Translation Not Found>
   translations:
-  - key: 'Testing #0'
-    allTranslations:
-    - languageIndex: 0
-      text: 'blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah,
-        blah, '
-    - languageIndex: 1
-      text: 'blah, blah, blah, blah, blah, blah, '
   - key: 'Testing #1'
     allTranslations:
-    - languageIndex: 0
-      text: Neato
+    - languageIndex: 1
+      text: 'Neato, Neato, Neato, Neato, Neato, Neato, Neato, Neato, Neato, Neato, '
   - key: 'Testing #2'
     allTranslations:
+    - languageIndex: 0
+      text: Neato
+    - languageIndex: 2
+      text: Neato
     - languageIndex: 1
       text: Neato
+  - key: 'Testing #3'
+    allTranslations:
+    - languageIndex: 0
+      text: 'blah, '
+    - languageIndex: 1
+      text: 'blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah,
+        blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, blah, '
+    - languageIndex: 2
+      text: 'blah, blah, blah, blah, blah, blah, '

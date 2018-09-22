@@ -83,7 +83,7 @@ namespace OmiyaGames.UI.Translations
         {
             get
             {
-                return EditorGUIUtility.singleLineHeight * 2f;
+                return EditorGUIUtility.singleLineHeight * 2.25f;
             }
         }
 
@@ -161,7 +161,7 @@ namespace OmiyaGames.UI.Translations
             // If so, calculate the height of translations
             bool isExpandable;
             float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
-            Debug.Log(textAreaHeight);
+            //Debug.Log(textAreaHeight);
             height += textAreaHeight;
             height += VerticalMargin;
             height += VerticalMargin;
@@ -356,6 +356,7 @@ namespace OmiyaGames.UI.Translations
             // Get the minimum and maximum measurement
             float min = PreviewHeight;
             float max = WrappedTextArea.CalcHeight(content, viewWidth);
+            //Debug.Log("( " + min + ", " + max + " )");
             if (max < min)
             {
                 isExpandable = false;
