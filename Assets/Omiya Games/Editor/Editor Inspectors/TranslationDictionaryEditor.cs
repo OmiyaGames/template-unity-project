@@ -208,7 +208,12 @@ namespace OmiyaGames.UI.Translations
             {
                 UpdateTranslationListStatus(translationsList, index);
             }
+            EditorGUI.BeginChangeCheck();
             translationStatus[index].DrawGui(rect, frequencyInKeyAppearance);
+            if(EditorGUI.EndChangeCheck() == true)
+            {
+                UpdateTranslationListStatus(translationsList, index);
+            }
         }
 
         private float CalculateTranslationsListElementHeight(int index)
