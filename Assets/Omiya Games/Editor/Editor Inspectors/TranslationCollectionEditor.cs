@@ -123,7 +123,7 @@ namespace OmiyaGames.UI.Translations
             set
             {
                 supportedLanguages = value;
-                foreach(LanguageTextPairEditor editor in allTranslationsEditors)
+                foreach (LanguageTextPairEditor editor in allTranslationsEditors)
                 {
                     editor.SupportedLanguages = supportedLanguages;
                 }
@@ -174,8 +174,7 @@ namespace OmiyaGames.UI.Translations
             if ((ShowAllTranslationsList.target == true) || (ShowAllTranslationsList.isAnimating == true))
             {
                 // If so, calculate the height of translations
-                height += translationsList.GetHeight() * ShowAllTranslationsList.faded;
-                height += VerticalMargin;
+                height += (translationsList.GetHeight() + VerticalMargin) * ShowAllTranslationsList.faded;
             }
             height += VerticalMargin;
             return height;
@@ -379,11 +378,13 @@ namespace OmiyaGames.UI.Translations
 
         private float CalculateTranslationsListElementHeight(int index)
         {
-            if(translationsList.count != allTranslationsEditors.Count)
+            if (translationsList.count != allTranslationsEditors.Count)
             {
                 UpdateAllTranslationsEditors();
             }
-            return allTranslationsEditors[index].CalculateHeight(languageFrequency);
+            float returnHeight = allTranslationsEditors[index].CalculateHeight(languageFrequency);
+            //Debug.Log("( " + index + "->" + returnHeight + " )");
+            return returnHeight;
         }
 
         private void DrawTranslationsListElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -411,11 +412,10 @@ namespace OmiyaGames.UI.Translations
             }
 
             languageFrequency.Clear();
-            foreach(LanguageTextPairEditor editor in allTranslationsEditors)
+            foreach (LanguageTextPairEditor editor in allTranslationsEditors)
             {
                 LanguageTextPairEditor.AddLanguageToFrequencyDictionary(languageFrequency, editor.LanguageIndexProperty.intValue);
             }
         }
     }
 }
-
