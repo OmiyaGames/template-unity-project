@@ -51,7 +51,7 @@ namespace OmiyaGames.UI.Translations
         readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
-        readonly AnimBool expandToggle;
+        //readonly AnimBool expandToggle;
 
         public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
@@ -62,7 +62,7 @@ namespace OmiyaGames.UI.Translations
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
-            EditorUtility.CreateBool(editor, ref expandToggle);
+            //EditorUtility.CreateBool(editor, ref expandToggle);
         }
 
         #region Properties
@@ -83,12 +83,12 @@ namespace OmiyaGames.UI.Translations
         {
             get
             {
-                return EditorGUIUtility.singleLineHeight * 2.25f;
+                return EditorGUIUtility.singleLineHeight + 1f;
             }
         }
 
         public AnimBool ShowHelpBox => showHelpBox;
-        public AnimBool ExpandToggle => expandToggle;
+        //public AnimBool ExpandToggle => expandToggle;
 
         public SerializedProperty LanguageIndexProperty
         {
@@ -160,8 +160,8 @@ namespace OmiyaGames.UI.Translations
 
             // If so, calculate the height of translations
             bool isExpandable;
-            float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
-            //Debug.Log(textAreaHeight);
+            //float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
+            float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, 1f, out isExpandable);
             height += textAreaHeight;
             height += VerticalMargin;
             height += VerticalMargin;
@@ -316,15 +316,16 @@ namespace OmiyaGames.UI.Translations
             // Calculate range of warning
             string oldText = TextProperty.stringValue;
             bool isExpandable;
-            rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
+            //rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
+            rect.height = GetTextAreaHeight(oldText, Width, 1f, out isExpandable);
 
             // Draw the translations list
             TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
 
             // Draw the toggle, enabled only if the area is expandable
-            GUI.enabled = isExpandable;
-            ExpandToggle.target = EditorGUI.ToggleLeft(expandToggleRect, "Expand", ExpandToggle.target);
-            GUI.enabled = true;
+            //GUI.enabled = isExpandable;
+            //ExpandToggle.target = EditorGUI.ToggleLeft(expandToggleRect, "Expand", ExpandToggle.target);
+            //GUI.enabled = true;
 
             // Adjust the rectangle
             rect.x = originalX;
