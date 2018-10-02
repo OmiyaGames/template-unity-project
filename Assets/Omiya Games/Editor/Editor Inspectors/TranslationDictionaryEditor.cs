@@ -1,9 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditor.IMGUI.Controls;
 using UnityEditorInternal;
 using UnityEngine;
-using System.Text;
 using System.IO;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
@@ -187,6 +185,9 @@ namespace OmiyaGames.UI.Translations
                 DrawSearchResults();
             }
 
+            // Draw CSV-related action buttons
+            DrawSyncCsv();
+
             // Reset all variables
             lastSearchedString = newSearchString;
             GUI.enabled = true;
@@ -279,6 +280,25 @@ namespace OmiyaGames.UI.Translations
                     DrawDefaultsWhenTranslationForLanguageIsNotFound();
                 }
             }
+        }
+
+        private void DrawSyncCsv()
+        {
+            // Draw label
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Sync with CSV file", EditorStyles.boldLabel);
+
+            // Draw the buttons
+            EditorGUILayout.BeginHorizontal();
+            if(GUILayout.Button("Import...") == true)
+            {
+
+            }
+            if (GUILayout.Button("Export...") == true)
+            {
+
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawDefaultsWhenKeyIsNotFound()
