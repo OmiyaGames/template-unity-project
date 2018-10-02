@@ -305,7 +305,7 @@ namespace OmiyaGames.UI.Translations
             // Calculate the toggle bound (to be used later)
             rect.x += originalWidth - ExpandLength;
             rect.width = originalWidth - ExpandLength;
-            Rect expandToggleRect = new Rect(rect);
+            //Rect expandToggleRect = new Rect(rect);
 
             // Offset the text area
             rect.x = originalX - ExpandTranslationsLeft;
