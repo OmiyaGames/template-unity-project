@@ -46,7 +46,6 @@ namespace OmiyaGames.UI.Translations
 
         static readonly GUIContent DefaultTextToLabel = new GUIContent("Default Text To");
         static readonly GUIContent PresetMessageLabel = new GUIContent("Preset Message");
-        static readonly string[] CsvFileFilter = new string[] { "CSV files", "csv", "All files", "*" };
         const string DefaultLanguageLabel = "Default Language";
 
         #region Member Variables
@@ -293,29 +292,12 @@ namespace OmiyaGames.UI.Translations
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Import...") == true)
             {
-                // FIXME: create a separate pop-up window for this, rather than a serious of pop-ups like this ridiculous monstrosity.
-                string filename = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Import CSV File", "/Assets/", CsvFileFilter);
-                if (string.IsNullOrEmpty(filename) == false)
-                {
-                    int answer = UnityEditor.EditorUtility.DisplayDialogComplex("Import Method", "Do you want to append or overwrite this translation dictionary?", "Append", "Cancel", "Overwrite");
-                    switch (answer)
-                    {
-                        case 0:
-                            Debug.Log("Append Selected");
-                            break;
-                        case 1:
-                            Debug.Log("Cancel Selected");
-                            break;
-                        case 2:
-                            Debug.Log("Overwrite Selected");
-                            break;
-                    }
-                    //UnityEditor.EditorUtility.DisplayCancelableProgressBar();
-                    //UnityEditor.EditorUtility.ClearProgressBar();
-                }
+                // Create a separate pop-up window for this, rather than a serious of pop-ups like this ridiculous monstrosity.
+                ImportCsvPopUp.ShowPopUp(serializedObject.targetObject as TranslationDictionary);
             }
-                // FIXME: As soon as export is implemented, re-enable this button
-                bool lastEnabled = GUI.enabled;
+
+            // FIXME: As soon as export is implemented, re-enable this button
+            bool lastEnabled = GUI.enabled;
             GUI.enabled = false;
             if (GUILayout.Button("Export...") == true)
             {
