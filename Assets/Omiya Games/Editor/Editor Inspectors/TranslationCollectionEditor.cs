@@ -263,7 +263,7 @@ namespace OmiyaGames.UI.Translations
             rect.x += rect.width + VerticalSpace;
             rect.width = originalWidth - (KeyLength + VerticalSpace);
             string oldKey = KeyProperty.stringValue;
-            KeyProperty.stringValue = EditorGUI.TextField(rect, oldKey);
+            KeyProperty.stringValue = EditorGUI.DelayedTextField(rect, oldKey);
 
             // Check if there's a difference
             if (KeyProperty.stringValue != oldKey)
