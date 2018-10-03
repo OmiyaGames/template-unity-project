@@ -91,18 +91,18 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                if (languageToIndexMap == null)
-                {
-                    // Setup dictionary
-                    languageToIndexMap = new Dictionary<string, int>(supportedLanguages.Length);
+                return LanguageToIndexMap[language];
+            }
+        }
 
-                    // Go through all the supported languages
-                    for (int index = 0; index < supportedLanguages.Length; ++index)
-                    {
-                        languageToIndexMap.Add(supportedLanguages[index].LanguageName, index);
-                    }
-                }
-                return languageToIndexMap[language];
+        /// <summary>
+        /// Returns the number of supported languages
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return supportedLanguages.Length;
             }
         }
 
@@ -136,6 +136,25 @@ namespace OmiyaGames.Translations
             get
             {
                 return previewLanguageInIndex;
+            }
+        }
+
+        private Dictionary<string, int> LanguageToIndexMap
+        {
+            get
+            {
+                if (languageToIndexMap == null)
+                {
+                    // Setup dictionary
+                    languageToIndexMap = new Dictionary<string, int>(supportedLanguages.Length);
+
+                    // Go through all the supported languages
+                    for (int index = 0; index < supportedLanguages.Length; ++index)
+                    {
+                        languageToIndexMap.Add(supportedLanguages[index].LanguageName, index);
+                    }
+                }
+                return languageToIndexMap;
             }
         }
         #endregion
@@ -179,6 +198,26 @@ namespace OmiyaGames.Translations
                 }
             }
             return returnIsFound;
+        }
+
+        /// <summary>
+        /// Checks if the index is supported.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public bool Contains(int index)
+        {
+            return ((index >= 0) && (index < Count));
+        }
+
+        /// <summary>
+        /// Checks if the language is supported
+        /// </summary>
+        /// <param name="language"></param>
+        /// <returns></returns>
+        public bool Contains(string language)
+        {
+            return LanguageToIndexMap.ContainsKey(language);
         }
     }
 }
