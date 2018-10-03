@@ -407,11 +407,11 @@ namespace OmiyaGames
         {
             if (string.IsNullOrEmpty(BuildDirectory) == true)
             {
-                EditorUtility.RevealInFinder(SavedBuildDirectory);
+                UnityEditor.EditorUtility.RevealInFinder(SavedBuildDirectory);
             }
             else
             {
-                EditorUtility.RevealInFinder(BuildDirectory);
+                UnityEditor.EditorUtility.RevealInFinder(BuildDirectory);
             }
         }
 
@@ -560,7 +560,7 @@ namespace OmiyaGames
                 if (string.IsNullOrEmpty(buildDirectory) == true)
                 {
                     // Open the save folder dialog
-                    buildDirectory = EditorUtility.SaveFolderPanel("Build project to folder", SavedBuildDirectory, "");
+                    buildDirectory = UnityEditor.EditorUtility.SaveFolderPanel("Build project to folder", SavedBuildDirectory, "");
 
                     // Check if the user selected a folder
                     if (string.IsNullOrEmpty(buildDirectory) == false)

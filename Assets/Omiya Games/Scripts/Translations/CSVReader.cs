@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace OmiyaGames
 {
@@ -42,17 +43,136 @@ namespace OmiyaGames
         const string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         static readonly char[] TRIM_CHARS = { '\"' };
 
-        public static List<Dictionary<string, string>> Read(TextAsset data)
+        public class ReadStatus
         {
-            List<Dictionary<string, string>> returnList = new List<Dictionary<string, string>>();
-            List<string> lines = SplitNewLines(data.text);
-
-            if (lines.Count <= 1)
+            public enum State
             {
-                return returnList;
+                ReadingFileIntoRows,
+                ReadingRowsIntoCells,
+                NumberOfStates
             }
 
+            ThreadSafe<State> currentStatus = new ThreadSafe<State>();
+            ProgressReport progressReport = new ProgressReport();
+
+            public State CurrentState
+            {
+                get
+                {
+                    return currentStatus.Value;
+                }
+                internal set
+                {
+                    currentStatus.Value = value;
+                }
+            }
+
+            public long CurrentStep
+            {
+                get
+                {
+                    return progressReport.CurrentStep;
+                }
+                internal set
+                {
+                    progressReport.CurrentStep = value;
+                }
+            }
+
+            public long TotalSteps
+            {
+                get
+                {
+                    return progressReport.TotalSteps;
+                }
+            }
+
+            public float ProgressPercent
+            {
+                get
+                {
+                    return progressReport.ProgressPercent;
+                }
+            }
+
+            internal void IncrementStep()
+            {
+                progressReport.IncrementCurrentStep();
+            }
+
+            internal void SetTotalSteps(long newTotalSteps)
+            {
+                progressReport.SetTotalSteps(newTotalSteps);
+            }
+        }
+
+        public static List<Dictionary<string, string>> ReadFile(TextAsset data, ReadStatus status = null)
+        {
+            return ReadText(data.text, status);
+        }
+
+        public static List<Dictionary<string, string>> ReadText(string csvText, ReadStatus status = null)
+        {
+            List<string> lines = null;
+            using (StreamReader stringReader = new StreamReader(new FileStream(csvText, FileMode.Open)))
+            {
+                lines = SplitNewLines(stringReader, status);
+            }
+            if ((lines == null) || (lines.Count <= 1))
+            {
+                return GenerateEmptyList(status);
+            }
+            else
+            {
+                return GenerateRows(lines, status);
+            }
+        }
+
+        public static List<Dictionary<string, string>> ReadFile(string filePath, ReadStatus status = null)
+        {
+            List<string> lines = null;
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                lines = SplitNewLines(fileReader, status);
+            }
+            if ((lines == null) || (lines.Count <= 1))
+            {
+                return GenerateEmptyList(status);
+            }
+            else
+            {
+                return GenerateRows(lines, status);
+            }
+        }
+
+        private static List<Dictionary<string, string>> GenerateEmptyList(ReadStatus status)
+        {
+            // Check if we need to report status
+            if (status != null)
+            {
+                // Move the status to the next phase, and indicate completion
+                status.CurrentState = ReadStatus.State.ReadingRowsIntoCells;
+                status.SetTotalSteps(1);
+                status.CurrentStep = 1;
+            }
+
+            // Return empty list
+            return new List<Dictionary<string, string>>(0);
+        }
+
+        private static List<Dictionary<string, string>> GenerateRows(List<string> lines, ReadStatus status)
+        {
+            List<Dictionary<string, string>> returnList = new List<Dictionary<string, string>>(lines.Count - 1);
             string[] header = Regex.Split(lines[0], SPLIT_RE);
+
+            // Check if we need to report status
+            if (status != null)
+            {
+                // Reset status
+                status.CurrentState = ReadStatus.State.ReadingRowsIntoCells;
+                status.SetTotalSteps(lines.Count - 1);
+            }
+
             for (int i = 1; i < lines.Count; ++i)
             {
                 string[] values = Regex.Split(lines[i], SPLIT_RE);
@@ -77,22 +197,42 @@ namespace OmiyaGames
                     entry[header[j]] = value;
                 }
                 returnList.Add(entry);
+
+                // Check if we need to report status
+                if (status != null)
+                {
+                    // If so, indicate progress made
+                    status.IncrementStep();
+                }
             }
             return returnList;
         }
 
-        private static List<string> SplitNewLines(string allText)
+        private static List<string> SplitNewLines(StreamReader reader, ReadStatus status)
         {
             // Setup each variable
             StringBuilder eachLine = new StringBuilder();
             List<string> lines = new List<string>();
-            int scanTo = allText.Length;
             bool isEscapedByQuote = false;
+            char readChar;
 
-            for (int i = 0; i < scanTo; ++i)
+            // Check if we need to report status
+            if (status != null)
             {
+                // Reset status
+                status.CurrentState = ReadStatus.State.ReadingFileIntoRows;
+                status.SetTotalSteps(1);
+            }
+
+            // Read the first letter
+            int readInt = reader.Read();
+            while (readInt >= 0)
+            {
+                // Convert the byte to a character
+                readChar = (char)readInt;
+
                 // Check to see if we hit a newline, not escaped by quotes
-                if ((isEscapedByQuote == false) && (allText[i] == '\n'))
+                if ((isEscapedByQuote == false) && (readChar == '\n'))
                 {
                     // Add a line to the lines list
                     lines.Add(eachLine.ToString());
@@ -100,25 +240,35 @@ namespace OmiyaGames
                     // Reset the string builder
                     eachLine.Length = 0;
                 }
-                else if (allText[i] != '\r')
+                else if (readChar != '\r')
                 {
                     // Otherwise, add the character to the the string builder (except '\r')
-                    eachLine.Append(allText[i]);
+                    eachLine.Append(readChar);
 
                     // Check to see if this character is a quote
-                    if (allText[i] == '"')
+                    if (readChar == '"')
                     {
                         // Toggle whether the next newline needs to be escaped or not
                         isEscapedByQuote = !isEscapedByQuote;
                     }
                 }
+
+                // Read the next byte
+                readInt = reader.Read();
             }
 
-            // Check if there's any text left (this assumes document doesn't end in a newline
-            if(eachLine.Length > 0)
+            // Check if there's any text left (this assumes document doesn't end in a newline)
+            if (eachLine.Length > 0)
             {
                 // Add the last line into all lines
                 lines.Add(eachLine.ToString());
+            }
+
+            // Check if we need to report status
+            if (status != null)
+            {
+                // If so, indicate progress made
+                status.IncrementStep();
             }
             return lines;
         }

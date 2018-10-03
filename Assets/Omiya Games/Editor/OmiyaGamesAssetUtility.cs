@@ -38,21 +38,9 @@ namespace OmiyaGames
     /// </summary>
     public static class AssetUtility
     {
-        static readonly StringBuilder tempBuilder = new StringBuilder();
-        
-        public static float SingleLineHeight(float verticalMargin)
-        {
-            return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
-        }
-
-        public static float GetHeight(GUIContent label, int numRows, float verticalMargin)
-        {
-            if ((label != null) && (string.IsNullOrEmpty(label.text) == false))
-            {
-                numRows += 1;
-            }
-            return (EditorGUIUtility.singleLineHeight + verticalMargin) * numRows;
-        }
+        public const string CreateScriptableObjectAtFolder = "Assets/";
+        public const string ManifestFileExtension = ".manifest";
+        public const string ConfirmationDialogTitle = "Overwrite File?";
 
         public static string GetLastFolderName(string path, bool pathIncludesFileName)
         {
@@ -103,38 +91,80 @@ namespace OmiyaGames
             return returnGuid;
         }
 
-        public static DomainList GenerateAcceptedDomainList(string folderName, string fileName, string[] content, out string pathOfAsset)
+        public static string GetSelectedFolder()
         {
-            return GenerateAcceptedDomainList(tempBuilder, folderName, fileName, content, null, out pathOfAsset);
+            string returnPath = null;
+
+            // Check if there's a selected object
+            var obj = Selection.activeObject;
+            if (obj != null)
+            {
+                returnPath = AssetDatabase.GetAssetPath(obj.GetInstanceID());
+                if((string.IsNullOrEmpty(returnPath) == false) && (Directory.Exists(returnPath) == false))
+                {
+                    returnPath = Path.GetDirectoryName(returnPath);
+                }
+            }
+
+            if (string.IsNullOrEmpty(returnPath) == true)
+            {
+                returnPath = CreateScriptableObjectAtFolder;
+            }
+            return returnPath;
         }
 
-        public static DomainList GenerateAcceptedDomainList(string folderName, string fileName, string[] content, string bundleId, out string pathOfAsset)
+        public static bool ConfirmFileIsWriteable(string pathOfAsset, string nameOfFile, bool showWindow = true)
         {
-            return GenerateAcceptedDomainList(tempBuilder, folderName, fileName, content, bundleId, out pathOfAsset);
+            // Check to see if file exists
+            bool isBuildConfirmed = (File.Exists(pathOfAsset) == false);
+            if ((isBuildConfirmed == false) && (showWindow == true))
+            {
+                // Create a message to indicate to the user
+                StringBuilder builder = new StringBuilder();
+                builder.Append("File \"");
+                builder.Append(nameOfFile);
+                builder.Append("\" already exists. Are you sure you want to overwrite this file?");
+
+                // Bring up a pop-up confirming the file will be overwritten
+                isBuildConfirmed = UnityEditor.EditorUtility.DisplayDialog(ConfirmationDialogTitle, builder.ToString(), "Yes", "No");
+            }
+            return isBuildConfirmed;
         }
 
-        public static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, out string pathOfAsset)
+        public static string SaveAsAssetBundle(ScriptableObject newAsset, string newFolderName, string newFileName, string bundleId, StringBuilder builder)
         {
-            return GenerateAcceptedDomainList(builder, folderName, fileName, content, null, out pathOfAsset);
+            // Generate the asset bundle at the Assets folder
+            string pathOfAsset = GenerateScriptableObject(newAsset, newFileName, bundleId, builder);
+            GenerateAssetBundle(bundleId, pathOfAsset);
+
+            // Clean-up the rest of the assets
+            CleanUpFiles(builder, pathOfAsset, bundleId);
+
+            if (string.IsNullOrEmpty(newFolderName) == false)
+            {
+                // Create a new folder if one doesn't exist
+                CreateFolderRecursively(newFolderName);
+
+                // Move the created asset bundle to the designated location
+                MoveAssetBundleTo(builder, pathOfAsset, newFolderName, newFileName, bundleId);
+            }
+            return pathOfAsset;
         }
 
-        public static DomainList GenerateAcceptedDomainList(StringBuilder builder, string folderName, string fileName, string[] content, string bundleId, out string pathOfAsset)
+        #region SaveAsAssetBundle helpers
+        private static string GenerateScriptableObject(ScriptableObject newAsset, string fileName, string bundleId, StringBuilder builder)
         {
-            DomainList returnAsset = ScriptableObject.CreateInstance<DomainList>();
-            returnAsset.name = fileName;
-            returnAsset.Domains = content;
-
             // Generate a path to create an AcceptedDomainList
-            builder.Length = 0;
-            builder.Append(Path.Combine(folderName, fileName));
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, fileName));
             builder.Append(Utility.FileExtensionScriptableObject);
-            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
+            string pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(builder.ToString());
 
             // Create the AcceptedDomainList at the assigned path
-            AssetDatabase.CreateAsset(returnAsset, pathOfAsset);
+            AssetDatabase.CreateAsset(newAsset, pathOfAsset);
 
             // Set its asset bundle name
-            if(string.IsNullOrEmpty(bundleId) == false)
+            if (string.IsNullOrEmpty(bundleId) == false)
             {
                 AssetImporter.GetAtPath(pathOfAsset).assetBundleName = bundleId;
             }
@@ -142,10 +172,10 @@ namespace OmiyaGames
             // Save and refresh this asset
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            return returnAsset;
+            return pathOfAsset;
         }
 
-        public static void GenerateAssetBundle(string folderName, string bundleId, params string[] objectPaths)
+        private static void GenerateAssetBundle(string bundleId, params string[] objectPaths)
         {
             // Create the array of bundle build details.
             AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
@@ -154,11 +184,53 @@ namespace OmiyaGames
             buildMap[0].assetNames = objectPaths;
 
             // Put the bundles in folderName
-            BuildPipeline.BuildAssetBundles(folderName, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
+            BuildPipeline.BuildAssetBundles(CreateScriptableObjectAtFolder, buildMap, BuildAssetBundleOptions.None, BuildTarget.WebGL);
 
             // Save and refresh this asset
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+
+        private static void MoveAssetBundleTo(StringBuilder builder, string pathOfAsset, string newFolderName, string newFileName, string bundleId)
+        {
+            // Generate paths for the old file, to move to the new one
+            string newPath = Path.Combine(newFolderName, newFileName);
+            pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, bundleId);
+
+            // Move the asset to the folder designated by the user
+            FileUtil.ReplaceFile(pathOfAsset, newPath);
+            FileUtil.DeleteFileOrDirectory(pathOfAsset);
+
+            // Refresh the project window
+            AssetDatabase.Refresh();
+            UnityEditor.EditorUtility.FocusProjectWindow();
+            Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(newPath);
+        }
+
+        private static void CleanUpFiles(StringBuilder builder, string acceptedDomainListObjectPath, string bundleId)
+        {
+            // Clean-up the acceptedDomainListObject
+            FileUtil.DeleteFileOrDirectory(acceptedDomainListObjectPath);
+
+            // Clean-up the asset bundle for this folder
+            string fileName = Path.GetFileName(Path.GetDirectoryName(CreateScriptableObjectAtFolder));
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, fileName));
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up the manifest files for this folder
+            builder.Append(ManifestFileExtension);
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up the manifest files for this folder
+            builder.Clear();
+            builder.Append(Path.Combine(CreateScriptableObjectAtFolder, bundleId));
+            builder.Append(ManifestFileExtension);
+            FileUtil.DeleteFileOrDirectory(builder.ToString());
+
+            // Clean-up unused bundle IDs
+            AssetDatabase.RemoveAssetBundleName(bundleId, false);
+        }
+        #endregion
     }
 }

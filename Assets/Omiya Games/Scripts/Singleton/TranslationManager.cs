@@ -114,7 +114,6 @@ namespace OmiyaGames.Translations
         }
 
         [System.Serializable]
-        [System.Obsolete("Obsolete in favor of FontAssetDetails")]
         public struct FontMapDetails
         {
             [SerializeField]
@@ -191,20 +190,23 @@ namespace OmiyaGames.Translations
         {
             [SerializeField]
             string header;
-            [SerializeField]
-            TMP_FontAsset defaultFontAsset;
-            [SerializeField]
-            FontAssetDetails[] otherFontAssets;
 
-            [Header("Obsolete Properties")]
+            [Header("Text Properties")]
             [SerializeField]
-            [System.Obsolete("Obsolete in favor of defaultFontAsset")]
-            Font defaultFont;
+            [UnityEngine.Serialization.FormerlySerializedAs("defaultFont")]
+            Font defaultUguiTextFont;
             [SerializeField]
-            [System.Obsolete("Obsolete in favor of otherFontAssets")]
-            FontMapDetails[] otherFonts;
+            [UnityEngine.Serialization.FormerlySerializedAs("otherFonts")]
+            FontMapDetails[] otherUguiTextFonts;
 
-            [System.Obsolete("Obsolete in favor of otherFontAssetMap")]
+            [Header("TextMeshPro Properties")]
+            [SerializeField]
+            [UnityEngine.Serialization.FormerlySerializedAs("defaultFontAsset")]
+            TMP_FontAsset defaultTextMeshProFont;
+            [SerializeField]
+            [UnityEngine.Serialization.FormerlySerializedAs("otherFontAssets")]
+            FontAssetDetails[] otherTextMeshProFonts;
+
             readonly Dictionary<FontMapKey, FontMapDetails> otherFontMap = new Dictionary<FontMapKey, FontMapDetails>();
             readonly Dictionary<string, FontAssetDetails> otherFontAssetMap = new Dictionary<string, FontAssetDetails>();
             FontMapKey fontSearchCache = new FontMapKey();
@@ -217,12 +219,11 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            [System.Obsolete("Obsolete in favor of DefaultFontAsset")]
             public Font DefaultFont
             {
                 get
                 {
-                    return defaultFont;
+                    return defaultUguiTextFont;
                 }
             }
 
@@ -230,19 +231,18 @@ namespace OmiyaGames.Translations
             {
                 get
                 {
-                    return defaultFontAsset;
+                    return defaultTextMeshProFont;
                 }
             }
 
-            [System.Obsolete("Obsolete in favor of OtherFontAssets")]
             public Dictionary<FontMapKey, FontMapDetails> OtherFonts
             {
                 get
                 {
-                    if(otherFontMap.Count != otherFonts.Length)
+                    if(otherFontMap.Count != otherUguiTextFonts.Length)
                     {
                         otherFontMap.Clear();
-                        foreach(FontMapDetails details in otherFonts)
+                        foreach(FontMapDetails details in otherUguiTextFonts)
                         {
                             fontSearchCache.Name = details.Name;
                             fontSearchCache.Style = details.Style;
@@ -253,14 +253,14 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            public Dictionary<string, FontAssetDetails> OtherFontAssets
+            public Dictionary<string, FontAssetDetails> OtherTextMeshProFonts
             {
                 get
                 {
-                    if (otherFontAssetMap.Count != otherFontAssets.Length)
+                    if (otherFontAssetMap.Count != otherTextMeshProFonts.Length)
                     {
                         otherFontAssetMap.Clear();
-                        foreach (FontAssetDetails details in otherFontAssets)
+                        foreach (FontAssetDetails details in otherTextMeshProFonts)
                         {
                             otherFontAssetMap.Add(details.Name, details);
                         }
@@ -269,8 +269,7 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            [System.Obsolete("Obsolete in favor of GetFontAsset")]
-            public Font GetFont(string name, FontStyle style = FontStyle.Normal)
+            public Font GetFontUgui(string name, FontStyle style = FontStyle.Normal)
             {
                 Font returnFont = DefaultFont;
 
@@ -283,12 +282,12 @@ namespace OmiyaGames.Translations
                 return returnFont;
             }
 
-            public TMP_FontAsset GetFontAsset(string name)
+            public TMP_FontAsset GetFontTextMeshPro(string name)
             {
                 TMP_FontAsset returnFont = DefaultFontAsset;
-                if (OtherFontAssets.ContainsKey(name) == true)
+                if (OtherTextMeshProFonts.ContainsKey(name) == true)
                 {
-                    returnFont = OtherFontAssets[name].Font;
+                    returnFont = OtherTextMeshProFonts[name].Font;
                 }
                 return returnFont;
             }
@@ -589,25 +588,6 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
-        static void UpdateLabels()
-        {
-            /* Update any Text labels */
-            foreach (TranslatedText label in TranslatedText.AllTranslationScripts)
-            {
-                if (label != null)
-                {
-                    label.UpdateLabel();
-                }
-            }
-            foreach (TranslatedTextMesh label in TranslatedTextMesh.AllTranslationScripts)
-            {
-                if (label != null)
-                {
-                    label.UpdateLabel();
-                }
-            }
-        }
-
         static void SetupTranslationDictionary(Dictionary<string, string> dictionaryToPopulate, List<Dictionary<string, string>> data, string keyHeader, string firstLanguageHeader, params string[] backupLanguageHeaders)
         {
             // Setup loop variables
@@ -703,7 +683,7 @@ namespace OmiyaGames.Translations
             // first row is headers), the keys in the dictionary reflect the column
             // names from the header, and the values in the dictionary reflect the
             // values for a given row/column.
-            List<Dictionary<string, string>> data = CSVReader.Read(loadFileAsset);
+            List<Dictionary<string, string>> data = CSVReader.ReadFile(loadFileAsset);
 
             // Check if this manager is properly setup
             if (IsReady == false)
@@ -714,9 +694,6 @@ namespace OmiyaGames.Translations
 
             // Get the current translations
             SetupTranslationDictionary(CurrentTranslationDictionary, data, keyHeader, currentLanguage);
-
-            // Update the labels
-            UpdateLabels();
         }
 
         void SetupDefaults(List<Dictionary<string, string>> data)
