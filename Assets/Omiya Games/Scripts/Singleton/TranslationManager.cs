@@ -683,7 +683,7 @@ namespace OmiyaGames.Translations
             // first row is headers), the keys in the dictionary reflect the column
             // names from the header, and the values in the dictionary reflect the
             // values for a given row/column.
-            List<Dictionary<string, string>> data = CSVReader.Read(loadFileAsset);
+            List<Dictionary<string, string>> data = CSVReader.ReadFile(loadFileAsset);
 
             // Check if this manager is properly setup
             if (IsReady == false)
