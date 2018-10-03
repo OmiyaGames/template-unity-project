@@ -39,6 +39,14 @@ namespace OmiyaGames
             }
         }
 
+        public void Insert(int index, string insert)
+        {
+            lock(ThreadLock)
+            {
+                value.Insert(index, insert);
+            }
+        }
+
         public void AppendLine()
         {
             lock (ThreadLock)
