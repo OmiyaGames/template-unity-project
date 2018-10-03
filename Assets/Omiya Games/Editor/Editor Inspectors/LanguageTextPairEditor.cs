@@ -45,13 +45,16 @@ namespace OmiyaGames.UI.Translations
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
         const float ExpandLength = 60f;
+        const float WordWrapLength = 80f;
         const float ExpandTranslationsLeft = 14f;
+        const bool WordWrapEnabledDefault = false;
         static GUIStyle wrappedTextArea = null;
 
         readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
-        //readonly AnimBool expandToggle;
+        readonly AnimBool expandToggle;
+        float width;
 
         public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
@@ -62,19 +65,19 @@ namespace OmiyaGames.UI.Translations
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
-            //EditorUtility.CreateBool(editor, ref expandToggle);
+            EditorUtility.CreateBool(editor, ref expandToggle);
         }
 
         #region Properties
-        public static GUIStyle WrappedTextArea
+        public GUIStyle WrappedTextArea
         {
             get
             {
                 if (wrappedTextArea == null)
                 {
                     wrappedTextArea = new GUIStyle(EditorStyles.textArea);
-                    wrappedTextArea.wordWrap = true;
                 }
+                wrappedTextArea.wordWrap = IsWordWrapEnabled;
                 return wrappedTextArea;
             }
         }
@@ -83,12 +86,18 @@ namespace OmiyaGames.UI.Translations
         {
             get
             {
-                return EditorGUIUtility.singleLineHeight + 1f;
+                return EditorGUIUtility.singleLineHeight * 2 + VerticalSpace;
             }
         }
 
         public AnimBool ShowHelpBox => showHelpBox;
-        //public AnimBool ExpandToggle => expandToggle;
+        public AnimBool ExpandToggle => expandToggle;
+
+        public bool IsWordWrapEnabled
+        {
+            get;
+            private set;
+        } = WordWrapEnabledDefault;
 
         public SerializedProperty LanguageIndexProperty
         {
@@ -107,10 +116,26 @@ namespace OmiyaGames.UI.Translations
             get;
             set;
         }
+
         private float Width
         {
-            get;
-            set;
+            get
+            {
+                return width;
+            }
+            set
+            {
+                // Not sure why we need this, but it fixes a lot of problems.
+                if(value > 0)
+                {
+                    width = value;
+                    //Debug.Log("Width: " + width + ", vs Utility: " + EditorGUIUtility.currentViewWidth);
+                }
+                //else
+                //{
+                //    Debug.Log("Trying to set width to negative");
+                //}
+            }
         }
 
         public SerializedProperty Element
@@ -160,10 +185,8 @@ namespace OmiyaGames.UI.Translations
 
             // If so, calculate the height of translations
             bool isExpandable;
-            //float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
-            float textAreaHeight = GetTextAreaHeight(TextProperty.stringValue, Width, 1f, out isExpandable);
-            height += textAreaHeight;
-            height += VerticalMargin;
+            height += GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
+            //height += VerticalMargin;
             height += VerticalMargin;
             return height;
         }
@@ -265,9 +288,6 @@ namespace OmiyaGames.UI.Translations
 
         private bool DrawWarningMessage(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
-            // Update the width variable
-            Width = rect.width;
-
             // Adjust the bools
             LastMessage = GetWarning(frequencyInLanguageAppearance);
             ShowHelpBox.target = (string.IsNullOrEmpty(LastMessage) == false);
@@ -302,10 +322,17 @@ namespace OmiyaGames.UI.Translations
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.LabelField(rect, "Text");
 
-            // Calculate the toggle bound (to be used later)
-            rect.x += originalWidth - ExpandLength;
-            rect.width = originalWidth - ExpandLength;
-            //Rect expandToggleRect = new Rect(rect);
+            // Calculate the Expand toggle bound (to be used later)
+            rect.x = (originalX + originalWidth) - ExpandLength;
+            rect.width = ExpandLength;
+            Rect expandToggleRect = new Rect(rect);
+
+            // Calculate the Word Wrap toggle bound (to be used later)
+            rect.x -= (WordWrapLength + VerticalSpace);
+            rect.width = WordWrapLength;
+
+            // Draw the word-wrap toggle
+            IsWordWrapEnabled = EditorGUI.ToggleLeft(rect, "Word Wrap", IsWordWrapEnabled);
 
             // Offset the text area
             rect.x = originalX - ExpandTranslationsLeft;
@@ -316,16 +343,15 @@ namespace OmiyaGames.UI.Translations
             // Calculate range of warning
             string oldText = TextProperty.stringValue;
             bool isExpandable;
-            //rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
-            rect.height = GetTextAreaHeight(oldText, Width, 1f, out isExpandable);
+            rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
 
             // Draw the translations list
             TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
 
             // Draw the toggle, enabled only if the area is expandable
-            //GUI.enabled = isExpandable;
-            //ExpandToggle.target = EditorGUI.ToggleLeft(expandToggleRect, "Expand", ExpandToggle.target);
-            //GUI.enabled = true;
+            GUI.enabled = isExpandable;
+            ExpandToggle.target = EditorGUI.ToggleLeft(expandToggleRect, "Expand", ExpandToggle.target);
+            GUI.enabled = true;
 
             // Adjust the rectangle
             rect.x = originalX;
@@ -350,14 +376,13 @@ namespace OmiyaGames.UI.Translations
             return message;
         }
 
-        private static float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
+        private float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
         {
             var content = new GUIContent(text);
 
             // Get the minimum and maximum measurement
             float min = PreviewHeight;
             float max = WrappedTextArea.CalcHeight(content, viewWidth);
-            //Debug.Log("( " + min + ", " + max + " )");
             if (max < min)
             {
                 isExpandable = false;
