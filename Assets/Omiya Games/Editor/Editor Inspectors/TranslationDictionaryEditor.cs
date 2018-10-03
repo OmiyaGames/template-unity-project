@@ -158,6 +158,9 @@ namespace OmiyaGames.UI.Translations
             DrawSupportedLanguageField();
             DrawDefaultBehaviorsFields();
 
+            // Draw CSV-related action buttons
+            DrawSyncCsv();
+
             // Draw the search bar at the top of the inspector
             GUI.enabled = (supportedLanguages.objectReferenceValue != null);
             DrawSearchBar();
@@ -184,9 +187,6 @@ namespace OmiyaGames.UI.Translations
                 // Draw the search results
                 DrawSearchResults();
             }
-
-            // Draw CSV-related action buttons
-            DrawSyncCsv();
 
             // Reset all variables
             lastSearchedString = newSearchString;
