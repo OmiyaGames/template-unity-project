@@ -61,12 +61,14 @@ namespace OmiyaGames.Translations
         [SerializeField]
         private TranslationDictionary dictionary;
 
+        public TranslatedString() : this(string.Empty) { }
+
         public TranslatedString(string key) : this(key, null) { }
 
         public TranslatedString(string key, params object[] values)
         {
             this.key = key;
-            Values = values;
+            Arguments = values;
         }
 
         #region Properties
@@ -78,10 +80,31 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public string TranslationKey => key;
-        public TranslationDictionary Dictionary => dictionary;
+        public string TranslationKey
+        {
+            get
+            {
+                return key;
+            }
+            set
+            {
+                key = value;
+            }
+        }
 
-        public object[] Values
+        public TranslationDictionary Dictionary
+        {
+            get
+            {
+                return dictionary;
+            }
+            set
+            {
+                dictionary = value;
+            }
+        }
+
+        public object[] Arguments
         {
             get;
             set;
@@ -97,7 +120,7 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (dictionary != null) && (dictionary.AllTranslations.ContainsKey(TranslationKey) == true);
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Dictionary != null) && (Dictionary.AllTranslations.ContainsKey(TranslationKey) == true);
             }
         }
         #endregion
@@ -133,9 +156,9 @@ namespace OmiyaGames.Translations
         public string ToString(int languageIndex)
         {
             string returnString = null;
-            if ((IsTranslating == true) && (dictionary.SupportedLanguages.Contains(languageIndex) == true))
+            if ((IsTranslating == true) && (Dictionary.SupportedLanguages.Contains(languageIndex) == true))
             {
-                returnString = AddFormatting(dictionary[TranslationKey, languageIndex]);
+                returnString = AddFormatting(Dictionary[TranslationKey, languageIndex]);
             }
             return returnString;
         }
@@ -151,24 +174,24 @@ namespace OmiyaGames.Translations
         public string ToString(string language)
         {
             string returnString = null;
-            if ((IsTranslating == true) && (dictionary.SupportedLanguages.Contains(language) == true))
+            if ((IsTranslating == true) && (Dictionary.SupportedLanguages.Contains(language) == true))
             {
-                returnString = AddFormatting(dictionary[TranslationKey, language]);
+                returnString = AddFormatting(Dictionary[TranslationKey, language]);
             }
             return returnString;
         }
 
         public void SetValues(params object[] values)
         {
-            Values = values;
+            Arguments = values;
         }
 
         #region Helper Methods
         private string AddFormatting(string translatedText)
         {
-            if ((Values != null) && (Values.Length > 0))
+            if ((Arguments != null) && (Arguments.Length > 0))
             {
-                translatedText = string.Format(translatedText, Values);
+                translatedText = string.Format(translatedText, Arguments);
             }
             return translatedText;
         }
