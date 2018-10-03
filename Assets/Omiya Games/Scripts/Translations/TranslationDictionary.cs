@@ -227,10 +227,15 @@ namespace OmiyaGames.Translations
         }
 
         /// <summary>
-        /// A dictionary embedded in the dictionary. The top-most keys are keys to translations;
-        /// next tier keys are languages; and values of the embedded tier are the text itself.
+        /// A map of all the translations. The top-most keys are keys to translations;
+        /// second-tier keys are languages; and values of the embedded tier are the text itself.
         /// </summary>
-        private Dictionary<string, Dictionary<int, string>> AllTranslations
+        /// <remarks>
+        /// It's worth noting that any changes made to this dictionary will NOT be synced with
+        /// the actual serialization until <code>UpdateSerializedTranslations()</code> is called.
+        /// </remarks>
+        /// <seealso cref="UpdateSerializedTranslations"/>
+        public Dictionary<string, Dictionary<int, string>> AllTranslations
         {
             get
             {
