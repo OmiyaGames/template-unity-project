@@ -8,7 +8,7 @@ If this is an exported folder intended to be zipped for upload, take the followi
 
 2) Do not zip or upload this README.txt, either.
 
-3) If you are using WebLocationChecker script (by default, this project *is*), and decided on using the asset bundle file, remember to replace the "TemplateData/domains" to the asset bundle that contains the domains you want your game to support. The "AcceptedDomains" folder contains some examples you can copy & paste.
+3) If you are using WebLocationChecker script (by default, this project *is*), and decided on using the asset bundle file, remember to replace the "TemplateData/domains" file to the asset bundle that contains the domains you want your game to support. The "AcceptedDomains" folder contains some examples you can copy & paste.
 
 3) If you are *not* using the WebLocationChecker script, you can delete "TemplateData/domains".
 

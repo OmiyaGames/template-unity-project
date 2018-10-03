@@ -51,74 +51,32 @@ namespace OmiyaGames
     /// <description>Taro</description>
     /// <description>Actual implementation.</description>
     /// </item>
+    /// <item>
+    /// <description>9/11/2018</description>
+    /// <description>Taro</description>
+    /// <description>Added abstraction.</description>
+    /// </item>
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class TextMeshProResizer : IResizer
+    public class TextMeshProResizer : ILabelResizer<TextMeshProUGUI>
     {
-        TextMeshProUGUI label = null;
-        float originalFontSize = -1f;
-        ResizeMultiplierChanged lastAction = null;
-
-        public TextMeshProUGUI Label
+        public override float FontSize
         {
             get
             {
-                if(label == null)
-                {
-                    label = GetComponent<TextMeshProUGUI>();
-                }
-                return label;
+                return Label.fontSize;
             }
         }
 
-        public float OriginalFontSize
-        {
-            get
-            {
-                if (originalFontSize < 0)
-                {
-                    originalFontSize = Label.fontSize;
-                }
-                return originalFontSize;
-            }
-        }
-
-        private void OnEnable()
-        {
-            // Update the font size if the multiplier is not set to 1
-            UpdateLabelSize();
-
-            // Bind to the resize event
-            if(lastAction == null)
-            {
-                lastAction = new ResizeMultiplierChanged(UpdateLabelSize);
-                OnAfterResizeMultiplierChanged += lastAction;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if(lastAction != null)
-            {
-                OnAfterResizeMultiplierChanged -= lastAction;
-                lastAction = null;
-            }
-        }
-
-        public void UpdateLabelSize()
+        public override void UpdateLabelSize()
         {
             // Do NOT attempt to resize the text if it's set to auto-size
             if ((isActiveAndEnabled == true) && (Label != null) && (Label.enableAutoSizing == false))
             {
                 Label.fontSize = OriginalFontSize * ResizeMultiplier;
             }
-        }
-
-        private void UpdateLabelSize(float lastMultiplier, float newMultiplier)
-        {
-            UpdateLabelSize();
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="AudioFinder.cs" company="Omiya Games">
+    /// <copyright file="TranslatedTextMesh.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -33,145 +32,66 @@ namespace OmiyaGames.Translations
     /// <summary>
     /// Set translation text.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>6/1/2018</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// <item>
+    /// <description>9/11/2018</description>
+    /// <description>Taro</description>
+    /// <description>Abstracting script to <code>ITranslatedLabel</code></description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     /// <seealso cref="TranslatedTextMeshPro"/>
     [RequireComponent(typeof(TextMesh))]
-    [System.Obsolete("Obsolete in favor of TranslatedTextMeshPro")]
-    public class TranslatedTextMesh : MonoBehaviour
+    [DisallowMultipleComponent]
+    public class TranslatedTextMesh : ITranslatedLabel<TextMesh, FontStyle>
     {
-        static readonly HashSet<TranslatedTextMesh> allTranslationScripts = new HashSet<TranslatedTextMesh>();
-
-        public static IEnumerable<TranslatedTextMesh> AllTranslationScripts
-        {
-            get
-            {
-                return allTranslationScripts;
-            }
-        }
-
-        private static TranslationManager Parser
-        {
-            get
-            {
-                return Singleton.Get<TranslationManager>();
-            }
-        }
-
         /// <summary>
-        /// The key to the CSVLanguageParser.
+        /// Gets or sets the style of the label's font directly.
+        /// Override to adjust the behavior of this script.
         /// </summary>
-        [SerializeField]
-        string translationKey = "";
-
-        /// <summary>
-        /// The attached label.
-        /// </summary>
-        TextMesh label = null;
-        object[] formatArgs = null;
-
-        public bool IsTranslating
+        public override FontStyle LabelFontStyle
         {
             get
             {
-                return (string.IsNullOrEmpty(translationKey) == false);
-            }
-        }
-
-        /// <summary>
-        /// Gets the <c>Text</c> component.
-        /// </summary>
-        /// <value>The label.</value>
-        public TextMesh Label
-        {
-            get
-            {
-                if (label == null)
-                {
-                    // Grab the label component
-                    label = GetComponent<TextMesh>();
-                }
-                return label;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the translation key.
-        /// </summary>
-        /// <value>The translation key.</value>
-        public string TranslationKey
-        {
-            get
-            {
-                return translationKey;
+                return Label.fontStyle;
             }
             set
             {
-                translationKey = value;
-                if (IsTranslating == true)
-                {
-                    // Add this script to the dictionary
-                    if (allTranslationScripts.Contains(this) == false)
-                    {
-                        allTranslationScripts.Add(this);
-                    }
-
-                    // Update the label
-                    UpdateLabel();
-                }
-                else if (allTranslationScripts.Contains(this) == true)
-                {
-                    // Remove this script from the dictionary
-                    allTranslationScripts.Remove(this);
-                }
+                Label.fontStyle = value;
             }
         }
 
-        void Start()
+        /// <summary>
+        /// Gets or sets the text of the label directly.
+        /// Override to adjust the behavior of this script.
+        /// </summary>
+        protected override string LabelText
         {
-            if (IsTranslating == true)
+            get
             {
-                // Add this script to the dictionary
-                allTranslationScripts.Add(this);
-
-                // Update the label
-                UpdateLabel();
+                return Label.text;
             }
-        }
-
-        void OnDestroy()
-        {
-            if (IsTranslating == true)
+            set
             {
-                // Remove this script from the dictionary
-                allTranslationScripts.Remove(this);
+                Label.text = value;
             }
         }
 
-        public void UpdateLabel()
+        protected override void UpdateFont(TranslationManager.FontMap fontMap, string fontKey)
         {
-            // Check if there's a CSV parser
-            if ((Parser != null) && (Parser.ContainsKey(TranslationKey) == true))
-            {
-                // check if there's any formatting involved
-                if ((formatArgs != null) && (formatArgs.Length > 0))
-                {
-                    // Set the label to the text directly
-                    Label.text = string.Format(Parser[TranslationKey], formatArgs);
-                }
-                else
-                {
-                    // Set the label to the text directly
-                    Label.text = Parser[TranslationKey];
-                }
-            }
-        }
-
-        public void SetLabelFormat(params object[] args)
-        {
-            // Update the member variable
-            formatArgs = args;
-
-            // Update the label
-            UpdateLabel();
+            Label.font = fontMap.GetFontUgui(fontKey);
         }
     }
 }
