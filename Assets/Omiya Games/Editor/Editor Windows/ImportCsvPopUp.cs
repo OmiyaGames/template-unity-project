@@ -56,9 +56,10 @@ namespace OmiyaGames.UI.Translations
 
         #region Constants
         const float ImportButtonWidth = 50f;
-        const float SideMargin = 6f;
         const float Space = 4f;
         const int TotalStates = ((int)CSVReader.ReadStatus.State.NumberOfStates) + ((int)ImportState.NumberOfStates) - 1;
+        const float ProgressNotStarted = -1f;
+        const float ProgressFinished = -2f;
         static readonly string[] CsvFileFilter = new string[]
         {
             "CSV files", "csv",
@@ -77,24 +78,32 @@ namespace OmiyaGames.UI.Translations
             (int)ConflictResolution.Overwrite
         };
         static readonly Vector2 DefaultWindowSize = new Vector2(350f, 150f);
+        static readonly GUIContent EmptyLabel = new GUIContent();
         #endregion
 
         static GUIStyle browseButtonFont = null;
 
-        public static void ShowPopUp(TranslationDictionary dictionaryToEdit)
+        public static void ShowPopUp(TranslationDictionaryEditor editor)
         {
             ImportCsvPopUp window = GetWindow<ImportCsvPopUp>(true, "Import CSV", true);
-            window.DictionaryToEdit = dictionaryToEdit;
+            window.Editor = editor;
+            window.DictionaryToEdit = (TranslationDictionary)editor.serializedObject.targetObject;
             window.minSize = DefaultWindowSize;
             window.Show();
         }
 
-        readonly ThreadSafe<float> progress = new ThreadSafe<float>(-1f);
+        readonly ThreadSafe<float> progress = new ThreadSafe<float>(ProgressNotStarted);
         readonly CSVReader.ReadStatus csvReadStatus = new CSVReader.ReadStatus();
         readonly ThreadSafe<ImportState> currentStatus = new ThreadSafe<ImportState>();
         readonly ProgressReport progressReport = new ProgressReport();
 
         #region Properties
+        TranslationDictionaryEditor Editor
+        {
+            get;
+            set;
+        } = null;
+
         TranslationDictionary DictionaryToEdit
         {
             get;
@@ -200,14 +209,13 @@ namespace OmiyaGames.UI.Translations
 
             // Draw the rest of the buttons
             DrawImportButton();
-            DrawProgressBar();
             EditorGUILayout.EndVertical();
             GUI.enabled = true;
         }
 
         void OnEnable()
         {
-            Progress = -1f;
+            Progress = ProgressNotStarted;
         }
 
         void OnInspectorUpdate()
@@ -219,20 +227,24 @@ namespace OmiyaGames.UI.Translations
                 // Update the message
                 Repaint();
             }
+            else if(Mathf.Approximately(Progress, ProgressFinished) == true)
+            {
+                Close();
+            }
         }
 
         void OnDestroy()
         {
-            Progress = -1f;
+            Editor.serializedObject.ApplyModifiedProperties();
+            Progress = ProgressNotStarted;
         }
         #endregion
 
         #region UI Helper Methods
         private void DrawCsvFileName(ref MessageType messageType)
         {
-            EditorGUILayout.BeginHorizontal();
-
             // Draw the label
+            EditorGUILayout.BeginHorizontal();
             EditorGUILayout.PrefixLabel("Import From");
 
             // Draw the text field
@@ -294,36 +306,36 @@ namespace OmiyaGames.UI.Translations
             GUI.enabled = isEnabled;
         }
 
-        private void DrawProgressBar()
+        private void DrawImportButton()
         {
+            // Reserve space for this part
+            EditorGUILayout.Space();
+            Rect bounds = GUILayoutUtility.GetRect(EmptyLabel, "button");
+
+            // Calculate the progress bar bounds
+            float originalWidth = bounds.width;
+            bounds.width = originalWidth - (ImportButtonWidth + Space);
+
+            // Check if we need to show the progress bar
             if (IsInMiddleOfImporting == true)
             {
-                UnityEditor.EditorUtility.DisplayProgressBar("Import CSV Progress", ProgressMessage.ToString(), Progress);
-
-                // TODO: When we're ready, add a method to cancel the import progress
-                //if (UnityEditor.EditorUtility.DisplayCancelableProgressBar("Import CSV Progress", ProgressMessage.ToString(), Progress) == true)
-                //{
-                //    // User canceled, reset progress
-                //    Progress = -1f;
-                //}
+                EditorGUI.ProgressBar(bounds, Progress, ProgressMessage.ToString());
             }
             else
             {
-                UnityEditor.EditorUtility.ClearProgressBar();
+                EditorGUI.ProgressBar(bounds, 1, "Waiting...");
             }
-        }
-
-        private void DrawImportButton()
-        {
-            // Calculate the size of the progress bar
-            EditorGUILayout.Space();
 
             // Only enable if no error messages are there
             bool isEnabled = GUI.enabled;
             GUI.enabled = ((ErrorMessage.Length == 0) && (IsInMiddleOfImporting == false));
 
+            // Calculate the button bounds
+            bounds.width = ImportButtonWidth;
+            bounds.x = (bounds.x + originalWidth) - ImportButtonWidth;
+
             // Draw the button
-            if ((GUILayout.Button("Import") == true) && (GUI.enabled == true))
+            if ((GUI.Button(bounds, "Import") == true) && (GUI.enabled == true))
             {
                 // Reset the progress
                 Progress = 0f;
@@ -355,7 +367,7 @@ namespace OmiyaGames.UI.Translations
                 // Indicate the error that the file could not be read
                 ErrorMessage.Clear();
                 ErrorMessage.Append("Could not read CSV file.");
-                Progress = -1f;
+                Progress = ProgressNotStarted;
                 results = null;
             }
 
@@ -366,8 +378,7 @@ namespace OmiyaGames.UI.Translations
                 ProcessResults(results);
 
                 // Indicate we're done
-                Progress = -1f;
-                Close();
+                Progress = ProgressFinished;
             }
         }
 
