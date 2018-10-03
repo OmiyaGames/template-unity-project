@@ -4,13 +4,7 @@ namespace OmiyaGames
 {
     public class ThreadSafeStringBuilder : ThreadSafe<StringBuilder>
     {
-        public override string ToString()
-        {
-            lock (ThreadLock)
-            {
-                return value.ToString();
-            }
-        }
+        public ThreadSafeStringBuilder() : base(new StringBuilder()) { }
 
         public int Length
         {
@@ -20,6 +14,14 @@ namespace OmiyaGames
                 {
                     return value.Length;
                 }
+            }
+        }
+
+        public override string ToString()
+        {
+            lock (ThreadLock)
+            {
+                return value.ToString();
             }
         }
 
