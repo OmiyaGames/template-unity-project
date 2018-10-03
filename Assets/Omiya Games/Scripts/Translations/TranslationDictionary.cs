@@ -249,8 +249,15 @@ namespace OmiyaGames.Translations
         }
         #endregion
 
-        public List<TranslationCollection> UpdateSerializedTranslations()
+        public List<TranslationCollection> UpdateSerializedTranslations(ProgressReport report = null)
         {
+            // Check if we need to report our progress
+            if(report != null)
+            {
+                // Set the number of steps involved in serialization
+                report.Reset(AllTranslations.Count);
+            }
+
             // Grab a soft-copy of all translations
             Dictionary<string, Dictionary<int, string>> translationCopy = AllTranslations;
 
@@ -277,6 +284,13 @@ namespace OmiyaGames.Translations
 
                 // Add new collection to the list
                 translations.Add(collectionToAdd);
+
+                // Check if we need to report our progress
+                if (report != null)
+                {
+                    // Increment
+                    report.IncrementCurrentStep();
+                }
             }
 
             // Return the updated translations list
