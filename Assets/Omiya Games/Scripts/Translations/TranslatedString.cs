@@ -57,9 +57,9 @@ namespace OmiyaGames.Translations
     public class TranslatedString
     {
         [SerializeField]
-        string key;
+        private string key;
         [SerializeField]
-        TranslationDictionary dictionary;
+        private TranslationDictionary dictionary;
 
         public TranslatedString(string key) : this(key, null) { }
 
@@ -87,6 +87,12 @@ namespace OmiyaGames.Translations
             set;
         } = null;
 
+        /// <summary>
+        /// Indicating whether this class is ready to translate.
+        /// </summary>
+        /// <seealso cref="ToString"/>
+        /// <seealso cref="ToString(int)"/>
+        /// <seealso cref="ToString(string)"/>
         public bool IsTranslating
         {
             get
@@ -97,18 +103,19 @@ namespace OmiyaGames.Translations
         #endregion
 
         /// <summary>
-        /// Generates a translated text based on GameSettings' language.
+        /// Generates a translated text based on TranslationManager's language.
         /// </summary>
         /// <remarks>
         /// A new string will be generated each time,
         /// making this operation potentially slow.
         /// </remarks>
-        /// <returns>A translated text.</returns>
+        /// <returns>A translated text, or null if not ready.</returns>
+        /// <seealso cref="TranslationManager"/>
         public override string ToString()
         {
-            // Check if we can translate
+            // Check if the TranslationManager is ready
             string returnString = null;
-            if (Manager != null)
+            if ((Manager != null) && (Manager.IsReady == true))
             {
                 returnString = ToString(Manager.CurrentLanguage);
             }
@@ -122,7 +129,7 @@ namespace OmiyaGames.Translations
         /// A new string will be generated each time,
         /// making this operation potentially slow.
         /// </remarks>
-        /// <returns>A translated text.</returns>
+        /// <returns>A translated text, or null if not ready.</returns>
         public string ToString(int languageIndex)
         {
             string returnString = null;
@@ -140,7 +147,7 @@ namespace OmiyaGames.Translations
         /// A new string will be generated each time,
         /// making this operation potentially slow.
         /// </remarks>
-        /// <returns>A translated text.</returns>
+        /// <returns>A translated text, or null if not ready.</returns>
         public string ToString(string language)
         {
             string returnString = null;
