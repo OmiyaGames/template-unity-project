@@ -44,7 +44,7 @@
             this.value = value;
         }
 
-        private object ThreadLock
+        protected object ThreadLock
         {
             get;
         } = new object();
