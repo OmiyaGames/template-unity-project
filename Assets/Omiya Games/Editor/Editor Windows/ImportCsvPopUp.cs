@@ -46,10 +46,19 @@ namespace OmiyaGames.UI.Translations
             Overwrite
         }
 
+        public enum ImportState
+        {
+            ReadFile,
+            ConvertToTranslations,
+            Serializing,
+            NumberOfStates
+        }
+
         #region Constants
         const float ImportButtonWidth = 50f;
         const float SideMargin = 6f;
         const float Space = 4f;
+        const int TotalStates = ((int)CSVReader.ReadStatus.State.NumberOfStates) + ((int)ImportState.NumberOfStates) - 1;
         static readonly string[] CsvFileFilter = new string[]
         {
             "CSV files", "csv",
@@ -82,6 +91,8 @@ namespace OmiyaGames.UI.Translations
 
         readonly ThreadSafe<float> progress = new ThreadSafe<float>(-1f);
         readonly CSVReader.ReadStatus csvReadStatus = new CSVReader.ReadStatus();
+        readonly ThreadSafe<ImportState> currentStatus = new ThreadSafe<ImportState>();
+        readonly ProgressReport progressReport = new ProgressReport();
 
         #region Properties
         TranslationDictionary DictionaryToEdit
@@ -201,9 +212,11 @@ namespace OmiyaGames.UI.Translations
 
         void OnInspectorUpdate()
         {
-            if(IsInMiddleOfImporting == true)
+            if (IsInMiddleOfImporting == true)
             {
-                // FIXME: update the message
+                UpdateProgressMessage();
+
+                // Update the message
                 Repaint();
             }
         }
@@ -314,6 +327,8 @@ namespace OmiyaGames.UI.Translations
             {
                 // Reset the progress
                 Progress = 0f;
+                currentStatus.Value = ImportState.ReadFile;
+                progressReport.Reset(1);
 
                 // Start a new thread
                 ThreadPool.QueueUserWorkItem(ImportCsvFile);
@@ -327,6 +342,7 @@ namespace OmiyaGames.UI.Translations
         private void ImportCsvFile(object stateInfo)
         {
             // Indicate we're processing something!
+            currentStatus.Value = ImportState.ReadFile;
             Progress = 0f;
 
             List<Dictionary<string, string>> results = null;
@@ -334,15 +350,17 @@ namespace OmiyaGames.UI.Translations
             {
                 results = CSVReader.ReadFile(CsvFileName, csvReadStatus);
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
-                // FIXME: indicate the error that the file could not be read
+                // Indicate the error that the file could not be read
+                ErrorMessage.Clear();
+                ErrorMessage.Append("Could not read CSV file.");
+                Progress = -1f;
                 results = null;
             }
 
             // Check if we have any results
-            // FIXME: report progress, too!
-            if(results != null)
+            if (results != null)
             {
                 ProcessResults(results);
             }
@@ -350,7 +368,10 @@ namespace OmiyaGames.UI.Translations
 
         private void ProcessResults(List<Dictionary<string, string>> results)
         {
-            // FIXME: report progress, too!
+            // Report initial progress
+            currentStatus.Value = ImportState.ConvertToTranslations;
+            progressReport.Reset(results.Count);
+
             // Check if we want to overwrite the translations
             if (Resolution == ConflictResolution.Overwrite)
             {
@@ -397,13 +418,75 @@ namespace OmiyaGames.UI.Translations
                         }
                     }
                 }
+
+                // Indicate progress
+                progressReport.IncrementCurrentStep();
             }
 
             // Apply the changes
-            DictionaryToEdit.UpdateSerializedTranslations();
+            currentStatus.Value = ImportState.Serializing;
+            DictionaryToEdit.UpdateSerializedTranslations(progressReport);
 
             // Indicate we're done
-            Progress = 1f;
+            Progress = -1f;
+            Close();
+        }
+
+        private void UpdateProgressMessage()
+        {
+            // Calculate base progress based on state
+            float baseProgress = 0;
+            float stateProgress = 0;
+            string message = "Serializing translations...";
+            ImportState state = currentStatus.Value;
+            if (state == ImportState.ReadFile)
+            {
+                // Get the CSV status
+                CSVReader.ReadStatus.State csvState = csvReadStatus.CurrentState.Value;
+                if (csvState == CSVReader.ReadStatus.State.ReadingFileIntoRows)
+                {
+                    // Report that we're reading the file.
+                    // Progress is not calculated here because we do not
+                    // check how long the CSV file is.
+                    message = "Parsing CSV file into text...";
+                }
+                else
+                {
+                    // Report the text is being split into cells
+                    message = "Splitting text into cells...";
+
+                    // Calculate the progress
+                    baseProgress = (int)csvState;
+                    stateProgress = csvReadStatus.ProgressMade.Value;
+                    stateProgress /= csvReadStatus.StepsInState.Value;
+                }
+            }
+            else
+            {
+                // Check the state
+                if (state == ImportState.ConvertToTranslations)
+                {
+                    // Report cells are being converted
+                    message = "Converting cells into translations...";
+                }
+
+                // Calculate the progress
+                baseProgress = ((int)state) + 1;
+                stateProgress = progressReport.CurrentStep;
+                stateProgress /= progressReport.NumberOfSteps;
+            }
+
+            // Calculate progress
+            baseProgress /= TotalStates;
+            stateProgress /= TotalStates;
+            baseProgress += stateProgress;
+            Progress = baseProgress;
+
+            // Update message
+            ProgressMessage.Clear();
+            ProgressMessage.Append(baseProgress.ToString("00%"));
+            ProgressMessage.Append(": ");
+            ProgressMessage.Append(message);
         }
     }
 }
