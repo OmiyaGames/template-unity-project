@@ -33,22 +33,22 @@
     /// <seealso cref="ThreadSafeInt"/>
     public class ProgressReport
     {
-        readonly ThreadSafeInt currentStep;
-        readonly ThreadSafeInt numberOfSteps;
+        readonly ThreadSafeLong currentStep;
+        readonly ThreadSafeLong totalSteps;
 
         public ProgressReport() : this(1) { }
 
-        public ProgressReport(int numberOfSteps)
+        public ProgressReport(int totalSteps)
         {
-            if (numberOfSteps < 1)
+            if (totalSteps < 1)
             {
                 throw new System.ArgumentException("Argument \"numberOfSteps\" cannot be less than 1.");
             }
-            currentStep = new ThreadSafeInt(0);
-            this.numberOfSteps = new ThreadSafeInt(numberOfSteps);
+            currentStep = new ThreadSafeLong(0);
+            this.totalSteps = new ThreadSafeLong(totalSteps);
         }
 
-        public int CurrentStep
+        public long CurrentStep
         {
             get
             {
@@ -56,36 +56,63 @@
             }
             set
             {
-                currentStep.Value = UnityEngine.Mathf.Clamp(value, 0, NumberOfSteps);
+                // Don't change the finalValue if value is below 0
+                long finalValue = 0;
+                if (value > 0)
+                {
+                    // Grab the number of steps only once
+                    finalValue = TotalSteps;
+
+                    // Don't change the finalValue if the value is above NumberOfSteps
+                    if (value < finalValue)
+                    {
+                        finalValue = value;
+                    }
+                }
+                currentStep.Value = finalValue;
             }
         }
 
-        public int NumberOfSteps
+        public long TotalSteps
         {
             get
             {
-                return numberOfSteps.Value;
+                return totalSteps.Value;
+            }
+        }
+
+        public float ProgressPercent
+        {
+            get
+            {
+                float returnPercent = CurrentStep;
+                returnPercent /= TotalSteps;
+                return returnPercent;
             }
         }
 
         public void Reset()
         {
-            CurrentStep = 0;
+            currentStep.Value = 0;
         }
 
-        public void Reset(int newNumberOfSteps)
+        /// <summary>
+        /// Resets current step, then sets the total steps
+        /// </summary>
+        /// <param name="newTotalSteps"></param>
+        public void SetTotalSteps(long newTotalSteps)
         {
-            if (newNumberOfSteps < 1)
+            if (newTotalSteps < 1)
             {
                 throw new System.ArgumentException("Argument \"newNumberOfSteps\" cannot be less than 1.");
             }
             Reset();
-            numberOfSteps.Value = newNumberOfSteps;
+            totalSteps.Value = newTotalSteps;
         }
 
         public void IncrementCurrentStep()
         {
-            if (CurrentStep < NumberOfSteps)
+            if (CurrentStep < TotalSteps)
             {
                 currentStep.Increment();
             }
