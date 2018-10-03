@@ -293,7 +293,7 @@ namespace OmiyaGames.UI.Translations
             if (GUILayout.Button("Import...") == true)
             {
                 // Create a separate pop-up window for this, rather than a serious of pop-ups like this ridiculous monstrosity.
-                ImportCsvPopUp.ShowPopUp(serializedObject.targetObject as TranslationDictionary);
+                ImportCsvPopUp.ShowPopUp(this);
             }
 
             // FIXME: As soon as export is implemented, re-enable this button
