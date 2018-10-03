@@ -52,22 +52,57 @@ namespace OmiyaGames
                 NumberOfStates
             }
 
-            public ThreadSafe<State> CurrentState
+            ThreadSafe<State> currentStatus = new ThreadSafe<State>();
+            ProgressReport progressReport = new ProgressReport();
+
+            public State CurrentState
             {
-                get;
-                private set;
+                get
+                {
+                    return currentStatus.Value;
+                }
+                internal set
+                {
+                    currentStatus.Value = value;
+                }
             }
 
-            public ThreadSafeLong ProgressMade
+            public long CurrentStep
             {
-                get;
-                private set;
+                get
+                {
+                    return progressReport.CurrentStep;
+                }
+                internal set
+                {
+                    progressReport.CurrentStep = value;
+                }
             }
 
-            public ThreadSafeLong StepsInState
+            public long TotalSteps
             {
-                get;
-                private set;
+                get
+                {
+                    return progressReport.TotalSteps;
+                }
+            }
+
+            public float ProgressPercent
+            {
+                get
+                {
+                    return progressReport.ProgressPercent;
+                }
+            }
+
+            internal void IncrementStep()
+            {
+                progressReport.IncrementCurrentStep();
+            }
+
+            internal void SetTotalSteps(long newTotalSteps)
+            {
+                progressReport.SetTotalSteps(newTotalSteps);
             }
         }
 
@@ -116,9 +151,9 @@ namespace OmiyaGames
             if (status != null)
             {
                 // Move the status to the next phase, and indicate completion
-                status.CurrentState.Value = ReadStatus.State.ReadingRowsIntoCells;
-                status.ProgressMade.Value = 1;
-                status.StepsInState.Value = 1;
+                status.CurrentState = ReadStatus.State.ReadingRowsIntoCells;
+                status.SetTotalSteps(1);
+                status.CurrentStep = 1;
             }
 
             // Return empty list
@@ -134,9 +169,8 @@ namespace OmiyaGames
             if (status != null)
             {
                 // Reset status
-                status.CurrentState.Value = ReadStatus.State.ReadingRowsIntoCells;
-                status.ProgressMade.Value = 0;
-                status.StepsInState.Value = (lines.Count - 1);
+                status.CurrentState = ReadStatus.State.ReadingRowsIntoCells;
+                status.SetTotalSteps(lines.Count - 1);
             }
 
             for (int i = 1; i < lines.Count; ++i)
@@ -168,7 +202,7 @@ namespace OmiyaGames
                 if (status != null)
                 {
                     // If so, indicate progress made
-                    status.ProgressMade.Increment();
+                    status.IncrementStep();
                 }
             }
             return returnList;
@@ -186,9 +220,8 @@ namespace OmiyaGames
             if (status != null)
             {
                 // Reset status
-                status.CurrentState.Value = ReadStatus.State.ReadingFileIntoRows;
-                status.ProgressMade.Value = 0;
-                status.StepsInState.Value = 0;
+                status.CurrentState = ReadStatus.State.ReadingFileIntoRows;
+                status.SetTotalSteps(1);
             }
 
             // Read the first letter
@@ -220,14 +253,6 @@ namespace OmiyaGames
                     }
                 }
 
-                // Check if we need to report status
-                if (status != null)
-                {
-                    // If so, indicate progress made
-                    status.ProgressMade.Increment();
-                    status.StepsInState.Increment();
-                }
-
                 // Read the next byte
                 readInt = reader.Read();
             }
@@ -237,6 +262,13 @@ namespace OmiyaGames
             {
                 // Add the last line into all lines
                 lines.Add(eachLine.ToString());
+            }
+
+            // Check if we need to report status
+            if (status != null)
+            {
+                // If so, indicate progress made
+                status.IncrementStep();
             }
             return lines;
         }

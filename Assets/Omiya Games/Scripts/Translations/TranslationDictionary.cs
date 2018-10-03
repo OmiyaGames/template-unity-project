@@ -255,7 +255,7 @@ namespace OmiyaGames.Translations
             if(report != null)
             {
                 // Set the number of steps involved in serialization
-                report.Reset(AllTranslations.Count);
+                report.SetTotalSteps(AllTranslations.Count);
             }
 
             // Grab a soft-copy of all translations

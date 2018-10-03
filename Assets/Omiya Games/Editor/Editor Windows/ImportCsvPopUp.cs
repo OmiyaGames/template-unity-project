@@ -328,7 +328,7 @@ namespace OmiyaGames.UI.Translations
                 // Reset the progress
                 Progress = 0f;
                 currentStatus.Value = ImportState.ReadFile;
-                progressReport.Reset(1);
+                progressReport.SetTotalSteps(1);
 
                 // Start a new thread
                 ThreadPool.QueueUserWorkItem(ImportCsvFile);
@@ -362,7 +362,12 @@ namespace OmiyaGames.UI.Translations
             // Check if we have any results
             if (results != null)
             {
+                // Process the results
                 ProcessResults(results);
+
+                // Indicate we're done
+                Progress = -1f;
+                Close();
             }
         }
 
@@ -370,7 +375,7 @@ namespace OmiyaGames.UI.Translations
         {
             // Report initial progress
             currentStatus.Value = ImportState.ConvertToTranslations;
-            progressReport.Reset(results.Count);
+            progressReport.SetTotalSteps(results.Count);
 
             // Check if we want to overwrite the translations
             if (Resolution == ConflictResolution.Overwrite)
@@ -426,10 +431,6 @@ namespace OmiyaGames.UI.Translations
             // Apply the changes
             currentStatus.Value = ImportState.Serializing;
             DictionaryToEdit.UpdateSerializedTranslations(progressReport);
-
-            // Indicate we're done
-            Progress = -1f;
-            Close();
         }
 
         private void UpdateProgressMessage()
@@ -442,7 +443,7 @@ namespace OmiyaGames.UI.Translations
             if (state == ImportState.ReadFile)
             {
                 // Get the CSV status
-                CSVReader.ReadStatus.State csvState = csvReadStatus.CurrentState.Value;
+                CSVReader.ReadStatus.State csvState = csvReadStatus.CurrentState;
                 if (csvState == CSVReader.ReadStatus.State.ReadingFileIntoRows)
                 {
                     // Report that we're reading the file.
@@ -457,8 +458,7 @@ namespace OmiyaGames.UI.Translations
 
                     // Calculate the progress
                     baseProgress = (int)csvState;
-                    stateProgress = csvReadStatus.ProgressMade.Value;
-                    stateProgress /= csvReadStatus.StepsInState.Value;
+                    stateProgress = csvReadStatus.ProgressPercent;
                 }
             }
             else
@@ -472,8 +472,7 @@ namespace OmiyaGames.UI.Translations
 
                 // Calculate the progress
                 baseProgress = ((int)state) + 1;
-                stateProgress = progressReport.CurrentStep;
-                stateProgress /= progressReport.NumberOfSteps;
+                stateProgress = progressReport.ProgressPercent;
             }
 
             // Calculate progress
