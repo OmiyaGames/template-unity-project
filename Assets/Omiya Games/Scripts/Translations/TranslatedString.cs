@@ -54,26 +54,19 @@ namespace OmiyaGames.Translations
     /// </list>
     /// </remarks>
     [Serializable]
-    public class TranslatedString : IDisposable
+    public class TranslatedString
     {
         [SerializeField]
         string key;
         [SerializeField]
         TranslationDictionary dictionary;
 
-        object[] values;
-        TranslationManager.LanguageChanged onLanguageChanged = null;
-        /// <summary>
-        /// If null, this string is marked dirty.
-        /// </summary>
-        string translatedFormattedText = null;
-
         public TranslatedString(string key) : this(key, null) { }
 
         public TranslatedString(string key, params object[] values)
         {
             this.key = key;
-            this.values = values;
+            Values = values;
         }
 
         #region Properties
@@ -85,69 +78,14 @@ namespace OmiyaGames.Translations
             }
         }
 
-        public string TranslationKey
-        {
-            get
-            {
-                return key;
-            }
-            set
-            {
-                // Check if the value is actually different
-                if(key != value)
-                {
-                    // Set key
-                    key = value;
-
-                    // Mark dirty
-                    SetDirty();
-                }
-            }
-        }
+        public string TranslationKey => key;
+        public TranslationDictionary Dictionary => dictionary;
 
         public object[] Values
         {
-            get
-            {
-                return values;
-            }
-            set
-            {
-                // Set the values directly; it's not performant to check whether all objects are different
-                values = value;
-
-                // Mark dirty
-                SetDirty();
-            }
-        }
-
-        public TranslationDictionary Dictionary
-        {
-            get
-            {
-                return dictionary;
-            }
-            set
-            {
-                // Check if the value is different
-                if (dictionary != value)
-                {
-                    // Set dictionary
-                    dictionary = value;
-
-                    // Mark dirty
-                    SetDirty();
-                }
-            }
-        }
-
-        public bool IsDirty
-        {
-            get
-            {
-                return (translatedFormattedText == null);
-            }
-        }
+            get;
+            set;
+        } = null;
 
         public bool IsTranslating
         {
@@ -159,44 +97,32 @@ namespace OmiyaGames.Translations
         #endregion
 
         /// <summary>
-        /// Generates a translated text based on GameSettings
-        /// </summary>
-        /// <returns>A translated text.</returns>
-        public override string ToString()
-        {
-            // Check if we can translate
-            if (IsTranslating == true)
-            {
-                // Check whether TranslationManager is available, and we need to generate a new string
-                if ((IsDirty != true) && (Manager != null))
-                {
-                    // Check if we've binded to language change event
-                    if (onLanguageChanged == null)
-                    {
-                        // If not, bind to the language manager, setting the flag dirty on language change
-                        onLanguageChanged = new TranslationManager.LanguageChanged(SetDirty);
-                        Manager.OnAfterLanguageChanged += onLanguageChanged;
-                    }
-
-                    // Retrieve the language
-                    translatedFormattedText = ToString(Manager.CurrentLanguage);
-                }
-                else if (Manager == null)
-                {
-                    Dispose();
-                }
-            }
-            return translatedFormattedText;
-        }
-
-        /// <summary>
-        /// Generates a translated text based on input language
+        /// Generates a translated text based on GameSettings' language.
         /// </summary>
         /// <remarks>
         /// A new string will be generated each time,
         /// making this operation potentially slow.
         /// </remarks>
-        /// <returns></returns>
+        /// <returns>A translated text.</returns>
+        public override string ToString()
+        {
+            // Check if we can translate
+            string returnString = null;
+            if (Manager != null)
+            {
+                returnString = ToString(Manager.CurrentLanguage);
+            }
+            return returnString;
+        }
+
+        /// <summary>
+        /// Generates a translated text based on input language.
+        /// </summary>
+        /// <remarks>
+        /// A new string will be generated each time,
+        /// making this operation potentially slow.
+        /// </remarks>
+        /// <returns>A translated text.</returns>
         public string ToString(int languageIndex)
         {
             string returnString = null;
@@ -208,13 +134,13 @@ namespace OmiyaGames.Translations
         }
 
         /// <summary>
-        /// Generates a translated text based on input language
+        /// Generates a translated text based on input language.
         /// </summary>
         /// <remarks>
         /// A new string will be generated each time,
         /// making this operation potentially slow.
         /// </remarks>
-        /// <returns></returns>
+        /// <returns>A translated text.</returns>
         public string ToString(string language)
         {
             string returnString = null;
@@ -223,22 +149,6 @@ namespace OmiyaGames.Translations
                 returnString = AddFormatting(dictionary[TranslationKey, language]);
             }
             return returnString;
-        }
-
-        /// <summary>
-        /// Cleans-up events and generated string.
-        /// </summary>
-        public void Dispose()
-        {
-            if (onLanguageChanged != null)
-            {
-                // Unbind to the language change event
-                Manager.OnAfterLanguageChanged -= onLanguageChanged;
-                onLanguageChanged = null;
-            }
-
-            // Dispose the generated string
-            SetDirty();
         }
 
         public void SetValues(params object[] values)
@@ -254,16 +164,6 @@ namespace OmiyaGames.Translations
                 translatedText = string.Format(translatedText, Values);
             }
             return translatedText;
-        }
-
-        private void SetDirty()
-        {
-            translatedFormattedText = null;
-        }
-
-        private void SetDirty(TranslationManager source, string lastLanguage, string currentLanguage)
-        {
-            SetDirty();
         }
         #endregion
     }
