@@ -76,10 +76,14 @@ namespace OmiyaGames.Translations
         }
 
         /// <summary>
-        /// The key to the CSVLanguageParser.
+        /// Translations to plop onto the label.
         /// </summary>
         [SerializeField]
+        protected TranslatedString translation = new TranslatedString();
+
+        [SerializeField]
         [Tooltip("The key to the CSVLanguageParser.")]
+        [System.Obsolete("Use translation instead.")]
         protected string translationKey = "";
 
         [Header("Optional Font Adjustments")]
@@ -91,16 +95,18 @@ namespace OmiyaGames.Translations
         /// The attached label.
         /// </summary>
         private LABEL label = default(LABEL);
-        private object[] arguments = null;
-        private string originalString = null;
-        private TranslationManager.LanguageChanged langaugeChangedEvent = null;
+        /// <summary>
+        /// If null, means this label is dirty
+        /// </summary>
+        private string cacheString = null;
+        private TranslationManager.LanguageChanged languageChangedEvent = null;
 
         #region Properties
         public bool IsTranslating
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && Parser.IsReady && Parser.ContainsKey(TranslationKey);
+                return (translation.IsTranslating == true) && (Parser != null) && Parser.IsReady;
             }
         }
 
@@ -129,16 +135,39 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return translationKey;
+                return translation.TranslationKey;
             }
             set
             {
-                // Update variables
-                translationKey = value;
-                originalString = null;
+                // Check if different
+                if (translation.TranslationKey != value)
+                {
+                    // Update variables
+                    translation.TranslationKey = value;
 
-                // Update the label
-                UpdateLabel();
+                    // Repaint the label
+                    RepaintLabel();
+                }
+            }
+        }
+
+        public TranslationDictionary Dictionary
+        {
+            get
+            {
+                return translation.Dictionary;
+            }
+            set
+            {
+                // Check if different
+                if (translation.Dictionary != value)
+                {
+                    // Update variables
+                    translation.Dictionary = value;
+
+                    // Repaint the label
+                    RepaintLabel();
+                }
             }
         }
 
@@ -149,11 +178,15 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return arguments;
+                return translation.Arguments;
             }
             set
             {
-                SetArguments(value);
+                // Update variables
+                translation.Arguments = value;
+
+                // Repaint the label
+                RepaintLabel();
             }
         }
 
@@ -253,11 +286,11 @@ namespace OmiyaGames.Translations
         public void OnDestroy()
         {
             // Check if we've binded to an event before, and if so, the source is still available
-            if ((Parser != null) && (langaugeChangedEvent != null))
+            if ((Parser != null) && (languageChangedEvent != null))
             {
                 // Unbind to the event
-                Parser.OnAfterLanguageChanged -= langaugeChangedEvent;
-                langaugeChangedEvent = null;
+                Parser.OnAfterLanguageChanged -= languageChangedEvent;
+                languageChangedEvent = null;
             }
         }
         #endregion
@@ -269,7 +302,11 @@ namespace OmiyaGames.Translations
         {
             if (translation != null)
             {
-                SetTranslationKey(translation.TranslationKey, translation.Values);
+                // Set the dictionary
+                this.translation.Dictionary = translation.Dictionary;
+
+                // Set the rest of the member variables
+                SetTranslationKey(translation.TranslationKey, translation.Arguments);
             }
         }
 
@@ -279,8 +316,11 @@ namespace OmiyaGames.Translations
         public void SetTranslationKey(string translationKey, params object[] args)
         {
             // Update the member variable
-            arguments = args;
-            TranslationKey = translationKey;
+            translation.TranslationKey = translationKey;
+            translation.Arguments = args;
+
+            // Repaint the label
+            RepaintLabel();
         }
 
         /// <summary>
@@ -300,25 +340,30 @@ namespace OmiyaGames.Translations
         /// </summary>
         public void SetArguments(params object[] args)
         {
-            // Update the member variable
-            arguments = args;
-
-            // Update the label
-            UpdateLabel();
+            Arguments = args;
         }
 
         protected virtual string GetDisplayString(string originalString)
         {
             string displayString = originalString;
-            if ((arguments != null) && (arguments.Length > 0))
+            if ((Arguments != null) && (Arguments.Length > 0))
             {
                 // Format the string based on the translation and arguments
-                displayString = string.Format(displayString, arguments);
+                displayString = string.Format(displayString, Arguments);
             }
             return displayString;
         }
 
         #region Helper Methods
+        protected void RepaintLabel()
+        {
+            // Mark label as dirty and regenerate new string
+            cacheString = null;
+
+            // Update label
+            UpdateLabel();
+        }
+
         private void SetupLabelNow(TranslationManager parser)
         {
             // Confirm the parser is ready
@@ -328,8 +373,8 @@ namespace OmiyaGames.Translations
                 OnDestroy();
 
                 // Bind to the parser's event
-                langaugeChangedEvent = new TranslationManager.LanguageChanged(AfterLanguageChanged);
-                parser.OnAfterLanguageChanged += langaugeChangedEvent;
+                languageChangedEvent = new TranslationManager.LanguageChanged(AfterLanguageChanged);
+                parser.OnAfterLanguageChanged += languageChangedEvent;
             }
 
             // Update the label
@@ -342,18 +387,18 @@ namespace OmiyaGames.Translations
             if ((parser != null) && (parser.IsReady == true) && (string.IsNullOrEmpty(translationKey) == false))
             {
                 // Check if the original string needs to be updated
-                if (string.IsNullOrEmpty(originalString) == true)
+                if (string.IsNullOrEmpty(cacheString) == true)
                 {
                     // Update the original string
-                    originalString = CurrentText;
+                    cacheString = CurrentText;
                     if (IsTranslating == true)
                     {
-                        originalString = parser[TranslationKey];
+                        cacheString = parser[TranslationKey];
                     }
                 }
 
                 // Set the label's text
-                LabelText = GetDisplayString(originalString);
+                LabelText = GetDisplayString(cacheString);
 
                 // Set the label's font
                 UpdateFont(parser);
@@ -365,11 +410,8 @@ namespace OmiyaGames.Translations
 
         private void AfterLanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage)
         {
-            // Remove the original string, as it's no longer the correct language.
-            originalString = null;
-
-            // Update the label
-            UpdateLabel();
+            // Repaint the label
+            RepaintLabel();
         }
 
         private void UpdateFont(TranslationManager parser)
