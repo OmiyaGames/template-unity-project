@@ -45,9 +45,15 @@ namespace OmiyaGames.Translations
     /// <description>9/11/2018</description>
     /// <description>Taro</description>
     /// <description>Initial verison</description>
+    /// 
+    /// <description>10/5/2018</description>
+    /// <description>Taro</description>
+    /// <description>Adding new <code>TranslatedString</code>
+    /// as a serialized member variable</description>
     /// </item>
     /// </list>
     /// </remarks>
+    /// <seealso cref="TranslatedString"/>
     [DisallowMultipleComponent]
     public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour where LABEL : Component
     {
@@ -244,6 +250,14 @@ namespace OmiyaGames.Translations
                 UpdateFont(Parser);
             }
         }
+
+        public virtual string DisplayString
+        {
+            get
+            {
+                return translation.ToString();
+            }
+        }
         #endregion
 
         /// <summary>
@@ -343,17 +357,6 @@ namespace OmiyaGames.Translations
             Arguments = args;
         }
 
-        protected virtual string GetDisplayString(string originalString)
-        {
-            string displayString = originalString;
-            if ((Arguments != null) && (Arguments.Length > 0))
-            {
-                // Format the string based on the translation and arguments
-                displayString = string.Format(displayString, Arguments);
-            }
-            return displayString;
-        }
-
         #region Helper Methods
         protected void RepaintLabel()
         {
@@ -384,21 +387,17 @@ namespace OmiyaGames.Translations
         private void UpdateLabelNow(TranslationManager parser)
         {
             // Confirm the parser is ready
-            if ((parser != null) && (parser.IsReady == true) && (string.IsNullOrEmpty(translationKey) == false))
+            if (IsTranslating == true)
             {
                 // Check if the original string needs to be updated
                 if (string.IsNullOrEmpty(cacheString) == true)
                 {
                     // Update the original string
-                    cacheString = CurrentText;
-                    if (IsTranslating == true)
-                    {
-                        cacheString = parser[TranslationKey];
-                    }
+                    cacheString = DisplayString;
                 }
 
                 // Set the label's text
-                LabelText = GetDisplayString(cacheString);
+                LabelText = cacheString;
 
                 // Set the label's font
                 UpdateFont(parser);
