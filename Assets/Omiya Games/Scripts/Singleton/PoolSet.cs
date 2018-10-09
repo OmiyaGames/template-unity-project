@@ -47,6 +47,17 @@ namespace OmiyaGames.Global
             OriginalScript = originalPrefab.GetComponent<IPooledObject>();
         }
 
+        public PoolSet(IPooledObject originalPrefab)
+        {
+            if (originalPrefab == null)
+            {
+                throw new System.ArgumentNullException("originalPrefab");
+            }
+
+            OriginalScript = originalPrefab;
+            OriginalPrefab = originalPrefab.gameObject;
+        }
+
         public Dictionary<GameObject, IPooledObject> ActiveInstances
         {
             get;

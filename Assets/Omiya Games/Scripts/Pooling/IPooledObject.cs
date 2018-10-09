@@ -55,6 +55,7 @@ namespace OmiyaGames
     /// </list>
     /// </remarks>
     /// <seealso cref="PoolingManager"/>
+    [DisallowMultipleComponent]
     public abstract class IPooledObject : MonoBehaviour
     {
         /// <summary>
@@ -120,10 +121,8 @@ namespace OmiyaGames
         /// </summary>
         internal void AfterInitialized(PoolingManager manager)
         {
-            if (SetPoolState(true) == true)
-            {
-                OnAfterInitialized?.Invoke(this, manager);
-            }
+            SetPoolState(true);
+            OnAfterInitialized?.Invoke(this, manager);
         }
 
         /// <summary>
@@ -133,10 +132,8 @@ namespace OmiyaGames
         /// </summary>
         internal void AfterActivated(PoolingManager manager)
         {
-            if (SetPoolState(true) == true)
-            {
-                OnAfterActivated?.Invoke(this, manager);
-            }
+            SetPoolState(true);
+            OnAfterActivated?.Invoke(this, manager);
 
             // Since this is called right after reactivating an existing GameObject,
             // for easier transition, simulate calling Awake and Start.
@@ -149,10 +146,8 @@ namespace OmiyaGames
         /// </summary>
         internal void AfterDeactivate(PoolingManager manager)
         {
-            if (SetPoolState(false) == true)
-            {
-                OnAfterDeactivated?.Invoke(this, manager);
-            }
+            SetPoolState(false);
+            OnAfterDeactivated?.Invoke(this, manager);
         }
 
         /// <summary>
