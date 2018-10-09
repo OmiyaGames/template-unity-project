@@ -40,55 +40,211 @@ namespace OmiyaGames.UI.Translations
     [CustomPropertyDrawer(typeof(TranslatedString), true)]
     public class TranslatedStringEditor : PropertyDrawer
     {
-        const float VerticalMargin = 2;
-        const string message = "Testing, testing...";
+        const float ButtonHeight = 18f;
+        const float IndentLeft = 16f;
 
+        List<TranslationDictionary.LanguageTextPair> previewTranslations;
+        ReorderableList previewTranslationList;
+
+        #region Properties
         float Width
         {
             get;
             set;
         } = 0;
-        List<TranslationDictionary.LanguageTextPair> previewTranslations;
-        ReorderableList previewTranslationList;
+
+        bool IsExpanded
+        {
+            get;
+            set;
+        } = true;
+
+        string Message
+        {
+            get;
+            set;
+        } = null;
+
+        MessageType MessageType
+        {
+            get;
+            set;
+        } = MessageType.Info;
+
+        bool ShowButton
+        {
+            get;
+            set;
+        } = false;
+        #endregion
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            float height = EditorUtility.GetHelpBoxHeight(message, Width, EditorGUIUtility.singleLineHeight);
-            height += EditorGUIUtility.singleLineHeight * 3;
-            height += VerticalMargin * 3;
+            float height = EditorGUIUtility.singleLineHeight;
+            if (IsExpanded == true)
+            {
+                // Grab every field
+                SerializedProperty key = property.FindPropertyRelative("key");
+                SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
+
+                // Allocate key field
+                height += EditorUtility.GetHeight(2);
+
+                // Update status
+                TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
+                string translationKey = key.stringValue;
+                UpdateMessageStatus(translationDictionary, translationKey);
+
+                // Check status
+                if (string.IsNullOrEmpty(Message) == false)
+                {
+                    // Allocate help box
+                    height += EditorUtility.VerticalMargin;
+                    height += EditorUtility.GetHelpBoxHeight(Message, Width);
+                }
+
+                // Check button
+                if(ShowButton == true)
+                {
+                    // Allocate button
+                    height += EditorUtility.VerticalMargin;
+                    height += ButtonHeight;
+                }
+            }
             return height;
         }
+
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
-            // Set width
-            Width = rect.width;
-
-            // Draw a header message
-            rect.height = EditorUtility.GetHelpBoxHeight(message, rect.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.HelpBox(rect, message, MessageType.Info);
-
             // Grab every field
             SerializedProperty key = property.FindPropertyRelative("key");
             SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
 
-            // Draw label of object
-            rect.y += VerticalMargin + rect.height;
+            // Calculate height
+            float previewHeight = rect.height;
             rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(rect, label, EditorStyles.boldLabel);
-            EditorGUI.indentLevel += 1;
+            previewHeight -= rect.height;
+            Width = rect.width;
 
-            // Draw the properties regularly
-            rect.y += VerticalMargin + rect.height;
+            // Draw label of object
+            IsExpanded = EditorGUI.Foldout(rect, IsExpanded, label);
+            if (IsExpanded == true)
+            {
+                // Indent
+                using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
+                {
+                    // Draw the properties regularly
+                    rect = DrawFields(rect, key, dictionary);
+
+                    // Update status
+                    TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
+                    string translationKey = key.stringValue;
+                    UpdateMessageStatus(translationDictionary, translationKey);
+
+                    // Add indentation
+                    rect.x += IndentLeft;
+                    rect.width -= IndentLeft;
+
+                    // Draw HelpBox
+                    rect = DrawHelpBox(rect);
+
+                    if (string.IsNullOrEmpty(Message) == true)
+                    {
+                        // Construct a list for the clip variations
+                        //rect.y += EditorUtility.VerticalMargin + rect.height;
+                        //rect.height = EditorGUIUtility.singleLineHeight;
+                        //previewTranslationList = new ReorderableList(previewTranslations, typeof(TranslationDictionary.LanguageTextPair), true, true, true, true);
+                        //previewTranslationList.drawHeaderCallback = DrawTranslationsListHeader;
+                        //previewTranslationList.drawElementCallback = DrawTranslationsListElement;
+                    }
+
+                    // Show button to add a new translation key
+                    rect = DrawButton(rect, translationDictionary, translationKey, dictionary);
+
+                    // Remove indentation
+                    rect.x -= IndentLeft;
+                    rect.width += IndentLeft;
+                }
+            }
+        }
+
+        #region Helper Methods
+        private static Rect DrawFields(Rect rect, SerializedProperty key, SerializedProperty dictionary)
+        {
+            rect.y += EditorUtility.VerticalMargin + rect.height;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.DelayedTextField(rect, key);
-            rect.y += VerticalMargin + rect.height;
+            rect.y += EditorUtility.VerticalMargin + rect.height;
             EditorGUI.PropertyField(rect, dictionary);
-
-            // Construct a list for the clip variations
-            //previewTranslationList = new ReorderableList(previewTranslations, typeof(TranslationDictionary.LanguageTextPair), true, true, true, true);
-            //previewTranslationList.drawHeaderCallback = DrawTranslationsListHeader;
-            //previewTranslationList.drawElementCallback = DrawTranslationsListElement;
-            EditorGUI.indentLevel -= 1;
+            return rect;
         }
+
+        private Rect DrawButton(Rect rect, TranslationDictionary translationDictionary, string translationKey, SerializedProperty dictionary)
+        {
+            if (ShowButton == true)
+            {
+                rect.y += EditorUtility.VerticalMargin + rect.height;
+                rect.height = ButtonHeight;
+                if ((MessageType == MessageType.Error) && (GUI.Button(rect, "Create New Dictionary") == true))
+                {
+                    // Add the key into the translations dictionary
+                    dictionary.objectReferenceValue = TranslationDictionaryEditor.CreateTranslationDictionary();
+                }
+                else if ((MessageType == MessageType.Warning) && (GUI.Button(rect, "Create New Key") == true))
+                {
+                    // Add the key into the translations dictionary
+                    translationDictionary.AllTranslations.Add(translationKey, new Dictionary<int, string>());
+                    translationDictionary.UpdateSerializedTranslations();
+                }
+                else if ((MessageType == MessageType.None) && (GUI.Button(rect, "Update Dictionary") == true))
+                {
+                    // Apply changes to the dictionary
+                    translationDictionary.UpdateSerializedTranslations();
+                }
+            }
+            return rect;
+        }
+
+        private Rect DrawHelpBox(Rect rect)
+        {
+            // Check whether to show the help box
+            if (string.IsNullOrEmpty(Message) == false)
+            {
+                // Draw a header message
+                rect.y += EditorUtility.VerticalMargin + rect.height;
+                rect.height = EditorUtility.GetHelpBoxHeight(Message, rect.width);
+                EditorGUI.HelpBox(rect, Message, MessageType);
+            }
+
+            return rect;
+        }
+
+        private void UpdateMessageStatus(TranslationDictionary translationDictionary, string translationKey)
+        {
+            // Update message
+            ShowButton = true;
+            Message = null;
+            MessageType = MessageType.None;
+            if (translationDictionary == null)
+            {
+                Message = "Field, \"Dictionary\" must be set!";
+                MessageType = MessageType.Error;
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(translationKey) == true)
+                {
+                    Message = "Field, \"Key\" needs to be set for the label to be translated.";
+                    MessageType = MessageType.Warning;
+                    ShowButton = false;
+                }
+                else if (translationDictionary.AllTranslations.ContainsKey(translationKey) == false)
+                {
+                    Message = "The key, \"" + translationKey + "\" isn't in the dictionary.";
+                    MessageType = MessageType.Warning;
+                }
+            }
+        }
+        #endregion
     }
 }

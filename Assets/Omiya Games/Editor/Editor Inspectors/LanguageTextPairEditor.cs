@@ -40,7 +40,6 @@ namespace OmiyaGames.UI.Translations
     /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
     public class LanguageTextPairEditor : System.IDisposable
     {
-        const float MinHelpBoxHeight = 30f;
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
@@ -176,7 +175,7 @@ namespace OmiyaGames.UI.Translations
             if ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width, MinHelpBoxHeight) * ShowHelpBox.faded;
+                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
                 height += VerticalSpace;
             }
 
@@ -296,7 +295,7 @@ namespace OmiyaGames.UI.Translations
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width, MinHelpBoxHeight);
+                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width);
                 rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning

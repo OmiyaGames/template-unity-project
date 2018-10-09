@@ -82,7 +82,7 @@ namespace OmiyaGames.UI.Translations
         #endregion
 
         [MenuItem("Omiya Games/Create/Translation Dictionary")]
-        private static void CreateTranslationDictionary()
+        public static TranslationDictionary CreateTranslationDictionary()
         {
             // Setup asset
             TranslationDictionary newAsset = ScriptableObject.CreateInstance<TranslationDictionary>();
@@ -94,6 +94,7 @@ namespace OmiyaGames.UI.Translations
 
             // Create the asset, and prompt the user to rename it
             ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
+            return newAsset;
         }
 
         #region Unity Events
