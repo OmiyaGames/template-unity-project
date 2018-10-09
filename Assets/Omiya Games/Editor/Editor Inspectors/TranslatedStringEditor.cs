@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
@@ -43,8 +42,15 @@ namespace OmiyaGames.UI.Translations
         const float ButtonHeight = 18f;
         const float IndentLeft = 16f;
 
-        List<TranslationDictionary.LanguageTextPair> previewTranslations;
-        ReorderableList previewTranslationList;
+        public enum Status
+        {
+            OK = 0,
+            DictionaryNotSet,
+            SupportedLanguageNotSet,
+            NoKey,
+            UnknownKey,
+            PreviewError
+        }
 
         #region Properties
         float Width
@@ -71,12 +77,36 @@ namespace OmiyaGames.UI.Translations
             set;
         } = MessageType.Info;
 
-        bool ShowButton
+        TranslationPreviewEditor TextPreview
         {
             get;
-            set;
-        } = false;
+        } = new TranslationPreviewEditor(null);
         #endregion
+
+        public static bool IsTextPreviewDrawn(Status status)
+        {
+            switch (status)
+            {
+                case Status.OK:
+                case Status.PreviewError:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool IsButtonDrawn(Status status)
+        {
+            switch (status)
+            {
+                case Status.DictionaryNotSet:
+                case Status.UnknownKey:
+                case Status.OK:
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -93,7 +123,7 @@ namespace OmiyaGames.UI.Translations
                 // Update status
                 TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
                 string translationKey = key.stringValue;
-                UpdateMessageStatus(translationDictionary, translationKey);
+                Status status = UpdateMessageStatus(translationDictionary, translationKey);
 
                 // Check status
                 if (string.IsNullOrEmpty(Message) == false)
@@ -104,11 +134,19 @@ namespace OmiyaGames.UI.Translations
                 }
 
                 // Check button
-                if(ShowButton == true)
+                if (IsButtonDrawn(status) == true)
                 {
                     // Allocate button
                     height += EditorUtility.VerticalMargin;
                     height += ButtonHeight;
+                }
+
+                // Check preview
+                if (IsTextPreviewDrawn(status) == true)
+                {
+                    // Allocate preview
+                    height += EditorUtility.VerticalMargin;
+                    height += TextPreview.CalculateHeight(null);
                 }
             }
             return height;
@@ -116,54 +154,50 @@ namespace OmiyaGames.UI.Translations
 
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
-            // Grab every field
-            SerializedProperty key = property.FindPropertyRelative("key");
-            SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
-
-            // Calculate height
-            float previewHeight = rect.height;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            previewHeight -= rect.height;
-            Width = rect.width;
-
-            // Draw label of object
-            IsExpanded = EditorGUI.Foldout(rect, IsExpanded, label);
-            if (IsExpanded == true)
+            using (EditorGUI.PropertyScope scope = new EditorGUI.PropertyScope(rect, label, property))
             {
-                // Indent
-                using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
+                // Grab every field
+                SerializedProperty key = property.FindPropertyRelative("key");
+                SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
+
+                // Calculate height
+                float previewHeight = rect.height;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                previewHeight -= rect.height;
+                Width = rect.width;
+
+                // Draw label of object
+                IsExpanded = EditorGUI.Foldout(rect, IsExpanded, scope.content);
+                if (IsExpanded == true)
                 {
-                    // Draw the properties regularly
-                    rect = DrawFields(rect, key, dictionary);
-
-                    // Update status
-                    TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
-                    string translationKey = key.stringValue;
-                    UpdateMessageStatus(translationDictionary, translationKey);
-
-                    // Add indentation
-                    rect.x += IndentLeft;
-                    rect.width -= IndentLeft;
-
-                    // Draw HelpBox
-                    rect = DrawHelpBox(rect);
-
-                    if (string.IsNullOrEmpty(Message) == true)
+                    // Indent
+                    using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
                     {
-                        // Construct a list for the clip variations
-                        //rect.y += EditorUtility.VerticalMargin + rect.height;
-                        //rect.height = EditorGUIUtility.singleLineHeight;
-                        //previewTranslationList = new ReorderableList(previewTranslations, typeof(TranslationDictionary.LanguageTextPair), true, true, true, true);
-                        //previewTranslationList.drawHeaderCallback = DrawTranslationsListHeader;
-                        //previewTranslationList.drawElementCallback = DrawTranslationsListElement;
+                        // Draw the properties regularly
+                        rect = DrawFields(rect, key, dictionary);
+
+                        // Update status
+                        TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
+                        string translationKey = key.stringValue;
+                        Status status = UpdateMessageStatus(translationDictionary, translationKey);
+
+                        // Add indentation
+                        rect.x += IndentLeft;
+                        rect.width -= IndentLeft;
+
+                        // Draw HelpBox
+                        rect = DrawHelpBox(rect);
+
+                        // Draw preview
+                        rect = DrawTextPreview(rect, status, translationKey, translationDictionary);
+
+                        // Show button to add a new translation key
+                        rect = DrawButton(rect, status, translationDictionary, translationKey, dictionary);
+
+                        // Remove indentation
+                        rect.x -= IndentLeft;
+                        rect.width += IndentLeft;
                     }
-
-                    // Show button to add a new translation key
-                    rect = DrawButton(rect, translationDictionary, translationKey, dictionary);
-
-                    // Remove indentation
-                    rect.x -= IndentLeft;
-                    rect.width += IndentLeft;
                 }
             }
         }
@@ -179,24 +213,24 @@ namespace OmiyaGames.UI.Translations
             return rect;
         }
 
-        private Rect DrawButton(Rect rect, TranslationDictionary translationDictionary, string translationKey, SerializedProperty dictionary)
+        private Rect DrawButton(Rect rect, Status status, TranslationDictionary translationDictionary, string translationKey, SerializedProperty dictionary)
         {
-            if (ShowButton == true)
+            if (IsButtonDrawn(status) == true)
             {
                 rect.y += EditorUtility.VerticalMargin + rect.height;
                 rect.height = ButtonHeight;
-                if ((MessageType == MessageType.Error) && (GUI.Button(rect, "Create New Dictionary") == true))
+                if ((status == Status.DictionaryNotSet) && (GUI.Button(rect, "Create New Dictionary") == true))
                 {
                     // Add the key into the translations dictionary
                     dictionary.objectReferenceValue = TranslationDictionaryEditor.CreateTranslationDictionary();
                 }
-                else if ((MessageType == MessageType.Warning) && (GUI.Button(rect, "Create New Key") == true))
+                else if ((status == Status.UnknownKey) && (GUI.Button(rect, "Create New Key") == true))
                 {
                     // Add the key into the translations dictionary
                     translationDictionary.AllTranslations.Add(translationKey, new Dictionary<int, string>());
                     translationDictionary.UpdateSerializedTranslations();
                 }
-                else if ((MessageType == MessageType.None) && (GUI.Button(rect, "Update Dictionary") == true))
+                else if ((status == Status.OK) && (GUI.Button(rect, "Update Dictionary") == true))
                 {
                     // Apply changes to the dictionary
                     translationDictionary.UpdateSerializedTranslations();
@@ -219,31 +253,89 @@ namespace OmiyaGames.UI.Translations
             return rect;
         }
 
-        private void UpdateMessageStatus(TranslationDictionary translationDictionary, string translationKey)
+        private Rect DrawTextPreview(Rect rect, Status status, string key, TranslationDictionary translationDictionary)
+        {
+            if (IsTextPreviewDrawn(status) == true)
+            {
+                // Construct a list for the clip variations
+                rect.y += EditorUtility.VerticalMargin + rect.height;
+                rect.height = TextPreview.CalculateHeight(null);
+
+                // Update text preview
+                TextPreview.SupportedLanguages = translationDictionary.SupportedLanguages;
+                TextPreview.LanguageIndex = translationDictionary.SupportedLanguages.PreviewIndex;
+                Dictionary<int, string> translations;
+                if ((translationDictionary.AllTranslations.TryGetValue(key, out translations) == true) && (translations.ContainsKey(TextPreview.LanguageIndex) == true))
+                {
+                    TextPreview.Text = translations[TextPreview.LanguageIndex];
+                }
+
+                // Draw the preview
+                EditorGUI.indentLevel -= 1;
+                TextPreview.DrawGui(rect, null, false);
+                EditorGUI.indentLevel += 1;
+
+                // Check if we need to apply changes
+                if(TextPreview.IsLanguageIndexChanged == true)
+                {
+                    translationDictionary.SupportedLanguages.PreviewIndex = TextPreview.LanguageIndex;
+                }
+                else if ((TextPreview.IsTextChanged == true) && (translationDictionary.AllTranslations.TryGetValue(key, out translations) == true))
+                {
+                    // Apply the changes to the dictionary
+                    if (translations.ContainsKey(TextPreview.LanguageIndex) == true)
+                    {
+                        translations[TextPreview.LanguageIndex] = TextPreview.Text;
+                    }
+                    else
+                    {
+                        translations.Add(TextPreview.LanguageIndex, TextPreview.Text);
+                    }
+                }
+            }
+            return rect;
+        }
+
+        private Status UpdateMessageStatus(TranslationDictionary translationDictionary, string translationKey)
         {
             // Update message
-            ShowButton = true;
+            Status returnStatus = Status.OK;
             Message = null;
             MessageType = MessageType.None;
             if (translationDictionary == null)
             {
+                returnStatus = Status.DictionaryNotSet;
                 Message = "Field, \"Dictionary\" must be set!";
                 MessageType = MessageType.Error;
             }
+            else if (translationDictionary.SupportedLanguages == null)
+            {
+                returnStatus = Status.SupportedLanguageNotSet;
+                Message = "The dictionary, \"" + translationDictionary.name + "\" must have its supported language field set!";
+                MessageType = MessageType.Error;
+            }
+            else if (string.IsNullOrEmpty(translationKey) == true)
+            {
+                returnStatus = Status.NoKey;
+                Message = "Field, \"Key\" needs to be set for the label to be translated.";
+                MessageType = MessageType.Warning;
+            }
+            else if (translationDictionary.AllTranslations.ContainsKey(translationKey) == false)
+            {
+                returnStatus = Status.UnknownKey;
+                Message = "The key, \"" + translationKey + "\" isn't in the dictionary.";
+                MessageType = MessageType.Warning;
+            }
             else
             {
-                if (string.IsNullOrEmpty(translationKey) == true)
+                // Indicate the text preview should be drawn
+                Message = TextPreview.GetWarning(null);
+                if (string.IsNullOrEmpty(Message) == true)
                 {
-                    Message = "Field, \"Key\" needs to be set for the label to be translated.";
-                    MessageType = MessageType.Warning;
-                    ShowButton = false;
-                }
-                else if (translationDictionary.AllTranslations.ContainsKey(translationKey) == false)
-                {
-                    Message = "The key, \"" + translationKey + "\" isn't in the dictionary.";
-                    MessageType = MessageType.Warning;
+                    MessageType = MessageType.Error;
                 }
             }
+            return returnStatus;
         }
         #endregion
     }

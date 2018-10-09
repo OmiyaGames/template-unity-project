@@ -66,9 +66,6 @@ namespace OmiyaGames.UI.Translations
         /// <summary>
         /// Draws a popup mapping an int-property to a supported language.
         /// </summary>
-        /// <param name="label"></param>
-        /// <param name="property"></param>
-        /// <param name="target"></param>
         public static void DrawSupportedLanguages(string label, SerializedProperty property, SupportedLanguages target)
         {
             property.intValue = EditorGUILayout.Popup(label, property.intValue, GetAllLanguageNames(target));
@@ -77,12 +74,25 @@ namespace OmiyaGames.UI.Translations
         /// <summary>
         /// Draws a popup mapping an int-property to a supported language.
         /// </summary>
-        /// <param name="label"></param>
-        /// <param name="property"></param>
-        /// <param name="target"></param>
+        public static int DrawSupportedLanguages(Rect rect, string label, int index, SupportedLanguages target)
+        {
+            return EditorGUI.Popup(rect, label, index, GetAllLanguageNames(target));
+        }
+
+        /// <summary>
+        /// Draws a popup mapping an int-property to a supported language.
+        /// </summary>
         public static int DrawSupportedLanguages(Rect rect, SerializedProperty property, SupportedLanguages target)
         {
-            return EditorGUI.Popup(rect, property.intValue, GetAllLanguageNames(target));
+            return DrawSupportedLanguages(rect, property.intValue, target);
+        }
+
+        /// <summary>
+        /// Draws a popup mapping an int-property to a supported language.
+        /// </summary>
+        public static int DrawSupportedLanguages(Rect rect, int index, SupportedLanguages target)
+        {
+            return EditorGUI.Popup(rect, index, GetAllLanguageNames(target));
         }
 
         public override void OnInspectorGUI()
