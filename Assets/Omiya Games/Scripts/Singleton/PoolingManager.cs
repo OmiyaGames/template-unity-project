@@ -45,6 +45,8 @@ namespace OmiyaGames.Global
         struct PoolSet
         {
             public readonly bool containsPoolScript;
+
+            // FIXME: create two sets of this dictionary: one for active gameobjects, and one for deactivated ones.
             public readonly Dictionary<GameObject, IPooledObject> allClonedInstances;
 
             public PoolSet(GameObject original)
