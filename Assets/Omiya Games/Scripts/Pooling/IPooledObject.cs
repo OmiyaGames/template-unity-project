@@ -28,15 +28,51 @@ namespace OmiyaGames
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>10/9/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// Abstract class with functions that triggers during
     /// <code>PoolingManager</code>'s events.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>5/18/2015</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// <item>
+    /// <description>10/9/2018</description>
+    /// <description>Taro</description>
+    /// <description>Adding <code>PoolSet</code> and <code>event</code>s.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     /// <seealso cref="PoolingManager"/>
     public abstract class IPooledObject : MonoBehaviour
     {
+        /// <summary>
+        /// Called when this instance is initialized by PoolingManager,
+        /// but before Start or Awake is called.
+        /// </summary>
+        public event System.Action<IPooledObject, PoolingManager> OnAfterInitialized;
+        /// <summary>
+        /// Called when this instance -- already initialized and pooled --
+        /// is activated by PoolingManager for re-use. Note this method will
+        /// be called before Start or Awake.
+        /// </summary>
+        public event System.Action<IPooledObject, PoolingManager> OnAfterActivated;
+        /// <summary>
+        /// Called when this instance -- already initialized and pooled -- is deactivated.
+        /// </summary>
+        public event System.Action<IPooledObject, PoolingManager> OnAfterDeactivated;
+
         /// <summary>
         /// Gets the original prefab this object was pooled from.
         /// </summary>
@@ -46,7 +82,7 @@ namespace OmiyaGames
             get
             {
                 GameObject returnPrefab = null;
-                if(Pool != null)
+                if (Pool != null)
                 {
                     returnPrefab = Pool.OriginalPrefab;
                 }
@@ -65,20 +101,42 @@ namespace OmiyaGames
             set;
         } = null;
 
-        /// <summary>
-        /// Called when this instance is initialized by PoolingManager.
-        /// </summary>
-        public virtual void AfterInitialized(PoolingManager manager)
+        public abstract void Awake();
+        public abstract void Start();
+
+        public virtual void OnDestroy()
         {
-            MarkActive();
+            AfterDeactivate(null);
+        }
+
+        public virtual void OnDisable()
+        {
+            AfterDeactivate(null);
         }
 
         /// <summary>
-        /// Called when this instance -- already initialized and pooled -- is activated by PoolingManager for re-use.
+        /// Called when this instance is initialized by PoolingManager,
+        /// but before Start or Awake is called.
         /// </summary>
-        public virtual void AfterActivated(PoolingManager manager)
+        internal void AfterInitialized(PoolingManager manager)
         {
-            MarkActive();
+            if (SetPoolState(true) == true)
+            {
+                OnAfterInitialized?.Invoke(this, manager);
+            }
+        }
+
+        /// <summary>
+        /// Called when this instance -- already initialized and pooled --
+        /// is activated by PoolingManager for re-use. Note this method will
+        /// be called before Start or Awake.
+        /// </summary>
+        internal void AfterActivated(PoolingManager manager)
+        {
+            if (SetPoolState(true) == true)
+            {
+                OnAfterActivated?.Invoke(this, manager);
+            }
 
             // Since this is called right after reactivating an existing GameObject,
             // for easier transition, simulate calling Awake and Start.
@@ -87,76 +145,58 @@ namespace OmiyaGames
         }
 
         /// <summary>
-        /// Called when this instance -- already initialized and pooled -- is activated by PoolingManager for re-use.
+        /// Called when this instance -- already initialized and pooled -- is deactivated.
         /// </summary>
-        /// <param name="manager"></param>
-        public virtual void AfterDeactivate(PoolingManager manager)
+        internal void AfterDeactivate(PoolingManager manager)
         {
-            MarkInactive();
+            if (SetPoolState(false) == true)
+            {
+                OnAfterDeactivated?.Invoke(this, manager);
+            }
         }
 
-        public virtual void Awake()
-        {
-            // Do nothing by default.
-        }
-
-        public virtual void Start()
-        {
-            // Do nothing by default.
-        }
-
-        public void OnDestroy()
-        {
-            AfterDeactivate(null);
-        }
-
-        public void OnDisable()
-        {
-            AfterDeactivate(null);
-        }
-
-        protected void MarkActive()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="active"></param>
+        /// <returns>True if any changes were made to the Pool.</returns>
+        protected bool SetPoolState(bool active)
         {
             // Check if the pool is set
+            bool returnChangeDetected = false;
             if ((Pool != null) && (OriginalPrefab != gameObject))
             {
                 // Check if this game object is in the inactive list
-                if (Pool.InactiveInstances.ContainsKey(gameObject) == true)
+                if ((active == true) && (Pool.InactiveInstances.ContainsKey(gameObject) == true))
                 {
                     // If so, since we're activating this object, remove
                     // it from the inactive list.
                     Pool.InactiveInstances.Remove(gameObject);
+                    returnChangeDetected = true;
+                }
+                else if ((active == false) && (Pool.InactiveInstances.ContainsKey(gameObject) == false))
+                {
+                    // If not, add this object into the inactive list
+                    Pool.InactiveInstances.Add(gameObject, this);
+                    returnChangeDetected = true;
                 }
 
                 // Check if this game object is in the active list
-                if (Pool.ActiveInstances.ContainsKey(gameObject) == false)
+                if ((active == true) && (Pool.ActiveInstances.ContainsKey(gameObject) == false))
                 {
                     // If not, add this object into the gameobject list
                     Pool.ActiveInstances.Add(gameObject, this);
+                    returnChangeDetected = true;
                 }
-            }
-        }
-
-        protected void MarkInactive()
-        {
-            // Check if the pool is set
-            if ((Pool != null) && (OriginalPrefab != gameObject))
-            {
-                // Check if this game object is in the active list
-                if (Pool.ActiveInstances.ContainsKey(gameObject) == true)
+                else if ((active == false) && (Pool.ActiveInstances.ContainsKey(gameObject) == true))
                 {
                     // If so, since we're deactivating this object,
                     // remove it from the active list.
                     Pool.ActiveInstances.Remove(gameObject);
-                }
-
-                // Check if this game object is in the inactive list
-                if (Pool.InactiveInstances.ContainsKey(gameObject) == false)
-                {
-                    // If not, add this object into the inactive list
-                    Pool.InactiveInstances.Add(gameObject, this);
+                    returnChangeDetected = true;
                 }
             }
+            return returnChangeDetected;
         }
     }
 }
