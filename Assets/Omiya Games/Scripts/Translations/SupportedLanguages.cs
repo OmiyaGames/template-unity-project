@@ -137,6 +137,10 @@ namespace OmiyaGames.Translations
             {
                 return previewLanguageInIndex;
             }
+            set
+            {
+                previewLanguageInIndex = value;
+            }
         }
 
         private Dictionary<string, int> LanguageToIndexMap
