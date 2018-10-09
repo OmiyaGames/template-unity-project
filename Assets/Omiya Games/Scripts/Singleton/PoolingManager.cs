@@ -28,7 +28,7 @@ namespace OmiyaGames.Global
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>5/18/2015</date>
+    /// <date>10/9/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A singleton script that pools <code>GameObjects</code> for re-use.  It will
@@ -36,39 +36,37 @@ namespace OmiyaGames.Global
     /// 
     /// Will also call events on <code>IPooledObject</code>s.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>5/18/2015</description>
+    /// <description>Taro</description>
+    /// <description>Initial verison</description>
+    /// </item>
+    /// <item>
+    /// <description>10/9/2018</description>
+    /// <description>Taro</description>
+    /// <description>Optimizing performance, which requires forcing the type
+    /// Pooling Manager manages <code>IPooledObject</code>-only.</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     /// <seealso cref="IPooledObject"/>
     public class PoolingManager : ISingletonScript
     {
         [SerializeField]
         GameObject[] objectsToPreload = null;
 
-        struct PoolSet
-        {
-            public readonly bool containsPoolScript;
-
-            // FIXME: create two sets of this dictionary: one for active gameobjects, and one for deactivated ones.
-            public readonly Dictionary<GameObject, IPooledObject> allClonedInstances;
-
-            public PoolSet(GameObject original)
-            {
-                IPooledObject script = original.GetComponent<IPooledObject>();
-                if (script != null)
-                {
-                    script.OriginalPrefab = original;
-                    containsPoolScript = true;
-                }
-                else
-                {
-                    containsPoolScript = false;
-                }
-                allClonedInstances = new Dictionary<GameObject, IPooledObject>();
-            }
-        }
-
         Transform poolingParent = null;
         readonly Dictionary<GameObject, PoolSet> allPooledObjects = new Dictionary<GameObject, PoolSet>();
 
-        public static void ReturnToPool(Component script)
+        public static void ReturnToPool(IPooledObject script)
         {
             if (script != null)
             {
@@ -122,26 +120,20 @@ namespace OmiyaGames.Global
                     PoolSet pooledSet = allPooledObjects[prefab];
 
                     // Check if there are any deactivated objects
-                    foreach (KeyValuePair<GameObject, IPooledObject> cloneInstance in pooledSet.allClonedInstances)
+                    IPooledObject script = null;
+                    foreach (KeyValuePair<GameObject, IPooledObject> cloneInstance in pooledSet.InactiveInstances)
                     {
-                        if (cloneInstance.Key.activeSelf == false)
-                        {
-                            // If so, position this object properly
-                            returnObject = cloneInstance.Key;
-                            Transform cloneTransform = returnObject.transform;
-                            cloneTransform.position = position;
-                            cloneTransform.rotation = rotation;
+                        // If so, position this object properly
+                        returnObject = cloneInstance.Key;
+                        returnObject.transform.position = position;
+                        returnObject.transform.rotation = rotation;
 
-                            // Activate this object and return it
-                            returnObject.SetActive(true);
+                        // Activate this object and return it
+                        returnObject.SetActive(true);
 
-                            // If this set has a script, indicate this GameObject was activated
-                            if (cloneInstance.Value != null)
-                            {
-                                cloneInstance.Value.Activated(this);
-                            }
-                            break;
-                        }
+                        // If this set has a script, indicate this GameObject was activated
+                        script = cloneInstance.Value;
+                        break;
                     }
 
                     // If not, initialize a new object
@@ -149,6 +141,10 @@ namespace OmiyaGames.Global
                     {
                         // Initialized a new GameObject
                         returnObject = CloneNewInstance(prefab, pooledSet, position, rotation);
+                    }
+                    else if (script != null)
+                    {
+                        script.AfterActivated(this);
                     }
                 }
                 else
@@ -175,7 +171,7 @@ namespace OmiyaGames.Global
             return returnObject;
         }
 
-        public C GetInstance<C>(C script, Vector3 position, Quaternion rotation) where C : Component
+        public C GetInstance<C>(C script, Vector3 position, Quaternion rotation) where C : IPooledObject
         {
             C returnScript = default(C);
             if(script != null)
@@ -186,7 +182,7 @@ namespace OmiyaGames.Global
             return returnScript;
         }
 
-        public C GetInstance<C>(C script) where C : Component
+        public C GetInstance<C>(C script) where C : IPooledObject
         {
             C returnScript = default(C);
             if (script != null)
@@ -207,38 +203,51 @@ namespace OmiyaGames.Global
 
             // Grab the script from the clone if there is any in the original
             IPooledObject script = null;
-            if (pooledSet.containsPoolScript == true)
+            if (pooledSet.ContainsPoolScript == true)
             {
                 script = returnObject.GetComponent<IPooledObject>();
-                script.OriginalPrefab = prefab;
+                script.Pool = pooledSet;
             }
 
             // Add this new GameObject and script into the dictionary
-            pooledSet.allClonedInstances.Add(returnObject, script);
+            pooledSet.ActiveInstances.Add(returnObject, script);
 
             // Indicate to the script the object was initialized
             if (script != null)
             {
-                script.Initialized(this);
+                script.AfterInitialized(this);
             }
             return returnObject;
         }
 
         internal void DestroyAll()
         {
+            List<IPooledObject> deactivatedScripts = new List<IPooledObject>();
+
             // Deactivate everything
             foreach (PoolSet pool in allPooledObjects.Values)
             {
-                foreach (KeyValuePair<GameObject, IPooledObject> set in pool.allClonedInstances)
+                // Clear the scripts to deactivate
+                deactivatedScripts.Clear();
+                if (pool.ContainsPoolScript == true)
                 {
-                    if (set.Key.activeSelf == true)
+                    deactivatedScripts.Capacity = pool.ActiveInstances.Count;
+                }
+
+                // Go through all the active pooled items
+                foreach (KeyValuePair<GameObject, IPooledObject> set in pool.ActiveInstances)
+                {
+                    set.Key.SetActive(false);
+                    if (set.Value != null)
                     {
-                        set.Key.SetActive(false);
-                        if (set.Value != null)
-                        {
-                            set.Value.AfterDeactivate(this);
-                        }
+                        deactivatedScripts.Add(set.Value);
                     }
+                }
+
+                // Indicate script is deactivated
+                foreach(IPooledObject deactivatedScript in deactivatedScripts)
+                {
+                    deactivatedScript.AfterDeactivate(this);
                 }
             }
         }
