@@ -35,6 +35,7 @@ namespace OmiyaGames
     /// </summary>
     /// <seealso cref="IPooledObject"/>
     /// <seealso cref="PoolingManager"/>
+    [DisallowMultipleComponent]
     public class PooledObject : IPooledObject
     {
         public override void Awake()
