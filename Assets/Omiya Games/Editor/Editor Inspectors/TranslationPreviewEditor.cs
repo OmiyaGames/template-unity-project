@@ -41,8 +41,8 @@ namespace OmiyaGames.UI.Translations
     public class TranslationPreviewEditor
     {
         protected const float VerticalSpace = 4;
-        protected const float ExpandLength = 80f;
-        protected const float WordWrapLength = 100f;
+        protected const float ExpandLength = 75f;
+        protected const float WordWrapLength = 95f;
         protected const bool WordWrapEnabledDefault = false;
         static GUIStyle wrappedTextArea = null;
 
@@ -54,7 +54,7 @@ namespace OmiyaGames.UI.Translations
         int languageIndex = 0;
         string text = null;
 
-        public TranslationPreviewEditor(SupportedLanguages supportedLanguages) : this(supportedLanguages, null, "Preview Language", "Translation") { }
+        public TranslationPreviewEditor(SupportedLanguages supportedLanguages) : this(supportedLanguages, null, "Language", "Text") { }
 
         protected TranslationPreviewEditor(SupportedLanguages supportedLanguages, Editor editor, string keyLabel, string valueLabel)
         {
@@ -283,21 +283,21 @@ namespace OmiyaGames.UI.Translations
             float originalWidth = rect.width;
 
             // Calculate the Expand toggle bound (to be used later)
-            rect.x = (originalX + originalWidth) - ExpandLength;
+            rect.x = (originalX + originalWidth);
             rect.height = EditorGUIUtility.singleLineHeight;
             rect.width = ExpandLength;
+            rect.x -= rect.width;
             Rect expandToggleRect = new Rect(rect);
 
-            // Calculate the Word Wrap toggle bound (to be used later)
-            rect.x -= (WordWrapLength + VerticalSpace);
-            rect.width = WordWrapLength;
-
             // Draw the word-wrap toggle
+            //rect.x -= VerticalSpace;
+            rect.width = WordWrapLength;
+            rect.x -= rect.width;
             IsWordWrapEnabled = EditorGUI.ToggleLeft(rect, "Word Wrap", IsWordWrapEnabled);
 
             // Draw the label of the field
+            rect.width = originalWidth - Mathf.Abs((originalX + originalWidth) - rect.x);
             rect.x = originalX - ExpandTranslationsLeft;
-            rect.width = originalWidth - (ExpandLength + WordWrapLength) - (VerticalSpace + EditorUtility.VerticalMargin);
             EditorGUI.LabelField(rect, valueLabel);
 
             // Offset the text area

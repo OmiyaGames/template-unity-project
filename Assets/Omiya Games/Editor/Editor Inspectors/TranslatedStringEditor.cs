@@ -145,7 +145,8 @@ namespace OmiyaGames.UI.Translations
                 if (IsTextPreviewDrawn(status) == true)
                 {
                     // Allocate preview
-                    height += EditorUtility.VerticalMargin;
+                    height += EditorUtility.VerticalMargin * 2;
+                    height += EditorGUIUtility.singleLineHeight;
                     height += TextPreview.CalculateHeight(null);
                 }
             }
@@ -154,12 +155,12 @@ namespace OmiyaGames.UI.Translations
 
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
         {
+            // Grab every field
+            SerializedProperty key = property.FindPropertyRelative("key");
+            SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
+
             using (EditorGUI.PropertyScope scope = new EditorGUI.PropertyScope(rect, label, property))
             {
-                // Grab every field
-                SerializedProperty key = property.FindPropertyRelative("key");
-                SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
-
                 // Calculate height
                 float previewHeight = rect.height;
                 rect.height = EditorGUIUtility.singleLineHeight;
@@ -175,29 +176,31 @@ namespace OmiyaGames.UI.Translations
                     {
                         // Draw the properties regularly
                         rect = DrawFields(rect, key, dictionary);
-
-                        // Update status
-                        TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
-                        string translationKey = key.stringValue;
-                        Status status = UpdateMessageStatus(translationDictionary, translationKey);
-
-                        // Add indentation
-                        rect.x += IndentLeft;
-                        rect.width -= IndentLeft;
-
-                        // Draw HelpBox
-                        rect = DrawHelpBox(rect);
-
-                        // Draw preview
-                        rect = DrawTextPreview(rect, status, translationKey, translationDictionary);
-
-                        // Show button to add a new translation key
-                        rect = DrawButton(rect, status, translationDictionary, translationKey, dictionary);
-
-                        // Remove indentation
-                        rect.x -= IndentLeft;
-                        rect.width += IndentLeft;
                     }
+                }
+            }
+
+            if (IsExpanded == true)
+            {
+                // Update status
+                TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
+                string translationKey = key.stringValue;
+                Status status = UpdateMessageStatus(translationDictionary, translationKey);
+
+                // Draw preview
+                rect = DrawPreviewLabel(rect, status);
+
+                // Indent
+                using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
+                {
+                    // Draw HelpBox
+                    rect = DrawHelpBox(rect);
+
+                    // Draw preview
+                    rect = DrawTextPreview(rect, status, translationKey, translationDictionary);
+
+                    // Show button to add a new translation key
+                    rect = DrawButton(rect, status, translationDictionary, translationKey, dictionary);
                 }
             }
         }
@@ -217,8 +220,15 @@ namespace OmiyaGames.UI.Translations
         {
             if (IsButtonDrawn(status) == true)
             {
+                // Adjust height
                 rect.y += EditorUtility.VerticalMargin + rect.height;
                 rect.height = ButtonHeight;
+
+                // Add indentation
+                rect.x += IndentLeft;
+                rect.width -= IndentLeft;
+
+                // Draw buttons
                 if ((status == Status.DictionaryNotSet) && (GUI.Button(rect, "Create New Dictionary") == true))
                 {
                     // Add the key into the translations dictionary
@@ -235,6 +245,10 @@ namespace OmiyaGames.UI.Translations
                     // Apply changes to the dictionary
                     translationDictionary.UpdateSerializedTranslations();
                 }
+
+                // Remove indentation
+                rect.x -= IndentLeft;
+                rect.width += IndentLeft;
             }
             return rect;
         }
@@ -244,12 +258,31 @@ namespace OmiyaGames.UI.Translations
             // Check whether to show the help box
             if (string.IsNullOrEmpty(Message) == false)
             {
+                // Add indentation
+                rect.x += IndentLeft;
+                rect.width -= IndentLeft;
+
                 // Draw a header message
                 rect.y += EditorUtility.VerticalMargin + rect.height;
                 rect.height = EditorUtility.GetHelpBoxHeight(Message, rect.width);
                 EditorGUI.HelpBox(rect, Message, MessageType);
-            }
 
+                // Remove indentation
+                rect.x -= IndentLeft;
+                rect.width += IndentLeft;
+            }
+            return rect;
+        }
+
+        private Rect DrawPreviewLabel(Rect rect, Status status)
+        {
+            if (IsTextPreviewDrawn(status) == true)
+            {
+                // Draw header
+                rect.y += EditorUtility.VerticalMargin + rect.height;
+                rect.height = EditorGUIUtility.singleLineHeight;
+                EditorGUI.LabelField(rect, "Preview", EditorStyles.boldLabel);
+            }
             return rect;
         }
 
@@ -257,10 +290,6 @@ namespace OmiyaGames.UI.Translations
         {
             if (IsTextPreviewDrawn(status) == true)
             {
-                // Construct a list for the clip variations
-                rect.y += EditorUtility.VerticalMargin + rect.height;
-                rect.height = TextPreview.CalculateHeight(null);
-
                 // Update text preview
                 TextPreview.SupportedLanguages = translationDictionary.SupportedLanguages;
                 TextPreview.LanguageIndex = translationDictionary.SupportedLanguages.PreviewIndex;
@@ -271,12 +300,12 @@ namespace OmiyaGames.UI.Translations
                 }
 
                 // Draw the preview
-                EditorGUI.indentLevel -= 1;
+                rect.y += EditorUtility.VerticalMargin + rect.height;
+                rect.height = TextPreview.CalculateHeight(null);
                 TextPreview.DrawGui(rect, null, false);
-                EditorGUI.indentLevel += 1;
 
                 // Check if we need to apply changes
-                if(TextPreview.IsLanguageIndexChanged == true)
+                if (TextPreview.IsLanguageIndexChanged == true)
                 {
                     translationDictionary.SupportedLanguages.PreviewIndex = TextPreview.LanguageIndex;
                 }
