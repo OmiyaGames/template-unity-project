@@ -34,10 +34,9 @@ namespace OmiyaGames.UI.Translations
     /// <date>10/9/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Helper editor class to display <code>TranslationDictionary.LanguageTextPair</code>.
+    /// Helper editor class to display preview in <code>TranslatedStringEditor</code>.
     /// </summary>
-    /// <seealso cref="TranslationDictionaryEditor"/>
-    /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
+    /// <seealso cref="TranslatedStringEditor"/>
     public class TranslationPreviewEditor
     {
         protected const float VerticalSpace = 4;
@@ -82,6 +81,7 @@ namespace OmiyaGames.UI.Translations
                 {
                     wrappedTextArea = new GUIStyle(EditorStyles.textArea);
                 }
+                //wrappedTextArea.fontStyle = FontStyle.Bold;
                 wrappedTextArea.wordWrap = IsWordWrapEnabled;
                 return wrappedTextArea;
             }

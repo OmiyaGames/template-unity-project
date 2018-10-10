@@ -1,13 +1,40 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 namespace OmiyaGames.Translations
 {
-    public class TranslationDictionary : ScriptableObject
+    ///-----------------------------------------------------------------------
+    /// <copyright file="LanguageTextPairEditor.cs" company="Omiya Games">
+    /// The MIT License (MIT)
+    /// 
+    /// Copyright (c) 2014-2018 Omiya Games
+    /// 
+    /// Permission is hereby granted, free of charge, to any person obtaining a copy
+    /// of this software and associated documentation files (the "Software"), to deal
+    /// in the Software without restriction, including without limitation the rights
+    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    /// copies of the Software, and to permit persons to whom the Software is
+    /// furnished to do so, subject to the following conditions:
+    /// 
+    /// The above copyright notice and this permission notice shall be included in
+    /// all copies or substantial portions of the Software.
+    /// 
+    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    /// THE SOFTWARE.
+    /// </copyright>
+    /// <author>Taro Omiya</author>
+    /// <date>10/10/2018</date>
+    ///-----------------------------------------------------------------------
+    /// <summary>
+    /// Assets holding a giant list of translations.
+    /// </summary>
+    public partial class TranslationDictionary : ScriptableObject
     {
-        public const byte DefaultNumberOfLanguages = 3;
-
         public enum KeyNotFoundDefaults
         {
             Null,
@@ -23,85 +50,6 @@ namespace OmiyaGames.Translations
             DefaultLanguageOrNull,
             DefaultLanguageOrEmptyString,
             DefaultLanguageOrPresetMessage
-        }
-
-        [Serializable]
-        public struct LanguageTextPair
-        {
-            [SerializeField]
-            int languageIndex;
-            [SerializeField]
-            [TextArea]
-            string text;
-
-            public LanguageTextPair(int languageIndex, string text)
-            {
-                this.languageIndex = languageIndex;
-                this.text = text;
-            }
-
-            public int LanguageIndex
-            {
-                get
-                {
-                    return languageIndex;
-                }
-                set
-                {
-                    languageIndex = value;
-                }
-            }
-
-            public string Text
-            {
-                get
-                {
-                    return text;
-                }
-                set
-                {
-                    text = value;
-                }
-            }
-        }
-
-        [Serializable]
-        public struct TranslationCollection
-        {
-            [SerializeField]
-            string key;
-            [SerializeField]
-            List<LanguageTextPair> allTranslations;
-
-            public TranslationCollection(string key)
-            {
-                this.key = key;
-                this.allTranslations = new List<LanguageTextPair>(DefaultNumberOfLanguages);
-            }
-
-            public string Key
-            {
-                get
-                {
-                    return key;
-                }
-                set
-                {
-                    key = value;
-                }
-            }
-
-            public List<LanguageTextPair> AllTranslations
-            {
-                get
-                {
-                    if (allTranslations == null)
-                    {
-                        allTranslations = new List<LanguageTextPair>(DefaultNumberOfLanguages);
-                    }
-                    return allTranslations;
-                }
-            }
         }
 
         [Header("Required Components")]
@@ -126,7 +74,7 @@ namespace OmiyaGames.Translations
         /// A dictionary embedded in the dictionary. The top-most keys are keys to translations;
         /// next tier keys are languages; and values of the embedded tier are the text itself.
         /// </summary>
-        Dictionary<string, Dictionary<int, string>> allTranslations = null;
+        TranslationKeyCollection allTranslations = null;
 
         #region Properties
         public string this[string key, int languageIndex]
@@ -183,7 +131,6 @@ namespace OmiyaGames.Translations
             {
                 return presetMessageWhenKeyNotFound;
             }
-
             set
             {
                 presetMessageWhenKeyNotFound = value;
@@ -235,7 +182,7 @@ namespace OmiyaGames.Translations
         /// the actual serialization until <code>UpdateSerializedTranslations()</code> is called.
         /// </remarks>
         /// <seealso cref="UpdateSerializedTranslations"/>
-        public Dictionary<string, Dictionary<int, string>> AllTranslations
+        public IDictionary<string, IDictionary<int, string>> AllTranslations
         {
             get
             {
@@ -246,6 +193,12 @@ namespace OmiyaGames.Translations
                 }
                 return allTranslations;
             }
+        }
+
+        public bool IsAllTranslationsSerialized
+        {
+            get;
+            private set;
         }
         #endregion
 
@@ -259,7 +212,7 @@ namespace OmiyaGames.Translations
             }
 
             // Grab a soft-copy of all translations
-            Dictionary<string, Dictionary<int, string>> translationCopy = AllTranslations;
+            IDictionary<string, IDictionary<int, string>> translationCopy = AllTranslations;
 
             // Clear the translations list (this needs to happen AFTER calling AllTranslations' getter)
             translations.Clear();
@@ -267,7 +220,7 @@ namespace OmiyaGames.Translations
             // Go through all the keys
             TranslationCollection collectionToAdd;
             LanguageTextPair pairToAdd;
-            foreach (KeyValuePair<string, Dictionary<int, string>> collection in translationCopy)
+            foreach (KeyValuePair<string, IDictionary<int, string>> collection in translationCopy)
             {
                 // Create a new collection of translations
                 collectionToAdd = new TranslationCollection(collection.Key);
@@ -297,12 +250,12 @@ namespace OmiyaGames.Translations
             return translations;
         }
 
-        public Dictionary<string, Dictionary<int, string>> RepopulateAllTranslations()
+        public IDictionary<string, IDictionary<int, string>> RepopulateAllTranslations()
         {
             // Setup or clear the dictionary
             if (allTranslations == null)
             {
-                allTranslations = new Dictionary<string, Dictionary<int, string>>(translations.Count);
+                allTranslations = new TranslationKeyCollection(this);
             }
             allTranslations.Clear();
 
@@ -439,7 +392,7 @@ namespace OmiyaGames.Translations
         private void AddOrSetTranslation(string key, int languageIndex, string text)
         {
             // Grab a dictionary of translations from the argument, "key"
-            Dictionary<int, string> translationsForKey;
+            IDictionary<int, string> translationsForKey;
             if(AllTranslations.TryGetValue(key, out translationsForKey) == false)
             {
                 // Add a new dictionary for this key
