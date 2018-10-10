@@ -55,7 +55,6 @@ namespace OmiyaGames.UI.Translations
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
             EditorUtility.CreateBool(editor, ref expandToggle);
-            Debug.Log("New");
         }
 
         public LanguageTextPairEditor(LanguageTextPairEditor editor) : base(editor.SupportedLanguages, editor.editor, "Language", "Text")
@@ -220,15 +219,10 @@ namespace OmiyaGames.UI.Translations
             DrawKeyField(ref rect, indent, frequencyInLanguageAppearance);
 
             // Draw the warning, if any
-            //rect.y += VerticalSpace;
-            if (DrawWarningMessage(ref rect, frequencyInLanguageAppearance) == true)
-            {
-                // If there are, add an extra margin
-                //rect.y += VerticalSpace;
-            }
+            DrawWarningMessage(ref rect, frequencyInLanguageAppearance);
 
             // Draw the translation list
-            DrawText(ExpandToggle.faded, ref rect);
+            DrawText(ref rect);
         }
 
         public void Dispose()
@@ -263,7 +257,7 @@ namespace OmiyaGames.UI.Translations
             return isShown;
         }
 
-        protected override void DrawText(float faded, ref Rect rect)
+        protected override void DrawText(ref Rect rect)
         {
             float originalX = rect.x;
             float originalWidth = rect.width;

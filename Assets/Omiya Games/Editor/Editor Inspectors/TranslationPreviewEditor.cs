@@ -192,7 +192,7 @@ namespace OmiyaGames.UI.Translations
 
             // If so, calculate the height of translations
             bool isExpandable;
-            height += GetTextAreaHeight(Text, Width, (IsExpanded ? 1 : 0), out isExpandable);
+            height += GetTextAreaHeight(Text, Width, IsExpanded, out isExpandable);
             return height;
         }
 
@@ -206,7 +206,7 @@ namespace OmiyaGames.UI.Translations
             DrawKeyField(ref rect, indent, frequencyInLanguageAppearance);
 
             // Draw the translation list
-            DrawText((IsExpanded ? 1 : 0), ref rect);
+            DrawText(ref rect);
         }
 
         public static void AddLanguageToFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
@@ -277,7 +277,7 @@ namespace OmiyaGames.UI.Translations
             rect.width = originalWidth;
         }
 
-        protected virtual void DrawText(float faded, ref Rect rect)
+        protected virtual void DrawText(ref Rect rect)
         {
             float originalX = rect.x;
             float originalWidth = rect.width;
@@ -309,7 +309,7 @@ namespace OmiyaGames.UI.Translations
             // Calculate range of warning
             string oldText = Text;
             bool isExpandable;
-            rect.height = GetTextAreaHeight(oldText, Width, faded, out isExpandable);
+            rect.height = GetTextAreaHeight(oldText, Width, IsExpanded, out isExpandable);
 
             // Draw the translations list
             IsTextChanged = false;
@@ -343,6 +343,11 @@ namespace OmiyaGames.UI.Translations
                 }
             }
             return message;
+        }
+
+        protected float GetTextAreaHeight(string text, float viewWidth, bool isExpanded, out bool isExpandable)
+        {
+            return GetTextAreaHeight(text, viewWidth, (isExpanded ? 1 : 0), out isExpandable);
         }
 
         protected float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
