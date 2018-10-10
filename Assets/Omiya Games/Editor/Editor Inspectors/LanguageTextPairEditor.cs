@@ -38,65 +38,51 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="TranslationDictionaryEditor"/>
     /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
-    public class LanguageTextPairEditor : System.IDisposable
+    public class LanguageTextPairEditor : TranslationPreviewEditor, System.IDisposable
     {
-        const float VerticalMargin = 2;
-        const float VerticalSpace = 4;
         const float KeyLength = 30f;
-        const float ExpandLength = 60f;
-        const float WordWrapLength = 80f;
-        const float ExpandTranslationsLeft = 14f;
-        const bool WordWrapEnabledDefault = false;
-        static GUIStyle wrappedTextArea = null;
 
-        readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
         readonly AnimBool expandToggle;
         float width;
 
-        public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
+        public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages) : base(supportedLanguages, editor, "Language", "Text")
         {
             // Setup member variables
-            this.editor = editor;
-            this.SupportedLanguages = supportedLanguages;
             Element = element;
 
             // Setup the bools
             EditorUtility.CreateBool(editor, ref showHelpBox);
             EditorUtility.CreateBool(editor, ref expandToggle);
+            Debug.Log("New");
+        }
+
+        public LanguageTextPairEditor(LanguageTextPairEditor editor) : base(editor.SupportedLanguages, editor.editor, "Language", "Text")
+        {
+            // Setup member variables
+            Element = editor.Element;
+
+            // Setup the bools
+            EditorUtility.CreateBool(editor.editor, ref showHelpBox);
+            EditorUtility.CreateBool(editor.editor, ref expandToggle);
+
+            // Transfer variables
+            IsWordWrapEnabled = editor.IsWordWrapEnabled;
+            IsExpanded = editor.IsExpanded;
         }
 
         #region Properties
-        public GUIStyle WrappedTextArea
-        {
-            get
-            {
-                if (wrappedTextArea == null)
-                {
-                    wrappedTextArea = new GUIStyle(EditorStyles.textArea);
-                }
-                wrappedTextArea.wordWrap = IsWordWrapEnabled;
-                return wrappedTextArea;
-            }
-        }
-
-        public static float PreviewHeight
-        {
-            get
-            {
-                return EditorGUIUtility.singleLineHeight * 2 + VerticalSpace;
-            }
-        }
-
         public AnimBool ShowHelpBox => showHelpBox;
         public AnimBool ExpandToggle => expandToggle;
 
-        public bool IsWordWrapEnabled
+        public override bool SetMininmumHeightToPreview
         {
-            get;
-            private set;
-        } = WordWrapEnabledDefault;
+            get
+            {
+                return false;
+            }
+        }
 
         public SerializedProperty LanguageIndexProperty
         {
@@ -116,27 +102,6 @@ namespace OmiyaGames.UI.Translations
             set;
         }
 
-        private float Width
-        {
-            get
-            {
-                return width;
-            }
-            set
-            {
-                // Not sure why we need this, but it fixes a lot of problems.
-                if(value > 0)
-                {
-                    width = value;
-                    //Debug.Log("Width: " + width + ", vs Utility: " + EditorGUIUtility.currentViewWidth);
-                }
-                //else
-                //{
-                //    Debug.Log("Trying to set width to negative");
-                //}
-            }
-        }
-
         public SerializedProperty Element
         {
             get
@@ -152,10 +117,66 @@ namespace OmiyaGames.UI.Translations
             }
         }
 
-        public SupportedLanguages SupportedLanguages
+        public override int LanguageIndex
         {
-            get;
-            set;
+            get
+            {
+                int returnIndex = 0;
+                if (LanguageIndexProperty != null)
+                {
+                    returnIndex = LanguageIndexProperty.intValue;
+                }
+                return returnIndex;
+            }
+            set
+            {
+                if ((LanguageIndexProperty != null) && (LanguageIndexProperty.intValue != value))
+                {
+                    LanguageIndexProperty.intValue = value;
+                    IsLanguageIndexChanged = true;
+                }
+            }
+        }
+
+        public override string Text
+        {
+            get
+            {
+                string returnText = null;
+                if (TextProperty != null)
+                {
+                    returnText = TextProperty.stringValue;
+                }
+                return returnText;
+            }
+            set
+            {
+                if ((TextProperty != null) && (TextProperty.stringValue != value))
+                {
+                    TextProperty.stringValue = value;
+                    IsTextChanged = true;
+                }
+            }
+        }
+
+        public override float ExpandTranslationsLeft
+        {
+            get
+            {
+                return 15f;
+            }
+        }
+
+        public override bool IsExpanded
+        {
+            get
+            {
+                return ExpandToggle.target;
+            }
+            protected set
+            {
+                ExpandToggle.target = value;
+            }
         }
         #endregion
 
@@ -164,10 +185,10 @@ namespace OmiyaGames.UI.Translations
             Element = element;
         }
 
-        public float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance)
+        public override float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Calculate the key height
-            float height = VerticalMargin;
+            float height = EditorUtility.VerticalMargin;
             height += EditorGUIUtility.singleLineHeight;
             height += VerticalSpace;
 
@@ -185,16 +206,18 @@ namespace OmiyaGames.UI.Translations
             // If so, calculate the height of translations
             bool isExpandable;
             height += GetTextAreaHeight(TextProperty.stringValue, Width, ExpandToggle.faded, out isExpandable);
-            //height += VerticalMargin;
-            height += VerticalMargin;
+            height += EditorUtility.VerticalMargin;
             return height;
         }
 
-        public void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
+        public override void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance, bool indent = true)
         {
             // Draw the key field
-            rect.y += VerticalMargin;
-            DrawKeyField(ref rect, frequencyInLanguageAppearance);
+            if (indent == true)
+            {
+                rect.y += EditorUtility.VerticalMargin;
+            }
+            DrawKeyField(ref rect, indent, frequencyInLanguageAppearance);
 
             // Draw the warning, if any
             //rect.y += VerticalSpace;
@@ -205,39 +228,7 @@ namespace OmiyaGames.UI.Translations
             }
 
             // Draw the translation list
-            DrawText(ref rect);
-        }
-
-        public static void AddLanguageToFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
-        {
-            // Make sure argument is correct
-            if (frequencyInLanguageAppearance != null)
-            {
-                // Add this key to the dictionary
-                if (frequencyInLanguageAppearance.ContainsKey(key) == false)
-                {
-                    frequencyInLanguageAppearance.Add(key, 1);
-                }
-                else
-                {
-                    frequencyInLanguageAppearance[key] += 1;
-                }
-            }
-        }
-
-        public static void RemoveLanguageFromFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
-        {
-            // Make sure argument is correct
-            if ((frequencyInLanguageAppearance != null) && (frequencyInLanguageAppearance.ContainsKey(key) == true))
-            {
-                // Remove this key from the dictionary
-                frequencyInLanguageAppearance[key] -= 1;
-                if (frequencyInLanguageAppearance[key] <= 0)
-                {
-                    // Remove the key if the value is below 0
-                    frequencyInLanguageAppearance.Remove(key);
-                }
-            }
+            DrawText(ExpandToggle.faded, ref rect);
         }
 
         public void Dispose()
@@ -247,44 +238,6 @@ namespace OmiyaGames.UI.Translations
         }
 
         #region Helper Methods
-        private void DrawKeyField(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
-        {
-            // Hold onto the original rect position
-            float originalX = rect.x;
-            float originalWidth = rect.width;
-
-            // Adjust the values 
-            rect.height = EditorGUIUtility.singleLineHeight;
-            rect.width = KeyLength;
-
-            // Draw the key label
-            EditorGUI.LabelField(rect, "Language");
-
-            // Draw the key text field
-            rect.x += rect.width + VerticalSpace;
-            rect.width = originalWidth - (KeyLength + VerticalSpace);
-            EditorGUI.BeginChangeCheck();
-            int oldLanguageIndex = LanguageIndexProperty.intValue;
-            LanguageIndexProperty.intValue = SupportedLanguagesEditor.DrawSupportedLanguages(rect, LanguageIndexProperty, SupportedLanguages);
-
-            // Check if there's a difference
-            if (LanguageIndexProperty.intValue != oldLanguageIndex)
-            {
-                // Update dictionary
-                RemoveLanguageFromFrequencyDictionary(frequencyInLanguageAppearance, oldLanguageIndex);
-                AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndexProperty.intValue);
-
-                // Testing...
-                editor.serializedObject.ApplyModifiedProperties();
-            }
-
-            // Re-adjust the rectangle, full-width for the next part
-            rect.x = originalX;
-            rect.y += rect.height;
-            rect.height = EditorGUIUtility.singleLineHeight;
-            rect.width = originalWidth;
-        }
-
         private bool DrawWarningMessage(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Adjust the bools
@@ -310,7 +263,7 @@ namespace OmiyaGames.UI.Translations
             return isShown;
         }
 
-        private void DrawText(ref Rect rect)
+        protected override void DrawText(float faded, ref Rect rect)
         {
             float originalX = rect.x;
             float originalWidth = rect.width;
@@ -319,7 +272,7 @@ namespace OmiyaGames.UI.Translations
             rect.x = originalX - ExpandTranslationsLeft;
             rect.width = KeyLength;
             rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(rect, "Text");
+            EditorGUI.LabelField(rect, valueLabel);
 
             // Calculate the Expand toggle bound (to be used later)
             rect.x = (originalX + originalWidth) - ExpandLength;
@@ -356,42 +309,6 @@ namespace OmiyaGames.UI.Translations
             rect.x = originalX;
             rect.width = originalWidth;
             rect.y += rect.height;
-        }
-
-        private string GetWarning(Dictionary<int, int> frequencyInLanguageAppearance)
-        {
-            // Check what warning to display
-            string message = null;
-            int langaugeIndex = LanguageIndexProperty.intValue;
-            if ((langaugeIndex < 0) || (langaugeIndex >= SupportedLanguages.NumberOfLanguages))
-            {
-                message = "Language is not set to a valid value.";
-            }
-            else if (frequencyInLanguageAppearance[langaugeIndex] > 1)
-            {
-                message = "Multiple texts for the same language exists in this set.";
-            }
-
-            return message;
-        }
-
-        private float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
-        {
-            var content = new GUIContent(text);
-
-            // Get the minimum and maximum measurement
-            float min = PreviewHeight;
-            float max = WrappedTextArea.CalcHeight(content, viewWidth);
-            if (max < min)
-            {
-                isExpandable = false;
-                return max;
-            }
-            else
-            {
-                isExpandable = true;
-                return Mathf.Lerp(min, max, fadeValue);
-            }
         }
         #endregion
     }

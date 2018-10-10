@@ -40,26 +40,40 @@ namespace OmiyaGames.UI.Translations
     /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
     public class TranslationPreviewEditor
     {
-        const float VerticalMargin = 2;
-        const float VerticalSpace = 4;
-        const float ExpandLength = 80f;
-        const float WordWrapLength = 100f;
-        const bool WordWrapEnabledDefault = false;
+        protected const float VerticalSpace = 4;
+        protected const float ExpandLength = 80f;
+        protected const float WordWrapLength = 100f;
+        protected const bool WordWrapEnabledDefault = false;
         static GUIStyle wrappedTextArea = null;
 
         protected readonly Editor editor;
+        protected readonly string keyLabel;
+        protected readonly string valueLabel;
         SerializedProperty element;
         float width;
         int languageIndex = 0;
         string text = null;
 
-        public TranslationPreviewEditor(SupportedLanguages supportedLanguages)
+        public TranslationPreviewEditor(SupportedLanguages supportedLanguages) : this(supportedLanguages, null, "Preview Language", "Translation") { }
+
+        protected TranslationPreviewEditor(SupportedLanguages supportedLanguages, Editor editor, string keyLabel, string valueLabel)
         {
             // Setup member variables
-            this.SupportedLanguages = supportedLanguages;
+            SupportedLanguages = supportedLanguages;
+            this.editor = editor;
+            this.keyLabel = keyLabel;
+            this.valueLabel = valueLabel;
         }
 
         #region Properties
+        public virtual bool SetMininmumHeightToPreview
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public GUIStyle WrappedTextArea
         {
             get
@@ -92,16 +106,16 @@ namespace OmiyaGames.UI.Translations
         public bool IsWordWrapEnabled
         {
             get;
-            private set;
+            protected set;
         } = WordWrapEnabledDefault;
 
-        public bool IsExpanded
+        public virtual bool IsExpanded
         {
             get;
-            private set;
+            protected set;
         } = false;
 
-        public int LanguageIndex
+        public virtual int LanguageIndex
         {
             get
             {
@@ -117,7 +131,7 @@ namespace OmiyaGames.UI.Translations
             }
         }
 
-        public string Text
+        public virtual string Text
         {
             get
             {
@@ -136,16 +150,16 @@ namespace OmiyaGames.UI.Translations
         public bool IsLanguageIndexChanged
         {
             get;
-            private set;
+            protected set;
         }
 
         public bool IsTextChanged
         {
             get;
-            private set;
+            protected set;
         }
 
-        private float Width
+        protected float Width
         {
             get
             {
@@ -168,11 +182,6 @@ namespace OmiyaGames.UI.Translations
         }
         #endregion
 
-        public virtual float GetKeyLength(float width)
-        {
-            return (width - ((EditorGUI.indentLevel + 1) * 15)) * 0.35f;
-        }
-
         public virtual float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Calculate the language height
@@ -192,7 +201,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the key field
             if(indent == true)
             {
-                rect.y += VerticalMargin;
+                rect.y += EditorUtility.VerticalMargin;
             }
             DrawKeyField(ref rect, indent, frequencyInLanguageAppearance);
 
@@ -233,7 +242,7 @@ namespace OmiyaGames.UI.Translations
         }
 
         #region Helper Methods
-        private void DrawKeyField(ref Rect rect, bool indent, Dictionary<int, int> frequencyInLanguageAppearance)
+        protected void DrawKeyField(ref Rect rect, bool indent, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Hold onto the original rect position
             float originalX = rect.x;
@@ -245,7 +254,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the key text field
             IsLanguageIndexChanged = false;
             int oldLanguageIndex = LanguageIndex;
-            LanguageIndex = SupportedLanguagesEditor.DrawSupportedLanguages(rect, "Preview", LanguageIndex, SupportedLanguages);
+            LanguageIndex = SupportedLanguagesEditor.DrawSupportedLanguages(rect, keyLabel, LanguageIndex, SupportedLanguages);
 
             // Check if there's a difference
             if ((frequencyInLanguageAppearance != null) && (LanguageIndex != oldLanguageIndex))
@@ -255,7 +264,10 @@ namespace OmiyaGames.UI.Translations
                 AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndex);
 
                 // Testing...
-                editor.serializedObject.ApplyModifiedProperties();
+                if(editor != null)
+                {
+                    editor.serializedObject.ApplyModifiedProperties();
+                }
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -265,19 +277,14 @@ namespace OmiyaGames.UI.Translations
             rect.width = originalWidth;
         }
 
-        private void DrawText(float faded, ref Rect rect)
+        protected virtual void DrawText(float faded, ref Rect rect)
         {
             float originalX = rect.x;
             float originalWidth = rect.width;
 
-            // Draw the label of the field
-            rect.x = originalX - ExpandTranslationsLeft;
-            rect.width = GetKeyLength(originalWidth);
-            rect.height = EditorGUIUtility.singleLineHeight;
-            EditorGUI.LabelField(rect, "Translation");
-
             // Calculate the Expand toggle bound (to be used later)
             rect.x = (originalX + originalWidth) - ExpandLength;
+            rect.height = EditorGUIUtility.singleLineHeight;
             rect.width = ExpandLength;
             Rect expandToggleRect = new Rect(rect);
 
@@ -287,6 +294,11 @@ namespace OmiyaGames.UI.Translations
 
             // Draw the word-wrap toggle
             IsWordWrapEnabled = EditorGUI.ToggleLeft(rect, "Word Wrap", IsWordWrapEnabled);
+
+            // Draw the label of the field
+            rect.x = originalX - ExpandTranslationsLeft;
+            rect.width = originalWidth - (ExpandLength + WordWrapLength) - (VerticalSpace + EditorUtility.VerticalMargin);
+            EditorGUI.LabelField(rect, valueLabel);
 
             // Offset the text area
             rect.x = originalX - ExpandTranslationsLeft;
@@ -343,7 +355,14 @@ namespace OmiyaGames.UI.Translations
             if (max < min)
             {
                 isExpandable = false;
-                return min;
+                if(SetMininmumHeightToPreview == true)
+                {
+                    return min;
+                }
+                else
+                {
+                    return max;
+                }
             }
             else
             {
