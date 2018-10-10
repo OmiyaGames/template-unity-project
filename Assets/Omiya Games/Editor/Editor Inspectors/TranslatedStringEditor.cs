@@ -293,7 +293,7 @@ namespace OmiyaGames.UI.Translations
                 // Update text preview
                 TextPreview.SupportedLanguages = translationDictionary.SupportedLanguages;
                 TextPreview.LanguageIndex = translationDictionary.SupportedLanguages.PreviewIndex;
-                Dictionary<int, string> translations;
+                IDictionary<int, string> translations;
                 if ((translationDictionary.AllTranslations.TryGetValue(key, out translations) == true) && (translations.ContainsKey(TextPreview.LanguageIndex) == true))
                 {
                     TextPreview.Text = translations[TextPreview.LanguageIndex];
