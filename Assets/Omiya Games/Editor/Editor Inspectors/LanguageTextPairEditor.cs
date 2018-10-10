@@ -40,6 +40,8 @@ namespace OmiyaGames.UI.Translations
     /// <seealso cref="OmiyaGames.Translations.TranslationDictionary.LanguageTextPair"/>
     public class LanguageTextPairEditor : System.IDisposable
     {
+        // TODO: consider refactoring TranslationPreviewEditor as a parent
+        // class to this script
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
