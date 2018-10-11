@@ -316,7 +316,7 @@ namespace OmiyaGames.UI.Translations
                 // Draw header
                 rect.y += EditorUtility.VerticalMargin + rect.height;
                 rect.height = EditorGUIUtility.singleLineHeight;
-                EditorGUI.LabelField(rect, "Preview", EditorStyles.boldLabel);
+                EditorGUI.LabelField(rect, "Preview", EditorStyles.label);
             }
             return rect;
         }
