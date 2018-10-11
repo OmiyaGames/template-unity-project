@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="AudioFinder.cs" company="Omiya Games">
+    /// <copyright file="UpdateTranslatedTextComponent.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
