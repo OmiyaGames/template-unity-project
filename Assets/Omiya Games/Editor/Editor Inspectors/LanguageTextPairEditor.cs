@@ -276,8 +276,8 @@ namespace OmiyaGames.UI.Translations
                 RemoveLanguageFromFrequencyDictionary(frequencyInLanguageAppearance, oldLanguageIndex);
                 AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndexProperty.intValue);
 
-                // Testing...
-                editor.serializedObject.ApplyModifiedProperties();
+                // Indicate this dictionary needs to be updated
+                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -347,7 +347,13 @@ namespace OmiyaGames.UI.Translations
             rect.height = GetTextAreaHeight(oldText, Width, ExpandToggle.faded, out isExpandable);
 
             // Draw the translations list
+            EditorGUI.BeginChangeCheck();
             TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
+            if(EditorGUI.EndChangeCheck() == true)
+            {
+                // Indicate this dictionary needs to be updated
+                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
+            }
 
             // Draw the toggle, enabled only if the area is expandable
             GUI.enabled = isExpandable;
