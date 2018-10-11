@@ -65,6 +65,8 @@ namespace OmiyaGames.Translations
         int defaultLanguageWhenTranslationNotFound = 0;
         [SerializeField]
         string presetMessageWhenTranslationNotFound = "<Translation Not Found>";
+        [SerializeField]
+        bool replaceEmptyStringWithDefaultText = true;
 
         [Header("Translations")]
         [SerializeField]
@@ -77,11 +79,27 @@ namespace OmiyaGames.Translations
         KeyLanguageTextMap allTranslations = null;
 
         #region Properties
+        public string this[string key, int languageIndex, bool allowRetrievingDefaultText]
+        {
+            get
+            {
+                return GetTranslation(key, languageIndex, allowRetrievingDefaultText);
+            }
+        }
+
+        public string this[string key, string language, bool allowRetrievingDefaultText]
+        {
+            get
+            {
+                return this[key, SupportedLanguages[language], allowRetrievingDefaultText];
+            }
+        }
+
         public string this[string key, int languageIndex]
         {
             get
             {
-                return GetTranslation(key, languageIndex);
+                return this[key, languageIndex, true];
             }
             set
             {
@@ -93,7 +111,7 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return this[key, SupportedLanguages[language]];
+                return this[key, language, true];
             }
             set
             {
@@ -170,6 +188,18 @@ namespace OmiyaGames.Translations
             set
             {
                 defaultLanguageWhenTranslationNotFound = value;
+            }
+        }
+
+        public bool IsEmptyStringReplacedWithDefaultText
+        {
+            get
+            {
+                return replaceEmptyStringWithDefaultText;
+            }
+            set
+            {
+                replaceEmptyStringWithDefaultText = value;
             }
         }
 
@@ -304,24 +334,35 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
-        private string GetTranslation(string key, int languageIndex)
+        private string GetTranslation(string key, int languageIndex, bool allowRetrievingDefaultText)
         {
             // Check if key or translation is available
             string returnText = null;
             if (HasKey(key) == false)
             {
-                // Key is not available, return a default
-                returnText = GetDefaultKeyNotFoundText();
+                if (allowRetrievingDefaultText == true)
+                {
+                    // Key is not available, return a default
+                    returnText = GetDefaultKeyNotFoundText();
+                }
             }
             else if (HasTranslation(key, languageIndex) == false)
             {
-                // Translation is not available, return a default
-                returnText = GetDefaultTranslationNotFoundText(key);
+                if (allowRetrievingDefaultText == true)
+                {
+                    // Translation is not available, return a default
+                    returnText = GetDefaultTranslationNotFoundText(key);
+                }
             }
             else
             {
                 // Grab the actual text
                 returnText = AllTranslations[key][languageIndex];
+                if ((allowRetrievingDefaultText == true) && (IsEmptyStringReplacedWithDefaultText == true) && (string.IsNullOrEmpty(returnText) == true))
+                {
+                    // Translation is not available, return a default
+                    returnText = GetDefaultTranslationNotFoundText(key);
+                }
             }
             return returnText;
         }
