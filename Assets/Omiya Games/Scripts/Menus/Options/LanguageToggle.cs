@@ -40,6 +40,8 @@ namespace OmiyaGames.Menu
         public event System.Action<LanguageToggle> OnChecked;
 
         [SerializeField]
+        Translations.TranslatedString languageText;
+        [SerializeField]
         TMPro.TextMeshProUGUI label;
         [SerializeField]
         UiEventNavigation navigation;
@@ -56,7 +58,7 @@ namespace OmiyaGames.Menu
             set
             {
                 language = value;
-                label.text = language;
+                label.text = languageText.ToString(language);
             }
         }
 
