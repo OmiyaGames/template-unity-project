@@ -36,21 +36,31 @@ namespace OmiyaGames
     /// </summary>
     public static class EditorUtility
     {
+        public const float MinHelpBoxHeight = 30f;
+        public const float VerticalMargin = 2f;
+
         public static float SingleLineHeight(float verticalMargin)
         {
             return EditorGUIUtility.singleLineHeight + (verticalMargin * 2);
         }
 
-        public static float GetHeight(GUIContent label, int numRows, float verticalMargin)
+        public static float GetHeight(GUIContent label, int numRows, float verticalMargin = VerticalMargin)
         {
             if ((label != null) && (string.IsNullOrEmpty(label.text) == false))
             {
                 numRows += 1;
             }
-            return (EditorGUIUtility.singleLineHeight + verticalMargin) * numRows;
+            return GetHeight(numRows, verticalMargin);
         }
 
-        public static float GetHelpBoxHeight(string text, float viewWidth, float minHeight)
+        public static float GetHeight(int numRows, float verticalMargin = VerticalMargin)
+        {
+            float height = (EditorGUIUtility.singleLineHeight * numRows);
+            height += (verticalMargin * numRows);
+            return height;
+        }
+
+        public static float GetHelpBoxHeight(string text, float viewWidth, float minHeight = MinHelpBoxHeight)
         {
             var content = new GUIContent(text);
             var style = GUI.skin.GetStyle("helpbox");

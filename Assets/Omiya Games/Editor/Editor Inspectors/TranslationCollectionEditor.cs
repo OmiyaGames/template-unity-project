@@ -44,7 +44,6 @@ namespace OmiyaGames.UI.Translations
         const float VerticalMargin = 2;
         const float VerticalSpace = 4;
         const float KeyLength = 30f;
-        const float MinHelpBoxHeight = 30f;
         const float ExpandTranslationsLeft = 14f;
 
         readonly Editor editor;
@@ -163,7 +162,7 @@ namespace OmiyaGames.UI.Translations
             if ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width, MinHelpBoxHeight) * ShowHelpBox.faded;
+                height += EditorUtility.GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
                 height += VerticalSpace;
             }
 
@@ -271,6 +270,9 @@ namespace OmiyaGames.UI.Translations
                 // Update dictionary
                 RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, oldKey);
                 AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
+
+                // Indicate this dictionary needs to be updated
+                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -290,7 +292,7 @@ namespace OmiyaGames.UI.Translations
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width, MinHelpBoxHeight);
+                float helpBoxHeight = EditorUtility.GetHelpBoxHeight(LastMessage, rect.width);
                 rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning
