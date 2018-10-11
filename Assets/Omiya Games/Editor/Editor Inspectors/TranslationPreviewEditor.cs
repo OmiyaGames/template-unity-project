@@ -43,11 +43,11 @@ namespace OmiyaGames.UI.Translations
         protected const float ExpandLength = 75f;
         protected const float WordWrapLength = 95f;
         protected const bool WordWrapEnabledDefault = false;
-        static GUIStyle wrappedTextArea = null;
 
         protected readonly Editor editor;
         protected readonly string keyLabel;
         protected readonly string valueLabel;
+        protected readonly GUIStyle wrappedTextArea = new GUIStyle(EditorStyles.textArea);
         SerializedProperty element;
         float width;
         int languageIndex = 0;
@@ -70,20 +70,6 @@ namespace OmiyaGames.UI.Translations
             get
             {
                 return true;
-            }
-        }
-
-        public GUIStyle WrappedTextArea
-        {
-            get
-            {
-                if (wrappedTextArea == null)
-                {
-                    wrappedTextArea = new GUIStyle(EditorStyles.textArea);
-                }
-                //wrappedTextArea.fontStyle = FontStyle.Bold;
-                wrappedTextArea.wordWrap = IsWordWrapEnabled;
-                return wrappedTextArea;
             }
         }
 
@@ -182,7 +168,7 @@ namespace OmiyaGames.UI.Translations
         }
         #endregion
 
-        public virtual float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance)
+        public virtual float CalculateHeight(Dictionary<int, int> frequencyInLanguageAppearance, bool isTextBolded)
         {
             // Calculate the language height
             float height = EditorGUIUtility.singleLineHeight;
@@ -192,21 +178,17 @@ namespace OmiyaGames.UI.Translations
 
             // If so, calculate the height of translations
             bool isExpandable;
-            height += GetTextAreaHeight(Text, Width, IsExpanded, out isExpandable);
+            height += GetTextAreaHeight(Text, Width, IsExpanded, isTextBolded, out isExpandable);
             return height;
         }
 
-        public virtual void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance, bool indent = true)
+        public virtual void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance, bool isTextBolded)
         {
             // Draw the key field
-            if(indent == true)
-            {
-                rect.y += EditorUtility.VerticalMargin;
-            }
-            DrawKeyField(ref rect, indent, frequencyInLanguageAppearance);
+            DrawKeyField(ref rect, frequencyInLanguageAppearance);
 
             // Draw the translation list
-            DrawText(ref rect);
+            DrawText(ref rect, isTextBolded);
         }
 
         public static void AddLanguageToFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
@@ -242,7 +224,7 @@ namespace OmiyaGames.UI.Translations
         }
 
         #region Helper Methods
-        protected void DrawKeyField(ref Rect rect, bool indent, Dictionary<int, int> frequencyInLanguageAppearance)
+        protected void DrawKeyField(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
         {
             // Hold onto the original rect position
             float originalX = rect.x;
@@ -264,7 +246,7 @@ namespace OmiyaGames.UI.Translations
                 AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndex);
 
                 // Testing...
-                if(editor != null)
+                if (editor != null)
                 {
                     editor.serializedObject.ApplyModifiedProperties();
                 }
@@ -277,7 +259,7 @@ namespace OmiyaGames.UI.Translations
             rect.width = originalWidth;
         }
 
-        protected virtual void DrawText(ref Rect rect)
+        protected virtual void DrawText(ref Rect rect, bool isTextBolded)
         {
             float originalX = rect.x;
             float originalWidth = rect.width;
@@ -290,7 +272,6 @@ namespace OmiyaGames.UI.Translations
             Rect expandToggleRect = new Rect(rect);
 
             // Draw the word-wrap toggle
-            //rect.x -= VerticalSpace;
             rect.width = WordWrapLength;
             rect.x -= rect.width;
             IsWordWrapEnabled = EditorGUI.ToggleLeft(rect, "Word Wrap", IsWordWrapEnabled);
@@ -298,7 +279,12 @@ namespace OmiyaGames.UI.Translations
             // Draw the label of the field
             rect.width = originalWidth - Mathf.Abs((originalX + originalWidth) - rect.x);
             rect.x = originalX - ExpandTranslationsLeft;
-            EditorGUI.LabelField(rect, valueLabel);
+            GUIStyle labelStyle = EditorStyles.label;
+            if (isTextBolded == true)
+            {
+                labelStyle = EditorStyles.boldLabel;
+            }
+            EditorGUI.LabelField(rect, valueLabel, labelStyle);
 
             // Offset the text area
             rect.x = originalX - ExpandTranslationsLeft;
@@ -309,11 +295,11 @@ namespace OmiyaGames.UI.Translations
             // Calculate range of warning
             string oldText = Text;
             bool isExpandable;
-            rect.height = GetTextAreaHeight(oldText, Width, IsExpanded, out isExpandable);
+            rect.height = GetTextAreaHeight(oldText, Width, IsExpanded, isTextBolded, out isExpandable);
 
             // Draw the translations list
             IsTextChanged = false;
-            Text = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
+            Text = EditorGUI.TextArea(rect, oldText, GetTextAreaStyle(isTextBolded));
 
             // Draw the toggle, enabled only if the area is expandable
             GUI.enabled = isExpandable;
@@ -345,22 +331,22 @@ namespace OmiyaGames.UI.Translations
             return message;
         }
 
-        protected float GetTextAreaHeight(string text, float viewWidth, bool isExpanded, out bool isExpandable)
+        protected float GetTextAreaHeight(string text, float viewWidth, bool isExpanded, bool isBolded, out bool isExpandable)
         {
-            return GetTextAreaHeight(text, viewWidth, (isExpanded ? 1 : 0), out isExpandable);
+            return GetTextAreaHeight(text, viewWidth, (isExpanded ? 1 : 0), isBolded, out isExpandable);
         }
 
-        protected float GetTextAreaHeight(string text, float viewWidth, float fadeValue, out bool isExpandable)
+        protected float GetTextAreaHeight(string text, float viewWidth, float fadeValue, bool isBolded, out bool isExpandable)
         {
             var content = new GUIContent(text);
 
             // Get the minimum and maximum measurement
             float min = PreviewHeight;
-            float max = WrappedTextArea.CalcHeight(content, viewWidth);
+            float max = GetTextAreaStyle(isBolded).CalcHeight(content, viewWidth);
             if (max < min)
             {
                 isExpandable = false;
-                if(SetMininmumHeightToPreview == true)
+                if (SetMininmumHeightToPreview == true)
                 {
                     return min;
                 }
@@ -374,6 +360,17 @@ namespace OmiyaGames.UI.Translations
                 isExpandable = true;
                 return Mathf.Lerp(min, max, fadeValue);
             }
+        }
+
+        private GUIStyle GetTextAreaStyle(bool isTextBolded)
+        {
+            wrappedTextArea.wordWrap = IsWordWrapEnabled;
+            wrappedTextArea.fontStyle = FontStyle.Normal;
+            if (isTextBolded == true)
+            {
+                wrappedTextArea.fontStyle = FontStyle.Bold;
+            }
+            return wrappedTextArea;
         }
         #endregion
     }

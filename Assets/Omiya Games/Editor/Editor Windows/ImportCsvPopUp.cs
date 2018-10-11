@@ -397,7 +397,7 @@ namespace OmiyaGames.UI.Translations
 
             // Go through each row of the results
             string key;
-            Dictionary<int, string> translations;
+            TranslationDictionary.LanguageTextMap translations;
             foreach (Dictionary<string, string> row in results)
             {
                 // First, search for the key column
@@ -408,8 +408,7 @@ namespace OmiyaGames.UI.Translations
                     if (DictionaryToEdit.AllTranslations.ContainsKey(key) == false)
                     {
                         // If no conflicts, add a new translations dictionary
-                        translations = new Dictionary<int, string>(row.Count - 1);
-                        DictionaryToEdit.AllTranslations.Add(key, translations);
+                        translations = DictionaryToEdit.AllTranslations.Add(key);
                     }
                     else if (Resolution == ConflictResolution.AppendIgnore)
                     {
@@ -419,8 +418,7 @@ namespace OmiyaGames.UI.Translations
                     else
                     {
                         // Otherwise, overwrite the key with a new translations dictionary
-                        translations = new Dictionary<int, string>(row.Count - 1);
-                        DictionaryToEdit.AllTranslations[key] = translations;
+                        translations = DictionaryToEdit.AllTranslations.Add(key);
                     }
 
                     // Go through each cell in each row
@@ -430,7 +428,7 @@ namespace OmiyaGames.UI.Translations
                         if (DictionaryToEdit.SupportedLanguages.Contains(cell.Key) == true)
                         {
                             // If so, add it and its text into the translations dictionary
-                            translations.Add(DictionaryToEdit.SupportedLanguages[cell.Key], cell.Value);
+                            translations[cell.Key] = cell.Value;
                         }
                     }
                 }
