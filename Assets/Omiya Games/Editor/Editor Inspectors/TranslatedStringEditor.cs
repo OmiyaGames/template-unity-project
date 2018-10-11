@@ -265,6 +265,10 @@ namespace OmiyaGames.UI.Translations
                     // Apply changes to the dictionary
                     translationDictionary.UpdateSerializedTranslations();
 
+                    // Save these changes to the file
+                    UnityEditor.EditorUtility.SetDirty(translationDictionary);
+                    AssetDatabase.SaveAssets();
+
                     // Change focus
                     GUI.FocusControl("Apply");
                 }
