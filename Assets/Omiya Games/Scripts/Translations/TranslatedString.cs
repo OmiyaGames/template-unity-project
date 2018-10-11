@@ -72,14 +72,6 @@ namespace OmiyaGames.Translations
         }
 
         #region Properties
-        private static TranslationManager Manager
-        {
-            get
-            {
-                return Singleton.Get<TranslationManager>();
-            }
-        }
-
         public string TranslationKey
         {
             get
@@ -120,7 +112,9 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Dictionary != null) && (Dictionary.AllTranslations.ContainsKey(TranslationKey) == true);
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Dictionary != null) &&
+                    (Dictionary.SupportedLanguages != null) &&
+                    (Dictionary.AllTranslations.ContainsKey(TranslationKey) == true);
             }
         }
         #endregion
@@ -136,13 +130,11 @@ namespace OmiyaGames.Translations
         /// <seealso cref="TranslationManager"/>
         public override string ToString()
         {
-            // Check if the TranslationManager is ready
-            string returnString = null;
-            if ((Manager != null) && (Manager.IsReady == true))
-            {
-                returnString = ToString(Manager.CurrentLanguage);
-            }
-            return returnString;
+#if UNITY_EDITOR
+            return GetTextFromSupportedLanguage();
+#else
+            return GetTextFromTranslationManager();
+#endif
         }
 
         /// <summary>
@@ -187,6 +179,31 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
+        private string GetTextFromTranslationManager()
+        {
+            string returnString = null;
+
+            // Check if the TranslationManager is ready
+            TranslationManager manager = Singleton.Get<TranslationManager>();
+            if ((manager != null) && (manager.IsReady == true))
+            {
+                returnString = ToString(manager.CurrentLanguage);
+            }
+            return returnString;
+        }
+
+        private string GetTextFromSupportedLanguage()
+        {
+            string returnString = null;
+
+            // Check if the TranslationManager is ready
+            if ((Dictionary != null) && (Dictionary.SupportedLanguages != null))
+            {
+                returnString = ToString(Dictionary.SupportedLanguages.PreviewIndex);
+            }
+            return returnString;
+        }
+
         private string AddFormatting(string translatedText)
         {
             if ((Arguments != null) && (Arguments.Length > 0))
