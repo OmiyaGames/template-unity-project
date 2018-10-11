@@ -131,7 +131,14 @@ namespace OmiyaGames.Translations
         public override string ToString()
         {
 #if UNITY_EDITOR
-            return GetTextFromSupportedLanguage();
+            if(Application.isPlaying == true)
+            {
+                return GetTextFromTranslationManager();
+            }
+            else
+            {
+                return GetTextFromSupportedLanguage();
+            }
 #else
             return GetTextFromTranslationManager();
 #endif

@@ -358,7 +358,7 @@ namespace OmiyaGames.Translations
             set
             {
                 // Check to see if this is a new language
-                if (CurrentLanguage.Equals(value) == false)
+                if (CurrentLanguage != value)
                 {
                     // Check if this language is supported
                     if (languages.Contains(value) == true)

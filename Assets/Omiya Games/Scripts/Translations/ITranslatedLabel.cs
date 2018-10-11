@@ -291,22 +291,27 @@ namespace OmiyaGames.Translations
         #region Unity Events
         public void OnEnable()
         {
-#if !UNITY_EDITOR
-            Setup();
-#endif
+            if (Application.isPlaying == true)
+            {
+                Setup();
+            }
         }
 
         public void OnDestroy()
         {
-#if !UNITY_EDITOR
-            Dispose();
-#endif
+            if (Application.isPlaying == true)
+            {
+                Dispose();
+            }
         }
 
 #if UNITY_EDITOR
+        // Don't allow binding to the update event outside of the editor
         public void Update()
         {
-            if (translation.IsTranslating == true)
+            // ONLY update the label's text if the application is NOT playing
+            // (i.e. in editing mode), and the text can be translated
+            if ((Application.isPlaying == false) && (translation.IsTranslating == true))
             {
                 LabelText = translation.ToString();
             }
