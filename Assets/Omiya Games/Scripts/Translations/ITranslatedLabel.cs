@@ -55,7 +55,8 @@ namespace OmiyaGames.Translations
     /// </remarks>
     /// <seealso cref="TranslatedString"/>
     [DisallowMultipleComponent]
-    public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour where LABEL : Component
+    [ExecuteInEditMode]
+    public abstract class ITranslatedLabel<LABEL, STYLE> : MonoBehaviour, System.IDisposable where LABEL : Component
     {
         public enum LetterFormatting
         {
@@ -285,28 +286,27 @@ namespace OmiyaGames.Translations
         #region Unity Events
         public void OnEnable()
         {
-            if (CurrentState == State.NeedSetup)
-            {
-                CurrentState = State.WaitingForSetup;
-                TranslationManager.RunWhenReady(SetupLabelNow);
-            }
-            else if (CurrentState == State.NeedUpdate)
-            {
-                CurrentState = State.WaitingForUpdate;
-                UpdateLabelNow(Parser);
-            }
+#if !UNITY_EDITOR
+            Setup();
+#endif
         }
 
         public void OnDestroy()
         {
-            // Check if we've binded to an event before, and if so, the source is still available
-            if ((Parser != null) && (languageChangedEvent != null))
+#if !UNITY_EDITOR
+            Dispose();
+#endif
+        }
+
+#if UNITY_EDITOR
+        public void Update()
+        {
+            if (translation.IsTranslating == true)
             {
-                // Unbind to the event
-                Parser.OnAfterLanguageChanged -= languageChangedEvent;
-                languageChangedEvent = null;
+                LabelText = translation.ToString();
             }
         }
+#endif
         #endregion
 
         /// <summary>
@@ -357,7 +357,32 @@ namespace OmiyaGames.Translations
             Arguments = args;
         }
 
+        public void Dispose()
+        {
+            // Check if we've binded to an event before, and if so, the source is still available
+            if ((Parser != null) && (languageChangedEvent != null))
+            {
+                // Unbind to the event
+                Parser.OnAfterLanguageChanged -= languageChangedEvent;
+                languageChangedEvent = null;
+            }
+        }
+
         #region Helper Methods
+        private void Setup()
+        {
+            if (CurrentState == State.NeedSetup)
+            {
+                CurrentState = State.WaitingForSetup;
+                TranslationManager.RunWhenReady(SetupLabelNow);
+            }
+            else if (CurrentState == State.NeedUpdate)
+            {
+                CurrentState = State.WaitingForUpdate;
+                UpdateLabelNow(Parser);
+            }
+        }
+
         protected void RepaintLabel()
         {
             // Mark label as dirty and regenerate new string

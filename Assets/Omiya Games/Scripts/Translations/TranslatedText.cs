@@ -57,6 +57,7 @@ namespace OmiyaGames.Translations
     /// <seealso cref="ITranslatedLabel{LABEL, STYLE}"/>
     [RequireComponent(typeof(Text))]
     [DisallowMultipleComponent]
+    [ExecuteInEditMode]
     public class TranslatedText : ITranslatedLabel<Text, FontStyle>
     {
         [SerializeField]
