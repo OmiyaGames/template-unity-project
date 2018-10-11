@@ -74,11 +74,6 @@ namespace OmiyaGames.Translations
     [DisallowMultipleComponent]
     public class TranslationManager : ISingletonScript
     {
-        // FIXME: add a static delegate stacking setup methods.
-        // Also add a static function where one passes in a setup method.
-        // If the translation manager is already setup, run that method directly.
-        // Otherwise, queue it to the static delegate until we have verification it's setup.
-
         public delegate void LanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage);
         public event LanguageChanged OnBeforeLanguageChanged;
         public event LanguageChanged OnAfterLanguageChanged;
@@ -87,31 +82,6 @@ namespace OmiyaGames.Translations
         /// A queue of setup methods that needs to run when setup of the translation manager is finished.
         /// </summary>
         private static event System.Action<TranslationManager> OnReady = null;
-
-        [System.Serializable]
-        public struct LanguageMap
-        {
-            [SerializeField]
-            SystemLanguage language;
-            [SerializeField]
-            string header;
-
-            public SystemLanguage Language
-            {
-                get
-                {
-                    return language;
-                }
-            }
-
-            public string Header
-            {
-                get
-                {
-                    return header;
-                }
-            }
-        }
 
         [System.Serializable]
         public struct FontMapDetails
@@ -293,38 +263,15 @@ namespace OmiyaGames.Translations
             }
         }
 
-        [Header("Runtime Behavior")]
-        [Tooltip("If true, keys that has missing values (an empty cell) will be replaced by their counterpart from the default language, or the left-most text if even that is missing.")]
+        [Tooltip("Maps a font to a header in the CSV file.")]
         [SerializeField]
-        bool retrieveDefaultsAsBackup = true;
-
-        [Header("CSV File")]
-        [Tooltip("Set this variable if the CSV file is a text asset that isn't in the Resources folder.")]
-        [SerializeField]
-        TextAsset loadFileAsset = null;
-        [Tooltip("Set this variable if the CSV file is going to be loaded from the Resources folder.")]
-        [SerializeField]
-        string loadFileName = "";
-
-        [Header("Content")]
-        [Tooltip("The header containing the keys, referencing each string.")]
-        [SerializeField]
-        string keyHeader = "Keys";
-        [Tooltip("Maps a system language setting to a header in the CSV file. Also defines the starting language, based on system's settings.")]
-        [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("langaugeMap")]
-        LanguageMap[] systemLanguageToHeaderMap = null;
+        SupportedLanguages languages = null;
         [Tooltip("Maps a font to a header in the CSV file.")]
         [SerializeField]
         FontMap[] fontMap = null;
 
-        /// <summary>
-        /// Currently selected langauge. Defaults to the first language encountered in the file.
-        /// </summary>
-        string currentLanguage = "";
         bool isReady = false;
 
-        readonly Dictionary<SystemLanguage, string> headerDictionary = new Dictionary<SystemLanguage, string>();
         readonly Dictionary<string, FontMap> fontDictionary = new Dictionary<string, FontMap>();
 
         #region Overrides
@@ -344,8 +291,9 @@ namespace OmiyaGames.Translations
             // Check if we've populated any translations
             if (IsReady == false)
             {
-                // Parse the file
-                ParseFile();
+                // Update languages
+                SetupDefaultLanguage();
+                SetupCurrentLanguage();
 
                 // Indicate final results
                 IsReady = true;
@@ -354,28 +302,6 @@ namespace OmiyaGames.Translations
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Retrieves a translated string.
-        /// </summary>
-        /// <param name="translationKey">A string corresponding to a key on the left-most column in the CSV file</param>
-        /// <returns>A translated string parsed from a CSV file, based on the <seealso cref="CurrentLanguage"/>.</returns>
-        public string this[string translationKey]
-        {
-            get
-            {
-                // Attempt to retrieve from the current translation
-                string returnString = GetTranslatedStringForCurrentLanguage(translationKey);
-
-                // If retrieving from defaults is enabled, and the current language didn't contain the proper string..
-                if ((retrieveDefaultsAsBackup == true) && (string.IsNullOrEmpty(returnString) == true))
-                {
-                    // Grab the default language
-                    returnString = GetTranslatedStringForDefaultanguage(translationKey);
-                }
-                return returnString;
-            }
-        }
-
         /// <summary>
         /// Indicates whether the translation manager is setup or not.
         /// </summary>
@@ -405,15 +331,6 @@ namespace OmiyaGames.Translations
         }
 
         /// <summary>
-        /// Gets the list of langauges identified in the most recent parse.
-        /// </summary>
-        /// <returns>The supported languages.</returns>
-        public List<string> SupportedLanguages
-        {
-            get;
-        } = new List<string>();
-
-        /// <summary>
         /// Gets the default language.
         /// </summary>
         /// <value>The default language.</value>
@@ -436,31 +353,25 @@ namespace OmiyaGames.Translations
         {
             get
             {
-                return currentLanguage;
+                return Singleton.Get<GameSettings>().Language;
             }
             set
             {
                 // Check to see if this is a new language
-                if (currentLanguage.Equals(value) == false)
+                if (CurrentLanguage.Equals(value) == false)
                 {
                     // Check if this language is supported
-                    if (SupportedLanguages.Contains(value) == true)
+                    if (languages.Contains(value) == true)
                     {
                         // Call event
-                        OnBeforeLanguageChanged?.Invoke(this, currentLanguage, value);
-
-                        // Set the language
-                        string lastLanguage = currentLanguage;
-                        currentLanguage = value;
-
-                        // Parse the file
-                        ParseFile();
+                        OnBeforeLanguageChanged?.Invoke(this, CurrentLanguage, value);
 
                         // Update settings
-                        Singleton.Get<GameSettings>().Language = currentLanguage;
+                        string lastLanguage = CurrentLanguage;
+                        Singleton.Get<GameSettings>().Language = value;
 
                         // Call the event that the langauge changed
-                        OnAfterLanguageChanged?.Invoke(this, lastLanguage, currentLanguage);
+                        OnAfterLanguageChanged?.Invoke(this, lastLanguage, CurrentLanguage);
                     }
                     else
                     {
@@ -504,66 +415,7 @@ namespace OmiyaGames.Translations
                 return fontDictionary;
             }
         }
-
-        Dictionary<SystemLanguage, string> HeaderDictionary
-        {
-            get
-            {
-                // Check if the language map has a different size of our cached dictionary
-                if ((systemLanguageToHeaderMap != null) && (headerDictionary.Count != systemLanguageToHeaderMap.Length))
-                {
-                    // Setup the header dictionary
-                    headerDictionary.Clear();
-                    for (int i = 0; i < systemLanguageToHeaderMap.Length; ++i)
-                    {
-                        headerDictionary.Add(systemLanguageToHeaderMap[i].Language, systemLanguageToHeaderMap[i].Header);
-                    }
-                }
-                return headerDictionary;
-            }
-        }
-
-        /// <summary>
-        /// A dictionary of the keys, current-language-values.
-        /// </summary>
-        Dictionary<string, string> CurrentTranslationDictionary
-        {
-            get;
-        } = new Dictionary<string, string>();
-
-        /// <summary>
-        /// A dictionary of the keys, default-language-values.
-        /// </summary>
-        Dictionary<string, string> DefaultTranslationDictionary
-        {
-            get;
-        } = new Dictionary<string, string>();
         #endregion
-
-        public bool ContainsKey(string key)
-        {
-            return CurrentTranslationDictionary.ContainsKey(key);
-        }
-
-        public HashSet<string> GetAllKeys()
-        {
-            HashSet<string> keys = new HashSet<string>();
-            foreach (KeyValuePair<string, string> pair in CurrentTranslationDictionary)
-            {
-                keys.Add(pair.Key);
-            }
-            return keys;
-        }
-
-        public string GetTranslatedStringForCurrentLanguage(string translationKey)
-        {
-            return GetTranslatedString(CurrentTranslationDictionary, translationKey);
-        }
-
-        public string GetTranslatedStringForDefaultanguage(string translationKey)
-        {
-            return GetTranslatedString(DefaultTranslationDictionary, translationKey);
-        }
 
         public static void RunWhenReady(System.Action<TranslationManager> setupMethod)
         {
@@ -588,172 +440,27 @@ namespace OmiyaGames.Translations
         }
 
         #region Helper Methods
-        static void SetupTranslationDictionary(Dictionary<string, string> dictionaryToPopulate, List<Dictionary<string, string>> data, string keyHeader, string firstLanguageHeader, params string[] backupLanguageHeaders)
-        {
-            // Setup loop variables
-            string val;
-            string key;
-
-            // Reset the dictionary
-            dictionaryToPopulate.Clear();
-
-            // Loop through each row in the file. Grab the langauge-independet, and
-            // the value based on the current langage. Put them in the dictionary.
-            for (int i = 0; i < data.Count; i++)
-            {
-                // Default the value
-                val = "";
-
-                // Grab the value
-                if (data[i].TryGetValue(firstLanguageHeader, out val) == false)
-                {
-                    // Default the value
-                    val = "";
-                    foreach (string header in backupLanguageHeaders)
-                    {
-                        // Retrieve the value from data
-                        if ((data[i].TryGetValue(header, out val) == true) && (string.IsNullOrEmpty(val) == false))
-                        {
-                            break;
-                        }
-                    }
-                }
-
-                // Grab the key
-                key = data[i][keyHeader];
-                if (dictionaryToPopulate.ContainsKey(key) == false)
-                {
-                    // Add to the dictionary
-                    dictionaryToPopulate.Add(key, val);
-                }
-                else
-                {
-                    Debug.LogError("Translation CSV file contains duplicate key: " + key);
-                }
-            }
-        }
-
-        static string GetTranslatedString(Dictionary<string, string> translations, string translationKey)
-        {
-            if (translations.ContainsKey(translationKey) == true)
-            {
-                return translations[translationKey];
-            }
-            else
-            {
-                throw new System.ArgumentException("The key, \"" + translationKey + "\" was not present in the CSV file.");
-            }
-        }
-
-        void ParseFile()
-        {
-            // Check if we need to load a file from resources
-            bool isFileLoaded = false;
-            if ((loadFileAsset == null) && (string.IsNullOrEmpty(loadFileName) == false))
-            {
-                // Load from resources
-                loadFileAsset = Resources.Load<TextAsset>(loadFileName);
-                isFileLoaded = true;
-            }
-
-            // Make sure the file can be parsed
-            if (loadFileAsset != null)
-            {
-                // Analyze the file, and update the member variables
-                AnalyzeFile(loadFileAsset);
-
-                // Unload the file, if we need to
-                if (isFileLoaded == true)
-                {
-                    Resources.UnloadAsset(loadFileAsset);
-                    loadFileAsset = null;
-                }
-            }
-            else
-            {
-                Debug.LogWarning("No file found for TranslationManager");
-            }
-        }
-
-        void AnalyzeFile(TextAsset loadFileAsset)
-        {
-            // Read the input file. Data is expected to be returned in a list of
-            // Dictionary objects in which the position in the list corolates to the
-            // row-number from the CSV file (element 0 is the second row where the
-            // first row is headers), the keys in the dictionary reflect the column
-            // names from the header, and the values in the dictionary reflect the
-            // values for a given row/column.
-            List<Dictionary<string, string>> data = CSVReader.ReadFile(loadFileAsset);
-
-            // Check if this manager is properly setup
-            if (IsReady == false)
-            {
-                // If not, setup the defaults
-                SetupDefaults(data);
-            }
-
-            // Get the current translations
-            SetupTranslationDictionary(CurrentTranslationDictionary, data, keyHeader, currentLanguage);
-        }
-
-        void SetupDefaults(List<Dictionary<string, string>> data)
-        {
-            // Populate the supported languages so the defaults are correct
-            SupportedLanguages.Clear();
-            foreach (string key in data[0].Keys)
-            {
-                if ((string.IsNullOrEmpty(key) == false) && (key != keyHeader))
-                {
-                    SupportedLanguages.Add(key);
-                }
-            }
-
-            // Make sure the list is populated
-            if (SupportedLanguages.Count > 0)
-            {
-                SetupDefaultLanguage();
-                SetupCurrentLanguage();
-
-                // Setup the default translation dictionary, taking in both default language and left-most column as backup
-                SetupTranslationDictionary(DefaultTranslationDictionary, data, keyHeader, DefaultLanguage, SupportedLanguages[0]);
-            }
-            else
-            {
-                // Setup the default translation dictionary, taking in only the default language
-                SetupTranslationDictionary(DefaultTranslationDictionary, data, keyHeader, DefaultLanguage);
-            }
-        }
-
         void SetupDefaultLanguage()
         {
-            // Check to see if default language isn't set yet
-            if (HeaderDictionary.ContainsKey(Application.systemLanguage) == true)
+            if (string.IsNullOrEmpty(DefaultLanguage) == true)
             {
-                // Grab the default language from the system settings
-                DefaultLanguage = HeaderDictionary[Application.systemLanguage];
-            }
-
-            // Check if the default language is set
-            if ((string.IsNullOrEmpty(DefaultLanguage) == true) || (SupportedLanguages.Contains(DefaultLanguage) == false))
-            {
-                // If not, grab the first language in the headers
-                DefaultLanguage = SupportedLanguages[0];
+                string language;
+                int index;
+                languages.GetDefaultLanguage(out language, out index);
+                DefaultLanguage = language;
             }
         }
 
         void SetupCurrentLanguage()
         {
-            // Retrieve the current language settings from GameSettings
-            currentLanguage = Singleton.Get<GameSettings>().Language;
-
             // Check if the current langauge is set
-            if ((string.IsNullOrEmpty(currentLanguage) == true) || (SupportedLanguages.Contains(currentLanguage) == false))
+            if ((string.IsNullOrEmpty(CurrentLanguage) == true) || (languages.Contains(CurrentLanguage) == false))
             {
                 // If not, use the default language instead
-                currentLanguage = DefaultLanguage;
+                CurrentLanguage = DefaultLanguage;
 
                 // Update the settings
-                Singleton.Get<GameSettings>().Language = currentLanguage;
+                Singleton.Get<GameSettings>().Language = CurrentLanguage;
             }
         }
         #endregion
