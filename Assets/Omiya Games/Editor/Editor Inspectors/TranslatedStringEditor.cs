@@ -242,14 +242,7 @@ namespace OmiyaGames.UI.Translations
                 }
                 else if (status == Status.OK)
                 {
-                    using (EditorGUI.DisabledGroupScope scope = new EditorGUI.DisabledGroupScope(translationDictionary.IsAllTranslationsSerialized))
-                    {
-                        if (GUI.Button(rect, "Update Dictionary") == true)
-                        {
-                            // Apply changes to the dictionary
-                            translationDictionary.UpdateSerializedTranslations();
-                        }
-                    }
+                    DrawDictionaryButton(rect, dictionary, translationDictionary);
                 }
 
                 // Remove indentation
@@ -257,6 +250,38 @@ namespace OmiyaGames.UI.Translations
                 rect.width += IndentLeft;
             }
             return rect;
+        }
+
+        private void DrawDictionaryButton(Rect rect, SerializedProperty dictionary, TranslationDictionary translationDictionary)
+        {
+            using (EditorGUI.DisabledGroupScope scope = new EditorGUI.DisabledGroupScope(translationDictionary.IsAllTranslationsSerialized))
+            {
+                // Draw update button
+                rect.width += EditorUtility.VerticalMargin;
+                rect.width /= 2f;
+                GUI.SetNextControlName("Apply");
+                if (GUI.Button(rect, "Apply Changes") == true)
+                {
+                    // Apply changes to the dictionary
+                    translationDictionary.UpdateSerializedTranslations();
+
+                    // Change focus
+                    GUI.FocusControl("Apply");
+                }
+
+                // Draw revert button
+                rect.x += EditorUtility.VerticalMargin;
+                rect.x += rect.width;
+                GUI.SetNextControlName("Revert");
+                if (GUI.Button(rect, "Revert Changes") == true)
+                {
+                    // Revert the dictionary
+                    translationDictionary.RepopulateAllTranslations();
+
+                    // Change focus
+                    GUI.FocusControl("Revert");
+                }
+            }
         }
 
         private Rect DrawHelpBox(Rect rect)
