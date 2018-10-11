@@ -106,7 +106,7 @@ namespace OmiyaGames.Translations
 
         private void UpdateField<L, S>(ITranslatedLabel<L, S> source) where L : Component
         {
-            source.UpdateField();
+            //source.UpdateField();
             foreach(TranslationDictionary dictionary in dictionaries)
             {
                 if(dictionary.AllTranslations.ContainsKey(source.TranslationKey) == true)
