@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 namespace OmiyaGames.Translations
 {
@@ -58,6 +57,7 @@ namespace OmiyaGames.Translations
     /// <seealso cref="ITranslatedLabel{LABEL, STYLE}"/>
     [RequireComponent(typeof(Text))]
     [DisallowMultipleComponent]
+    [ExecuteInEditMode]
     public class TranslatedText : ITranslatedLabel<Text, FontStyle>
     {
         [SerializeField]
@@ -152,25 +152,28 @@ namespace OmiyaGames.Translations
             }
         }
 
-        protected override string GetDisplayString(string originalString)
+        public override string DisplayString
         {
-            string displayString = base.GetDisplayString(originalString);
-            if (string.IsNullOrEmpty(extraFormatting) == false)
+            get
             {
-                // Format the string based on extra formatting
-                displayString = string.Format(extraFormatting, displayString);
+                string displayString = base.DisplayString;
+                if (string.IsNullOrEmpty(extraFormatting) == false)
+                {
+                    // Format the string based on extra formatting
+                    displayString = string.Format(extraFormatting, displayString);
+                }
+                switch (letterFormatting)
+                {
+                    // Format the string based on extra formatting
+                    case LetterFormatting.UpperCase:
+                        displayString = displayString.ToUpper();
+                        break;
+                    case LetterFormatting.LowerCase:
+                        displayString = displayString.ToLower();
+                        break;
+                }
+                return displayString;
             }
-            switch (letterFormatting)
-            {
-                // Format the string based on extra formatting
-                case LetterFormatting.UpperCase:
-                    displayString = displayString.ToUpper();
-                    break;
-                case LetterFormatting.LowerCase:
-                    displayString = displayString.ToLower();
-                    break;
-            }
-            return displayString;
         }
     }
 }

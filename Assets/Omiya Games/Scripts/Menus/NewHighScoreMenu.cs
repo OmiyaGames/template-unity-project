@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Menu;
-using OmiyaGames.Settings;
 using TMPro;
+using OmiyaGames.Settings;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menu
 {
@@ -61,12 +61,9 @@ namespace OmiyaGames.Menu
         [SerializeField]
         TMP_InputField nameField;
         [SerializeField]
-        TextMeshProUGUI scorePlacementLabel;
+        TranslatedTextMeshPro scorePlacementLabel;
         [SerializeField]
-        TextMeshProUGUI scoreLabel;
-
-        string originalScorePlacementText = null;
-        string originalScoreText = null;
+        TranslatedTextMeshPro scoreLabel;
 
         #region Non-abstract Properties
         public override BackgroundMenu.BackgroundType Background
@@ -123,8 +120,8 @@ namespace OmiyaGames.Menu
             scoreLabel.gameObject.SetActive(NewScore != null);
             if (NewScore != null)
             {
-                UpdateLabel(scorePlacementLabel, (highScorePlacement + 1).ToString(), ref originalScorePlacementText);
-                UpdateLabel(scoreLabel, NewScore.Record.ToString(), ref originalScoreText);
+                scorePlacementLabel.SetArguments(highScorePlacement + 1);
+                scoreLabel.SetArguments(NewScore.Record);
             }
         }
 
@@ -167,15 +164,6 @@ namespace OmiyaGames.Menu
             // Store this name for the next gameplay as well
             Settings.LastEnteredName = nameField.text;
             Settings.SaveSettings();
-        }
-
-        private void UpdateLabel(TextMeshProUGUI label, string info, ref string originalString)
-        {
-            if(string.IsNullOrEmpty(originalString) == true)
-            {
-                originalString = label.text;
-            }
-            label.text = string.Format(originalString, info);
         }
     }
 }

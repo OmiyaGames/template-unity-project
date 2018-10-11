@@ -1,10 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using System;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="OptionsLanguageMenu.cs" company="Omiya Games">
+    /// <copyright file="LanguageTextPairEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,65 +29,49 @@ namespace OmiyaGames.Menu
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/16/2018</date>
+    /// <date>10/10/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Script to handle listening to a toggle button on a langauge.
+    /// Pair of key and list of <code>LanguageTextPair</code>.
     /// </summary>
-    /// <seealso cref="OptionsLanguageMenu"/>
-    [RequireComponent(typeof(Toggle))]
-    public class LanguageToggle : MonoBehaviour
+    /// <seealso cref="LanguageTextPair"/>
+    [Serializable]
+    public struct TranslationCollection
     {
-        public event System.Action<LanguageToggle> OnChecked;
+        public const byte DefaultNumberOfLanguages = 3;
 
         [SerializeField]
-        Translations.TranslatedString languageText;
+        string key;
         [SerializeField]
-        TMPro.TextMeshProUGUI label;
-        [SerializeField]
-        UiEventNavigation navigation;
+        List<LanguageTextPair> allTranslations;
 
-        string language = null;
-        Toggle cachedCheckbox = null;
+        public TranslationCollection(string key)
+        {
+            this.key = key;
+            this.allTranslations = new List<LanguageTextPair>(DefaultNumberOfLanguages);
+        }
 
-        public string Language
+        public string Key
         {
             get
             {
-                return language;
+                return key;
             }
             set
             {
-                language = value;
-                label.text = languageText.ToString(language);
+                key = value;
             }
         }
 
-        public Toggle Checkbox
+        public List<LanguageTextPair> AllTranslations
         {
             get
             {
-                if(cachedCheckbox == null)
+                if (allTranslations == null)
                 {
-                    cachedCheckbox = GetComponent<Toggle>();
+                    allTranslations = new List<LanguageTextPair>(DefaultNumberOfLanguages);
                 }
-                return cachedCheckbox;
-            }
-        }
-
-        public UiEventNavigation Navigation
-        {
-            get
-            {
-                return navigation;
-            }
-        }
-
-        public void OnToggleChanged(bool isChecked)
-        {
-            if(isChecked == true)
-            {
-                OnChecked?.Invoke(this);
+                return allTranslations;
             }
         }
     }

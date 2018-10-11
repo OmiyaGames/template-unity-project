@@ -9,7 +9,7 @@ namespace OmiyaGames.UI.Audio
     /// <copyright file="SoundEffectEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2016 Omiya Games
+    /// Copyright (c) 2014-2018 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ namespace OmiyaGames.UI.Audio
 
         SerializedProperty mutatePitch;
         SerializedProperty pitchMutationRange;
-        
+
         SerializedProperty mutateVolume;
         SerializedProperty volumeMutationRange;
 
@@ -64,14 +64,14 @@ namespace OmiyaGames.UI.Audio
 
             // Construct a list for the clip variations
             clipVariationList = new ReorderableList(serializedObject, clipVariations, true, true, true, true);
-            clipVariationList.drawHeaderCallback = DrawObjectsToPreloadListHeader;
-            clipVariationList.drawElementCallback = DrawObjectsToPreloadListElement;
+            clipVariationList.drawHeaderCallback = DrawClipVariationListHeader;
+            clipVariationList.drawElementCallback = DrawClipVariationListElement;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            
+
             // Start the Mutate Pitch group
             mutatePitch.boolValue = EditorGUILayout.BeginToggleGroup("Mutate Pitch", mutatePitch.boolValue);
             if(mutatePitch.boolValue == true)
@@ -90,7 +90,7 @@ namespace OmiyaGames.UI.Audio
 
             // Start the audio clip variations list
             clipVariationList.DoLayoutList();
-            
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -117,12 +117,12 @@ namespace OmiyaGames.UI.Audio
             EditorGUILayout.EndHorizontal();
         }
 
-        void DrawObjectsToPreloadListHeader(Rect rect)
+        void DrawClipVariationListHeader(Rect rect)
         {
             EditorGUI.LabelField(rect, "Clip Variations");
         }
 
-        void DrawObjectsToPreloadListElement(Rect rect, int index, bool isActive, bool isFocused)
+        void DrawClipVariationListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = clipVariationList.serializedProperty.GetArrayElementAtIndex(index);
             rect.y += VerticalMargin;

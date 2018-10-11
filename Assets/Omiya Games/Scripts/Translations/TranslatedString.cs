@@ -28,76 +28,197 @@ namespace OmiyaGames.Translations
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>3/23/2017</date>
+    /// <date>10/3/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
     /// A struct whose <code>ToString()</code> method automatically translates
     /// based on settings.
     /// </summary>
+    /// <remarks>
+    /// Revision History:
+    /// <list type="table">
+    /// <listheader>
+    /// <description>Date</description>
+    /// <description>Name</description>
+    /// <description>Description</description>
+    /// </listheader>
+    /// <item>
+    /// <description>3/23/2017</description>
+    /// <description>Taro Omiya</description>
+    /// <description>Initial verison</description>
+    /// 
+    /// <description>10/3/2018</description>
+    /// <description>Taro</description>
+    /// <description>Upgrading with TranslationDictionary support</description>
+    /// </item>
+    /// </list>
+    /// </remarks>
     [Serializable]
     public class TranslatedString
     {
         [SerializeField]
-        readonly string key;
+        private string key;
+        [SerializeField]
+        private TranslationDictionary dictionary;
 
-        public TranslatedString(string key) : this(key, null)
-        {
-        }
+        public TranslatedString() : this(string.Empty) { }
+
+        public TranslatedString(string key) : this(key, null) { }
 
         public TranslatedString(string key, params object[] values)
         {
             this.key = key;
-            Values = values;
+            Arguments = values;
         }
 
+        #region Properties
         public string TranslationKey
         {
             get
             {
                 return key;
             }
+            set
+            {
+                key = value;
+            }
         }
 
-        public object[] Values
+        public TranslationDictionary Dictionary
+        {
+            get
+            {
+                return dictionary;
+            }
+            set
+            {
+                dictionary = value;
+            }
+        }
+
+        public object[] Arguments
         {
             get;
             set;
-        }
+        } = null;
 
+        /// <summary>
+        /// Indicating whether this class is ready to translate.
+        /// </summary>
+        /// <seealso cref="ToString"/>
+        /// <seealso cref="ToString(int)"/>
+        /// <seealso cref="ToString(string)"/>
         public bool IsTranslating
         {
             get
             {
-                return (string.IsNullOrEmpty(TranslationKey) == false) && (Parser != null) && (Parser.ContainsKey(TranslationKey) == true);
+                return (string.IsNullOrEmpty(TranslationKey) == false) && (Dictionary != null) &&
+                    (Dictionary.SupportedLanguages != null) &&
+                    (Dictionary.AllTranslations.ContainsKey(TranslationKey) == true);
             }
         }
+        #endregion
 
-        private static TranslationManager Parser
-        {
-            get
-            {
-                return Singleton.Get<TranslationManager>();
-            }
-        }
-
+        /// <summary>
+        /// Generates a translated text based on TranslationManager's language.
+        /// </summary>
+        /// <remarks>
+        /// A new string will be generated each time,
+        /// making this operation potentially slow.
+        /// </remarks>
+        /// <returns>A translated text, or null if not ready.</returns>
+        /// <seealso cref="TranslationManager"/>
         public override string ToString()
         {
-            string returnString = base.ToString();
-            if (IsTranslating == true)
+#if UNITY_EDITOR
+            if(Application.isPlaying == true)
             {
-                // Add this script to the dictionary
-                returnString = Parser[TranslationKey];
-                if((Values != null) && (Values.Length > 0))
-                {
-                    returnString = string.Format(returnString, Values);
-                }
+                return GetTextFromTranslationManager();
+            }
+            else
+            {
+                return GetTextFromSupportedLanguage();
+            }
+#else
+            return GetTextFromTranslationManager();
+#endif
+        }
+
+        /// <summary>
+        /// Generates a translated text based on input language.
+        /// </summary>
+        /// <remarks>
+        /// A new string will be generated each time,
+        /// making this operation potentially slow.
+        /// </remarks>
+        /// <returns>A translated text, or null if not ready.</returns>
+        public string ToString(int languageIndex)
+        {
+            string returnString = null;
+            if ((IsTranslating == true) && (Dictionary.SupportedLanguages.Contains(languageIndex) == true))
+            {
+                returnString = AddFormatting(Dictionary[TranslationKey, languageIndex]);
+            }
+            return returnString;
+        }
+
+        /// <summary>
+        /// Generates a translated text based on input language.
+        /// </summary>
+        /// <remarks>
+        /// A new string will be generated each time,
+        /// making this operation potentially slow.
+        /// </remarks>
+        /// <returns>A translated text, or null if not ready.</returns>
+        public string ToString(string language)
+        {
+            string returnString = null;
+            if ((IsTranslating == true) && (Dictionary.SupportedLanguages.Contains(language) == true))
+            {
+                returnString = AddFormatting(Dictionary[TranslationKey, language]);
             }
             return returnString;
         }
 
         public void SetValues(params object[] values)
         {
-            Values = values;
+            Arguments = values;
         }
+
+        #region Helper Methods
+        private string GetTextFromTranslationManager()
+        {
+            string returnString = null;
+
+            // Check if the TranslationManager is ready
+            TranslationManager manager = Singleton.Get<TranslationManager>();
+            if ((manager != null) && (manager.IsReady == true))
+            {
+                returnString = ToString(manager.CurrentLanguage);
+            }
+            return returnString;
+        }
+
+        private string GetTextFromSupportedLanguage()
+        {
+            string returnString = null;
+
+            // Check if the TranslationManager is ready
+            if ((Dictionary != null) && (Dictionary.SupportedLanguages != null))
+            {
+                returnString = ToString(Dictionary.SupportedLanguages.PreviewIndex);
+            }
+            return returnString;
+        }
+
+        private string AddFormatting(string translatedText)
+        {
+            if ((Arguments != null) && (Arguments.Length > 0))
+            {
+                translatedText = string.Format(translatedText, Arguments);
+            }
+            return translatedText;
+        }
+        #endregion
     }
 }

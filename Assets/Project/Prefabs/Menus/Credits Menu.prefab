@@ -720,7 +720,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: Skip Credits Button
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: Skip Credits Button
   fontKey: 
 --- !u!114 &114304071000546158
 MonoBehaviour:
@@ -837,6 +840,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  translation:
+    key: Credits Full
+    dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
   translationKey: Credits Full
   fontKey: 
 --- !u!114 &114597372037217516
@@ -1084,14 +1090,87 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "Created by Omiya Games\r\n\r\n<b>Programming</b>\r\nTaro Omiya\r\n\r\n<b>Art</b>\r\nTaro
-    Omiya\r\n\r\n<b>Music</b>\r\nMuse en Lystrala\r\n\r\n<b>Sound</b>\r\nTaro Omiya\r\n\r\n<b>Fonts</b>\r\n\"Noto-Sans\"\r\nby
-    Google\r\n<size=38>Licensed under SIL Open Font License v1.1\r\n<link=\"license-font\"><u>scripts.sil.org/OFL</u></link></size>\r\n\r\n<b>Special
-    Effects</b>\r\nAll particles effects\r\nby Unity\r\n\r\n<b>Special Thanks</b>\r\nTech
-    Valley Game Space\r\nTech Valley Center of Gravity\r\n\r\n<b>Funded by Patreon</b>\r\nFor
-    more info, see:\r\n<link=\"patreon\"><u>patreon.com/OmiyaGames\r\n</u></link>\r\n\r\n<b>Thanks
-    to These Patrons!</b>\r\nAdam R. Vierra\r\nXanderHD\r\npoetic android\r\n\r\n<b>Thanks
-    for playing!</b>"
+  m_text: 'Created by Omiya Games
+
+
+    <b>Programming</b>
+
+    Taro Omiya
+
+
+    <b>3D Models</b>
+
+    Taro Omiya
+
+
+    <b>Textures</b>
+
+    "???"
+
+    by Taro Omiya
+
+    <size=38>Licensed under ???
+
+    <link="license-texture"><u>omiygagames.com/???</u></link></size>
+
+
+    <b>Music</b>
+
+    Taro Omiya
+
+
+    <b>Sound</b>
+
+    "Jump" & "Footsteps"
+
+    by Unity
+
+
+    All other sound effects
+
+    by Taro Omiya
+
+
+    <b>Fonts</b>
+
+    "Noto-Sans"
+
+    by Google
+
+    <size=38>Licensed under SIL Open Font License v1.1
+
+    <link="license-font"><u>scripts.sil.org/OFL</u></link></size>
+
+
+    <b>Special Effects</b>
+
+    All particles effects
+
+    by Unity
+
+
+    <b>Special Thanks</b>
+
+    Tech Valley Game Space
+
+    Tech Valley Center of Gravity
+
+
+    <b>Funded by Patreon</b>
+
+    For more info, see:
+
+    <link="patreon"><u>patreon.com/OmiyaGames
+
+    </u></link>
+
+
+    <b>Thanks to These Patrons!</b>
+
+    ???
+
+
+    Thanks for playing!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5a0a9b0a47e21b7478dd51583ce7edd4, type: 2}
   m_sharedMaterial: {fileID: 21687855418224584, guid: 5a0a9b0a47e21b7478dd51583ce7edd4,
@@ -1160,12 +1239,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 114822816929783740}
-    characterCount: 499
+    characterCount: 553
     spriteCount: 0
-    spaceCount: 78
-    wordCount: 74
-    linkCount: 2
-    lineCount: 39
+    spaceCount: 94
+    wordCount: 85
+    linkCount: 3
+    lineCount: 47
     pageCount: 1
     materialCount: 2
   m_havePropertiesChanged: 0
@@ -1173,7 +1252,7 @@ MonoBehaviour:
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
   m_isInputParsingRequired: 0
-  m_inputSource: 0
+  m_inputSource: 3
   m_hasFontAssetChanged: 0
   m_subTextObjects:
   - {fileID: 0}
@@ -1270,6 +1349,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  translation:
+    key: Credits
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   translationKey: Credits
   fontKey: 
 --- !u!114 &114958434130901286
@@ -1388,10 +1470,10 @@ RectTransform:
   m_Father: {fileID: 224457668004366086}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 445.00003, y: -1518.9105}
-  m_SizeDelta: {x: 890.00006, y: 122.46}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224084689647611934
 RectTransform:
@@ -1464,10 +1546,10 @@ RectTransform:
   m_Father: {fileID: 224457668004366086}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 445.00003, y: -3190.0105}
-  m_SizeDelta: {x: 890.00006, y: 3179.74}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224207719834169610
 RectTransform:
@@ -1482,10 +1564,10 @@ RectTransform:
   m_Father: {fileID: 224457668004366086}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 445.00003, y: -718.8403}
-  m_SizeDelta: {x: 890.00006, y: 1437.6805}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224212058176108608
 RectTransform:
@@ -1544,7 +1626,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0.00024414062}
-  m_SizeDelta: {x: 0, y: 6237.561}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!224 &224633521892192988
 RectTransform:
@@ -1562,7 +1644,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.3}
   m_AnchorMax: {x: 0, y: 0.7}
   m_AnchoredPosition: {x: -20, y: 0}
-  m_SizeDelta: {x: 24, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!224 &224697490882392044
 RectTransform:
@@ -1577,10 +1659,10 @@ RectTransform:
   m_Father: {fileID: 224457668004366086}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 445.00003, y: -5518.7207}
-  m_SizeDelta: {x: 890.00006, y: 1437.6805}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224803896930086592
 RectTransform:
@@ -1615,10 +1697,10 @@ RectTransform:
   m_Father: {fileID: 224125410034159126}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 733.63007, y: -30}
-  m_SizeDelta: {x: 312.74, y: 60}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224933435942855748
 RectTransform:

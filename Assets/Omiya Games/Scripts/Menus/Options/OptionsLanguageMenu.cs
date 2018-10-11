@@ -46,6 +46,8 @@ namespace OmiyaGames.Menu
 
         [Header("Language Controls")]
         [SerializeField]
+        SupportedLanguages supportedLanguages;
+        [SerializeField]
         LanguageToggle languageCheckbox;
 
         LanguageToggle currentSelectedCheckbox = null;
@@ -126,22 +128,22 @@ namespace OmiyaGames.Menu
         private UiEventNavigation[] GenerateLanguageCheckboxes()
         {
             // Setup return variable
-            UiEventNavigation[] returnToggles = new UiEventNavigation[Translations.SupportedLanguages.Count];
+            UiEventNavigation[] returnToggles = new UiEventNavigation[supportedLanguages.Count];
 
             // Setup the first button
             StringBuilder nameBuilder = new StringBuilder();
-            SetupToggle(languageCheckbox, Translations.SupportedLanguages[0], nameBuilder);
+            SetupToggle(languageCheckbox, supportedLanguages[0], nameBuilder);
             returnToggles[0] = languageCheckbox.Navigation;
 
             // Setup the rest of the buttons
             LanguageToggle clonedToggle;
-            for (int index = 1; index < Translations.SupportedLanguages.Count; ++index)
+            for (int index = 1; index < supportedLanguages.Count; ++index)
             {
                 // Duplicate the toggle
                 clonedToggle = DuplicateToggle(languageCheckbox);
 
                 // Setup the toggle
-                SetupToggle(clonedToggle, Translations.SupportedLanguages[index], nameBuilder);
+                SetupToggle(clonedToggle, supportedLanguages[index], nameBuilder);
                 returnToggles[index] = clonedToggle.Navigation;
             }
 

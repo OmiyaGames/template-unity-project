@@ -1,0 +1,694 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d6c52b9cf610df48b4665cc30309117, type: 3}
+  m_Name: Translations - Menus
+  m_EditorClassIdentifier: 
+  supportedLanguages: {fileID: 11400000, guid: 9a398ff91c9f6604aa13c646f61c274e, type: 2}
+  defaultToWhenKeyNotFound: 2
+  presetMessageWhenKeyNotFound: <Key Not Found>
+  defaultToWhenTranslationNotFound: 5
+  defaultLanguageWhenTranslationNotFound: 0
+  presetMessageWhenTranslationNotFound: <Translation Not Found>
+  replaceEmptyStringWithDefaultText: 1
+  translations:
+  - key: Back Button
+    allTranslations:
+    - languageIndex: 0
+      text: Back
+    - languageIndex: 1
+      text: "\u623B\u308B"
+    - languageIndex: 2
+      text: 
+  - key: Click To Start Button
+    allTranslations:
+    - languageIndex: 0
+      text: Click here to begin!
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Confirmation Title
+    allTranslations:
+    - languageIndex: 0
+      text: Are you sure?
+    - languageIndex: 1
+      text: "\u672C\u5F53\u306B\uFF1F"
+    - languageIndex: 2
+      text: 
+  - key: Credits
+    allTranslations:
+    - languageIndex: 0
+      text: Credits
+    - languageIndex: 1
+      text: "\u30B9\u30BF\u30C3\u30D5"
+    - languageIndex: 2
+      text: 
+  - key: Credits Button
+    allTranslations:
+    - languageIndex: 0
+      text: Credits
+    - languageIndex: 1
+      text: "\u30B9\u30BF\u30C3\u30D5"
+    - languageIndex: 2
+      text: 
+  - key: Enter Name Here
+    allTranslations:
+    - languageIndex: 0
+      text: Enter Name Here...
+  - key: Hack Warning Continue Button
+    allTranslations:
+    - languageIndex: 0
+      text: Continue
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Intro
+    allTranslations:
+    - languageIndex: 0
+      text: Someone besides the original developers may have uploaded this game without
+        their permission. How can they tell?
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Options
+    allTranslations:
+    - languageIndex: 0
+      text: 'This could potentially mean that this game''s quality is compromised.
+        There are a few options you can take.
+
+
+        First, you can check our website at <link="website"><u>{0}</u></link> for
+        a legitimate copy of this game, as well as news about this project and other
+        games we''ve created.
+
+
+        You can also click on the button below to continue this copy of the game.
+        We don''t take any responsibilities for what might happen next, though.'
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Domain Mismatch
+    allTranslations:
+    - languageIndex: 0
+      text: The detected url, "{0}," does not match any of the domains the developers
+        uploaded their game to.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Not Genuine
+    allTranslations:
+    - languageIndex: 0
+      text: Internal tests confirm this game is not genuine.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Unknown Domain
+    allTranslations:
+    - languageIndex: 0
+      text: Unable to confirm this game is hosted by a domain the developers uploaded
+        their game to.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Title
+    allTranslations:
+    - languageIndex: 0
+      text: Uh, oh.
+    - languageIndex: 1
+      text: "\u3042\u308C\uFF1F"
+    - languageIndex: 2
+      text: 
+  - key: High Scores
+    allTranslations:
+    - languageIndex: 0
+      text: High Scores
+  - key: High Scores Button
+    allTranslations:
+    - languageIndex: 0
+      text: High Scores
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: How to Play Button
+    allTranslations:
+    - languageIndex: 0
+      text: How to Play
+    - languageIndex: 1
+      text: "\u904A\u3073\u65B9"
+    - languageIndex: 2
+      text: 
+  - key: How To Play Button
+    allTranslations:
+    - languageIndex: 0
+      text: How to Play
+    - languageIndex: 1
+      text: "\u904A\u3073\u65B9"
+    - languageIndex: 2
+      text: 
+  - key: Level Button
+    allTranslations:
+    - languageIndex: 0
+      text: Level {0}
+    - languageIndex: 1
+      text: "\u30B9\u30C6\u30FC\u30B8{0}"
+    - languageIndex: 2
+      text: 
+  - key: Level Complete Title
+    allTranslations:
+    - languageIndex: 0
+      text: '{0} Complete'
+    - languageIndex: 1
+      text: "{0}\u30AF\u30EA\u30A2\u30FC"
+    - languageIndex: 2
+      text: 
+  - key: Level Failed Title
+    allTranslations:
+    - languageIndex: 0
+      text: '{0} Failed'
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Level Select Button
+    allTranslations:
+    - languageIndex: 0
+      text: Level Select
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Level Select Title
+    allTranslations:
+    - languageIndex: 0
+      text: Level Select
+    - languageIndex: 1
+      text: "\u30B9\u30C6\u30FC\u30B8\u9078\u629E"
+    - languageIndex: 2
+      text: 
+  - key: Loading
+    allTranslations:
+    - languageIndex: 0
+      text: Loading...
+    - languageIndex: 1
+      text: "\u30ED\u30FC\u30C9\u4E2D..."
+    - languageIndex: 2
+      text: 
+  - key: Lock Mouse Instructions
+    allTranslations:
+    - languageIndex: 0
+      text: 'Note: this game will lock your mouse cursor, but you can always recover
+        by holding ESC.'
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Main Menu
+    allTranslations:
+    - languageIndex: 0
+      text: Menu
+    - languageIndex: 1
+      text: "\u30E1\u30CB\u30E5\u30FC"
+    - languageIndex: 2
+      text: 
+  - key: Native Language
+    allTranslations:
+    - languageIndex: 0
+      text: English (USA)
+    - languageIndex: 1
+      text: "\u65E5\u672C\u8A9E"
+    - languageIndex: 2
+      text: Pig Latin (USA)
+  - key: New High Score
+    allTranslations:
+    - languageIndex: 0
+      text: New Record!
+  - key: New High Score Place
+    allTranslations:
+    - languageIndex: 0
+      text: '#{0} Place!'
+  - key: Next Level Button
+    allTranslations:
+    - languageIndex: 0
+      text: Next Level
+    - languageIndex: 1
+      text: "\u6B21\u306E\u30B9\u30C6\u30FC\u30B8"
+    - languageIndex: 2
+      text: 
+  - key: No Button
+    allTranslations:
+    - languageIndex: 0
+      text: No
+    - languageIndex: 1
+      text: "\u3044\u3044\u3048"
+    - languageIndex: 2
+      text: 
+  - key: No High Scores Recorded
+    allTranslations:
+    - languageIndex: 0
+      text: (No Scores Recorded Yet...)
+  - key: Options Accessibility
+    allTranslations:
+    - languageIndex: 0
+      text: Accessibility
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Audio
+    allTranslations:
+    - languageIndex: 0
+      text: Audio
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Button
+    allTranslations:
+    - languageIndex: 0
+      text: Options
+    - languageIndex: 1
+      text: "\u8A2D\u5B9A"
+    - languageIndex: 2
+      text: 
+  - key: Options Controls
+    allTranslations:
+    - languageIndex: 0
+      text: Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable
+    allTranslations:
+    - languageIndex: 0
+      text: Enable
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Bloom
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Bloom Effect
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Camera Shakes
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Camera Shakes
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Flashing Effects
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Screen Flashing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Head Bobbing
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Head Bobbing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Motion Blurs
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Motion Blurs
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Graphics
+    allTranslations:
+    - languageIndex: 0
+      text: Graphics
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Keyboard X-Axis
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontally
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Keyboard Y-Axis
+    allTranslations:
+    - languageIndex: 0
+      text: Vertically
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Mouse X-Axis
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontally
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Mouse Y-Axis
+    allTranslations:
+    - languageIndex: 0
+      text: Vertically
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Scroll Wheel
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Mouse Scroll-Wheel
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invincibility
+    allTranslations:
+    - languageIndex: 0
+      text: Invincibility Mode
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invincibility Message
+    allTranslations:
+    - languageIndex: 0
+      text: Enabling this mode prevents the player from taking any damage.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Invert
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Movement Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Overall Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Movement Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard X-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontal Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Y-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Vertical Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Language
+    allTranslations:
+    - languageIndex: 0
+      text: Language
+    - languageIndex: 1
+      text: "\u5358\u8A9E"
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Invert
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Camera Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Overall Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Camera Control's Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse X-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontal Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Y-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Vertical Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Music Volume
+    allTranslations:
+    - languageIndex: 0
+      text: Music Volume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mute
+    allTranslations:
+    - languageIndex: 0
+      text: Mute
+    - languageIndex: 1
+      text: "\u5F31\u97F3"
+    - languageIndex: 2
+      text: 
+  - key: Options Reset
+    allTranslations:
+    - languageIndex: 0
+      text: Reset
+    - languageIndex: 1
+      text: "\u30EA\u30BB\u30C3\u30C8"
+    - languageIndex: 2
+      text: 
+  - key: Options Reset Data
+    allTranslations:
+    - languageIndex: 0
+      text: Reset Data
+    - languageIndex: 1
+      text: "\u30C7\u30FC\u30BF\u3092\u524A\u9664"
+    - languageIndex: 2
+      text: 
+  - key: Options Reset Message
+    allTranslations:
+    - languageIndex: 0
+      text: This will reset all your in-game progress data.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Scroll Wheel
+    allTranslations:
+    - languageIndex: 0
+      text: Mouse Scroll-Wheel
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Scroll Wheel Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Smooth Camera
+    allTranslations:
+    - languageIndex: 0
+      text: Camera Smoothing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Smooth Camera Hint
+    allTranslations:
+    - languageIndex: 0
+      text: Enabling this feature smooths the camera rotation towards the direction
+        the mouse moved, rather than rotating it at the slightest mouse movement.
+        The higher the value, the more the camera lags behind the mouse movement.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Sound Effects Volume
+    allTranslations:
+    - languageIndex: 0
+      text: Sound Effects Volume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Split Keyboard Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Movement Sensitivity By Axis
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Split Mouse Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Camera Sensitivity By Axis
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Text Size
+    allTranslations:
+    - languageIndex: 0
+      text: Text Size
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Time Scale
+    allTranslations:
+    - languageIndex: 0
+      text: Time Scale
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Time Scale Message
+    allTranslations:
+    - languageIndex: 0
+      text: If enabled, allows one to adjust the speed of how the game progresses.
+        This includes the speed of movement, animations, physics, etc.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Paused Title
+    allTranslations:
+    - languageIndex: 0
+      text: Paused
+    - languageIndex: 1
+      text: "\u30DD\u30FC\u30BA"
+    - languageIndex: 2
+      text: 
+  - key: Play Again Button
+    allTranslations:
+    - languageIndex: 0
+      text: Play Again!
+    - languageIndex: 1
+      text: "\u307E\u305F\u904A\u3076"
+  - key: Quit Button
+    allTranslations:
+    - languageIndex: 0
+      text: Quit
+    - languageIndex: 1
+      text: "\u7D42\u308F\u308B"
+    - languageIndex: 2
+      text: 
+  - key: Restart Button
+    allTranslations:
+    - languageIndex: 0
+      text: Restart {0}
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Resume Button
+    allTranslations:
+    - languageIndex: 0
+      text: Resume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Return To Menu Button
+    allTranslations:
+    - languageIndex: 0
+      text: Return to {0}
+    - languageIndex: 1
+      text: "{0}\u3078\u623B\u308B"
+    - languageIndex: 2
+      text: 
+  - key: Skip Credits Button
+    allTranslations:
+    - languageIndex: 0
+      text: Press any key to skip
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Start Button
+    allTranslations:
+    - languageIndex: 0
+      text: Start
+    - languageIndex: 1
+      text: "\u30B9\u30BF\u30FC\u30C8"
+    - languageIndex: 2
+      text: 
+  - key: Submit Button
+    allTranslations: []
+  - key: Submit Record Button
+    allTranslations:
+    - languageIndex: 0
+      text: Submit Record
+  - key: Yes Button
+    allTranslations:
+    - languageIndex: 0
+      text: Yes
+    - languageIndex: 1
+      text: "\u306F\u3044"
+    - languageIndex: 2
+      text: 

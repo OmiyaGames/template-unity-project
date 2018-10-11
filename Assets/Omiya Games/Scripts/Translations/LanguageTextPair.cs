@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using System;
 
 namespace OmiyaGames.Translations
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="TranslatedTextMesh.cs" company="Omiya Games">
+    /// <copyright file="LanguageTextPairEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -27,72 +28,47 @@ namespace OmiyaGames.Translations
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>6/1/2018</date>
+    /// <date>10/10/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Set translation text.
+    /// Pair of int and text.
     /// </summary>
-    /// <remarks>
-    /// Revision History:
-    /// <list type="table">
-    /// <listheader>
-    /// <description>Date</description>
-    /// <description>Name</description>
-    /// <description>Description</description>
-    /// </listheader>
-    /// <item>
-    /// <description>6/1/2018</description>
-    /// <description>Taro</description>
-    /// <description>Initial verison</description>
-    /// </item>
-    /// <item>
-    /// <description>9/11/2018</description>
-    /// <description>Taro</description>
-    /// <description>Abstracting script to <code>ITranslatedLabel</code></description>
-    /// </item>
-    /// </list>
-    /// </remarks>
-    /// <seealso cref="TranslatedTextMeshPro"/>
-    [RequireComponent(typeof(TextMesh))]
-    [DisallowMultipleComponent]
-    [ExecuteInEditMode]
-    public class TranslatedTextMesh : ITranslatedLabel<TextMesh, FontStyle>
+    [Serializable]
+    public struct LanguageTextPair
     {
-        /// <summary>
-        /// Gets or sets the style of the label's font directly.
-        /// Override to adjust the behavior of this script.
-        /// </summary>
-        public override FontStyle LabelFontStyle
+        [SerializeField]
+        int languageIndex;
+        [SerializeField]
+        string text;
+
+        public LanguageTextPair(int languageIndex, string text)
+        {
+            this.languageIndex = languageIndex;
+            this.text = text;
+        }
+
+        public int LanguageIndex
         {
             get
             {
-                return Label.fontStyle;
+                return languageIndex;
             }
             set
             {
-                Label.fontStyle = value;
+                languageIndex = value;
             }
         }
 
-        /// <summary>
-        /// Gets or sets the text of the label directly.
-        /// Override to adjust the behavior of this script.
-        /// </summary>
-        protected override string LabelText
+        public string Text
         {
             get
             {
-                return Label.text;
+                return text;
             }
             set
             {
-                Label.text = value;
+                text = value;
             }
-        }
-
-        protected override void UpdateFont(TranslationManager.FontMap fontMap, string fontKey)
-        {
-            Label.font = fontMap.GetFontUgui(fontKey);
         }
     }
 }

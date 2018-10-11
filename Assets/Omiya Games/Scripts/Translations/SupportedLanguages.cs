@@ -137,6 +137,10 @@ namespace OmiyaGames.Translations
             {
                 return previewLanguageInIndex;
             }
+            set
+            {
+                previewLanguageInIndex = value;
+            }
         }
 
         private Dictionary<string, int> LanguageToIndexMap
@@ -160,23 +164,27 @@ namespace OmiyaGames.Translations
         #endregion
 
         /// <summary>
-        /// Gets the default supported language based on system's settings.  Since this operation iterates through all supported languages, it may be slow.
+        /// Gets the default supported language based on system's settings.
+        /// Returns true if a language matching the <code>systemDefault</code> is outputted.
+        /// Since this operation iterates through all supported languages, it may be slow.
         /// </summary>
         /// <param name="language">Name of the Language.</param>
         /// <param name="index">The index this language belongs to.</param>
-        /// <returns></returns>
+        /// <returns>True if a language matching the <code>systemDefault</code> is outputted.</returns>
         public bool GetDefaultLanguage(out string language, out int index)
         {
             return GetLanguage(Application.systemLanguage, out language, out index);
         }
 
         /// <summary>
-        /// Gets the supported language mapped to <code>systemDefault</code>.  Since this operation iterates through all supported languages, it may be slow.
+        /// Gets the supported language mapped to <code>systemDefault</code>.
+        /// Returns true if a language matching the <code>systemDefault</code> is outputted.
+        /// Since this operation iterates through all supported languages, it may be slow.
         /// </summary>
         /// <param name="systemDefault">The system language to find the corresponding language.</param>
         /// <param name="language">Name of the Language.</param>
         /// <param name="index">The index this language belongs to.</param>
-        /// <returns></returns>
+        /// <returns>True if a language matching the <code>systemDefault</code> is outputted.</returns>
         public bool GetLanguage(SystemLanguage systemDefault, out string language, out int index)
         {
             // By default, return null and the first language in the list

@@ -56,6 +56,7 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty defaultToWhenTranslationNotFound;
         SerializedProperty defaultLanguageWhenTranslationNotFound;
         SerializedProperty presetMessageWhenTranslationNotFound;
+        SerializedProperty replaceEmptyStringWithDefaultText;
 
         // Defaults field
         AnimBool showErrorMessage = null;
@@ -82,7 +83,7 @@ namespace OmiyaGames.UI.Translations
         #endregion
 
         [MenuItem("Omiya Games/Create/Translation Dictionary")]
-        private static void CreateTranslationDictionary()
+        public static TranslationDictionary CreateTranslationDictionary()
         {
             // Setup asset
             TranslationDictionary newAsset = ScriptableObject.CreateInstance<TranslationDictionary>();
@@ -94,6 +95,7 @@ namespace OmiyaGames.UI.Translations
 
             // Create the asset, and prompt the user to rename it
             ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
+            return newAsset;
         }
 
         #region Unity Events
@@ -106,6 +108,7 @@ namespace OmiyaGames.UI.Translations
             defaultToWhenTranslationNotFound = serializedObject.FindProperty("defaultToWhenTranslationNotFound");
             presetMessageWhenTranslationNotFound = serializedObject.FindProperty("presetMessageWhenTranslationNotFound");
             defaultLanguageWhenTranslationNotFound = serializedObject.FindProperty("defaultLanguageWhenTranslationNotFound");
+            replaceEmptyStringWithDefaultText = serializedObject.FindProperty("replaceEmptyStringWithDefaultText");
 
             // Setup animations
             EditorUtility.CreateBool(this, ref showErrorMessage);
@@ -389,6 +392,9 @@ namespace OmiyaGames.UI.Translations
                     EditorGUILayout.PropertyField(presetMessageWhenTranslationNotFound, PresetMessageLabel);
                 }
             }
+
+            // Draw the replace empty string field
+            replaceEmptyStringWithDefaultText.boolValue = EditorGUILayout.ToggleLeft("Replace Empty String With Default Text", replaceEmptyStringWithDefaultText.boolValue);
         }
 
         private void DrawSupportedLanguageField()
