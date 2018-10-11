@@ -88,16 +88,6 @@ namespace OmiyaGames.Translations
         [SerializeField]
         protected TranslatedString translation = new TranslatedString();
 
-        [SerializeField]
-        [Tooltip("The key to the CSVLanguageParser.")]
-        [System.Obsolete("Use translation instead.")]
-        protected string translationKey = "";
-        [System.Obsolete("Delete as soon as all labels are updated.")]
-        public void UpdateField()
-        {
-            translation.TranslationKey = translationKey;
-        }
-
         [Header("Optional Font Adjustments")]
         [SerializeField]
         [Tooltip("(Optional) Name of the font key, set in the Translation Manager.")]
