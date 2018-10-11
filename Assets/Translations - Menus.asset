@@ -18,14 +18,30 @@ MonoBehaviour:
   defaultLanguageWhenTranslationNotFound: 0
   presetMessageWhenTranslationNotFound: <Translation Not Found>
   translations:
-  - key: Native Language
+  - key: Back Button
     allTranslations:
     - languageIndex: 0
-      text: English (USA)
+      text: Back
     - languageIndex: 1
-      text: "\u65E5\u672C\u8A9E"
+      text: "\u623B\u308B"
     - languageIndex: 2
-      text: Pig Latin (USA)
+      text: 
+  - key: Click To Start Button
+    allTranslations:
+    - languageIndex: 0
+      text: Click here to begin!
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Confirmation Title
+    allTranslations:
+    - languageIndex: 0
+      text: Are you sure?
+    - languageIndex: 1
+      text: "\u672C\u5F53\u306B\uFF1F"
+    - languageIndex: 2
+      text: 
   - key: Credits
     allTranslations:
     - languageIndex: 0
@@ -34,34 +50,87 @@ MonoBehaviour:
       text: "\u30B9\u30BF\u30C3\u30D5"
     - languageIndex: 2
       text: 
-  - key: Main Menu
+  - key: Credits Button
     allTranslations:
     - languageIndex: 0
-      text: Menu
+      text: Credits
     - languageIndex: 1
-      text: "\u30E1\u30CB\u30E5\u30FC"
+      text: "\u30B9\u30BF\u30C3\u30D5"
     - languageIndex: 2
       text: 
-  - key: Loading
+  - key: Hack Warning Continue Button
     allTranslations:
     - languageIndex: 0
-      text: Loading...
+      text: Continue
     - languageIndex: 1
-      text: "\u30ED\u30FC\u30C9\u4E2D..."
+      text: 
     - languageIndex: 2
       text: 
-  - key: Start Button
+  - key: Hack Warning Intro
     allTranslations:
     - languageIndex: 0
-      text: Start
+      text: Someone besides the original developers may have uploaded this game without
+        their permission. How can they tell?
     - languageIndex: 1
-      text: "\u30B9\u30BF\u30FC\u30C8"
+      text: 
     - languageIndex: 2
       text: 
-  - key: Level Select Button
+  - key: Hack Warning Options
     allTranslations:
     - languageIndex: 0
-      text: Level Select
+      text: 'This could potentially mean that this game''s quality is compromised.
+        There are a few options you can take.
+
+
+        First, you can check our website at <link="website"><u>{0}</u></link> for
+        a legitimate copy of this game, as well as news about this project and other
+        games we''ve created.
+
+
+        You can also click on the button below to continue this copy of the game.
+        We don''t take any responsibilities for what might happen next, though.'
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Domain Mismatch
+    allTranslations:
+    - languageIndex: 0
+      text: The detected url, "{0}," does not match any of the domains the developers
+        uploaded their game to.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Not Genuine
+    allTranslations:
+    - languageIndex: 0
+      text: Internal tests confirm this game is not genuine.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Reasoning Unknown Domain
+    allTranslations:
+    - languageIndex: 0
+      text: Unable to confirm this game is hosted by a domain the developers uploaded
+        their game to.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Hack Warning Title
+    allTranslations:
+    - languageIndex: 0
+      text: Uh, oh.
+    - languageIndex: 1
+      text: "\u3042\u308C\uFF1F"
+    - languageIndex: 2
+      text: 
+  - key: High Scores Button
+    allTranslations:
+    - languageIndex: 0
+      text: High Scores
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -74,12 +143,12 @@ MonoBehaviour:
       text: "\u904A\u3073\u65B9"
     - languageIndex: 2
       text: 
-  - key: Click To Start Button
+  - key: Level Button
     allTranslations:
     - languageIndex: 0
-      text: Click here to begin!
+      text: Level {0}
     - languageIndex: 1
-      text: 
+      text: "\u30B9\u30C6\u30FC\u30B8{0}"
     - languageIndex: 2
       text: 
   - key: Level Complete Title
@@ -98,26 +167,83 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Resume Button
+  - key: Level Select Button
     allTranslations:
     - languageIndex: 0
-      text: Resume
+      text: Level Select
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: High Scores Button
+  - key: Level Select Title
     allTranslations:
     - languageIndex: 0
-      text: High Scores
+      text: Level Select
+    - languageIndex: 1
+      text: "\u30B9\u30C6\u30FC\u30B8\u9078\u629E"
+    - languageIndex: 2
+      text: 
+  - key: Loading
+    allTranslations:
+    - languageIndex: 0
+      text: Loading...
+    - languageIndex: 1
+      text: "\u30ED\u30FC\u30C9\u4E2D..."
+    - languageIndex: 2
+      text: 
+  - key: Lock Mouse Instructions
+    allTranslations:
+    - languageIndex: 0
+      text: 'Note: this game will lock your mouse cursor, but you can always recover
+        by holding ESC.'
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Restart Button
+  - key: Main Menu
     allTranslations:
     - languageIndex: 0
-      text: Restart {0}
+      text: Menu
+    - languageIndex: 1
+      text: "\u30E1\u30CB\u30E5\u30FC"
+    - languageIndex: 2
+      text: 
+  - key: Native Language
+    allTranslations:
+    - languageIndex: 0
+      text: English (USA)
+    - languageIndex: 1
+      text: "\u65E5\u672C\u8A9E"
+    - languageIndex: 2
+      text: Pig Latin (USA)
+  - key: Next Level Button
+    allTranslations:
+    - languageIndex: 0
+      text: Next Level
+    - languageIndex: 1
+      text: "\u6B21\u306E\u30B9\u30C6\u30FC\u30B8"
+    - languageIndex: 2
+      text: 
+  - key: No Button
+    allTranslations:
+    - languageIndex: 0
+      text: No
+    - languageIndex: 1
+      text: "\u3044\u3044\u3048"
+    - languageIndex: 2
+      text: 
+  - key: Options Accessibility
+    allTranslations:
+    - languageIndex: 0
+      text: Accessibility
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Audio
+    allTranslations:
+    - languageIndex: 0
+      text: Audio
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -130,86 +256,6 @@ MonoBehaviour:
       text: "\u8A2D\u5B9A"
     - languageIndex: 2
       text: 
-  - key: Credits Button
-    allTranslations:
-    - languageIndex: 0
-      text: Credits
-    - languageIndex: 1
-      text: "\u30B9\u30BF\u30C3\u30D5"
-    - languageIndex: 2
-      text: 
-  - key: Level Button
-    allTranslations:
-    - languageIndex: 0
-      text: Level {0}
-    - languageIndex: 1
-      text: "\u30B9\u30C6\u30FC\u30B8{0}"
-    - languageIndex: 2
-      text: 
-  - key: Next Level Button
-    allTranslations:
-    - languageIndex: 0
-      text: Next Level
-    - languageIndex: 1
-      text: "\u6B21\u306E\u30B9\u30C6\u30FC\u30B8"
-    - languageIndex: 2
-      text: 
-  - key: Skip Credits Button
-    allTranslations:
-    - languageIndex: 0
-      text: Press any key to skip
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Return To Menu Button
-    allTranslations:
-    - languageIndex: 0
-      text: Return to {0}
-    - languageIndex: 1
-      text: "{0}\u3078\u623B\u308B"
-    - languageIndex: 2
-      text: 
-  - key: Back Button
-    allTranslations:
-    - languageIndex: 0
-      text: Back
-    - languageIndex: 1
-      text: "\u623B\u308B"
-    - languageIndex: 2
-      text: 
-  - key: Quit Button
-    allTranslations:
-    - languageIndex: 0
-      text: Quit
-    - languageIndex: 1
-      text: "\u7D42\u308F\u308B"
-    - languageIndex: 2
-      text: 
-  - key: Paused Title
-    allTranslations:
-    - languageIndex: 0
-      text: Paused
-    - languageIndex: 1
-      text: "\u30DD\u30FC\u30BA"
-    - languageIndex: 2
-      text: 
-  - key: Level Select Title
-    allTranslations:
-    - languageIndex: 0
-      text: Level Select
-    - languageIndex: 1
-      text: "\u30B9\u30C6\u30FC\u30B8\u9078\u629E"
-    - languageIndex: 2
-      text: 
-  - key: Options Audio
-    allTranslations:
-    - languageIndex: 0
-      text: Audio
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
   - key: Options Controls
     allTranslations:
     - languageIndex: 0
@@ -218,76 +264,18 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Accessibility
+  - key: Options Enable
     allTranslations:
     - languageIndex: 0
-      text: Accessibility
+      text: Enable
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Mute
+  - key: Options Enable Bloom
     allTranslations:
     - languageIndex: 0
-      text: Mute
-    - languageIndex: 1
-      text: "\u5F31\u97F3"
-    - languageIndex: 2
-      text: 
-  - key: Options Language
-    allTranslations:
-    - languageIndex: 0
-      text: Language
-    - languageIndex: 1
-      text: "\u5358\u8A9E"
-    - languageIndex: 2
-      text: 
-  - key: Options Music Volume
-    allTranslations:
-    - languageIndex: 0
-      text: Music Volume
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Sound Effects Volume
-    allTranslations:
-    - languageIndex: 0
-      text: Sound Effects Volume
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Graphics
-    allTranslations:
-    - languageIndex: 0
-      text: Graphics
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Smooth Camera
-    allTranslations:
-    - languageIndex: 0
-      text: Camera Smoothing
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Smooth Camera Hint
-    allTranslations:
-    - languageIndex: 0
-      text: Enabling this feature smooths the camera rotation towards the direction
-        the mouse moved, rather than rotating it at the slightest mouse movement.
-        The higher the value, the more the camera lags behind the mouse movement.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Flashing Effects
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Screen Flashing
+      text: Enable Bloom Effect
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -296,6 +284,14 @@ MonoBehaviour:
     allTranslations:
     - languageIndex: 0
       text: Enable Camera Shakes
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Enable Flashing Effects
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Screen Flashing
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -316,58 +312,10 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Enable Bloom
+  - key: Options Graphics
     allTranslations:
     - languageIndex: 0
-      text: Enable Bloom Effect
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Movement Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Split Keyboard Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Split Movement Sensitivity By Axis
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Overall Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard X-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Horizontal Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Y-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Vertical Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Invert
-    allTranslations:
-    - languageIndex: 0
-      text: Invert Movement Controls
+      text: Graphics
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -388,18 +336,98 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Mouse Sensitivity
+  - key: Options Invert Mouse X-Axis
     allTranslations:
     - languageIndex: 0
-      text: Camera Control's Sensitivity
+      text: Horizontally
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Split Mouse Sensitivity
+  - key: Options Invert Mouse Y-Axis
     allTranslations:
     - languageIndex: 0
-      text: Split Camera Sensitivity By Axis
+      text: Vertically
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invert Scroll Wheel
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Mouse Scroll-Wheel
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invincibility
+    allTranslations:
+    - languageIndex: 0
+      text: Invincibility Mode
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Invincibility Message
+    allTranslations:
+    - languageIndex: 0
+      text: Enabling this mode prevents the player from taking any damage.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Invert
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Movement Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Overall Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Movement Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard X-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontal Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Keyboard Y-Axis Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Vertical Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Language
+    allTranslations:
+    - languageIndex: 0
+      text: Language
+    - languageIndex: 1
+      text: "\u5358\u8A9E"
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Invert
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Camera Controls
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -408,6 +436,14 @@ MonoBehaviour:
     allTranslations:
     - languageIndex: 0
       text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Mouse Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Camera Control's Sensitivity
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -428,52 +464,20 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Mouse Invert
+  - key: Options Music Volume
     allTranslations:
     - languageIndex: 0
-      text: Invert Camera Controls
+      text: Music Volume
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Invert Mouse X-Axis
+  - key: Options Mute
     allTranslations:
     - languageIndex: 0
-      text: Horizontally
+      text: Mute
     - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Mouse Y-Axis
-    allTranslations:
-    - languageIndex: 0
-      text: Vertically
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Scroll Wheel
-    allTranslations:
-    - languageIndex: 0
-      text: Mouse Scroll-Wheel
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Scroll Wheel Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Scroll Wheel
-    allTranslations:
-    - languageIndex: 0
-      text: Invert Mouse Scroll-Wheel
-    - languageIndex: 1
-      text: 
+      text: "\u5F31\u97F3"
     - languageIndex: 2
       text: 
   - key: Options Reset
@@ -500,28 +504,62 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Confirmation Title
+  - key: Options Scroll Wheel
     allTranslations:
     - languageIndex: 0
-      text: Are you sure?
+      text: Mouse Scroll-Wheel
     - languageIndex: 1
-      text: "\u672C\u5F53\u306B\uFF1F"
+      text: 
     - languageIndex: 2
       text: 
-  - key: Yes Button
+  - key: Options Scroll Wheel Sensitivity
     allTranslations:
     - languageIndex: 0
-      text: Yes
+      text: Sensitivity
     - languageIndex: 1
-      text: "\u306F\u3044"
+      text: 
     - languageIndex: 2
       text: 
-  - key: No Button
+  - key: Options Smooth Camera
     allTranslations:
     - languageIndex: 0
-      text: No
+      text: Camera Smoothing
     - languageIndex: 1
-      text: "\u3044\u3044\u3048"
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Smooth Camera Hint
+    allTranslations:
+    - languageIndex: 0
+      text: Enabling this feature smooths the camera rotation towards the direction
+        the mouse moved, rather than rotating it at the slightest mouse movement.
+        The higher the value, the more the camera lags behind the mouse movement.
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Sound Effects Volume
+    allTranslations:
+    - languageIndex: 0
+      text: Sound Effects Volume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Split Keyboard Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Movement Sensitivity By Axis
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Options Split Mouse Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Camera Sensitivity By Axis
+    - languageIndex: 1
+      text: 
     - languageIndex: 2
       text: 
   - key: Options Text Size
@@ -549,105 +587,67 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Enable
+  - key: Paused Title
     allTranslations:
     - languageIndex: 0
-      text: Enable
+      text: Paused
+    - languageIndex: 1
+      text: "\u30DD\u30FC\u30BA"
+    - languageIndex: 2
+      text: 
+  - key: Quit Button
+    allTranslations:
+    - languageIndex: 0
+      text: Quit
+    - languageIndex: 1
+      text: "\u7D42\u308F\u308B"
+    - languageIndex: 2
+      text: 
+  - key: Restart Button
+    allTranslations:
+    - languageIndex: 0
+      text: Restart {0}
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Invincibility
+  - key: Resume Button
     allTranslations:
     - languageIndex: 0
-      text: Invincibility Mode
+      text: Resume
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Invincibility Message
+  - key: Return To Menu Button
     allTranslations:
     - languageIndex: 0
-      text: Enabling this mode prevents the player from taking any damage.
+      text: Return to {0}
+    - languageIndex: 1
+      text: "{0}\u3078\u623B\u308B"
+    - languageIndex: 2
+      text: 
+  - key: Skip Credits Button
+    allTranslations:
+    - languageIndex: 0
+      text: Press any key to skip
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Hack Warning Title
+  - key: Start Button
     allTranslations:
     - languageIndex: 0
-      text: Uh, oh.
+      text: Start
     - languageIndex: 1
-      text: "\u3042\u308C\uFF1F"
+      text: "\u30B9\u30BF\u30FC\u30C8"
     - languageIndex: 2
       text: 
-  - key: Hack Warning Intro
+  - key: Yes Button
     allTranslations:
     - languageIndex: 0
-      text: Someone besides the original developers may have uploaded this game without
-        their permission. How can they tell?
+      text: Yes
     - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Hack Warning Reasoning Not Genuine
-    allTranslations:
-    - languageIndex: 0
-      text: Internal tests confirm this game is not genuine.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Hack Warning Reasoning Unknown Domain
-    allTranslations:
-    - languageIndex: 0
-      text: Unable to confirm this game is hosted by a domain the developers uploaded
-        their game to.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Hack Warning Reasoning Domain Mismatch
-    allTranslations:
-    - languageIndex: 0
-      text: The detected url, "{0}," does not match any of the domains the developers
-        uploaded their game to.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Hack Warning Options
-    allTranslations:
-    - languageIndex: 0
-      text: 'This could potentially mean that this game''s quality is compromised.
-        There are a few options you can take.
-
-
-        First, you can check our website at <link="website"><u>{0}</u></link> for
-        a legitimate copy of this game, as well as news about this project and other
-        games we''ve created.
-
-
-        You can also click on the button below to continue this copy of the game.
-        We don''t take any responsibilities for what might happen next, though.'
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Hack Warning Continue Button
-    allTranslations:
-    - languageIndex: 0
-      text: Continue
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Lock Mouse Instructions
-    allTranslations:
-    - languageIndex: 0
-      text: 'Note: this game will lock your mouse cursor, but you can always recover
-        by holding ESC.'
-    - languageIndex: 1
-      text: 
+      text: "\u306F\u3044"
     - languageIndex: 2
       text: 
