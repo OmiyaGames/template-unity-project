@@ -92,6 +92,11 @@ namespace OmiyaGames.Translations
         [Tooltip("The key to the CSVLanguageParser.")]
         [System.Obsolete("Use translation instead.")]
         protected string translationKey = "";
+        [System.Obsolete("Delete as soon as all labels are updated.")]
+        public void UpdateField()
+        {
+            translation.TranslationKey = translationKey;
+        }
 
         [Header("Optional Font Adjustments")]
         [SerializeField]
