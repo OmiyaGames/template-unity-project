@@ -631,7 +631,7 @@ Animator:
   m_GameObject: {fileID: 1983717634162456}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cc143e1bc1faf9f4f9555c0ccc7b3f88, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -705,7 +705,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: New High Score
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: New High Score
   fontKey: 
 --- !u!114 &114010290992383214
 MonoBehaviour:
@@ -1499,7 +1502,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224294807933898840}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1564,7 +1567,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: Play Again Button
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: Play Again Button
   fontKey: 
 --- !u!114 &114406929597734494
 MonoBehaviour:
@@ -1602,8 +1608,8 @@ MonoBehaviour:
   stateField: State
   navigator: {fileID: 114333043191433568}
   nameField: {fileID: 114126847527547588}
-  scorePlacementLabel: {fileID: 114668783475891022}
-  scoreLabel: {fileID: 114636045959637836}
+  scorePlacementLabel: {fileID: 0}
+  scoreLabel: {fileID: 0}
 --- !u!114 &114439893291905066
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1672,7 +1678,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: New High Score Format
+    dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
+  translationKey: New High Score Format
   fontKey: 
 --- !u!114 &114575919837585886
 MonoBehaviour:
@@ -1685,7 +1694,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: Enter Name Here
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: Enter Name Here
   fontKey: 
 --- !u!114 &114590361690250512
 MonoBehaviour:
@@ -2207,7 +2219,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: Submit Record Button
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: Submit Record Button
   fontKey: 
 --- !u!114 &114743155918955094
 MonoBehaviour:
@@ -2327,7 +2342,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b48364c3c6952b748be4c8401d7dc5df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  translationKey: 
+  translation:
+    key: New High Score Place
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+  translationKey: New High Score Place
   fontKey: 
 --- !u!114 &114842261520096624
 MonoBehaviour:
@@ -2951,7 +2969,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 346, y: -484.52}
-  m_SizeDelta: {x: 692, y: 5.999999}
+  m_SizeDelta: {x: 0, y: 5.999999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224117985051866546
 RectTransform:
@@ -3029,7 +3047,7 @@ RectTransform:
   m_AnchorMin: {x: 0.45, y: 0}
   m_AnchorMax: {x: 0.55, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.00024414062}
-  m_SizeDelta: {x: 500, y: -844.3729}
+  m_SizeDelta: {x: 500, y: -509.12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224189201511401842
 RectTransform:
@@ -3292,7 +3310,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 346, y: -145.46}
-  m_SizeDelta: {x: 692, y: 5.999999}
+  m_SizeDelta: {x: 0, y: 5.999999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224631468894835516
 RectTransform:
@@ -3519,7 +3537,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000015258789}
   m_SizeDelta: {x: 0, y: 293.06}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224902698030651558
