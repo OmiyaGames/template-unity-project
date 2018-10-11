@@ -147,7 +147,7 @@ namespace OmiyaGames.UI.Translations
                     // Allocate preview
                     height += EditorUtility.VerticalMargin * 2;
                     height += EditorGUIUtility.singleLineHeight;
-                    height += TextPreview.CalculateHeight(null);
+                    height += TextPreview.CalculateHeight(null, !translationDictionary.IsAllTranslationsSerialized);
                 }
             }
             return height;
@@ -237,13 +237,19 @@ namespace OmiyaGames.UI.Translations
                 else if ((status == Status.UnknownKey) && (GUI.Button(rect, "Create New Key") == true))
                 {
                     // Add the key into the translations dictionary
-                    translationDictionary.AllTranslations.Add(translationKey, new Dictionary<int, string>());
+                    translationDictionary.AllTranslations.Add(translationKey);
                     translationDictionary.UpdateSerializedTranslations();
                 }
-                else if ((status == Status.OK) && (GUI.Button(rect, "Update Dictionary") == true))
+                else if (status == Status.OK)
                 {
-                    // Apply changes to the dictionary
-                    translationDictionary.UpdateSerializedTranslations();
+                    using (EditorGUI.DisabledGroupScope scope = new EditorGUI.DisabledGroupScope(translationDictionary.IsAllTranslationsSerialized))
+                    {
+                        if (GUI.Button(rect, "Update Dictionary") == true)
+                        {
+                            // Apply changes to the dictionary
+                            translationDictionary.UpdateSerializedTranslations();
+                        }
+                    }
                 }
 
                 // Remove indentation
@@ -293,16 +299,16 @@ namespace OmiyaGames.UI.Translations
                 // Update text preview
                 TextPreview.SupportedLanguages = translationDictionary.SupportedLanguages;
                 TextPreview.LanguageIndex = translationDictionary.SupportedLanguages.PreviewIndex;
-                IDictionary<int, string> translations;
-                if ((translationDictionary.AllTranslations.TryGetValue(key, out translations) == true) && (translations.ContainsKey(TextPreview.LanguageIndex) == true))
+                TranslationDictionary.LanguageTextMap translations;
+                if (translationDictionary.AllTranslations.TryGetValue(key, out translations) == true)
                 {
                     TextPreview.Text = translations[TextPreview.LanguageIndex];
                 }
 
                 // Draw the preview
                 rect.y += EditorUtility.VerticalMargin + rect.height;
-                rect.height = TextPreview.CalculateHeight(null);
-                TextPreview.DrawGui(rect, null, false);
+                rect.height = TextPreview.CalculateHeight(null, !translationDictionary.IsAllTranslationsSerialized);
+                TextPreview.DrawGui(rect, null, !translationDictionary.IsAllTranslationsSerialized);
 
                 // Check if we need to apply changes
                 if (TextPreview.IsLanguageIndexChanged == true)
@@ -312,14 +318,7 @@ namespace OmiyaGames.UI.Translations
                 else if ((TextPreview.IsTextChanged == true) && (translationDictionary.AllTranslations.TryGetValue(key, out translations) == true))
                 {
                     // Apply the changes to the dictionary
-                    if (translations.ContainsKey(TextPreview.LanguageIndex) == true)
-                    {
-                        translations[TextPreview.LanguageIndex] = TextPreview.Text;
-                    }
-                    else
-                    {
-                        translations.Add(TextPreview.LanguageIndex, TextPreview.Text);
-                    }
+                    translations[TextPreview.LanguageIndex] = TextPreview.Text;
                 }
             }
             return rect;

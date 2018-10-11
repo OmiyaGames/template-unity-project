@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 ///-----------------------------------------------------------------------
-/// <copyright file="TranslationDictionary.TranslationKeyCollection.cs" company="Omiya Games">
+/// <copyright file="TranslationDictionary.KeyLanguageTextMap.cs" company="Omiya Games">
 /// The MIT License (MIT)
 /// 
 /// Copyright (c) 2014-2018 Omiya Games
@@ -37,14 +37,22 @@ namespace OmiyaGames.Translations
         /// An interface to the translations in <code>TranslationDictionary</code>.
         /// </summary>
         /// <seealso cref="TranslationDictionary"/>
-        public class TranslationKeyCollection : IEnumerable<KeyValuePair<string, TranslationTextCollection>>
+        public class KeyLanguageTextMap : IEnumerable<KeyValuePair<string, LanguageTextMap>>
         {
-            readonly IDictionary<string, TranslationTextCollection> dictionary;
+            readonly IDictionary<string, LanguageTextMap> dictionary;
 
-            public TranslationKeyCollection(TranslationDictionary parent)
+            public KeyLanguageTextMap(TranslationDictionary parent)
             {
-                dictionary = new SortedDictionary<string, TranslationTextCollection>();
+                dictionary = new SortedDictionary<string, LanguageTextMap>();
                 Parent = parent;
+            }
+
+            public LanguageTextMap this[string translationKey]
+            {
+                get
+                {
+                    return dictionary[translationKey];
+                }
             }
 
             public TranslationDictionary Parent
@@ -64,11 +72,11 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            public TranslationTextCollection this[string translationKey]
+            public int Count
             {
                 get
                 {
-                    return dictionary[translationKey];
+                    return dictionary.Count;
                 }
             }
 
@@ -77,14 +85,79 @@ namespace OmiyaGames.Translations
                 return dictionary.ContainsKey(translationKey);
             }
 
-            public IEnumerator<KeyValuePair<string, TranslationTextCollection>> GetEnumerator()
+            public bool TryGetValue(string translationKey, out LanguageTextMap textCollection)
             {
-                throw new NotImplementedException();
+                return dictionary.TryGetValue(translationKey, out textCollection);
+            }
+
+            /// <summary>
+            /// Creates a new <code>TranslationTextCollection</code> for the argument,
+            /// <code>translationKey</code>; or null if the collection already contains the key.
+            /// </summary>
+            /// <param name="translationKey"></param>
+            /// <returns>
+            /// A new <code>TranslationTextCollection</code>,
+            /// or null if the collection already has the key.
+            /// </returns>
+            public LanguageTextMap Add(string translationKey)
+            {
+                // Make sure the key hasn't been added already
+                LanguageTextMap returnCollection = null;
+                if(ContainsKey(translationKey) == false)
+                {
+                    // If not, create a new collection
+                    returnCollection = new LanguageTextMap(this);
+
+                    // Add it to this dictionary
+                    dictionary.Add(translationKey, returnCollection);
+
+                    // Indicate the serialization no longer matches what's contained in the dictionary
+                    IsSerialized = false;
+                }
+                return returnCollection;
+            }
+
+            public LanguageTextMap Remove(string translationKey)
+            {
+                // Make sure the dictionar contains the key
+                LanguageTextMap returnCollection = null;
+                if (dictionary.TryGetValue(translationKey, out returnCollection) == true)
+                {
+                    // If so, remove it from the dictionary
+                    dictionary.Remove(translationKey);
+
+                    // Indicate the serialization no longer matches what's contained in the dictionary
+                    IsSerialized = false;
+                }
+                else
+                {
+                    // Otherwise, return null
+                    returnCollection = null;
+                }
+                return returnCollection;
+            }
+
+            public void Clear()
+            {
+                // Check the size of the dictionary
+                if(Count > 0)
+                {
+                    // Clear the dictionary
+                    dictionary.Clear();
+
+                    // Indicate the serialization no longer matches what's contained in the dictionary
+                    IsSerialized = false;
+                }
+            }
+
+            public IEnumerator<KeyValuePair<string, LanguageTextMap>> GetEnumerator()
+            {
+                return dictionary.GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                throw new NotImplementedException();
+                return dictionary.GetEnumerator();
             }
         }
 
@@ -92,17 +165,94 @@ namespace OmiyaGames.Translations
         /// An interface to the translations in <code>TranslationDictionary</code>.
         /// </summary>
         /// <seealso cref="TranslationDictionary"/>
-        public class TranslationTextCollection : IEnumerable<KeyValuePair<int, string>>
+        public class LanguageTextMap : IEnumerable<KeyValuePair<int, string>>
         {
             readonly IDictionary<int, string> dictionary;
 
-            public TranslationTextCollection(TranslationKeyCollection parent)
+            public LanguageTextMap(KeyLanguageTextMap parent)
             {
                 dictionary = new SortedDictionary<int, string>();
                 Parent = parent;
             }
 
-            public TranslationKeyCollection Parent
+            public string this[int languageIndex]
+            {
+                get
+                {
+                    // Check if the language index is valid
+                    if (SupportedLanguages.Contains(languageIndex) == false)
+                    {
+                        // Indicate if it isn't
+                        throw new ArgumentOutOfRangeException("languageIndex");
+                    }
+
+                    // Grab a text based off of the index
+                    string returnText = null;
+                    if (dictionary.TryGetValue(languageIndex, out returnText) == false)
+                    {
+                        // If none found, return null
+                        returnText = null;
+                    }
+                    return returnText;
+                }
+                set
+                {
+                    // Check if the language index is valid
+                    if (SupportedLanguages.Contains(languageIndex) == false)
+                    {
+                        // Indicate if it isn't
+                        throw new ArgumentOutOfRangeException("languageIndex");
+                    }
+
+                    // Check if the dictionary already contains a text
+                    if (dictionary.ContainsKey(languageIndex) == false)
+                    {
+                        // Add this text
+                        dictionary.Add(languageIndex, value);
+
+                        // Indicate the serialization no longer matches what's contained in the dictionary
+                        IsSerialized = false;
+                    }
+                    else if (dictionary[languageIndex] != value)
+                    {
+                        // Overwrite this text
+                        dictionary[languageIndex] = value;
+
+                        // Indicate the serialization no longer matches what's contained in the dictionary
+                        IsSerialized = false;
+                    }
+                }
+            }
+
+            public string this[string languageName]
+            {
+                get
+                {
+                    // Check if the language index is valid
+                    if (SupportedLanguages.Contains(languageName) == false)
+                    {
+                        // Indicate if it isn't
+                        throw new ArgumentOutOfRangeException("languageName");
+                    }
+
+                    // Use the above getter
+                    return this[SupportedLanguages[languageName]];
+                }
+                set
+                {
+                    // Check if the language index is valid
+                    if (SupportedLanguages.Contains(languageName) == false)
+                    {
+                        // Indicate if it isn't
+                        throw new ArgumentOutOfRangeException("languageName");
+                    }
+
+                    // Use the above setter
+                    this[SupportedLanguages[languageName]] = value;
+                }
+            }
+
+            public KeyLanguageTextMap Parent
             {
                 get;
             }
@@ -119,26 +269,22 @@ namespace OmiyaGames.Translations
                 }
             }
 
-            public string this[int key]
+            public SupportedLanguages SupportedLanguages
             {
                 get
                 {
-                    throw new NotImplementedException();
-                }
-                set
-                {
-                    throw new NotImplementedException();
+                    return Parent.Parent.SupportedLanguages;
                 }
             }
 
             public IEnumerator<KeyValuePair<int, string>> GetEnumerator()
             {
-                throw new NotImplementedException();
+                return dictionary.GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
             {
-                throw new NotImplementedException();
+                return dictionary.GetEnumerator();
             }
         }
     }
