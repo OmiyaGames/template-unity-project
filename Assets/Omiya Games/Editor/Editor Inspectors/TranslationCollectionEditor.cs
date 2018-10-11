@@ -270,6 +270,9 @@ namespace OmiyaGames.UI.Translations
                 // Update dictionary
                 RemoveKeyFromFrequencyDictionary(frequencyInKeyAppearance, oldKey);
                 AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
+
+                // Indicate this dictionary needs to be updated
+                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
             }
 
             // Re-adjust the rectangle, full-width for the next part

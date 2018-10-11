@@ -229,6 +229,10 @@ namespace OmiyaGames.UI.Translations
             }
             else if(Mathf.Approximately(Progress, ProgressFinished) == true)
             {
+                // Indicate the dictionary is dirty
+                UnityEditor.EditorUtility.SetDirty(DictionaryToEdit);
+
+                // Close the editor
                 Close();
             }
         }
