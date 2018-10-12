@@ -18,7 +18,13 @@ namespace Community.UI
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            // Using BeginProperty / EndProperty on the parent property means that
+            // prefab override logic works on the entire property.
+            EditorGUI.BeginProperty(position, label, property);
+
             property.intValue = DisplayEnumFlags(position, property, label);
+
+            EditorGUI.EndProperty();
         }
 
         public static int DisplayEnumFlags(Rect position, SerializedProperty property, GUIContent label)
