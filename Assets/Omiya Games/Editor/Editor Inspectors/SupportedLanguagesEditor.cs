@@ -48,7 +48,7 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty supportedLanguages;
         ReorderableList supportedLanguagesList;
 
-        [MenuItem("Omiya Games/Create/Supported Languages")]
+        [MenuItem("Tools/Omiya Games/Create Supported Languages...", priority = 801)]
         private static void CreateSupportedLanguages()
         {
             // Setup asset
@@ -68,15 +68,21 @@ namespace OmiyaGames.UI.Translations
         /// </summary>
         public static void DrawSupportedLanguages(string label, SerializedProperty property, SupportedLanguages target)
         {
-            property.intValue = EditorGUILayout.Popup(label, property.intValue, GetAllLanguageNames(target));
+            property.intValue = EditorGUILayout.Popup(label, property.intValue, GetAllLanguageNames(target, false));
         }
 
         /// <summary>
         /// Draws a popup mapping an int-property to a supported language.
         /// </summary>
-        public static int DrawSupportedLanguages(Rect rect, string label, int index, SupportedLanguages target)
+        public static int DrawSupportedLanguages(Rect rect, string label, int index, SupportedLanguages target, bool includeAddLanguage = false)
         {
-            return EditorGUI.Popup(rect, label, index, GetAllLanguageNames(target));
+            int returnIndex = EditorGUI.Popup(rect, label, index, GetAllLanguageNames(target, includeAddLanguage));
+            if(returnIndex >= target.Count)
+            {
+                returnIndex = index;
+                Selection.activeObject = target;
+            }
+            return returnIndex;
         }
 
         /// <summary>
@@ -90,9 +96,15 @@ namespace OmiyaGames.UI.Translations
         /// <summary>
         /// Draws a popup mapping an int-property to a supported language.
         /// </summary>
-        public static int DrawSupportedLanguages(Rect rect, int index, SupportedLanguages target)
+        public static int DrawSupportedLanguages(Rect rect, int index, SupportedLanguages target, bool includeAddLanguage = false)
         {
-            return EditorGUI.Popup(rect, index, GetAllLanguageNames(target));
+            int returnIndex = EditorGUI.Popup(rect, index, GetAllLanguageNames(target, includeAddLanguage));
+            if (returnIndex >= target.Count)
+            {
+                returnIndex = index;
+                Selection.activeObject = target;
+            }
+            return returnIndex;
         }
 
         public override void OnInspectorGUI()
@@ -164,12 +176,24 @@ namespace OmiyaGames.UI.Translations
             }
         }
 
-        static string[] GetAllLanguageNames(SupportedLanguages target)
+        static string[] GetAllLanguageNames(SupportedLanguages target, bool includeAddLanguage)
         {
-            string[] returnNames = new string[target.NumberOfLanguages];
-            for (int index = 0; index < returnNames.Length; ++index)
+            string[] returnNames;
+            if(includeAddLanguage == true)
+            {
+                returnNames = new string[target.NumberOfLanguages + 1];
+            }
+            else
+            {
+                returnNames = new string[target.NumberOfLanguages];
+            }
+            for (int index = 0; index < target.NumberOfLanguages; ++index)
             {
                 returnNames[index] = target[index];
+            }
+            if (includeAddLanguage == true)
+            {
+                returnNames[target.NumberOfLanguages] = "Add Language...";
             }
             return returnNames;
         }
