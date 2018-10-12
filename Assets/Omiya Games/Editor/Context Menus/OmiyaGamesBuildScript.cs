@@ -224,7 +224,7 @@ namespace OmiyaGames
         /// Function that builds for all platforms.  Edit this function if you want
         /// to add more platforms besides PC, Mac, Linux, and Web.
         /// </summary>
-        [MenuItem("Build/Build All")]
+        [MenuItem("Tools/Omiya Games/Build All", priority = 100)]
         public static void BuildAllPlatforms()
         {
             allBuildTargets.Clear();
@@ -249,7 +249,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Desktop OSs.
         /// </summary>
-        [MenuItem("Build/Build Set/Major Desktop OSs")]
+        [MenuItem("Tools/Omiya Games/Build Set/Major Desktop OSs", priority = 101)]
         public static void PerformDesktopBuilds()
         {
             allBuildTargets.Clear();
@@ -260,7 +260,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mobile OSs.
         /// </summary>
-        [MenuItem("Build/Build Set/Major Mobile OSs")]
+        [MenuItem("Tools/Omiya Games/Build Set/Major Mobile OSs", priority = 102)]
         public static void PerformMobileBuilds()
         {
             allBuildTargets.Clear();
@@ -272,7 +272,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Web.
         /// </summary>
-        [MenuItem("Build/Build For/WebGL")]
+        [MenuItem("Tools/Omiya Games/Build For/WebGL", priority = 600)]
         public static void PerformWebGLBuild()
         {
             allBuildTargets.Clear();
@@ -283,7 +283,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 32-bit.
         /// </summary>
-        [MenuItem("Build/Build For/Windows 32-bit")]
+        [MenuItem("Tools/Omiya Games/Build For/Windows 32-bit", priority = 201)]
         public static void PerformWindows32Build()
         {
             allBuildTargets.Clear();
@@ -294,7 +294,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 64-bit.
         /// </summary>
-        [MenuItem("Build/Build For/Windows 64-bit")]
+        [MenuItem("Tools/Omiya Games/Build For/Windows 64-bit", priority = 200)]
         public static void PerformWindows64Build()
         {
             allBuildTargets.Clear();
@@ -305,7 +305,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Mac.
         /// </summary>
-        [MenuItem("Build/Build For/Mac (Universal)")]
+        [MenuItem("Tools/Omiya Games/Build For/Mac (Universal)", priority = 300)]
         public static void PerformMacUniversalBuild()
         {
             allBuildTargets.Clear();
@@ -316,7 +316,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux.
         /// </summary>
-        [MenuItem("Build/Build For/Linux (Universal)")]
+        [MenuItem("Tools/Omiya Games/Build For/Linux (Universal)", priority = 400)]
         public static void PerformLinuxUniversalBuild()
         {
             allBuildTargets.Clear();
@@ -327,7 +327,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 32-bit.
         /// </summary>
-        [MenuItem("Build/Build For/Linux 32-bit")]
+        [MenuItem("Tools/Omiya Games/Build For/Linux 32-bit", priority = 402)]
         public static void PerformLinux32Build()
         {
             allBuildTargets.Clear();
@@ -338,7 +338,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Linux, 64-bit.
         /// </summary>
-        [MenuItem("Build/Build For/Linux 64-bit")]
+        [MenuItem("Tools/Omiya Games/Build For/Linux 64-bit", priority = 401)]
         public static void PerformLinux64Build()
         {
             allBuildTargets.Clear();
@@ -349,7 +349,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for iOS.
         /// </summary>
-        [MenuItem("Build/Build For/iOS")]
+        [MenuItem("Tools/Omiya Games/Build For/iOS", priority = 500)]
         public static void PerformIosBuild()
         {
             allBuildTargets.Clear();
@@ -360,7 +360,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Android.
         /// </summary>
-        [MenuItem("Build/Build For/Android")]
+        [MenuItem("Tools/Omiya Games/Build For/Android", priority = 501)]
         public static void PerformAndroidBuild()
         {
             allBuildTargets.Clear();
@@ -371,7 +371,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows Store Apps
         /// </summary>
-        //[MenuItem("Build/Build For/Windows Store App")]
+        //[MenuItem("Tools/Omiya Games/Build For/Windows Store App", priority = 502)]
         //public static void PerformWsaBuild()
         //{
         //    allBuildTargets.Clear();
@@ -382,7 +382,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Web.
         /// </summary>
-        [MenuItem("Build/Build For/Facebook WebGL")]
+        [MenuItem("Tools/Omiya Games/Build For/Facebook WebGL", priority = 601)]
         public static void PerformFacebookWebGLBuild()
         {
             allBuildTargets.Clear();
@@ -393,7 +393,7 @@ namespace OmiyaGames
         /// <summary>
         /// Function that builds for Windows, 32-bit.
         /// </summary>
-        [MenuItem("Build/Build For/Facebook Windows 32-bit")]
+        [MenuItem("Tools/Omiya Games/Build For/Facebook Windows 32-bit", priority = 202)]
         public static void PerformFacebookWindows32Build()
         {
             allBuildTargets.Clear();
@@ -402,7 +402,7 @@ namespace OmiyaGames
         }
         #endregion
 
-        [MenuItem("Build/Open Last Builds Folder")]
+        [MenuItem("Tools/Omiya Games/Open Last Builds Folder", priority = 700)]
         public static void OpenBuildsFolder()
         {
             if (string.IsNullOrEmpty(BuildDirectory) == true)

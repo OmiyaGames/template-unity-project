@@ -41,7 +41,7 @@ namespace OmiyaGames
         /// Deletes all stores settings in <code>PlayerPrefs</code>.
         /// </summary>
         /// <seealso cref="PlayerPrefs"/>
-        [MenuItem("Player Prefs/Delete All")]
+        [MenuItem("Tools/Omiya Games/Clear Player Prefs", priority = 0)]
         public static void ResetPlayerPrefs()
         {
             PlayerPrefs.DeleteAll();

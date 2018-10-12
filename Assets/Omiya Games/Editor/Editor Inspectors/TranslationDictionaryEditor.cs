@@ -82,7 +82,7 @@ namespace OmiyaGames.UI.Translations
         readonly Dictionary<string, int> frequencyInKeyAppearance = new Dictionary<string, int>();
         #endregion
 
-        [MenuItem("Omiya Games/Create/Translation Dictionary")]
+        [MenuItem("Tools/Omiya Games/Create Translation Dictionary...", priority = 800)]
         public static TranslationDictionary CreateTranslationDictionary()
         {
             // Setup asset
