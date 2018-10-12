@@ -94,21 +94,22 @@ namespace Community
 
         public HsvColor(HsvColor col) : this(col.Hue, col.Saturation, col.Value, col.Alpha) { }
 
-        public HsvColor(Color col) : this(FromColor(col)) { }
-
-        public static HsvColor FromColor(Color color)
+        public HsvColor(Color col)
         {
-            HsvColor ret = new HsvColor(0f, 0f, 0f, color.a);
+            hue = 0f;
+            saturation = 0f;
+            value = 0f;
+            alpha = col.a;
 
-            float r = color.r;
-            float g = color.g;
-            float b = color.b;
+            float r = col.r;
+            float g = col.g;
+            float b = col.b;
 
             float max = Mathf.Max(r, Mathf.Max(g, b));
 
             if (max <= 0)
             {
-                return ret;
+                return;
             }
 
             float min = Mathf.Min(r, Mathf.Min(g, b));
@@ -118,35 +119,38 @@ namespace Community
             {
                 if (g == max)
                 {
-                    ret.hue = (b - r) / dif * 60f + 120f;
+                    hue = (b - r) / dif * 60f + 120f;
                 }
                 else if (b == max)
                 {
-                    ret.hue = (r - g) / dif * 60f + 240f;
+                    hue = (r - g) / dif * 60f + 240f;
                 }
                 else if (b > g)
                 {
-                    ret.hue = (g - b) / dif * 60f + 360f;
+                    hue = (g - b) / dif * 60f + 360f;
                 }
                 else
                 {
-                    ret.hue = (g - b) / dif * 60f;
+                    hue = (g - b) / dif * 60f;
                 }
-                if (ret.hue < 0)
+                if (hue < 0)
                 {
-                    ret.hue = ret.hue + 360f;
+                    hue = hue + 360f;
                 }
             }
             else
             {
-                ret.hue = 0;
+                hue = 0;
             }
 
-            ret.hue *= 1f / 360f;
-            ret.saturation = (dif / max) * 1f;
-            ret.value = max;
+            hue *= 1f / 360f;
+            saturation = (dif / max) * 1f;
+            value = max;
+        }
 
-            return ret;
+        public static HsvColor FromColor(Color color)
+        {
+            return new HsvColor(color);
         }
 
         public static Color ToColor(HsvColor color)
