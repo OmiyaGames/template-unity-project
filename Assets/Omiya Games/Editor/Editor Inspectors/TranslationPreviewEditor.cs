@@ -44,7 +44,6 @@ namespace OmiyaGames.UI.Translations
         protected const float WordWrapLength = 95f;
         protected const bool WordWrapEnabledDefault = false;
 
-        protected readonly Editor editor;
         protected readonly string keyLabel;
         protected readonly string valueLabel;
         protected readonly GUIStyle wrappedTextArea = new GUIStyle(EditorStyles.textArea);
@@ -53,13 +52,12 @@ namespace OmiyaGames.UI.Translations
         int languageIndex = 0;
         string text = null;
 
-        public TranslationPreviewEditor(SupportedLanguages supportedLanguages) : this(supportedLanguages, null, "Language", "Text") { }
+        public TranslationPreviewEditor(SupportedLanguages supportedLanguages) : this(supportedLanguages, "Language", "Text") { }
 
-        protected TranslationPreviewEditor(SupportedLanguages supportedLanguages, Editor editor, string keyLabel, string valueLabel)
+        protected TranslationPreviewEditor(SupportedLanguages supportedLanguages, string keyLabel, string valueLabel)
         {
             // Setup member variables
             SupportedLanguages = supportedLanguages;
-            this.editor = editor;
             this.keyLabel = keyLabel;
             this.valueLabel = valueLabel;
         }
@@ -182,49 +180,17 @@ namespace OmiyaGames.UI.Translations
             return height;
         }
 
-        public virtual void DrawGui(Rect rect, Dictionary<int, int> frequencyInLanguageAppearance, bool isTextBolded)
+        public virtual void DrawGui(Rect rect, bool isTextBolded)
         {
             // Draw the key field
-            DrawKeyField(ref rect, frequencyInLanguageAppearance);
+            DrawKeyField(ref rect);
 
             // Draw the translation list
             DrawText(ref rect, isTextBolded);
         }
 
-        public static void AddLanguageToFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
-        {
-            // Make sure argument is correct
-            if (frequencyInLanguageAppearance != null)
-            {
-                // Add this key to the dictionary
-                if (frequencyInLanguageAppearance.ContainsKey(key) == false)
-                {
-                    frequencyInLanguageAppearance.Add(key, 1);
-                }
-                else
-                {
-                    frequencyInLanguageAppearance[key] += 1;
-                }
-            }
-        }
-
-        public static void RemoveLanguageFromFrequencyDictionary(Dictionary<int, int> frequencyInLanguageAppearance, int key)
-        {
-            // Make sure argument is correct
-            if ((frequencyInLanguageAppearance != null) && (frequencyInLanguageAppearance.ContainsKey(key) == true))
-            {
-                // Remove this key from the dictionary
-                frequencyInLanguageAppearance[key] -= 1;
-                if (frequencyInLanguageAppearance[key] <= 0)
-                {
-                    // Remove the key if the value is below 0
-                    frequencyInLanguageAppearance.Remove(key);
-                }
-            }
-        }
-
         #region Helper Methods
-        protected void DrawKeyField(ref Rect rect, Dictionary<int, int> frequencyInLanguageAppearance)
+        protected void DrawKeyField(ref Rect rect)
         {
             // Hold onto the original rect position
             float originalX = rect.x;
@@ -236,21 +202,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the key text field
             IsLanguageIndexChanged = false;
             int oldLanguageIndex = LanguageIndex;
-            LanguageIndex = SupportedLanguagesEditor.DrawSupportedLanguages(rect, keyLabel, LanguageIndex, SupportedLanguages);
-
-            // Check if there's a difference
-            if ((frequencyInLanguageAppearance != null) && (LanguageIndex != oldLanguageIndex))
-            {
-                // Update dictionary
-                RemoveLanguageFromFrequencyDictionary(frequencyInLanguageAppearance, oldLanguageIndex);
-                AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndex);
-
-                // Testing...
-                if (editor != null)
-                {
-                    editor.serializedObject.ApplyModifiedProperties();
-                }
-            }
+            LanguageIndex = SupportedLanguagesEditor.DrawSupportedLanguages(rect, keyLabel, LanguageIndex, SupportedLanguages, true);
 
             // Re-adjust the rectangle, full-width for the next part
             rect.x = originalX;
