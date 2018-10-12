@@ -82,7 +82,7 @@ namespace OmiyaGames.UI.Translations
         readonly Dictionary<string, int> frequencyInKeyAppearance = new Dictionary<string, int>();
         #endregion
 
-        [MenuItem("Omiya Games/Create/Translation Dictionary")]
+        [MenuItem("Tools/Omiya Games/Create Translation Dictionary...", priority = 800)]
         public static TranslationDictionary CreateTranslationDictionary()
         {
             // Setup asset
@@ -214,7 +214,7 @@ namespace OmiyaGames.UI.Translations
             }
             EditorGUI.BeginChangeCheck();
             translationStatus[index].DrawGui(rect, frequencyInKeyAppearance);
-            if(EditorGUI.EndChangeCheck() == true)
+            if (EditorGUI.EndChangeCheck() == true)
             {
                 UpdateTranslationListStatus(translationsList, index);
             }
@@ -298,15 +298,10 @@ namespace OmiyaGames.UI.Translations
                 // Create a separate pop-up window for this, rather than a serious of pop-ups like this ridiculous monstrosity.
                 ImportCsvPopUp.ShowPopUp(this);
             }
-
-            // FIXME: As soon as export is implemented, re-enable this button
-            bool lastEnabled = GUI.enabled;
-            GUI.enabled = false;
             if (GUILayout.Button("Export...") == true)
             {
-
+                ExportCsv((TranslationDictionary)target);
             }
-            GUI.enabled = lastEnabled;
             EditorGUILayout.EndHorizontal();
         }
 
@@ -326,6 +321,18 @@ namespace OmiyaGames.UI.Translations
                     // Show preset message field
                     EditorGUILayout.PropertyField(presetMessageWhenKeyNotFound, PresetMessageLabel);
                 }
+            }
+        }
+
+        private void ExportCsv(TranslationDictionary data)
+        {
+            // Prompt the player where to write the CSV file.
+            string newFileName = UnityEditor.EditorUtility.SaveFilePanel("Export CSV File", "Assets/", data.name, "csv");
+            if (string.IsNullOrEmpty(newFileName) == false)
+            {
+                // If not, straight-up export the CSV file
+                data.RepopulateAllTranslations();
+                CsvWriter.WriteFile(newFileName, data);
             }
         }
 
@@ -358,7 +365,7 @@ namespace OmiyaGames.UI.Translations
                     // Show default language field
                     EditorGUI.BeginChangeCheck();
                     SupportedLanguagesEditor.DrawSupportedLanguages(DefaultLanguageLabel, defaultLanguageWhenTranslationNotFound, ((SupportedLanguages)supportedLanguages.objectReferenceValue));
-                    if(EditorGUI.EndChangeCheck() == true)
+                    if (EditorGUI.EndChangeCheck() == true)
                     {
                         SupportedLanguages newLanguage = ((SupportedLanguages)supportedLanguages.objectReferenceValue);
                         if (newLanguage != null)

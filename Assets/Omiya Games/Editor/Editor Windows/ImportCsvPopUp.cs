@@ -57,7 +57,7 @@ namespace OmiyaGames.UI.Translations
         #region Constants
         const float ImportButtonWidth = 50f;
         const float Space = 4f;
-        const int TotalStates = ((int)CSVReader.ReadStatus.State.NumberOfStates) + ((int)ImportState.NumberOfStates) - 1;
+        const int TotalStates = ((int)CsvReader.ReadStatus.State.NumberOfStates) + ((int)ImportState.NumberOfStates) - 1;
         const float ProgressNotStarted = -1f;
         const float ProgressFinished = -2f;
         static readonly string[] CsvFileFilter = new string[]
@@ -93,7 +93,7 @@ namespace OmiyaGames.UI.Translations
         }
 
         readonly ThreadSafe<float> progress = new ThreadSafe<float>(ProgressNotStarted);
-        readonly CSVReader.ReadStatus csvReadStatus = new CSVReader.ReadStatus();
+        readonly CsvReader.ReadStatus csvReadStatus = new CsvReader.ReadStatus();
         readonly ThreadSafe<ImportState> currentStatus = new ThreadSafe<ImportState>();
         readonly ProgressReport progressReport = new ProgressReport();
 
@@ -257,7 +257,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the browse button
             if (GUILayout.Button("Browse...", BrowseButtonFont, BrowseButtonHeight) == true)
             {
-                string newFileName = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Import CSV File", "/Assets/", CsvFileFilter);
+                string newFileName = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Import CSV File", "Assets/", CsvFileFilter);
                 if (string.IsNullOrEmpty(newFileName) == false)
                 {
                     CsvFileName = newFileName;
@@ -364,7 +364,7 @@ namespace OmiyaGames.UI.Translations
             List<Dictionary<string, string>> results = null;
             try
             {
-                results = CSVReader.ReadFile(CsvFileName, csvReadStatus);
+                results = CsvReader.ReadFile(CsvFileName, csvReadStatus);
             }
             catch (System.Exception)
             {
@@ -456,8 +456,8 @@ namespace OmiyaGames.UI.Translations
             if (state == ImportState.ReadFile)
             {
                 // Get the CSV status
-                CSVReader.ReadStatus.State csvState = csvReadStatus.CurrentState;
-                if (csvState == CSVReader.ReadStatus.State.ReadingFileIntoRows)
+                CsvReader.ReadStatus.State csvState = csvReadStatus.CurrentState;
+                if (csvState == CsvReader.ReadStatus.State.ReadingFileIntoRows)
                 {
                     // Report that we're reading the file.
                     // Progress is not calculated here because we do not

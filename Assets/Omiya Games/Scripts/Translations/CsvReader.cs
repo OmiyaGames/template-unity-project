@@ -8,7 +8,7 @@ using System.IO;
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="AudioFinder.cs" company="Omiya Games">
+    /// <copyright file="CsvReader.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -38,7 +38,7 @@ namespace OmiyaGames
     /// Reads a CSV file to generate a dictionary.
     /// </summary>
     /// <seealso cref="TranslatedTextMeshPro"/>
-    public static class CSVReader
+    public static class CsvReader
     {
         const string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
         static readonly char[] TRIM_CHARS = { '\"' };
