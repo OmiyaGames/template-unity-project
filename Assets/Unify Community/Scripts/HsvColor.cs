@@ -3,7 +3,7 @@
 namespace Community
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="HSBColor.cs">
+    /// <copyright file="HsvColor.cs">
     /// Code by Jonathan Czeck from Unify Community:
     /// http://wiki.unity3d.com/index.php/HSBColor
     /// 
@@ -16,7 +16,7 @@ namespace Community
     /// Displays the frame-rate in the upper-left hand corner of the screen.
     /// </summary>
     [System.Serializable]
-    public struct HSBColor
+    public struct HsvColor
     {
         [Range(0f, 1f)]
         [SerializeField]
@@ -26,7 +26,8 @@ namespace Community
         float saturation;
         [Range(0f, 1f)]
         [SerializeField]
-        float brightness;
+        [UnityEngine.Serialization.FormerlySerializedAs("brightness")]
+        float value;
         [Range(0f, 1f)]
         [SerializeField]
         float alpha;
@@ -56,15 +57,15 @@ namespace Community
             }
         }
 
-        public float Brightness
+        public float Value
         {
             get
             {
-                return brightness;
+                return value;
             }
             set
             {
-                brightness = Mathf.Clamp01(value);
+                this.value = Mathf.Clamp01(value);
             }
         }
 
@@ -81,34 +82,23 @@ namespace Community
         }
         #endregion
 
-        public HSBColor(float h, float s, float b, float a)
+        public HsvColor(float h, float s, float v, float a)
         {
             hue = h;
             saturation = s;
-            brightness = b;
+            value = v;
             alpha = a;
         }
 
-        public HSBColor(float h, float s, float b)
-        {
-            hue = h;
-            saturation = s;
-            brightness = b;
-            alpha = 1f;
-        }
+        public HsvColor(float h, float s, float v) : this(h, s, v, 1f) { }
 
-        public HSBColor(Color col)
-        {
-            HSBColor temp = FromColor(col);
-            hue = temp.hue;
-            saturation = temp.saturation;
-            brightness = temp.brightness;
-            alpha = temp.alpha;
-        }
+        public HsvColor(HsvColor col) : this(col.Hue, col.Saturation, col.Value, col.Alpha) { }
 
-        public static HSBColor FromColor(Color color)
+        public HsvColor(Color col) : this(FromColor(col)) { }
+
+        public static HsvColor FromColor(Color color)
         {
-            HSBColor ret = new HSBColor(0f, 0f, 0f, color.a);
+            HsvColor ret = new HsvColor(0f, 0f, 0f, color.a);
 
             float r = color.r;
             float g = color.g;
@@ -154,23 +144,23 @@ namespace Community
 
             ret.hue *= 1f / 360f;
             ret.saturation = (dif / max) * 1f;
-            ret.brightness = max;
+            ret.value = max;
 
             return ret;
         }
 
-        public static Color ToColor(HSBColor hsbColor)
+        public static Color ToColor(HsvColor color)
         {
-            float red = hsbColor.brightness;
-            float green = hsbColor.brightness;
-            float blue = hsbColor.brightness;
-            if (hsbColor.saturation != 0)
+            float red = color.value;
+            float green = color.value;
+            float blue = color.value;
+            if (color.saturation != 0)
             {
-                float max = hsbColor.brightness;
-                float dif = hsbColor.brightness * hsbColor.saturation;
-                float min = hsbColor.brightness - dif;
+                float max = color.value;
+                float dif = color.value * color.saturation;
+                float min = color.value - dif;
 
-                float h = hsbColor.hue * 360f;
+                float h = color.hue * 360f;
 
                 if (h < 60f)
                 {
@@ -216,7 +206,7 @@ namespace Community
                 }
             }
 
-            return new Color(Mathf.Clamp01(red), Mathf.Clamp01(green), Mathf.Clamp01(blue), hsbColor.alpha);
+            return new Color(Mathf.Clamp01(red), Mathf.Clamp01(green), Mathf.Clamp01(blue), color.alpha);
         }
 
         public Color ToColor()
@@ -226,21 +216,21 @@ namespace Community
 
         public override string ToString()
         {
-            return "H:" + hue + " S:" + saturation + " B:" + brightness;
+            return "H:" + hue + " S:" + saturation + " V:" + value;
         }
 
-        public static HSBColor Lerp(HSBColor a, HSBColor b, float t)
+        public static HsvColor Lerp(HsvColor a, HsvColor b, float t)
         {
             float h, s;
 
             //check special case black (color.b==0): interpolate neither hue nor saturation!
             //check special case grey (color.s==0): don't interpolate hue!
-            if (a.brightness == 0)
+            if (a.value == 0)
             {
                 h = b.hue;
                 s = b.saturation;
             }
-            else if (b.brightness == 0)
+            else if (b.value == 0)
             {
                 h = a.hue;
                 s = a.saturation;
@@ -267,7 +257,7 @@ namespace Community
                 }
                 s = Mathf.Lerp(a.saturation, b.saturation, t);
             }
-            return new HSBColor(h, s, Mathf.Lerp(a.brightness, b.brightness, t), Mathf.Lerp(a.alpha, b.alpha, t));
+            return new HsvColor(h, s, Mathf.Lerp(a.value, b.value, t), Mathf.Lerp(a.alpha, b.alpha, t));
         }
     }
 }
