@@ -24,7 +24,7 @@ namespace Community.UI
             }
         }
 
-        [MenuItem("Build/Delete Sprite Packing Cache")]
+        [MenuItem("Tools/Omiya Games/Delete Sprite Packing Cache")]
         public static void DeleteAtlasCache()
         {
             DeleteAtlasCache(EditorUserBuildSettings.activeBuildTarget, null);

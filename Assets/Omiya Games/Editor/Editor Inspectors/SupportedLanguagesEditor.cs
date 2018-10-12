@@ -48,7 +48,7 @@ namespace OmiyaGames.UI.Translations
         SerializedProperty supportedLanguages;
         ReorderableList supportedLanguagesList;
 
-        [MenuItem("Omiya Games/Create/Supported Languages")]
+        [MenuItem("Tools/Omiya Games/Create Supported Languages...", priority = 801)]
         private static void CreateSupportedLanguages()
         {
             // Setup asset
