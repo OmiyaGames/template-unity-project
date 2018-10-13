@@ -117,7 +117,7 @@ namespace OmiyaGames.Translations
 
             // Add the new text component
             TranslatedTextMeshPro newTranslation = parentObject.AddComponent<TranslatedTextMeshPro>();
-            TextMeshProResizer newResizer = parentObject.AddComponent<TextMeshProResizer>();
+            //TextMeshProResizer newResizer = parentObject.AddComponent<TextMeshProResizer>();
 
             // Copy the old translation properties into the new one
             newTranslation.TranslationKey = translationKey;
