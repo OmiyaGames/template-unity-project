@@ -244,8 +244,8 @@ namespace OmiyaGames.UI.Translations
 
         public void Dispose()
         {
-            //expandToggle.valueChanged.RemoveListener(editor.Repaint);
-            //showHelpBox.valueChanged.RemoveListener(editor.Repaint);
+            expandToggle.valueChanged.RemoveListener(editor.Repaint);
+            showHelpBox.valueChanged.RemoveListener(editor.Repaint);
         }
 
         #region Helper Methods
