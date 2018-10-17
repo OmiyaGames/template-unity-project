@@ -1,6 +1,6 @@
 ﻿using OmiyaGames.Settings;
 
-namespace Project.Settings
+namespace OmiyaGames.Settings
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsGraphicsMenu.cs" company="Omiya Games">
