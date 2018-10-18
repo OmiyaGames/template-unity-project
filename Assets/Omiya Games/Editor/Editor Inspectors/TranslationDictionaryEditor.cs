@@ -163,6 +163,7 @@ namespace OmiyaGames.UI.Translations
 
             // Draw CSV-related action buttons
             DrawSyncCsv();
+            DrawUpdateFontAssets();
 
             // Draw the search bar at the top of the inspector
             GUI.enabled = (supportedLanguages.objectReferenceValue != null);
@@ -301,6 +302,21 @@ namespace OmiyaGames.UI.Translations
             if (GUILayout.Button("Export...") == true)
             {
                 ExportCsv((TranslationDictionary)target);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawUpdateFontAssets()
+        {
+            // Draw label
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Update Font Assets", EditorStyles.boldLabel);
+
+            // Draw the buttons
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Add Characters to Font Assets...") == true)
+            {
+                UpdateFontAssets.ShowPopUp(this);
             }
             EditorGUILayout.EndHorizontal();
         }

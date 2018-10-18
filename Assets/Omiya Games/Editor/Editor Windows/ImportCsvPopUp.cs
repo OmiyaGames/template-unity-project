@@ -37,7 +37,7 @@ namespace OmiyaGames.UI.Translations
     /// <summary>
     /// Creates a window that imports CSV files.
     /// </summary>
-    public partial class ImportCsvPopUp : EditorWindow
+    public class ImportCsvPopUp : EditorWindow
     {
         public enum ConflictResolution
         {
