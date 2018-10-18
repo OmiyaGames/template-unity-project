@@ -15,8 +15,8 @@
             new OmiyaGames.Settings.AddAudioSettings(),
             new OmiyaGames.Settings.AddLocalAnalytics(),
             new OmiyaGames.Settings.AddLanguageSettings(),
-            new Project.Settings.AddHighScores(),
-            new Project.Settings.AddOptions(),
+            new OmiyaGames.Settings.AddHighScores(),
+            new OmiyaGames.Settings.AddOptions(),
         };
 
         /// <summary>
@@ -472,7 +472,7 @@
         {
             get
             {
-                return Project.Settings.AddOptions.CameraSmoothFactor;
+                return OmiyaGames.Settings.AddOptions.CameraSmoothFactor;
             }
         }
 
@@ -544,7 +544,7 @@
         {
             get
             {
-                return Project.Settings.AddOptions.IsHeadBobbingEnabled;
+                return OmiyaGames.Settings.AddOptions.IsHeadBobbingEnabled;
             }
         }
 
@@ -662,7 +662,7 @@
         {
             get
             {
-                return Project.Settings.AddOptions.CustomTimeScale;
+                return OmiyaGames.Settings.AddOptions.CustomTimeScale;
             }
         }
         #endregion

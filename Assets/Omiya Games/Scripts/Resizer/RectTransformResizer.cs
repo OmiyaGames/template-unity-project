@@ -2,8 +2,6 @@
 
 namespace OmiyaGames
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="RectTransformResizer.cs" company="Omiya Games">
     /// The MIT License (MIT)
@@ -50,6 +48,7 @@ namespace OmiyaGames
     /// </list>
     /// </remarks>
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(RectTransform))]
     public class RectTransformResizer : IResizer
     {
         [Header("Resize")]
@@ -64,10 +63,78 @@ namespace OmiyaGames
         [SerializeField]
         bool repositionY = false;
 
-        // FIXME: do something!
-        void Start()
-        {
+        Rect originalDimensions;
+        RectTransform transformCache = null;
+        ResizeMultiplierChanged lastAction = null;
+        Vector2 neato;
 
+        public RectTransform Transform
+        {
+            get
+            {
+                if(transformCache == null)
+                {
+                    transformCache = GetComponent<RectTransform>();
+                    originalDimensions = new Rect(transformCache.anchoredPosition, transformCache.sizeDelta);
+                }
+                return transformCache;
+            }
+        }
+
+        public void OnEnable()
+        {
+            // Update the font size if the multiplier is not set to 1
+            UpdateTransform();
+
+            // Bind to the resize event
+            if (lastAction == null)
+            {
+                lastAction = new ResizeMultiplierChanged(UpdateTransform);
+                OnAfterResizeMultiplierChanged += lastAction;
+            }
+        }
+
+        public void OnDestroy()
+        {
+            if (lastAction != null)
+            {
+                OnAfterResizeMultiplierChanged -= lastAction;
+                lastAction = null;
+            }
+        }
+
+        public void UpdateTransform()
+        {
+            // Do NOT attempt to resize the text if it's set to auto-size
+            if ((isActiveAndEnabled == true) && (Transform != null))
+            {
+                // Resize the dimensions first
+                if(resizeWidth == true)
+                {
+                    neato.x = originalDimensions.width * ResizeMultiplier;
+                }
+                if (resizeHeight == true)
+                {
+                    neato.y = originalDimensions.height * ResizeMultiplier;
+                }
+                Transform.sizeDelta = neato;
+
+                // Adjust the position
+                if (repositionX == true)
+                {
+                    neato.x = originalDimensions.x * ResizeMultiplier;
+                }
+                if (repositionY == true)
+                {
+                    neato.y = originalDimensions.y * ResizeMultiplier;
+                }
+                neato = Transform.anchoredPosition;
+            }
+        }
+
+        private void UpdateTransform(float lastMultiplier, float newMultiplier)
+        {
+            UpdateTransform();
         }
     }
 }
