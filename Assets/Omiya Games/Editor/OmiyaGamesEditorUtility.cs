@@ -39,6 +39,7 @@ namespace OmiyaGames
         public const float MinHelpBoxHeight = 30f;
         public const float VerticalMargin = 2f;
         public const float VerticalSpace = 8f;
+        public const float IndentSpace = 14f;
 
         public static float SingleLineHeight(float verticalMargin)
         {
