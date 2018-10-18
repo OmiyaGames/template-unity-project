@@ -139,6 +139,9 @@ namespace OmiyaGames.UI.Translations
             supportedLanguagesList.elementHeightCallback = CalculateSupportedLangaugesListElementHeight;
             supportedLanguagesList.onAddCallback = AddSupportedLangaugesListElement;
             supportedLanguagesList.onRemoveCallback = RemoveSupportedLangaugesListElement;
+
+            // Clean everything up
+            fonts.Clear();
         }
 
         #region Helper Methods
