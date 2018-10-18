@@ -39,8 +39,8 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     public class UpdateFontAssets : EditorWindow
     {
-        const string LatinCharacters = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ           ​‌‍‎‏‐‑‒–—―‖‗‘’‚‛“”„‟†‡•‣․‥…‧\n\r\t‪‫‬‭‮ ‰‱′″‴‵‶‷‸‹›※‼‽‾‿⁀⁁⁂⁃⁄⁅⁆⁇⁈⁉⁊⁋⁌⁍⁎⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞ ⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯€™\n\t";
-        const string JapaneseCharacters = LatinCharacters + "　ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゙゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿ･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ「」。？！～￥｜,＜＞＝＋ー＿）（＊＆＾％＄＃＠！～｀｛｝｜￥’”ｌ＜＞・…︙➖１２３４５６７８９０!\" & '(),-./012347:;<=>?ABCDEFGHIJKLMNOPQRSTUVWXY_abcdefghijklmnopqrstuvwxyz{}’“”●「」\n\t !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~‐‑‒–—―‖‗‘’‚‛“”„‟†‡•‣․‥…‧\n\r\t‪‫‬‭‮ ‰‱′″‴‵‶‷‸‹›※‼⁇⁈⁉⁊⁋‾‿⁀⁁⁂⁃⁎⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞ ⁯€™⁠⁡⁢⁣⁤";
+        const string LatinCharacters = "\t\n\r !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ           ​‌‍‎‏‐‑‒–—―‖‗‘’‚‛“”„‟†‡•‣․‥…‧‪‫‬‭‮ ‰‱′″‴‵‶‷‸‹›※‼‽‾‿⁀⁁⁂⁃⁄⁅⁆⁇⁈⁉⁊⁋⁌⁍⁎⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞ ⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯€™";
+        const string JapaneseCharacters = LatinCharacters + "●➖　。「」ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゙゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ︙！＃＄％＆（）＊＋０１２３４５６７８９＜＝＞？＠＾＿｀ｌ｛｜｝～･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ￥";
         static readonly Vector2 DefaultWindowSize = new Vector2(350f, 150f);
 
         DebugCharacterSets debugCharacterSets = null;
@@ -52,8 +52,9 @@ namespace OmiyaGames.UI.Translations
             window.DictionaryToEdit = (TranslationDictionary)editor.serializedObject.targetObject;
             window.minSize = DefaultWindowSize;
 
-            // FIXME: comment out the line below.
-            window.debugCharacterSets = new DebugCharacterSets(LatinCharacters, JapaneseCharacters);
+            // Debugging line below: useful for filtering unique characters and sorting them in order
+            // to later paste into this code.
+            //window.debugCharacterSets = new DebugCharacterSets(LatinCharacters, JapaneseCharacters);
             window.Show();
         }
 
@@ -88,45 +89,28 @@ namespace OmiyaGames.UI.Translations
                 SortedSet<char>[] previousSets = new SortedSet<char>[allCharacterLists.Length];
                 SortedSet<char> currentSet;
                 StringBuilder builder = new StringBuilder();
-                // FIXME: get rid of this variable
-                bool isCharacterAlreadyAdded = false;
 
                 // Setup member variables
                 allSets = new string[allCharacterLists.Length];
 
                 // Go through params
-                for (int i = 0; i < allSets.Length; ++i)
+                for (int i = 0; i < allCharacterLists.Length; ++i)
                 {
                     // Setup variables
-                    isCharacterAlreadyAdded = false;
                     currentSet = new SortedSet<char>();
 
                     // Go through all characters
                     foreach (char c in allCharacterLists[i])
                     {
-                        // Make sure this character wasn't added in in a previous language
-                        for(int check = 0; check < i; ++check)
-                        {
-                            if(previousSets[check].Contains(c) == true)
-                            {
-                                isCharacterAlreadyAdded = true;
-                                break;
-                            }
-                        }
-
-                        // If it wasn't, add this character into the set
-                        if(isCharacterAlreadyAdded == false)
-                        {
-                            currentSet.Add(c);
-                        }
+                        currentSet.Add(c);
                     }
 
                     // Go through all unique, sorted characters
-                    foreach(char c in currentSet)
+                    builder.Clear();
+                    foreach (char c in currentSet)
                     {
                         AddChar(c, builder);
                     }
-                    builder.Clear();
 
                     // Plop this into allSets as a string
                     allSets[i] = builder.ToString();
@@ -138,8 +122,9 @@ namespace OmiyaGames.UI.Translations
             {
                 foreach(string set in allSets)
                 {
+                    EditorGUILayout.HelpBox("Copy texts below", MessageType.Info);
                     EditorGUILayout.Space();
-                    EditorGUILayout.TextArea(set);
+                    EditorGUILayout.TextArea(set, EditorStyles.textArea);
                 }
             }
 
