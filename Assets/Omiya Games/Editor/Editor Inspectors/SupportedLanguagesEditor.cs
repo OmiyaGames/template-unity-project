@@ -284,8 +284,7 @@ namespace OmiyaGames.UI.Translations
 
                 // Draw enum
                 property = element.FindPropertyRelative("mapTo");
-                Enum selectedLanguage = EditorGUI.EnumPopup(rect, (SystemLanguage)property.enumValueIndex);
-                property.enumValueIndex = Convert.ToInt32(selectedLanguage);
+                EditorGUI.PropertyField(rect, property, GUIContent.none);
             }
 
             // Revert the rectangle
