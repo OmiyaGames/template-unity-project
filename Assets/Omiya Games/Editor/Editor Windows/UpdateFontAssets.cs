@@ -39,9 +39,10 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     public class UpdateFontAssets : EditorWindow
     {
+        const float LanguageCheckBoxSetHeight = 100;
+        static readonly Vector2 DefaultWindowSize = new Vector2(350f, 150f);
         const string LatinCharacters = "\t\n\r !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ           ​‌‍‎‏‐‑‒–—―‖‗‘’‚‛“”„‟†‡•‣․‥…‧‪‫‬‭‮ ‰‱′″‴‵‶‷‸‹›※‼‽‾‿⁀⁁⁂⁃⁄⁅⁆⁇⁈⁉⁊⁋⁌⁍⁎⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞ ⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯€™";
         const string JapaneseCharacters = LatinCharacters + "●➖　。「」ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖ゙゚゛゜ゝゞゟ゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヷヸヹヺ・ーヽヾヿㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽㇾㇿ︙！＃＄％＆（）＊＋０１２３４５６７８９＜＝＞？＠＾＿｀ｌ｛｜｝～･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ￥";
-        static readonly Vector2 DefaultWindowSize = new Vector2(350f, 150f);
 
         DebugCharacterSets debugCharacterSets = null;
 
@@ -50,7 +51,8 @@ namespace OmiyaGames.UI.Translations
             UpdateFontAssets window = GetWindow<UpdateFontAssets>(true, "Update Font Assets", true);
             window.Editor = editor;
             window.DictionaryToEdit = (TranslationDictionary)editor.serializedObject.targetObject;
-            window.minSize = DefaultWindowSize;
+            window.LanguageToUpdate = new bool[window.Languages.Count];
+            window.SetupDefaults();
 
             // Debugging line below: useful for filtering unique characters and sorting them in order
             // to later paste into this code.
@@ -70,12 +72,105 @@ namespace OmiyaGames.UI.Translations
             set;
         } = null;
 
+        Vector2 ScrollPosition
+        {
+            get;
+            set;
+        } = Vector2.zero;
+
+        SupportedLanguages Languages
+        {
+            get
+            {
+                return DictionaryToEdit.SupportedLanguages;
+            }
+        }
+
+        bool[] LanguageToUpdate
+        {
+            get;
+            set;
+        }
+
+        private void SetupDefaults()
+        {
+            // Setup minimum window size
+            minSize = DefaultWindowSize;
+
+            // Check what languages to update
+            for (int i = 0; i < Languages.Count; ++i)
+            {
+                LanguageToUpdate[i] = false;
+                SupportedLanguages.Language metadata = Languages.GetLanguageMetaData(i);
+                if (metadata.IsSystemDefault == false)
+                {
+                    LanguageToUpdate[i] = true;
+                }
+                else if (IsLatinLanguage(metadata.LanguageMappedTo) == false)
+                {
+                    LanguageToUpdate[i] = true;
+                }
+            }
+        }
+
         private void OnGUI()
         {
             EditorGUILayout.HelpBox("Testing...", MessageType.Info);
-            if(debugCharacterSets != null)
+            if (debugCharacterSets != null)
             {
                 debugCharacterSets.Draw();
+            }
+
+            using (EditorGUILayout.ScrollViewScope scope = new EditorGUILayout.ScrollViewScope(ScrollPosition, GUILayout.Height(LanguageCheckBoxSetHeight)))
+            {
+                for (int i = 0; i < Languages.Count; ++i)
+                {
+                    LanguageToUpdate[i] = EditorGUILayout.ToggleLeft(Languages[i], LanguageToUpdate[i]);
+                }
+
+                // Update scroll position
+                ScrollPosition = scope.scrollPosition;
+            }
+
+        }
+
+        private bool IsLatinLanguage(SystemLanguage language)
+        {
+            // Basing this list off of Wikipedia:
+            // https://en.wikipedia.org/wiki/List_of_languages_by_writing_system#Latin_script
+            Debug.Log(language);
+            switch (language)
+            {
+                case SystemLanguage.Afrikaans:
+                case SystemLanguage.Basque:
+                case SystemLanguage.Catalan:
+                case SystemLanguage.Danish:
+                case SystemLanguage.Dutch:
+                case SystemLanguage.English:
+                case SystemLanguage.Estonian:
+                case SystemLanguage.Faroese:
+                case SystemLanguage.Finnish:
+                case SystemLanguage.French:
+                case SystemLanguage.German:
+                case SystemLanguage.Hungarian:
+                case SystemLanguage.Icelandic:
+                case SystemLanguage.Indonesian:
+                case SystemLanguage.Italian:
+                case SystemLanguage.Latvian:
+                case SystemLanguage.Lithuanian:
+                case SystemLanguage.Norwegian:
+                case SystemLanguage.Polish:
+                case SystemLanguage.Portuguese:
+                case SystemLanguage.Romanian:
+                case SystemLanguage.Slovak:
+                case SystemLanguage.Slovenian:
+                case SystemLanguage.Spanish:
+                case SystemLanguage.Swedish:
+                case SystemLanguage.Turkish:
+                case SystemLanguage.Vietnamese:
+                    return true;
+                default:
+                    return false;
             }
         }
 
@@ -120,7 +215,7 @@ namespace OmiyaGames.UI.Translations
 
             public void Draw()
             {
-                foreach(string set in allSets)
+                foreach (string set in allSets)
                 {
                     EditorGUILayout.HelpBox("Copy texts below", MessageType.Info);
                     EditorGUILayout.Space();

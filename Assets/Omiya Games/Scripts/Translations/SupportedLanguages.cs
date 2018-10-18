@@ -34,7 +34,7 @@ namespace OmiyaGames.Translations
             {
                 this.languageName = languageName;
                 isSystemDefault = false;
-                mapTo = DefaultLanguageSystem;
+                mapTo = SystemLanguage.Unknown;
                 fonts = new TMP_FontAsset[0];
             }
 
@@ -215,6 +215,26 @@ namespace OmiyaGames.Translations
         public bool Contains(string language)
         {
             return LanguageToIndexMap.ContainsKey(language);
+        }
+
+        public TMP_FontAsset[] GetLanguageFonts(int index)
+        {
+            return supportedLanguages[index].Fonts;
+        }
+
+        public TMP_FontAsset[] GetLanguageFonts(string language)
+        {
+            return GetLanguageFonts(this[language]);
+        }
+
+        public Language GetLanguageMetaData(int index)
+        {
+            return supportedLanguages[index];
+        }
+
+        public Language GetLanguageMetaData(string language)
+        {
+            return GetLanguageMetaData(this[language]);
         }
     }
 }
