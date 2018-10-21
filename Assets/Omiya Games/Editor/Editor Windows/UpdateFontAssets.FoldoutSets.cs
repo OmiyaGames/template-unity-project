@@ -294,6 +294,9 @@ namespace OmiyaGames.UI.Translations
             static readonly GUILayoutOption ActionsWidth = GUILayout.Width(80f);
             static readonly GUILayoutOption InfoWidth = GUILayout.Width(30f);
             static readonly GUILayoutOption ButtonsWidth = GUILayout.Width(120f);
+            static readonly GUILayoutOption CommonHeight = GUILayout.Height(16.25f);
+            static readonly GUILayoutOption InfoHeight = GUILayout.Height(16.75f);
+            static readonly GUILayoutOption ButtonHeight = GUILayout.Height(15f);
 
             private readonly SupportedLanguages languages;
             private readonly bool[] languageToUpdate;
@@ -304,6 +307,69 @@ namespace OmiyaGames.UI.Translations
             {
                 this.languages = languages;
                 this.languageToUpdate = languageToUpdate;
+            }
+
+            public void UpdateFonts()
+            {
+                // Setup variables
+                SupportedLanguages.Language languageMetadata;
+                PresetCharacters defaultPreset = PresetCharacters.None;
+                Metadata fontMetadata;
+
+                // Reset the list
+                allFonts.Clear();
+                foreach (Metadata data in allMetaData.Values)
+                {
+                    data.Languages.Clear();
+                }
+
+                // Go through all the languages
+                for (int i = 0; i < languages.Count; ++i)
+                {
+                    // Check if we want to check this language
+                    if (languageToUpdate[i] == false)
+                    {
+                        continue;
+                    }
+
+                    // Grab the metadata for this language
+                    languageMetadata = languages.GetLanguageMetaData(i);
+                    defaultPreset = PresetCharacters.None;
+                    if (languageMetadata.IsSystemDefault == true)
+                    {
+                        defaultPreset = GetDefaultPreset(languageMetadata.LanguageMappedTo);
+                    }
+
+                    // If so, grab all the fonts
+                    foreach (TMP_FontAsset font in languageMetadata.Fonts)
+                    {
+                        if (font != null)
+                        {
+                            if (allMetaData.TryGetValue(font, out fontMetadata) == true)
+                            {
+                                if (fontMetadata.Languages.Count == 0)
+                                {
+                                    // Indicate this is a unique new font
+                                    allFonts.Add(font);
+                                }
+
+                                // Update the font's metadata
+                                fontMetadata.Languages.Add(languages[i]);
+                                fontMetadata.AddCharacters |= defaultPreset;
+                            }
+                            else
+                            {
+                                // Indicate this is a unique new font
+                                allFonts.Add(font);
+
+                                // Create a new font's metadata
+                                fontMetadata = new Metadata(languages.Count, defaultPreset);
+                                fontMetadata.Languages.Add(languages[i]);
+                                allMetaData.Add(font, fontMetadata);
+                            }
+                        }
+                    }
+                }
             }
 
             protected override string FoldoutLabel
@@ -345,7 +411,7 @@ namespace OmiyaGames.UI.Translations
                     GUI.enabled = false;
                     foreach (TMP_FontAsset font in allFonts)
                     {
-                        if (GUILayout.Button("Update Font", GUILayout.Height(15f), ButtonsWidth) == true)
+                        if (GUILayout.Button("Update Font", ButtonHeight, ButtonsWidth) == true)
                         {
                             // FIXME: do something!
                         }
@@ -362,7 +428,7 @@ namespace OmiyaGames.UI.Translations
                     foreach (TMP_FontAsset font in allFonts)
                     {
                         int action = (int)allMetaData[font].Action;
-                        action = EditorGUILayout.IntPopup(action, ActionNames, ActionValues, ActionsWidth);
+                        action = EditorGUILayout.IntPopup(action, ActionNames, ActionValues, ActionsWidth, CommonHeight);
                         allMetaData[font].Action = (Action)action;
                     }
                 }
@@ -376,7 +442,7 @@ namespace OmiyaGames.UI.Translations
                     foreach (TMP_FontAsset font in allFonts)
                     {
                         int mask = (int)allMetaData[font].AddCharacters;
-                        mask = EditorGUILayout.MaskField(mask, PresetCharacterNames);
+                        mask = EditorGUILayout.MaskField(mask, PresetCharacterNames, CommonHeight);
                         allMetaData[font].AddCharacters = (PresetCharacters)mask;
                     }
                 }
@@ -403,7 +469,7 @@ namespace OmiyaGames.UI.Translations
                         }
                         tooltip.tooltip = builder.ToString();
 
-                        EditorGUILayout.LabelField(tooltip, InfoWidth);
+                        EditorGUILayout.LabelField(tooltip, InfoHeight, InfoWidth);
                     }
                 }
             }
@@ -416,72 +482,9 @@ namespace OmiyaGames.UI.Translations
                     GUI.enabled = false;
                     foreach (TMP_FontAsset font in allFonts)
                     {
-                        EditorGUILayout.ObjectField(font, typeof(TMP_Asset), false);
+                        EditorGUILayout.ObjectField(font, typeof(TMP_Asset), false, CommonHeight);
                     }
                     GUI.enabled = true;
-                }
-            }
-
-            public void UpdateFonts()
-            {
-                // Setup variables
-                SupportedLanguages.Language languageMetadata;
-                PresetCharacters defaultPreset = PresetCharacters.None;
-                Metadata fontMetadata;
-
-                // Reset the list
-                allFonts.Clear();
-                foreach(Metadata data in allMetaData.Values)
-                {
-                    data.Languages.Clear();
-                }
-
-                // Go through all the languages
-                for (int i = 0; i < languages.Count; ++i)
-                {
-                    // Check if we want to check this language
-                    if (languageToUpdate[i] == false)
-                    {
-                        continue;
-                    }
-
-                    // Grab the metadata for this language
-                    languageMetadata = languages.GetLanguageMetaData(i);
-                    defaultPreset = PresetCharacters.None;
-                    if (languageMetadata.IsSystemDefault == true)
-                    {
-                        defaultPreset = GetDefaultPreset(languageMetadata.LanguageMappedTo);
-                    }
-
-                    // If so, grab all the fonts
-                    foreach (TMP_FontAsset font in languageMetadata.Fonts)
-                    {
-                        if (font != null)
-                        {
-                            if(allMetaData.TryGetValue(font, out fontMetadata) == true)
-                            {
-                                if (fontMetadata.Languages.Count == 0)
-                                {
-                                    // Indicate this is a unique new font
-                                    allFonts.Add(font);
-                                }
-
-                                // Update the font's metadata
-                                fontMetadata.Languages.Add(languages[i]);
-                                fontMetadata.AddCharacters |= defaultPreset;
-                            }
-                            else
-                            {
-                                // Indicate this is a unique new font
-                                allFonts.Add(font);
-
-                                // Create a new font's metadata
-                                fontMetadata = new Metadata(languages.Count, defaultPreset);
-                                fontMetadata.Languages.Add(languages[i]);
-                                allMetaData.Add(font, fontMetadata);
-                            }
-                        }
-                    }
                 }
             }
         }
