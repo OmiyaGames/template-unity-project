@@ -336,7 +336,7 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 114936924004685594, guid: 873d985b771b5ad4d92bf58ce8f2618e,
+    - target: {fileID: 114907157888053690, guid: 873d985b771b5ad4d92bf58ce8f2618e,
         type: 2}
       propertyPath: m_MaxHeightElement
       value: 
@@ -346,7 +346,7 @@ Prefab:
       propertyPath: m_MaxHeightElement
       value: 
       objectReference: {fileID: 1423548465}
-    - target: {fileID: 114907157888053690, guid: 873d985b771b5ad4d92bf58ce8f2618e,
+    - target: {fileID: 114936924004685594, guid: 873d985b771b5ad4d92bf58ce8f2618e,
         type: 2}
       propertyPath: m_MaxHeightElement
       value: 
@@ -853,7 +853,7 @@ Prefab:
     - target: {fileID: 114523620558195494, guid: 409bd7de3a5b6374f8e82f4dc9494e4b,
         type: 2}
       propertyPath: resetDataButton.enabledFor
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 409bd7de3a5b6374f8e82f4dc9494e4b, type: 2}
@@ -933,6 +933,11 @@ Prefab:
         type: 2}
       propertyPath: m_sharedMaterial
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114188700365703764, guid: 5c48fcaa0038d944f91d06c1f9b98156,
+        type: 2}
+      propertyPath: m_padding
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c48fcaa0038d944f91d06c1f9b98156, type: 2}
@@ -1331,11 +1336,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224844351071423728, guid: 33d707ba4cff4354bb60037d336ffa1e,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33d707ba4cff4354bb60037d336ffa1e, type: 2}
   m_IsPrefabAsset: 0
@@ -1486,26 +1486,6 @@ Prefab:
         type: 2}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 224107475666699874, guid: 00c91f78a3abcb24f82fd98f0c02ac3f,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224107475666699874, guid: 00c91f78a3abcb24f82fd98f0c02ac3f,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224107475666699874, guid: 00c91f78a3abcb24f82fd98f0c02ac3f,
-        type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224340525868363958, guid: 00c91f78a3abcb24f82fd98f0c02ac3f,
-        type: 2}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00c91f78a3abcb24f82fd98f0c02ac3f, type: 2}

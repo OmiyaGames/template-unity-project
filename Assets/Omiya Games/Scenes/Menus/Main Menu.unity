@@ -722,6 +722,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 224030540674267582, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224030540674267582, guid: 268d5824041a1244187bab4917ec74b3,
+        type: 2}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
@@ -730,16 +735,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114658227689849132, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_havePropertiesChanged
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114658227689849132, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_isInputParsingRequired
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 114629470494452134, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_havePropertiesChanged
@@ -750,12 +745,12 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114609225995480748, guid: 268d5824041a1244187bab4917ec74b3,
+    - target: {fileID: 114366853518084234, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114609225995480748, guid: 268d5824041a1244187bab4917ec74b3,
+    - target: {fileID: 114366853518084234, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -770,12 +765,22 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114366853518084234, guid: 268d5824041a1244187bab4917ec74b3,
+    - target: {fileID: 114609225995480748, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_havePropertiesChanged
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114366853518084234, guid: 268d5824041a1244187bab4917ec74b3,
+    - target: {fileID: 114609225995480748, guid: 268d5824041a1244187bab4917ec74b3,
+        type: 2}
+      propertyPath: m_isInputParsingRequired
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114658227689849132, guid: 268d5824041a1244187bab4917ec74b3,
+        type: 2}
+      propertyPath: m_havePropertiesChanged
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114658227689849132, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_isInputParsingRequired
       value: 1
@@ -973,11 +978,6 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 224030540674267582, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 224962202763876616, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_AnchorMin.y
@@ -1111,72 +1111,12 @@ Prefab:
     - target: {fileID: 224809724297381430, guid: 268d5824041a1244187bab4917ec74b3,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.00003040798
+      value: 0.000014543212
       objectReference: {fileID: 0}
     - target: {fileID: 1429893259717778, guid: 268d5824041a1244187bab4917ec74b3, type: 2}
       propertyPath: m_Name
       value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-Bold
         SDF Atlas]
-      objectReference: {fileID: 0}
-    - target: {fileID: 114024327525217742, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114024327525217742, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114235081455889976, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114235081455889976, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114103872622966234, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114103872622966234, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114402786057046664, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114402786057046664, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114024327525217742, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_padding
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114235081455889976, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_padding
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114103872622966234, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_padding
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114402786057046664, guid: 268d5824041a1244187bab4917ec74b3,
-        type: 2}
-      propertyPath: m_padding
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 268d5824041a1244187bab4917ec74b3, type: 2}
@@ -1630,6 +1570,56 @@ Prefab:
         type: 2}
       propertyPath: m_AnchoredPosition.y
       value: -121.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224188128284014108, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224450456355688110, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224450456355688110, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114936718746485154, guid: e19785c2790a6f24986526029495de4f,
+        type: 2}
+      propertyPath: m_padding
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844153919809146, guid: e19785c2790a6f24986526029495de4f, type: 2}
+      propertyPath: m_Name
+      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-Bold
+        SDF Atlas]
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e19785c2790a6f24986526029495de4f, type: 2}
