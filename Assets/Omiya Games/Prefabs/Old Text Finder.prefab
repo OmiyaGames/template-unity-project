@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4062640368738788}
   - component: {fileID: 114261689644470770}
   - component: {fileID: 114395177606013352}
+  - component: {fileID: 114702389566939518}
   m_Layer: 0
   m_Name: Old Text Finder
   m_TagString: Untagged
@@ -73,6 +74,22 @@ MonoBehaviour:
   dictionaries:
   - {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   - {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
+  recursivelyCheckChildren: 1
+  labels1: []
+  labels2: []
+  labels3: []
+--- !u!114 &114702389566939518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1080487326905056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9122f127ffa33fa41b9aeb0251c0b6b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  searchThrough: []
   recursivelyCheckChildren: 1
   labels1: []
   labels2: []
