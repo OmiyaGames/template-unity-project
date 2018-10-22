@@ -19,7 +19,23 @@ MonoBehaviour:
   presetMessageWhenTranslationNotFound: <Translation Not Found>
   replaceEmptyStringWithDefaultText: 1
   translations:
-  - key: Back Button
+  - key: Accessibility
+    allTranslations:
+    - languageIndex: 0
+      text: Accessibility
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Audio
+    allTranslations:
+    - languageIndex: 0
+      text: Audio
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Back
     allTranslations:
     - languageIndex: 0
       text: Back
@@ -27,7 +43,23 @@ MonoBehaviour:
       text: "\u623B\u308B"
     - languageIndex: 2
       text: 
-  - key: Click To Start Button
+  - key: Camera Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Camera Control's Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Camera Smoothing
+    allTranslations:
+    - languageIndex: 0
+      text: Camera Smoothing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Click To Start
     allTranslations:
     - languageIndex: 0
       text: Click here to begin!
@@ -43,6 +75,22 @@ MonoBehaviour:
       text: "\u672C\u5F53\u306B\uFF1F"
     - languageIndex: 2
       text: 
+  - key: Continue
+    allTranslations:
+    - languageIndex: 0
+      text: Continue
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Controls
+    allTranslations:
+    - languageIndex: 0
+      text: Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
   - key: Credits
     allTranslations:
     - languageIndex: 0
@@ -51,22 +99,66 @@ MonoBehaviour:
       text: "\u30B9\u30BF\u30C3\u30D5"
     - languageIndex: 2
       text: 
-  - key: Credits Button
+  - key: Enable
     allTranslations:
     - languageIndex: 0
-      text: Credits
+      text: Enable
     - languageIndex: 1
-      text: "\u30B9\u30BF\u30C3\u30D5"
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Enable Bloom
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Bloom Effect
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Enable Camera Shakes
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Camera Shakes
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Enable Flashing Effects
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Screen Flashing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Enable Head Bobbing
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Head Bobbing
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Enable Motion Blurs
+    allTranslations:
+    - languageIndex: 0
+      text: Enable Motion Blurs
+    - languageIndex: 1
+      text: 
     - languageIndex: 2
       text: 
   - key: Enter Name Here
     allTranslations:
     - languageIndex: 0
       text: Enter Name Here...
-  - key: Hack Warning Continue Button
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Graphics
     allTranslations:
     - languageIndex: 0
-      text: Continue
+      text: Graphics
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -136,15 +228,27 @@ MonoBehaviour:
     allTranslations:
     - languageIndex: 0
       text: High Scores
-  - key: High Scores Button
-    allTranslations:
-    - languageIndex: 0
-      text: High Scores
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: How to Play Button
+  - key: Horizontal Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontal Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Horizontally
+    allTranslations:
+    - languageIndex: 0
+      text: Horizontally
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: How to Play
     allTranslations:
     - languageIndex: 0
       text: How to Play
@@ -152,12 +256,44 @@ MonoBehaviour:
       text: "\u904A\u3073\u65B9"
     - languageIndex: 2
       text: 
-  - key: How To Play Button
+  - key: Invert Camera Controls
     allTranslations:
     - languageIndex: 0
-      text: How to Play
+      text: Invert Camera Controls
     - languageIndex: 1
-      text: "\u904A\u3073\u65B9"
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Invert Movement Controls
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Movement Controls
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Invert Scroll Wheel
+    allTranslations:
+    - languageIndex: 0
+      text: Invert Mouse Scroll-Wheel
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Invincibility Mode
+    allTranslations:
+    - languageIndex: 0
+      text: Invincibility Mode
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Language
+    allTranslations:
+    - languageIndex: 0
+      text: Language
+    - languageIndex: 1
+      text: "\u5358\u8A9E"
     - languageIndex: 2
       text: 
   - key: Level Button
@@ -184,15 +320,7 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Level Select Button
-    allTranslations:
-    - languageIndex: 0
-      text: Level Select
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Level Select Title
+  - key: Level Select
     allTranslations:
     - languageIndex: 0
       text: Level Select
@@ -225,6 +353,38 @@ MonoBehaviour:
       text: "\u30E1\u30CB\u30E5\u30FC"
     - languageIndex: 2
       text: 
+  - key: Mouse Scroll Wheel
+    allTranslations:
+    - languageIndex: 0
+      text: Mouse Scroll-Wheel
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Movement Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Movement Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Music Volume
+    allTranslations:
+    - languageIndex: 0
+      text: Music Volume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Mute
+    allTranslations:
+    - languageIndex: 0
+      text: Mute
+    - languageIndex: 1
+      text: "\u5F31\u97F3"
+    - languageIndex: 2
+      text: 
   - key: Native Language
     allTranslations:
     - languageIndex: 0
@@ -237,11 +397,19 @@ MonoBehaviour:
     allTranslations:
     - languageIndex: 0
       text: New Record!
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
   - key: New High Score Place
     allTranslations:
     - languageIndex: 0
       text: '#{0} Place!'
-  - key: Next Level Button
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Next Level
     allTranslations:
     - languageIndex: 0
       text: Next Level
@@ -249,7 +417,7 @@ MonoBehaviour:
       text: "\u6B21\u306E\u30B9\u30C6\u30FC\u30B8"
     - languageIndex: 2
       text: 
-  - key: No Button
+  - key: No
     allTranslations:
     - languageIndex: 0
       text: No
@@ -261,23 +429,11 @@ MonoBehaviour:
     allTranslations:
     - languageIndex: 0
       text: (No Scores Recorded Yet...)
-  - key: Options Accessibility
-    allTranslations:
-    - languageIndex: 0
-      text: Accessibility
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Audio
-    allTranslations:
-    - languageIndex: 0
-      text: Audio
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Button
+  - key: Options
     allTranslations:
     - languageIndex: 0
       text: Options
@@ -285,274 +441,10 @@ MonoBehaviour:
       text: "\u8A2D\u5B9A"
     - languageIndex: 2
       text: 
-  - key: Options Controls
-    allTranslations:
-    - languageIndex: 0
-      text: Controls
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable
-    allTranslations:
-    - languageIndex: 0
-      text: Enable
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Bloom
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Bloom Effect
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Camera Shakes
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Camera Shakes
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Flashing Effects
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Screen Flashing
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Head Bobbing
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Head Bobbing
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Enable Motion Blurs
-    allTranslations:
-    - languageIndex: 0
-      text: Enable Motion Blurs
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Graphics
-    allTranslations:
-    - languageIndex: 0
-      text: Graphics
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Keyboard X-Axis
-    allTranslations:
-    - languageIndex: 0
-      text: Horizontally
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Keyboard Y-Axis
-    allTranslations:
-    - languageIndex: 0
-      text: Vertically
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Mouse X-Axis
-    allTranslations:
-    - languageIndex: 0
-      text: Horizontally
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Mouse Y-Axis
-    allTranslations:
-    - languageIndex: 0
-      text: Vertically
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invert Scroll Wheel
-    allTranslations:
-    - languageIndex: 0
-      text: Invert Mouse Scroll-Wheel
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Invincibility
-    allTranslations:
-    - languageIndex: 0
-      text: Invincibility Mode
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
   - key: Options Invincibility Message
     allTranslations:
     - languageIndex: 0
       text: Enabling this mode prevents the player from taking any damage.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Invert
-    allTranslations:
-    - languageIndex: 0
-      text: Invert Movement Controls
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Overall Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Movement Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard X-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Horizontal Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Keyboard Y-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Vertical Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Language
-    allTranslations:
-    - languageIndex: 0
-      text: Language
-    - languageIndex: 1
-      text: "\u5358\u8A9E"
-    - languageIndex: 2
-      text: 
-  - key: Options Mouse Invert
-    allTranslations:
-    - languageIndex: 0
-      text: Invert Camera Controls
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Mouse Overall Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Mouse Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Camera Control's Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Mouse X-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Horizontal Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Mouse Y-Axis Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Vertical Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Music Volume
-    allTranslations:
-    - languageIndex: 0
-      text: Music Volume
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Mute
-    allTranslations:
-    - languageIndex: 0
-      text: Mute
-    - languageIndex: 1
-      text: "\u5F31\u97F3"
-    - languageIndex: 2
-      text: 
-  - key: Options Reset
-    allTranslations:
-    - languageIndex: 0
-      text: Reset
-    - languageIndex: 1
-      text: "\u30EA\u30BB\u30C3\u30C8"
-    - languageIndex: 2
-      text: 
-  - key: Options Reset Data
-    allTranslations:
-    - languageIndex: 0
-      text: Reset Data
-    - languageIndex: 1
-      text: "\u30C7\u30FC\u30BF\u3092\u524A\u9664"
-    - languageIndex: 2
-      text: 
-  - key: Options Reset Message
-    allTranslations:
-    - languageIndex: 0
-      text: This will reset all your in-game progress data.
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Scroll Wheel
-    allTranslations:
-    - languageIndex: 0
-      text: Mouse Scroll-Wheel
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Scroll Wheel Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Sensitivity
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Smooth Camera
-    allTranslations:
-    - languageIndex: 0
-      text: Camera Smoothing
     - languageIndex: 1
       text: 
     - languageIndex: 2
@@ -567,46 +459,6 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Options Sound Effects Volume
-    allTranslations:
-    - languageIndex: 0
-      text: Sound Effects Volume
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Split Keyboard Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Split Movement Sensitivity By Axis
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Split Mouse Sensitivity
-    allTranslations:
-    - languageIndex: 0
-      text: Split Camera Sensitivity By Axis
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Text Size
-    allTranslations:
-    - languageIndex: 0
-      text: Text Size
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
-  - key: Options Time Scale
-    allTranslations:
-    - languageIndex: 0
-      text: Time Scale
-    - languageIndex: 1
-      text: 
-    - languageIndex: 2
-      text: 
   - key: Options Time Scale Message
     allTranslations:
     - languageIndex: 0
@@ -616,21 +468,31 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
+  - key: Patreon Button
+    allTranslations:
+    - languageIndex: 0
+      text: Support us on
+    - languageIndex: 1
+      text: "\u30B5\u30DD\u30FC\u30C8\u3057\u3066\u304F\u3060\u3055\u3044"
+    - languageIndex: 2
+      text: Upportsay usway onway
   - key: Paused Title
     allTranslations:
     - languageIndex: 0
       text: Paused
     - languageIndex: 1
-      text: "\u30DD\u30FC\u30BA"
+      text: "\u4E00\u6642\u505C\u6B62"
     - languageIndex: 2
       text: 
-  - key: Play Again Button
+  - key: Play Again
     allTranslations:
     - languageIndex: 0
       text: Play Again!
     - languageIndex: 1
       text: "\u307E\u305F\u904A\u3076"
-  - key: Quit Button
+    - languageIndex: 2
+      text: 
+  - key: Quit
     allTranslations:
     - languageIndex: 0
       text: Quit
@@ -638,15 +500,39 @@ MonoBehaviour:
       text: "\u7D42\u308F\u308B"
     - languageIndex: 2
       text: 
-  - key: Restart Button
+  - key: Reset
     allTranslations:
     - languageIndex: 0
-      text: Restart {0}
+      text: Reset
+    - languageIndex: 1
+      text: "\u30EA\u30BB\u30C3\u30C8"
+    - languageIndex: 2
+      text: 
+  - key: Reset Data
+    allTranslations:
+    - languageIndex: 0
+      text: Reset Data
+    - languageIndex: 1
+      text: "\u30C7\u30FC\u30BF\u3092\u524A\u9664"
+    - languageIndex: 2
+      text: 
+  - key: Reset Message
+    allTranslations:
+    - languageIndex: 0
+      text: This will reset all your in-game progress data.
     - languageIndex: 1
       text: 
     - languageIndex: 2
       text: 
-  - key: Resume Button
+  - key: Restart
+    allTranslations:
+    - languageIndex: 0
+      text: Restart
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Resume
     allTranslations:
     - languageIndex: 0
       text: Resume
@@ -662,7 +548,15 @@ MonoBehaviour:
       text: "{0}\u3078\u623B\u308B"
     - languageIndex: 2
       text: 
-  - key: Skip Credits Button
+  - key: Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Skip Credits
     allTranslations:
     - languageIndex: 0
       text: Press any key to skip
@@ -670,7 +564,31 @@ MonoBehaviour:
       text: 
     - languageIndex: 2
       text: 
-  - key: Start Button
+  - key: Sound Effects Volume
+    allTranslations:
+    - languageIndex: 0
+      text: Sound Effects Volume
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Split Camera Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Camera Sensitivity By Axis
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Split Movement Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Split Movement Sensitivity By Axis
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Start
     allTranslations:
     - languageIndex: 0
       text: Start
@@ -678,13 +596,47 @@ MonoBehaviour:
       text: "\u30B9\u30BF\u30FC\u30C8"
     - languageIndex: 2
       text: 
-  - key: Submit Button
-    allTranslations: []
-  - key: Submit Record Button
+  - key: Submit Record
     allTranslations:
     - languageIndex: 0
       text: Submit Record
-  - key: Yes Button
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Text Size
+    allTranslations:
+    - languageIndex: 0
+      text: Text Size
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Time Scale
+    allTranslations:
+    - languageIndex: 0
+      text: Time Scale
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Vertical Sensitivity
+    allTranslations:
+    - languageIndex: 0
+      text: Vertical Sensitivity
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Vertically
+    allTranslations:
+    - languageIndex: 0
+      text: Vertically
+    - languageIndex: 1
+      text: 
+    - languageIndex: 2
+      text: 
+  - key: Yes
     allTranslations:
     - languageIndex: 0
       text: Yes

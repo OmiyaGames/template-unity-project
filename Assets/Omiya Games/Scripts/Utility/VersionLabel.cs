@@ -75,6 +75,10 @@ namespace OmiyaGames
                     {
                         // Parse the file
                         buildMapping = Json.Deserialize(manifest.text) as Dictionary<string, object>;
+
+                        // Unload the manifest file
+                        Resources.UnloadAsset(manifest);
+                        manifest = null;
                     }
 
                     // Flag that we've already loaded the manifest file

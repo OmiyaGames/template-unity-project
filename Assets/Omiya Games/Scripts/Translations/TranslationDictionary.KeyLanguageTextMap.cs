@@ -80,6 +80,22 @@ namespace OmiyaGames.Translations
                 }
             }
 
+            public ICollection<string> Keys
+            {
+                get
+                {
+                    return dictionary.Keys;
+                }
+            }
+
+            public ICollection<LanguageTextMap> Values
+            {
+                get
+                {
+                    return dictionary.Values;
+                }
+            }
+
             public bool ContainsKey(string translationKey)
             {
                 return dictionary.ContainsKey(translationKey);
