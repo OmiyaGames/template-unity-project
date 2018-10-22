@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using System.Text;
+using TMPro;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.UI.Translations
@@ -55,6 +57,7 @@ namespace OmiyaGames.UI.Translations
         static readonly Vector2 DefaultWindowSize = new Vector2(500f, 200f);
         static string[] presetCharacterNames = null;
         static int[] actionValues = null;
+        static readonly StringBuilder builder = new StringBuilder();
         static readonly Dictionary<PresetCharacters, CharacterSet> PresetCharacterSets = new Dictionary<PresetCharacters, CharacterSet>()
         {
             {
@@ -142,6 +145,11 @@ namespace OmiyaGames.UI.Translations
             set;
         } = null;
 
+        SortedSet<char> CurrentSet
+        {
+            get;
+        } = new SortedSet<char>();
+
         public static string[] PresetCharacterNames
         {
             get
@@ -194,6 +202,7 @@ namespace OmiyaGames.UI.Translations
             DebugFoldout = new DebugCharacterSets(this, PresetCharacterSets);
             LanguageFoldout = new LanguageSets(this, Languages);
             FontFoldout = new FontSets(this, Languages, LanguageFoldout.LanguageToUpdate);
+            FontFoldout.OnAfterButtonClicked += OnUpdateFontClicked;
             FontFoldout.UpdateFonts();
         }
 
@@ -221,6 +230,74 @@ namespace OmiyaGames.UI.Translations
                 // Update scroll position
                 ScrollPosition = scrollScope.scrollPosition;
             }
+        }
+
+        private void OnUpdateFontClicked(FontSets source, FontSets.OnClickEventArgs args)
+        {
+            // Setup variables
+            FontAssetCreationSettings settings = args.Font.creationSettings;
+            CurrentSet.Clear();
+
+            // Start appending characters already in the settings
+            if (args.ActionToTake == Action.Append)
+            {
+                // Add them to the hashset
+                Add(CurrentSet, TMP_FontAsset.GetCharacters(args.Font));
+            }
+
+            // Add all the preset characters
+            foreach(KeyValuePair<PresetCharacters, CharacterSet> pair in PresetCharacterSets)
+            {
+                // Check if this preset should be appended to the hashset
+                if((args.PresetsToAdd & pair.Key) != 0)
+                {
+                    Add(CurrentSet, pair.Value.characters);
+                }
+            }
+
+            // Go through the languages this font supports
+            foreach (string language in args.Languages)
+            {
+                // Grab the language index
+                int languageIndex = Languages[language];
+
+                // Go through all the texts in the translation file
+                foreach (TranslationDictionary.LanguageTextMap languageMap in DictionaryToEdit.AllTranslations.Values)
+                {
+                    // Add the text into the set
+                    Add(CurrentSet, languageMap[languageIndex]);
+                }
+            }
+
+            // Apply changes
+            settings.characterSetSelectionMode = 7;
+            settings.characterSequence = ToString(CurrentSet);
+            args.Font.creationSettings = settings;
+
+            // Open the window
+            TMPro.EditorUtilities.TMPro_FontAssetCreatorWindow.ShowFontAtlasCreatorWindow(args.Font);
+        }
+
+        public static void Add(ISet<char> set, string add)
+        {
+            if ((set != null) && (string.IsNullOrEmpty(add) == false))
+            {
+                // Add them to the hashset
+                foreach (char c in add)
+                {
+                    set.Add(c);
+                }
+            }
+        }
+
+        public static string ToString(ISet<char> set)
+        {
+            builder.Clear();
+            foreach (char c in set)
+            {
+                builder.Append(c);
+            }
+            return builder.ToString();
         }
     }
 }
