@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using TMPro;
 
 namespace OmiyaGames.Translations
 {
@@ -18,44 +19,32 @@ namespace OmiyaGames.Translations
             bool isSystemDefault;
             [SerializeField]
             SystemLanguage mapTo;
+            [SerializeField]
+            TMP_FontAsset[] fonts;
 
             public Language(string languageName, SystemLanguage systemDefault)
             {
                 this.languageName = languageName;
                 isSystemDefault = true;
                 mapTo = systemDefault;
+                fonts = new TMP_FontAsset[0];
             }
 
             public Language(string languageName)
             {
                 this.languageName = languageName;
                 isSystemDefault = false;
-                mapTo = DefaultLanguageSystem;
+                mapTo = SystemLanguage.Unknown;
+                fonts = new TMP_FontAsset[0];
             }
 
-            public string LanguageName
-            {
-                get
-                {
-                    return languageName;
-                }
-            }
+            public string LanguageName => languageName;
 
-            public bool IsSystemDefault
-            {
-                get
-                {
-                    return isSystemDefault;
-                }
-            }
+            public bool IsSystemDefault => isSystemDefault;
 
-            public SystemLanguage LanguageMappedTo
-            {
-                get
-                {
-                    return mapTo;
-                }
-            }
+            public SystemLanguage LanguageMappedTo => mapTo;
+
+            public TMP_FontAsset[] Fonts => fonts;
         }
 
         [SerializeField]
@@ -226,6 +215,26 @@ namespace OmiyaGames.Translations
         public bool Contains(string language)
         {
             return LanguageToIndexMap.ContainsKey(language);
+        }
+
+        public TMP_FontAsset[] GetLanguageFonts(int index)
+        {
+            return supportedLanguages[index].Fonts;
+        }
+
+        public TMP_FontAsset[] GetLanguageFonts(string language)
+        {
+            return GetLanguageFonts(this[language]);
+        }
+
+        public Language GetLanguageMetaData(int index)
+        {
+            return supportedLanguages[index];
+        }
+
+        public Language GetLanguageMetaData(string language)
+        {
+            return GetLanguageMetaData(this[language]);
         }
     }
 }
