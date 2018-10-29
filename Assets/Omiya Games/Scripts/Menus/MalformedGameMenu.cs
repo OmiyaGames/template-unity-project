@@ -5,7 +5,7 @@ using System.Collections;
 using OmiyaGames.Web;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="MalformedGameMenu.cs" company="Omiya Games">

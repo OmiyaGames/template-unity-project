@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using OmiyaGames.Settings;
 using System;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     public class HighScoresMenu : IMenu
     {

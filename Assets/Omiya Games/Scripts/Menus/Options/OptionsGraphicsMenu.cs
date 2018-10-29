@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsGraphicsMenu.cs" company="Omiya Games">

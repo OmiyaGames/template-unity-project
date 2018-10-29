@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Community.UI;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="UiEventNavigation.cs" company="Omiya Games">

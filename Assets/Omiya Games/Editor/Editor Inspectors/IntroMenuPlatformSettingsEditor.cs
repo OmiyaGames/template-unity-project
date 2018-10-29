@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using OmiyaGames.Menu;
+using OmiyaGames.Menus;
 
 namespace OmiyaGames.UI
 {

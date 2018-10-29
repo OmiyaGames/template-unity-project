@@ -4,7 +4,7 @@ using System.Collections;
 using OmiyaGames.Translations;
 using OmiyaGames.Global;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelIntroMenu.cs" company="Omiya Games">
