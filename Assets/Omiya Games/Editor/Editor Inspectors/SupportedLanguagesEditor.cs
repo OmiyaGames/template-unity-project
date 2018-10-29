@@ -50,7 +50,7 @@ namespace OmiyaGames.UI.Translations
         ReorderableList supportedLanguagesList;
         readonly Dictionary<SerializedProperty, ReorderableList> fonts = new Dictionary<SerializedProperty, ReorderableList>();
 
-        [MenuItem("Tools/Omiya Games/Create Supported Languages...", priority = 801)]
+        [MenuItem("Assets/Create/Omiya Games/Supported Languages", priority = 20)]
         private static void CreateSupportedLanguages()
         {
             // Setup asset
