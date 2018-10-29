@@ -40,7 +40,7 @@ namespace OmiyaGames.Builds
         [SerializeField]
         private bool haltOnFirstError = false;
         [SerializeField]
-        List<IBuildSetting> allSettings = new List<IBuildSetting>();
+        List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
 
         public override int MaxNumberOfResults
         {
@@ -74,12 +74,12 @@ namespace OmiyaGames.Builds
             }
         }
 
-        public void Add(IBuildSetting addSetting)
+        public void Add(IChildBuildSetting addSetting)
         {
             AddSetting(this, allSettings, addSetting);
         }
 
-        public IBuildSetting Remove(int index)
+        public IChildBuildSetting Remove(int index)
         {
             return RemoveSetting(allSettings, index);
         }

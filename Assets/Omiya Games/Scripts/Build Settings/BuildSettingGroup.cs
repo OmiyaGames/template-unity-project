@@ -36,7 +36,7 @@ namespace OmiyaGames.Builds
     public class BuildSettingGroup : IChildBuildSetting
     {
         [SerializeField]
-        readonly List<IBuildSetting> allSettings = new List<IBuildSetting>();
+        readonly List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
 
         public override int MaxNumberOfResults
         {
@@ -70,12 +70,12 @@ namespace OmiyaGames.Builds
             }
         }
 
-        public void Add(IBuildSetting addSetting)
+        public void Add(IChildBuildSetting addSetting)
         {
             AddSetting(this, allSettings, addSetting);
         }
 
-        public IBuildSetting Remove(int index)
+        public IChildBuildSetting Remove(int index)
         {
             return RemoveSetting(allSettings, index);
         }
@@ -85,7 +85,7 @@ namespace OmiyaGames.Builds
             // Check whether root is null or not
             if (root == null)
             {
-                // If so, replace it with this variable
+                // If so, replace it with the root of this variable
                 root = RootSetting;
             }
 

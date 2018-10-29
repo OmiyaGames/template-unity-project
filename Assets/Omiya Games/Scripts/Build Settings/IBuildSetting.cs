@@ -78,18 +78,8 @@ namespace OmiyaGames.Builds
         /// <returns></returns>
         public bool Build(out List<BuildResult> results)
         {
-            return Build(null, out results);
-        }
-
-        /// <summary>
-        /// Recursively creates builds.
-        /// </summary>
-        /// <param name="results">List of statuses indicating the results</param>
-        /// <returns></returns>
-        public bool Build(RootBuildSetting root, out List<BuildResult> results)
-        {
             results = new List<BuildResult>(MaxNumberOfResults);
-            return BuildBaseOnSettings(root, ref results);
+            return BuildBaseOnSettings(null, ref results);
         }
 
         /// <summary>
@@ -106,7 +96,7 @@ namespace OmiyaGames.Builds
         /// <param name="settings">All the build settings to build from.</param>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
-        protected static bool BuildGroup(RootBuildSetting root, IList<IBuildSetting> settings, ref List<BuildResult> results)
+        protected static bool BuildGroup(RootBuildSetting root, IList<IChildBuildSetting> settings, ref List<BuildResult> results)
         {
             bool returnFlag = true;
 
@@ -129,25 +119,19 @@ namespace OmiyaGames.Builds
             return returnFlag;
         }
 
-        protected static void AddSetting(IBuildSetting parent, List<IBuildSetting> allSettings, IBuildSetting setting)
+        protected static void AddSetting(IBuildSetting parent, List<IChildBuildSetting> allSettings, IChildBuildSetting setting)
         {
-            if(setting is IChildBuildSetting)
-            {
-                ((IChildBuildSetting)setting).Parent = parent;
-            }
+            setting.Parent = parent;
             allSettings.Add(setting);
         }
 
-        protected static IBuildSetting RemoveSetting(List<IBuildSetting> allSettings, int index)
+        protected static IChildBuildSetting RemoveSetting(List<IChildBuildSetting> allSettings, int index)
         {
             // Grab the return value
-            IBuildSetting returnChild = allSettings[index];
+            IChildBuildSetting returnChild = allSettings[index];
 
             // Reset parent
-            if (returnChild is IChildBuildSetting)
-            {
-                ((IChildBuildSetting)returnChild).Parent = null;
-            }
+            returnChild.Parent = null;
 
             // Remove the element
             allSettings.RemoveAt(index);
