@@ -15,3 +15,9 @@ The globe icon on the upper-right of the sprite sheet designed by Andrian Valean
 The rest of the social media icons are designed by PATHRPOL DAVIVONGSA.  Icon colors were changed to white.
 
 Both are licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+# "Control Icons.svg" and it's exported file, "Control Icons.png"
+
+All icons in file designed by Kenny.
+
+Licensed under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/).
