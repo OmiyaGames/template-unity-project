@@ -35,19 +35,39 @@ namespace OmiyaGames.Builds
     public abstract class IChildBuildSetting : IBuildSetting
     {
         [SerializeField]
-        private RootBuildSetting rootSetting = null;
-        [SerializeField]
         private IBuildSetting parentSetting = null;
 
         public RootBuildSetting RootSetting
         {
             get
             {
-                return rootSetting;
-            }
-            private set
-            {
-                rootSetting = value;
+                // Grab the parent
+                IBuildSetting currentParent = Parent;
+
+                // Check if it's not null
+                while (currentParent != null)
+                {
+                    if (currentParent is RootBuildSetting)
+                    {
+                        // Check if the parent is already a root
+                        // If so, return this parent
+                        return (RootBuildSetting)currentParent;
+                    }
+                    else if(currentParent is IChildBuildSetting)
+                    {
+                        // Check if parent is also a child.
+                        // If so, loop again, this time with the parent's parent.
+                        currentParent = ((IChildBuildSetting)currentParent).Parent;
+                    }
+                    else
+                    {
+                        // Otherwise, break out of the loop
+                        break;
+                    }
+                }
+
+                // Nothing found, return null
+                return null;
             }
         }
 
@@ -60,18 +80,6 @@ namespace OmiyaGames.Builds
             set
             {
                 parentSetting = value;
-                if(parentSetting == null)
-                {
-                    throw new System.ArgumentNullException("value");
-                }
-                else if(parentSetting is RootBuildSetting)
-                {
-                    RootSetting = (RootBuildSetting)parentSetting;
-                }
-                else if(parentSetting is IChildBuildSetting)
-                {
-                    RootSetting = ((IChildBuildSetting)parentSetting).RootSetting;
-                }
             }
         }
     }
