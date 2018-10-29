@@ -164,10 +164,7 @@ namespace OmiyaGames.Settings
                 }
 
                 // Run events
-                if (OnBeforeRetrieveSettings != null)
-                {
-                    OnBeforeRetrieveSettings(this);
-                }
+                OnBeforeRetrieveSettings?.Invoke(this);
             }
 
             // Retrieve from all ISingleSettings here
@@ -180,9 +177,9 @@ namespace OmiyaGames.Settings
             isSettingsRetrieved = true;
 
             // Run events
-            if ((runEvent == true) && (OnAfterRetrieveSettings != null))
+            if (runEvent == true)
             {
-                OnAfterRetrieveSettings(this);
+                OnAfterRetrieveSettings?.Invoke(this);
             }
         }
 
@@ -198,9 +195,9 @@ namespace OmiyaGames.Settings
             Settings.SetInt(VersionKey, AppVersion);
 
             // Run events
-            if ((runEvent == true) && (OnBeforeSaveSettings != null))
+            if (runEvent == true)
             {
-                OnBeforeSaveSettings(this);
+                OnBeforeSaveSettings?.Invoke(this);
             }
 
             // Save each version here
@@ -213,9 +210,9 @@ namespace OmiyaGames.Settings
             Settings.Save();
 
             // Run events
-            if ((runEvent == true) && (OnAfterSaveSettings != null))
+            if (runEvent == true)
             {
-                OnAfterSaveSettings(this);
+                OnAfterSaveSettings?.Invoke(this);
             }
         }
 
@@ -225,9 +222,9 @@ namespace OmiyaGames.Settings
             int currentVersion = Settings.GetInt(VersionKey, 0);
 
             // Run events
-            if ((runEvent == true) && (OnBeforeClearSettings != null))
+            if (runEvent == true)
             {
-                OnBeforeClearSettings(this);
+                OnBeforeClearSettings?.Invoke(this);
             }
 
             // Delete all stored preferences
@@ -247,9 +244,9 @@ namespace OmiyaGames.Settings
             RetrieveFromSettings(false);
 
             // Run events
-            if ((runEvent == true) && (OnAfterClearSettings != null))
+            if (runEvent == true)
             {
-                OnAfterClearSettings(this);
+                OnAfterClearSettings?.Invoke(this);
             }
         }
         #endregion

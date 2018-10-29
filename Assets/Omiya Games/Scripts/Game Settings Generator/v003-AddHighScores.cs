@@ -35,7 +35,7 @@ namespace OmiyaGames.Settings
     public class AddHighScores : SettingsVersionGeneratorDecorator
     {
         public const ushort AppVersion = 3;
-        public const int MaxListSize = 10;
+        public const int MaxListSize = 20;
         const string HighScoresPropertyName = "HighScores";
 
         public override ushort Version
