@@ -2,7 +2,7 @@ using UnityEngine;
 using OmiyaGames.Global;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="PauseMenu.cs" company="Omiya Games">

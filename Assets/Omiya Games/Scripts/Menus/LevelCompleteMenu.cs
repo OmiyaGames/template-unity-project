@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelCompleteMenu.cs" company="Omiya Games">

@@ -3,7 +3,7 @@ using System.Collections;
 using OmiyaGames.Web;
 using OmiyaGames.Scenes;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="SplashMenu.cs" company="Omiya Games">

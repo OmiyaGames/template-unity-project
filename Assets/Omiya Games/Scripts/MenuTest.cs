@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OmiyaGames;
 using OmiyaGames.Audio;
-using OmiyaGames.Menu;
+using OmiyaGames.Menus;
 
 namespace Project
 {
