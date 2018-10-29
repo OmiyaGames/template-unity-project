@@ -4,7 +4,7 @@ using UnityEngine;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="BuildSettingGroup.cs" company="Omiya Games">
+    /// <copyright file="GroupBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -33,7 +33,7 @@ namespace OmiyaGames.Builds
     /// <summary>
     /// Assets holding settings for creating builds.
     /// </summary>
-    public class BuildSettingGroup : IChildBuildSetting
+    public class GroupBuildSetting : IChildBuildSetting
     {
         [SerializeField]
         readonly List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
