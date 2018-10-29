@@ -1,0 +1,697 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
+  m_Name: Control Icons
+  m_EditorClassIdentifier: 
+  hashCode: -491303649
+  material: {fileID: 21617378406265902}
+  materialHashCode: 0
+  spriteSheet: {fileID: 2800000, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  spriteInfoList:
+  - id: 0
+    x: 4
+    y: 411
+    width: 97
+    height: 80
+    xOffset: -48.5
+    yOffset: 40
+    xAdvance: 97
+    scale: 1
+    name: Right Arrow
+    hashCode: -2112617351
+    unicode: 0
+    pivot: {x: -48.5, y: 40}
+    sprite: {fileID: 21300000, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 1
+    x: 145
+    y: 411
+    width: 97
+    height: 80
+    xOffset: -48.5
+    yOffset: 40
+    xAdvance: 97
+    scale: 1
+    name: Left Arrow
+    hashCode: 116651618
+    unicode: 0
+    pivot: {x: -48.5, y: 40}
+    sprite: {fileID: 21300002, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 2
+    x: 295
+    y: 402
+    width: 80
+    height: 97
+    xOffset: -40
+    yOffset: 48.5
+    xAdvance: 80
+    scale: 1
+    name: Up Arrow
+    hashCode: 2114222300
+    unicode: 0
+    pivot: {x: -40, y: 48.5}
+    sprite: {fileID: 21300004, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 3
+    x: 436
+    y: 402
+    width: 80
+    height: 97
+    xOffset: -40
+    yOffset: 48.5
+    xAdvance: 80
+    scale: 1
+    name: Down Arrow
+    hashCode: 1799030411
+    unicode: 0
+    pivot: {x: -40, y: 48.5}
+    sprite: {fileID: 21300006, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 4
+    x: 1404
+    y: 402
+    width: 108
+    height: 70
+    xOffset: -54
+    yOffset: 35
+    xAdvance: 108
+    scale: 1
+    name: L2 Shoulder Button
+    hashCode: 400352374
+    unicode: 0
+    pivot: {x: -54, y: 35}
+    sprite: {fileID: 21300020, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 5
+    x: 1545
+    y: 402
+    width: 108
+    height: 69
+    xOffset: -54
+    yOffset: 34.5
+    xAdvance: 108
+    scale: 1
+    name: R2 Shoulder Button
+    hashCode: -227048408
+    unicode: 0
+    pivot: {x: -54, y: 34.5}
+    sprite: {fileID: 21300022, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 6
+    x: 1285
+    y: 400
+    width: 65
+    height: 88
+    xOffset: -32.5
+    yOffset: 44
+    xAdvance: 65
+    scale: 1
+    name: Cursor
+    hashCode: -1609697814
+    unicode: 0
+    pivot: {x: -32.5, y: 44}
+    sprite: {fileID: 21300018, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 7
+    x: 1132
+    y: 399
+    width: 94
+    height: 86
+    xOffset: -47
+    yOffset: 43
+    xAdvance: 94
+    scale: 1
+    name: Hand
+    hashCode: 2552675
+    unicode: 0
+    pivot: {x: -47, y: 43}
+    sprite: {fileID: 21300016, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 8
+    x: 574
+    y: 396
+    width: 80
+    height: 99
+    xOffset: -40
+    yOffset: 49.5
+    xAdvance: 80
+    scale: 1
+    name: Left Click
+    hashCode: 119231733
+    unicode: 0
+    pivot: {x: -40, y: 49.5}
+    sprite: {fileID: 21300008, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 9
+    x: 712
+    y: 396
+    width: 83
+    height: 100
+    xOffset: -41.5
+    yOffset: 50
+    xAdvance: 83
+    scale: 1
+    name: Scrollwheel
+    hashCode: -1794911362
+    unicode: 0
+    pivot: {x: -41.5, y: 50}
+    sprite: {fileID: 21300010, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 10
+    x: 856
+    y: 396
+    width: 80
+    height: 99
+    xOffset: -40
+    yOffset: 49.5
+    xAdvance: 80
+    scale: 1
+    name: Right Click
+    hashCode: -2105710354
+    unicode: 0
+    pivot: {x: -40, y: 49.5}
+    sprite: {fileID: 21300012, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 11
+    x: 997
+    y: 396
+    width: 83
+    height: 99
+    xOffset: -41.5
+    yOffset: 49.5
+    xAdvance: 83
+    scale: 1
+    name: Mouse
+    hashCode: 87461121
+    unicode: 0
+    pivot: {x: -41.5, y: 49.5}
+    sprite: {fileID: 21300014, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 12
+    x: 1396
+    y: 282
+    width: 122
+    height: 70
+    xOffset: -61
+    yOffset: 35
+    xAdvance: 122
+    scale: 1
+    name: Start
+    hashCode: 99187456
+    unicode: 0
+    pivot: {x: -61, y: 35}
+    sprite: {fileID: 21300044, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 13
+    x: 1537
+    y: 282
+    width: 122
+    height: 69
+    xOffset: -61
+    yOffset: 34.5
+    xAdvance: 122
+    scale: 1
+    name: Select
+    hashCode: -1001587544
+    unicode: 0
+    pivot: {x: -61, y: 34.5}
+    sprite: {fileID: 21300046, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 14
+    x: 564
+    y: 269
+    width: 102
+    height: 102
+    xOffset: -51
+    yOffset: 51
+    xAdvance: 102
+    scale: 1
+    name: None Directional
+    hashCode: -1130216446
+    unicode: 0
+    pivot: {x: -51, y: 51}
+    sprite: {fileID: 21300032, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 15
+    x: 705
+    y: 268
+    width: 103
+    height: 103
+    xOffset: -51.5
+    yOffset: 51.5
+    xAdvance: 103
+    scale: 1
+    name: Up Directional
+    hashCode: 1011517229
+    unicode: 0
+    pivot: {x: -51.5, y: 51.5}
+    sprite: {fileID: 21300034, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 16
+    x: 846
+    y: 268
+    width: 103
+    height: 103
+    xOffset: -51.5
+    yOffset: 51.5
+    xAdvance: 103
+    scale: 1
+    name: Right Directional
+    hashCode: -1703523960
+    unicode: 0
+    pivot: {x: -51.5, y: 51.5}
+    sprite: {fileID: 21300036, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 17
+    x: 987
+    y: 268
+    width: 103
+    height: 103
+    xOffset: -51.5
+    yOffset: 51.5
+    xAdvance: 103
+    scale: 1
+    name: Down Directional
+    hashCode: -1632270278
+    unicode: 0
+    pivot: {x: -51.5, y: 51.5}
+    sprite: {fileID: 21300038, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 18
+    x: 1128
+    y: 268
+    width: 103
+    height: 103
+    xOffset: -51.5
+    yOffset: 51.5
+    xAdvance: 103
+    scale: 1
+    name: Left Directional
+    hashCode: 1222397523
+    unicode: 0
+    pivot: {x: -51.5, y: 51.5}
+    sprite: {fileID: 21300040, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 19
+    x: 1269
+    y: 268
+    width: 101
+    height: 103
+    xOffset: -50.5
+    yOffset: 51.5
+    xAdvance: 101
+    scale: 1
+    name: All Directional
+    hashCode: -1406830871
+    unicode: 0
+    pivot: {x: -50.5, y: 51.5}
+    sprite: {fileID: 21300042, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 20
+    x: 439
+    y: 267
+    width: 80
+    height: 80
+    xOffset: -40
+    yOffset: 40
+    xAdvance: 80
+    scale: 1
+    name: Down Right Arrow
+    hashCode: -643929141
+    unicode: 0
+    pivot: {x: -40, y: 40}
+    sprite: {fileID: 21300030, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 21
+    x: 15
+    y: 266
+    width: 81
+    height: 80
+    xOffset: -40.5
+    yOffset: 40
+    xAdvance: 81
+    scale: 1
+    name: Up Right Arrow
+    hashCode: -1742582436
+    unicode: 0
+    pivot: {x: -40.5, y: 40}
+    sprite: {fileID: 21300024, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 22
+    x: 156
+    y: 266
+    width: 80
+    height: 80
+    xOffset: -40
+    yOffset: 40
+    xAdvance: 80
+    scale: 1
+    name: Up Left Arrow
+    hashCode: 276301415
+    unicode: 0
+    pivot: {x: -40, y: 40}
+    sprite: {fileID: 21300026, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 23
+    x: 298
+    y: 266
+    width: 80
+    height: 80
+    xOffset: -40
+    yOffset: 40
+    xAdvance: 80
+    scale: 1
+    name: Down Left Arrow
+    hashCode: -1548569264
+    unicode: 0
+    pivot: {x: -40, y: 40}
+    sprite: {fileID: 21300028, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 24
+    x: 715
+    y: 130
+    width: 93
+    height: 91
+    xOffset: -46.5
+    yOffset: 45.5
+    xAdvance: 93
+    scale: 1
+    name: R Button
+    hashCode: -1279817052
+    unicode: 0
+    pivot: {x: -46.5, y: 45.5}
+    sprite: {fileID: 21300058, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 25
+    x: 574
+    y: 128
+    width: 92
+    height: 93
+    xOffset: -46
+    yOffset: 46.5
+    xAdvance: 92
+    scale: 1
+    name: L Button
+    hashCode: 739792634
+    unicode: 0
+    pivot: {x: -46, y: 46.5}
+    sprite: {fileID: 21300056, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 26
+    x: 1269
+    y: 125
+    width: 96
+    height: 104
+    xOffset: -48
+    yOffset: 52
+    xAdvance: 96
+    scale: 1
+    name: Tilt Stick Left
+    hashCode: -178020968
+    unicode: 0
+    pivot: {x: -48, y: 52}
+    sprite: {fileID: 21300066, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 27
+    x: 1427
+    y: 125
+    width: 96
+    height: 107
+    xOffset: -48
+    yOffset: 53.5
+    xAdvance: 96
+    scale: 1
+    name: Tilt Stick Right
+    hashCode: -1581514525
+    unicode: 0
+    pivot: {x: -48, y: 53.5}
+    sprite: {fileID: 21300068, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 28
+    x: 851
+    y: 124
+    width: 105
+    height: 104
+    xOffset: -52.5
+    yOffset: 52
+    xAdvance: 105
+    scale: 1
+    name: Control Stick
+    hashCode: -480323455
+    unicode: 0
+    pivot: {x: -52.5, y: 52}
+    sprite: {fileID: 21300060, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 29
+    x: 992
+    y: 124
+    width: 104
+    height: 104
+    xOffset: -52
+    yOffset: 52
+    xAdvance: 104
+    scale: 1
+    name: Left Stick
+    hashCode: 101102077
+    unicode: 0
+    pivot: {x: -52, y: 52}
+    sprite: {fileID: 21300062, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 30
+    x: 1133
+    y: 124
+    width: 103
+    height: 104
+    xOffset: -51.5
+    yOffset: 52
+    xAdvance: 103
+    scale: 1
+    name: Right Stick
+    hashCode: -2087580698
+    unicode: 0
+    pivot: {x: -51.5, y: 52}
+    sprite: {fileID: 21300064, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 31
+    x: 6
+    y: 115
+    width: 114
+    height: 106
+    xOffset: -57
+    yOffset: 53
+    xAdvance: 114
+    scale: 1
+    name: P1
+    hashCode: 2657
+    unicode: 0
+    pivot: {x: -57, y: 53}
+    sprite: {fileID: 21300048, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 32
+    x: 147
+    y: 115
+    width: 112
+    height: 106
+    xOffset: -56
+    yOffset: 53
+    xAdvance: 112
+    scale: 1
+    name: P2
+    hashCode: 2658
+    unicode: 0
+    pivot: {x: -56, y: 53}
+    sprite: {fileID: 21300050, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 33
+    x: 288
+    y: 115
+    width: 112
+    height: 106
+    xOffset: -56
+    yOffset: 53
+    xAdvance: 112
+    scale: 1
+    name: P3
+    hashCode: 2659
+    unicode: 0
+    pivot: {x: -56, y: 53}
+    sprite: {fileID: 21300052, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 34
+    x: 430
+    y: 115
+    width: 111
+    height: 106
+    xOffset: -55.5
+    yOffset: 53
+    xAdvance: 111
+    scale: 1
+    name: P4
+    hashCode: 2660
+    unicode: 0
+    pivot: {x: -55.5, y: 53}
+    sprite: {fileID: 21300054, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 35
+    x: 980
+    y: 12
+    width: 109
+    height: 68
+    xOffset: -54.5
+    yOffset: 34
+    xAdvance: 109
+    scale: 1
+    name: L Shoulder Button
+    hashCode: -1930903612
+    unicode: 0
+    pivot: {x: -54.5, y: 34}
+    sprite: {fileID: 21300084, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 36
+    x: 1121
+    y: 12
+    width: 109
+    height: 68
+    xOffset: -54.5
+    yOffset: 34
+    xAdvance: 109
+    scale: 1
+    name: R Shoulder Button
+    hashCode: -711420198
+    unicode: 0
+    pivot: {x: -54.5, y: 34}
+    sprite: {fileID: 21300086, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 37
+    x: 1263
+    y: 12
+    width: 108
+    height: 68
+    xOffset: -54
+    yOffset: 34
+    xAdvance: 108
+    scale: 1
+    name: L1 Shoulder Button
+    hashCode: 102792117
+    unicode: 0
+    pivot: {x: -54, y: 34}
+    sprite: {fileID: 21300088, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 38
+    x: 1404
+    y: 12
+    width: 108
+    height: 68
+    xOffset: -54
+    yOffset: 34
+    xAdvance: 108
+    scale: 1
+    name: R1 Shoulder Button
+    hashCode: 379609451
+    unicode: 0
+    pivot: {x: -54, y: 34}
+    sprite: {fileID: 21300090, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 39
+    x: 4
+    y: 3
+    width: 91
+    height: 91
+    xOffset: -45.5
+    yOffset: 45.5
+    xAdvance: 91
+    scale: 1
+    name: A Button
+    hashCode: -721869289
+    unicode: 0
+    pivot: {x: -45.5, y: 45.5}
+    sprite: {fileID: 21300070, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 40
+    x: 144
+    y: 3
+    width: 92
+    height: 93
+    xOffset: -46
+    yOffset: 46.5
+    xAdvance: 92
+    scale: 1
+    name: B Button
+    hashCode: -238270284
+    unicode: 0
+    pivot: {x: -46, y: 46.5}
+    sprite: {fileID: 21300072, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 41
+    x: 286
+    y: 3
+    width: 91
+    height: 91
+    xOffset: -45.5
+    yOffset: 45.5
+    xAdvance: 91
+    scale: 1
+    name: X Button
+    hashCode: 1032374126
+    unicode: 0
+    pivot: {x: -45.5, y: 45.5}
+    sprite: {fileID: 21300074, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 42
+    x: 427
+    y: 3
+    width: 92
+    height: 93
+    xOffset: -46
+    yOffset: 46.5
+    xAdvance: 92
+    scale: 1
+    name: Y Button
+    hashCode: -118289137
+    unicode: 0
+    pivot: {x: -46, y: 46.5}
+    sprite: {fileID: 21300076, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 43
+    x: 568
+    y: 3
+    width: 92
+    height: 91
+    xOffset: -46
+    yOffset: 45.5
+    xAdvance: 92
+    scale: 1
+    name: 1 Button
+    hashCode: 1936276839
+    unicode: 0
+    pivot: {x: -46, y: 45.5}
+    sprite: {fileID: 21300078, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 44
+    x: 710
+    y: 3
+    width: 91
+    height: 93
+    xOffset: -45.5
+    yOffset: 46.5
+    xAdvance: 91
+    scale: 1
+    name: 2 Button
+    hashCode: 320732804
+    unicode: 0
+    pivot: {x: -45.5, y: 46.5}
+    sprite: {fileID: 21300080, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  - id: 45
+    x: 851
+    y: 0
+    width: 93
+    height: 94
+    xOffset: -46.5
+    yOffset: 47
+    xAdvance: 93
+    scale: 1
+    name: 3 Button
+    hashCode: 965338021
+    unicode: 0
+    pivot: {x: -46.5, y: 47}
+    sprite: {fileID: 21300082, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+  fallbackSpriteAssets:
+  - {fileID: 11400000, guid: c41005c129ba4d66911b75229fd70b45, type: 2}
+--- !u!21 &21617378406265902
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: TextMeshPro/Sprite
+  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 78b573e65e1171b47bdaf1114e6836f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorMask: 15
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
