@@ -30,14 +30,16 @@ namespace OmiyaGames.Builds
     /// <date>10/29/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Assets holding settings for creating builds.
+    /// Abstract build settings that are children to <code>RootBuildSetting</code>.
     /// </summary>
+    /// <seealso cref="RootBuildSetting"/>
     public abstract class IChildBuildSetting : IBuildSetting
     {
         [SerializeField]
         private IBuildSetting parentSetting = null;
 
-        public RootBuildSetting RootSetting
+        #region Overrides
+        internal override RootBuildSetting RootSetting
         {
             get
             {
@@ -70,6 +72,7 @@ namespace OmiyaGames.Builds
                 return null;
             }
         }
+        #endregion
 
         public virtual IBuildSetting Parent
         {

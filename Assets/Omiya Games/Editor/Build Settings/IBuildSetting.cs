@@ -35,38 +35,19 @@ namespace OmiyaGames.Builds
     /// </summary>
     public abstract class IBuildSetting : ScriptableObject
     {
-        public struct BuildResult
-        {
-            public enum Status
-            {
-                Info,
-                Success,
-                Warning,
-                Error
-            }
-
-            public BuildResult(Status state, string message)
-            {
-                State = state;
-                Message = message;
-            }
-
-            public Status State
-            {
-                get;
-            }
-
-            public string Message
-            {
-                get;
-            }
-        }
-
         /// <summary>
         /// Returns the maximum number of results possible,
         /// returned by a single build call.
         /// </summary>
-        public abstract int MaxNumberOfResults
+        internal abstract int MaxNumberOfResults
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Returns the root-most parent.
+        /// </summary>
+        internal abstract RootBuildSetting RootSetting
         {
             get;
         }
@@ -76,10 +57,12 @@ namespace OmiyaGames.Builds
         /// </summary>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns></returns>
-        public bool Build(out List<BuildResult> results)
+        public BuildPlayersResult Build()
         {
-            results = new List<BuildResult>(MaxNumberOfResults);
-            return BuildBaseOnSettings(null, ref results);
+            RootBuildSetting root = RootSetting;
+            BuildPlayersResult results = new BuildPlayersResult(root, this);
+            BuildBaseOnSettings(root, results);
+            return results;
         }
 
         /// <summary>
@@ -87,7 +70,7 @@ namespace OmiyaGames.Builds
         /// </summary>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
-        protected abstract bool BuildBaseOnSettings(RootBuildSetting root, ref List<BuildResult> results);
+        protected abstract void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results);
 
         #region Helper Methods
         /// <summary>
@@ -96,27 +79,28 @@ namespace OmiyaGames.Builds
         /// <param name="settings">All the build settings to build from.</param>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
-        protected static bool BuildGroup(RootBuildSetting root, IList<IChildBuildSetting> settings, ref List<BuildResult> results)
+        protected static void BuildGroup(RootBuildSetting root, IEnumerable<IChildBuildSetting> settings, BuildPlayersResult results)
         {
-            bool returnFlag = true;
-
             // Go through all settings
             foreach (IChildBuildSetting setting in settings)
             {
-                // Attempt to make a build
-                if (setting.BuildBaseOnSettings(root, ref results) == false)
+                // First, check if we didn't cancel the build
+                if (results.IsAllBuildsCancelled == true)
                 {
-                    // If the build failed, update return flag
-                    returnFlag = false;
+                    return;
+                }
 
-                    // Check if we need to halt
-                    if (setting.RootSetting.HaltOnFirstError == true)
-                    {
-                        break;
-                    }
+                // Make a build
+                setting.BuildBaseOnSettings(root, results);
+                if (results.LastReport.State == BuildPlayersResult.Status.Error)
+                {
+                    UpdateResults(results, true);
+                }
+                else if (results.LastReport.State == BuildPlayersResult.Status.Cancelled)
+                {
+                    UpdateResults(results, true);
                 }
             }
-            return returnFlag;
         }
 
         protected static void AddSetting(IBuildSetting parent, List<IChildBuildSetting> allSettings, IChildBuildSetting setting)
@@ -136,6 +120,40 @@ namespace OmiyaGames.Builds
             // Remove the element
             allSettings.RemoveAt(index);
             return returnChild;
+        }
+
+        private static void UpdateResults(BuildPlayersResult results, bool isError)
+        {
+            // Grab the result's state
+            RootBuildSetting.BuildProgression state = results.OnBuildCancelled;
+            if (isError == true)
+            {
+                state = results.OnBuildFailed;
+            }
+
+            // Check if we need to display a dialog
+            if (state == RootBuildSetting.BuildProgression.AskWhetherToContinue)
+            {
+                // Display the dialog, and update the build failed state
+                state = results.DisplayBuildProgressionDialog(isError);
+
+                // Update the result as well
+                if (isError == true)
+                {
+                    results.OnBuildFailed = state;
+                }
+                else
+                {
+                    results.OnBuildCancelled = state;
+                }
+            }
+
+            // Check if we need to halt building
+            if (state == RootBuildSetting.BuildProgression.HaltImmediately)
+            {
+                // Halt immediately
+                results.IsAllBuildsCancelled = true;
+            }
         }
         #endregion
     }

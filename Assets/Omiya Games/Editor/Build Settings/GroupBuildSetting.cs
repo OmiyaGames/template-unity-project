@@ -31,14 +31,15 @@ namespace OmiyaGames.Builds
     /// <date>10/29/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Assets holding settings for creating builds.
+    /// A list of <code>IChildBuildSettings</code> to run sequentially.
     /// </summary>
     public class GroupBuildSetting : IChildBuildSetting
     {
         [SerializeField]
-        readonly List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
+        List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
 
-        public override int MaxNumberOfResults
+        #region Overrides
+        internal override int MaxNumberOfResults
         {
             get
             {
@@ -70,6 +71,17 @@ namespace OmiyaGames.Builds
             }
         }
 
+        protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
+        {
+            // Indicate group build started
+            using (new GroupBuildScope(results, this))
+            {
+                // Build the list of settings
+                BuildGroup(root, allSettings, results);
+            }
+        }
+        #endregion
+
         public void Add(IChildBuildSetting addSetting)
         {
             AddSetting(this, allSettings, addSetting);
@@ -78,26 +90,6 @@ namespace OmiyaGames.Builds
         public IChildBuildSetting Remove(int index)
         {
             return RemoveSetting(allSettings, index);
-        }
-
-        protected override bool BuildBaseOnSettings(RootBuildSetting root, ref List<BuildResult> results)
-        {
-            // Check whether root is null or not
-            if (root == null)
-            {
-                // If so, replace it with the root of this variable
-                root = RootSetting;
-            }
-
-            // Indicate group build started
-            results.Add(new BuildResult(BuildResult.Status.Info, "Going through group: " + name));
-
-            // Build the list of settings
-            bool returnFlag = BuildGroup(root, allSettings, ref results);
-
-            // Indicate group build ended
-            results.Add(new BuildResult(BuildResult.Status.Info, "Finished building group: " + name));
-            return returnFlag;
         }
     }
 }
