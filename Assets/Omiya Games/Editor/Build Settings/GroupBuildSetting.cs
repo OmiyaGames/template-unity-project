@@ -35,8 +35,15 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class GroupBuildSetting : IChildBuildSetting
     {
+        [Header("Folder Settings")]
         [SerializeField]
-        List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
+        private bool createEmbeddedFolder = true;
+        [SerializeField]
+        private CustomFileName folderName = new CustomFileName();
+
+        [Header("Child Settings")]
+        [SerializeField]
+        private List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
 
         #region Overrides
         internal override int MaxNumberOfResults
@@ -74,13 +81,29 @@ namespace OmiyaGames.Builds
         protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
         {
             // Indicate group build started
-            using (new GroupBuildScope(results, this))
+            using (new BuildPlayersResult.GroupBuildScope(results, this))
             {
                 // Build the list of settings
                 BuildGroup(root, allSettings, results);
             }
         }
         #endregion
+
+        public string FolderName
+        {
+            get
+            {
+                return folderName.ToString();
+            }
+        }
+
+        public bool IsInEmbeddedFolder
+        {
+            get
+            {
+                return createEmbeddedFolder;
+            }
+        }
 
         public void Add(IChildBuildSetting addSetting)
         {

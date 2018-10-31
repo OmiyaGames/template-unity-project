@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 namespace OmiyaGames.Builds
 {
@@ -42,8 +41,12 @@ namespace OmiyaGames.Builds
             IgnoreAndResumeBuilding,
             HaltImmediately,
         }
+
+        // FIXME: add a custom property drawer prompting for a file browser
         [SerializeField]
-        private string buildPath;
+        private string rootBuildFolder = "";
+        [SerializeField]
+        private CustomFileName newBuildFolderName = new CustomFileName();
         [SerializeField]
         private BuildProgression onBuildFailed = BuildProgression.AskWhetherToContinue;
         [SerializeField]
@@ -56,8 +59,6 @@ namespace OmiyaGames.Builds
         //[SerializeField]
         //[Tooltip("Time-saving flag: If true, builds the current platform first rather than going through them in order")]
         //private bool buildCurrentPlatformFirst = true;
-
-        string[] defaultScenesCache = null;
 
         #region Overrides
         internal override int MaxNumberOfResults
@@ -87,7 +88,7 @@ namespace OmiyaGames.Builds
         protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
         {
             // Indicate group build started
-            using (new GroupBuildScope(results, this))
+            using (new BuildPlayersResult.GroupBuildScope(results, this))
             {
                 // Build the list of settings
                 BuildGroup(root, allSettings, results);
@@ -96,14 +97,6 @@ namespace OmiyaGames.Builds
         #endregion
 
         #region Properties
-        public string BuildPath
-        {
-            get
-            {
-                return buildPath;
-            }
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -125,44 +118,21 @@ namespace OmiyaGames.Builds
                 return onBuildCancelled;
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Helper property that retrieve all the scenes from the build settings.
-        /// </summary>
-        public string[] DefaultScenes
+        public string GetBuildPath()
         {
-            get
+            string customPath = rootBuildFolder;
+            if (string.IsNullOrEmpty(rootBuildFolder) == true)
             {
-                if (defaultScenesCache == null)
+                customPath = UnityEditor.EditorUtility.SaveFolderPanel("Build project to folder", "Builds", "");
+                if (string.IsNullOrEmpty(customPath) == true)
                 {
-                    // Grab all enabled scenes
-                    List<string> EditorScenes = new List<string>();
-                    foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
-                    {
-                        if (scene.enabled == true)
-                        {
-                            EditorScenes.Add(scene.path);
-                        }
-                    }
-                    defaultScenesCache = EditorScenes.ToArray();
+                    throw new System.Exception("No folder assigned to build to.");
                 }
-                return defaultScenesCache;
             }
+            return System.IO.Path.Combine(customPath, newBuildFolderName.ToString());
         }
-        #endregion
-
-        #region Unity Events
-        public void OnEnable()
-        {
-            ResetCache();
-            EditorBuildSettings.sceneListChanged += ResetCache;
-        }
-
-        public void OnDisable()
-        {
-            EditorBuildSettings.sceneListChanged -= ResetCache;
-        }
-        #endregion
 
         public void Add(IChildBuildSetting addSetting)
         {
@@ -172,11 +142,6 @@ namespace OmiyaGames.Builds
         public IChildBuildSetting Remove(int index)
         {
             return RemoveSetting(allSettings, index);
-        }
-
-        private void ResetCache()
-        {
-            defaultScenesCache = null;
         }
     }
 }

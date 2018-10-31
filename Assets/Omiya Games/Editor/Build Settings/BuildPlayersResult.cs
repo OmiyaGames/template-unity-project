@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using UnityEditor;
 using UnityEditor.Build.Reporting;
 
 namespace OmiyaGames.Builds
@@ -71,7 +73,7 @@ namespace OmiyaGames.Builds
             public GroupReport(bool isEntering, IBuildSetting source) : base(source)
             {
                 State = Status.ExitGroup;
-                if(isEntering == true)
+                if (isEntering == true)
                 {
                     State = Status.EnterGroup;
                 }
@@ -118,14 +120,38 @@ namespace OmiyaGames.Builds
                 get;
             }
         }
+
+        public class GroupBuildScope : System.IDisposable
+        {
+            private readonly BuildPlayersResult result;
+            private readonly IBuildSetting setting;
+
+            public GroupBuildScope(BuildPlayersResult result, IBuildSetting setting)
+            {
+                this.result = result;
+                this.setting = setting;
+                result.AddGroupReport(true, setting);
+            }
+
+            public void Dispose()
+            {
+                result.AddGroupReport(false, setting);
+            }
+        }
         #endregion
 
         private readonly List<IReport> allReports;
+        private readonly List<GroupBuildSetting> allEmbeddedGroups;
         private readonly StringBuilder builder = new StringBuilder();
+        private string rootFolderName;
+        private string folderNameCache = null;
+        string[] defaultScenesCache = null;
 
         public BuildPlayersResult(RootBuildSetting root, IBuildSetting info)
         {
             allReports = new List<IReport>(info.MaxNumberOfResults);
+            allEmbeddedGroups = new List<GroupBuildSetting>(info.MaxNumberOfResults);
+            AppName = CustomFileName.AppName;
             Setup(root);
         }
 
@@ -168,6 +194,53 @@ namespace OmiyaGames.Builds
                 return returnReport;
             }
         }
+
+        public string FolderName
+        {
+            get
+            {
+                if (folderNameCache == null)
+                {
+                    builder.Clear();
+                    builder.Append(rootFolderName);
+                    foreach (GroupBuildSetting setting in allEmbeddedGroups)
+                    {
+                        builder.Append(Path.DirectorySeparatorChar);
+                        builder.Append(setting.FolderName);
+                    }
+                }
+                return folderNameCache;
+            }
+        }
+
+        public string AppName
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Helper property that retrieve all the scenes from the build settings.
+        /// </summary>
+        public string[] DefaultScenes
+        {
+            get
+            {
+                if (defaultScenesCache == null)
+                {
+                    // Grab all enabled scenes
+                    List<string> EditorScenes = new List<string>();
+                    foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+                    {
+                        if (scene.enabled == true)
+                        {
+                            EditorScenes.Add(scene.path);
+                        }
+                    }
+                    defaultScenesCache = EditorScenes.ToArray();
+                }
+                return defaultScenesCache;
+            }
+        }
         #endregion
 
         /// <summary>
@@ -180,6 +253,7 @@ namespace OmiyaGames.Builds
             {
                 OnBuildCancelled = root.OnBuildCancelled;
                 OnBuildFailed = root.OnBuildFailed;
+                rootFolderName = root.GetBuildPath();
             }
         }
 
@@ -188,9 +262,29 @@ namespace OmiyaGames.Builds
             allReports.Add(new ChildReport(report, source));
         }
 
-        public void AddGroupReport(bool isEntering, IBuildSetting source)
+        private void AddGroupReport(bool isEntering, IBuildSetting source)
         {
             allReports.Add(new GroupReport(isEntering, source));
+
+            // Check if source is a Group
+            if (source is GroupBuildSetting)
+            {
+                // Check whether to stack the group
+                GroupBuildSetting groupSetting = (GroupBuildSetting)source;
+                if (groupSetting.IsInEmbeddedFolder == true)
+                {
+                    if (isEntering == false)
+                    {
+                        allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
+                        folderNameCache = null;
+                    }
+                    else if (folderNameCache != null)
+                    {
+                        allEmbeddedGroups.Add(groupSetting);
+                        folderNameCache = ConcatenateFolders(folderNameCache, groupSetting.FolderName);
+                    }
+                }
+            }
         }
 
         public void AddPostBuildReport(Status state, string message, IBuildSetting source)
@@ -203,7 +297,7 @@ namespace OmiyaGames.Builds
             // Setup the dialog strings
             string title, promptMeAgain;
             builder.Clear();
-            if(isError == true)
+            if (isError == true)
             {
                 title = "Build Failed";
                 promptMeAgain = "Resume, But Ask Me On The Next Error";
@@ -224,7 +318,7 @@ namespace OmiyaGames.Builds
                 "Stop All", promptMeAgain, "Resume, And Don't Ask Me Again");
 
             // Evaluate options
-            switch(option)
+            switch (option)
             {
                 case 0:
                     return RootBuildSetting.BuildProgression.HaltImmediately;
@@ -239,10 +333,19 @@ namespace OmiyaGames.Builds
         public string Concatenate(params string[] sentences)
         {
             builder.Clear();
-            foreach(string sentence in sentences)
+            foreach (string sentence in sentences)
             {
                 builder.Append(sentence);
             }
+            return builder.ToString();
+        }
+
+        public string ConcatenateFolders(string path, string folder)
+        {
+            builder.Clear();
+            builder.Append(path);
+            builder.Append(Path.DirectorySeparatorChar);
+            builder.Append(folder);
             return builder.ToString();
         }
 
@@ -250,7 +353,7 @@ namespace OmiyaGames.Builds
         {
             int indentLevel = 0, indent;
             builder.Clear();
-            foreach(IReport report in allReports)
+            foreach (IReport report in allReports)
             {
                 // Add newline if this isn't the first report
                 if (builder.Length > 0)
