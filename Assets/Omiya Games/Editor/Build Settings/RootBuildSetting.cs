@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace OmiyaGames.Builds
 {
@@ -35,14 +36,31 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class RootBuildSetting : IBuildSetting
     {
+        public enum BuildProgression
+        {
+            AskWhetherToContinue,
+            IgnoreAndResumeBuilding,
+            HaltImmediately,
+        }
         [SerializeField]
         private string buildPath;
         [SerializeField]
-        private bool haltOnFirstError = false;
+        private BuildProgression onBuildFailed = BuildProgression.AskWhetherToContinue;
+        [SerializeField]
+        private BuildProgression onBuildCancelled = BuildProgression.AskWhetherToContinue;
         [SerializeField]
         List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
 
-        public override int MaxNumberOfResults
+        // TODO: add this optimization flag once we've figured out what platform and debug settings we're on.
+        // Not to mention recursively finding a list of similar build settings to reduce script compiling.
+        //[SerializeField]
+        //[Tooltip("Time-saving flag: If true, builds the current platform first rather than going through them in order")]
+        //private bool buildCurrentPlatformFirst = true;
+
+        string[] defaultScenesCache = null;
+
+        #region Overrides
+        internal override int MaxNumberOfResults
         {
             get
             {
@@ -58,6 +76,26 @@ namespace OmiyaGames.Builds
             }
         }
 
+        internal override RootBuildSetting RootSetting
+        {
+            get
+            {
+                return this;
+            }
+        }
+
+        protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
+        {
+            // Indicate group build started
+            using (new GroupBuildScope(results, this))
+            {
+                // Build the list of settings
+                BuildGroup(root, allSettings, results);
+            }
+        }
+        #endregion
+
+        #region Properties
         public string BuildPath
         {
             get
@@ -66,13 +104,65 @@ namespace OmiyaGames.Builds
             }
         }
 
-        public bool HaltOnFirstError
+        /// <summary>
+        /// 
+        /// </summary>
+        public BuildProgression OnBuildFailed
         {
             get
             {
-                return haltOnFirstError;
+                return onBuildFailed;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public BuildProgression OnBuildCancelled
+        {
+            get
+            {
+                return onBuildCancelled;
+            }
+        }
+
+        /// <summary>
+        /// Helper property that retrieve all the scenes from the build settings.
+        /// </summary>
+        public string[] DefaultScenes
+        {
+            get
+            {
+                if (defaultScenesCache == null)
+                {
+                    // Grab all enabled scenes
+                    List<string> EditorScenes = new List<string>();
+                    foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+                    {
+                        if (scene.enabled == true)
+                        {
+                            EditorScenes.Add(scene.path);
+                        }
+                    }
+                    defaultScenesCache = EditorScenes.ToArray();
+                }
+                return defaultScenesCache;
+            }
+        }
+        #endregion
+
+        #region Unity Events
+        public void OnEnable()
+        {
+            ResetCache();
+            EditorBuildSettings.sceneListChanged += ResetCache;
+        }
+
+        public void OnDisable()
+        {
+            EditorBuildSettings.sceneListChanged -= ResetCache;
+        }
+        #endregion
 
         public void Add(IChildBuildSetting addSetting)
         {
@@ -84,24 +174,9 @@ namespace OmiyaGames.Builds
             return RemoveSetting(allSettings, index);
         }
 
-        protected override bool BuildBaseOnSettings(RootBuildSetting root, ref List<BuildResult> results)
+        private void ResetCache()
         {
-            // Check whether root is null or not
-            if (root == null)
-            {
-                // If so, replace it with this variable
-                root = this;
-            }
-
-            // Indicate group build started
-            results.Add(new BuildResult(BuildResult.Status.Info, "Going through " + name));
-
-            // Build the list of settings
-            bool returnFlag = BuildGroup(root, allSettings, ref results);
-
-            // Indicate group build ended
-            results.Add(new BuildResult(BuildResult.Status.Info, "Finished building " + name));
-            return returnFlag;
+            defaultScenesCache = null;
         }
     }
 }
