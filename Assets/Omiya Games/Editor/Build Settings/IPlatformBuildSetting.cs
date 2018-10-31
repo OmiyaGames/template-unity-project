@@ -55,7 +55,7 @@ namespace OmiyaGames.Builds
         public struct SceneSettings
         {
             [SerializeField]
-            bool enabled;
+            bool enable;
             [SerializeField]
             string[] scenePaths;
 
@@ -63,7 +63,7 @@ namespace OmiyaGames.Builds
             {
                 get
                 {
-                    return enabled;
+                    return enable;
                 }
             }
 
@@ -80,7 +80,7 @@ namespace OmiyaGames.Builds
         public struct ArchiveSettings
         {
             [SerializeField]
-            bool enabled;
+            bool enable;
             [SerializeField]
             bool includeParentFolder;
             [SerializeField]
@@ -95,7 +95,7 @@ namespace OmiyaGames.Builds
                 this.includeParentFolder = includeParentFolder;
 
                 // Setup defaults
-                enabled = false;
+                enable = false;
                 deleteOriginals = false;
             }
 
@@ -103,7 +103,7 @@ namespace OmiyaGames.Builds
             {
                 get
                 {
-                    return enabled;
+                    return enable;
                 }
             }
 
@@ -132,23 +132,64 @@ namespace OmiyaGames.Builds
             }
         }
 
+        [Serializable]
+        public struct DevelopmentSettings
+        {
+            [SerializeField]
+            bool enable;
+            [SerializeField]
+            bool enableDebuggingScripts;
+            [SerializeField]
+            bool buildScriptsOnly;
+
+            public DevelopmentSettings(bool allowDebuggingScripts)
+            {
+                this.enable = false;
+                this.enableDebuggingScripts = allowDebuggingScripts;
+                this.buildScriptsOnly = false;
+            }
+
+            public bool IsEnabled
+            {
+                get
+                {
+                    return enable;
+                }
+            }
+
+            public bool IsBuildingScriptsOnly
+            {
+                get
+                {
+                    return buildScriptsOnly;
+                }
+            }
+
+            public bool IsScriptDebuggingEnabled
+            {
+                get
+                {
+                    return enableDebuggingScripts;
+                }
+            }
+        }
+
         [Header("Common Settings")]
         [SerializeField]
         protected CustomFileName fileName = new CustomFileName();
         [SerializeField]
         protected CustomFileName folderName = new CustomFileName();
         [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        protected CompressionType compression = CompressionType.Default;
-        [SerializeField]
         protected bool enableStrictMode = false;
-
-        [Header("Scene Settings")]
+        /// <summary>
+        /// Only effective if debugSettings is disabled.
+        /// </summary>
         [SerializeField]
-        protected SceneSettings customScenes;
-
-        [Header("Archive Settings")]
+        protected bool enableAssertions = false;
+        [SerializeField]
+        protected SceneSettings customScenes = new SceneSettings();
+        [SerializeField]
+        protected DevelopmentSettings debugSettings = new DevelopmentSettings(true);
         [SerializeField]
         protected ArchiveSettings archiveSettings = new ArchiveSettings(new CustomFileName(), true);
 
@@ -157,7 +198,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                if(archiveSettings.IsEnabled == true)
+                if (archiveSettings.IsEnabled == true)
                 {
                     return 2;
                 }
@@ -209,9 +250,39 @@ namespace OmiyaGames.Builds
             get;
         }
 
-        protected abstract BuildOptions Options
+        protected virtual BuildOptions Options
         {
-            get;
+            get
+            {
+                BuildOptions options = BuildOptions.None;
+
+                // Update strict mode
+                if (enableStrictMode == true)
+                {
+                    options |= BuildOptions.StrictMode;
+                }
+
+                // Check debug settings
+                if (debugSettings.IsEnabled == true)
+                {
+                    // Update debug settings
+                    options |= BuildOptions.Development;
+                    if(debugSettings.IsScriptDebuggingEnabled == true)
+                    {
+                        options |= BuildOptions.AllowDebugging;
+                    }
+                    if (debugSettings.IsBuildingScriptsOnly == true)
+                    {
+                        options |= BuildOptions.BuildScriptsOnly;
+                    }
+                }
+                else if (enableAssertions == true)
+                {
+                    // Update assertion mode
+                    options |= BuildOptions.ForceEnableAssertions;
+                }
+                return options;
+            }
         }
 
         protected virtual void RenameBuild(BuildPlayerOptions options, BuildPlayersResult results)

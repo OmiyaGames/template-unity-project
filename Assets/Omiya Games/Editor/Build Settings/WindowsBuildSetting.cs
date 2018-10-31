@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEditor.Build.Reporting;
-using System;
 
 namespace OmiyaGames.Builds
 {
@@ -37,6 +35,14 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class WindowsBuildSetting : IPlatformBuildSetting
     {
+        [Header("Windows-Specific Settings")]
+        [SerializeField]
+        protected Architecture architecture = Architecture.Build64Bit;
+        [SerializeField]
+        protected CompressionType compression = CompressionType.Default;
+        [SerializeField]
+        protected bool includePdbFles = false;
+
         #region Overrides
         protected override BuildTargetGroup TargetGroup
         {
@@ -65,12 +71,16 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                BuildOptions options = BuildOptions.None;
-                if (enableStrictMode == true)
-                {
-                    options |= BuildOptions.StrictMode;
-                }
+                BuildOptions options = base.Options;
+
+                // Add compression options
                 SetBuildOption(ref options, TargetGroup, compression);
+
+                // Add PDB options
+                if(includePdbFles == true)
+                {
+                    options |= BuildOptions.IncludeTestAssemblies;
+                }
                 return options;
             }
         }
