@@ -168,7 +168,7 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
+        protected override void Build(BuildPlayersResult results)
         {
             // Get options
             BuildPlayerOptions options = GetPlayerOptions(results);

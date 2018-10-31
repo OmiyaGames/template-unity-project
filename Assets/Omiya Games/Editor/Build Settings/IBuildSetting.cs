@@ -61,7 +61,7 @@ namespace OmiyaGames.Builds
         {
             RootBuildSetting root = RootSetting;
             BuildPlayersResult results = new BuildPlayersResult(root, this);
-            BuildBaseOnSettings(root, results);
+            Build(results);
             return results;
         }
 
@@ -70,7 +70,7 @@ namespace OmiyaGames.Builds
         /// </summary>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
-        protected abstract void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results);
+        protected abstract void Build(BuildPlayersResult results);
 
         #region Helper Methods
         /// <summary>
@@ -79,7 +79,7 @@ namespace OmiyaGames.Builds
         /// <param name="settings">All the build settings to build from.</param>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
-        protected static void BuildGroup(RootBuildSetting root, IEnumerable<IChildBuildSetting> settings, BuildPlayersResult results)
+        protected static void BuildGroup(IEnumerable<IChildBuildSetting> settings, BuildPlayersResult results)
         {
             // Go through all settings
             foreach (IChildBuildSetting setting in settings)
@@ -91,7 +91,7 @@ namespace OmiyaGames.Builds
                 }
 
                 // Make a build
-                setting.BuildBaseOnSettings(root, results);
+                setting.Build(results);
                 if (results.LastReport.State == BuildPlayersResult.Status.Error)
                 {
                     UpdateResults(results, true);
