@@ -78,13 +78,13 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
+        protected override void Build(BuildPlayersResult results)
         {
             // Indicate group build started
             using (new BuildPlayersResult.GroupBuildScope(results, this))
             {
                 // Build the list of settings
-                BuildGroup(root, allSettings, results);
+                BuildGroup(allSettings, results);
             }
         }
         #endregion

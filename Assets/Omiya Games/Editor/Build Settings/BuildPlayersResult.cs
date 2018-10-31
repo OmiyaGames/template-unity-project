@@ -262,31 +262,6 @@ namespace OmiyaGames.Builds
             allReports.Add(new ChildReport(report, source));
         }
 
-        private void AddGroupReport(bool isEntering, IBuildSetting source)
-        {
-            allReports.Add(new GroupReport(isEntering, source));
-
-            // Check if source is a Group
-            if (source is GroupBuildSetting)
-            {
-                // Check whether to stack the group
-                GroupBuildSetting groupSetting = (GroupBuildSetting)source;
-                if (groupSetting.IsInEmbeddedFolder == true)
-                {
-                    if (isEntering == false)
-                    {
-                        allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
-                        folderNameCache = null;
-                    }
-                    else if (folderNameCache != null)
-                    {
-                        allEmbeddedGroups.Add(groupSetting);
-                        folderNameCache = ConcatenateFolders(folderNameCache, groupSetting.FolderName);
-                    }
-                }
-            }
-        }
-
         public void AddPostBuildReport(Status state, string message, IBuildSetting source)
         {
             allReports.Add(new PostBuildReport(state, message, source));
@@ -374,6 +349,31 @@ namespace OmiyaGames.Builds
         }
 
         #region Helper Methods
+        private void AddGroupReport(bool isEntering, IBuildSetting source)
+        {
+            allReports.Add(new GroupReport(isEntering, source));
+
+            // Check if source is a Group
+            if (source is GroupBuildSetting)
+            {
+                // Check whether to stack the group
+                GroupBuildSetting groupSetting = (GroupBuildSetting)source;
+                if (groupSetting.IsInEmbeddedFolder == true)
+                {
+                    if (isEntering == false)
+                    {
+                        allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
+                        folderNameCache = null;
+                    }
+                    else if (folderNameCache != null)
+                    {
+                        allEmbeddedGroups.Add(groupSetting);
+                        folderNameCache = ConcatenateFolders(folderNameCache, groupSetting.FolderName);
+                    }
+                }
+            }
+        }
+
         private static void AppendMessage(IReport report, StringBuilder builder, ref int indentLevel)
         {
             switch (report.State)
