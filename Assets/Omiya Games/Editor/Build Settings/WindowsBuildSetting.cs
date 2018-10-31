@@ -35,238 +35,45 @@ namespace OmiyaGames.Builds
     /// <summary>
     /// Build settings for Windows platform.
     /// </summary>
-    public class WindowsBuildSetting : IChildBuildSetting
+    public class WindowsBuildSetting : IPlatformBuildSetting
     {
-        public enum Architecture
-        {
-            BuildUniversal,
-            Build64Bit,
-            Build32Bit
-        }
-
-        public enum CompressionType
-        {
-            Default,
-            LZ4,
-            LZ4HighCompression
-        }
-
-        [Serializable]
-        public struct CustomName
-        {
-            public string ToString(IChildBuildSetting setting)
-            {
-                return base.ToString();
-            }
-        }
-
-        [Serializable]
-        public struct SceneSettings
-        {
-            [SerializeField]
-            bool enabled;
-            [SerializeField]
-            string[] scenePaths;
-
-            public bool IsEnabled
-            {
-                get
-                {
-                    return enabled;
-                }
-            }
-
-            public string[] Paths
-            {
-                get
-                {
-                    return scenePaths;
-                }
-            }
-        }
-
-        [Serializable]
-        public struct ArchiveSettings
-        {
-            [SerializeField]
-            bool enabled;
-            [SerializeField]
-            bool includeParentFolder;
-            [SerializeField]
-            CustomName fileName;
-            [SerializeField]
-            bool deleteOriginals;
-
-            public ArchiveSettings(CustomName fileName, bool includeParentFolder)
-            {
-                // Setup member variables
-                this.fileName = fileName;
-                this.includeParentFolder = includeParentFolder;
-
-                // Setup defaults
-                enabled = false;
-                deleteOriginals = false;
-            }
-
-            public bool IsEnabled
-            {
-                get
-                {
-                    return enabled;
-                }
-            }
-
-            public bool IsParentFolderIncluded
-            {
-                get
-                {
-                    return includeParentFolder;
-                }
-            }
-
-            public CustomName FileName
-            {
-                get
-                {
-                    return fileName;
-                }
-            }
-
-            public bool DeleteOriginals
-            {
-                get
-                {
-                    return deleteOriginals;
-                }
-            }
-        }
-
-        [SerializeField]
-        Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        CompressionType compression = CompressionType.Default;
-        [SerializeField]
-        bool enableStrictMode = false;
-
-        [Header("Scene Settings")]
-        [SerializeField]
-        SceneSettings customScenes;
-
-        [Header("Archive Configuration")]
-        [SerializeField]
-        ArchiveSettings archiveSettings = new ArchiveSettings(new CustomName(), true);
-
         #region Overrides
-        internal override int MaxNumberOfResults
+        protected override BuildTargetGroup TargetGroup
         {
             get
             {
-                if(archiveSettings.IsEnabled == true)
+                return BuildTargetGroup.Standalone;
+            }
+        }
+
+        protected override BuildTarget Target
+        {
+            get
+            {
+                if (architecture == Architecture.Build64Bit)
                 {
-                    return 2;
+                    return BuildTarget.StandaloneWindows64;
                 }
                 else
                 {
-                    return 1;
+                    return BuildTarget.StandaloneWindows;
                 }
             }
         }
 
-        protected override void BuildBaseOnSettings(RootBuildSetting root, BuildPlayersResult results)
+        protected override BuildOptions Options
         {
-            // Get options
-            BuildPlayerOptions options = GetPlayerOptions(root);
-
-            // Build the player
-            BuildReport res = BuildPipeline.BuildPlayer(options);
-
-            // Add the latest results
-            results.AddReport(res, this);
-
-            // Consider making a post build
-            if ((results.LastReport.State == BuildPlayersResult.Status.Success) && (archiveSettings.IsEnabled == true))
+            get
             {
-                if(ArchiveBuild(root) == true)
+                BuildOptions options = BuildOptions.None;
+                if (enableStrictMode == true)
                 {
-                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+                    options |= BuildOptions.StrictMode;
                 }
-                else
-                {
-                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
-                }
+                SetBuildOption(ref options, TargetGroup, compression);
+                return options;
             }
         }
         #endregion
-
-        public BuildPlayerOptions GetPlayerOptions(RootBuildSetting root)
-        {
-            // Setup all options
-            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-
-            // Update the location to build this player
-            buildPlayerOptions.locationPathName = root.BuildPath;
-
-            // Update the scenes to build
-            if (customScenes.IsEnabled == true)
-            {
-                buildPlayerOptions.scenes = customScenes.Paths;
-            }
-            else
-            {
-                buildPlayerOptions.scenes = root.DefaultScenes;
-            }
-
-            // Update the platform target
-            buildPlayerOptions.targetGroup = BuildTargetGroup.Standalone;
-            buildPlayerOptions.target = BuildTarget.StandaloneWindows;
-            if (architecture == Architecture.Build64Bit)
-            {
-                buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
-            }
-
-            // Update the options
-            BuildOptions options = BuildOptions.None;
-            if (enableStrictMode == true)
-            {
-                options |= BuildOptions.StrictMode;
-            }
-            options |= GetBuildOption(ref buildPlayerOptions, compression);
-            buildPlayerOptions.options = options;
-            return buildPlayerOptions;
-        }
-
-        public bool ArchiveBuild(RootBuildSetting root)
-        {
-            return false;
-        }
-
-        private static BuildOptions GetBuildOption(ref BuildPlayerOptions buildPlayerOptions, CompressionType compression)
-        {
-            BuildOptions options = BuildOptions.None;
-            if (compression == CompressionType.LZ4HighCompression)
-            {
-                switch (buildPlayerOptions.targetGroup)
-                {
-                    case BuildTargetGroup.Standalone:
-                    case BuildTargetGroup.Android:
-                    case BuildTargetGroup.iOS:
-                    case BuildTargetGroup.WebGL:
-                        options |= BuildOptions.CompressWithLz4HC;
-                        break;
-                }
-            }
-            else if (compression == CompressionType.LZ4)
-            {
-                switch (buildPlayerOptions.targetGroup)
-                {
-                    case BuildTargetGroup.Standalone:
-                    case BuildTargetGroup.Android:
-                    case BuildTargetGroup.iOS:
-                        options |= BuildOptions.CompressWithLz4;
-                        break;
-                }
-            }
-            return options;
-        }
     }
 }
