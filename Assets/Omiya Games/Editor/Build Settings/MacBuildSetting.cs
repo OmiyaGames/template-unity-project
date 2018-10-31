@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WindowsBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="MacBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,45 +31,28 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Build settings for Mac platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class MacBuildSetting : IPlatformBuildSetting
     {
-        [Header("Windows Settings")]
+        [Header("Mac Settings")]
         [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        protected bool includePdbFles = false;
-        [SerializeField]
-        protected bool forFacebook = false;
+        protected CompressionType compression = CompressionType.Default;
 
         #region Overrides
         protected override BuildTargetGroup TargetGroup
         {
             get
             {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return base.TargetGroup;
-                }
+                return BuildTargetGroup.Standalone;
             }
         }
+
         protected override BuildTarget Target
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
-                {
-                    return BuildTarget.StandaloneWindows64;
-                }
-                else
-                {
-                    return BuildTarget.StandaloneWindows;
-                }
+                return BuildTarget.StandaloneOSX;
             }
         }
 
@@ -79,11 +62,8 @@ namespace OmiyaGames.Builds
             {
                 BuildOptions options = base.Options;
 
-                // Add PDB options
-                if (includePdbFles == true)
-                {
-                    options |= BuildOptions.IncludeTestAssemblies;
-                }
+                // Add compression options
+                SetBuildOption(ref options, TargetGroup, compression);
                 return options;
             }
         }
