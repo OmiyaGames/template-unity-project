@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WindowsBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="AndroidBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,45 +31,29 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Build settings for Android platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class AndroidBuildSetting : MacBuildSetting
     {
-        [Header("Windows Settings")]
+        // FIXME: figure out Android specific build options
+        [Header("Android Settings")]
         [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        protected bool includePdbFles = false;
-        [SerializeField]
-        protected bool forFacebook = false;
+        protected bool acceptExternalModificationsToPlayer = false;
 
         #region Overrides
         protected override BuildTargetGroup TargetGroup
         {
             get
             {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return base.TargetGroup;
-                }
+                return BuildTargetGroup.Android;
             }
         }
+
         protected override BuildTarget Target
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
-                {
-                    return BuildTarget.StandaloneWindows64;
-                }
-                else
-                {
-                    return BuildTarget.StandaloneWindows;
-                }
+                return BuildTarget.Android;
             }
         }
 
@@ -79,10 +63,10 @@ namespace OmiyaGames.Builds
             {
                 BuildOptions options = base.Options;
 
-                // Add PDB options
-                if (includePdbFles == true)
+                // FIXME: add more options once fileds are determined
+                if (acceptExternalModificationsToPlayer == true)
                 {
-                    options |= BuildOptions.IncludeTestAssemblies;
+                    options |= BuildOptions.AcceptExternalModificationsToPlayer;
                 }
                 return options;
             }

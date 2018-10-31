@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WindowsBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="UwpBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,45 +31,29 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Build settings for UWP platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class UwpBuildSetting : MacBuildSetting
     {
-        [Header("Windows Settings")]
-        [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        protected bool includePdbFles = false;
-        [SerializeField]
-        protected bool forFacebook = false;
+        // FIXME: figure out UWP specific options
+        //[Header("UWP Settings")]
+        //[SerializeField]
+        //protected bool acceptExternalModificationsToPlayer = false;
 
         #region Overrides
         protected override BuildTargetGroup TargetGroup
         {
             get
             {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return base.TargetGroup;
-                }
+                return BuildTargetGroup.WSA;
             }
         }
+
         protected override BuildTarget Target
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
-                {
-                    return BuildTarget.StandaloneWindows64;
-                }
-                else
-                {
-                    return BuildTarget.StandaloneWindows;
-                }
+                return BuildTarget.WSAPlayer;
             }
         }
 
@@ -78,12 +62,7 @@ namespace OmiyaGames.Builds
             get
             {
                 BuildOptions options = base.Options;
-
-                // Add PDB options
-                if (includePdbFles == true)
-                {
-                    options |= BuildOptions.IncludeTestAssemblies;
-                }
+                // FIXME: add more options once fileds are determined
                 return options;
             }
         }

@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WindowsBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="WebGlBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,19 +31,68 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Build settings for WebGL platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class WebGlBuildSetting : IPlatformBuildSetting
     {
-        [Header("Windows Settings")]
+        [System.Serializable]
+        public struct WebLocationCheckerSettings
+        {
+            [SerializeField]
+            CustomFileName fileName;
+            [SerializeField]
+            bool includeIndexHtml;
+            [SerializeField]
+            string[] acceptedDomains;
+
+            public WebLocationCheckerSettings(bool includeIndexHtml = true)
+            {
+                // Setup member variables
+                this.fileName = new CustomFileName();
+                this.includeIndexHtml = includeIndexHtml;
+                acceptedDomains = null;
+            }
+
+            public CustomFileName FileName
+            {
+                get
+                {
+                    return fileName;
+                }
+            }
+
+            public bool IncludeIndexHtml
+            {
+                get
+                {
+                    return includeIndexHtml;
+                }
+            }
+
+            public string[] AcceptedDomains
+            {
+                get
+                {
+                    return acceptedDomains;
+                }
+            }
+        }
+
+        [Header("WebGL Settings")]
         [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
-        [SerializeField]
-        protected bool includePdbFles = false;
+        protected WebLocationCheckerSettings[] webLocations;
         [SerializeField]
         protected bool forFacebook = false;
 
         #region Overrides
+        internal override int MaxNumberOfResults
+        {
+            get
+            {
+                return base.MaxNumberOfResults + webLocations.Length;
+            }
+        }
+
         protected override BuildTargetGroup TargetGroup
         {
             get
@@ -54,38 +103,30 @@ namespace OmiyaGames.Builds
                 }
                 else
                 {
-                    return base.TargetGroup;
+                    return BuildTargetGroup.WebGL;
                 }
             }
         }
+
         protected override BuildTarget Target
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
-                {
-                    return BuildTarget.StandaloneWindows64;
-                }
-                else
-                {
-                    return BuildTarget.StandaloneWindows;
-                }
+                return BuildTarget.WebGL;
             }
         }
 
-        protected override BuildOptions Options
+        protected override void ArchiveBuild(BuildPlayersResult results)
         {
-            get
+            foreach(WebLocationCheckerSettings webLocation in webLocations)
             {
-                BuildOptions options = base.Options;
-
-                // Add PDB options
-                if (includePdbFles == true)
-                {
-                    options |= BuildOptions.IncludeTestAssemblies;
-                }
-                return options;
+                // FIXME: to generate the domains file
+                // Then ZIP the folder that's generated
+                throw new System.NotImplementedException();
             }
+
+            // Do the regular archive business
+            ArchiveBuild(results);
         }
         #endregion
     }

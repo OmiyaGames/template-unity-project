@@ -33,7 +33,7 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Base build settings for any platform.
     /// </summary>
     public abstract class IPlatformBuildSetting : IChildBuildSetting
     {
@@ -223,18 +223,7 @@ namespace OmiyaGames.Builds
             // Consider making a post build
             if (results.LastReport.State == BuildPlayersResult.Status.Success)
             {
-                if (archiveSettings.IsEnabled == true)
-                {
-                    if (ArchiveBuild(results) == true)
-                    {
-                        results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
-                    }
-                    else
-                    {
-                        results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
-                    }
-                }
-
+                ArchiveBuild(results);
                 RenameBuild(options, results);
             }
         }
@@ -291,10 +280,21 @@ namespace OmiyaGames.Builds
             FileUtil.MoveFileOrDirectory(options.locationPathName, newFolderName);
         }
 
-        protected virtual bool ArchiveBuild(BuildPlayersResult results)
+        protected virtual void ArchiveBuild(BuildPlayersResult results)
         {
-            // FIXME: to ZIP the folder that's generated
-            throw new System.NotImplementedException();
+            if (archiveSettings.IsEnabled == true)
+            {
+                // FIXME: to ZIP the folder that's generated
+                throw new System.NotImplementedException();
+                if (false)
+                {
+                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+                }
+                else
+                {
+                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
+                }
+            }
         }
 
         private BuildPlayerOptions GetPlayerOptions(BuildPlayersResult results)

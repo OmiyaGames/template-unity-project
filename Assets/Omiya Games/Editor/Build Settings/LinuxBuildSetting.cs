@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="WindowsBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="LinuxBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -31,44 +31,29 @@ namespace OmiyaGames.Builds
     /// <date>10/31/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Windows platform.
+    /// Build settings for Linux platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class LinuxBuildSetting : MacBuildSetting
     {
-        [Header("Windows Settings")]
+        [Header("Linux Settings")]
         [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
+        protected Architecture architecture = Architecture.BuildUniversal;
         [SerializeField]
-        protected bool includePdbFles = false;
-        [SerializeField]
-        protected bool forFacebook = false;
+        protected bool enableHeadlessMode = false;
 
         #region Overrides
-        protected override BuildTargetGroup TargetGroup
-        {
-            get
-            {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return base.TargetGroup;
-                }
-            }
-        }
         protected override BuildTarget Target
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
+                switch(architecture)
                 {
-                    return BuildTarget.StandaloneWindows64;
-                }
-                else
-                {
-                    return BuildTarget.StandaloneWindows;
+                    case Architecture.Build64Bit:
+                        return BuildTarget.StandaloneLinux64;
+                    case Architecture.Build32Bit:
+                        return BuildTarget.StandaloneLinux;
+                    default:
+                        return BuildTarget.StandaloneLinuxUniversal;
                 }
             }
         }
@@ -79,10 +64,10 @@ namespace OmiyaGames.Builds
             {
                 BuildOptions options = base.Options;
 
-                // Add PDB options
-                if (includePdbFles == true)
+                // Add Headless options
+                if (enableHeadlessMode == true)
                 {
-                    options |= BuildOptions.IncludeTestAssemblies;
+                    options |= BuildOptions.EnableHeadlessMode;
                 }
                 return options;
             }
