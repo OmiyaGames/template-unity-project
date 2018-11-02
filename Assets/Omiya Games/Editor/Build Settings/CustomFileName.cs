@@ -42,67 +42,120 @@ namespace OmiyaGames.Builds
     [System.Serializable]
     public struct CustomFileName
     {
-        /// <summary>
-        /// Regular expression to detect /, \, :, *, ?, ", <, >, and |.
-        /// </summary>
-        public static readonly Regex InvalidFileNameCharacters = new Regex("[.\\\\/:*?\"<>|]");
+        public enum PrefillType
+        {
+            Literal,
+            AppName,
+            BuildSettingName,
+            DateTime
+        }
+
+        [System.Serializable]
+        public struct Prefill
+        {
+            [SerializeField]
+            PrefillType type;
+            [SerializeField]
+            string text;
+
+            public Prefill(PrefillType type, string text)
+            {
+                this.type = type;
+                this.text = text;
+            }
+
+            public PrefillType Type => type;
+            public string Text => text;
+        }
+
+        public delegate string GetText(string text, IChildBuildSetting setting);
+
         /// <summary>
         /// The maximum WebGL build name
         /// </summary>
         public const int MaxSlugLength = 45;
-
-        // Since colons are NOT allowed to be used in folder names, using it here!
-        public const string appName = ":App:";
-        public const string settingName = ":Setting:";
+        /// <summary>
+        /// Set of invalid folder chars: "/, \, :, *, ?, ", <, >, and |."
+        /// </summary>
+        public static readonly HashSet<char> InvalidFileNameCharactersSet = new HashSet<char>()
+        {
+            '.',
+            '\\',
+            '/',
+            ':',
+            '*',
+            '?',
+            '"',
+            '<',
+            '>',
+            '|'
+        };
+        /// <summary>
+        /// Map from PrefillType to method
+        /// </summary>
+        public static readonly Dictionary<PrefillType, GetText> TextMapper = new Dictionary<PrefillType, GetText>()
+        {
+            {
+                PrefillType.Literal,
+                (string text, IChildBuildSetting setting) =>
+                {
+                    return text;
+                }
+            }, {
+                PrefillType.AppName,
+                (string text, IChildBuildSetting setting) =>
+                {
+                    return PlayerSettings.productName;
+                }
+            }, {
+                PrefillType.BuildSettingName,
+                (string text, IChildBuildSetting setting) =>
+                {
+                    return setting.name;
+                }
+            }, {
+                PrefillType.DateTime,
+                (string text, IChildBuildSetting setting) =>
+                {
+                    return System.DateTime.Now.ToString(text);
+                }
+            }
+        };
 
         [SerializeField]
-        private string[] names;
+        private Prefill[] names;
         [SerializeField]
         bool asSlug;
 
-        public CustomFileName(bool asSlug = false, params string[] names)
+        public CustomFileName(bool asSlug = false, params Prefill[] names)
         {
             this.names = names;
             this.asSlug = asSlug;
         }
 
-        // FIXME: somehow create a list of settings, some pre-made, to insert into file
         public string ToString(IChildBuildSetting setting)
         {
+            // Append all the text into one
             StringBuilder builder = new StringBuilder();
-            foreach(string name in names)
+            GetText method;
+            foreach (Prefill name in names)
             {
-                switch(name)
+                if(TextMapper.TryGetValue(name.Type, out method) == true)
                 {
-                    case settingName:
-                        builder.Append(setting.name);
-                        break;
-                    case appName:
-                        builder.Append(AppName);
-                        break;
-                    default:
-                        builder.Append(name);
-                        break;
+                    builder.Append(method(name.Text, setting));
                 }
             }
 
-            // Check if this needs to be a slug
-            if(asSlug == true)
-            {
-                return GenerateSlug(builder.ToString());
-            }
-            else
-            {
-                return builder.ToString();
-            }
-        }
+            // Remove invalid characters
+            string returnString = builder.ToString();
+            returnString = RemoveDiacritics(builder, returnString);
 
-        public static string AppName
-        {
-            get
+            // Check if this needs to be a slug
+            if (asSlug == true)
             {
-                return InvalidFileNameCharacters.Replace(RemoveDiacritics(PlayerSettings.productName), "");
+                returnString = GenerateSlug(returnString);
             }
+            return returnString;
         }
 
         /// <summary>
@@ -131,17 +184,17 @@ namespace OmiyaGames.Builds
         /// <summary>
         /// Taken from http://archives.miloush.net/michkap/archive/2007/05/14/2629747.html
         /// </summary>
-        public static string RemoveDiacritics(string text)
+        public static string RemoveDiacritics(StringBuilder stringBuilder, string text)
         {
             string normalizedString = text.Normalize(NormalizationForm.FormD);
-            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Clear();
 
-            for (int index = 0; index < normalizedString.Length; ++index)
+            foreach (char c in normalizedString)
             {
-                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(normalizedString[index]);
-                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if ((unicodeCategory != UnicodeCategory.NonSpacingMark) && (InvalidFileNameCharactersSet.Contains(c) == false))
                 {
-                    stringBuilder.Append(normalizedString[index]);
+                    stringBuilder.Append(c);
                 }
             }
 
