@@ -44,6 +44,7 @@ namespace OmiyaGames.Builds
 
         // FIXME: add a custom property drawer prompting for a file browser
         [SerializeField]
+        [FolderPath]
         private string rootBuildFolder = "";
         [SerializeField]
         private CustomFileName newBuildFolderName = new CustomFileName();

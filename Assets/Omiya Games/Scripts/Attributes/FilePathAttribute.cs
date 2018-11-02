@@ -1,15 +1,10 @@
-﻿using UnityEditor;
-using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
-using UnityEngine;
-using System.IO;
-using System.Collections.Generic;
-using OmiyaGames.Builds;
+﻿using UnityEngine;
+using System;
 
-namespace OmiyaGames.UI.Builds
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="TranslationDictionaryEditor.cs" company="Omiya Games">
+    /// <copyright file="FilePathAttribute.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -33,33 +28,27 @@ namespace OmiyaGames.UI.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>10/29/2018</date>
+    /// <date>11/01/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An editor to allow editing <code>RootBuildSetting</code> scripts.
+    /// Adds a browse button to a string field.
     /// </summary>
-    /// <seealso cref="TranslationDictionary"/>
-
-    // FIXME: Comment back in when ready
-    //[CustomEditor(typeof(RootBuildSetting), true)]
-    public class RootBuildSettingEditor : Editor
+    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+    public class FilePathAttribute : FolderPathAttribute
     {
-        public const string DefaultFileName = "New Build Settings" + Utility.FileExtensionScriptableObject;
-
-        [MenuItem("Assets/Create/Omiya Games/Build Setting", priority = 40)]
-        public static RootBuildSetting CreateTranslationDictionary()
+        /// <summary>
+        /// Adds a browse button to a string field.
+        /// </summary>
+        /// <param name="fileExtensions">The file extention, without "*."</param>
+        /// <param name="defaultPath"></param>
+        public FilePathAttribute(string fileExtensions, string defaultPath = ""/*, bool relativeToResourcesFolder = false*/) : base(defaultPath/*, relativeToResourcesFolder*/)
         {
-            // Setup asset
-            RootBuildSetting newAsset = ScriptableObject.CreateInstance<RootBuildSetting>();
+            FileExtension = fileExtensions;
+        }
 
-            // Setup path to file
-            string folderName = AssetUtility.GetSelectedFolder();
-            string pathOfAsset = Path.Combine(folderName, DefaultFileName);
-            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
-
-            // Create the asset, and prompt the user to rename it
-            ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
-            return newAsset;
+        public string FileExtension
+        {
+            get;
         }
     }
 }
