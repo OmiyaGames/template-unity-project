@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Builds;
@@ -45,6 +46,8 @@ namespace OmiyaGames.UI.Builds
         SerializedProperty onBuildCancelled;
         SerializedProperty allSettings;
 
+        AnimBool foldoutAnimation;
+
         public void OnEnable()
         {
             rootBuildFolder = serializedObject.FindProperty("rootBuildFolder");
@@ -52,17 +55,58 @@ namespace OmiyaGames.UI.Builds
             onBuildFailed = serializedObject.FindProperty("onBuildFailed");
             onBuildCancelled = serializedObject.FindProperty("onBuildCancelled");
             allSettings = serializedObject.FindProperty("allSettings");
+
+            foldoutAnimation = new AnimBool(true, Repaint);
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            EditorGUILayout.PropertyField(onBuildFailed);
-            EditorGUILayout.PropertyField(onBuildCancelled);
+            EditorGUILayout.LabelField("Build Folder", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(rootBuildFolder);
             EditorGUILayout.PropertyField(newBuildFolderName);
-            EditorGUILayout.PropertyField(allSettings);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Interruptions", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(onBuildFailed);
+            EditorGUILayout.PropertyField(onBuildCancelled);
+
+            // Draw stuff
+            DrawFoldout();
+
+            // Build button
+            EditorGUILayout.Space();
+            if (GUI.Button(EditorGUILayout.GetControlRect(), "Build All") == true)
+            {
+                RootBuildSetting setting = target as RootBuildSetting;
+                if (setting != null)
+                {
+                    BuildPlayersResult results = setting.Build();
+                    Debug.Log(results);
+                }
+            }
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawFoldout()
+        {
+            // Draw foldout
+            EditorGUILayout.Space();
+            GUIStyle boldFoldoutStyle = EditorStyles.foldout;
+            FontStyle lastFontStyle = boldFoldoutStyle.fontStyle;
+            boldFoldoutStyle.fontStyle = FontStyle.Bold;
+            foldoutAnimation.target = EditorGUILayout.Foldout(foldoutAnimation.target, "Platforms", boldFoldoutStyle);
+            boldFoldoutStyle.fontStyle = lastFontStyle;
+
+            // Draw the list
+            using (new EditorGUI.IndentLevelScope())
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(foldoutAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    EditorGUILayout.PropertyField(allSettings);
+                }
+            }
         }
     }
 }
