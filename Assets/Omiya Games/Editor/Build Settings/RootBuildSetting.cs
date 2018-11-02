@@ -42,7 +42,6 @@ namespace OmiyaGames.Builds
             HaltImmediately,
         }
 
-        // FIXME: add a custom property drawer prompting for a file browser
         [SerializeField]
         [FolderPath]
         private string rootBuildFolder = "";

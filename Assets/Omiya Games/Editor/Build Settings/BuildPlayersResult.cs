@@ -326,7 +326,7 @@ namespace OmiyaGames.Builds
 
         public override string ToString()
         {
-            int indentLevel = 0, indent;
+            int indentLevel = 0;
             builder.Clear();
             foreach (IReport report in allReports)
             {
@@ -336,19 +336,40 @@ namespace OmiyaGames.Builds
                     builder.AppendLine();
                 }
 
-                // Add indentations, if any
-                for (indent = 0; indent < indentLevel; ++indent)
-                {
-                    builder.Append("  ");
-                }
+                // Add indentation
+                AppendIndentation(ref indentLevel, report);
 
                 // Add report's message
                 AppendMessage(report, builder, ref indentLevel);
             }
-            return base.ToString();
+            return builder.ToString();
         }
 
         #region Helper Methods
+        private int AppendIndentation(ref int indentLevel, IReport report)
+        {
+            int indent;
+            // Adjust indentation
+            if (report.State == Status.ExitGroup)
+            {
+                indentLevel -= 1;
+            }
+
+            // Add indentations, if any
+            for (indent = 0; indent < indentLevel; ++indent)
+            {
+                builder.Append("  ");
+            }
+
+            // Adjust indentation
+            if (report.State == Status.EnterGroup)
+            {
+                indentLevel += 1;
+            }
+
+            return indent;
+        }
+
         private void AddGroupReport(bool isEntering, IBuildSetting source)
         {
             allReports.Add(new GroupReport(isEntering, source));
@@ -379,11 +400,9 @@ namespace OmiyaGames.Builds
             switch (report.State)
             {
                 case Status.EnterGroup:
-                    indentLevel += 1;
                     builder.Append("Entering group: ");
                     break;
                 case Status.ExitGroup:
-                    indentLevel -= 1;
                     builder.Append("Exiting group: ");
                     break;
                 case Status.Success:
