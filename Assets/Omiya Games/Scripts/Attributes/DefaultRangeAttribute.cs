@@ -54,20 +54,6 @@ namespace OmiyaGames
     public class DefaultRangeAttribute : PropertyAttribute
     {
         /// <summary>
-        /// The number set to the value if editor's checkbox is unchecked.
-        /// Best to set to a value that's NOT within the range of <code>min</code> and <code>max</code>.
-        /// </summary>
-        public readonly float defaultNumber;
-        /// <summary>
-        /// Minimum value in the editor's slider.
-        /// </summary>
-        public readonly float min;
-        /// <summary>
-        /// Maximum value in the editor's slider.
-        /// </summary>
-        public readonly float max;
-
-        /// <summary>
         /// Creates a checkbox in the editor. If unchecked, argument is set to first argument.
         /// Otherwise, the user is allowed to set the value to a specified range between min and max (both inclusive).
         /// </summary>
@@ -79,9 +65,9 @@ namespace OmiyaGames
         /// <param name="max">Maximum value in the editor's slider.</param>
         public DefaultRangeAttribute(float defaultNumber, float min, float max)
         {
-            this.defaultNumber = defaultNumber;
-            this.min = min;
-            this.max = max;
+            this.DefaultNumber = defaultNumber;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
@@ -96,9 +82,34 @@ namespace OmiyaGames
         /// <param name="max">Maximum value in the editor's slider.</param>
         public DefaultRangeAttribute(int defaultNumber, int min, int max)
         {
-            this.defaultNumber = defaultNumber;
-            this.min = min;
-            this.max = max;
+            this.DefaultNumber = defaultNumber;
+            this.Min = min;
+            this.Max = max;
+        }
+
+        /// <summary>
+        /// The number set to the value if editor's checkbox is unchecked.
+        /// Best to set to a value that's NOT within the range of <code>min</code> and <code>max</code>.
+        /// </summary>
+        public float DefaultNumber
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Minimum value in the editor's slider.
+        /// </summary>
+        public float Min
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Maximum value in the editor's slider.
+        /// </summary>
+        public float Max
+        {
+            get;
         }
     }
 }
