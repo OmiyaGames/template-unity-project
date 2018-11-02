@@ -57,7 +57,7 @@ namespace OmiyaGames.UI
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return OmiyaGames.EditorUtility.GetHeight(label, 1, VerticalMargin);
+            return OmiyaGames.EditorUiUtility.GetHeight(label, 1, VerticalMargin);
         }
 
         // Draw the property inside the given rect

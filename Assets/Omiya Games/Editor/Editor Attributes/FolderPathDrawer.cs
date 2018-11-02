@@ -80,7 +80,7 @@ namespace OmiyaGames.UI
                     {
                         // Draw the message box
                         position.height -= textPosition.height;
-                        position.height -= EditorUtility.VerticalMargin;
+                        position.height -= EditorUiUtility.VerticalMargin;
                         EditorGUI.HelpBox(position, WrongPathMessage, MessageType.Error);
                     }
                     EditorGUI.EndProperty();
@@ -125,12 +125,12 @@ namespace OmiyaGames.UI
         {
             // Calculate text positioning
             textPosition = position;
-            textPosition.width -= buttonWidth + EditorUtility.VerticalMargin;
+            textPosition.width -= buttonWidth + EditorUiUtility.VerticalMargin;
 
             // Calculate button positioning
             buttonPosition = position;
             buttonPosition.x += textPosition.width;
-            buttonPosition.x += EditorUtility.VerticalMargin;
+            buttonPosition.x += EditorUiUtility.VerticalMargin;
             buttonPosition.width = buttonWidth;
 
             // Draw message box

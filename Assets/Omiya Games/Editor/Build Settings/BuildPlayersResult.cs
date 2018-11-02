@@ -151,7 +151,10 @@ namespace OmiyaGames.Builds
         {
             allReports = new List<IReport>(info.MaxNumberOfResults);
             allEmbeddedGroups = new List<GroupBuildSetting>(info.MaxNumberOfResults);
-            AppName = CustomFileName.AppName;
+
+            //StringBuilder builder = new StringBuilder();
+            //CustomFileName.RemoveDiacritics(builder, PlayerSettings.productName);
+            //AppName = builder.ToString();
             Setup(root);
         }
 
@@ -213,10 +216,10 @@ namespace OmiyaGames.Builds
             }
         }
 
-        public string AppName
-        {
-            get;
-        }
+        //public string AppName
+        //{
+        //    get;
+        //}
 
         /// <summary>
         /// Helper property that retrieve all the scenes from the build settings.

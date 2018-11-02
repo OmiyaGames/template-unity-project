@@ -76,13 +76,13 @@ namespace OmiyaGames.UI.Web
             domainMustContainList = new ReorderableList(serializedObject, domainMustContain, true, true, true, true);
             domainMustContainList.drawHeaderCallback = DrawDomainHeader;
             domainMustContainList.drawElementCallback = DrawDomainElement;
-            domainMustContainList.elementHeight = EditorUtility.SingleLineHeight(VerticalMargin);
+            domainMustContainList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
 
             // Setup waitObjects list
             waitObjectsList = new ReorderableList(serializedObject, waitObjects, true, true, true, true);
             waitObjectsList.drawHeaderCallback = DrawWaitHeader;
             waitObjectsList.drawElementCallback = DrawWaitElement;
-            waitObjectsList.elementHeight = EditorUtility.SingleLineHeight(VerticalMargin);
+            waitObjectsList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
         }
 
         public override void OnInspectorGUI()
