@@ -67,7 +67,7 @@ namespace OmiyaGames.UI.Builds
             interruptionsAnimation = new AnimBool(true, Repaint);
 
             newBuildFolderNameList = new CustomFileNameReorderableList(newBuildFolderName, new GUIContent("New Build Folder Name"));
-            childBuildSettingsList = new ChildBuildSettingReorderableList(allSettings, new GUIContent("All Settings"));
+            childBuildSettingsList = new ChildBuildSettingReorderableList(this.target, allSettings, new GUIContent("All Settings"));
         }
 
         public override void OnInspectorGUI()
