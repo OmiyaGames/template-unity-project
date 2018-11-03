@@ -94,7 +94,7 @@ namespace OmiyaGames.UI.Builds
         {
             names = property.FindPropertyRelative("names");
             asSlug = property.FindPropertyRelative("asSlug");
-            if ((namesList == null) || (namesList.NamesProperty != property))
+            if (namesList == null)
             {
                 namesList = new CustomFileNameReorderableList(names, asSlug, label);
             }
