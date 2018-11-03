@@ -176,9 +176,13 @@ namespace OmiyaGames.Builds
 
         [Header("Common Settings")]
         [SerializeField]
-        protected CustomFileName fileName = new CustomFileName();
+        protected CustomFileName fileName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.AppName));
         [SerializeField]
-        protected CustomFileName folderName = new CustomFileName();
+        protected CustomFileName folderName = new CustomFileName(false,
+            new CustomFileName.Prefill(CustomFileName.PrefillType.AppName),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " ("),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, "}"));
         [SerializeField]
         protected bool enableStrictMode = false;
         /// <summary>
