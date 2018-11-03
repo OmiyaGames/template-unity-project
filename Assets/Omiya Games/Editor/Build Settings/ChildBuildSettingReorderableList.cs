@@ -60,9 +60,10 @@ namespace OmiyaGames.UI.Builds
 
         public readonly BuildSettingCreator[] AllMethods;
 
-        public ChildBuildSettingReorderableList(SerializedProperty property, GUIContent label)
+        public ChildBuildSettingReorderableList(UnityEngine.Object target, SerializedProperty property, GUIContent label)
         {
             // Member Variable
+            Target = target;
             Property = property;
             Label = label;
 
@@ -71,7 +72,7 @@ namespace OmiyaGames.UI.Builds
             List.drawHeaderCallback = DrawBuildSettingListHeader;
             List.drawElementCallback = DrawBuildSettingListElement;
             List.onAddDropdownCallback = DrawBuildSettingListDropdown;
-            List.elementHeight = EditorUiUtility.GetHeight(2);
+            List.elementHeight = EditorUiUtility.GetHeight(2, 4f);
 
             // Setup all Methods
             AllMethods = new BuildSettingCreator[]
@@ -114,6 +115,11 @@ namespace OmiyaGames.UI.Builds
         }
 
         #region Properties
+        public UnityEngine.Object Target
+        {
+            get;
+        }
+
         public SerializedProperty Property
         {
             get;
@@ -146,10 +152,10 @@ namespace OmiyaGames.UI.Builds
             rect.y += EditorUiUtility.VerticalMargin;
 
             // Draw the object field
-            bool originalEnabled = GUI.enabled;
-            GUI.enabled = false;
-            EditorGUI.ObjectField(rect, "", element.objectReferenceValue, typeof(IChildBuildSetting), false);
-            GUI.enabled = originalEnabled;
+            //bool originalEnabled = GUI.enabled;
+            //GUI.enabled = false;
+            element.objectReferenceValue = EditorGUI.ObjectField(rect, "", element.objectReferenceValue, typeof(IChildBuildSetting), false);
+            //GUI.enabled = originalEnabled;
 
             // Calculate position
             rect.y += rect.height;
@@ -182,10 +188,15 @@ namespace OmiyaGames.UI.Builds
 
             // Setup data field
             T instance = ScriptableObject.CreateInstance<T>();
-            Debug.Log(instance);
             instance.name = name;
+            instance.Parent = Target as IBuildSetting;
+
+            // Create this asset
+            AssetDatabase.AddObjectToAsset(instance, Target);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(instance));
+
+            // Update the properties
             element.objectReferenceValue = instance;
-            Debug.Log(element.objectReferenceValue);
             return element;
         }
 
