@@ -46,8 +46,11 @@ namespace OmiyaGames.UI.Builds
         SerializedProperty onBuildCancelled;
         SerializedProperty allSettings;
 
-        AnimBool foldoutAnimation;
+        AnimBool folderAnimation;
+        AnimBool buildSettingsAnimation;
+        AnimBool interruptionsAnimation;
         CustomFileNameReorderableList newBuildFolderNameList;
+        ChildBuildSettingReorderableList childBuildSettingsList;
         string previewPath = null;
         readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
 
@@ -59,48 +62,28 @@ namespace OmiyaGames.UI.Builds
             onBuildCancelled = serializedObject.FindProperty("onBuildCancelled");
             allSettings = serializedObject.FindProperty("allSettings");
 
-            foldoutAnimation = new AnimBool(true, Repaint);
+            folderAnimation = new AnimBool(true, Repaint);
+            buildSettingsAnimation = new AnimBool(true, Repaint);
+            interruptionsAnimation = new AnimBool(true, Repaint);
 
             newBuildFolderNameList = new CustomFileNameReorderableList(newBuildFolderName, new GUIContent("New Build Folder Name"));
+            childBuildSettingsList = new ChildBuildSettingReorderableList(allSettings, new GUIContent("All Settings"));
         }
 
         public override void OnInspectorGUI()
         {
-            // Setup variables
-            CustomFileName name = CustomFileNameDrawer.GetTarget(newBuildFolderName);
-            builder.Clear();
-
             serializedObject.Update();
-            EditorGUILayout.LabelField("Build Folder", EditorStyles.boldLabel);
 
-            if (string.IsNullOrEmpty(previewPath) == true)
-            {
-                builder.AppendLine("Preview:");
-                builder.Append(rootBuildFolder.stringValue);
-                if (builder[builder.Length - 1] != '/')
-                {
-                    builder.Append('/');
-                }
-                builder.Append(name.ToString((RootBuildSetting)target));
-                previewPath = builder.ToString();
-            }
-            EditorGUILayout.HelpBox(previewPath, MessageType.None);
-
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(rootBuildFolder);
-            newBuildFolderNameList.List.DoLayoutList();
-            if(EditorGUI.EndChangeCheck() == true)
-            {
-                previewPath = null;
-            }
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Interruptions", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(onBuildFailed);
-            EditorGUILayout.PropertyField(onBuildCancelled);
+            // Draw build folder group
+            DrawBuildFolder();
 
             // Draw stuff
-            DrawFoldout();
+            EditorGUILayout.Space();
+            DrawBuildSettingList();
+
+            // Draw interruptions
+            EditorGUILayout.Space();
+            DrawInterruptions();
 
             // Build button
             EditorGUILayout.Space();
@@ -116,25 +99,82 @@ namespace OmiyaGames.UI.Builds
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawFoldout()
+        public static void DrawBoldFoldout(AnimBool buildSettingsAnimation, string displayLabel)
         {
-            // Draw foldout
-            EditorGUILayout.Space();
             GUIStyle boldFoldoutStyle = EditorStyles.foldout;
             FontStyle lastFontStyle = boldFoldoutStyle.fontStyle;
             boldFoldoutStyle.fontStyle = FontStyle.Bold;
-            foldoutAnimation.target = EditorGUILayout.Foldout(foldoutAnimation.target, "Platforms", boldFoldoutStyle);
+            buildSettingsAnimation.target = EditorGUILayout.Foldout(buildSettingsAnimation.target, displayLabel, boldFoldoutStyle);
             boldFoldoutStyle.fontStyle = lastFontStyle;
+        }
 
-            // Draw the list
-            using (new EditorGUI.IndentLevelScope())
-            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(foldoutAnimation.faded))
+        private void DrawInterruptions()
+        {
+            DrawBoldFoldout(interruptionsAnimation, "Interruptions");
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(interruptionsAnimation.faded))
             {
                 if (scope.visible == true)
                 {
-                    EditorGUILayout.PropertyField(allSettings);
+                    EditorGUILayout.PropertyField(onBuildFailed);
+                    EditorGUILayout.PropertyField(onBuildCancelled);
                 }
             }
+        }
+
+        private void DrawBuildFolder()
+        {
+            // Draw the build folder
+            DrawBoldFoldout(folderAnimation, "Build Folder");
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(folderAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    if (string.IsNullOrEmpty(previewPath) == true)
+                    {
+                        previewPath = GetPathPreview();
+                    }
+                    EditorGUILayout.HelpBox(previewPath, MessageType.None);
+
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.PropertyField(rootBuildFolder);
+                    newBuildFolderNameList.List.DoLayoutList();
+                    if (EditorGUI.EndChangeCheck() == true)
+                    {
+                        previewPath = null;
+                    }
+                }
+            }
+        }
+
+        private void DrawBuildSettingList()
+        {
+            // Draw foldout
+            DrawBoldFoldout(buildSettingsAnimation, "Platforms");
+
+            // Draw the list
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(buildSettingsAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    childBuildSettingsList.List.DoLayoutList();
+                }
+            }
+        }
+
+        private string GetPathPreview()
+        {
+            // Setup variables
+            CustomFileName name = CustomFileNameDrawer.GetTarget(newBuildFolderName);
+            builder.Clear();
+            builder.AppendLine("Preview:");
+            builder.Append(rootBuildFolder.stringValue);
+            if (builder[builder.Length - 1] != '/')
+            {
+                builder.Append('/');
+            }
+            builder.Append(name.ToString((RootBuildSetting)target));
+            return builder.ToString();
         }
     }
 }

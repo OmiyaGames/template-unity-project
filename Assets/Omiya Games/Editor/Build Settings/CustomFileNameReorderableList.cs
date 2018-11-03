@@ -7,7 +7,7 @@ using System;
 namespace OmiyaGames.UI.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="CustomFileNameDrawer.cs" company="Omiya Games">
+    /// <copyright file="CustomFileNameReorderableList.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games

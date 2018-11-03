@@ -58,6 +58,7 @@ namespace OmiyaGames.Builds
                 }
             }
         }
+
         protected override BuildTarget Target
         {
             get

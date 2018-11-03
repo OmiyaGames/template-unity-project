@@ -69,7 +69,7 @@ namespace OmiyaGames.Builds
             [SerializeField]
             string text;
 
-            public Prefill(PrefillType type, string text)
+            public Prefill(PrefillType type, string text = null)
             {
                 this.type = type;
                 this.text = text;
