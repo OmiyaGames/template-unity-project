@@ -48,6 +48,7 @@ namespace OmiyaGames.UI.Builds
 
         AnimBool foldoutAnimation;
         CustomFileNameReorderableList newBuildFolderNameList;
+        string previewPath = null;
         readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
 
         public void OnEnable()
@@ -72,17 +73,26 @@ namespace OmiyaGames.UI.Builds
             serializedObject.Update();
             EditorGUILayout.LabelField("Build Folder", EditorStyles.boldLabel);
 
-            builder.AppendLine("Preview:");
-            builder.Append(rootBuildFolder.stringValue);
-            if (builder[builder.Length - 1] != '/')
+            if (string.IsNullOrEmpty(previewPath) == true)
             {
-                builder.Append('/');
+                builder.AppendLine("Preview:");
+                builder.Append(rootBuildFolder.stringValue);
+                if (builder[builder.Length - 1] != '/')
+                {
+                    builder.Append('/');
+                }
+                builder.Append(name.ToString((RootBuildSetting)target));
+                previewPath = builder.ToString();
             }
-            builder.Append(name.ToString((RootBuildSetting)target));
-            EditorGUILayout.HelpBox(builder.ToString(), MessageType.None);
+            EditorGUILayout.HelpBox(previewPath, MessageType.None);
 
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(rootBuildFolder);
             newBuildFolderNameList.List.DoLayoutList();
+            if(EditorGUI.EndChangeCheck() == true)
+            {
+                previewPath = null;
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Interruptions", EditorStyles.boldLabel);

@@ -60,7 +60,7 @@ namespace OmiyaGames.Builds
                     IBuildSetting.DefaultDateTimeText
                 }, {
                     PrefillType.Literal,
-                    "-"
+                    " - "
                 }
             };
 
