@@ -47,6 +47,8 @@ namespace OmiyaGames.UI.Builds
         SerializedProperty allSettings;
 
         AnimBool foldoutAnimation;
+        CustomFileNameReorderableList newBuildFolderNameList;
+        readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
 
         public void OnEnable()
         {
@@ -57,14 +59,30 @@ namespace OmiyaGames.UI.Builds
             allSettings = serializedObject.FindProperty("allSettings");
 
             foldoutAnimation = new AnimBool(true, Repaint);
+
+            newBuildFolderNameList = new CustomFileNameReorderableList(newBuildFolderName, new GUIContent("New Build Folder Name"));
         }
 
         public override void OnInspectorGUI()
         {
+            // Setup variables
+            CustomFileName name = CustomFileNameDrawer.GetTarget(newBuildFolderName);
+            builder.Clear();
+
             serializedObject.Update();
             EditorGUILayout.LabelField("Build Folder", EditorStyles.boldLabel);
+
+            builder.AppendLine("Preview:");
+            builder.Append(rootBuildFolder.stringValue);
+            if (builder[builder.Length - 1] != '/')
+            {
+                builder.Append('/');
+            }
+            builder.Append(name.ToString((RootBuildSetting)target));
+            EditorGUILayout.HelpBox(builder.ToString(), MessageType.None);
+
             EditorGUILayout.PropertyField(rootBuildFolder);
-            EditorGUILayout.PropertyField(newBuildFolderName);
+            newBuildFolderNameList.List.DoLayoutList();
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Interruptions", EditorStyles.boldLabel);

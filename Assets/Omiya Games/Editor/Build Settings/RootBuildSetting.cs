@@ -46,7 +46,10 @@ namespace OmiyaGames.Builds
         [FolderPath]
         private string rootBuildFolder = "";
         [SerializeField]
-        private CustomFileName newBuildFolderName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName, ""));
+        private CustomFileName newBuildFolderName = new CustomFileName(false,
+            new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName, null),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, "-"),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.DateTime, DefaultDateTimeText));
         [SerializeField]
         private BuildProgression onBuildFailed = BuildProgression.AskWhetherToContinue;
         [SerializeField]

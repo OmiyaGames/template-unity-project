@@ -35,6 +35,8 @@ namespace OmiyaGames.Builds
     /// </summary>
     public abstract class IBuildSetting : ScriptableObject
     {
+        public const string DefaultDateTimeText = "yyyy.MM.dd-HH.mm";
+
         /// <summary>
         /// Returns the maximum number of results possible,
         /// returned by a single build call.

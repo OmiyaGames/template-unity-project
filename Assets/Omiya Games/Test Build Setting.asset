@@ -12,10 +12,15 @@ MonoBehaviour:
   m_Name: Test Build Setting
   m_EditorClassIdentifier: 
   rootBuildFolder: D:/Projects/hg/template-unity-project/Builds
-  testFile: D:/Projects/hg/template-unity-project/Builds/README.txt
   newBuildFolderName:
-    names: []
-    asSlug: 1
+    names:
+    - type: 2
+      text: 
+    - type: 0
+      text: '-'
+    - type: 3
+      text: yyyy.MM.dd-HH.mm
+    asSlug: 0
   onBuildFailed: 0
   onBuildCancelled: 0
   allSettings: []

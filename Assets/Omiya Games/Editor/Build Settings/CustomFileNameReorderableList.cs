@@ -72,7 +72,7 @@ namespace OmiyaGames.UI.Builds
             List.drawHeaderCallback = DrawNamesListHeader;
             List.drawElementCallback = DrawNamesListElement;
             List.onAddDropdownCallback = DrawNameListDropdown;
-            List.elementHeight = EditorGUIUtility.singleLineHeight + EditorUiUtility.VerticalMargin;
+            List.elementHeight = EditorUiUtility.SingleLineHeight(EditorUiUtility.VerticalMargin);
         }
 
         #region Properties
@@ -120,26 +120,36 @@ namespace OmiyaGames.UI.Builds
             // Draw the text
             float originalWidth = rect.width;
             rect.width = TypeWidth;
-            rect.height = EditorGUIUtility.singleLineHeight;
+            rect.y += EditorUiUtility.VerticalMargin;
 
             // Draw enumerator
             type.enumValueIndex = EditorGUI.IntPopup(rect, type.enumValueIndex, type.enumDisplayNames, PrefillTypeValues);
 
             // Draw the text field (if necessary)
-            bool originalEnabled = GUI.enabled;
+            bool canEditText = true;
             switch (type.enumValueIndex)
             {
                 case (int)CustomFileName.PrefillType.AppName:
                 case (int)CustomFileName.PrefillType.BuildSettingName:
-                    GUI.enabled = false;
+                    canEditText = false;
                     break;
             }
             rect.x += (EditorUiUtility.VerticalMargin + TypeWidth);
             rect.width = (originalWidth - (TypeWidth + EditorUiUtility.VerticalMargin));
 
             // Draw text field
-            text.stringValue = EditorGUI.TextField(rect, text.stringValue);
-            GUI.enabled = originalEnabled;
+            bool originalEnabled = GUI.enabled;
+            if(canEditText == true)
+            {
+                rect.height = EditorGUIUtility.singleLineHeight - EditorUiUtility.VerticalMargin;
+                text.stringValue = EditorGUI.TextField(rect, text.stringValue);
+            }
+            else
+            {
+                GUI.enabled = false;
+                EditorGUI.SelectableLabel(rect, text.stringValue);
+                GUI.enabled = originalEnabled;
+            }
         }
 
         private void DrawNameListDropdown(Rect buttonRect, ReorderableList list)
@@ -159,9 +169,20 @@ namespace OmiyaGames.UI.Builds
             List.serializedProperty.arraySize++;
             List.index = index;
 
-            CustomFileName.PrefillType data = (CustomFileName.PrefillType)arg;
             SerializedProperty element = List.serializedProperty.GetArrayElementAtIndex(index);
+
+            // Setup data field
+            CustomFileName.PrefillType data = (CustomFileName.PrefillType)arg;
             element.FindPropertyRelative("type").enumValueIndex = (int)data;
+
+            // Setup string value
+            string text;
+            if(CustomFileName.Prefill.DefaultTextMapper.TryGetValue(data, out text) == true)
+            {
+                element.FindPropertyRelative("text").stringValue = text;
+            }
+
+            // Apply the property
             List.serializedProperty.serializedObject.ApplyModifiedProperties();
         }
     }

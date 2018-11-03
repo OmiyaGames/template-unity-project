@@ -53,6 +53,17 @@ namespace OmiyaGames.Builds
         [System.Serializable]
         public struct Prefill
         {
+            public static readonly Dictionary<PrefillType, string> DefaultTextMapper = new Dictionary<PrefillType, string>()
+            {
+                {
+                    PrefillType.DateTime,
+                    IBuildSetting.DefaultDateTimeText
+                }, {
+                    PrefillType.Literal,
+                    "-"
+                }
+            };
+
             [SerializeField]
             PrefillType type;
             [SerializeField]
@@ -68,7 +79,7 @@ namespace OmiyaGames.Builds
             public string Text => text;
         }
 
-        public delegate string GetText(string text, IChildBuildSetting setting);
+        public delegate string GetText(string text, IBuildSetting setting);
 
         /// <summary>
         /// The maximum WebGL build name
@@ -79,7 +90,6 @@ namespace OmiyaGames.Builds
         /// </summary>
         public static readonly HashSet<char> InvalidFileNameCharactersSet = new HashSet<char>()
         {
-            '.',
             '\\',
             '/',
             ':',
@@ -97,25 +107,25 @@ namespace OmiyaGames.Builds
         {
             {
                 PrefillType.Literal,
-                (string text, IChildBuildSetting setting) =>
+                (string text, IBuildSetting setting) =>
                 {
                     return text;
                 }
             }, {
                 PrefillType.AppName,
-                (string text, IChildBuildSetting setting) =>
+                (string text, IBuildSetting setting) =>
                 {
                     return PlayerSettings.productName;
                 }
             }, {
                 PrefillType.BuildSettingName,
-                (string text, IChildBuildSetting setting) =>
+                (string text, IBuildSetting setting) =>
                 {
                     return setting.name;
                 }
             }, {
                 PrefillType.DateTime,
-                (string text, IChildBuildSetting setting) =>
+                (string text, IBuildSetting setting) =>
                 {
                     return System.DateTime.Now.ToString(text);
                 }
@@ -133,7 +143,7 @@ namespace OmiyaGames.Builds
             this.asSlug = asSlug;
         }
 
-        public string ToString(IChildBuildSetting setting)
+        public string ToString(IBuildSetting setting)
         {
             // Append all the text into one
             StringBuilder builder = new StringBuilder();
