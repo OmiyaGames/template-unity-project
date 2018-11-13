@@ -386,7 +386,10 @@ namespace OmiyaGames.Builds
                 {
                     if (isEntering == false)
                     {
-                        allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
+                        if(allEmbeddedGroups.Count > 0)
+                        {
+                            allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
+                        }
                         folderNameCache = null;
                     }
                     else if (folderNameCache != null)

@@ -38,7 +38,7 @@ namespace OmiyaGames.UI.Builds
     /// </summary>
     /// <seealso cref="RootBuildSetting"/>
     [CustomEditor(typeof(RootBuildSetting))]
-    public class RootBuildSettingEditor : Editor
+    public class RootBuildSettingEditor : IBuildSettingEditor
     {
         SerializedProperty rootBuildFolder;
         SerializedProperty newBuildFolderName;
@@ -46,23 +46,21 @@ namespace OmiyaGames.UI.Builds
         SerializedProperty onBuildCancelled;
         SerializedProperty allSettings;
 
-        AnimBool folderAnimation;
         AnimBool buildSettingsAnimation;
         AnimBool interruptionsAnimation;
         CustomFileNameReorderableList newBuildFolderNameList;
         ChildBuildSettingReorderableList childBuildSettingsList;
-        string previewPath = null;
-        readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
 
-        public void OnEnable()
+        public override void OnEnable()
         {
+            base.OnEnable();
+
             rootBuildFolder = serializedObject.FindProperty("rootBuildFolder");
             newBuildFolderName = serializedObject.FindProperty("newBuildFolderName");
             onBuildFailed = serializedObject.FindProperty("onBuildFailed");
             onBuildCancelled = serializedObject.FindProperty("onBuildCancelled");
             allSettings = serializedObject.FindProperty("allSettings");
 
-            folderAnimation = new AnimBool(true, Repaint);
             buildSettingsAnimation = new AnimBool(true, Repaint);
             interruptionsAnimation = new AnimBool(true, Repaint);
 
@@ -75,7 +73,7 @@ namespace OmiyaGames.UI.Builds
             serializedObject.Update();
 
             // Draw build folder group
-            DrawBuildFolder();
+            DrawBuildFolder(rootBuildFolder, newBuildFolderNameList);
 
             // Draw stuff
             EditorGUILayout.Space();
@@ -99,15 +97,6 @@ namespace OmiyaGames.UI.Builds
             serializedObject.ApplyModifiedProperties();
         }
 
-        public static void DrawBoldFoldout(AnimBool buildSettingsAnimation, string displayLabel)
-        {
-            GUIStyle boldFoldoutStyle = EditorStyles.foldout;
-            FontStyle lastFontStyle = boldFoldoutStyle.fontStyle;
-            boldFoldoutStyle.fontStyle = FontStyle.Bold;
-            buildSettingsAnimation.target = EditorGUILayout.Foldout(buildSettingsAnimation.target, displayLabel, boldFoldoutStyle);
-            boldFoldoutStyle.fontStyle = lastFontStyle;
-        }
-
         private void DrawInterruptions()
         {
             DrawBoldFoldout(interruptionsAnimation, "Interruptions");
@@ -117,32 +106,6 @@ namespace OmiyaGames.UI.Builds
                 {
                     EditorGUILayout.PropertyField(onBuildFailed);
                     EditorGUILayout.PropertyField(onBuildCancelled);
-                }
-            }
-        }
-
-        private void DrawBuildFolder()
-        {
-            // Draw the build folder
-            DrawBoldFoldout(folderAnimation, "Build Folder");
-            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(folderAnimation.faded))
-            {
-                if (scope.visible == true)
-                {
-                    if (string.IsNullOrEmpty(previewPath) == true)
-                    {
-                        previewPath = GetPathPreview();
-                    }
-                    EditorGUILayout.HelpBox(previewPath, MessageType.None);
-
-
-                    EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.PropertyField(rootBuildFolder);
-                    newBuildFolderNameList.List.DoLayoutList();
-                    if (EditorGUI.EndChangeCheck() == true)
-                    {
-                        previewPath = null;
-                    }
                 }
             }
         }
@@ -162,7 +125,7 @@ namespace OmiyaGames.UI.Builds
             }
         }
 
-        private string GetPathPreview()
+        public override string GetPathPreview()
         {
             // Setup variables
             CustomFileName name = CustomFileNameDrawer.GetTarget(newBuildFolderName);

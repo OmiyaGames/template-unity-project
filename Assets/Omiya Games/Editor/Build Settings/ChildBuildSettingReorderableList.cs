@@ -72,6 +72,8 @@ namespace OmiyaGames.UI.Builds
             List.drawHeaderCallback = DrawBuildSettingListHeader;
             List.drawElementCallback = DrawBuildSettingListElement;
             List.onAddDropdownCallback = DrawBuildSettingListDropdown;
+            List.onReorderCallback = OnBuildSettingListReorder;
+            List.onRemoveCallback = OnBuildSettingListRemove;
             List.elementHeight = EditorUiUtility.GetHeight(2, 4f);
 
             // Setup all Methods
@@ -152,17 +154,17 @@ namespace OmiyaGames.UI.Builds
             rect.y += EditorUiUtility.VerticalMargin;
 
             // Draw the object field
-            //bool originalEnabled = GUI.enabled;
+            bool originalEnabled = GUI.enabled;
             //GUI.enabled = false;
             element.objectReferenceValue = EditorGUI.ObjectField(rect, "", element.objectReferenceValue, typeof(IChildBuildSetting), false);
-            //GUI.enabled = originalEnabled;
+            GUI.enabled = originalEnabled;
 
             // Calculate position
             rect.y += rect.height;
             rect.y += EditorUiUtility.VerticalMargin;
 
             // Draw Edit buttons
-            DrawButtons(rect);
+            DrawButtons(rect, element.objectReferenceValue);
         }
 
         private void DrawBuildSettingListDropdown(Rect buttonRect, ReorderableList list)
@@ -188,8 +190,8 @@ namespace OmiyaGames.UI.Builds
 
             // Setup data field
             T instance = ScriptableObject.CreateInstance<T>();
-            instance.name = name;
             instance.Parent = Target as IBuildSetting;
+            instance.name = name;
 
             // Create this asset
             AssetDatabase.AddObjectToAsset(instance, Target);
@@ -206,13 +208,19 @@ namespace OmiyaGames.UI.Builds
             ApplyModification();
         }
 
-        private void Duplicate<T>(string name, T original) where T : IChildBuildSetting
+        private void Duplicate<T>(string name, T original) where T : UnityEngine.Object
         {
             SerializedProperty element = CreateNewElement();
 
             // Setup data field
-            T instance = ScriptableObject.Instantiate<T>(original);
+            T instance = UnityEngine.Object.Instantiate(original);
             instance.name = name;
+
+            // Create this asset
+            AssetDatabase.AddObjectToAsset(instance, Target);
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(instance));
+
+            // Update the properties
             element.objectReferenceValue = instance;
 
             // Apply the property
@@ -232,26 +240,72 @@ namespace OmiyaGames.UI.Builds
             return List.serializedProperty.GetArrayElementAtIndex(index);
         }
 
-        private static void DrawButtons(Rect rect)
+        private void DrawButtons(Rect rect, UnityEngine.Object serializedObject)
         {
+            // Unindent
+            bool originalEnabled = GUI.enabled;
+            rect.x -= EditorUiUtility.IndentSpace;
+            rect.width += EditorUiUtility.IndentSpace;
+
+            // Draw Edit Button
             rect.width -= (EditorUiUtility.VerticalMargin * 2);
             rect.width /= 3f;
             if (GUI.Button(rect, "Edit") == true)
             {
-                Debug.Log("Hit Edit button");
+                // Select object
+                Selection.activeObject = serializedObject;
             }
+
+            // Draw Duplicate Button
             rect.x += EditorUiUtility.VerticalMargin;
             rect.x += rect.width;
             if (GUI.Button(rect, "Duplicate") == true)
             {
-                Debug.Log("Hit Duplicate button");
+                // Duplicate object
+                Duplicate(serializedObject.name + " (Clone)", serializedObject);
             }
+
+            // Draw build button
+            IChildBuildSetting setting = serializedObject as IChildBuildSetting;
+            GUI.enabled = (setting != null);
             rect.x += EditorUiUtility.VerticalMargin;
             rect.x += rect.width;
             if (GUI.Button(rect, "Build") == true)
             {
-                Debug.Log("Build");
+                // Make a build
+                Debug.Log(setting.Build());
             }
+            GUI.enabled = originalEnabled;
+        }
+
+        private void OnBuildSettingListReorder(ReorderableList list)
+        {
+            for (int index = 0; index < list.count; ++index)
+            {
+                SerializedProperty element = Property.GetArrayElementAtIndex(index);
+                AssetDatabase.MoveAsset(element.propertyPath, element.propertyPath);
+            }
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Target));
+        }
+
+        private void OnBuildSettingListRemove(ReorderableList list)
+        {
+            // Grab the element
+            SerializedProperty element = Property.GetArrayElementAtIndex(list.index);
+            if (element.objectReferenceValue != null)
+            {
+                // Destroy the asset
+                UnityEngine.Object.DestroyImmediate(element.objectReferenceValue, true);
+
+                // Remove the element from the list
+                ReorderableList.defaultBehaviours.DoRemoveButton(list);
+            }
+
+            // If null, remove the entry
+            ReorderableList.defaultBehaviours.DoRemoveButton(list);
+
+            // Reimport
+            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Target));
         }
         #endregion
     }
