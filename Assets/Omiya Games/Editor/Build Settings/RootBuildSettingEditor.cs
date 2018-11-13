@@ -73,7 +73,11 @@ namespace OmiyaGames.UI.Builds
             serializedObject.Update();
 
             // Draw build folder group
-            DrawBuildFolder(rootBuildFolder, newBuildFolderNameList);
+            DrawBuildFolder(() =>
+            {
+                EditorGUILayout.PropertyField(rootBuildFolder);
+                newBuildFolderNameList.List.DoLayoutList();
+            });
 
             // Draw stuff
             EditorGUILayout.Space();
@@ -85,15 +89,7 @@ namespace OmiyaGames.UI.Builds
 
             // Build button
             EditorGUILayout.Space();
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Build All") == true)
-            {
-                RootBuildSetting setting = target as RootBuildSetting;
-                if (setting != null)
-                {
-                    BuildPlayersResult results = setting.Build();
-                    Debug.Log(results);
-                }
-            }
+            DrawBuildAllButton();
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -123,21 +119,6 @@ namespace OmiyaGames.UI.Builds
                     childBuildSettingsList.List.DoLayoutList();
                 }
             }
-        }
-
-        public override string GetPathPreview()
-        {
-            // Setup variables
-            CustomFileName name = CustomFileNameDrawer.GetTarget(newBuildFolderName);
-            builder.Clear();
-            builder.AppendLine("Preview:");
-            builder.Append(rootBuildFolder.stringValue);
-            if (builder[builder.Length - 1] != '/')
-            {
-                builder.Append('/');
-            }
-            builder.Append(name.ToString((RootBuildSetting)target));
-            return builder.ToString();
         }
     }
 }

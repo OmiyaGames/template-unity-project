@@ -37,14 +37,30 @@ namespace OmiyaGames.UI.Builds
     /// Helper script for <code>IBuildSetting</code>
     /// </summary>
     /// <seealso cref="IBuildSetting"/>
+    [CustomEditor(typeof(IBuildSetting))]
     public abstract class IBuildSettingEditor : Editor
     {
-        protected readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
+        private const char PathDivider = '/';
         private string previewPath = null;
         private AnimBool folderAnimation;
-        private SerializedProperty nameProperty;
+        protected readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
 
-        public abstract string GetPathPreview();
+        public string GetPathPreview()
+        {
+            string returnPath = null;
+            if (target is IBuildSetting)
+            {
+                // Calculate the path from the target
+                returnPath = ((IBuildSetting)target).GetPathPreview(builder, PathDivider);
+
+                // Prepend "Preview"
+                builder.Clear();
+                builder.AppendLine("Preview: ");
+                builder.Append(returnPath);
+                returnPath = builder.ToString();
+            }
+            return returnPath;
+        }
 
         public static void DrawBoldFoldout(AnimBool buildSettingsAnimation, string displayLabel)
         {
@@ -58,15 +74,9 @@ namespace OmiyaGames.UI.Builds
         public virtual void OnEnable()
         {
             folderAnimation = new AnimBool(true, Repaint);
-            nameProperty = serializedObject.FindProperty("name");
         }
 
-        protected void DrawName()
-        {
-            EditorGUILayout.PropertyField(nameProperty);
-        }
-
-        protected void DrawBuildFolder(SerializedProperty pathNameProperty, CustomFileNameReorderableList pathNameList)
+        protected void DrawBuildFolder(System.Action drawPath)
         {
             // Draw the build folder
             DrawBoldFoldout(folderAnimation, "Build Folder");
@@ -80,16 +90,28 @@ namespace OmiyaGames.UI.Builds
                     }
                     EditorGUILayout.HelpBox(previewPath, MessageType.None);
 
-                    if (pathNameList != null)
+                    if (drawPath != null)
                     {
                         EditorGUI.BeginChangeCheck();
-                        EditorGUILayout.PropertyField(pathNameProperty);
-                        pathNameList.List.DoLayoutList();
+                        drawPath();
                         if (EditorGUI.EndChangeCheck() == true)
                         {
                             previewPath = null;
                         }
                     }
+                }
+            }
+        }
+
+        protected void DrawBuildAllButton()
+        {
+            if (GUI.Button(EditorGUILayout.GetControlRect(), "Build All") == true)
+            {
+                IBuildSetting setting = target as IBuildSetting;
+                if (setting != null)
+                {
+                    BuildPlayersResult results = setting.Build();
+                    Debug.Log(results);
                 }
             }
         }

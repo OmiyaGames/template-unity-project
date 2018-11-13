@@ -256,7 +256,7 @@ namespace OmiyaGames.Builds
             {
                 OnBuildCancelled = root.OnBuildCancelled;
                 OnBuildFailed = root.OnBuildFailed;
-                rootFolderName = root.GetBuildPath();
+                rootFolderName = root.GetPathPreview(builder, Path.DirectorySeparatorChar);
             }
         }
 

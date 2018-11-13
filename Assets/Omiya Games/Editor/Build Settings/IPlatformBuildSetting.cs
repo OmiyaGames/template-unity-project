@@ -176,8 +176,10 @@ namespace OmiyaGames.Builds
 
         [Header("Common Settings")]
         [SerializeField]
+        [Tooltip("Name of the executable file.")]
         protected CustomFileName fileName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.AppName));
         [SerializeField]
+        [Tooltip("Name of the folder the executables will be in.")]
         protected CustomFileName folderName = new CustomFileName(false,
             new CustomFileName.Prefill(CustomFileName.PrefillType.AppName),
             new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " ("),
@@ -230,6 +232,28 @@ namespace OmiyaGames.Builds
                 ArchiveBuild(results);
                 RenameBuild(options, results);
             }
+        }
+
+        public override string GetPathPreview(System.Text.StringBuilder builder, char pathDivider)
+        {
+            // Get the parent's path
+            string parentPath = null;
+            if (Parent != null)
+            {
+                parentPath = Parent.GetPathPreview(builder, pathDivider);
+            }
+
+            // Setup builder with parent path
+            builder.Clear();
+            builder.Append(parentPath);
+            if (builder[builder.Length - 1] != pathDivider)
+            {
+                builder.Append(pathDivider);
+            }
+
+            // Append this folder name
+            builder.Append(folderName.ToString(this));
+            return builder.ToString();
         }
         #endregion
 

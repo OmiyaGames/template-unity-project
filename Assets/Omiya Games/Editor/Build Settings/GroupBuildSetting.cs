@@ -39,7 +39,7 @@ namespace OmiyaGames.Builds
         [SerializeField]
         private bool createEmbeddedFolder = true;
         [SerializeField]
-        private CustomFileName folderName = new CustomFileName();
+        private CustomFileName folderName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName));
 
         [Header("Child Settings")]
         [SerializeField]
@@ -54,7 +54,7 @@ namespace OmiyaGames.Builds
                 int returnNumber = 2;
 
                 // Increment the max by all the other settings
-                foreach(IBuildSetting setting in allSettings)
+                foreach (IBuildSetting setting in allSettings)
                 {
                     returnNumber += setting.MaxNumberOfResults;
                 }
@@ -86,6 +86,35 @@ namespace OmiyaGames.Builds
                 // Build the list of settings
                 BuildGroup(allSettings, results);
             }
+        }
+
+        public override string GetPathPreview(System.Text.StringBuilder builder, char pathDivider)
+        {
+            // Get the parent's path
+            string returnPath = null;
+            if (Parent != null)
+            {
+                returnPath = Parent.GetPathPreview(builder, pathDivider);
+            }
+
+            // Check if we need to append the group folder name
+            if (createEmbeddedFolder == true)
+            {
+                // Setup builder with parent path
+                builder.Clear();
+                builder.Append(returnPath);
+
+                // Append this group's name
+                if (builder[builder.Length - 1] != pathDivider)
+                {
+                    builder.Append(pathDivider);
+                }
+                builder.Append(folderName.ToString(this));
+
+                // Update return variable
+                returnPath = builder.ToString();
+            }
+            return returnPath;
         }
         #endregion
 

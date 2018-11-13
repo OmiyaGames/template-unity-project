@@ -1,4 +1,5 @@
-﻿using OmiyaGames.Builds;
+﻿#define TEST
+using OmiyaGames.Builds;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -110,7 +111,11 @@ namespace OmiyaGames.UI.Builds
         private void CreateDesktopPlatformSettings<T>(string name, IPlatformBuildSetting.Architecture architecture) where T : IPlatformBuildSetting
         {
             SerializedProperty element = Add<T>(name);
-            element.FindPropertyRelative("architecture").enumValueIndex = (int)architecture;
+            element = element.FindPropertyRelative("architecture");
+            if(element != null)
+            {
+                element.enumValueIndex = (int)architecture;
+            }
 
             // Apply the property
             ApplyModification();
@@ -155,7 +160,9 @@ namespace OmiyaGames.UI.Builds
 
             // Draw the object field
             bool originalEnabled = GUI.enabled;
-            //GUI.enabled = false;
+#if !TEST
+            GUI.enabled = false;
+#endif
             element.objectReferenceValue = EditorGUI.ObjectField(rect, "", element.objectReferenceValue, typeof(IChildBuildSetting), false);
             GUI.enabled = originalEnabled;
 
@@ -181,6 +188,15 @@ namespace OmiyaGames.UI.Builds
                     menu.AddSeparator("");
                 }
             }
+#if TEST
+            menu.AddSeparator("");
+            menu.AddItem(new GUIContent("Empty"), false, () =>
+            {
+                SerializedProperty element = CreateNewElement();
+                element.objectReferenceValue = null;
+                ApplyModification();
+            });
+#endif
             menu.ShowAsContext();
         }
 
@@ -247,6 +263,10 @@ namespace OmiyaGames.UI.Builds
             rect.x -= EditorUiUtility.IndentSpace;
             rect.width += EditorUiUtility.IndentSpace;
 
+            // Update enabled stuff
+            IBuildSetting setting = serializedObject as IBuildSetting;
+            GUI.enabled = (setting != null);
+
             // Draw Edit Button
             rect.width -= (EditorUiUtility.VerticalMargin * 2);
             rect.width /= 3f;
@@ -266,8 +286,6 @@ namespace OmiyaGames.UI.Builds
             }
 
             // Draw build button
-            IChildBuildSetting setting = serializedObject as IChildBuildSetting;
-            GUI.enabled = (setting != null);
             rect.x += EditorUiUtility.VerticalMargin;
             rect.x += rect.width;
             if (GUI.Button(rect, "Build") == true)
@@ -307,6 +325,6 @@ namespace OmiyaGames.UI.Builds
             // Reimport
             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Target));
         }
-        #endregion
+#endregion
     }
 }

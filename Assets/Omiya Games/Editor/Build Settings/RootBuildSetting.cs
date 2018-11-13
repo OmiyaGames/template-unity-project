@@ -97,6 +97,19 @@ namespace OmiyaGames.Builds
                 BuildGroup(allSettings, results);
             }
         }
+
+        public override string GetPathPreview(System.Text.StringBuilder builder, char pathDivider)
+        {
+            // Setup variables
+            builder.Clear();
+            builder.Append(rootBuildFolder);
+            if (builder[builder.Length - 1] != pathDivider)
+            {
+                builder.Append(pathDivider);
+            }
+            builder.Append(newBuildFolderName.ToString(this));
+            return builder.ToString();
+        }
         #endregion
 
         #region Properties
