@@ -55,6 +55,23 @@ namespace OmiyaGames.Builds
         }
 
         /// <summary>
+        /// Grabs a preview of the path to build to
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public abstract string GetPathPreview(System.Text.StringBuilder builder, char pathDivider);
+
+        /// <summary>
+        /// Grabs a preview of the path to build to
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public string GetPathPreview(System.Text.StringBuilder builder)
+        {
+            return GetPathPreview(builder, System.IO.Path.DirectorySeparatorChar);
+        }
+
+        /// <summary>
         /// Recursively creates builds.
         /// </summary>
         /// <param name="results">List of statuses indicating the results</param>
