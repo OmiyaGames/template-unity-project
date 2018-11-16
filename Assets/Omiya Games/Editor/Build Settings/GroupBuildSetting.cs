@@ -80,6 +80,21 @@ namespace OmiyaGames.Builds
 
         protected override void Build(BuildPlayersResult results)
         {
+            // Check the group first
+            string message;
+            foreach (IChildBuildSetting setting in allSettings)
+            {
+                // Check if prebuild check failed
+                if (setting.PreBuildCheck(out message) == false)
+                {
+                    // Display a message
+                    DisplayPreBuildCheckFailed(message);
+
+                    // Stop building entirely
+                    return;
+                }
+            }
+
             // Indicate group build started
             using (new BuildPlayersResult.GroupBuildScope(results, this))
             {
@@ -115,6 +130,19 @@ namespace OmiyaGames.Builds
                 returnPath = builder.ToString();
             }
             return returnPath;
+        }
+
+        public override bool PreBuildCheck(out string message)
+        {
+            message = null;
+            foreach (IChildBuildSetting setting in allSettings)
+            {
+                if (setting.PreBuildCheck(out message) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
 

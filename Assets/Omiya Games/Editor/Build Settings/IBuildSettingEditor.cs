@@ -76,10 +76,10 @@ namespace OmiyaGames.UI.Builds
             folderAnimation = new AnimBool(true, Repaint);
         }
 
-        protected void DrawBuildFolder(System.Action drawPath)
+        protected void DrawBuildFolder(System.Action drawPath, string foldoutLabel = "Build Folder")
         {
             // Draw the build folder
-            DrawBoldFoldout(folderAnimation, "Build Folder");
+            DrawBoldFoldout(folderAnimation, foldoutLabel);
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(folderAnimation.faded))
             {
                 if (scope.visible == true)
@@ -105,7 +105,12 @@ namespace OmiyaGames.UI.Builds
 
         protected void DrawBuildAllButton()
         {
-            if (GUI.Button(EditorGUILayout.GetControlRect(), "Build All") == true)
+            DrawBuildButton("Build All");
+        }
+
+        protected void DrawBuildButton(string buttonText = "Build")
+        {
+            if (GUI.Button(EditorGUILayout.GetControlRect(), buttonText) == true)
             {
                 IBuildSetting setting = target as IBuildSetting;
                 if (setting != null)

@@ -34,7 +34,7 @@ namespace OmiyaGames.UI.Builds
     /// <date>11/01/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>RootBuildSetting</code>
+    /// Editor script for <code>GroupBuildSetting</code>
     /// </summary>
     /// <seealso cref="GroupBuildSetting"/>
     [CustomEditor(typeof(GroupBuildSetting))]
@@ -66,21 +66,21 @@ namespace OmiyaGames.UI.Builds
         {
             serializedObject.Update();
 
-            // Draw name of this group
-            DrawBackButton();
-
             // Draw build folder group
-            EditorGUILayout.Space();
             DrawBuildFolder(DrawFolderName);
 
             // Draw platforms
             EditorGUILayout.Space();
             DrawBuildSettingList();
+            serializedObject.ApplyModifiedProperties();
+
+            // Draw back buttons
+            EditorGUILayout.Space();
+            DrawBackButton();
 
             // Build button
             EditorGUILayout.Space();
             DrawBuildAllButton();
-            serializedObject.ApplyModifiedProperties();
         }
 
         private void DrawFolderName()

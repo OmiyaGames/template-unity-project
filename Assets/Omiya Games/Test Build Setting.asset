@@ -43,4 +43,52 @@ MonoBehaviour:
     - type: 2
       text: ' - '
     asSlug: 0
-  allSettings: []
+  allSettings:
+  - {fileID: 114809925387849062}
+--- !u!114 &114809925387849062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2176a121975fabb42802a36269849773, type: 3}
+  m_Name: Mac
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114688565428732006}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    scenePaths: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    includeParentFolder: 1
+    fileName:
+      names: []
+      asSlug: 0
+    deleteOriginals: 0
+  changeScriptDefineSymbols: 0
+  customScriptDefineSymbols: 
+  compression: 0

@@ -40,6 +40,30 @@ namespace OmiyaGames.Builds
         [SerializeField]
         protected bool acceptExternalModificationsToPlayer = false;
 
+        public static bool AndroidCredentialsFilled
+        {
+            get
+            {
+                // By default, return true
+                bool returnFlag = true;
+
+                // Check if there's an Android keystore name
+                if (string.IsNullOrEmpty(PlayerSettings.Android.keystoreName) == false)
+                {
+                    // If so, by default, return false
+                    returnFlag = false;
+
+                    // Make sure all the passwords are filled in
+                    if ((string.IsNullOrEmpty(PlayerSettings.keystorePass) == false) && (string.IsNullOrEmpty(PlayerSettings.keyaliasPass) == false))
+                    {
+                        // We're going to assume it's all good to go!
+                        returnFlag = true;
+                    }
+                }
+                return returnFlag;
+            }
+        }
+
         #region Overrides
         protected override BuildTargetGroup TargetGroup
         {
@@ -70,6 +94,20 @@ namespace OmiyaGames.Builds
                 }
                 return options;
             }
+        }
+
+        public override bool PreBuildCheck(out string message)
+        {
+            // Check if the android credentials are set
+            message = null;
+            bool returnFlag = AndroidCredentialsFilled;
+            if (returnFlag == false)
+            {
+                // If not, prompt the user to fill in the Android credentials
+                message = "Please fill out the Android Keystore credentials first, before building again.";
+                AndroidKeystoreCredentialsWindow.Display(null);
+            }
+            return returnFlag;
         }
         #endregion
     }

@@ -90,6 +90,21 @@ namespace OmiyaGames.Builds
 
         protected override void Build(BuildPlayersResult results)
         {
+            // Check the group first
+            string message;
+            foreach(IChildBuildSetting setting in allSettings)
+            {
+                // Check if prebuild check failed
+                if(setting.PreBuildCheck(out message) == false)
+                {
+                    // Display a message
+                    DisplayPreBuildCheckFailed(message);
+
+                    // Stop building entired
+                    return;
+                }
+            }
+
             // Indicate group build started
             using (new BuildPlayersResult.GroupBuildScope(results, this))
             {

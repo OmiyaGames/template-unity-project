@@ -174,6 +174,20 @@ namespace OmiyaGames.Builds
             }
         }
 
+        public class LastPlayerSettings
+        {
+            public string LastScriptDefineSymbols
+            {
+                get;
+            }
+
+            public LastPlayerSettings(BuildTargetGroup target)
+            {
+                // Setup member variables
+                LastScriptDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(target);
+            }
+        }
+
         [Header("Common Settings")]
         [SerializeField]
         [Tooltip("Name of the executable file.")]
@@ -184,7 +198,7 @@ namespace OmiyaGames.Builds
             new CustomFileName.Prefill(CustomFileName.PrefillType.AppName),
             new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " ("),
             new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName),
-            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, "}"));
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, ")"));
         [SerializeField]
         protected bool enableStrictMode = false;
         /// <summary>
@@ -198,6 +212,10 @@ namespace OmiyaGames.Builds
         protected DevelopmentSettings debugSettings = new DevelopmentSettings(true);
         [SerializeField]
         protected ArchiveSettings archiveSettings = new ArchiveSettings(new CustomFileName(), true);
+        [SerializeField]
+        protected bool changeScriptDefineSymbols = false;
+        [SerializeField]
+        protected string customScriptDefineSymbols = "";
 
         #region Overrides
         internal override int MaxNumberOfResults
@@ -217,20 +235,38 @@ namespace OmiyaGames.Builds
 
         protected override void Build(BuildPlayersResult results)
         {
-            // Get options
-            BuildPlayerOptions options = GetPlayerOptions(results);
-
-            // Build the player
-            BuildReport res = BuildPipeline.BuildPlayer(options);
-
-            // Add the latest results
-            results.AddReport(res, this);
-
-            // Consider making a post build
-            if (results.LastReport.State == BuildPlayersResult.Status.Success)
+            // Check if prebuild check succeeded
+            string message;
+            if (PreBuildCheck(out message) == true)
             {
-                ArchiveBuild(results);
-                RenameBuild(options, results);
+                // Setup the folders
+                if (System.IO.Directory.Exists(results.FolderName) == false)
+                {
+                    System.IO.Directory.CreateDirectory(results.FolderName);
+                }
+
+                // Get options
+                BuildPlayerOptions options = GetPlayerOptions(results);
+
+                // Build the player
+                LastPlayerSettings lastSettings = SetupPlayerSettings();
+                BuildReport res = BuildPipeline.BuildPlayer(options);
+                RevertPlayerSettings(lastSettings);
+
+                // Add the latest results
+                results.AddReport(res, this);
+
+                // Consider making a post build
+                if (results.LastReport.State == BuildPlayersResult.Status.Success)
+                {
+                    ArchiveBuild(results);
+                    RenameBuild(options, results);
+                }
+            }
+            else
+            {
+                // Display a message
+                DisplayPreBuildCheckFailed(message);
             }
         }
 
@@ -254,6 +290,12 @@ namespace OmiyaGames.Builds
             // Append this folder name
             builder.Append(folderName.ToString(this));
             return builder.ToString();
+        }
+
+        public override bool PreBuildCheck(out string message)
+        {
+            message = null;
+            return true;
         }
         #endregion
 
@@ -284,7 +326,7 @@ namespace OmiyaGames.Builds
                 {
                     // Update debug settings
                     options |= BuildOptions.Development;
-                    if(debugSettings.IsScriptDebuggingEnabled == true)
+                    if (debugSettings.IsScriptDebuggingEnabled == true)
                     {
                         options |= BuildOptions.AllowDebugging;
                     }
@@ -299,6 +341,36 @@ namespace OmiyaGames.Builds
                     options |= BuildOptions.ForceEnableAssertions;
                 }
                 return options;
+            }
+        }
+
+        /// <summary>
+        /// Note: don't forget to override <code>RevertPlayerSettings()</code>!
+        /// </summary>
+        protected virtual LastPlayerSettings SetupPlayerSettings()
+        {
+            // Setup return variable
+            LastPlayerSettings returnSettings = new LastPlayerSettings(TargetGroup);
+
+            // Check if we want to update the player settings
+            if (changeScriptDefineSymbols == true)
+            {
+                // Update player settings
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, customScriptDefineSymbols);
+            }
+            return returnSettings;
+        }
+
+        /// <summary>
+        /// Note: don't forget to override <code>SetupPlayerSettings()</code>!
+        /// </summary>
+        protected virtual void RevertPlayerSettings(LastPlayerSettings lastSettings)
+        {
+            // Check if we want to update the player settings
+            if (changeScriptDefineSymbols == true)
+            {
+                // Revert player settings
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, lastSettings.LastScriptDefineSymbols);
             }
         }
 
