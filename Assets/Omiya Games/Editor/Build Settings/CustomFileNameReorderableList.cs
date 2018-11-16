@@ -41,8 +41,6 @@ namespace OmiyaGames.UI.Builds
         public const float TypeWidth = 110f;
         public const float SlugWidth = 107f;
 
-        private static int[] prefillTypeValues = null;
-
         public static int[] PrefillTypeValues
         {
             get
@@ -141,7 +139,8 @@ namespace OmiyaGames.UI.Builds
             bool originalEnabled = GUI.enabled;
             if(canEditText == true)
             {
-                rect.height = EditorGUIUtility.singleLineHeight - EditorUiUtility.VerticalMargin;
+                rect.y -= EditorUiUtility.VerticalMargin / 2f;
+                rect.height = EditorGUIUtility.singleLineHeight;
                 text.stringValue = EditorGUI.TextField(rect, text.stringValue);
             }
             else

@@ -47,7 +47,7 @@ namespace OmiyaGames.UI.Builds
         public override void OnEnable()
         {
             base.OnEnable();
-            backAnimation = new AnimBool(true, Repaint);
+            backAnimation = new AnimBool(false, Repaint);
 
             nameProperty = serializedObject.FindProperty("m_Name");
             parentProperty = serializedObject.FindProperty("parentSetting");

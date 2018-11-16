@@ -92,6 +92,12 @@ namespace OmiyaGames.Builds
         protected abstract void Build(BuildPlayersResult results);
 
         #region Helper Methods
+        protected static void DisplayPreBuildCheckFailed(string message)
+        {
+            // Display a message
+            UnityEditor.EditorUtility.DisplayDialog("Pre-Build Check Failed", message, "OK");
+        }
+
         /// <summary>
         /// Helper method to build a list of settings.
         /// </summary>

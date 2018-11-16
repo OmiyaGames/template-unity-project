@@ -1,10 +1,8 @@
 ﻿#define TEST
-using OmiyaGames.Builds;
-using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using OmiyaGames.Builds;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -224,12 +222,12 @@ namespace OmiyaGames.UI.Builds
             ApplyModification();
         }
 
-        private void Duplicate<T>(string name, T original) where T : UnityEngine.Object
+        private void Duplicate<T>(string name, T original) where T : Object
         {
             SerializedProperty element = CreateNewElement();
 
             // Setup data field
-            T instance = UnityEngine.Object.Instantiate(original);
+            T instance = Object.Instantiate(original);
             instance.name = name;
 
             // Create this asset

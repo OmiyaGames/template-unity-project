@@ -74,6 +74,8 @@ namespace OmiyaGames.Builds
         }
         #endregion
 
+        public abstract bool PreBuildCheck(out string message);
+
         public virtual IBuildSetting Parent
         {
             get
