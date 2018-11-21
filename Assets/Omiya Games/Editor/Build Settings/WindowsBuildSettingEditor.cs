@@ -4,7 +4,7 @@ using OmiyaGames.Builds;
 namespace OmiyaGames.UI.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="MacBuildSettingEditor.cs" company="Omiya Games">
+    /// <copyright file="WindowsBuildSettingEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,35 +28,44 @@ namespace OmiyaGames.UI.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>11/16/2015</date>
+    /// <date>11/21/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>MacBuildSetting</code>
+    /// Editor script for <code>WindowsBuildSetting</code>
     /// </summary>
-    /// <seealso cref="MacBuildSetting"/>
-    [CustomEditor(typeof(MacBuildSetting))]
-    public class MacBuildSettingEditor : IPlatformBuildSettingEditor
+    /// <seealso cref="WindowsBuildSetting"/>
+    [CustomEditor(typeof(WindowsBuildSetting))]
+    public class WindowsBuildSettingEditor : IPlatformBuildSettingEditor
     {
-        // Mac Settings
+        private SerializedProperty architecture;
         private SerializedProperty compression;
+        private SerializedProperty includePdbFles;
+        // FIXME: do more research on the Facebook builds
+        //private SerializedProperty forFacebook;
 
         public override string FileExtension
         {
             get
             {
-                return ".app";
+                return ".exe";
             }
         }
 
         public override void OnEnable()
         {
             base.OnEnable();
+            architecture = serializedObject.FindProperty("architecture");
             compression = serializedObject.FindProperty("compression");
+            includePdbFles = serializedObject.FindProperty("includePdbFles");
+            //forFacebook = serializedObject.FindProperty("forFacebook");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
+            EditorGUILayout.PropertyField(architecture);
             EditorGUILayout.PropertyField(compression);
+            EditorGUILayout.PropertyField(includePdbFles);
+            //EditorGUILayout.PropertyField(forFacebook);
         }
     }
 }

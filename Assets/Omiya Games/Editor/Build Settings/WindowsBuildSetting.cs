@@ -35,29 +35,29 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class WindowsBuildSetting : MacBuildSetting
     {
-        [Header("Windows Settings")]
         [SerializeField]
         protected Architecture architecture = Architecture.Build64Bit;
         [SerializeField]
         protected bool includePdbFles = false;
-        [SerializeField]
-        protected bool forFacebook = false;
+        // FIXME: do more research on the Facebook builds
+        //[SerializeField]
+        //protected bool forFacebook = false;
 
         #region Overrides
-        protected override BuildTargetGroup TargetGroup
-        {
-            get
-            {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return base.TargetGroup;
-                }
-            }
-        }
+        //protected override BuildTargetGroup TargetGroup
+        //{
+        //    get
+        //    {
+        //        if (forFacebook == true)
+        //        {
+        //            return BuildTargetGroup.Facebook;
+        //        }
+        //        else
+        //        {
+        //            return base.TargetGroup;
+        //        }
+        //    }
+        //}
 
         protected override BuildTarget Target
         {
