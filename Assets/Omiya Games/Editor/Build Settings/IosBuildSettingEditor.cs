@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using OmiyaGames.Builds;
 
-namespace OmiyaGames.Builds
+namespace OmiyaGames.UI.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="IosBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="IosBuildSettingEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,54 +28,41 @@ namespace OmiyaGames.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>10/31/2018</date>
+    /// <date>11/21/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for iOS platform.
+    /// Editor script for <code>IosBuildSetting</code>
     /// </summary>
-    public class IosBuildSetting : MacBuildSetting
+    /// <seealso cref="IosBuildSetting"/>
+    [CustomEditor(typeof(IosBuildSetting))]
+    public class IosBuildSettingEditor : IPlatformBuildSettingEditor
     {
-        // FIXME: figure out iOS specific options
-        [SerializeField]
-        protected bool symlinkLibraries = false;
-        [SerializeField]
-        protected bool acceptExternalModificationsToPlayer = false;
+        private SerializedProperty compression;
+        private SerializedProperty symlinkLibraries;
+        private SerializedProperty acceptExternalModificationsToPlayer;
 
-        #region Overrides
-        protected override BuildTargetGroup TargetGroup
+
+        public override string FileExtension
         {
             get
             {
-                return BuildTargetGroup.iOS;
+                return "";
             }
         }
 
-        protected override BuildTarget Target
+        public override void OnEnable()
         {
-            get
-            {
-                return BuildTarget.iOS;
-            }
+            base.OnEnable();
+            compression = serializedObject.FindProperty("compression");
+            symlinkLibraries = serializedObject.FindProperty("symlinkLibraries");
+            acceptExternalModificationsToPlayer = serializedObject.FindProperty("acceptExternalModificationsToPlayer");
         }
 
-        protected override BuildOptions Options
+        protected override void DrawPlatformSpecificSettings()
         {
-            get
-            {
-                BuildOptions options = base.Options;
-
-                // FIXME: add more options once fileds are determined
-                if (symlinkLibraries == true)
-                {
-                    options |= BuildOptions.SymlinkLibraries;
-                }
-                if (acceptExternalModificationsToPlayer == true)
-                {
-                    options |= BuildOptions.AcceptExternalModificationsToPlayer;
-                }
-                return options;
-            }
+            EditorGUILayout.PropertyField(compression);
+            EditorGUILayout.PropertyField(symlinkLibraries);
+            EditorGUILayout.PropertyField(acceptExternalModificationsToPlayer);
         }
-        #endregion
     }
 }
