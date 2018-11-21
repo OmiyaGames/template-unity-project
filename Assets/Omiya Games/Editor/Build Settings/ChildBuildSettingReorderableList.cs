@@ -59,7 +59,7 @@ namespace OmiyaGames.UI.Builds
 
         public readonly BuildSettingCreator[] AllMethods;
 
-        public ChildBuildSettingReorderableList(UnityEngine.Object target, SerializedProperty property, GUIContent label)
+        public ChildBuildSettingReorderableList(Object target, SerializedProperty property, GUIContent label)
         {
             // Member Variable
             Target = target;
@@ -78,22 +78,42 @@ namespace OmiyaGames.UI.Builds
             // Setup all Methods
             AllMethods = new BuildSettingCreator[]
             {
-                new BuildSettingCreator("Group of Platforms", () => { AddAndModify<GroupBuildSetting>("Group"); }),
-                null,
+                #region Windows
                 new BuildSettingCreator("Windows 64-bit", () => { CreateDesktopPlatformSettings<WindowsBuildSetting>("Windows 64-bit", IPlatformBuildSetting.Architecture.Build64Bit); }),
                 new BuildSettingCreator("Windows 32-bit", () => { CreateDesktopPlatformSettings<WindowsBuildSetting>("Windows 32-bit", IPlatformBuildSetting.Architecture.Build32Bit); }),
                 null,
+                #endregion
+
                 new BuildSettingCreator("Mac", () => { AddAndModify<MacBuildSetting>("Mac"); }),
                 null,
+
+                #region Linux
                 new BuildSettingCreator("Linux Universal", () => { CreateDesktopPlatformSettings<LinuxBuildSetting>("Linux", IPlatformBuildSetting.Architecture.BuildUniversal); }),
                 new BuildSettingCreator("Linux 64-bit", () => { CreateDesktopPlatformSettings<LinuxBuildSetting>("Linux 64-bit", IPlatformBuildSetting.Architecture.Build64Bit); }),
                 new BuildSettingCreator("Linux 32-bit", () => { CreateDesktopPlatformSettings<LinuxBuildSetting>("Linux 32-bit", IPlatformBuildSetting.Architecture.Build32Bit); }),
                 null,
+                #endregion
+
                 new BuildSettingCreator("WebGL", () => { CreateWebGLSettings(); }),
                 null,
+
+                // FIXME: add UWP support
+                #region Mobile
                 new BuildSettingCreator("iOS", () => { AddAndModify<IosBuildSetting>("iOS"); }),
                 new BuildSettingCreator("Android", () => { AddAndModify<AndroidBuildSetting>("Android"); }),
-                new BuildSettingCreator("UWP", () => { AddAndModify<UwpBuildSetting>("UWP"); }),
+                //new BuildSettingCreator("UWP", () => { AddAndModify<UwpBuildSetting>("UWP"); }),
+                null,
+                #endregion
+
+                // FIXME: add Facebook support
+                #region Facebook
+                //new BuildSettingCreator("Facebook Gameroom, WebGL", () => { CreateWebGLSettings(); }),
+                //new BuildSettingCreator("Facebook Gameroom, Windows 64-bit", () => { CreateDesktopPlatformSettings<WindowsBuildSetting>("Windows 64-bit", IPlatformBuildSetting.Architecture.Build64Bit); }),
+                //new BuildSettingCreator("Facebook Gameroom,Windows 32-bit", () => { CreateDesktopPlatformSettings<WindowsBuildSetting>("Windows 32-bit", IPlatformBuildSetting.Architecture.Build32Bit); }),
+                //null,
+                #endregion
+
+                new BuildSettingCreator("Group of Platforms", () => { AddAndModify<GroupBuildSetting>("Group"); }),
             };
         }
 

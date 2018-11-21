@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Builds;
 
@@ -40,6 +39,8 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(RootBuildSetting))]
     public class RootBuildSettingEditor : IBuildSettingEditor
     {
+        public const string DefaultFileName = "New Build Settings" + Utility.FileExtensionScriptableObject;
+
         SerializedProperty rootBuildFolder;
         SerializedProperty newBuildFolderName;
         SerializedProperty onBuildFailed;
@@ -50,6 +51,22 @@ namespace OmiyaGames.UI.Builds
         AnimBool interruptionsAnimation;
         CustomFileNameReorderableList newBuildFolderNameList;
         ChildBuildSettingReorderableList childBuildSettingsList;
+
+        [MenuItem("Assets/Create/Omiya Games/Build Settings", priority = 500)]
+        public static RootBuildSetting CreateBuildSettings()
+        {
+            // Setup asset
+            RootBuildSetting newAsset = ScriptableObject.CreateInstance<RootBuildSetting>();
+
+            // Setup path to file
+            string folderName = AssetUtility.GetSelectedFolder();
+            string pathOfAsset = System.IO.Path.Combine(folderName, DefaultFileName);
+            pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
+
+            // Create the asset, and prompt the user to rename it
+            ProjectWindowUtil.CreateAsset(newAsset, pathOfAsset);
+            return newAsset;
+        }
 
         public override void OnEnable()
         {
