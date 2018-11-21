@@ -36,7 +36,6 @@ namespace OmiyaGames.Builds
     public class AndroidBuildSetting : MacBuildSetting
     {
         // FIXME: figure out Android specific build options
-        [Header("Android Settings")]
         [SerializeField]
         protected bool acceptExternalModificationsToPlayer = false;
 
