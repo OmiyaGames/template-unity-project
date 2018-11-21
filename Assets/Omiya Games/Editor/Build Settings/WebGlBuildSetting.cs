@@ -78,7 +78,6 @@ namespace OmiyaGames.Builds
             }
         }
 
-        [Header("WebGL Settings")]
         [SerializeField]
         protected WebLocationCheckerSettings[] webLocations;
         // FIXME: do more research on the Facebook builds
