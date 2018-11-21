@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Builds;
 
@@ -45,34 +44,102 @@ namespace OmiyaGames.UI.Builds
         private SerializedProperty folderName;
 
         // build settings
-        private SerializedProperty changeScriptDefineSymbols;
+        private AnimBool customSettingsAnimation;
         private SerializedProperty customScriptDefineSymbols;
         private SerializedProperty customScenes;
-        private SerializedProperty archiveSettings;
 
-        // debugging settings
+        // development settings
+        private AnimBool developmentAnimation;
         private SerializedProperty enableStrictMode;
         private SerializedProperty enableAssertions;
-        private SerializedProperty debugSettings;
+
+        // debugging settings
+        private AnimBool debugAnimation;
+        private SerializedProperty debugEnable;
+        private SerializedProperty debugEnableScriptDebugging;
+        private SerializedProperty debugBuildScriptOnly;
+
+        // Archive settings
+        private AnimBool archiveAnimation;
+        private SerializedProperty archiveEnable;
+        private SerializedProperty archiveType;
+        private SerializedProperty archiveIncludeParentFolder;
+        private SerializedProperty archiveFileName;
+        private SerializedProperty archiveDeleteOriginals;
+
+        public abstract string FileExtension
+        {
+            get;
+        }
+
+        protected abstract void DrawPlatformSpecificSettings();
 
         public override void OnEnable()
         {
             base.OnEnable();
+            SerializedProperty setting;
 
             // name stuff
             fileName = serializedObject.FindProperty("fileName");
             folderName = serializedObject.FindProperty("folderName");
 
             // build settings
-            changeScriptDefineSymbols = serializedObject.FindProperty("changeScriptDefineSymbols");
+            customSettingsAnimation = new AnimBool(true, Repaint);
             customScriptDefineSymbols = serializedObject.FindProperty("customScriptDefineSymbols");
             customScenes = serializedObject.FindProperty("customScenes");
-            archiveSettings = serializedObject.FindProperty("archiveSettings");
 
-            // debugging settings
+            // archive settings
+            setting = serializedObject.FindProperty("archiveSettings");
+            archiveEnable = setting.FindPropertyRelative("enable");
+            archiveType = setting.FindPropertyRelative("type");
+            archiveIncludeParentFolder = setting.FindPropertyRelative("includeParentFolder");
+            archiveDeleteOriginals = setting.FindPropertyRelative("deleteOriginals");
+            archiveFileName = setting.FindPropertyRelative("fileName");
+            archiveAnimation = new AnimBool(archiveEnable.boolValue, Repaint);
+
+            // Development settings
+            developmentAnimation = new AnimBool(false, Repaint);
             enableStrictMode = serializedObject.FindProperty("enableStrictMode");
             enableAssertions = serializedObject.FindProperty("enableAssertions");
-            debugSettings = serializedObject.FindProperty("debugSettings");
+            setting = serializedObject.FindProperty("debugSettings");
+
+            // Debugging settings
+            debugEnable = setting.FindPropertyRelative("enable");
+            debugEnableScriptDebugging = setting.FindPropertyRelative("enableDebuggingScripts");
+            debugBuildScriptOnly = setting.FindPropertyRelative("buildScriptsOnly");
+            debugAnimation = new AnimBool(debugEnable.boolValue, Repaint);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            // Draw name of this build
+            DrawBeginningOfSetting();
+
+            // Draw custom settings
+            EditorGUILayout.Space();
+            DrawCustomSettings();
+
+            // Draw development settings
+            EditorGUILayout.Space();
+            DrawDevelopmentSettings();
+
+            // Draw archive settings
+            EditorGUILayout.Space();
+            DrawArchiveSettings();
+
+            serializedObject.ApplyModifiedProperties();
+
+            // Draw the bottom of the setting
+            DrawEndOfSetting();
+        }
+
+        protected void DrawBeginningOfSetting()
+        {
+            // Draw build folder group
+            DrawBuildFile(DrawCustomNameControls, AppendFileName,
+            "File Name");
         }
 
         protected void DrawEndOfSetting()
@@ -85,5 +152,114 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.Space();
             DrawBuildButton();
         }
+
+        protected void DrawCustomSettings()
+        {
+            // Draw foldout
+            DrawBoldFoldout(customSettingsAnimation, "Custom Build Settings");
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(customSettingsAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    DrawPlatformSpecificSettings();
+                    EditorGUILayout.PropertyField(customScriptDefineSymbols);
+                    EditorGUILayout.PropertyField(customScenes);
+                }
+            }
+        }
+
+        protected void DrawDevelopmentSettings()
+        {
+            DrawBoldFoldout(developmentAnimation, "Development Settings");
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(developmentAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    // Show the enabled bool
+                    debugEnable.boolValue = EditorGUILayout.Toggle("Enable Debugging", debugEnable.boolValue);
+                    debugAnimation.target = debugEnable.boolValue;
+
+                    // Draw the rest of the controls
+                    using (new EditorGUI.IndentLevelScope())
+                    using (EditorGUILayout.FadeGroupScope fadeScope = new EditorGUILayout.FadeGroupScope(debugAnimation.faded))
+                    {
+                        if (fadeScope.visible == true)
+                        {
+                            debugEnableScriptDebugging.boolValue = EditorGUILayout.Toggle("Debug Script", debugEnableScriptDebugging.boolValue);
+                            debugBuildScriptOnly.boolValue = EditorGUILayout.Toggle("Build Scripts Only", debugBuildScriptOnly.boolValue);
+                        }
+                    }
+
+                    // Draw checkboxes
+                    EditorGUILayout.PropertyField(enableStrictMode);
+                    EditorGUILayout.PropertyField(enableAssertions);
+                }
+            }
+        }
+
+        protected void DrawArchiveSettings()
+        {
+            // Show the enabled bool
+            Rect indentLeft = EditorGUILayout.GetControlRect();
+            indentLeft.x -= EditorUiUtility.IndentSpace;
+            indentLeft.x += EditorUiUtility.VerticalMargin;
+            archiveEnable.boolValue = EditorGUI.ToggleLeft(indentLeft, "Zip The Build", archiveEnable.boolValue, EditorStyles.boldLabel);
+            archiveAnimation.target = archiveEnable.boolValue;
+
+            // Draw the rest of the controls
+            using (EditorGUILayout.FadeGroupScope fadeScope = new EditorGUILayout.FadeGroupScope(archiveAnimation.faded))
+            {
+                if (fadeScope.visible == true)
+                {
+                    DrawFileNamePreview(DrawArchiveControls, AppendArchiveFileName);
+                }
+            }
+        }
+
+        #region Archive Settings Helpers
+        private void DrawArchiveControls()
+        {
+            EditorGUILayout.PropertyField(archiveType);
+            archiveIncludeParentFolder.boolValue = EditorGUILayout.Toggle("Zip Under a Single Folder", archiveIncludeParentFolder.boolValue);
+            archiveDeleteOriginals.boolValue = EditorGUILayout.Toggle("Delete The Original Files", archiveDeleteOriginals.boolValue);
+            EditorGUILayout.PropertyField(archiveFileName);
+        }
+
+        private string AppendArchiveFileName(string originalString, System.Text.StringBuilder builder)
+        {
+            builder.Clear();
+            builder.Append(originalString);
+            builder.Append(PathDivider);
+
+            CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
+            builder.Append(name.ToString((IBuildSetting)target));
+            return builder.ToString();
+        }
+        #endregion
+
+        #region DrawBeginningOfSetting Helpers
+        private void DrawCustomNameControls()
+        {
+            // Draw name of the group
+            DrawName();
+
+            // Draw the folder and the file it's going to create
+            EditorGUILayout.PropertyField(fileName);
+            EditorGUILayout.PropertyField(folderName);
+        }
+
+        private string AppendFileName(string originalString, System.Text.StringBuilder builder)
+        {
+            builder.Clear();
+            builder.Append(originalString);
+            builder.Append(PathDivider);
+
+            // Add file name
+            CustomFileName name = CustomFileNameDrawer.GetTarget(fileName);
+            builder.Append(name.ToString((IBuildSetting)target));
+            builder.Append(FileExtension);
+            return builder.ToString();
+        }
+        #endregion
     }
 }

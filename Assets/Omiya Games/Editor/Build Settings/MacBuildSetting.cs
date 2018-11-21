@@ -35,7 +35,6 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class MacBuildSetting : IPlatformBuildSetting
     {
-        [Header("Mac Settings")]
         [SerializeField]
         protected CompressionType compression = CompressionType.Default;
 

@@ -1,10 +1,10 @@
-﻿using UnityEditor;
-using OmiyaGames.Builds;
+﻿using UnityEngine;
+using System;
 
-namespace OmiyaGames.UI.Builds
+namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="MacBuildSettingEditor.cs" company="Omiya Games">
+    /// <copyright file="CustomSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,37 +28,43 @@ namespace OmiyaGames.UI.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>11/16/2015</date>
+    /// <date>11/20/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>MacBuildSetting</code>
+    /// Helper setting for arguments
     /// </summary>
-    /// <seealso cref="MacBuildSetting"/>
-    [CustomEditor(typeof(MacBuildSetting))]
-    public class MacBuildSettingEditor : IPlatformBuildSettingEditor
+    [Serializable]
+    public class CustomSetting<TYPE>
     {
-        // Mac Settings
-        private SerializedProperty compression;
+        [SerializeField]
+        bool enable;
+        [SerializeField]
+        TYPE customValue;
 
-        public override string FileExtension
+        public bool IsEnabled
         {
             get
             {
-                return ".app";
+                return enable;
             }
         }
 
-        public override void OnEnable()
+        public TYPE CustomValue
         {
-            base.OnEnable();
-
-            // name stuff
-            compression = serializedObject.FindProperty("compression");
+            get
+            {
+                return customValue;
+            }
         }
+    }
 
-        protected override void DrawPlatformSpecificSettings()
-        {
-            EditorGUILayout.PropertyField(compression);
-        }
+    [Serializable]
+    public class SceneSetting : CustomSetting<string[]>
+    {
+    }
+
+    [Serializable]
+    public class ScriptDefineSymbolsSetting : CustomSetting<string>
+    {
     }
 }

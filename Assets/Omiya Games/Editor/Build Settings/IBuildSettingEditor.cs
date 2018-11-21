@@ -40,10 +40,12 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(IBuildSetting))]
     public abstract class IBuildSettingEditor : Editor
     {
-        private const char PathDivider = '/';
+        public const char PathDivider = '/';
+
         private string previewPath = null;
         private AnimBool folderAnimation;
         protected readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
+        protected delegate string AdjustText(string originalString, System.Text.StringBuilder builder);
 
         public string GetPathPreview()
         {
@@ -76,7 +78,12 @@ namespace OmiyaGames.UI.Builds
             folderAnimation = new AnimBool(true, Repaint);
         }
 
-        protected void DrawBuildFolder(System.Action drawPath, string foldoutLabel = "Build Folder")
+        protected void DrawBuildFolder(System.Action drawPath)
+        {
+            DrawBuildFile(drawPath, null, "Build Folder");
+        }
+
+        protected void DrawBuildFile(System.Action drawPath, AdjustText adjustPreviewPath, string foldoutLabel)
         {
             // Draw the build folder
             DrawBoldFoldout(folderAnimation, foldoutLabel);
@@ -84,21 +91,32 @@ namespace OmiyaGames.UI.Builds
             {
                 if (scope.visible == true)
                 {
-                    if (string.IsNullOrEmpty(previewPath) == true)
-                    {
-                        previewPath = GetPathPreview();
-                    }
-                    EditorGUILayout.HelpBox(previewPath, MessageType.None);
+                    DrawFileNamePreview(drawPath, adjustPreviewPath);
+                }
+            }
+        }
 
-                    if (drawPath != null)
-                    {
-                        EditorGUI.BeginChangeCheck();
-                        drawPath();
-                        if (EditorGUI.EndChangeCheck() == true)
-                        {
-                            previewPath = null;
-                        }
-                    }
+        protected void DrawFileNamePreview(System.Action drawPath, AdjustText adjustPreviewPath)
+        {
+            // Draw the build folder
+            if (string.IsNullOrEmpty(previewPath) == true)
+            {
+                previewPath = GetPathPreview();
+            }
+            string preview = previewPath;
+            if (adjustPreviewPath != null)
+            {
+                preview = adjustPreviewPath(previewPath, builder);
+            }
+            EditorGUILayout.HelpBox(preview, MessageType.None);
+
+            if (drawPath != null)
+            {
+                EditorGUI.BeginChangeCheck();
+                drawPath();
+                if (EditorGUI.EndChangeCheck() == true)
+                {
+                    previewPath = null;
                 }
             }
         }
