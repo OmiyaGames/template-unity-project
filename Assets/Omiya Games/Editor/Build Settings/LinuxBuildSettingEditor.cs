@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using OmiyaGames.Builds;
 
-namespace OmiyaGames.Builds
+namespace OmiyaGames.UI.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LinuxBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="LinuxBuildSettingEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,49 +28,48 @@ namespace OmiyaGames.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>10/31/2018</date>
+    /// <date>11/21/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Linux platform.
+    /// Editor script for <code>LinuxBuildSetting</code>
     /// </summary>
-    public class LinuxBuildSetting : MacBuildSetting
+    /// <seealso cref="LinuxBuildSetting"/>
+    [CustomEditor(typeof(LinuxBuildSetting))]
+    public class LinuxBuildSettingEditor : IPlatformBuildSettingEditor
     {
-        [SerializeField]
-        protected Architecture architecture = Architecture.BuildUniversal;
-        [SerializeField]
-        protected bool enableHeadlessMode = false;
+        private SerializedProperty architecture;
+        private SerializedProperty compression;
+        private SerializedProperty enableHeadlessMode;
 
-        #region Overrides
-        protected override BuildTarget Target
+        public override string FileExtension
         {
             get
             {
-                switch(architecture)
+                if (architecture != null)
                 {
-                    case Architecture.Build64Bit:
-                        return BuildTarget.StandaloneLinux64;
-                    case Architecture.Build32Bit:
-                        return BuildTarget.StandaloneLinux;
-                    default:
-                        return BuildTarget.StandaloneLinuxUniversal;
+                    if (architecture.enumValueIndex == (int)IPlatformBuildSetting.Architecture.Build32Bit)
+                    {
+                        return ".x86";
+                    }
+                    return ".x86_64";
                 }
+                return ".x86";
             }
         }
 
-        protected override BuildOptions Options
+        public override void OnEnable()
         {
-            get
-            {
-                BuildOptions options = base.Options;
-
-                // Add Headless options
-                if (enableHeadlessMode == true)
-                {
-                    options |= BuildOptions.EnableHeadlessMode;
-                }
-                return options;
-            }
+            base.OnEnable();
+            architecture = serializedObject.FindProperty("architecture");
+            compression = serializedObject.FindProperty("compression");
+            enableHeadlessMode = serializedObject.FindProperty("enableHeadlessMode");
         }
-        #endregion
+
+        protected override void DrawPlatformSpecificSettings()
+        {
+            EditorGUILayout.PropertyField(architecture);
+            EditorGUILayout.PropertyField(compression);
+            EditorGUILayout.PropertyField(enableHeadlessMode);
+        }
     }
 }
