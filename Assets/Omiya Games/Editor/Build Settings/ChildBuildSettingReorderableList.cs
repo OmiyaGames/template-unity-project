@@ -100,7 +100,18 @@ namespace OmiyaGames.UI.Builds
         private void CreateWebGLSettings()
         {
             SerializedProperty element = Add<WebGlBuildSetting>("WebGL");
-            element.FindPropertyRelative("fileName").FindPropertyRelative("asSlug").boolValue = true;
+            if (element != null)
+            {
+                element = element.FindPropertyRelative("fileName");
+                if (element != null)
+                {
+                    element = element.FindPropertyRelative("asSlug");
+                    if (element != null)
+                    {
+                        element.boolValue = true;
+                    }
+                }
+            }
 
             // Apply the property
             ApplyModification();
@@ -110,7 +121,7 @@ namespace OmiyaGames.UI.Builds
         {
             SerializedProperty element = Add<T>(name);
             element = element.FindPropertyRelative("architecture");
-            if(element != null)
+            if (element != null)
             {
                 element.enumValueIndex = (int)architecture;
             }
@@ -323,6 +334,6 @@ namespace OmiyaGames.UI.Builds
             // Reimport
             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Target));
         }
-#endregion
+        #endregion
     }
 }
