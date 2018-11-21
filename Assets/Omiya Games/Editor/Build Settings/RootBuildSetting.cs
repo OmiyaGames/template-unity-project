@@ -118,7 +118,7 @@ namespace OmiyaGames.Builds
             // Setup variables
             builder.Clear();
             builder.Append(rootBuildFolder);
-            if (builder[builder.Length - 1] != pathDivider)
+            if ((builder.Length > 0) && (builder[builder.Length - 1] != pathDivider))
             {
                 builder.Append(pathDivider);
             }
