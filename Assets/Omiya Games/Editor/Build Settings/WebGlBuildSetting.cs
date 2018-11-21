@@ -81,8 +81,9 @@ namespace OmiyaGames.Builds
         [Header("WebGL Settings")]
         [SerializeField]
         protected WebLocationCheckerSettings[] webLocations;
-        [SerializeField]
-        protected bool forFacebook = false;
+        // FIXME: do more research on the Facebook builds
+        //[SerializeField]
+        //protected bool forFacebook = false;
 
         #region Overrides
         internal override int MaxNumberOfResults
@@ -97,14 +98,11 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                if (forFacebook == true)
-                {
-                    return BuildTargetGroup.Facebook;
-                }
-                else
-                {
-                    return BuildTargetGroup.WebGL;
-                }
+                //if (forFacebook == true)
+                //{
+                //    return BuildTargetGroup.Facebook;
+                //}
+                return BuildTargetGroup.WebGL;
             }
         }
 
