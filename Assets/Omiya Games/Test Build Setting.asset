@@ -25,6 +25,355 @@ MonoBehaviour:
   onBuildCancelled: 0
   allSettings:
   - {fileID: 114688565428732006}
+  - {fileID: 114489385817982290}
+  - {fileID: 114901754950995780}
+--- !u!114 &114067762013998006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90aa8e20c1245c343808f929cc036211, type: 3}
+  m_Name: Windows 64-bit
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114688565428732006}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 2
+  architecture: 1
+  includePdbFles: 0
+--- !u!114 &114225860922753906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c474afb2add8f2d4e93df2e3f9a2e7be, type: 3}
+  m_Name: Linux
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114688565428732006}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 2
+  architecture: 0
+  enableHeadlessMode: 0
+--- !u!114 &114412109014743086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b27a2cec29d914aa93631336cc5cbe, type: 3}
+  m_Name: Android
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114901754950995780}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 0
+  acceptExternalModificationsToPlayer: 0
+--- !u!114 &114421973233134676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90aa8e20c1245c343808f929cc036211, type: 3}
+  m_Name: Windows 32-bit
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114688565428732006}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 2
+  architecture: 2
+  includePdbFles: 0
+--- !u!114 &114489385817982290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 229db86099f0e2341bbf43c4ba6ed988, type: 3}
+  m_Name: Web
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 11400000}
+  createEmbeddedFolder: 1
+  folderName:
+    names:
+    - type: 2
+      text: 
+    asSlug: 0
+  allSettings:
+  - {fileID: 114510769280624196}
+--- !u!114 &114510769280624196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3a574855b962e43bcd4753f367c956, type: 3}
+  m_Name: WebGL
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114489385817982290}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  webLocations: []
+--- !u!114 &114649475892383972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8cad7f3e2af4834abf2a76511fdc102, type: 3}
+  m_Name: iOS
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114901754950995780}
+  fileName:
+    names:
+    - type: 1
+      text: 
+    asSlug: 0
+  folderName:
+    names:
+    - type: 1
+      text: 
+    - type: 0
+      text: ' ('
+    - type: 2
+      text: 
+    - type: 0
+      text: )
+    asSlug: 0
+  enableStrictMode: 0
+  enableAssertions: 0
+  customScenes:
+    enable: 0
+    customValue: []
+  debugSettings:
+    enable: 0
+    enableDebuggingScripts: 1
+    buildScriptsOnly: 0
+  archiveSettings:
+    enable: 0
+    type: 0
+    includeParentFolder: 1
+    deleteOriginals: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 0
+  symlinkLibraries: 0
+  acceptExternalModificationsToPlayer: 0
 --- !u!114 &114688565428732006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34,7 +383,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 229db86099f0e2341bbf43c4ba6ed988, type: 3}
-  m_Name: Desktop Platforms
+  m_Name: Desktop
   m_EditorClassIdentifier: 
   parentSetting: {fileID: 11400000}
   createEmbeddedFolder: 1
@@ -44,7 +393,10 @@ MonoBehaviour:
       text: ' - '
     asSlug: 0
   allSettings:
+  - {fileID: 114067762013998006}
+  - {fileID: 114421973233134676}
   - {fileID: 114809925387849062}
+  - {fileID: 114225860922753906}
 --- !u!114 &114809925387849062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,18 +429,45 @@ MonoBehaviour:
   enableAssertions: 0
   customScenes:
     enable: 0
-    scenePaths: []
+    customValue: []
   debugSettings:
     enable: 0
     enableDebuggingScripts: 1
     buildScriptsOnly: 0
   archiveSettings:
     enable: 0
-    includeParentFolder: 1
-    fileName:
-      names: []
-      asSlug: 0
+    type: 0
+    includeParentFolder: 0
     deleteOriginals: 0
-  changeScriptDefineSymbols: 0
-  customScriptDefineSymbols: 
-  compression: 0
+    fileName:
+      names:
+      - type: 1
+        text: 
+      - type: 0
+        text: .zip
+      asSlug: 0
+  customScriptDefineSymbols:
+    enable: 0
+    customValue: 
+  compression: 2
+--- !u!114 &114901754950995780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 229db86099f0e2341bbf43c4ba6ed988, type: 3}
+  m_Name: Mobile
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 11400000}
+  createEmbeddedFolder: 1
+  folderName:
+    names:
+    - type: 2
+      text: 
+    asSlug: 0
+  allSettings:
+  - {fileID: 114649475892383972}
+  - {fileID: 114412109014743086}
