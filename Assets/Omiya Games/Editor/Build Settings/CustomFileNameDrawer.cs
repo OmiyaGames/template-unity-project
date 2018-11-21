@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 using OmiyaGames.Builds;
-using System;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -36,7 +34,7 @@ namespace OmiyaGames.UI.Builds
     /// <summary>
     /// Property drawer for <code>CustomFileName</code>.
     /// </summary>
-    /// <seealso cref="SupportedPlatforms"/>
+    /// <seealso cref="CustomFileName"/>
     [CustomPropertyDrawer(typeof(CustomFileName))]
     public class CustomFileNameDrawer : PropertyDrawer
     {

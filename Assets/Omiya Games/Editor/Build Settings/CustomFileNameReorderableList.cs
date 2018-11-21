@@ -47,7 +47,7 @@ namespace OmiyaGames.UI.Builds
             {
                 CustomFileName.PrefillType[] values = (CustomFileName.PrefillType[])Enum.GetValues(typeof(CustomFileName.PrefillType));
                 int[] returnValues = new int[values.Length];
-                for(int i = 0; i < values.Length; ++i)
+                for (int i = 0; i < values.Length; ++i)
                 {
                     returnValues[i] = (int)values[i];
                 }
@@ -97,6 +97,9 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawNamesListHeader(Rect rect)
         {
+            int originalIndentLevel = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
             // Draw name of the variable
             float originalWidth = rect.width;
             rect.width -= SlugWidth + EditorUiUtility.VerticalMargin;
@@ -106,6 +109,8 @@ namespace OmiyaGames.UI.Builds
             rect.x += rect.width + EditorUiUtility.VerticalMargin;
             rect.width = SlugWidth;
             AsSlugProperty.boolValue = EditorGUI.ToggleLeft(rect, "Convert As Slug", AsSlugProperty.boolValue);
+
+            EditorGUI.indentLevel = originalIndentLevel;
         }
 
         private void DrawNamesListElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -137,7 +142,7 @@ namespace OmiyaGames.UI.Builds
 
             // Draw text field
             bool originalEnabled = GUI.enabled;
-            if(canEditText == true)
+            if (canEditText == true)
             {
                 rect.y -= EditorUiUtility.VerticalMargin / 2f;
                 rect.height = EditorGUIUtility.singleLineHeight;
@@ -176,7 +181,7 @@ namespace OmiyaGames.UI.Builds
 
             // Setup string value
             string text;
-            if(CustomFileName.Prefill.DefaultTextMapper.TryGetValue(data, out text) == true)
+            if (CustomFileName.Prefill.DefaultTextMapper.TryGetValue(data, out text) == true)
             {
                 element.FindPropertyRelative("text").stringValue = text;
             }

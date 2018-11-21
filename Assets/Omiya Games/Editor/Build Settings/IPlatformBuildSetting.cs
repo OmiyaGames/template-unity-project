@@ -51,29 +51,9 @@ namespace OmiyaGames.Builds
             LZ4HighCompression
         }
 
-        [Serializable]
-        public struct SceneSettings
+        public enum ArchiveType
         {
-            [SerializeField]
-            bool enable;
-            [SerializeField]
-            string[] scenePaths;
-
-            public bool IsEnabled
-            {
-                get
-                {
-                    return enable;
-                }
-            }
-
-            public string[] Paths
-            {
-                get
-                {
-                    return scenePaths;
-                }
-            }
+            Zip
         }
 
         [Serializable]
@@ -82,21 +62,37 @@ namespace OmiyaGames.Builds
             [SerializeField]
             bool enable;
             [SerializeField]
+            ArchiveType type;
+            [SerializeField]
             bool includeParentFolder;
             [SerializeField]
-            CustomFileName fileName;
-            [SerializeField]
             bool deleteOriginals;
+            [SerializeField]
+            CustomFileName fileName;
 
-            public ArchiveSettings(CustomFileName fileName, bool includeParentFolder)
+            public ArchiveSettings(bool includeParentFolder)
             {
                 // Setup member variables
-                this.fileName = fileName;
                 this.includeParentFolder = includeParentFolder;
 
                 // Setup defaults
                 enable = false;
                 deleteOriginals = false;
+                type = ArchiveType.Zip;
+
+                // Setup name
+                string extension;
+                switch (type)
+                {
+                    // TODO: when new archive types are added, add file extensions
+                    default:
+                        extension = ".zip";
+                        break;
+                }
+
+                CustomFileName.Prefill appName = new CustomFileName.Prefill(CustomFileName.PrefillType.AppName);
+                CustomFileName.Prefill fileExtension = new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, extension);
+                fileName = new CustomFileName(false, appName, fileExtension);
             }
 
             public bool IsEnabled
@@ -128,6 +124,14 @@ namespace OmiyaGames.Builds
                 get
                 {
                     return deleteOriginals;
+                }
+            }
+
+            public ArchiveType Type
+            {
+                get
+                {
+                    return type;
                 }
             }
         }
@@ -188,7 +192,6 @@ namespace OmiyaGames.Builds
             }
         }
 
-        [Header("Common Settings")]
         [SerializeField]
         [Tooltip("Name of the executable file.")]
         protected CustomFileName fileName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.AppName));
@@ -207,15 +210,13 @@ namespace OmiyaGames.Builds
         [SerializeField]
         protected bool enableAssertions = false;
         [SerializeField]
-        protected SceneSettings customScenes = new SceneSettings();
+        protected SceneSetting customScenes = new SceneSetting();
         [SerializeField]
         protected DevelopmentSettings debugSettings = new DevelopmentSettings(true);
         [SerializeField]
-        protected ArchiveSettings archiveSettings = new ArchiveSettings(new CustomFileName(), true);
+        protected ArchiveSettings archiveSettings = new ArchiveSettings(true);
         [SerializeField]
-        protected bool changeScriptDefineSymbols = false;
-        [SerializeField]
-        protected string customScriptDefineSymbols = "";
+        protected ScriptDefineSymbolsSetting customScriptDefineSymbols;
 
         #region Overrides
         internal override int MaxNumberOfResults
@@ -353,10 +354,10 @@ namespace OmiyaGames.Builds
             LastPlayerSettings returnSettings = new LastPlayerSettings(TargetGroup);
 
             // Check if we want to update the player settings
-            if (changeScriptDefineSymbols == true)
+            if (customScriptDefineSymbols.IsEnabled == true)
             {
                 // Update player settings
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, customScriptDefineSymbols);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, customScriptDefineSymbols.CustomValue);
             }
             return returnSettings;
         }
@@ -367,7 +368,7 @@ namespace OmiyaGames.Builds
         protected virtual void RevertPlayerSettings(LastPlayerSettings lastSettings)
         {
             // Check if we want to update the player settings
-            if (changeScriptDefineSymbols == true)
+            if (customScriptDefineSymbols.IsEnabled == true)
             {
                 // Revert player settings
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, lastSettings.LastScriptDefineSymbols);
@@ -408,7 +409,7 @@ namespace OmiyaGames.Builds
             // Update the scenes to build
             if (customScenes.IsEnabled == true)
             {
-                buildPlayerOptions.scenes = customScenes.Paths;
+                buildPlayerOptions.scenes = customScenes.CustomValue;
             }
             else
             {
