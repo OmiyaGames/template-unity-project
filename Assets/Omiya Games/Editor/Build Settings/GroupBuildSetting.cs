@@ -150,7 +150,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                return folderName.ToString();
+                return folderName.ToString(this);
             }
         }
 

@@ -229,7 +229,7 @@ namespace OmiyaGames.UI.Builds
         {
             builder.Clear();
             builder.Append(originalString);
-            builder.Append(PathDivider);
+            builder.Append(Utility.PathDivider);
 
             CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
             builder.Append(name.ToString((IBuildSetting)target));
@@ -252,7 +252,7 @@ namespace OmiyaGames.UI.Builds
         {
             builder.Clear();
             builder.Append(originalString);
-            builder.Append(PathDivider);
+            builder.Append(Utility.PathDivider);
 
             // Add file name
             CustomFileName name = CustomFileNameDrawer.GetTarget(fileName);

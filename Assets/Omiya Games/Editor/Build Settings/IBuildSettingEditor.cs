@@ -40,8 +40,6 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(IBuildSetting))]
     public abstract class IBuildSettingEditor : Editor
     {
-        public const char PathDivider = '/';
-
         private string previewPath = null;
         private AnimBool folderAnimation;
         protected readonly System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -53,7 +51,7 @@ namespace OmiyaGames.UI.Builds
             if (target is IBuildSetting)
             {
                 // Calculate the path from the target
-                returnPath = ((IBuildSetting)target).GetPathPreview(builder, PathDivider);
+                returnPath = ((IBuildSetting)target).GetPathPreview(builder, Utility.PathDivider);
 
                 // Prepend "Preview"
                 builder.Clear();

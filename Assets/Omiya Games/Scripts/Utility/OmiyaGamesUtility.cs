@@ -56,6 +56,7 @@ namespace OmiyaGames
     /// </remarks>
     public static class Utility
     {
+        public const char PathDivider = '/';
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";

@@ -68,7 +68,7 @@ namespace OmiyaGames.Builds
         /// <returns></returns>
         public string GetPathPreview(System.Text.StringBuilder builder)
         {
-            return GetPathPreview(builder, System.IO.Path.DirectorySeparatorChar);
+            return GetPathPreview(builder, Utility.PathDivider);
         }
 
         /// <summary>
@@ -76,10 +76,9 @@ namespace OmiyaGames.Builds
         /// </summary>
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns></returns>
-        public BuildPlayersResult Build()
+        public virtual BuildPlayersResult Build()
         {
-            RootBuildSetting root = RootSetting;
-            BuildPlayersResult results = new BuildPlayersResult(root, this);
+            BuildPlayersResult results = SetupResults();
             Build(results);
             return results;
         }
@@ -90,6 +89,15 @@ namespace OmiyaGames.Builds
         /// <param name="results">List of statuses indicating the results</param>
         /// <returns>True if the build was successful.</returns>
         protected abstract void Build(BuildPlayersResult results);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected BuildPlayersResult SetupResults()
+        {
+            return new BuildPlayersResult(RootSetting, this);
+        }
 
         #region Helper Methods
         protected static void DisplayPreBuildCheckFailed(string message)
