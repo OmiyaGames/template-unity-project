@@ -208,9 +208,10 @@ namespace OmiyaGames.Builds
                     builder.Append(rootFolderName);
                     foreach (GroupBuildSetting setting in allEmbeddedGroups)
                     {
-                        builder.Append(Path.DirectorySeparatorChar);
+                        builder.Append(Utility.PathDivider);
                         builder.Append(setting.FolderName);
                     }
+                    folderNameCache = builder.ToString();
                 }
                 return folderNameCache;
             }
@@ -256,7 +257,7 @@ namespace OmiyaGames.Builds
             {
                 OnBuildCancelled = root.OnBuildCancelled;
                 OnBuildFailed = root.OnBuildFailed;
-                rootFolderName = root.GetPathPreview(builder, Path.DirectorySeparatorChar);
+                rootFolderName = root.GetPathPreview(builder, Utility.PathDivider);
             }
         }
 
@@ -322,7 +323,7 @@ namespace OmiyaGames.Builds
         {
             builder.Clear();
             builder.Append(path);
-            builder.Append(Path.DirectorySeparatorChar);
+            builder.Append(Utility.PathDivider);
             builder.Append(folder);
             return builder.ToString();
         }
@@ -386,16 +387,19 @@ namespace OmiyaGames.Builds
                 {
                     if (isEntering == false)
                     {
-                        if(allEmbeddedGroups.Count > 0)
+                        if (allEmbeddedGroups.Count > 0)
                         {
                             allEmbeddedGroups.RemoveAt(allEmbeddedGroups.Count - 1);
                         }
                         folderNameCache = null;
                     }
-                    else if (folderNameCache != null)
+                    else
                     {
                         allEmbeddedGroups.Add(groupSetting);
-                        folderNameCache = ConcatenateFolders(folderNameCache, groupSetting.FolderName);
+                        if (folderNameCache != null)
+                        {
+                            folderNameCache = ConcatenateFolders(folderNameCache, groupSetting.FolderName);
+                        }
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace OmiyaGames.Builds
 {
@@ -55,7 +56,7 @@ namespace OmiyaGames.Builds
                         // If so, return this parent
                         return (RootBuildSetting)currentParent;
                     }
-                    else if(currentParent is IChildBuildSetting)
+                    else if (currentParent is IChildBuildSetting)
                     {
                         // Check if parent is also a child.
                         // If so, loop again, this time with the parent's parent.
@@ -71,6 +72,45 @@ namespace OmiyaGames.Builds
                 // Nothing found, return null
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Recursively creates builds.
+        /// </summary>
+        /// <param name="results">List of statuses indicating the results</param>
+        /// <returns></returns>
+        public override BuildPlayersResult Build()
+        {
+            // Setup variables
+            BuildPlayersResult results = SetupResults();
+            Stack<GroupBuildSetting> embeddedSettings = new Stack<GroupBuildSetting>();
+
+            // Go through all the parents
+            IChildBuildSetting checkParent = this;
+            while (checkParent != null)
+            {
+                // Check if the parent is a group build setting
+                if (checkParent is GroupBuildSetting)
+                {
+                    embeddedSettings.Push((GroupBuildSetting)checkParent);
+                }
+
+                // Go to the parent of the current setting we're reviewing
+                checkParent = checkParent.parentSetting as IChildBuildSetting;
+            }
+
+            // Go through the stack
+            Stack<BuildPlayersResult.GroupBuildScope> embeddedScopes = new Stack<BuildPlayersResult.GroupBuildScope>(embeddedSettings.Count);
+            while (embeddedSettings.Count > 0)
+            {
+                embeddedScopes.Push(new BuildPlayersResult.GroupBuildScope(results, embeddedSettings.Pop()));
+            }
+            Build(results);
+            while (embeddedScopes.Count > 0)
+            {
+                embeddedScopes.Pop().Dispose();
+            }
+            return results;
         }
         #endregion
 
