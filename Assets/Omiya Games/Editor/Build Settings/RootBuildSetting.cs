@@ -42,6 +42,150 @@ namespace OmiyaGames.Builds
             HaltImmediately,
         }
 
+        [System.Serializable]
+        public class BuildField
+        {
+            [SerializeField]
+            int version;
+            [SerializeField]
+            bool increment;
+
+            public BuildField(int version, bool increment)
+            {
+                this.version = version;
+                this.increment = increment;
+            }
+
+            #region Properties
+            public int Version
+            {
+                get
+                {
+                    return version;
+                }
+                set
+                {
+                    version = value;
+                }
+            }
+
+            public bool Increment
+            {
+                get
+                {
+                    return increment;
+                }
+            }
+            #endregion
+
+            public void IncrementVersion()
+            {
+                if (Increment == true)
+                {
+                    Version += 1;
+                }
+            }
+        }
+
+        [System.Serializable]
+        public class VersionField
+        {
+            [SerializeField]
+            BuildField major = new BuildField(1, false);
+            [SerializeField]
+            BuildField minor = new BuildField(0, true);
+            [SerializeField]
+            BuildField bug = new BuildField(0, false);
+
+            #region Properties
+            public int MajorVersion
+            {
+                get
+                {
+                    return major.Version;
+                }
+                set
+                {
+                    major.Version = value;
+                }
+            }
+
+            public bool IncrementMajorVersion
+            {
+                get
+                {
+                    return major.Increment;
+                }
+            }
+
+            public int MinorVersion
+            {
+                get
+                {
+                    return minor.Version;
+                }
+                set
+                {
+                    minor.Version = value;
+                }
+            }
+
+            public bool IncrementMinorVersion
+            {
+                get
+                {
+                    return minor.Increment;
+                }
+            }
+
+            public int BugVersion
+            {
+                get
+                {
+                    return bug.Version;
+                }
+                set
+                {
+                    bug.Version = value;
+                }
+            }
+
+            public bool IncrementBugVersion
+            {
+                get
+                {
+                    return bug.Increment;
+                }
+            }
+            #endregion
+
+            public override string ToString()
+            {
+                System.Text.StringBuilder builder = new System.Text.StringBuilder();
+                Append(builder);
+                return builder.ToString();
+            }
+
+            public void Append(System.Text.StringBuilder builder)
+            {
+                if (builder != null)
+                {
+                    builder.Append(MajorVersion);
+                    builder.Append('.');
+                    builder.Append(MinorVersion);
+                    builder.Append('.');
+                    builder.Append(BugVersion);
+                }
+            }
+
+            public void IncrementVersion()
+            {
+                major.IncrementVersion();
+                minor.IncrementVersion();
+                bug.IncrementVersion();
+            }
+        }
+
         [SerializeField]
         [FolderPath]
         private string rootBuildFolder = "";
@@ -56,6 +200,10 @@ namespace OmiyaGames.Builds
         private BuildProgression onBuildCancelled = BuildProgression.AskWhetherToContinue;
         [SerializeField]
         List<IChildBuildSetting> allSettings = new List<IChildBuildSetting>();
+        [SerializeField]
+        VersionField version;
+        [SerializeField]
+        BuildField buildNumber;
 
         // TODO: add this optimization flag once we've figured out what platform and debug settings we're on.
         // Not to mention recursively finding a list of similar build settings to reduce script compiling.
@@ -92,10 +240,10 @@ namespace OmiyaGames.Builds
         {
             // Check the group first
             string message;
-            foreach(IChildBuildSetting setting in allSettings)
+            foreach (IChildBuildSetting setting in allSettings)
             {
                 // Check if prebuild check failed
-                if(setting.PreBuildCheck(out message) == false)
+                if (setting.PreBuildCheck(out message) == false)
                 {
                     // Display a message
                     DisplayPreBuildCheckFailed(message);
@@ -105,11 +253,43 @@ namespace OmiyaGames.Builds
                 }
             }
 
+            // FIXME: Update player settings with the new version numbers
+
             // Indicate group build started
             using (new BuildPlayersResult.GroupBuildScope(results, this))
             {
                 // Build the list of settings
                 BuildGroup(allSettings, results);
+            }
+
+            // Make sure build succeeded
+            bool isSuccess = false;
+            foreach(BuildPlayersResult.IReport result in results.AllReports)
+            {
+                if (result.State == BuildPlayersResult.Status.Success)
+                {
+                    // consider passing true if at least one build succeeded
+                    isSuccess = true;
+                }
+                else if (result.State == BuildPlayersResult.Status.Cancelled)
+                {
+                    // but always return false if a build is canceled
+                    isSuccess = false;
+                    break;
+                }
+                else if (result.State == BuildPlayersResult.Status.Error)
+                {
+                    // or always return false if a build has errors
+                    isSuccess = false;
+                    break;
+                }
+            }
+
+            if (isSuccess == true)
+            {
+                // Increment the build numbers only on successful builds
+                Version.IncrementVersion();
+                BuildNumber.IncrementVersion();
             }
         }
 
@@ -147,6 +327,22 @@ namespace OmiyaGames.Builds
             get
             {
                 return onBuildCancelled;
+            }
+        }
+
+        public VersionField Version
+        {
+            get
+            {
+                return version;
+            }
+        }
+
+        public BuildField BuildNumber
+        {
+            get
+            {
+                return buildNumber;
             }
         }
         #endregion

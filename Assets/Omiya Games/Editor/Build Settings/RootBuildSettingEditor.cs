@@ -46,9 +46,12 @@ namespace OmiyaGames.UI.Builds
         SerializedProperty onBuildFailed;
         SerializedProperty onBuildCancelled;
         SerializedProperty allSettings;
+        SerializedProperty version;
+        SerializedProperty buildNumber;
 
         AnimBool buildSettingsAnimation;
         AnimBool interruptionsAnimation;
+        AnimBool versionsAnimation;
         CustomFileNameReorderableList newBuildFolderNameList;
         ChildBuildSettingReorderableList childBuildSettingsList;
 
@@ -77,9 +80,12 @@ namespace OmiyaGames.UI.Builds
             onBuildFailed = serializedObject.FindProperty("onBuildFailed");
             onBuildCancelled = serializedObject.FindProperty("onBuildCancelled");
             allSettings = serializedObject.FindProperty("allSettings");
+            version = serializedObject.FindProperty("version");
+            buildNumber = serializedObject.FindProperty("buildNumber");
 
             buildSettingsAnimation = new AnimBool(true, Repaint);
             interruptionsAnimation = new AnimBool(true, Repaint);
+            versionsAnimation = new AnimBool(true, Repaint);
 
             newBuildFolderNameList = new CustomFileNameReorderableList(newBuildFolderName, new GUIContent("New Build Folder Name"));
             childBuildSettingsList = new ChildBuildSettingReorderableList(this.target, allSettings, new GUIContent("All Settings"));
@@ -100,6 +106,10 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.Space();
             DrawBuildSettingList();
 
+            // Draw Versions
+            EditorGUILayout.Space();
+            DrawVersions();
+
             // Draw interruptions
             EditorGUILayout.Space();
             DrawInterruptions();
@@ -108,6 +118,19 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.Space();
             DrawBuildAllButton();
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void DrawVersions()
+        {
+            DrawBoldFoldout(interruptionsAnimation, "Version Fields");
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(versionsAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    EditorGUILayout.PropertyField(version);
+                    EditorGUILayout.PropertyField(buildNumber);
+                }
+            }
         }
 
         private void DrawInterruptions()
