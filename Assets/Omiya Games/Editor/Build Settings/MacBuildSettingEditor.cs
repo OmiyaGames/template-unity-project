@@ -39,6 +39,7 @@ namespace OmiyaGames.UI.Builds
     {
         // Mac Settings
         private SerializedProperty compression;
+        private SerializedProperty scriptingBackend;
 
         public override string FileExtension
         {
@@ -52,11 +53,13 @@ namespace OmiyaGames.UI.Builds
         {
             base.OnEnable();
             compression = serializedObject.FindProperty("compression");
+            scriptingBackend = serializedObject.FindProperty("scriptingBackend");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
             EditorGUILayout.PropertyField(compression);
+            EditorGUILayout.PropertyField(scriptingBackend);
         }
     }
 }

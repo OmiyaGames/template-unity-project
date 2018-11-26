@@ -37,8 +37,17 @@ namespace OmiyaGames.Builds
     {
         [SerializeField]
         protected CompressionType compression = CompressionType.Default;
+        [SerializeField]
+        protected ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
 
         #region Overrides
+        protected override LastPlayerSettings SetupPlayerSettings()
+        {
+            LastPlayerSettings returnSetting = base.SetupPlayerSettings();
+            PlayerSettings.SetScriptingBackend(TargetGroup, scriptingBackend);
+            return returnSetting;
+        }
+
         protected override BuildTargetGroup TargetGroup
         {
             get
