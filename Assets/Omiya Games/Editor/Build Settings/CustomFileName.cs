@@ -47,7 +47,9 @@ namespace OmiyaGames.Builds
             Literal,
             AppName,
             BuildSettingName,
-            DateTime
+            DateTime,
+            Version,
+            BuildNumber
         }
 
         [System.Serializable]
@@ -128,6 +130,18 @@ namespace OmiyaGames.Builds
                 (string text, IBuildSetting setting) =>
                 {
                     return System.DateTime.Now.ToString(text);
+                }
+            }, {
+                PrefillType.Version,
+                (string text, IBuildSetting setting) =>
+                {
+                    return setting.RootSetting.Version.ToString();
+                }
+            }, {
+                PrefillType.BuildNumber,
+                (string text, IBuildSetting setting) =>
+                {
+                    return setting.RootSetting.BuildNumber.ToString();
                 }
             }
         };
