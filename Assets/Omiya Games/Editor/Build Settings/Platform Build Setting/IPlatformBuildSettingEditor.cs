@@ -67,9 +67,12 @@ namespace OmiyaGames.UI.Builds
         private SerializedProperty archiveFileName;
         private SerializedProperty archiveDeleteOriginals;
 
-        public abstract string FileExtension
+        public virtual string FileExtension
         {
-            get;
+            get
+            {
+                return ((IPlatformBuildSetting)target).FileExtension;
+            }
         }
 
         protected abstract void DrawPlatformSpecificSettings();

@@ -261,10 +261,6 @@ namespace OmiyaGames.Builds
                 if (results.LastReport.State == BuildPlayersResult.Status.Success)
                 {
                     ArchiveBuild(results);
-                    if (IsBuildingASingleFile == false)
-                    {
-                        RenameBuild(options, results);
-                    }
                 }
             }
             else
@@ -323,9 +319,12 @@ namespace OmiyaGames.Builds
             get;
         }
 
-        protected abstract bool IsBuildingASingleFile
+        public virtual string FileExtension
         {
-            get;
+            get
+            {
+                return null;
+            }
         }
 
         protected virtual BuildOptions Options
@@ -393,15 +392,6 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected virtual void RenameBuild(BuildPlayerOptions options, BuildPlayersResult results)
-        {
-            string newFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this));
-            if (string.Equals(options.locationPathName, newFolderName) == false)
-            {
-                FileUtil.MoveFileOrDirectory(options.locationPathName, newFolderName);
-            }
-        }
-
         protected virtual void ArchiveBuild(BuildPlayersResult results)
         {
             if (archiveSettings.IsEnabled == true)
@@ -425,13 +415,10 @@ namespace OmiyaGames.Builds
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
 
             // Update the location to build this player
-            if (IsBuildingASingleFile == true)
+            buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+            if (string.IsNullOrEmpty(FileExtension) == false)
             {
-                buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
-            }
-            else
-            {
-                buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, fileName.ToString(this));
+                buildPlayerOptions.locationPathName = results.Concatenate(buildPlayerOptions.locationPathName, FileExtension);
             }
 
             // Update the scenes to build

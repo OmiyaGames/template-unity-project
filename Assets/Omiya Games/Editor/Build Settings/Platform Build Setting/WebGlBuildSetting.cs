@@ -85,14 +85,6 @@ namespace OmiyaGames.Builds
         //protected bool forFacebook = false;
 
         #region Overrides
-        protected override bool IsBuildingASingleFile
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         internal override int MaxNumberOfResults
         {
             get

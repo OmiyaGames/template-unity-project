@@ -57,14 +57,6 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override bool IsBuildingASingleFile
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         protected override BuildOptions Options
         {
             get

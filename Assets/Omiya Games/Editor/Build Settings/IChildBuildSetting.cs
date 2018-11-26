@@ -86,7 +86,7 @@ namespace OmiyaGames.Builds
             Stack<GroupBuildSetting> embeddedSettings = new Stack<GroupBuildSetting>();
 
             // Go through all the parents
-            IChildBuildSetting checkParent = this;
+            IChildBuildSetting checkParent = parentSetting as IChildBuildSetting;
             while (checkParent != null)
             {
                 // Check if the parent is a group build setting
