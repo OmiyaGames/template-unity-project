@@ -282,14 +282,24 @@ namespace OmiyaGames.Builds
 
             // Setup builder with parent path
             builder.Clear();
-            builder.Append(parentPath);
-            if (builder[builder.Length - 1] != pathDivider)
+            if (string.IsNullOrEmpty(parentPath) == false)
             {
-                builder.Append(pathDivider);
+                builder.Append(parentPath);
             }
 
-            // Append this folder name
-            builder.Append(folderName.ToString(this));
+            // Grab the folder name
+            parentPath = folderName.ToString(this);
+            if (string.IsNullOrEmpty(parentPath) == false)
+            {
+                // Check if we need to add a path divider
+                if (builder[builder.Length - 1] != pathDivider)
+                {
+                    builder.Append(pathDivider);
+                }
+
+                // Append this folder name
+                builder.Append(parentPath);
+            }
             return builder.ToString();
         }
 
