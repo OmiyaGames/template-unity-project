@@ -35,10 +35,9 @@ namespace OmiyaGames.UI.Builds
     /// </summary>
     /// <seealso cref="LinuxBuildSetting"/>
     [CustomEditor(typeof(LinuxBuildSetting))]
-    public class LinuxBuildSettingEditor : IPlatformBuildSettingEditor
+    public class LinuxBuildSettingEditor : IStandaloneBuildSettingEditor
     {
         private SerializedProperty architecture;
-        private SerializedProperty compression;
         private SerializedProperty enableHeadlessMode;
 
         public override string FileExtension
@@ -61,14 +60,13 @@ namespace OmiyaGames.UI.Builds
         {
             base.OnEnable();
             architecture = serializedObject.FindProperty("architecture");
-            compression = serializedObject.FindProperty("compression");
             enableHeadlessMode = serializedObject.FindProperty("enableHeadlessMode");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
             EditorGUILayout.PropertyField(architecture);
-            EditorGUILayout.PropertyField(compression);
+            base.DrawPlatformSpecificSettings();
             EditorGUILayout.PropertyField(enableHeadlessMode);
         }
     }

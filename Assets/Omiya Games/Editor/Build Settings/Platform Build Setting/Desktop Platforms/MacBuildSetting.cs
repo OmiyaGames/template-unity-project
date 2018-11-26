@@ -42,13 +42,5 @@ namespace OmiyaGames.Builds
                 return BuildTarget.StandaloneOSX;
             }
         }
-
-        protected override bool IsBuildingASingleFile
-        {
-            get
-            {
-                return true;
-            }
-        }
     }
 }

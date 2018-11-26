@@ -74,11 +74,11 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override bool IsBuildingASingleFile
+        public override string FileExtension
         {
             get
             {
-                return false;
+                return ".exe";
             }
         }
 
