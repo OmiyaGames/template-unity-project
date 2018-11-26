@@ -1,10 +1,12 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEditor.AnimatedValues;
+using UnityEngine;
+using OmiyaGames.Builds;
 
-namespace OmiyaGames.Builds
+namespace OmiyaGames.UI.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LinuxBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="IStandaloneBuildSettingEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,57 +30,29 @@ namespace OmiyaGames.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>10/31/2018</date>
+    /// <date>11/16/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Linux platform.
+    /// Helper script for <code>IPlatformBuildSetting</code>
     /// </summary>
-    public class LinuxBuildSetting : IStandaloneBuildSetting
+    /// <seealso cref="IPlatformBuildSetting"/>
+    [CustomEditor(typeof(IStandaloneBuildSetting))]
+    public abstract class IStandaloneBuildSettingEditor : IPlatformBuildSettingEditor
     {
-        [SerializeField]
-        protected Architecture architecture = Architecture.BuildUniversal;
-        [SerializeField]
-        protected bool enableHeadlessMode = false;
+        private SerializedProperty compression;
+        private SerializedProperty scriptingBackend;
 
-        #region Overrides
-        protected override BuildTarget Target
+        public override void OnEnable()
         {
-            get
-            {
-                switch(architecture)
-                {
-                    case Architecture.Build64Bit:
-                        return BuildTarget.StandaloneLinux64;
-                    case Architecture.Build32Bit:
-                        return BuildTarget.StandaloneLinux;
-                    default:
-                        return BuildTarget.StandaloneLinuxUniversal;
-                }
-            }
+            base.OnEnable();
+            compression = serializedObject.FindProperty("compression");
+            scriptingBackend = serializedObject.FindProperty("scriptingBackend");
         }
 
-        protected override bool IsBuildingASingleFile
+        protected override void DrawPlatformSpecificSettings()
         {
-            get
-            {
-                return false;
-            }
+            EditorGUILayout.PropertyField(compression);
+            EditorGUILayout.PropertyField(scriptingBackend);
         }
-
-        protected override BuildOptions Options
-        {
-            get
-            {
-                BuildOptions options = base.Options;
-
-                // Add Headless options
-                if (enableHeadlessMode == true)
-                {
-                    options |= BuildOptions.EnableHeadlessMode;
-                }
-                return options;
-            }
-        }
-        #endregion
     }
 }

@@ -33,29 +33,8 @@ namespace OmiyaGames.Builds
     /// <summary>
     /// Build settings for Mac platform.
     /// </summary>
-    public class MacBuildSetting : IPlatformBuildSetting
+    public class MacBuildSetting : IStandaloneBuildSetting
     {
-        [SerializeField]
-        protected CompressionType compression = CompressionType.Default;
-        [SerializeField]
-        protected ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
-
-        #region Overrides
-        protected override LastPlayerSettings SetupPlayerSettings()
-        {
-            LastPlayerSettings returnSetting = base.SetupPlayerSettings();
-            PlayerSettings.SetScriptingBackend(TargetGroup, scriptingBackend);
-            return returnSetting;
-        }
-
-        protected override BuildTargetGroup TargetGroup
-        {
-            get
-            {
-                return BuildTargetGroup.Standalone;
-            }
-        }
-
         protected override BuildTarget Target
         {
             get
@@ -64,17 +43,12 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override BuildOptions Options
+        protected override bool IsBuildingASingleFile
         {
             get
             {
-                BuildOptions options = base.Options;
-
-                // Add compression options
-                SetBuildOption(ref options, TargetGroup, compression);
-                return options;
+                return true;
             }
         }
-        #endregion
     }
 }

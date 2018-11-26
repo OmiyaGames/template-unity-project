@@ -33,7 +33,7 @@ namespace OmiyaGames.Builds
     /// <summary>
     /// Build settings for Windows platform.
     /// </summary>
-    public class WindowsBuildSetting : MacBuildSetting
+    public class WindowsBuildSetting : IStandaloneBuildSetting
     {
         [SerializeField]
         protected Architecture architecture = Architecture.Build64Bit;
@@ -71,6 +71,14 @@ namespace OmiyaGames.Builds
                 {
                     return BuildTarget.StandaloneWindows;
                 }
+            }
+        }
+
+        protected override bool IsBuildingASingleFile
+        {
+            get
+            {
+                return false;
             }
         }
 

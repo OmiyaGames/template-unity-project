@@ -4,7 +4,7 @@ using UnityEditor;
 namespace OmiyaGames.Builds
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LinuxBuildSetting.cs" company="Omiya Games">
+    /// <copyright file="IStandaloneBuildSetting.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,40 +28,31 @@ namespace OmiyaGames.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>10/31/2018</date>
+    /// <date>11/26/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Build settings for Linux platform.
+    /// Base build settings for standalone builds (i.e. PC/Mac/Linux).
     /// </summary>
-    public class LinuxBuildSetting : IStandaloneBuildSetting
+    public abstract class IStandaloneBuildSetting : IPlatformBuildSetting
     {
         [SerializeField]
-        protected Architecture architecture = Architecture.BuildUniversal;
+        protected CompressionType compression = CompressionType.Default;
         [SerializeField]
-        protected bool enableHeadlessMode = false;
+        protected ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
 
         #region Overrides
-        protected override BuildTarget Target
+        protected override LastPlayerSettings SetupPlayerSettings()
         {
-            get
-            {
-                switch(architecture)
-                {
-                    case Architecture.Build64Bit:
-                        return BuildTarget.StandaloneLinux64;
-                    case Architecture.Build32Bit:
-                        return BuildTarget.StandaloneLinux;
-                    default:
-                        return BuildTarget.StandaloneLinuxUniversal;
-                }
-            }
+            LastPlayerSettings returnSetting = base.SetupPlayerSettings();
+            PlayerSettings.SetScriptingBackend(TargetGroup, scriptingBackend);
+            return returnSetting;
         }
 
-        protected override bool IsBuildingASingleFile
+        protected override BuildTargetGroup TargetGroup
         {
             get
             {
-                return false;
+                return BuildTargetGroup.Standalone;
             }
         }
 
@@ -71,11 +62,8 @@ namespace OmiyaGames.Builds
             {
                 BuildOptions options = base.Options;
 
-                // Add Headless options
-                if (enableHeadlessMode == true)
-                {
-                    options |= BuildOptions.EnableHeadlessMode;
-                }
+                // Add compression options
+                SetBuildOption(ref options, TargetGroup, compression);
                 return options;
             }
         }

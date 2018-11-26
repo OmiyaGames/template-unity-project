@@ -319,13 +319,23 @@ namespace OmiyaGames.Builds
             return builder.ToString();
         }
 
-        public string ConcatenateFolders(string path, string folder)
+        public string ConcatenateFolders(string path, params string[] folders)
         {
-            builder.Clear();
-            builder.Append(path);
-            builder.Append(Utility.PathDivider);
-            builder.Append(folder);
-            return builder.ToString();
+            if ((folders != null) && (folders.Length > 0))
+            {
+                builder.Clear();
+                builder.Append(path);
+                foreach (string folder in folders)
+                {
+                    if (string.IsNullOrEmpty(folder) == false)
+                    {
+                        builder.Append(Utility.PathDivider);
+                        builder.Append(folder);
+                    }
+                }
+                path = builder.ToString();
+            }
+            return path;
         }
 
         public override string ToString()

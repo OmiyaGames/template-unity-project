@@ -261,7 +261,10 @@ namespace OmiyaGames.Builds
                 if (results.LastReport.State == BuildPlayersResult.Status.Success)
                 {
                     ArchiveBuild(results);
-                    RenameBuild(options, results);
+                    if (IsBuildingASingleFile == false)
+                    {
+                        RenameBuild(options, results);
+                    }
                 }
             }
             else
@@ -316,6 +319,11 @@ namespace OmiyaGames.Builds
         }
 
         protected abstract BuildTarget Target
+        {
+            get;
+        }
+
+        protected abstract bool IsBuildingASingleFile
         {
             get;
         }
@@ -387,8 +395,11 @@ namespace OmiyaGames.Builds
 
         protected virtual void RenameBuild(BuildPlayerOptions options, BuildPlayersResult results)
         {
-            string newFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString());
-            FileUtil.MoveFileOrDirectory(options.locationPathName, newFolderName);
+            string newFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this));
+            if (string.Equals(options.locationPathName, newFolderName) == false)
+            {
+                FileUtil.MoveFileOrDirectory(options.locationPathName, newFolderName);
+            }
         }
 
         protected virtual void ArchiveBuild(BuildPlayersResult results)
@@ -414,7 +425,14 @@ namespace OmiyaGames.Builds
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
 
             // Update the location to build this player
-            buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, fileName.ToString());
+            if (IsBuildingASingleFile == true)
+            {
+                buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+            }
+            else
+            {
+                buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, fileName.ToString(this));
+            }
 
             // Update the scenes to build
             if (customScenes.IsEnabled == true)
