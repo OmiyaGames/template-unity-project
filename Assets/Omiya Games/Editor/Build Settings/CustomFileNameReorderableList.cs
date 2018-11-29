@@ -129,31 +129,23 @@ namespace OmiyaGames.UI.Builds
             type.enumValueIndex = EditorGUI.IntPopup(rect, type.enumValueIndex, type.enumDisplayNames, PrefillTypeValues);
 
             // Draw the text field (if necessary)
-            bool canEditText = true;
-            switch (type.enumValueIndex)
-            {
-                case (int)CustomFileName.PrefillType.AppName:
-                case (int)CustomFileName.PrefillType.BuildSettingName:
-                    canEditText = false;
-                    break;
-            }
             rect.x += (EditorUiUtility.VerticalMargin + TypeWidth);
             rect.width = (originalWidth - (TypeWidth + EditorUiUtility.VerticalMargin));
 
             // Draw text field
             bool originalEnabled = GUI.enabled;
-            if (canEditText == true)
+            if (CustomFileName.CanEditText(type.enumValueIndex) == true)
             {
                 rect.y -= EditorUiUtility.VerticalMargin / 2f;
                 rect.height = EditorGUIUtility.singleLineHeight;
                 text.stringValue = EditorGUI.TextField(rect, text.stringValue);
             }
-            else
-            {
-                GUI.enabled = false;
-                EditorGUI.SelectableLabel(rect, text.stringValue);
-                GUI.enabled = originalEnabled;
-            }
+            //else
+            //{
+            //    GUI.enabled = false;
+            //    EditorGUI.SelectableLabel(rect, text.stringValue);
+            //    GUI.enabled = originalEnabled;
+            //}
         }
 
         private void DrawNameListDropdown(Rect buttonRect, ReorderableList list)

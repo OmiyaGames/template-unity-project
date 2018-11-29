@@ -55,6 +55,21 @@ namespace OmiyaGames.Builds
         }
 
         /// <summary>
+        /// Returns stored number of times this setting created a build.
+        /// </summary>
+        internal virtual int BuildNumber
+        {
+            get
+            {
+                return -1;
+            }
+            set
+            {
+                // Do nothing
+            }
+        }
+
+        /// <summary>
         /// Grabs a preview of the path to build to
         /// </summary>
         /// <param name="builder"></param>
