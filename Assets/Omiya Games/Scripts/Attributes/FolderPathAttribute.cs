@@ -38,18 +38,33 @@ namespace OmiyaGames
     [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
     public class FolderPathAttribute : PropertyAttribute
     {
-        public FolderPathAttribute(string defaultPath = "Assets"/*, bool relativeToResourcesFolder = false*/)
+        public const string DefaultLocalPath = "Assets";
+
+        public enum RelativeTo
         {
-            DefaultPath = defaultPath;
-            //RelativeToResourcesFolder = relativeToResourcesFolder;
+            None,
+            ProjectDirectory,
+            //ResourcesFolder
         }
 
-        //public bool RelativeToResourcesFolder
-        //{
-        //    get;
-        //}
+        public FolderPathAttribute(string defaultPath = DefaultLocalPath, RelativeTo relativeTo = RelativeTo.None, bool displayWarning = true)
+        {
+            DefaultPath = defaultPath;
+            PathRelativeTo = relativeTo;
+            IsWarningDisplayed = displayWarning;
+        }
+
+        public RelativeTo PathRelativeTo
+        {
+            get;
+        }
 
         public string DefaultPath
+        {
+            get;
+        }
+
+        public bool IsWarningDisplayed
         {
             get;
         }

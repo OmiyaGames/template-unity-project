@@ -38,9 +38,15 @@ namespace OmiyaGames.UI
     [CustomPropertyDrawer(typeof(FilePathAttribute))]
     public class FilePathDrawer : FolderPathDrawer
     {
-        public override bool IsMessageBoxShown(SerializedProperty property)
+        public override bool IsMessageBoxShown(SerializedProperty property, FolderPathAttribute attribute)
         {
-            return !File.Exists(property.stringValue);
+            bool showMessage = false;
+            if ((attribute != null) && (attribute.IsWarningDisplayed == true))
+            {
+                // FIXME: check local path
+                showMessage = (File.Exists(property.stringValue) == false);
+            }
+            return showMessage;
         }
 
         protected override bool IsValid
@@ -63,7 +69,7 @@ namespace OmiyaGames.UI
         {
             // Open a file panel
             FilePathAttribute path = (FilePathAttribute)attribute;
-            string browsedFile = UnityEditor.EditorUtility.OpenFilePanel(label.text, path.DefaultPath, path.FileExtension);
+            string browsedFile = EditorUtility.OpenFilePanel(label.text, path.DefaultPath, path.FileExtension);
 
             // Check if a folder was found
             if (string.IsNullOrEmpty(browsedFile) == false)

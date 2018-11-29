@@ -41,10 +41,23 @@ namespace OmiyaGames.UI
         const float messageHeight = 36f;
         const float buttonWidth = 63f;
 
+        public static string GetLocalPath(string fullPath, FolderPathAttribute.RelativeTo relativeTo)
+        {
+            if (relativeTo == FolderPathAttribute.RelativeTo.ProjectDirectory)
+            {
+                int startLocalPath = fullPath.IndexOf(FolderPathAttribute.DefaultLocalPath);
+                if (startLocalPath > 0)
+                {
+                    fullPath = fullPath.Substring(startLocalPath);
+                }
+            }
+            return fullPath;
+        }
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float singleLineHeight = base.GetPropertyHeight(property, label);
-            if ((IsValid == true) && (IsMessageBoxShown(property) == true))
+            if ((IsValid == true) && (IsMessageBoxShown(property, attribute as FolderPathAttribute) == true))
             {
                 singleLineHeight += messageHeight;
             }
@@ -116,9 +129,15 @@ namespace OmiyaGames.UI
             }
         }
 
-        public virtual bool IsMessageBoxShown(SerializedProperty property)
+        public virtual bool IsMessageBoxShown(SerializedProperty property, FolderPathAttribute attribute)
         {
-            return !Directory.Exists(property.stringValue);
+            bool showMessage = false;
+            if ((attribute != null) && (attribute.IsWarningDisplayed == true))
+            {
+                // FIXME: check local path
+                showMessage = (Directory.Exists(property.stringValue) == false);
+            }
+            return showMessage;
         }
 
         private bool CalculatePositions(Rect position, SerializedProperty property, out Rect textPosition, out Rect buttonPosition)
@@ -134,7 +153,7 @@ namespace OmiyaGames.UI
             buttonPosition.width = buttonWidth;
 
             // Draw message box
-            bool showMessageBox = IsMessageBoxShown(property);
+            bool showMessageBox = IsMessageBoxShown(property, attribute as FolderPathAttribute);
             if (showMessageBox)
             {
                 // Calculate text positioning
@@ -153,12 +172,12 @@ namespace OmiyaGames.UI
         {
             // Open a folder panel
             FolderPathAttribute path = (FolderPathAttribute)attribute;
-            string browsedFolder = UnityEditor.EditorUtility.OpenFolderPanel(label.text, path.DefaultPath, null);
+            string browsedFolder = EditorUtility.OpenFolderPanel(label.text, path.DefaultPath, null);
 
             // Check if a folder was found
             if (string.IsNullOrEmpty(browsedFolder) == false)
             {
-                property.stringValue = browsedFolder;
+                property.stringValue = GetLocalPath(browsedFolder, path.PathRelativeTo);
             }
         }
     }
