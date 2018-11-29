@@ -78,6 +78,7 @@ namespace OmiyaGames.Builds
             }
         }
 
+        // FIXME: work on setting up a drawer for this variable
         [SerializeField]
         protected WebLocationCheckerSettings[] webLocations;
         // FIXME: do more research on the Facebook builds
@@ -115,12 +116,12 @@ namespace OmiyaGames.Builds
 
         protected override void ArchiveBuild(BuildPlayersResult results)
         {
-            foreach(WebLocationCheckerSettings webLocation in webLocations)
-            {
-                // FIXME: to generate the domains file
-                // Then ZIP the folder that's generated
-                throw new System.NotImplementedException();
-            }
+            //foreach(WebLocationCheckerSettings webLocation in webLocations)
+            //{
+            //    // FIXME: to generate the domains file
+            //    // Then ZIP the folder that's generated
+            //    throw new System.NotImplementedException();
+            //}
 
             // Do the regular archive business
             ArchiveBuild(results);

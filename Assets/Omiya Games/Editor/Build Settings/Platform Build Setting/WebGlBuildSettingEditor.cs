@@ -59,7 +59,7 @@ namespace OmiyaGames.UI.Builds
         protected override void DrawPlatformSpecificSettings()
         {
             // FIXME: customize this
-            EditorGUILayout.PropertyField(webLocations);
+            //EditorGUILayout.PropertyField(webLocations);
             // FIXME: to draw
             //EditorGUILayout.PropertyField(forFacebook);
         }
