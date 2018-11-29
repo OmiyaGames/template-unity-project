@@ -55,7 +55,7 @@ namespace OmiyaGames.Builds
 
         public enum ArchiveType
         {
-            Zip
+            Gzip
         }
 
         [Serializable]
@@ -80,20 +80,11 @@ namespace OmiyaGames.Builds
                 // Setup defaults
                 enable = false;
                 deleteOriginals = false;
-                type = ArchiveType.Zip;
+                type = ArchiveType.Gzip;
 
                 // Setup name
-                string extension;
-                switch (type)
-                {
-                    // TODO: when new archive types are added, add file extensions
-                    default:
-                        extension = ".zip";
-                        break;
-                }
-
                 CustomFileName.Prefill appName = new CustomFileName.Prefill(CustomFileName.PrefillType.AppName);
-                CustomFileName.Prefill fileExtension = new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, extension);
+                CustomFileName.Prefill fileExtension = new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, GetFileExtension(type));
                 fileName = new CustomFileName(false, appName, fileExtension);
             }
 
@@ -134,6 +125,16 @@ namespace OmiyaGames.Builds
                 get
                 {
                     return type;
+                }
+            }
+
+            public static string GetFileExtension(ArchiveType type)
+            {
+                switch (type)
+                {
+                    // TODO: when new archive types are added, add file extensions
+                    default:
+                        return ".tgz";
                 }
             }
         }
@@ -422,33 +423,10 @@ namespace OmiyaGames.Builds
             Debug.Log(results.FolderName);
             if(archiveSettings.IsParentFolderIncluded == true)
             {
-
+                string fileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
+                Community.UI.Compression.CompressDirectory(results.FolderName, fileName);
             }
-            DirectoryInfo directorySelected = new DirectoryInfo(results.FolderName);
-            foreach (FileInfo fileToCompress in directorySelected.GetFiles())
-            {
-                using (FileStream originalFileStream = fileToCompress.OpenRead())
-                {
-                    if ((File.GetAttributes(fileToCompress.FullName) & FileAttributes.Hidden) != FileAttributes.Hidden && fileToCompress.Extension != ".gz")
-                    {
-                        using (FileStream compressedFileStream = File.Create(fileToCompress.FullName + ".gz"))
-                        {
-                            using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
-                            {
-                                originalFileStream.CopyTo(compressionStream);
-                            }
-                        }
-                    }
-                }
-            }
-            if (false)
-            {
-                results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
-            }
-            else
-            {
-                results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
-            }
+            results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
         }
 
         private BuildPlayerOptions GetPlayerOptions(BuildPlayersResult results)

@@ -3,7 +3,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 
-namespace Community
+namespace Community.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="Compression.cs">
@@ -195,7 +195,7 @@ namespace Community
             zipStream.Write(bytes, 0, bytes.Length);
         }
 
-        public static bool DecompressFile(string sDir, GZipStream zipStream, ProgressDelegate progress)
+        public static bool DecompressFile(string sDir, GZipStream zipStream, ProgressDelegate progress = null)
         {
             //Decompress file name
             byte[] bytes = new byte[sizeof(int)];
@@ -234,7 +234,7 @@ namespace Community
             return true;
         }
 
-        public static void CompressDirectory(string sInDir, string sOutFile, ProgressDelegate progress)
+        public static void CompressDirectory(string sInDir, string sOutFile, ProgressDelegate progress = null)
         {
             string[] sFiles = Directory.GetFiles(sInDir, "*.*", SearchOption.AllDirectories);
             int iDirLen = sInDir[sInDir.Length - 1] == Path.DirectorySeparatorChar ? sInDir.Length : sInDir.Length + 1;
@@ -249,7 +249,7 @@ namespace Community
                 }
         }
 
-        public static void DecompressToDirectory(string sCompressedFile, string sDir, ProgressDelegate progress)
+        public static void DecompressToDirectory(string sCompressedFile, string sDir, ProgressDelegate progress = null)
         {
             using (FileStream inFile = new FileStream(sCompressedFile, FileMode.Open, FileAccess.Read, FileShare.None))
             using (GZipStream zipStream = new GZipStream(inFile, CompressionMode.Decompress, true))

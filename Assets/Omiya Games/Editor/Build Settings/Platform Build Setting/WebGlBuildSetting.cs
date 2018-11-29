@@ -85,6 +85,17 @@ namespace OmiyaGames.Builds
         //[SerializeField]
         //protected bool forFacebook = false;
 
+
+        // FIXME: delete this variable
+        [SerializeField]
+        [FolderPath]
+        protected string testZipFolder;
+
+        public void TestZip()
+        {
+            Community.UI.Compression.CompressDirectory(testZipFolder, testZipFolder + ".tar.gz", (status) => { Debug.Log(status); });
+        }
+
         #region Overrides
         internal override int MaxNumberOfResults
         {

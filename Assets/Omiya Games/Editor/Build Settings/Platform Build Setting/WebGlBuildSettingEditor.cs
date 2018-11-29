@@ -41,6 +41,9 @@ namespace OmiyaGames.UI.Builds
         // FIXME: do more research on the Facebook builds
         //private SerializedProperty forFacebook;
 
+        // FIXME: delete this variable
+        private SerializedProperty testZipFolder;
+
         public override string FileExtension
         {
             get
@@ -54,6 +57,7 @@ namespace OmiyaGames.UI.Builds
             base.OnEnable();
             webLocations = serializedObject.FindProperty("webLocations");
             //forFacebook = serializedObject.FindProperty("forFacebook");
+            testZipFolder = serializedObject.FindProperty("testZipFolder");
         }
 
         protected override void DrawPlatformSpecificSettings()
@@ -62,6 +66,14 @@ namespace OmiyaGames.UI.Builds
             //EditorGUILayout.PropertyField(webLocations);
             // FIXME: to draw
             //EditorGUILayout.PropertyField(forFacebook);
+
+            // FIXME: delete all lines below
+            EditorGUILayout.PropertyField(testZipFolder);
+            UnityEngine.Rect rect = EditorGUILayout.GetControlRect();
+            if(UnityEngine.GUI.Button(rect, "Test Zipping") == true)
+            {
+                ((WebGlBuildSetting)target).TestZip();
+            }
         }
     }
 }
