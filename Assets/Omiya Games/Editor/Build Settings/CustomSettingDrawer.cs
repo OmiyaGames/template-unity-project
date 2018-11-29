@@ -104,6 +104,14 @@ namespace OmiyaGames.UI.Builds
     [CustomPropertyDrawer(typeof(SceneSetting))]
     public class SceneSettingDrawer : CustomSettingDrawer
     {
+        const float ButtonWidth = 64f;
+        const float Space = 4f;
+        static readonly string[] SceneFileFilter = new string[]
+        {
+            "Scene files", "unity",
+            "All files", "*"
+        };
+
         private SerializedProperty property = null;
         private UnityEditorInternal.ReorderableList list = null;
 
@@ -126,7 +134,22 @@ namespace OmiyaGames.UI.Builds
                 SerializedProperty element = property.GetArrayElementAtIndex(index);
                 rect.y += EditorUiUtility.VerticalMargin;
                 rect.height = EditorGUIUtility.singleLineHeight;
+
+                // Draw the text field
+                rect.width -= (ButtonWidth + Space);
                 element.stringValue = EditorGUI.TextField(rect, element.stringValue);
+
+                // Draw the browse button
+                rect.x += (rect.width + Space);
+                rect.width = ButtonWidth;
+                if (GUI.Button(rect, "Browse...") == true)
+                {
+                    string newFileName = EditorUtility.OpenFilePanelWithFilters("Open Scene", FolderPathAttribute.DefaultLocalPath, SceneFileFilter);
+                    if (string.IsNullOrEmpty(newFileName) == false)
+                    {
+                        element.stringValue = FolderPathDrawer.GetLocalPath(newFileName, FolderPathAttribute.RelativeTo.ProjectDirectory);
+                    }
+                }
             }
         }
 

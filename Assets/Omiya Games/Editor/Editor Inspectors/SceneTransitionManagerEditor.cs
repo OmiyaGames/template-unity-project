@@ -39,8 +39,8 @@ namespace OmiyaGames.UI.Scenes
     [CustomPropertyDrawer(typeof(SceneInfo))]
     public class SceneInfoDrawer : PropertyDrawer
     {
-        const int FileNameLabelWidth = 96;
-        const float RevertTimeLabelWidth = 120;
+        const int FileNameLabelWidth = 82;
+        const float RevertTimeLabelWidth = 102;
         const float RevertTimeFieldTotalMargin = 14;
         const int CursorModeLabelWidth = 160;
         const int VerticalMargin = 2;
@@ -133,7 +133,8 @@ namespace OmiyaGames.UI.Scenes
             position.y += (position.height + VerticalMargin);
 
             // Draw Cursor label
-            DrawTextField(position, property, "Cursor Lock Mode", "cursorMode", CursorModeLabelWidth);
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("cursorMode"), new GUIContent("Cursor Lock Mode"));
+            //DrawTextField(position, property, "Cursor Lock Mode", "cursorMode", CursorModeLabelWidth);
 
             // Set indent back to what it was
             EditorGUI.indentLevel = indent;

@@ -41,7 +41,7 @@ namespace OmiyaGames
         /// </summary>
         /// <param name="fileExtensions">The file extention, without "*."</param>
         /// <param name="defaultPath"></param>
-        public FilePathAttribute(string fileExtensions, string defaultPath = ""/*, bool relativeToResourcesFolder = false*/) : base(defaultPath/*, relativeToResourcesFolder*/)
+        public FilePathAttribute(string fileExtensions, string defaultPath = DefaultLocalPath, RelativeTo relativeTo = RelativeTo.None, bool displayWarning = true) : base(defaultPath, relativeTo, displayWarning)
         {
             FileExtension = fileExtensions;
         }
