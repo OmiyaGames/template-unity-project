@@ -2,6 +2,8 @@
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using System;
+using System.IO;
+using System.IO.Compression;
 
 namespace OmiyaGames.Builds
 {
@@ -203,6 +205,8 @@ namespace OmiyaGames.Builds
             new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName),
             new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, ")"));
         [SerializeField]
+        protected int buildNumber = 0;
+        [SerializeField]
         protected bool enableStrictMode = false;
         /// <summary>
         /// Only effective if debugSettings is disabled.
@@ -234,6 +238,18 @@ namespace OmiyaGames.Builds
             }
         }
 
+        internal override int BuildNumber
+        {
+            get
+            {
+                return buildNumber;
+            }
+            set
+            {
+                buildNumber = value;
+            }
+        }
+
         protected override void Build(BuildPlayersResult results)
         {
             // Check if prebuild check succeeded
@@ -260,7 +276,15 @@ namespace OmiyaGames.Builds
                 // Consider making a post build
                 if (results.LastReport.State == BuildPlayersResult.Status.Success)
                 {
-                    ArchiveBuild(results);
+                    // Check if the archive settings are enabled
+                    if (archiveSettings.IsEnabled == true)
+                    {
+                        // Archive the build
+                        ArchiveBuild(results);
+                    }
+
+                    // Increment the build number
+                    ++BuildNumber;
                 }
             }
             else
@@ -394,18 +418,36 @@ namespace OmiyaGames.Builds
 
         protected virtual void ArchiveBuild(BuildPlayersResult results)
         {
-            if (archiveSettings.IsEnabled == true)
+            // FIXME: to ZIP the folder that's generated
+            Debug.Log(results.FolderName);
+            if(archiveSettings.IsParentFolderIncluded == true)
             {
-                // FIXME: to ZIP the folder that's generated
-                throw new System.NotImplementedException();
-                if (false)
+
+            }
+            DirectoryInfo directorySelected = new DirectoryInfo(results.FolderName);
+            foreach (FileInfo fileToCompress in directorySelected.GetFiles())
+            {
+                using (FileStream originalFileStream = fileToCompress.OpenRead())
                 {
-                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+                    if ((File.GetAttributes(fileToCompress.FullName) & FileAttributes.Hidden) != FileAttributes.Hidden && fileToCompress.Extension != ".gz")
+                    {
+                        using (FileStream compressedFileStream = File.Create(fileToCompress.FullName + ".gz"))
+                        {
+                            using (GZipStream compressionStream = new GZipStream(compressedFileStream, CompressionMode.Compress))
+                            {
+                                originalFileStream.CopyTo(compressionStream);
+                            }
+                        }
+                    }
                 }
-                else
-                {
-                    results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
-                }
+            }
+            if (false)
+            {
+                results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+            }
+            else
+            {
+                results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Failed to archive: ", name), this);
             }
         }
 

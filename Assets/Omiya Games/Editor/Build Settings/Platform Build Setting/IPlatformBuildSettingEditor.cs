@@ -42,6 +42,7 @@ namespace OmiyaGames.UI.Builds
         // name stuff
         private SerializedProperty fileName;
         private SerializedProperty folderName;
+        private SerializedProperty buildNumber;
 
         // build settings
         private AnimBool customSettingsAnimation;
@@ -85,6 +86,7 @@ namespace OmiyaGames.UI.Builds
             // name stuff
             fileName = serializedObject.FindProperty("fileName");
             folderName = serializedObject.FindProperty("folderName");
+            buildNumber = serializedObject.FindProperty("buildNumber");
 
             // build settings
             customSettingsAnimation = new AnimBool(true, Repaint);
@@ -247,6 +249,7 @@ namespace OmiyaGames.UI.Builds
             DrawName();
 
             // Draw the folder and the file it's going to create
+            EditorGUILayout.PropertyField(buildNumber);
             EditorGUILayout.PropertyField(fileName);
             EditorGUILayout.PropertyField(folderName);
         }

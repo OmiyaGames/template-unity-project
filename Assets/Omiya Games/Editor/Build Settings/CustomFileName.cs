@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.Build.Reporting;
 
 namespace OmiyaGames.Builds
 {
@@ -49,7 +48,7 @@ namespace OmiyaGames.Builds
             BuildSettingName,
             DateTime,
             Version,
-            BuildNumber
+            BuildSettingNumber
         }
 
         [System.Serializable]
@@ -135,13 +134,18 @@ namespace OmiyaGames.Builds
                 PrefillType.Version,
                 (string text, IBuildSetting setting) =>
                 {
-                    return setting.RootSetting.Version.ToString();
+                    return Application.version;
                 }
             }, {
-                PrefillType.BuildNumber,
+                PrefillType.BuildSettingNumber,
                 (string text, IBuildSetting setting) =>
                 {
-                    return setting.RootSetting.BuildNumber.ToString();
+                    string returnString = null;
+                    if(setting.BuildNumber >= 0)
+                    {
+                        returnString = setting.BuildNumber.ToString();
+                    }
+                    return returnString;
                 }
             }
         };
@@ -150,6 +154,23 @@ namespace OmiyaGames.Builds
         private Prefill[] names;
         [SerializeField]
         bool asSlug;
+
+        public static bool CanEditText(PrefillType type)
+        {
+            switch (type)
+            {
+                case PrefillType.Literal:
+                case PrefillType.DateTime:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool CanEditText(int type)
+        {
+            return CanEditText((PrefillType)type);
+        }
 
         public CustomFileName(bool asSlug = false, params Prefill[] names)
         {
