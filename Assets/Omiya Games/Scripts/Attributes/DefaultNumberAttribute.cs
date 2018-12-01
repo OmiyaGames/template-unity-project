@@ -64,22 +64,6 @@ namespace OmiyaGames
         }
 
         /// <summary>
-        /// The number set to the value if editor's checkbox is unchecked.
-        /// </summary>
-        public readonly float defaultNumber;
-        /// <summary>
-        /// Indicates whether the editor number is limited to being greater, less, or neither.
-        /// </summary>
-        public readonly Range numberRange;
-        /// <summary>
-        /// If <code>numberRange</code> is <code>Range.GreaterThanOrEqualTo</code>,
-        /// the number in the editor must be greater than this parameter.
-        /// If <code>Range.LessThanOrEqualTo</code>, then the number in the editor must be less.
-        /// Otherwise, this value is the first value the editor is set to when it's checked.
-        /// </summary>
-        public readonly float startNumber;
-
-        /// <summary>
         /// Creates a checkbox in the editor. If unchecked, argument is set to first argument.
         /// Otherwise, the user is allowed to set the 
         /// </summary>
@@ -88,9 +72,9 @@ namespace OmiyaGames
         /// </param>
         public DefaultNumberAttribute(float defaultNumber)
         {
-            this.defaultNumber = defaultNumber;
-            startNumber = defaultNumber;
-            numberRange = Range.FullRange;
+            this.DefaultNumber = defaultNumber;
+            StartNumber = defaultNumber;
+            NumberRange = Range.FullRange;
         }
 
         /// <summary>
@@ -109,15 +93,42 @@ namespace OmiyaGames
         /// </param>
         public DefaultNumberAttribute(float defaultNumber, bool greaterThan, float startNumber)
         {
-            this.defaultNumber = defaultNumber;
-            this.startNumber = startNumber;
+            this.DefaultNumber = defaultNumber;
+            this.StartNumber = startNumber;
 
             // Set the number range
-            numberRange = Range.LessThanOrEqualTo;
+            NumberRange = Range.LessThanOrEqualTo;
             if (greaterThan == true)
             {
-                numberRange = Range.GreaterThanOrEqualTo;
+                NumberRange = Range.GreaterThanOrEqualTo;
             }
+        }
+
+        /// <summary>
+        /// The number set to the value if editor's checkbox is unchecked.
+        /// </summary>
+        public float DefaultNumber
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Indicates whether the editor number is limited to being greater, less, or neither.
+        /// </summary>
+        public Range NumberRange
+        {
+            get;
+        }
+
+        /// <summary>
+        /// If <code>numberRange</code> is <code>Range.GreaterThanOrEqualTo</code>,
+        /// the number in the editor must be greater than this parameter.
+        /// If <code>Range.LessThanOrEqualTo</code>, then the number in the editor must be less.
+        /// Otherwise, this value is the first value the editor is set to when it's checked.
+        /// </summary>
+        public float StartNumber
+        {
+            get;
         }
     }
 }

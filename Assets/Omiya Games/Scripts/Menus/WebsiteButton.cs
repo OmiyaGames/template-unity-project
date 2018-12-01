@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebsiteButton.cs" company="Omiya Games">

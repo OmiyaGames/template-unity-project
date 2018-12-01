@@ -40,6 +40,7 @@ namespace OmiyaGames
     public class SceneInfo
     {
         [SerializeField]
+        [FilePath("unity", relativeTo: FolderPathAttribute.RelativeTo.ProjectDirectory, displayWarning: false)]
         string scenePath = "";
         [SerializeField]
         string displayName = "";

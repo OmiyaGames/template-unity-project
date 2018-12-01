@@ -72,7 +72,7 @@ namespace OmiyaGames.UI
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return EditorUtility.GetHeight(label, GetNumLinesToDraw(property, label), VerticalMargin);
+            return EditorUiUtility.GetHeight(label, GetNumLinesToDraw(property, label), VerticalMargin);
         }
 
         public static bool ShowLabel(GUIContent label)

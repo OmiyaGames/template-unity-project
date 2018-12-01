@@ -4,7 +4,7 @@ using TMPro;
 using OmiyaGames.Settings;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="NewHighScoreMenu.cs" company="Omiya Games">

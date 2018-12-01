@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using OmiyaGames.Global;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="ISceneChangingMenu.cs" company="Omiya Games">

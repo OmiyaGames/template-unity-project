@@ -8,7 +8,7 @@ using OmiyaGames.Global;
 using OmiyaGames.Translations;
 using OmiyaGames.Scenes;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="MenuManager.cs" company="Omiya Games">
