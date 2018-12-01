@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using OmiyaGames.Audio;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsAudioMenu.cs" company="Omiya Games">

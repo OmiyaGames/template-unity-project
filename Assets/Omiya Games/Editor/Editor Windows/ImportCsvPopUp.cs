@@ -257,7 +257,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the browse button
             if (GUILayout.Button("Browse...", BrowseButtonFont, BrowseButtonHeight) == true)
             {
-                string newFileName = UnityEditor.EditorUtility.OpenFilePanelWithFilters("Import CSV File", "Assets/", CsvFileFilter);
+                string newFileName = EditorUtility.OpenFilePanelWithFilters("Import CSV File", "Assets/", CsvFileFilter);
                 if (string.IsNullOrEmpty(newFileName) == false)
                 {
                     CsvFileName = newFileName;

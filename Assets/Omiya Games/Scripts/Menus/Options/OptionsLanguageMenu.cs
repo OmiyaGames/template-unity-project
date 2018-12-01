@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsLanguageMenu.cs" company="Omiya Games">

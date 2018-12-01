@@ -34,7 +34,7 @@ namespace OmiyaGames
     /// <summary>
     /// A series of utilities used throughout the <code>OmiyaGames</code> namespace.
     /// </summary>
-    public static class EditorUtility
+    public static class EditorUiUtility
     {
         public const float MinHelpBoxHeight = 30f;
         public const float VerticalMargin = 2f;

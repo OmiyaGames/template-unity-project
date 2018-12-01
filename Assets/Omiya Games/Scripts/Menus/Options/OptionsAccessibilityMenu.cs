@@ -4,7 +4,7 @@ using OmiyaGames.Audio;
 using OmiyaGames.Settings;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsAccessibilityMenu.cs" company="Omiya Games">

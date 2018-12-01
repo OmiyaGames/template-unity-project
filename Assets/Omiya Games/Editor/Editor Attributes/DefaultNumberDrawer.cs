@@ -91,23 +91,23 @@ namespace OmiyaGames.UI
 
         static void SetToDefaultFloat(SerializedProperty property, DefaultNumberAttribute range)
         {
-            property.floatValue = range.defaultNumber;
+            property.floatValue = range.DefaultNumber;
         }
 
         static void SetToDefaultInt(SerializedProperty property, DefaultNumberAttribute range)
         {
-            property.floatValue = Mathf.RoundToInt(range.defaultNumber);
+            property.floatValue = Mathf.RoundToInt(range.DefaultNumber);
         }
 
         static float LimitValue(DefaultNumberAttribute range, float value)
         {
-            if ((range.numberRange == DefaultNumberAttribute.Range.GreaterThanOrEqualTo) && (value < range.startNumber))
+            if ((range.NumberRange == DefaultNumberAttribute.Range.GreaterThanOrEqualTo) && (value < range.StartNumber))
             {
-                value = range.startNumber;
+                value = range.StartNumber;
             }
-            else if ((range.numberRange == DefaultNumberAttribute.Range.LessThanOrEqualTo) && (value > range.startNumber))
+            else if ((range.NumberRange == DefaultNumberAttribute.Range.LessThanOrEqualTo) && (value > range.StartNumber))
             {
-                value = range.startNumber;
+                value = range.StartNumber;
             }
 
             return value;
