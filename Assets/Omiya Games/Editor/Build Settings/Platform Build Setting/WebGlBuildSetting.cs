@@ -124,7 +124,7 @@ namespace OmiyaGames.Builds
             //}
 
             // Do the regular archive business
-            ArchiveBuild(results);
+            base.ArchiveBuild(results);
         }
         #endregion
     }
