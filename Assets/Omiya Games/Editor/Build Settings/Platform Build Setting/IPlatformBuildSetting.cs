@@ -3,7 +3,6 @@ using UnityEditor;
 using UnityEditor.Build.Reporting;
 using System;
 using System.IO;
-using System.IO.Compression;
 
 namespace OmiyaGames.Builds
 {
@@ -70,17 +69,15 @@ namespace OmiyaGames.Builds
             [SerializeField]
             CustomFileName fileName;
 
-            public ArchiveSettings(ArchiveType type)
+            public ArchiveSettings(ArchiveType type, CustomFileName fileName)
             {
                 // Setup defaults
                 enable = false;
                 deleteOriginals = false;
-                this.type = type;
 
-                // Setup name
-                CustomFileName.Prefill appName = new CustomFileName.Prefill(CustomFileName.PrefillType.AppName);
-                CustomFileName.Prefill fileExtension = new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, GetFileExtension(type));
-                fileName = new CustomFileName(false, appName, fileExtension);
+                // Setup filenames
+                this.type = type;
+                this.fileName = fileName;
             }
 
             public bool IsEnabled
@@ -185,14 +182,19 @@ namespace OmiyaGames.Builds
 
         [SerializeField]
         [Tooltip("Name of the executable file.")]
-        protected CustomFileName fileName = new CustomFileName(false, new CustomFileName.Prefill(CustomFileName.PrefillType.AppName));
+        protected CustomFileName fileName = new CustomFileName(false,
+            new CustomFileName.Prefill(CustomFileName.PrefillType.AppName)
+        );
         [SerializeField]
         [Tooltip("Name of the folder the executables will be in.")]
         protected CustomFileName folderName = new CustomFileName(false,
             new CustomFileName.Prefill(CustomFileName.PrefillType.AppName),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " v"),
+            new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingNumber),
             new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " ("),
             new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName),
-            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, ")"));
+            new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, ")")
+        );
         [SerializeField]
         protected int buildNumber = 0;
         [SerializeField]
@@ -207,7 +209,16 @@ namespace OmiyaGames.Builds
         [SerializeField]
         protected DevelopmentSettings debugSettings = new DevelopmentSettings(true);
         [SerializeField]
-        protected ArchiveSettings archiveSettings = new ArchiveSettings(ArchiveType.Zip);
+        protected ArchiveSettings archiveSettings = new ArchiveSettings(ArchiveType.Zip,
+            new CustomFileName(false,
+                new CustomFileName.Prefill(CustomFileName.PrefillType.AppName),
+                new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " v"),
+                new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingNumber),
+                new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, " ("),
+                new CustomFileName.Prefill(CustomFileName.PrefillType.BuildSettingName),
+                new CustomFileName.Prefill(CustomFileName.PrefillType.Literal, ")" + ArchiveSettings.GetFileExtension(ArchiveType.Zip))
+            )
+        );
         [SerializeField]
         protected ScriptDefineSymbolsSetting customScriptDefineSymbols;
 
@@ -246,9 +257,9 @@ namespace OmiyaGames.Builds
             if (PreBuildCheck(out message) == true)
             {
                 // Setup the folders
-                if (System.IO.Directory.Exists(results.FolderName) == false)
+                if (Directory.Exists(results.FolderName) == false)
                 {
-                    System.IO.Directory.CreateDirectory(results.FolderName);
+                    Directory.CreateDirectory(results.FolderName);
                 }
 
                 // Get options
@@ -256,11 +267,11 @@ namespace OmiyaGames.Builds
 
                 // Build the player
                 LastPlayerSettings lastSettings = SetupPlayerSettings();
-                BuildReport res = BuildPipeline.BuildPlayer(options);
+                BuildReport report = BuildPipeline.BuildPlayer(options);
                 RevertPlayerSettings(lastSettings);
 
                 // Add the latest results
-                results.AddReport(res, this);
+                results.AddReport(report, this);
 
                 // Consider making a post build
                 if (results.LastReport.State == BuildPlayersResult.Status.Success)
@@ -407,17 +418,33 @@ namespace OmiyaGames.Builds
 
         protected virtual void ArchiveBuild(BuildPlayersResult results)
         {
-            // generate the archive file name
-            string fileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
-            // FIXME: to ZIP the folder that's generated
-            Debug.Log("Zip folder: " + results.FolderName);
+            // Calculate folder and file name
+            string archiveFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this));
+
+            // Make the build
+            ArchiveBuildHelper(results, archiveFolderName);
+        }
+
+        protected void ArchiveBuildHelper(BuildPlayersResult results, string archiveFolderName)
+        {
+            string newArchiveFileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
+
+            // Choose an archive algorithm
             switch (archiveSettings.Type)
             {
                 case ArchiveType.Zip:
                 default:
-                    ZipFolder(fileName, results.FolderName);
+                    ZipFolder(archiveFolderName, newArchiveFileName);
                     break;
             }
+
+            // Delete the original
+            if(archiveSettings.DeleteOriginals == true)
+            {
+                Directory.Delete(archiveFolderName, true);
+            }
+
+            // Add the results
             results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
         }
 

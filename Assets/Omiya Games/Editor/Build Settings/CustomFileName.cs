@@ -209,7 +209,7 @@ namespace OmiyaGames.Builds
         public static string GenerateSlug(string originalString)
         {
             // Remove invalid chars
-            string returnSlug = Regex.Replace(originalString.ToLower(), @"[^a-z0-9\s-]", "");
+            string returnSlug = Regex.Replace(originalString.ToLower(), @"[^a-z0-9\s-.]", "");
 
             // Convert multiple spaces into one space
             returnSlug = Regex.Replace(returnSlug, @"\s+", " ").Trim();

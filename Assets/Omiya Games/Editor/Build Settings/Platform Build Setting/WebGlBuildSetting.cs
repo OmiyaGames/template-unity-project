@@ -123,8 +123,11 @@ namespace OmiyaGames.Builds
             //    throw new System.NotImplementedException();
             //}
 
-            // Do the regular archive business
-            base.ArchiveBuild(results);
+            // Calculate folder and file name
+            string archiveFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+
+            // Make the build
+            ArchiveBuildHelper(results, archiveFolderName);
         }
         #endregion
     }
