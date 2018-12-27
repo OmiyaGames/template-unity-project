@@ -230,7 +230,8 @@ namespace OmiyaGames.UI.Builds
         private string AppendArchiveFileName(string originalString, System.Text.StringBuilder builder)
         {
             builder.Clear();
-            builder.Append(originalString);
+            int endIndex = originalString.LastIndexOf(Utility.PathDivider);
+            builder.Append(originalString.Substring(0, endIndex));
             builder.Append(Utility.PathDivider);
 
             CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
