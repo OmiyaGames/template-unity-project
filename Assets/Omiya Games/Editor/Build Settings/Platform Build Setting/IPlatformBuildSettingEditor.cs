@@ -65,7 +65,6 @@ namespace OmiyaGames.UI.Builds
         private SerializedProperty archiveEnable;
         private SerializedProperty archiveType;
         private SerializedProperty archiveFileName;
-        private SerializedProperty archiveDeleteOriginals;
 
         public virtual string FileExtension
         {
@@ -96,7 +95,6 @@ namespace OmiyaGames.UI.Builds
             setting = serializedObject.FindProperty("archiveSettings");
             archiveEnable = setting.FindPropertyRelative("enable");
             archiveType = setting.FindPropertyRelative("type");
-            archiveDeleteOriginals = setting.FindPropertyRelative("deleteOriginals");
             archiveFileName = setting.FindPropertyRelative("fileName");
             archiveAnimation = new AnimBool(archiveEnable.boolValue, Repaint);
 
@@ -223,7 +221,6 @@ namespace OmiyaGames.UI.Builds
         private void DrawArchiveControls()
         {
             EditorGUILayout.PropertyField(archiveType);
-            archiveDeleteOriginals.boolValue = EditorGUILayout.Toggle("Delete The Original Files", archiveDeleteOriginals.boolValue);
             EditorGUILayout.PropertyField(archiveFileName);
         }
 
