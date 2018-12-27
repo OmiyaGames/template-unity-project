@@ -85,17 +85,6 @@ namespace OmiyaGames.Builds
         //[SerializeField]
         //protected bool forFacebook = false;
 
-
-        // FIXME: delete this variable
-        [SerializeField]
-        [FolderPath]
-        protected string testZipFolder;
-
-        public void TestZip()
-        {
-            Community.UI.Compression.CompressDirectory(testZipFolder, testZipFolder + ".tar.gz", (status) => { Debug.Log(status); });
-        }
-
         #region Overrides
         internal override int MaxNumberOfResults
         {
@@ -134,8 +123,11 @@ namespace OmiyaGames.Builds
             //    throw new System.NotImplementedException();
             //}
 
-            // Do the regular archive business
-            ArchiveBuild(results);
+            // Calculate folder and file name
+            string archiveFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+
+            // Make the build
+            ArchiveBuildHelper(results, archiveFolderName);
         }
         #endregion
     }

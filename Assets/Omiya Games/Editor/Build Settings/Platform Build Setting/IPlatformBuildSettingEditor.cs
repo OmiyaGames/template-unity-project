@@ -64,9 +64,7 @@ namespace OmiyaGames.UI.Builds
         private AnimBool archiveAnimation;
         private SerializedProperty archiveEnable;
         private SerializedProperty archiveType;
-        private SerializedProperty archiveIncludeParentFolder;
         private SerializedProperty archiveFileName;
-        private SerializedProperty archiveDeleteOriginals;
 
         public virtual string FileExtension
         {
@@ -97,8 +95,6 @@ namespace OmiyaGames.UI.Builds
             setting = serializedObject.FindProperty("archiveSettings");
             archiveEnable = setting.FindPropertyRelative("enable");
             archiveType = setting.FindPropertyRelative("type");
-            archiveIncludeParentFolder = setting.FindPropertyRelative("includeParentFolder");
-            archiveDeleteOriginals = setting.FindPropertyRelative("deleteOriginals");
             archiveFileName = setting.FindPropertyRelative("fileName");
             archiveAnimation = new AnimBool(archiveEnable.boolValue, Repaint);
 
@@ -225,15 +221,14 @@ namespace OmiyaGames.UI.Builds
         private void DrawArchiveControls()
         {
             EditorGUILayout.PropertyField(archiveType);
-            archiveIncludeParentFolder.boolValue = EditorGUILayout.Toggle("Zip Under a Single Folder", archiveIncludeParentFolder.boolValue);
-            archiveDeleteOriginals.boolValue = EditorGUILayout.Toggle("Delete The Original Files", archiveDeleteOriginals.boolValue);
             EditorGUILayout.PropertyField(archiveFileName);
         }
 
         private string AppendArchiveFileName(string originalString, System.Text.StringBuilder builder)
         {
             builder.Clear();
-            builder.Append(originalString);
+            int endIndex = originalString.LastIndexOf(Utility.PathDivider);
+            builder.Append(originalString.Substring(0, endIndex));
             builder.Append(Utility.PathDivider);
 
             CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
