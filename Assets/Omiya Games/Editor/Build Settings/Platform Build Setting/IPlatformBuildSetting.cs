@@ -55,7 +55,7 @@ namespace OmiyaGames.Builds
 
         public enum ArchiveType
         {
-            Gzip
+            Zip
         }
 
         [Serializable]
@@ -66,21 +66,16 @@ namespace OmiyaGames.Builds
             [SerializeField]
             ArchiveType type;
             [SerializeField]
-            bool includeParentFolder;
-            [SerializeField]
             bool deleteOriginals;
             [SerializeField]
             CustomFileName fileName;
 
-            public ArchiveSettings(bool includeParentFolder)
+            public ArchiveSettings(ArchiveType type)
             {
-                // Setup member variables
-                this.includeParentFolder = includeParentFolder;
-
                 // Setup defaults
                 enable = false;
                 deleteOriginals = false;
-                type = ArchiveType.Gzip;
+                this.type = type;
 
                 // Setup name
                 CustomFileName.Prefill appName = new CustomFileName.Prefill(CustomFileName.PrefillType.AppName);
@@ -93,14 +88,6 @@ namespace OmiyaGames.Builds
                 get
                 {
                     return enable;
-                }
-            }
-
-            public bool IsParentFolderIncluded
-            {
-                get
-                {
-                    return includeParentFolder;
                 }
             }
 
@@ -133,8 +120,9 @@ namespace OmiyaGames.Builds
                 switch (type)
                 {
                     // TODO: when new archive types are added, add file extensions
+                    case ArchiveType.Zip:
                     default:
-                        return ".tgz";
+                        return ".zip";
                 }
             }
         }
@@ -219,7 +207,7 @@ namespace OmiyaGames.Builds
         [SerializeField]
         protected DevelopmentSettings debugSettings = new DevelopmentSettings(true);
         [SerializeField]
-        protected ArchiveSettings archiveSettings = new ArchiveSettings(true);
+        protected ArchiveSettings archiveSettings = new ArchiveSettings(ArchiveType.Zip);
         [SerializeField]
         protected ScriptDefineSymbolsSetting customScriptDefineSymbols;
 
@@ -419,14 +407,27 @@ namespace OmiyaGames.Builds
 
         protected virtual void ArchiveBuild(BuildPlayersResult results)
         {
+            // generate the archive file name
+            string fileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
             // FIXME: to ZIP the folder that's generated
-            Debug.Log(results.FolderName);
-            if(archiveSettings.IsParentFolderIncluded == true)
+            Debug.Log("Zip folder: " + results.FolderName);
+            switch (archiveSettings.Type)
             {
-                string fileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
-                Community.UI.Compression.CompressDirectory(results.FolderName, fileName);
+                case ArchiveType.Zip:
+                default:
+                    ZipFolder(fileName, results.FolderName);
+                    break;
             }
             results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+        }
+
+        private static void ZipFolder(string folderToZip, string resultingFileName)
+        {
+            ICSharpCode.SharpZipLib.Zip.FastZip zipper = new ICSharpCode.SharpZipLib.Zip.FastZip();
+            zipper.CreateEmptyDirectories = true;
+            zipper.RestoreAttributesOnExtract = true;
+            zipper.RestoreDateTimeOnExtract = false;
+            zipper.CreateZip(resultingFileName, folderToZip, true, "");
         }
 
         private BuildPlayerOptions GetPlayerOptions(BuildPlayersResult results)

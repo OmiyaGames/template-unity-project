@@ -64,7 +64,6 @@ namespace OmiyaGames.UI.Builds
         private AnimBool archiveAnimation;
         private SerializedProperty archiveEnable;
         private SerializedProperty archiveType;
-        private SerializedProperty archiveIncludeParentFolder;
         private SerializedProperty archiveFileName;
         private SerializedProperty archiveDeleteOriginals;
 
@@ -97,7 +96,6 @@ namespace OmiyaGames.UI.Builds
             setting = serializedObject.FindProperty("archiveSettings");
             archiveEnable = setting.FindPropertyRelative("enable");
             archiveType = setting.FindPropertyRelative("type");
-            archiveIncludeParentFolder = setting.FindPropertyRelative("includeParentFolder");
             archiveDeleteOriginals = setting.FindPropertyRelative("deleteOriginals");
             archiveFileName = setting.FindPropertyRelative("fileName");
             archiveAnimation = new AnimBool(archiveEnable.boolValue, Repaint);
@@ -225,7 +223,6 @@ namespace OmiyaGames.UI.Builds
         private void DrawArchiveControls()
         {
             EditorGUILayout.PropertyField(archiveType);
-            archiveIncludeParentFolder.boolValue = EditorGUILayout.Toggle("Zip Under a Single Folder", archiveIncludeParentFolder.boolValue);
             archiveDeleteOriginals.boolValue = EditorGUILayout.Toggle("Delete The Original Files", archiveDeleteOriginals.boolValue);
             EditorGUILayout.PropertyField(archiveFileName);
         }
