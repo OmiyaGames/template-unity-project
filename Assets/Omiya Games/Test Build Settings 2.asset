@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b371f27b6856fc24e8698e03c3e7fec1, type: 3}
-  m_Name: Mobile Build Settings
+  m_Name: Test Build Settings 2
   m_EditorClassIdentifier: 
   rootBuildFolder: D:/Projects/hg/template-unity-project/Builds
   newBuildFolderName:
@@ -18,7 +18,7 @@ MonoBehaviour:
     - type: 0
       text: v
     - type: 4
-      text: ' - '
+      text: yyyy.MM.dd-HH.mm
     - type: 0
       text: '-'
     - type: 3
@@ -27,9 +27,9 @@ MonoBehaviour:
   onBuildFailed: 0
   onBuildCancelled: 0
   allSettings:
-  - {fileID: 114975559315629012}
-  - {fileID: 114607421636069328}
---- !u!114 &114607421636069328
+  - {fileID: 114633283206127274}
+  - {fileID: 114164064414997312}
+--- !u!114 &114164064414997312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,8 +38,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b27a2cec29d914aa93631336cc5cbe, type: 3}
-  m_Name: Android
+  m_Script: {fileID: 11500000, guid: 90aa8e20c1245c343808f929cc036211, type: 3}
+  m_Name: Windows 32-bit
   m_EditorClassIdentifier: 
   parentSetting: {fileID: 11400000}
   fileName:
@@ -62,7 +62,7 @@ MonoBehaviour:
     - type: 0
       text: )
     asSlug: 0
-  buildNumber: 0
+  buildNumber: 1
   enableStrictMode: 0
   enableAssertions: 0
   customScenes:
@@ -73,7 +73,7 @@ MonoBehaviour:
     enableDebuggingScripts: 1
     buildScriptsOnly: 0
   archiveSettings:
-    enable: 0
+    enable: 1
     type: 0
     fileName:
       names:
@@ -95,8 +95,9 @@ MonoBehaviour:
     customValue: 
   compression: 0
   scriptingBackend: 0
-  acceptExternalModificationsToPlayer: 0
---- !u!114 &114975559315629012
+  architecture: 1
+  includePdbFles: 0
+--- !u!114 &114633283206127274
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,8 +106,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8cad7f3e2af4834abf2a76511fdc102, type: 3}
-  m_Name: iOS
+  m_Script: {fileID: 11500000, guid: 90aa8e20c1245c343808f929cc036211, type: 3}
+  m_Name: Windows 64-bit
   m_EditorClassIdentifier: 
   parentSetting: {fileID: 11400000}
   fileName:
@@ -129,7 +130,7 @@ MonoBehaviour:
     - type: 0
       text: )
     asSlug: 0
-  buildNumber: 0
+  buildNumber: 1
   enableStrictMode: 0
   enableAssertions: 0
   customScenes:
@@ -140,7 +141,7 @@ MonoBehaviour:
     enableDebuggingScripts: 1
     buildScriptsOnly: 0
   archiveSettings:
-    enable: 0
+    enable: 1
     type: 0
     fileName:
       names:
@@ -162,5 +163,5 @@ MonoBehaviour:
     customValue: 
   compression: 0
   scriptingBackend: 0
-  symlinkLibraries: 0
-  acceptExternalModificationsToPlayer: 0
+  architecture: 1
+  includePdbFles: 0
