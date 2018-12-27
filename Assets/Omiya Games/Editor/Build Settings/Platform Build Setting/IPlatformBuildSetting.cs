@@ -65,15 +65,12 @@ namespace OmiyaGames.Builds
             [SerializeField]
             ArchiveType type;
             [SerializeField]
-            bool deleteOriginals;
-            [SerializeField]
             CustomFileName fileName;
 
             public ArchiveSettings(ArchiveType type, CustomFileName fileName)
             {
                 // Setup defaults
                 enable = false;
-                deleteOriginals = false;
 
                 // Setup filenames
                 this.type = type;
@@ -93,14 +90,6 @@ namespace OmiyaGames.Builds
                 get
                 {
                     return fileName;
-                }
-            }
-
-            public bool DeleteOriginals
-            {
-                get
-                {
-                    return deleteOriginals;
                 }
             }
 
@@ -436,12 +425,6 @@ namespace OmiyaGames.Builds
                 default:
                     ZipFolder(archiveFolderName, newArchiveFileName);
                     break;
-            }
-
-            // Delete the original
-            if(archiveSettings.DeleteOriginals == true)
-            {
-                Directory.Delete(archiveFolderName, true);
             }
 
             // Add the results
