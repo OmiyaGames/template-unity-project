@@ -35,18 +35,37 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class LinuxBuildSetting : IStandaloneBuildSetting
     {
-        [SerializeField]
-        protected Architecture architecture = Architecture.BuildUniversal;
+        private static readonly Architecture[] supportedArchitectures = new Architecture[]
+        {
+            Architecture.BuildUniversal,
+            Architecture.Build64Bit,
+            Architecture.Build32Bit
+        };
+        private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
+        {
+            ScriptingImplementation.Mono2x
+        };
+
         [SerializeField]
         protected bool enableHeadlessMode = false;
 
-        public Architecture BuildArchitecture
+        #region Overrides
+        public override Architecture[] SupportedArchitectures
         {
-            private get => architecture;
-            set => architecture = value;
+            get
+            {
+                return supportedArchitectures;
+            }
         }
 
-        #region Overrides
+        public override ScriptingImplementation[] SupportedScriptingBackends
+        {
+            get
+            {
+                return supportedScriptingBackends;
+            }
+        }
+
         public override ScriptingImplementation ScriptingBackend
         {
             get
@@ -68,7 +87,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                switch(BuildArchitecture)
+                switch(ArchitectureToBuild)
                 {
                     case Architecture.Build64Bit:
                         return BuildTarget.StandaloneLinux64;

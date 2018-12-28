@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿//#define TEST
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -143,12 +143,12 @@ namespace OmiyaGames.UI.Builds
             if (element.objectReferenceValue is WindowsBuildSetting)
             {
                 WindowsBuildSetting setting = (WindowsBuildSetting)element.objectReferenceValue;
-                setting.BuildArchitecture = architecture;
+                setting.ArchitectureToBuild = architecture;
             }
             else if (element.objectReferenceValue is LinuxBuildSetting)
             {
                 LinuxBuildSetting setting = (LinuxBuildSetting)element.objectReferenceValue;
-                setting.BuildArchitecture = architecture;
+                setting.ArchitectureToBuild = architecture;
             }
 
             // Apply the property

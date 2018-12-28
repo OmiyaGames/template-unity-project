@@ -39,18 +39,21 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(IStandaloneBuildSetting))]
     public abstract class IStandaloneBuildSettingEditor : IPlatformBuildSettingEditor
     {
+        protected SerializedProperty architecture;
         private SerializedProperty compression;
         private SerializedProperty scriptingBackend;
 
         public override void OnEnable()
         {
             base.OnEnable();
+            architecture = serializedObject.FindProperty("architecture");
             compression = serializedObject.FindProperty("compression");
             scriptingBackend = serializedObject.FindProperty("scriptingBackend");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
+            EditorGUILayout.PropertyField(architecture);
             EditorGUILayout.PropertyField(compression);
             EditorGUILayout.PropertyField(scriptingBackend);
         }

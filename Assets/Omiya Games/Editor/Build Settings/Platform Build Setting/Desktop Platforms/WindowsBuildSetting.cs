@@ -35,43 +35,40 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class WindowsBuildSetting : IStandaloneBuildSetting
     {
-        public const Architecture DefaultArchitecture = Architecture.Build64Bit;
+        private static readonly Architecture[] supportedArchitectures = new Architecture[]
+        {
+            Architecture.Build64Bit,
+            Architecture.Build32Bit
+        };
+        private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
+        {
+            ScriptingImplementation.Mono2x,
+            ScriptingImplementation.IL2CPP
+        };
 
-        [SerializeField]
-        protected Architecture architecture = DefaultArchitecture;
         [SerializeField]
         protected bool includePdbFles = false;
         // FIXME: do more research on the Facebook builds
         //[SerializeField]
         //protected bool forFacebook = false;
 
-        public Architecture BuildArchitecture
+        #region Overrides
+        public override Architecture[] SupportedArchitectures
         {
-            private get
+            get
             {
-                if (architecture == Architecture.BuildUniversal)
-                {
-                    return DefaultArchitecture;
-                }
-                else
-                {
-                    return architecture;
-                }
-            }
-            set
-            {
-                if (architecture == Architecture.BuildUniversal)
-                {
-                    architecture = DefaultArchitecture;
-                }
-                else
-                {
-                    architecture = value;
-                }
+                return supportedArchitectures;
             }
         }
 
-        #region Overrides
+        public override ScriptingImplementation[] SupportedScriptingBackends
+        {
+            get
+            {
+                return supportedScriptingBackends;
+            }
+        }
+
         public override ScriptingImplementation ScriptingBackend
         {
             get
@@ -108,7 +105,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                if (BuildArchitecture == Architecture.Build64Bit)
+                if (ArchitectureToBuild == Architecture.Build64Bit)
                 {
                     return BuildTarget.StandaloneWindows64;
                 }

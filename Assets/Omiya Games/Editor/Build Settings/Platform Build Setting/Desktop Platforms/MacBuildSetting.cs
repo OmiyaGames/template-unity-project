@@ -35,11 +35,37 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class MacBuildSetting : IStandaloneBuildSetting
     {
+        private static readonly Architecture[] supportedArchitectures = new Architecture[]
+        {
+            Architecture.BuildUniversal
+        };
+        private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
+        {
+            ScriptingImplementation.Mono2x,
+            ScriptingImplementation.IL2CPP
+        };
+
+        public override Architecture[] SupportedArchitectures
+        {
+            get
+            {
+                return supportedArchitectures;
+            }
+        }
+
+        public override ScriptingImplementation[] SupportedScriptingBackends
+        {
+            get
+            {
+                return supportedScriptingBackends;
+            }
+        }
+
         public override ScriptingImplementation ScriptingBackend
         {
             get
             {
-                switch(base.ScriptingBackend)
+                switch (base.ScriptingBackend)
                 {
                     // TODO: Figure out if there's an actual way to check if the editor does support IL2CPP
 #if UNITY_EDITOR_OSX
