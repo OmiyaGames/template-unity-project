@@ -35,6 +35,23 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class MacBuildSetting : IStandaloneBuildSetting
     {
+        public override ScriptingImplementation ScriptingBackend
+        {
+            get
+            {
+                switch(base.ScriptingBackend)
+                {
+                    // TODO: Figure out if there's an actual way to check if the editor does support IL2CPP
+#if UNITY_EDITOR_OSX
+                    case ScriptingImplementation.IL2CPP:
+                        return base.ScriptingBackend;
+#endif
+                    default:
+                        return DefaultScriptingBackend;
+                }
+            }
+        }
+
         protected override BuildTarget Target
         {
             get
