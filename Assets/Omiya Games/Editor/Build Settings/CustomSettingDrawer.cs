@@ -135,21 +135,8 @@ namespace OmiyaGames.UI.Builds
                 rect.y += EditorUiUtility.VerticalMargin;
                 rect.height = EditorGUIUtility.singleLineHeight;
 
-                // Draw the text field
-                rect.width -= (ButtonWidth + Space);
-                element.stringValue = EditorGUI.TextField(rect, element.stringValue);
-
-                // Draw the browse button
-                rect.x += (rect.width + Space);
-                rect.width = ButtonWidth;
-                if (GUI.Button(rect, "Browse...") == true)
-                {
-                    string newFileName = EditorUtility.OpenFilePanelWithFilters("Open Scene", FolderPathAttribute.DefaultLocalPath, SceneFileFilter);
-                    if (string.IsNullOrEmpty(newFileName) == false)
-                    {
-                        element.stringValue = FolderPathDrawer.GetLocalPath(newFileName, FolderPathAttribute.RelativeTo.ProjectDirectory);
-                    }
-                }
+                // Draw the scene field
+                ScenePathDrawer.DrawSceneAssetField(rect, element);
             }
         }
 
