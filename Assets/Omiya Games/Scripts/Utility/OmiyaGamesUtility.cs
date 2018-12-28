@@ -394,5 +394,15 @@ namespace OmiyaGames
             // Return URL
             return builder.ToString();
         }
+
+        public static ENUM ConvertToEnum<ENUM>(int value) where ENUM : System.Enum
+        {
+            return (ENUM)System.Enum.ToObject(typeof(ENUM), value);
+        }
+
+        public static int ConvertToInt<ENUM>(ENUM value) where ENUM : System.Enum
+        {
+            return System.Convert.ToInt32(value);
+        }
     }
 }

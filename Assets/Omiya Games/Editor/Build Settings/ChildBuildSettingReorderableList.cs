@@ -140,14 +140,9 @@ namespace OmiyaGames.UI.Builds
         private void CreateDesktopPlatformSettings<T>(string name, IPlatformBuildSetting.Architecture architecture) where T : IPlatformBuildSetting
         {
             SerializedProperty element = Add<T>(name);
-            if (element.objectReferenceValue is WindowsBuildSetting)
+            if (element.objectReferenceValue is IStandaloneBuildSetting)
             {
-                WindowsBuildSetting setting = (WindowsBuildSetting)element.objectReferenceValue;
-                setting.ArchitectureToBuild = architecture;
-            }
-            else if (element.objectReferenceValue is LinuxBuildSetting)
-            {
-                LinuxBuildSetting setting = (LinuxBuildSetting)element.objectReferenceValue;
+                IStandaloneBuildSetting setting = (IStandaloneBuildSetting)element.objectReferenceValue;
                 setting.ArchitectureToBuild = architecture;
             }
 
