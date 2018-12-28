@@ -37,7 +37,6 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(LinuxBuildSetting))]
     public class LinuxBuildSettingEditor : IStandaloneBuildSettingEditor
     {
-        private SerializedProperty architecture;
         private SerializedProperty enableHeadlessMode;
 
         public override string FileExtension
@@ -59,13 +58,11 @@ namespace OmiyaGames.UI.Builds
         public override void OnEnable()
         {
             base.OnEnable();
-            architecture = serializedObject.FindProperty("architecture");
             enableHeadlessMode = serializedObject.FindProperty("enableHeadlessMode");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
-            EditorGUILayout.PropertyField(architecture);
             base.DrawPlatformSpecificSettings();
             EditorGUILayout.PropertyField(enableHeadlessMode);
         }
