@@ -35,16 +35,26 @@ namespace OmiyaGames.Builds
     /// </summary>
     public abstract class IStandaloneBuildSetting : IPlatformBuildSetting
     {
+        public const ScriptingImplementation DefaultScriptingBackend = ScriptingImplementation.Mono2x;
+
         [SerializeField]
         protected CompressionType compression = CompressionType.Default;
         [SerializeField]
-        protected ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
+        private ScriptingImplementation scriptingBackend = DefaultScriptingBackend;
+
+        public virtual ScriptingImplementation ScriptingBackend
+        {
+            get
+            {
+                return scriptingBackend;
+            }
+        }
 
         #region Overrides
         protected override LastPlayerSettings SetupPlayerSettings()
         {
             LastPlayerSettings returnSetting = base.SetupPlayerSettings();
-            PlayerSettings.SetScriptingBackend(TargetGroup, scriptingBackend);
+            PlayerSettings.SetScriptingBackend(TargetGroup, ScriptingBackend);
             return returnSetting;
         }
 

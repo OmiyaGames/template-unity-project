@@ -40,12 +40,35 @@ namespace OmiyaGames.Builds
         [SerializeField]
         protected bool enableHeadlessMode = false;
 
+        public Architecture BuildArchitecture
+        {
+            private get => architecture;
+            set => architecture = value;
+        }
+
         #region Overrides
+        public override ScriptingImplementation ScriptingBackend
+        {
+            get
+            {
+                switch (base.ScriptingBackend)
+                {
+                    // TODO: currently, Linux only supports Mono. Update this property when that's no longer true
+#if false
+                    case ScriptingImplementation.IL2CPP:
+                        return base.ScriptingBackend;
+#endif
+                    default:
+                        return DefaultScriptingBackend;
+                }
+            }
+        }
+
         protected override BuildTarget Target
         {
             get
             {
-                switch(architecture)
+                switch(BuildArchitecture)
                 {
                     case Architecture.Build64Bit:
                         return BuildTarget.StandaloneLinux64;
