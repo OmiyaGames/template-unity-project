@@ -88,5 +88,78 @@ namespace OmiyaGames
                 boolAnimation = null;
             }
         }
+
+        /// <summary>
+        /// Helper method to draw enums from a limited range.
+        /// </summary>
+        /// <typeparam name="ENUM"></typeparam>
+        /// <param name="property"></param>
+        /// <param name="supportedEnums">List of supported enums.  The first element is treated as default.</param>
+        public static void DrawEnum<ENUM>(SerializedProperty property, params ENUM[] supportedEnums) where ENUM : System.Enum
+        {
+            DrawEnum(property, supportedEnums, supportedEnums[0]);
+        }
+
+        /// <summary>
+        /// Helper method to draw enums from a limited range.
+        /// </summary>
+        /// <typeparam name="ENUM"></typeparam>
+        /// <param name="property"></param>
+        /// <param name="supportedEnums">List of supported enums.  The first element is treated as default.</param>
+        public static void DrawEnum<ENUM>(SerializedProperty property, ENUM[] supportedEnums, ENUM defaultEnum) where ENUM : System.Enum
+        {
+            // Setup the pop-up
+            string[] enumNames = new string[supportedEnums.Length];
+            int[] enumValues = new int[supportedEnums.Length];
+            for(int index = 0; index < supportedEnums.Length; ++index)
+            {
+                enumNames[index] = ObjectNames.NicifyVariableName(supportedEnums[index].ToString());
+                enumValues[index] = Utility.ConvertToInt(supportedEnums[index]);
+            }
+
+            // Disable the pop-up if there's only one option
+            bool wasEnabled = GUI.enabled;
+            GUI.enabled = (supportedEnums.Length > 1);
+
+            // Show the pop-up
+            property.enumValueIndex = EditorGUILayout.IntPopup(property.displayName, property.enumValueIndex, enumNames, enumValues);
+
+            // Revert the later controls
+            GUI.enabled = wasEnabled;
+
+            // Verify the selected value is within range
+            ENUM selectedValue = Utility.ConvertToEnum<ENUM>(property.enumValueIndex);
+            if(ArrayUtility.Contains(supportedEnums, selectedValue) == false)
+            {
+                // If not, select the default option
+                property.enumValueIndex = Utility.ConvertToInt(defaultEnum);
+            }
+        }
+
+        /// <summary>
+        /// Helper method to draw enums from a limited range.
+        /// Draws a warning if the target has an enum that doesn't match the property
+        /// </summary>
+        /// <typeparam name="ENUM"></typeparam>
+        /// <param name="property"></param>
+        /// <param name="supportedEnums"></param>
+        /// <param name="targetsEnum"></param>
+        /// <param name="defaultEnum"></param>
+        public static void DrawEnum<ENUM>(SerializedProperty property, ENUM[] supportedEnums, ENUM defaultEnum, ENUM targetsEnum, string message = "\"{0}\" is not supported; \"{1}\" will be used instead.") where ENUM : System.Enum
+        {
+            // Check if we need to display the warning
+            int targetEnumValueIndex = Utility.ConvertToInt(targetsEnum);
+            if (property.enumValueIndex != targetEnumValueIndex)
+            {
+                ENUM selectedValue = Utility.ConvertToEnum<ENUM>(property.enumValueIndex);
+                string formattedMessage = string.Format(message,
+                    ObjectNames.NicifyVariableName(selectedValue.ToString()),
+                    ObjectNames.NicifyVariableName(targetsEnum.ToString()));
+                EditorGUILayout.HelpBox(formattedMessage, MessageType.Warning);
+            }
+
+            // Draw enums as normal
+            DrawEnum(property, supportedEnums, defaultEnum);
+        }
     }
 }

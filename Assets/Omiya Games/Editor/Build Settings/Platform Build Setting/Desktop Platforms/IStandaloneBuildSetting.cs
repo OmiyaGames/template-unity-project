@@ -36,15 +36,88 @@ namespace OmiyaGames.Builds
     public abstract class IStandaloneBuildSetting : IPlatformBuildSetting
     {
         [SerializeField]
+        protected Architecture architecture = Architecture.BuildUniversal;
+        [SerializeField]
         protected CompressionType compression = CompressionType.Default;
         [SerializeField]
-        protected ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
+        private ScriptingImplementation scriptingBackend = ScriptingImplementation.Mono2x;
+
+        /// <summary>
+        /// A (preferably static) list of supported architectures for this platform
+        /// </summary>
+        public abstract Architecture[] SupportedArchitectures
+        {
+            get;
+        }
+
+        public Architecture DefaultArchitecture
+        {
+            get
+            {
+                return SupportedArchitectures[0];
+            }
+        }
+
+        public Architecture ArchitectureToBuild
+        {
+            get
+            {
+                // Check if we're about to return a supported architecture
+                if (ArrayUtility.Contains(SupportedArchitectures, architecture) == false)
+                {
+                    // If not, force the member variable back to default
+                    architecture = DefaultArchitecture;
+                }
+                return architecture;
+            }
+            set
+            {
+                // Check if we're going to set to a supported architecture
+                if (ArrayUtility.Contains(SupportedArchitectures, architecture) == true)
+                {
+                    // If so, handle it normally
+                    architecture = value;
+                }
+                else
+                {
+                    // If not, set it to default
+                    architecture = DefaultArchitecture;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A list of supported scripting backends for this platform
+        /// </summary>
+        /// <remarks>
+        /// Overriding classes should return a static readonly lists.
+        /// </remarks>
+        public abstract ScriptingImplementation[] SupportedScriptingBackends
+        {
+            get;
+        }
+
+        public ScriptingImplementation DefaultScriptingBackend
+        {
+            get
+            {
+                return SupportedScriptingBackends[0];
+            }
+        }
+
+        public virtual ScriptingImplementation ScriptingBackend
+        {
+            get
+            {
+                return scriptingBackend;
+            }
+        }
 
         #region Overrides
         protected override LastPlayerSettings SetupPlayerSettings()
         {
             LastPlayerSettings returnSetting = base.SetupPlayerSettings();
-            PlayerSettings.SetScriptingBackend(TargetGroup, scriptingBackend);
+            PlayerSettings.SetScriptingBackend(TargetGroup, ScriptingBackend);
             return returnSetting;
         }
 

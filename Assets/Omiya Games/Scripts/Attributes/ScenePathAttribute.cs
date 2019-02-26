@@ -1,10 +1,10 @@
-﻿using UnityEditor;
-using OmiyaGames.Builds;
+﻿using UnityEngine;
+using System;
 
-namespace OmiyaGames.UI.Builds
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="LinuxBuildSettingEditor.cs" company="Omiya Games">
+    /// <copyright file="ScenePathAttribute.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -28,43 +28,21 @@ namespace OmiyaGames.UI.Builds
     /// THE SOFTWARE.
     /// </copyright>
     /// <author>Taro Omiya</author>
-    /// <date>11/21/2015</date>
+    /// <date>12/28/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>LinuxBuildSetting</code>
+    /// Makes a string field accept scene assets only.
     /// </summary>
-    /// <seealso cref="LinuxBuildSetting"/>
-    [CustomEditor(typeof(LinuxBuildSetting))]
-    public class LinuxBuildSettingEditor : IStandaloneBuildSettingEditor
+    [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
+    public class ScenePathAttribute : PropertyAttribute
     {
-        private SerializedProperty enableHeadlessMode;
-
-        public override string FileExtension
+        /// <summary>
+        /// Adds a browse button to a string field.
+        /// </summary>
+        /// <param name="fileExtensions">The file extention, without "*."</param>
+        /// <param name="defaultPath"></param>
+        public ScenePathAttribute()
         {
-            get
-            {
-                if (architecture != null)
-                {
-                    if (architecture.enumValueIndex == (int)IPlatformBuildSetting.Architecture.Build32Bit)
-                    {
-                        return ".x86";
-                    }
-                    return ".x86_64";
-                }
-                return ".x86";
-            }
-        }
-
-        public override void OnEnable()
-        {
-            base.OnEnable();
-            enableHeadlessMode = serializedObject.FindProperty("enableHeadlessMode");
-        }
-
-        protected override void DrawPlatformSpecificSettings()
-        {
-            base.DrawPlatformSpecificSettings();
-            EditorGUILayout.PropertyField(enableHeadlessMode);
         }
     }
 }

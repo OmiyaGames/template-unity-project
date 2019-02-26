@@ -39,20 +39,24 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(IStandaloneBuildSetting))]
     public abstract class IStandaloneBuildSettingEditor : IPlatformBuildSettingEditor
     {
+        protected SerializedProperty architecture;
         private SerializedProperty compression;
         private SerializedProperty scriptingBackend;
 
         public override void OnEnable()
         {
             base.OnEnable();
+            architecture = serializedObject.FindProperty("architecture");
             compression = serializedObject.FindProperty("compression");
             scriptingBackend = serializedObject.FindProperty("scriptingBackend");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
+            IStandaloneBuildSetting targetSetting = (IStandaloneBuildSetting)target;
+            EditorUiUtility.DrawEnum(architecture, targetSetting.SupportedArchitectures, targetSetting.DefaultArchitecture, targetSetting.ArchitectureToBuild, "\"{0}\" is not supported for this build platform; \"{1}\" will be used instead.");
             EditorGUILayout.PropertyField(compression);
-            EditorGUILayout.PropertyField(scriptingBackend);
+            EditorUiUtility.DrawEnum(scriptingBackend, targetSetting.SupportedScriptingBackends, targetSetting.DefaultScriptingBackend, targetSetting.ScriptingBackend, "\"{0}\" is not supported for this build platform, on this editor; \"{1}\" will be used instead.");
         }
     }
 }
