@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using OmiyaGames.Web;
 
 namespace OmiyaGames
 {
@@ -33,15 +34,80 @@ namespace OmiyaGames
     /// <author>Taro Omiya</author>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// <code>ScriptableObject</code> that contains a list of strings. Used to
-    /// create a list of domains the <code>WebLocationChecker</code> can download.
+    /// <see cref="ScriptableObject"/> that contains a list of strings. Used to
+    /// create a list of domains the <see cref="WebLocationChecker"/> can download.
     /// </summary>
-    /// <seealso cref="DomainListAssetBundleGenerator"/>
     /// <seealso cref="WebLocationChecker"/>
     public class DomainList : ScriptableObject, ICollection<string>
     {
         [SerializeField]
         string[] domains = null;
+
+        #region Helper Static Fucntions
+        public static DomainList Generate(string nameOfFile, IList<string> allDomains, StringCryptographer encrypter)
+        {
+            // Setup asset
+            DomainList newAsset = CreateInstance<DomainList>();
+            newAsset.name = nameOfFile;
+
+            // Copy over all the domain names
+            string[] domains = new string[allDomains.Count];
+            if (encrypter != null)
+            {
+                // Encrypt all entries
+                for (int index = 0; index < allDomains.Count; ++index)
+                {
+                    domains[index] = encrypter.Encrypt(allDomains[index]);
+                }
+            }
+            else
+            {
+                // Copy directly to the array
+                allDomains.CopyTo(domains, 0);
+            }
+            newAsset.Domains = domains;
+            return newAsset;
+        }
+
+        public static void Decrypt(DomainList domainList, StringCryptographer decrypter, IList<string> decryptedDomains)
+        {
+            decryptedDomains.Clear();
+            if (decrypter != null)
+            {
+                foreach (string encryptedDomain in domainList)
+                {
+                    decryptedDomains.Add(decrypter.Decrypt(encryptedDomain));
+                }
+            }
+            else
+            {
+                foreach (string domain in domainList)
+                {
+                    decryptedDomains.Add(domain);
+                }
+            }
+        }
+
+        public static string[] Decrypt(DomainList domainList, StringCryptographer decrypter)
+        {
+            string[] allDomains = new string[domainList.Count];
+            if (decrypter != null)
+            {
+                for (int index = 0; index < allDomains.Length; ++index)
+                {
+                    allDomains[index] = decrypter.Decrypt(domainList[index]);
+                }
+            }
+            else
+            {
+                for (int index = 0; index < allDomains.Length; ++index)
+                {
+                    allDomains[index] = domainList[index];
+                }
+            }
+            return allDomains;
+        }
+        #endregion
 
         public string[] Domains
         {
@@ -87,7 +153,7 @@ namespace OmiyaGames
         public void CopyTo(string[] array, int arrayIndex)
         {
             arrayIndex = Mathf.Clamp(arrayIndex, 0, array.Length);
-            for(int index = 0; ((index < Count) && ((index + arrayIndex) < array.Length)); ++index)
+            for (int index = 0; ((index < Count) && ((index + arrayIndex) < array.Length)); ++index)
             {
                 array[index + arrayIndex] = Domains[index];
             }
@@ -95,7 +161,7 @@ namespace OmiyaGames
 
         public IEnumerator<string> GetEnumerator()
         {
-            return ((IEnumerable<string>) Domains).GetEnumerator();
+            return ((IEnumerable<string>)Domains).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -108,7 +174,7 @@ namespace OmiyaGames
             bool returnFlag = false;
             for (int index = 0; index < Count; ++index)
             {
-                if(Domains[index] == item)
+                if (Domains[index] == item)
                 {
                     returnFlag = true;
                     break;
