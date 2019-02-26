@@ -37,7 +37,6 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(WindowsBuildSetting))]
     public class WindowsBuildSettingEditor : IStandaloneBuildSettingEditor
     {
-        private SerializedProperty architecture;
         private SerializedProperty includePdbFles;
         // FIXME: do more research on the Facebook builds
         //private SerializedProperty forFacebook;
@@ -45,17 +44,15 @@ namespace OmiyaGames.UI.Builds
         public override void OnEnable()
         {
             base.OnEnable();
-            architecture = serializedObject.FindProperty("architecture");
-            //forFacebook = serializedObject.FindProperty("forFacebook");
             includePdbFles = serializedObject.FindProperty("includePdbFles");
+            //forFacebook = serializedObject.FindProperty("forFacebook");
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
-            EditorGUILayout.PropertyField(architecture);
-            //EditorGUILayout.PropertyField(forFacebook);
             base.DrawPlatformSpecificSettings();
             EditorGUILayout.PropertyField(includePdbFles);
+            //EditorGUILayout.PropertyField(forFacebook);
         }
     }
 }

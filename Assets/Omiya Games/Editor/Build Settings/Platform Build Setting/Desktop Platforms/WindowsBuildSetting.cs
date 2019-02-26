@@ -35,8 +35,17 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class WindowsBuildSetting : IStandaloneBuildSetting
     {
-        [SerializeField]
-        protected Architecture architecture = Architecture.Build64Bit;
+        private static readonly Architecture[] supportedArchitectures = new Architecture[]
+        {
+            Architecture.Build64Bit,
+            Architecture.Build32Bit
+        };
+        private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
+        {
+            ScriptingImplementation.Mono2x,
+            ScriptingImplementation.IL2CPP
+        };
+
         [SerializeField]
         protected bool includePdbFles = false;
         // FIXME: do more research on the Facebook builds
@@ -44,6 +53,39 @@ namespace OmiyaGames.Builds
         //protected bool forFacebook = false;
 
         #region Overrides
+        public override Architecture[] SupportedArchitectures
+        {
+            get
+            {
+                return supportedArchitectures;
+            }
+        }
+
+        public override ScriptingImplementation[] SupportedScriptingBackends
+        {
+            get
+            {
+                return supportedScriptingBackends;
+            }
+        }
+
+        public override ScriptingImplementation ScriptingBackend
+        {
+            get
+            {
+                switch (base.ScriptingBackend)
+                {
+                    // TODO: Figure out if there's an actual way to check if the editor does support IL2CPP
+#if UNITY_EDITOR_WIN
+                    case ScriptingImplementation.IL2CPP:
+                        return base.ScriptingBackend;
+#endif
+                    default:
+                        return DefaultScriptingBackend;
+                }
+            }
+        }
+
         //protected override BuildTargetGroup TargetGroup
         //{
         //    get
@@ -63,7 +105,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                if (architecture == Architecture.Build64Bit)
+                if (ArchitectureToBuild == Architecture.Build64Bit)
                 {
                     return BuildTarget.StandaloneWindows64;
                 }

@@ -1,4 +1,4 @@
-﻿#define TEST
+﻿//#define TEST
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -140,10 +140,10 @@ namespace OmiyaGames.UI.Builds
         private void CreateDesktopPlatformSettings<T>(string name, IPlatformBuildSetting.Architecture architecture) where T : IPlatformBuildSetting
         {
             SerializedProperty element = Add<T>(name);
-            element = element.FindPropertyRelative("architecture");
-            if (element != null)
+            if (element.objectReferenceValue is IStandaloneBuildSetting)
             {
-                element.enumValueIndex = (int)architecture;
+                IStandaloneBuildSetting setting = (IStandaloneBuildSetting)element.objectReferenceValue;
+                setting.ArchitectureToBuild = architecture;
             }
 
             // Apply the property

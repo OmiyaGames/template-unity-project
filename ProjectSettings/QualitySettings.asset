@@ -56,7 +56,7 @@ QualitySettings:
     blendWeights: 2
     textureQuality: 0
     anisotropicTextures: 1
-    antiAliasing: 4
+    antiAliasing: 0
     softParticles: 1
     softVegetation: 1
     realtimeReflectionProbes: 1
@@ -147,9 +147,8 @@ QualitySettings:
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Android: 0
+    Android: 1
     Standalone: 1
-    WebGL: 0
+    WebGL: 1
     Windows Store Apps: 1
-    iPhone: 0
-    tvOS: 0
+    iPhone: 1
