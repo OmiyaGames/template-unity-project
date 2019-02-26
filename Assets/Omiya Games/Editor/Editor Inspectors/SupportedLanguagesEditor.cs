@@ -36,7 +36,7 @@ namespace OmiyaGames.UI.Translations
     /// <date>9/12/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An editor to allow editing <code>SupportedLanguages</code> scripts.
+    /// An editor to allow editing <see cref="SupportedLanguages"/> scripts.
     /// </summary>
     /// <seealso cref="SupportedLanguages"/>
     [CustomEditor(typeof(SupportedLanguages), true)]
@@ -50,11 +50,11 @@ namespace OmiyaGames.UI.Translations
         ReorderableList supportedLanguagesList;
         readonly Dictionary<SerializedProperty, ReorderableList> fonts = new Dictionary<SerializedProperty, ReorderableList>();
 
-        [MenuItem("Assets/Create/Omiya Games/Supported Languages", priority = 501)]
+        [MenuItem("Assets/Create/Omiya Games/Supported Languages", priority = 201)]
         private static void CreateSupportedLanguages()
         {
             // Setup asset
-            SupportedLanguages newAsset = ScriptableObject.CreateInstance<SupportedLanguages>();
+            SupportedLanguages newAsset = CreateInstance<SupportedLanguages>();
 
             // Setup path to file
             string folderName = AssetUtility.GetSelectedFolder();

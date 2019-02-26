@@ -36,7 +36,7 @@ namespace OmiyaGames.Menus
     /// <summary>
     /// Menu that provides accessibility options.
     /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
+    /// <seealso cref="MenuManager"/>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
@@ -241,7 +241,7 @@ namespace OmiyaGames.Menus
                 }
 
                 // Update timescale
-                TimeManager.RevertToCustomTimeScale();
+                TimeManager.TimeScale = Settings.CustomTimeScaleOption;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);
