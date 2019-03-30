@@ -76,9 +76,22 @@ namespace OmiyaGames.Global
 
         public static void ReturnToPool(GameObject gameObject)
         {
-            if(gameObject != null)
+            if (gameObject != null)
             {
                 gameObject.SetActive(false);
+            }
+        }
+
+        public static void DestroyFromPool(IPooledObject script)
+        {
+            // Deactivate the script first
+            ReturnToPool(script);
+
+            // Check if the script isn't null
+            if (script != null)
+            {
+                // Destroy the game object
+                Destroy(script.gameObject);
             }
         }
 
@@ -190,32 +203,30 @@ namespace OmiyaGames.Global
 
         internal void DestroyAll()
         {
-            List<IPooledObject> deactivatedScripts = new List<IPooledObject>();
+            List<GameObject> objectsToDeactivate = new List<GameObject>();
 
             // Deactivate everything
             foreach (PoolSet pool in allPooledObjects.Values)
             {
                 // Clear the scripts to deactivate
-                deactivatedScripts.Clear();
-                if (pool.ContainsPoolScript == true)
+                objectsToDeactivate.Clear();
+
+                // Expand the capacity, if we need to
+                if ((pool.ContainsPoolScript == true) && (pool.ActiveInstances.Count > objectsToDeactivate.Capacity))
                 {
-                    deactivatedScripts.Capacity = pool.ActiveInstances.Count;
+                    objectsToDeactivate.Capacity = pool.ActiveInstances.Count;
                 }
 
                 // Go through all the active pooled items
-                foreach (KeyValuePair<GameObject, IPooledObject> set in pool.ActiveInstances)
+                foreach (GameObject set in pool.ActiveInstances.Keys)
                 {
-                    set.Key.SetActive(false);
-                    if (set.Value != null)
-                    {
-                        deactivatedScripts.Add(set.Value);
-                    }
+                    objectsToDeactivate.Add(set);
                 }
 
                 // Indicate script is deactivated
-                foreach(IPooledObject deactivatedScript in deactivatedScripts)
+                foreach (GameObject deactivate in objectsToDeactivate)
                 {
-                    deactivatedScript.AfterDeactivate(this);
+                    deactivate.SetActive(false);
                 }
             }
         }

@@ -56,7 +56,7 @@ namespace OmiyaGames.Web
         const string LoadingMessage = "Loading web information...";
 
         [SerializeField]
-        Text infoLabel;
+        TMPro.TextMeshProUGUI infoLabel;
 
         // Use this for initialization
         IEnumerator Start()

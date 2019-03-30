@@ -61,15 +61,6 @@ namespace OmiyaGames.UI.Builds
             return returnPath;
         }
 
-        public static void DrawBoldFoldout(AnimBool buildSettingsAnimation, string displayLabel)
-        {
-            GUIStyle boldFoldoutStyle = EditorStyles.foldout;
-            FontStyle lastFontStyle = boldFoldoutStyle.fontStyle;
-            boldFoldoutStyle.fontStyle = FontStyle.Bold;
-            buildSettingsAnimation.target = EditorGUILayout.Foldout(buildSettingsAnimation.target, displayLabel, boldFoldoutStyle);
-            boldFoldoutStyle.fontStyle = lastFontStyle;
-        }
-
         public virtual void OnEnable()
         {
             folderAnimation = new AnimBool(true, Repaint);
@@ -83,7 +74,7 @@ namespace OmiyaGames.UI.Builds
         protected void DrawBuildFile(System.Action drawPath, AdjustText adjustPreviewPath, string foldoutLabel)
         {
             // Draw the build folder
-            DrawBoldFoldout(folderAnimation, foldoutLabel);
+            EditorUiUtility.DrawBoldFoldout(folderAnimation, foldoutLabel);
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(folderAnimation.faded))
             {
                 if (scope.visible == true)

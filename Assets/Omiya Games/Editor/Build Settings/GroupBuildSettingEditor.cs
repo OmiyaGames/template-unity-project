@@ -34,7 +34,7 @@ namespace OmiyaGames.UI.Builds
     /// <date>11/01/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>GroupBuildSetting</code>
+    /// Editor script for <see cref="GroupBuildSetting"/>.
     /// </summary>
     /// <seealso cref="GroupBuildSetting"/>
     [CustomEditor(typeof(GroupBuildSetting))]
@@ -66,17 +66,17 @@ namespace OmiyaGames.UI.Builds
         {
             serializedObject.Update();
 
+            // Draw back buttons
+            DrawBackButton();
+
             // Draw build folder group
+            EditorGUILayout.Space();
             DrawBuildFolder(DrawFolderName);
 
             // Draw platforms
             EditorGUILayout.Space();
             DrawBuildSettingList();
             serializedObject.ApplyModifiedProperties();
-
-            // Draw back buttons
-            EditorGUILayout.Space();
-            DrawBackButton();
 
             // Build button
             EditorGUILayout.Space();
@@ -105,7 +105,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawBuildSettingList()
         {
             // Draw foldout
-            DrawBoldFoldout(allSettingsAnimation, "Platforms");
+            EditorUiUtility.DrawBoldFoldout(allSettingsAnimation, "Platforms");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(allSettingsAnimation.faded))

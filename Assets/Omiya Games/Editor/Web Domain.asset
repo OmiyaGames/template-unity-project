@@ -16,16 +16,57 @@ MonoBehaviour:
   newBuildFolderName:
     names:
     - type: 0
-      text: 
+      text: Web Domain-v
     - type: 4
       text: '-'
     - type: 0
+      text: '-'
+    - type: 3
       text: yyyy.MM.dd-HH.mm
     asSlug: 0
   onBuildFailed: 0
   onBuildCancelled: 0
   allSettings:
   - {fileID: 114429296106961234}
+--- !u!114 &114230948490055728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59be3fe3d8a02549b4e1d4009543b12, type: 3}
+  m_Name: Itch io + Omiya Games + LDJAM
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114429296106961234}
+  archiveSettings:
+    enable: 1
+    type: 0
+    fileName:
+      names:
+      - type: 0
+        text: web-domain-itch-io-v
+      - type: 5
+        text: .zip
+      - type: 0
+        text: .zip
+      asSlug: 1
+  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
+  includeIndexHtml: 1
+  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  acceptedDomains:
+  - itch.io
+  - '*.itch.io'
+  - ssl.hwcdn.net
+  - '*.ssl.hwcdn.net'
+  - ldjam.com
+  - '*.ldjam.com'
+  - taroomiya.com
+  - '*.taroomiya.com'
+  - omiyagames.com
+  - '*.omiyagames.com'
 --- !u!114 &114429296106961234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,4 +112,40 @@ MonoBehaviour:
   customScriptDefineSymbols:
     enable: 0
     customValue: 
-  webLocations: []
+  templatePath: PROJECT:Embedded Build
+  hostSpecificArchiveSettings:
+  - {fileID: 114230948490055728}
+  - {fileID: 114490338645105428}
+--- !u!114 &114490338645105428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59be3fe3d8a02549b4e1d4009543b12, type: 3}
+  m_Name: GameJolt
+  m_EditorClassIdentifier: 
+  parentSetting: {fileID: 114429296106961234}
+  archiveSettings:
+    enable: 1
+    type: 0
+    fileName:
+      names:
+      - type: 0
+        text: web-domain-gamejolt-v
+      - type: 5
+        text: .zip
+      - type: 0
+        text: .zip
+      asSlug: 1
+  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
+  includeIndexHtml: 1
+  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  acceptedDomains:
+  - gamejolt.com
+  - '*.gamejolt.com'
+  - gamejolt.net
+  - '*.gamejolt.net'

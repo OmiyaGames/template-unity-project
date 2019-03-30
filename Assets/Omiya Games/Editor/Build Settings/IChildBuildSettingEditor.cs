@@ -2,6 +2,7 @@
 using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
+using System.Collections.Generic;
 using OmiyaGames.Builds;
 
 namespace OmiyaGames.UI.Builds
@@ -41,13 +42,38 @@ namespace OmiyaGames.UI.Builds
     public abstract class IChildBuildSettingEditor : IBuildSettingEditor
     {
         private SerializedProperty nameProperty;
-        private SerializedProperty parentProperty;
+        protected SerializedProperty parentProperty;
         private AnimBool backAnimation;
+        private Vector2 scrollPos;
+        private GUIStyle returnToParentStyle = null;
+
+        GUIStyle ReturnToParentStyle
+        {
+            get
+            {
+                if (returnToParentStyle == null)
+                {
+                    returnToParentStyle = new GUIStyle(EditorStyles.helpBox);
+                    RectOffset margin = returnToParentStyle.margin;
+                    margin.left = margin.right;
+                    returnToParentStyle.margin = margin;
+                }
+                return returnToParentStyle;
+            }
+        }
+
+        float BackHeight
+        {
+            get
+            {
+                return EditorGUIUtility.singleLineHeight * 2;
+            }
+        }
 
         public override void OnEnable()
         {
             base.OnEnable();
-            backAnimation = new AnimBool(false, Repaint);
+            backAnimation = new AnimBool(true, Repaint);
 
             nameProperty = serializedObject.FindProperty("m_Name");
             parentProperty = serializedObject.FindProperty("parentSetting");
@@ -60,34 +86,58 @@ namespace OmiyaGames.UI.Builds
 
         protected void DrawBackButton()
         {
-            DrawBoldFoldout(backAnimation, "Return Back to Parent");
+            EditorUiUtility.DrawBoldFoldout(backAnimation, "Return To Parent");
+
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(backAnimation.faded))
             {
                 if (scope.visible == true)
                 {
-                    IBuildSetting parentSetting = parentProperty.objectReferenceValue as IBuildSetting;
-                    while (parentSetting != null)
+                    using (EditorGUILayout.VerticalScope vScope = new EditorGUILayout.VerticalScope(ReturnToParentStyle))
+                    using (EditorGUILayout.ScrollViewScope sScope = new EditorGUILayout.ScrollViewScope(scrollPos, true, false, GUI.skin.horizontalScrollbar, GUIStyle.none, GUIStyle.none, GUILayout.MinHeight(BackHeight)))
+                    using (EditorGUILayout.HorizontalScope hScope = new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true)))
                     {
-                        // Draw the button
-                        if (GUI.Button(EditorGUILayout.GetControlRect(), parentSetting.name) == true)
-                        {
-                            Selection.activeObject = parentSetting;
-                        }
+                        // Starting with a list of size of 3 (latter number is arbitrary)
+                        List<IBuildSetting> parentSettings = GetAllParentSettings(3);
 
-                        // Check if this setting has a parent
-                        if (parentSetting is IChildBuildSetting)
+                        // Go through the parent settings in reverse order
+                        for (int index = (parentSettings.Count - 1); index >= 0; --index)
                         {
-                            // If so, grab it
-                            parentSetting = ((IChildBuildSetting)parentSetting).Parent;
+                            // Draw the button
+                            IBuildSetting parentSetting = parentSettings[index];
+                            if (GUILayout.Button(parentSetting.name, EditorStyles.foldout, GUILayout.ExpandWidth(false)) == true)
+                            {
+                                Selection.activeObject = parentSetting;
+                            }
                         }
-                        else
-                        {
-                            // If not, terminate the loop
-                            break;
-                        }
+                        scrollPos = sScope.scrollPosition;
                     }
                 }
             }
+        }
+
+        private List<IBuildSetting> GetAllParentSettings(int initialCapacity)
+        {
+            List<IBuildSetting> parentSettings = new List<IBuildSetting>(initialCapacity);
+            IBuildSetting parentSetting = parentProperty.objectReferenceValue as IBuildSetting;
+            while (parentSetting != null)
+            {
+                // Add the setting into the list
+                parentSettings.Add(parentSetting);
+
+                // Check if this setting has a parent
+                if (parentSetting is IChildBuildSetting)
+                {
+                    // If so, grab it
+                    parentSetting = ((IChildBuildSetting)parentSetting).Parent;
+                }
+                else
+                {
+                    // If not, terminate the loop
+                    break;
+                }
+            }
+
+            return parentSettings;
         }
     }
 }

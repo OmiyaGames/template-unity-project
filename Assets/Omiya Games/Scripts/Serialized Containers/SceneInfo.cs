@@ -43,14 +43,15 @@ namespace OmiyaGames
         [ScenePath]
         string scenePath = "";
         [SerializeField]
-        string displayName = "";
+        [UnityEngine.Serialization.FormerlySerializedAs("translatedDisplayName")]
+        TranslatedString displayName = null;
         [SerializeField]
         CursorLockMode cursorMode = CursorLockMode.None;
         [SerializeField]
         [Tooltip("See TimeManager to set the scene's timescale.")]
         bool revertTimeScale = true;
 
-        TranslatedString translatedDisplayName = null;
+        //TranslatedString translatedDisplayName = null;
         Scene? reference = null;
         string sceneName = null;
         int ordinal = 0;
@@ -59,13 +60,12 @@ namespace OmiyaGames
         {
             // Setup all member variables
             scenePath = scene;
-            displayName = displayNameTranslationKey;
             revertTimeScale = revertTime;
             cursorMode = lockMode;
             ordinal = index;
 
             // Setup translation variable
-            translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
+            displayName = new TranslatedString(displayNameTranslationKey, (Ordinal + 1));
         }
 
         public string ScenePath
@@ -80,7 +80,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(reference.HasValue == false)
+                if (reference.HasValue == false)
                 {
                     reference = SceneManager.GetSceneByPath(ScenePath);
                 }
@@ -92,7 +92,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(sceneName == null)
+                if (sceneName == null)
                 {
                     sceneName = System.IO.Path.GetFileNameWithoutExtension(ScenePath);
                 }
@@ -104,11 +104,7 @@ namespace OmiyaGames
         {
             get
             {
-                if(translatedDisplayName == null)
-                {
-                    translatedDisplayName = new TranslatedString(displayName, (Ordinal + 1));
-                }
-                return translatedDisplayName;
+                return displayName;
             }
         }
 
@@ -132,27 +128,6 @@ namespace OmiyaGames
                 return cursorMode;
             }
         }
-
-        //public CursorLockMode LockModeWeb
-        //{
-        //    get
-        //    {
-        //        return cursorModeWeb;
-        //    }
-        //}
-
-        //public CursorLockMode CurrentLockMode
-        //{
-        //    get
-        //    {
-        //        CursorLockMode returnLock = LockMode;
-        //        if(Singleton.Instance.IsWebApp == true)
-        //        {
-        //            returnLock = LockModeWeb;
-        //        }
-        //        return returnLock;
-        //    }
-        //}
 
         public bool RevertTimeScale
         {

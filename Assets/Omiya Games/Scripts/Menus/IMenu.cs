@@ -152,29 +152,11 @@ namespace OmiyaGames.Menus
         VisibilityChanged onStateChangedWhileManaged = null;
 
         #region Properties
-        protected static MenuManager Manager
-        {
-            get
-            {
-                return Singleton.Get<MenuManager>();
-            }
-        }
+        protected static MenuManager Manager => Singleton.Get<MenuManager>();
 
-        protected static Settings.GameSettings Settings
-        {
-            get
-            {
-                return Singleton.Get<Settings.GameSettings>();
-            }
-        }
+        protected static Settings.GameSettings Settings => Singleton.Get<Settings.GameSettings>();
 
-        protected static SceneTransitionManager SceneChanger
-        {
-            get
-            {
-                return Singleton.Get<SceneTransitionManager>();
-            }
-        }
+        protected static SceneTransitionManager SceneChanger => Singleton.Get<SceneTransitionManager>();
 
         /// <summary>
         /// Indicates whether the UI is setup or not.
@@ -222,17 +204,7 @@ namespace OmiyaGames.Menus
             }
         }
 
-        public Animator Animator
-        {
-            get
-            {
-                if (animatorCache == null)
-                {
-                    animatorCache = GetComponent<Animator>();
-                }
-                return animatorCache;
-            }
-        }
+        public Animator Animator => Utility.GetComponentCached(this, ref animatorCache);
 
         /// <summary>
         /// Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.
