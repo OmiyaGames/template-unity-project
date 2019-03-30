@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Project
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="RotateObject.cs" company="Omiya Games">

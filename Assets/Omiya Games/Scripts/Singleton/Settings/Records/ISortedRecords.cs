@@ -62,7 +62,7 @@ namespace OmiyaGames.Settings
         #region Constructors
         public ISortedRecords(int maxCapacity, bool isSortedInDescendingOrder, IRecord<T>.TryConvertOldRecord converter) : this(maxCapacity, null, converter)
         {
-            if(isSortedInDescendingOrder == false)
+            if (isSortedInDescendingOrder == false)
             {
                 Comparer = new AsecendingOrder();
             }
@@ -128,7 +128,7 @@ namespace OmiyaGames.Settings
             get
             {
                 IRecord<T> returnRecord = null;
-                if(Count > 0)
+                if (Count > 0)
                 {
                     returnRecord = this[0];
                 }
@@ -197,19 +197,25 @@ namespace OmiyaGames.Settings
         {
             // Make sure there are records to read
             bool returnFlag = false;
-            if (string.IsNullOrEmpty(pastRecords) == false)
+            if (pastRecords != null)
             {
-                // Attempt to split the records
-                string[] highScoresArray = pastRecords.Split(ScoreDivider);
-
                 // Clear the list
                 Clear();
 
-                // Add elements to the list
-                for (int i = 0; i < highScoresArray.Length; ++i)
+                // Check if there are more than one records
+                if (pastRecords.Length > 0)
                 {
-                    records.Add(ParseRecord(highScoresArray[i], appVersion, Converter));
+                    // Attempt to split the records
+                    string[] highScoresArray = pastRecords.Split(ScoreDivider);
+
+                    // Add elements to the list
+                    for (int i = 0; i < highScoresArray.Length; ++i)
+                    {
+                        records.Add(ParseRecord(highScoresArray[i], appVersion, Converter));
+                    }
                 }
+
+                // Return true
                 returnFlag = true;
             }
             return returnFlag;

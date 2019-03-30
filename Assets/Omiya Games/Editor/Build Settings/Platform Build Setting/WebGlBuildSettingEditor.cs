@@ -1,4 +1,7 @@
 ﻿using UnityEditor;
+using UnityEditor.AnimatedValues;
+using UnityEditorInternal;
+using UnityEngine;
 using OmiyaGames.Builds;
 
 namespace OmiyaGames.UI.Builds
@@ -37,9 +40,15 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(WebGlBuildSetting))]
     public class WebGlBuildSettingEditor : IPlatformBuildSettingEditor
     {
-        private SerializedProperty webLocations;
+        private SerializedProperty templatePath;
+        private SerializedProperty hostSpecificArchiveSettings;
+
         // FIXME: do more research on the Facebook builds
         //private SerializedProperty forFacebook;
+
+        AnimBool allArchivesAnimation;
+
+        HostArchiveSettingReorderableList allArchiveList;
 
         public override string FileExtension
         {
@@ -52,16 +61,38 @@ namespace OmiyaGames.UI.Builds
         public override void OnEnable()
         {
             base.OnEnable();
-            webLocations = serializedObject.FindProperty("webLocations");
+            templatePath = serializedObject.FindProperty("templatePath");
+            hostSpecificArchiveSettings = serializedObject.FindProperty("hostSpecificArchiveSettings");
             //forFacebook = serializedObject.FindProperty("forFacebook");
+
+            allArchivesAnimation = new AnimBool(true, Repaint);
+
+            allArchiveList = new HostArchiveSettingReorderableList(target, hostSpecificArchiveSettings, new GUIContent("Web Hosts"));
         }
 
         protected override void DrawPlatformSpecificSettings()
         {
-            // FIXME: customize this
-            //EditorGUILayout.PropertyField(webLocations);
+            EditorGUILayout.HelpBox("Current path -- " + PlayerSettings.WebGL.template, MessageType.None);
+            EditorGUILayout.PropertyField(templatePath);
             // FIXME: to draw
             //EditorGUILayout.PropertyField(forFacebook);
+        }
+
+        protected override void DrawExtraSettings()
+        {
+            EditorGUILayout.Space();
+
+            // Draw foldout
+            EditorUiUtility.DrawBoldFoldout(allArchivesAnimation, "Host Specific Archive Settings");
+
+            // Draw the list
+            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(allArchivesAnimation.faded))
+            {
+                if (scope.visible == true)
+                {
+                    allArchiveList.List.DoLayoutList();
+                }
+            }
         }
     }
 }

@@ -349,10 +349,10 @@ namespace OmiyaGames.UI.Translations
             // Draw the translations list
             EditorGUI.BeginChangeCheck();
             TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
-            if(EditorGUI.EndChangeCheck() == true)
+            if((EditorGUI.EndChangeCheck() == true) && (Element != null) && (Element.serializedObject != null) && (Element.serializedObject.context != null))
             {
                 // Indicate this dictionary needs to be updated
-                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
+                EditorUtility.SetDirty(Element.serializedObject.context);
             }
 
             // Draw the toggle, enabled only if the area is expandable

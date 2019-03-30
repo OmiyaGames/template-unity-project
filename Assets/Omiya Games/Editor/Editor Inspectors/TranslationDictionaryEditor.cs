@@ -36,7 +36,7 @@ namespace OmiyaGames.UI.Translations
     /// <date>9/12/2018</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// An editor to allow editing <code>TranslationDictionary</code> scripts.
+    /// An editor to allow editing <see cref="TranslationDictionary"/> scripts.
     /// </summary>
     /// <seealso cref="TranslationDictionary"/>
     [CustomEditor(typeof(TranslationDictionary), true)]
@@ -82,11 +82,11 @@ namespace OmiyaGames.UI.Translations
         readonly Dictionary<string, int> frequencyInKeyAppearance = new Dictionary<string, int>();
         #endregion
 
-        [MenuItem("Assets/Create/Omiya Games/Translation Dictionary", priority = 502)]
+        [MenuItem("Assets/Create/Omiya Games/Translation Dictionary", priority = 202)]
         public static TranslationDictionary CreateTranslationDictionary()
         {
             // Setup asset
-            TranslationDictionary newAsset = ScriptableObject.CreateInstance<TranslationDictionary>();
+            TranslationDictionary newAsset = CreateInstance<TranslationDictionary>();
 
             // Setup path to file
             string folderName = AssetUtility.GetSelectedFolder();

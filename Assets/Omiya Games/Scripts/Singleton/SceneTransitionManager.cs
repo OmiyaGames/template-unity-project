@@ -54,24 +54,21 @@ namespace OmiyaGames.Scenes
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
-        // FIXME: remove the cursor properties from the inspector on this scene info
-        [SerializeField]
-        SceneInfo splash;
-        // FIXME: remove the cursor properties from the inspector on this scene info
+        //[SerializeField]
+        //SceneInfo splash;
         [SerializeField]
         SceneInfo mainMenu;
-        // FIXME: remove the cursor properties from the inspector on this scene info
         [SerializeField]
         SceneInfo credits;
         // TODO: consider adding a loading scene
-        //[SerializeField]
-        //SceneInfo loading;
+        [SerializeField]
+        SceneInfo loading;
         [SerializeField]
         SceneInfo[] levels;
 
         [Header("Debugging")]
         [SerializeField]
-        CursorLockMode defaultLockMode = CursorLockMode.Locked;
+        CursorLockMode debugLockMode = CursorLockMode.Locked;
 
         SceneInfo sceneToLoad = null;
         AsyncOperation sceneLoadingInfo = null;
@@ -113,11 +110,11 @@ namespace OmiyaGames.Scenes
             private set;
         } = CursorLockMode.None;
 
-        public SceneInfo Splash
+        public SceneInfo Loading
         {
             get
             {
-                return splash;
+                return loading;
             }
         }
 
@@ -178,12 +175,12 @@ namespace OmiyaGames.Scenes
                 // Check which scene this is
                 if (currenLevel != null)
                 {
-                    if ((currenLevel == splash) || (currenLevel == credits))
+                    if (currenLevel == credits)
                     {
                         // If we're on the splash or credits scene, the next level is the main menu
                         returnLevel = mainMenu;
                     }
-                    else if(levels.Length > 0)
+                    else if (levels.Length > 0)
                     {
                         // By default, go straight to the credits
                         returnLevel = credits;
@@ -234,7 +231,7 @@ namespace OmiyaGames.Scenes
             // Add the main menu, credits, and splash scene
             sceneNameToInfo.Add(MainMenu.ScenePath, MainMenu);
             sceneNameToInfo.Add(Credits.ScenePath, Credits);
-            sceneNameToInfo.Add(Splash.ScenePath, Splash);
+            sceneNameToInfo.Add(Loading.ScenePath, Loading);
 
             // Update level information
             for (int index = 0; index < Levels.Length; ++index)
@@ -249,7 +246,7 @@ namespace OmiyaGames.Scenes
 
         internal override void SceneAwake()
         {
-            if(CurrentScene == null)
+            if (CurrentScene == null)
             {
                 Debug.LogWarning("Current scene is not added to the Build Settings");
                 return;
@@ -270,7 +267,7 @@ namespace OmiyaGames.Scenes
 
         public void RevertCursorLockMode()
         {
-            CursorLockMode mode = defaultLockMode;
+            CursorLockMode mode = debugLockMode;
             if (CurrentScene != null)
             {
                 mode = CurrentScene.LockMode;
@@ -293,7 +290,7 @@ namespace OmiyaGames.Scenes
         {
             LoadScene(MainMenu);
         }
-        
+
         /// <summary>
         /// Loads the Credits scene.
         /// </summary>
@@ -317,7 +314,7 @@ namespace OmiyaGames.Scenes
             {
                 throw new ArgumentNullException("scene");
             }
-            else if(string.IsNullOrEmpty(scene.ScenePath) == true)
+            else if (string.IsNullOrEmpty(scene.ScenePath) == true)
             {
                 throw new ArgumentException("No scene name is set", "scene");
             }
@@ -366,6 +363,7 @@ namespace OmiyaGames.Scenes
         void TransitionToScene(SceneInfo sceneToLoad)
         {
             // Indicate the next scene was loaded
+            // FIXME: move the destroy All line to after the transition animation has made the screen unviewable.
             Singleton.Get<PoolingManager>().DestroyAll();
 
             // Grab the last cursor mode
@@ -373,7 +371,7 @@ namespace OmiyaGames.Scenes
 
             // Load the next scene asynchronously
             // FIXME: once loading scene is in here, load that instead
-            sceneLoadingInfo = SceneManager.LoadSceneAsync(sceneToLoad.SceneFileName);
+            sceneLoadingInfo = SceneManager.LoadSceneAsync(sceneToLoad.ScenePath);
 
             // Prevent the scene from loading automatically
             sceneLoadingInfo.allowSceneActivation = false;
@@ -393,7 +391,7 @@ namespace OmiyaGames.Scenes
         IEnumerator MonitorSceneLoading()
         {
             // Check how much progress is being made on loading the scene
-            while(IsLoadingScene == true)
+            while (IsLoadingScene == true)
             {
                 // Wait until the scene is fully loaded
                 yield return null;
@@ -415,7 +413,6 @@ namespace OmiyaGames.Scenes
         {
             // To prevent conflicts, collect all the scenes we already have listed
             HashSet<string> usedPaths = new HashSet<string>();
-            usedPaths.Add(splash.ScenePath);
             usedPaths.Add(mainMenu.ScenePath);
             usedPaths.Add(credits.ScenePath);
 

@@ -455,7 +455,7 @@ namespace OmiyaGames.Menus
             {
                 yield return delaySelection;
 
-                if (Events.currentSelectedGameObject == null)
+                if ((Events.currentSelectedGameObject == null) && (guiElement != null))
                 {
                     guiElement.Select();
                     guiElement.OnSelect(null);
