@@ -81,31 +81,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundEffect: {fileID: 11492550}
   mainMenu:
-    scenePath: Assets/Project/Scenes/Menus/Main Menu.unity
+    scenePath: Assets/Omiya Games/Scenes/Menus/Main Menu.unity
     displayName:
       key: Main Menu
       dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     cursorMode: 0
     revertTimeScale: 1
   credits:
-    scenePath: Assets/Project/Scenes/Menus/Credits.unity
+    scenePath: Assets/Omiya Games/Scenes/Menus/Credits.unity
     displayName:
       key: Credits
       dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     cursorMode: 0
     revertTimeScale: 1
   loading:
-    scenePath: Assets/Project/Scenes/Menus/Loading.unity
+    scenePath: Assets/Omiya Games/Scenes/Menus/Loading.unity
     displayName:
       key: Loading
       dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     cursorMode: 0
     revertTimeScale: 1
   levels:
-  - scenePath: Assets/Project/Scenes/Race.unity
+  - scenePath: Assets/Omiya Games/Scenes/Level 1.unity
     displayName:
-      key: Game Title
-      dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
+      key: Level Button
+      dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+    cursorMode: 0
+    revertTimeScale: 1
+  - scenePath: Assets/Omiya Games/Scenes/Level 2.unity
+    displayName:
+      key: Level Button
+      dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     cursorMode: 0
     revertTimeScale: 1
   debugLockMode: 0
@@ -978,12 +984,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1774af6063f418442896f22c781fcf7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectsToPreload:
-  - {fileID: 3250943919729812575, guid: d7d2500f2fde39d49b9b1a1490ad80d3, type: 3}
-  - {fileID: 3740690918572659505, guid: a7e1d6defd5cab946ae8536c08a5e2db, type: 3}
-  - {fileID: 4831558834969005627, guid: 0de09f836a1da2646830911b9073b779, type: 3}
-  - {fileID: 4044865638797070909, guid: 5dbcc2579bc8e41e3905426e31730fb0, type: 3}
-  - {fileID: 223855573525347548, guid: 6b8fe4285fce14e47959702769bdf284, type: 3}
+  objectsToPreload: []
 --- !u!1 &185162
 GameObject:
   m_ObjectHideFlags: 0

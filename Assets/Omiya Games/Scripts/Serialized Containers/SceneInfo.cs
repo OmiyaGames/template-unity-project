@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using OmiyaGames.Translations;
 
@@ -39,6 +40,8 @@ namespace OmiyaGames
     [System.Serializable]
     public class SceneInfo
     {
+        public const string SceneFileExtension = ".unity";
+
         [SerializeField]
         [ScenePath]
         string scenePath = "";
@@ -54,6 +57,7 @@ namespace OmiyaGames
         //TranslatedString translatedDisplayName = null;
         Scene? reference = null;
         string sceneName = null;
+        string loadName = null;
         int ordinal = 0;
 
         public SceneInfo(string scene, string displayNameTranslationKey, bool revertTime = true, CursorLockMode lockMode = CursorLockMode.None, int index = 0)
@@ -94,9 +98,39 @@ namespace OmiyaGames
             {
                 if (sceneName == null)
                 {
-                    sceneName = System.IO.Path.GetFileNameWithoutExtension(ScenePath);
+                    sceneName = Path.GetFileNameWithoutExtension(ScenePath);
                 }
                 return sceneName;
+            }
+        }
+
+        public string SceneLoadName
+        {
+            get
+            {
+                //loadName = ScenePath;
+                if (loadName == null)
+                {
+                    // Load the full directory, minus the file extension
+                    System.Text.StringBuilder builder = new System.Text.StringBuilder();
+                    builder.Append(ScenePath);
+
+                    // Check if the StringBuilder starts with "Assets"
+                    if (StartsWith(builder, FolderPathAttribute.DefaultLocalPath) == true)
+                    {
+                        // Remove "Assets"
+                        builder.Remove(0, (FolderPathAttribute.DefaultLocalPath.Length + 1));
+                    }
+
+                    // Check if the StringBuilder ends with ".unity"
+                    if (EndsWith(builder, SceneFileExtension) == true)
+                    {
+                        // Remove "Assets"
+                        builder.Remove((builder.Length - SceneFileExtension.Length), SceneFileExtension.Length);
+                    }
+                    loadName = builder.ToString();
+                }
+                return loadName;
             }
         }
 
@@ -135,6 +169,34 @@ namespace OmiyaGames
             {
                 return revertTimeScale;
             }
+        }
+
+        private static bool StartsWith(System.Text.StringBuilder builder, string compare)
+        {
+            bool isDefaultLocalPath = true;
+            for (int i = 0; i < compare.Length; ++i)
+            {
+                if (char.ToLower(builder[i]) != char.ToLower(compare[i]))
+                {
+                    isDefaultLocalPath = false;
+                    break;
+                }
+            }
+            return isDefaultLocalPath;
+        }
+
+        private static bool EndsWith(System.Text.StringBuilder builder, string compare)
+        {
+            bool isDefaultLocalPath = true;
+            for (int i = 0, j = (builder.Length - compare.Length); i < compare.Length; ++i, ++j)
+            {
+                if (char.ToLower(builder[j]) != char.ToLower(compare[i]))
+                {
+                    isDefaultLocalPath = false;
+                    break;
+                }
+            }
+            return isDefaultLocalPath;
         }
     }
 }
