@@ -2,6 +2,7 @@
 using UnityEditor.AnimatedValues;
 using UnityEngine;
 using OmiyaGames.Builds;
+using System;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -130,25 +131,32 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.Space();
             DrawArchiveSettings();
 
+            // Draw extra settings, if any
+            DrawExtraSettings();
             serializedObject.ApplyModifiedProperties();
 
             // Draw the bottom of the setting
             DrawEndOfSetting();
         }
 
+        protected virtual void DrawExtraSettings()
+        {
+            // Do nothing
+        }
+
         protected void DrawBeginningOfSetting()
         {
+            // Draw name of this group
+            DrawBackButton();
+
             // Draw build folder group
+            EditorGUILayout.Space();
             DrawBuildFile(DrawCustomNameControls, AppendFileName,
             "File Name");
         }
 
         protected void DrawEndOfSetting()
         {
-            // Draw name of this group
-            EditorGUILayout.Space();
-            DrawBackButton();
-
             // Build button
             EditorGUILayout.Space();
             DrawBuildButton();
@@ -157,7 +165,7 @@ namespace OmiyaGames.UI.Builds
         protected void DrawCustomSettings()
         {
             // Draw foldout
-            DrawBoldFoldout(customSettingsAnimation, "Custom Build Settings");
+            EditorUiUtility.DrawBoldFoldout(customSettingsAnimation, "Custom Build Settings");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(customSettingsAnimation.faded))
             {
                 if (scope.visible == true)
@@ -171,7 +179,7 @@ namespace OmiyaGames.UI.Builds
 
         protected void DrawDevelopmentSettings()
         {
-            DrawBoldFoldout(developmentAnimation, "Development Settings");
+            EditorUiUtility.DrawBoldFoldout(developmentAnimation, "Development Settings");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(developmentAnimation.faded))
             {
                 if (scope.visible == true)
