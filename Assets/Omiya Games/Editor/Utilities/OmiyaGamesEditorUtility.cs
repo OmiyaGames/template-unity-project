@@ -161,5 +161,21 @@ namespace OmiyaGames
             // Draw enums as normal
             DrawEnum(property, supportedEnums, defaultEnum);
         }
+
+        public static void DrawBoldFoldout(AnimBool buildSettingsAnimation, string displayLabel)
+        {
+            // Grab foldout style
+            GUIStyle boldFoldoutStyle = EditorStyles.foldout;
+
+            // Change the font to bold
+            FontStyle lastFontStyle = boldFoldoutStyle.fontStyle;
+            boldFoldoutStyle.fontStyle = FontStyle.Bold;
+
+            // Draw the UI
+            buildSettingsAnimation.target = EditorGUILayout.Foldout(buildSettingsAnimation.target, displayLabel, boldFoldoutStyle);
+
+            // Revert the font
+            boldFoldoutStyle.fontStyle = lastFontStyle;
+        }
     }
 }

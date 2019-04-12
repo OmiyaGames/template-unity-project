@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using UnityEngine;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
-using System;
-using System.IO;
 
 namespace OmiyaGames.Builds
 {
@@ -79,27 +80,13 @@ namespace OmiyaGames.Builds
 
             public bool IsEnabled
             {
-                get
-                {
-                    return enable;
-                }
+                get => enable;
+                set => enable = value;
             }
 
-            public CustomFileName FileName
-            {
-                get
-                {
-                    return fileName;
-                }
-            }
+            public CustomFileName FileName => fileName;
 
-            public ArchiveType Type
-            {
-                get
-                {
-                    return type;
-                }
-            }
+            public ArchiveType Type => type;
 
             public static string GetFileExtension(ArchiveType type)
             {
@@ -157,21 +144,27 @@ namespace OmiyaGames.Builds
 
         public class LastPlayerSettings
         {
-            public string LastScriptDefineSymbols
+            public LastPlayerSettings(BuildTargetGroup target)
+            {
+                // Setup member variables
+                Target = target;
+                LastScriptDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(Target);
+            }
+
+            public BuildTargetGroup Target
             {
                 get;
             }
 
-            public LastPlayerSettings(BuildTargetGroup target)
+            public string LastScriptDefineSymbols
             {
-                // Setup member variables
-                LastScriptDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(target);
+                get;
             }
         }
 
         [SerializeField]
         [Tooltip("Name of the executable file.")]
-        protected CustomFileName fileName = new CustomFileName(false,
+        private CustomFileName fileName = new CustomFileName(false,
             new CustomFileName.Prefill(CustomFileName.PrefillType.AppName)
         );
         [SerializeField]
@@ -243,6 +236,7 @@ namespace OmiyaGames.Builds
         {
             // Check if prebuild check succeeded
             string message;
+            bool returnFlag = true;
             if (PreBuildCheck(out message) == true)
             {
                 // Setup the folders
@@ -269,8 +263,13 @@ namespace OmiyaGames.Builds
                     if (archiveSettings.IsEnabled == true)
                     {
                         // Archive the build
-                        ArchiveBuild(results);
+                        Task<bool> waitForArchive = ArchiveBuild(results);
+                        waitForArchive.Wait();
                     }
+
+                    // Handle any post-build setup
+                    Task waitForPostBuild = PostSuccessfulBuild(results);
+                    waitForPostBuild.Wait();
 
                     // Increment the build number
                     ++BuildNumber;
@@ -375,6 +374,12 @@ namespace OmiyaGames.Builds
             }
         }
 
+        public CustomFileName FileName
+        {
+            get => fileName;
+            protected set => fileName = value;
+        }
+
         /// <summary>
         /// Note: don't forget to override <code>RevertPlayerSettings()</code>!
         /// </summary>
@@ -405,39 +410,77 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected virtual void ArchiveBuild(BuildPlayersResult results)
+        protected virtual async Task<bool> ArchiveBuild(BuildPlayersResult results)
         {
             // Calculate folder and file name
             string archiveFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this));
 
             // Make the build
-            ArchiveBuildHelper(results, archiveFolderName);
+            return await ArchiveBuildHelper(results, archiveFolderName);
         }
 
-        protected void ArchiveBuildHelper(BuildPlayersResult results, string archiveFolderName)
+        protected virtual async Task PostSuccessfulBuild(BuildPlayersResult results)
         {
-            string newArchiveFileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(this));
+            // Do nothing
+            await Task.CompletedTask;
+        }
+
+        protected async Task<bool> ArchiveBuildHelper(BuildPlayersResult results, string archiveFolderName)
+        {
+            return await ArchiveBuildHelper(this, archiveSettings, results, archiveFolderName);
+        }
+
+        protected static async Task<bool> ArchiveBuildHelper(IBuildSetting buildSetting, ArchiveSettings archiveSettings, BuildPlayersResult results, string archiveFolderName)
+        {
+            bool returnFlag = true;
+            string newArchiveFileName = results.ConcatenateFolders(results.FolderName, archiveSettings.FileName.ToString(buildSetting));
 
             // Choose an archive algorithm
             switch (archiveSettings.Type)
             {
                 case ArchiveType.Zip:
                 default:
-                    ZipFolder(archiveFolderName, newArchiveFileName);
+                    returnFlag = await ZipFolder(archiveFolderName, newArchiveFileName);
                     break;
             }
 
             // Add the results
-            results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", name), this);
+            if(returnFlag == true)
+            {
+                results.AddPostBuildReport(BuildPlayersResult.Status.Success, results.Concatenate("Successfully archived: ", buildSetting.name), buildSetting);
+            }
+            else
+            {
+                results.AddPostBuildReport(BuildPlayersResult.Status.Error, results.Concatenate("Archiving ", buildSetting.name, " took too long!"), buildSetting);
+            }
+            return returnFlag;
         }
 
-        private static void ZipFolder(string folderToZip, string resultingFileName)
+        private const int MaxWaitTimeForZippingMilliseconds = 5000;
+        private const int CheckEveryMilliseconds = 500;
+        private async static Task<bool> ZipFolder(string folderToZip, string resultingFileName)
         {
             ICSharpCode.SharpZipLib.Zip.FastZip zipper = new ICSharpCode.SharpZipLib.Zip.FastZip();
             zipper.CreateEmptyDirectories = true;
             zipper.RestoreAttributesOnExtract = true;
             zipper.RestoreDateTimeOnExtract = false;
             zipper.CreateZip(resultingFileName, folderToZip, true, "");
+
+            // Forcing a time limit
+            int millisecondsPassed = 0;
+            bool returnFlag = File.Exists(resultingFileName);
+
+            // Constantly check if the file has been created or not
+            while ((returnFlag == false) && (millisecondsPassed < MaxWaitTimeForZippingMilliseconds))
+            {
+                // Wait for a few seconds
+                await Task.Delay(CheckEveryMilliseconds);
+
+                // Update loop variables
+                millisecondsPassed += CheckEveryMilliseconds;
+                returnFlag = File.Exists(resultingFileName);
+            }
+            return returnFlag;
         }
 
         private BuildPlayerOptions GetPlayerOptions(BuildPlayersResult results)
@@ -446,7 +489,7 @@ namespace OmiyaGames.Builds
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
 
             // Update the location to build this player
-            buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+            buildPlayerOptions.locationPathName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), FileName.ToString(this));
             if (string.IsNullOrEmpty(FileExtension) == false)
             {
                 buildPlayerOptions.locationPathName = results.Concatenate(buildPlayerOptions.locationPathName, FileExtension);

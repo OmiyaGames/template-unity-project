@@ -45,7 +45,7 @@ namespace OmiyaGames
         public static string GetLastFolderName(string path, bool pathIncludesFileName)
         {
             string returnPath = Path.GetFileName(path);
-            if((pathIncludesFileName == true) || (string.IsNullOrEmpty(returnPath) == true))
+            if ((pathIncludesFileName == true) || (string.IsNullOrEmpty(returnPath) == true))
             {
                 returnPath = Path.GetFileName(Path.GetDirectoryName(path));
             }
@@ -56,14 +56,14 @@ namespace OmiyaGames
         {
             // Setup return value
             string returnGuid = null;
-            
+
             // Check to see if the provided path ends properly
             string lastFolder = Path.GetFileName(newFolderPath);
-            if(string.IsNullOrEmpty(lastFolder) == true)
+            if (string.IsNullOrEmpty(lastFolder) == true)
             {
                 newFolderPath = Path.GetDirectoryName(newFolderPath);
             }
-            if(AssetDatabase.IsValidFolder(newFolderPath) == false)
+            if (AssetDatabase.IsValidFolder(newFolderPath) == false)
             {
                 // Create a stack of folders that doesn't exist yet
                 Stack<string> newFolders = new Stack<string>();
@@ -71,17 +71,17 @@ namespace OmiyaGames
                 {
                     // Push the last folder into the stack
                     lastFolder = GetLastFolderName(newFolderPath, false);
-                    if(string.IsNullOrEmpty(lastFolder) == false)
+                    if (string.IsNullOrEmpty(lastFolder) == false)
                     {
                         newFolders.Push(lastFolder);
                     }
 
                     // Reduce the newFolderPath by the path
                     newFolderPath = Path.GetDirectoryName(newFolderPath);
-                } while(AssetDatabase.IsValidFolder(newFolderPath) == false);
+                } while (AssetDatabase.IsValidFolder(newFolderPath) == false);
 
                 // Go through the stack of new folders to create
-                while(newFolders.Count > 0)
+                while (newFolders.Count > 0)
                 {
                     lastFolder = newFolders.Pop();
                     returnGuid = AssetDatabase.CreateFolder(newFolderPath, lastFolder);
@@ -100,7 +100,7 @@ namespace OmiyaGames
             if (obj != null)
             {
                 returnPath = AssetDatabase.GetAssetPath(obj.GetInstanceID());
-                if((string.IsNullOrEmpty(returnPath) == false) && (Directory.Exists(returnPath) == false))
+                if ((string.IsNullOrEmpty(returnPath) == false) && (Directory.Exists(returnPath) == false))
                 {
                     returnPath = Path.GetDirectoryName(returnPath);
                 }
@@ -131,7 +131,7 @@ namespace OmiyaGames
             return isBuildConfirmed;
         }
 
-        public static string SaveAsAssetBundle(ScriptableObject newAsset, string newFolderName, string newFileName, string bundleId, StringBuilder builder)
+        public static string SaveAsAssetBundle(ScriptableObject newAsset, string newFolderName, string newFileName, string bundleId, StringBuilder builder, bool relativeToProject, bool overwritePreviousFile = false)
         {
             // Generate the asset bundle at the Assets folder
             string pathOfAsset = GenerateScriptableObject(newAsset, newFileName, bundleId, builder);
@@ -142,11 +142,19 @@ namespace OmiyaGames
 
             if (string.IsNullOrEmpty(newFolderName) == false)
             {
-                // Create a new folder if one doesn't exist
-                CreateFolderRecursively(newFolderName);
+                if (relativeToProject == true)
+                {
+                    // Create a new folder if one doesn't exist
+                    CreateFolderRecursively(newFolderName);
+                }
+                else if (Directory.Exists(newFolderName) == false)
+                {
+                    // Create a new folder if one doesn't exist
+                    Directory.CreateDirectory(newFolderName);
+                }
 
                 // Move the created asset bundle to the designated location
-                MoveAssetBundleTo(builder, pathOfAsset, newFolderName, newFileName, bundleId);
+                MoveAssetBundleTo(builder, newFolderName, newFileName, bundleId, relativeToProject, overwritePreviousFile);
             }
             return pathOfAsset;
         }
@@ -191,20 +199,51 @@ namespace OmiyaGames
             AssetDatabase.Refresh();
         }
 
-        private static void MoveAssetBundleTo(StringBuilder builder, string pathOfAsset, string newFolderName, string newFileName, string bundleId)
+        private static void MoveAssetBundleTo(StringBuilder builder, string newFolderName, string newFileName, string bundleId, bool relativeToProject, bool overwritePreviousFile)
         {
             // Generate paths for the old file, to move to the new one
             string newPath = Path.Combine(newFolderName, newFileName);
-            pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, bundleId);
+            string pathOfAsset = Path.Combine(CreateScriptableObjectAtFolder, bundleId);
 
             // Move the asset to the folder designated by the user
-            FileUtil.ReplaceFile(pathOfAsset, newPath);
+            if (relativeToProject == true)
+            {
+                FileUtil.ReplaceFile(pathOfAsset, newPath);
+            }
+            else
+            {
+                bool canMoveFile = true;
+                if (File.Exists(newPath) == true)
+                {
+                    if (overwritePreviousFile == true)
+                    {
+                        File.Delete(newPath);
+                    }
+                    else if (EditorUtility.DisplayDialog("File already exists", "File already exists at '" + newPath + "'. Do you want to overwrite it?", "Yes", "No") == true)
+                    {
+                        File.Delete(newPath);
+                    }
+                    else
+                    {
+                        canMoveFile = false;
+                    }
+                }
+                if (canMoveFile == true)
+                {
+                    File.Move(Path.Combine(Application.dataPath, bundleId), newPath);
+                }
+            }
+
+            // Delete the old assets
             FileUtil.DeleteFileOrDirectory(pathOfAsset);
 
-            // Refresh the project window
-            AssetDatabase.Refresh();
-            UnityEditor.EditorUtility.FocusProjectWindow();
-            Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(newPath);
+            if (relativeToProject == true)
+            {
+                // Refresh the project window
+                AssetDatabase.Refresh();
+                UnityEditor.EditorUtility.FocusProjectWindow();
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(newPath);
+            }
         }
 
         private static void CleanUpFiles(StringBuilder builder, string acceptedDomainListObjectPath, string bundleId)

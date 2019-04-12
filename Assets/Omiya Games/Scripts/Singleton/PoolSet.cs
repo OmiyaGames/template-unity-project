@@ -40,7 +40,7 @@ namespace OmiyaGames.Global
         {
             if(originalPrefab == null)
             {
-                throw new System.ArgumentNullException("originalPrefab");
+                throw new System.ArgumentNullException(nameof(originalPrefab));
             }
 
             OriginalPrefab = originalPrefab;
@@ -51,7 +51,7 @@ namespace OmiyaGames.Global
         {
             if (originalPrefab == null)
             {
-                throw new System.ArgumentNullException("originalPrefab");
+                throw new System.ArgumentNullException(nameof(originalPrefab));
             }
 
             OriginalScript = originalPrefab;

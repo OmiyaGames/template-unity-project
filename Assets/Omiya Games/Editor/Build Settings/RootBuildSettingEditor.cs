@@ -33,7 +33,7 @@ namespace OmiyaGames.UI.Builds
     /// <date>11/01/2015</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// Editor script for <code>RootBuildSetting</code>
+    /// Editor script for <see cref="RootBuildSetting"/>.
     /// </summary>
     /// <seealso cref="RootBuildSetting"/>
     [CustomEditor(typeof(RootBuildSetting))]
@@ -52,11 +52,11 @@ namespace OmiyaGames.UI.Builds
         CustomFileNameReorderableList newBuildFolderNameList;
         ChildBuildSettingReorderableList childBuildSettingsList;
 
-        [MenuItem("Assets/Create/Omiya Games/Build Settings", priority = 500)]
+        [MenuItem("Assets/Create/Omiya Games/Build Settings", priority = 200)]
         public static RootBuildSetting CreateBuildSettings()
         {
             // Setup asset
-            RootBuildSetting newAsset = ScriptableObject.CreateInstance<RootBuildSetting>();
+            RootBuildSetting newAsset = CreateInstance<RootBuildSetting>();
 
             // Setup path to file
             string folderName = AssetUtility.GetSelectedFolder();
@@ -112,7 +112,7 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawInterruptions()
         {
-            DrawBoldFoldout(interruptionsAnimation, "Interruptions");
+            EditorUiUtility.DrawBoldFoldout(interruptionsAnimation, "Interruptions");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(interruptionsAnimation.faded))
             {
                 if (scope.visible == true)
@@ -126,7 +126,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawBuildSettingList()
         {
             // Draw foldout
-            DrawBoldFoldout(buildSettingsAnimation, "Platforms");
+            EditorUiUtility.DrawBoldFoldout(buildSettingsAnimation, "Platforms");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(buildSettingsAnimation.faded))

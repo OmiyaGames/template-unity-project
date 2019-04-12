@@ -92,6 +92,23 @@ namespace OmiyaGames
         }
 
         /// <summary>
+        /// Gets the original script this object was pooled from.
+        /// </summary>
+        /// <value>The original prefab.</value>
+        public IPooledObject OriginalScript
+        {
+            get
+            {
+                IPooledObject returnScript = null;
+                if (Pool != null)
+                {
+                    returnScript = Pool.OriginalScript;
+                }
+                return returnScript;
+            }
+        }
+
+        /// <summary>
         /// Gets the set of scripts this object belongs in.
         /// Handled by <code>PoolingManager</code>.
         /// </summary>
@@ -108,6 +125,24 @@ namespace OmiyaGames
         public virtual void OnDestroy()
         {
             AfterDeactivate(null);
+
+            // Check if this isn't the original prefab
+            if ((Pool != null) && (OriginalPrefab != gameObject))
+            {
+                // Check if this game object is in the inactive list
+                if (Pool.InactiveInstances.ContainsKey(gameObject) == true)
+                {
+                    // Clean self up from the pooling manager
+                    Pool.InactiveInstances.Remove(gameObject);
+                }
+
+                // Check if this game object is in the active list
+                if (Pool.ActiveInstances.ContainsKey(gameObject) == true)
+                {
+                    // Clean self up from the pooling manager
+                    Pool.ActiveInstances.Remove(gameObject);
+                }
+            }
         }
 
         public virtual void OnDisable()
@@ -119,7 +154,7 @@ namespace OmiyaGames
         /// Called when this instance is initialized by PoolingManager,
         /// but before Start or Awake is called.
         /// </summary>
-        internal void AfterInitialized(PoolingManager manager)
+        public virtual void AfterInitialized(PoolingManager manager)
         {
             SetPoolState(true);
             OnAfterInitialized?.Invoke(this, manager);
@@ -130,7 +165,7 @@ namespace OmiyaGames
         /// is activated by PoolingManager for re-use. Note this method will
         /// be called before Start or Awake.
         /// </summary>
-        internal void AfterActivated(PoolingManager manager)
+        public virtual void AfterActivated(PoolingManager manager)
         {
             SetPoolState(true);
             OnAfterActivated?.Invoke(this, manager);
@@ -144,7 +179,7 @@ namespace OmiyaGames
         /// <summary>
         /// Called when this instance -- already initialized and pooled -- is deactivated.
         /// </summary>
-        internal void AfterDeactivate(PoolingManager manager)
+        public virtual void AfterDeactivate(PoolingManager manager)
         {
             SetPoolState(false);
             OnAfterDeactivated?.Invoke(this, manager);

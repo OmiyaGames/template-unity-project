@@ -68,13 +68,13 @@ namespace OmiyaGames.Menus
             get
             {
                 Selectable returnObject = backButton;
-                if((allLevelButtons != null) && (allLevelButtons.Length > 0))
+                if ((allLevelButtons != null) && (allLevelButtons.Length > 0))
                 {
                     // Parse the level button array list in reverse direction
-                    for(int index = (allLevelButtons.Length - 1); index >= 0; --index)
+                    for (int index = (allLevelButtons.Length - 1); index >= 0; --index)
                     {
                         // Check if this button is interactable
-                        if((allLevelButtons[index] != null) && (allLevelButtons[index].Button != null) && (allLevelButtons[index].Button.IsInteractable() == true))
+                        if ((allLevelButtons[index] != null) && (allLevelButtons[index].Button != null) && (allLevelButtons[index].Button.IsInteractable() == true))
                         {
                             returnObject = allLevelButtons[index].Button;
                             break;
@@ -167,6 +167,12 @@ namespace OmiyaGames.Menus
 
         public GameObject SetButtonsEnabled(bool enabled)
         {
+            // Halt early if not setup yet
+            if (allLevelButtons == null)
+            {
+                return null;
+            }
+
             // Set all buttons
             GameObject returnButton = backButton.gameObject;
             for (int index = 0; index < allLevelButtons.Length; ++index)
@@ -260,7 +266,7 @@ namespace OmiyaGames.Menus
             // Setup the level button labels
             foreach (TranslatedTextMeshPro label in newButton.Labels)
             {
-                if(label != null)
+                if (label != null)
                 {
                     label.SetTranslationKey(scene.DisplayName.TranslationKey, (newButton.Index + 1));
                 }

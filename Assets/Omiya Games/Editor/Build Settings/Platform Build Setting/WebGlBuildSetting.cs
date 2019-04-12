@@ -35,52 +35,26 @@ namespace OmiyaGames.Builds
     /// </summary>
     public class WebGlBuildSetting : IPlatformBuildSetting
     {
-        [System.Serializable]
-        public struct WebLocationCheckerSettings
+        private class LastWebGlPlayerSettings : LastPlayerSettings
         {
-            [SerializeField]
-            CustomFileName fileName;
-            [SerializeField]
-            bool includeIndexHtml;
-            [SerializeField]
-            string[] acceptedDomains;
-
-            public WebLocationCheckerSettings(bool includeIndexHtml = true)
+            public LastWebGlPlayerSettings(LastPlayerSettings setting, string templatePath) : base(setting.Target)
             {
                 // Setup member variables
-                this.fileName = new CustomFileName();
-                this.includeIndexHtml = includeIndexHtml;
-                acceptedDomains = null;
+                TemplatePath = templatePath;
             }
 
-            public CustomFileName FileName
+            public string TemplatePath
             {
-                get
-                {
-                    return fileName;
-                }
-            }
-
-            public bool IncludeIndexHtml
-            {
-                get
-                {
-                    return includeIndexHtml;
-                }
-            }
-
-            public string[] AcceptedDomains
-            {
-                get
-                {
-                    return acceptedDomains;
-                }
+                get;
             }
         }
 
+        [SerializeField]
+        [Tooltip("[Optional] Determines the WebGL template this setting builds to.")]
+        private string templatePath;
         // FIXME: work on setting up a drawer for this variable
         [SerializeField]
-        protected WebLocationCheckerSettings[] webLocations;
+        protected HostArchiveSetting[] hostSpecificArchiveSettings;
         // FIXME: do more research on the Facebook builds
         //[SerializeField]
         //protected bool forFacebook = false;
@@ -90,7 +64,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                return base.MaxNumberOfResults + webLocations.Length;
+                return base.MaxNumberOfResults + hostSpecificArchiveSettings.Length;
             }
         }
 
@@ -106,29 +80,103 @@ namespace OmiyaGames.Builds
             }
         }
 
-        protected override BuildTarget Target
+        protected override BuildTarget Target => BuildTarget.WebGL;
+
+        public string TemplatePath
         {
-            get
+            get => templatePath;
+            set => templatePath = value;
+        }
+
+        protected override LastPlayerSettings SetupPlayerSettings()
+        {
+            // Store the old setting
+            LastWebGlPlayerSettings returnSetting = new LastWebGlPlayerSettings(base.SetupPlayerSettings(), PlayerSettings.WebGL.template);
+
+            // Change the template path
+            if (string.IsNullOrEmpty(TemplatePath) == false)
             {
-                return BuildTarget.WebGL;
+                PlayerSettings.WebGL.template = TemplatePath;
+            }
+            return returnSetting;
+        }
+
+        protected override void RevertPlayerSettings(LastPlayerSettings lastSettings)
+        {
+            base.RevertPlayerSettings(lastSettings);
+
+            // Revert the template path
+            if (lastSettings is LastWebGlPlayerSettings)
+            {
+                PlayerSettings.WebGL.template = ((LastWebGlPlayerSettings)lastSettings).TemplatePath;
             }
         }
 
-        protected override void ArchiveBuild(BuildPlayersResult results)
+        protected override async System.Threading.Tasks.Task PostSuccessfulBuild(BuildPlayersResult results)
         {
-            //foreach(WebLocationCheckerSettings webLocation in webLocations)
-            //{
-            //    // FIXME: to generate the domains file
-            //    // Then ZIP the folder that's generated
-            //    throw new System.NotImplementedException();
-            //}
+            if ((hostSpecificArchiveSettings != null) && (hostSpecificArchiveSettings.Length > 0))
+            {
+                // Indicate we're doing some post-build setup
+                results.AddPostBuildReport(BuildPlayersResult.Status.EnterGroup, "Building DomainLists for " + name, this);
 
-            // Calculate folder and file name
-            string archiveFolderName = results.ConcatenateFolders(results.FolderName, folderName.ToString(this), fileName.ToString(this));
+                // Grab the folder to archive
+                string archiveFolderName = GetBuildFolderName(results);
 
-            // Make the build
-            ArchiveBuildHelper(results, archiveFolderName);
+                // Go through every archive settings
+                foreach (HostArchiveSetting setting in hostSpecificArchiveSettings)
+                {
+                    // Check if the setting is enabled
+                    if (setting.IsEnabled == true)
+                    {
+                        // Build the setting first
+                        setting.Build(this, results);
+
+                        // Archive this build, assuming it was successful
+                        if (results.LastReport.State == BuildPlayersResult.Status.Success)
+                        {
+                            await ArchiveBuildHelper(setting, setting.ArchiveSettings, results, archiveFolderName);
+                        }
+                    }
+                }
+
+                // Indicate we finished post-build setup
+                results.AddPostBuildReport(BuildPlayersResult.Status.ExitGroup, "Finished building DomainLists for " + name, this);
+            }
+        }
+
+        public override bool PreBuildCheck(out string message)
+        {
+            bool returnFlag = base.PreBuildCheck(out message);
+
+            // Append the message to the builder
+            System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            if (string.IsNullOrEmpty(message) == false)
+            {
+                builder.AppendLine(message);
+            }
+
+            // Check if there are any problems in the archive settings
+            foreach (HostArchiveSetting setting in hostSpecificArchiveSettings)
+            {
+                // Check if prebuild check failed
+                if (setting.PreBuildCheck(out message) == false)
+                {
+                    // Return false and append the message
+                    returnFlag = false;
+                    builder.AppendLine(message);
+                }
+            }
+
+            // Setup return values
+            message = builder.ToString();
+            return returnFlag;
         }
         #endregion
+
+        public string GetBuildFolderName(BuildPlayersResult results)
+        {
+            // Calculate folder and file name
+            return results.ConcatenateFolders(results.FolderName, folderName.ToString(this), FileName.ToString(this));
+        }
     }
 }
