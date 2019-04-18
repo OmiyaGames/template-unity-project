@@ -44,26 +44,26 @@ namespace OmiyaGames.Menus
         #region Serialized Fields
         [Header("Features to Enable")]
         [SerializeField]
-        SupportedPlatforms enableMusicVolumeControls;
+        private SupportedPlatforms enableMusicVolumeControls;
         [SerializeField]
-        SupportedPlatforms enableSoundEffectVolumeControls;
+        private SupportedPlatforms enableSoundEffectVolumeControls;
         [SerializeField]
-        GameObject[] allDividers;
+        private GameObject[] allDividers;
 
         [Header("Music Controls")]
         [SerializeField]
-        AudioVolumeControls musicVolumeControls;
+        private AudioVolumeControls musicVolumeControls;
         [SerializeField]
-        GameObject[] musicVolumeSection;
+        private GameObject[] musicVolumeSection;
 
         [Header("Sound Effects Controls")]
         [SerializeField]
-        AudioVolumeControls soundEffectsVolumeControls;
+        private AudioVolumeControls soundEffectsVolumeControls;
         [SerializeField]
-        GameObject[] soundEffectsSection;
+        private GameObject[] soundEffectsSection;
         #endregion
 
-        SoundEffect audioCache;
+        private SoundEffect audioCache;
 
         #region Properties
         public SoundEffect TestSoundEffect

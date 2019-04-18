@@ -54,30 +54,30 @@ namespace OmiyaGames
         [Tooltip("The default link, in case the rest of the fields are not covered")]
         [FormerlySerializedAsAttribute("webLink")]
         [SerializeField]
-        string defaultWebLink;
+        private string defaultWebLink;
 #pragma warning disable 0414
         [SerializeField]
-        string iosWebLink;
+        private string iosWebLink;
         [SerializeField]
-        string androidWebLink;
+        private string androidWebLink;
         [SerializeField]
-        string amazonWebLink;
+        private string amazonWebLink;
         [SerializeField]
-        string windows10WebLink;
+        private string windows10WebLink;
 
         [Header("Native Store Links")]
         [FormerlySerializedAsAttribute("iosLink")]
         [SerializeField]
-        string iosNativeLink;
+        private string iosNativeLink;
         [FormerlySerializedAsAttribute("androidLink")]
         [SerializeField]
-        string androidNativeLink;
+        private string androidNativeLink;
         [FormerlySerializedAsAttribute("amazonLink")]
         [SerializeField]
-        string amazonNativeLink;
+        private string amazonNativeLink;
         [FormerlySerializedAsAttribute("windows10Link")]
         [SerializeField]
-        string windows10NativeLink;
+        private string windows10NativeLink;
 #pragma warning restore 0414
 
         public static SupportedPlatforms Platform
