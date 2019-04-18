@@ -12,31 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
   m_Name: Readme
   m_EditorClassIdentifier: 
-  icon: {fileID: 2800000, guid: 7801804018a7dcf42abb827444e18660, type: 3}
-  title: "Omiya Games' Template Unity Project"
+  editMode: 0
+  icon: {fileID: 2800000, guid: ecdf1cc5eedaf7d4fa5ef6de484d0001, type: 3}
+  title: Template Unity Project
   sections:
-  - heading:
-    text: 'The Template Unity Project is a base project Omiya Games uses as the basis for their game jam games. The focus of this project is to provide tools and pre-made assets to help accelerate developing a game jam game, while at the same time be generalist enough to be usable for nearly any game. Almost all assets is under the MIT license. Exceptions includes:'
-    linkText:
-    url:
-  - heading: 
-    text: 'Music (copyrighted by Omiya Games)'
+  - heading: Accelerate your game jam development process with Omiya Games' Template
+      Unity Project!
+    text: 'The Template Unity Project is a base project Omiya Games uses as the basis
+      for their game jam games. The focus of this project is to provide tools and
+      pre-made assets to help developing a game jam game, while at the same time be
+      generalist enough to be usable for nearly any game. Almost all assets are under
+      the MIT license. Exceptions includes:'
     linkText: 
     url: 
+    textList:
+    - Music (copyrighted by Omiya Games)
+    - Company logo (copyrighted by Omiya Games)
+    - Sound effects (public domain)
+    - Fonts (under SIL Open Font License by Google)
   - heading: 
-    text: 'Company logo (copyrighted by Omiya Games)'
+    text: 'Note that this template utilizes the Lightweight Scriptable Render Pipeline,
+      which is an efficient single-pass forward renderer. Features and tools this
+      project provides:'
     linkText: 
     url: 
+    textList: []
   - heading: 
-    text: 'Sound effects (public domain)'
+    text: (Documentation is still a work-in-progress)
     linkText: 
     url: 
-  - heading: 
-    text: 'Fonts (under SIL Open Font License by Google)'
-    linkText: 
-    url: 
-  - heading: 
-    text: 'Note that this template utilizes the Lightweight Scriptable Render Pipeline, which is an efficient single-pass forward renderer.'
-    linkText: 
-    url: 
+    textList: []
   loadedLayout: 1
