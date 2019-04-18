@@ -48,14 +48,13 @@ namespace OmiyaGames.Menus
 
         [Header("Start Menu")]
         [SerializeField]
-        LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
+        private LevelSelectButtonBehavior startBehavior = LevelSelectButtonBehavior.DefaultStartFirstLevel;
         [SerializeField]
-        Button creditsButton;
+        private Button creditsButton;
         [SerializeField]
-        Button quitButton;
+        private Button quitButton;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("projectTitleTranslationKey")]
-        string titleTranslationKey = "Title";
+        private string titleTranslationKey = "Title";
 
         #region Properties
         public override Type MenuType
