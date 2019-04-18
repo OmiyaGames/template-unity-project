@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿/*
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEditor.ShaderGraph;
 using System.Reflection;
 
@@ -94,3 +96,4 @@ public class MainLightNode : CodeFunctionNode
         return functionBody;
     }
 }
+*/
