@@ -146,9 +146,6 @@ namespace OmiyaGames.UI.Builds
 
         protected void DrawBeginningOfSetting()
         {
-            // Draw name of this group
-            DrawBackButton();
-
             // Draw build folder group
             EditorGUILayout.Space();
             DrawBuildFile(DrawCustomNameControls, AppendFileName,
