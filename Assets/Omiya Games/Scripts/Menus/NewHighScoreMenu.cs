@@ -55,15 +55,15 @@ namespace OmiyaGames.Menus
     public class NewHighScoreMenu : IMenu
     {
         [SerializeField]
-        MenuNavigator navigator;
+        private MenuNavigator navigator;
 
         [Header("Labels")]
         [SerializeField]
-        TMP_InputField nameField;
+        private TMP_InputField nameField;
         [SerializeField]
-        TranslatedTextMeshPro scorePlacementLabel;
+        private TranslatedTextMeshPro scorePlacementLabel;
         [SerializeField]
-        TranslatedTextMeshPro scoreLabel;
+        private TranslatedTextMeshPro scoreLabel;
 
         #region Non-abstract Properties
         public override BackgroundMenu.BackgroundType Background

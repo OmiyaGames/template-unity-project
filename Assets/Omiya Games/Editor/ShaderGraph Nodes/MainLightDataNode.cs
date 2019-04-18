@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿/*
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
 using UnityEditor.ShaderGraph;
 using System.Reflection;
 
@@ -20,60 +24,76 @@ using System.Reflection;
 ///  - likely to break in SG 5.x and beyond
 ///  - for HDRP, add your own keyword to detect environment
 /// </remarks>
-[Title("Custom", "Main Light Data")]
-public class MainLightDataNode : CodeFunctionNode
+
+[Title("Custom", "Main Light")]
+public class MainLightNode : CodeFunctionNode
 {
-    // shader code definition
-    // handle shader graph editor environment where main light data isn't defined
-    private static string shaderText = @"{
-        #ifdef LIGHTWEIGHT_LIGHTING_INCLUDED
+    public override bool hasPreview { get { return false; } }
+
+    //None of this is mine. It was created by @CiroContns on twitter. He uses an older version of shadergraph, so all I did was update it. This will eventually become outdatded.
+    private static string functionBodyForReals = @"{
             Light mainLight = GetMainLight();
             Color = mainLight.color;
             Direction = mainLight.direction;
-            Attenuation = mainLight.distanceAttenuation;
-        #else
-            Color = float3(1.0, 1.0, 1.0);
-            Direction = float3(0.0, 1.0, 0.0);
-            Attenuation = 1.0;
-        #endif
-    }";
+            float4 shadowCoord;
+            #ifdef LIGHTWEIGHT_SHADOWS_INCLUDED
+            #if SHADOWS_SCREEN
+                float4 clipPos = TransformWorldToHClip(WorldPos);
+                shadowCoord = ComputeScreenPos(clipPos);
+            #else
+                shadowCoord = TransformWorldToShadowCoord(WorldPos);
+            #endif
+            #endif
+                Attenuation = MainLightRealtimeShadow(shadowCoord);
+        }";
+    private static string functionBodyPreview = @"{
+            Color = 1;
+            Direction = float3(-0.5, .5, 0.5);
+            Attenuation = 1;
+        }";
 
-    // disable own preview as no light data in shader graph editor
-    public override bool hasPreview
+    private static bool isPreview;
+
+    private static string functionBody
     {
         get
         {
-            return false;
+            if (isPreview)
+                return functionBodyPreview;
+            else
+                return functionBodyForReals;
         }
     }
 
-    // declare node
-    public MainLightDataNode()
+
+    public MainLightNode()
     {
-        name = "Main Light Data";
+        name = "Main Light";
     }
 
-    // reflection to shader function
     protected override MethodInfo GetFunctionToConvert()
     {
-        return GetType().GetMethod(
-            "GetMainLightData",
-            BindingFlags.Static | BindingFlags.NonPublic
-        );
+        return GetType().GetMethod("CustomFunction", BindingFlags.Static | BindingFlags.NonPublic);
     }
 
-    // shader function and port definition
-    private static string GetMainLightData(
-        [Slot(0, Binding.None)] out Vector3 Color,
-        [Slot(1, Binding.None)] out Vector3 Direction,
-        [Slot(2, Binding.None)] out Vector1 Attenuation
-    )
+
+    public override void GenerateNodeFunction(FunctionRegistry registry, GraphContext graphContext, GenerationMode generationMode)
     {
-        // define vector3
+        isPreview = generationMode == GenerationMode.Preview;
+
+        base.GenerateNodeFunction(registry, graphContext, generationMode);
+    }
+
+    private static string CustomFunction(
+    [Slot(0, Binding.None)] out Vector3 Direction,
+    [Slot(1, Binding.None)] out Vector1 Attenuation,
+    [Slot(2, Binding.None)] out Vector3 Color,
+    [Slot(3, Binding.WorldSpacePosition)] Vector3 WorldPos)
+    {
         Direction = Vector3.zero;
         Color = Vector3.zero;
 
-        // actual shader code
-        return shaderText;
+        return functionBody;
     }
 }
+*/

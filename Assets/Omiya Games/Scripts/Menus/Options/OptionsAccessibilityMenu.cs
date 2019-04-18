@@ -218,6 +218,7 @@ namespace OmiyaGames.Menus
 
                 // Update timescale
                 TimeManager.RevertToCustomTimeScale();
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(isChecked, timeScaleSlider.Slider.value);
@@ -242,6 +243,7 @@ namespace OmiyaGames.Menus
 
                 // Update timescale
                 TimeManager.TimeScale = Settings.CustomTimeScaleOption;
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);
