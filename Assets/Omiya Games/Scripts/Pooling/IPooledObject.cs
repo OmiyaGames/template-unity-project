@@ -92,6 +92,23 @@ namespace OmiyaGames
         }
 
         /// <summary>
+        /// Gets the original script this object was pooled from.
+        /// </summary>
+        /// <value>The original prefab.</value>
+        public IPooledObject OriginalScript
+        {
+            get
+            {
+                IPooledObject returnScript = null;
+                if (Pool != null)
+                {
+                    returnScript = Pool.OriginalScript;
+                }
+                return returnScript;
+            }
+        }
+
+        /// <summary>
         /// Gets the set of scripts this object belongs in.
         /// Handled by <code>PoolingManager</code>.
         /// </summary>
@@ -108,6 +125,24 @@ namespace OmiyaGames
         public virtual void OnDestroy()
         {
             AfterDeactivate(null);
+
+            // Check if this isn't the original prefab
+            if ((Pool != null) && (OriginalPrefab != gameObject))
+            {
+                // Check if this game object is in the inactive list
+                if (Pool.InactiveInstances.ContainsKey(gameObject) == true)
+                {
+                    // Clean self up from the pooling manager
+                    Pool.InactiveInstances.Remove(gameObject);
+                }
+
+                // Check if this game object is in the active list
+                if (Pool.ActiveInstances.ContainsKey(gameObject) == true)
+                {
+                    // Clean self up from the pooling manager
+                    Pool.ActiveInstances.Remove(gameObject);
+                }
+            }
         }
 
         public virtual void OnDisable()

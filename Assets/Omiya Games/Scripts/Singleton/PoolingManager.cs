@@ -82,6 +82,19 @@ namespace OmiyaGames.Global
             }
         }
 
+        public static void DestroyFromPool(IPooledObject script)
+        {
+            // Deactivate the script first
+            ReturnToPool(script);
+
+            // Check if the script isn't null
+            if (script != null)
+            {
+                // Destroy the game object
+                Destroy(script.gameObject);
+            }
+        }
+
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>

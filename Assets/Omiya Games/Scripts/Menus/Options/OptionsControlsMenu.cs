@@ -42,39 +42,37 @@ namespace OmiyaGames.Menus
         #region Serialized Fields
         [Header("Features to Enable")]
         [SerializeField]
-        SupportedPlatforms enableKeyboardControls = SupportedPlatforms.AllPlatforms;
+        private SupportedPlatforms enableKeyboardControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("enableMouseControls")]
-        SupportedPlatforms enableCameraSensitivityControls = SupportedPlatforms.AllPlatforms;
+        private SupportedPlatforms enableCameraSensitivityControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
-        SupportedPlatforms enableCameraSmoothingControls = SupportedPlatforms.AllPlatforms;
+        private SupportedPlatforms enableCameraSmoothingControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
-        SupportedPlatforms enableScrollWheelControls = SupportedPlatforms.AllPlatforms;
+        private SupportedPlatforms enableScrollWheelControls = SupportedPlatforms.AllPlatforms;
         [SerializeField]
-        GameObject[] allDividers;
+        private GameObject[] allDividers;
 
         [Header("Keyboard Sensitivity")]
         [SerializeField]
-        ControllerSensitivityControls keyboardSensitivitySet;
+        private ControllerSensitivityControls keyboardSensitivitySet;
 
         [Header("Camera Sensitivity")]
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("mouseSensitivitySet")]
-        ControllerSensitivityControls cameraSensitivitySet;
+        private ControllerSensitivityControls cameraSensitivitySet;
 
         [Header("Camera Smoothing")]
         [SerializeField]
-        AudioVolumeControls cameraSmoothingSet;
+        private AudioVolumeControls cameraSmoothingSet;
         [SerializeField]
-        GameObject[] cameraSmoothingControls;
+        private GameObject[] cameraSmoothingControls;
 
         [Header("Scroll Wheel")]
         [SerializeField]
-        LabeledSlider scrollWheelSensitivity;
+        private LabeledSlider scrollWheelSensitivity;
         [SerializeField]
-        Toggle scrollWheelInvert;
+        private Toggle scrollWheelInvert;
         [SerializeField]
-        GameObject[] scrollWheelControls;
+        private GameObject[] scrollWheelControls;
         #endregion
 
         #region Properties

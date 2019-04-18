@@ -137,7 +137,7 @@ namespace OmiyaGames.Web
         [SerializeField]
         private string redirectURL;
 
-        string retrievedHostName = null;
+        private string retrievedHostName = null;
 
         #region Properties
         public State CurrentState
