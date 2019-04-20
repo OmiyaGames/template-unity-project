@@ -66,9 +66,6 @@ namespace OmiyaGames.UI.Builds
         {
             serializedObject.Update();
 
-            // Draw back buttons
-            DrawBackButton();
-
             // Draw build folder group
             EditorGUILayout.Space();
             DrawBuildFolder(DrawFolderName);

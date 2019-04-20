@@ -21,24 +21,33 @@ MonoBehaviour:
     text: 'The Template Unity Project is a base project Omiya Games uses as the basis
       for their game jam games. The focus of this project is to provide tools and
       pre-made assets to help developing a game jam game, while at the same time be
-      generalist enough to be usable for nearly any game. Almost all assets are under
-      the MIT license. Exceptions includes:'
+      generalist enough to be usable for nearly any game. Note that this template utilizes the Lightweight Scriptable Render Pipeline, which is an efficient single-pass forward renderer. Features and tools this project provides:'
     linkText: 
     url: 
     textList:
-    - Music (copyrighted by Omiya Games)
-    - Company logo (copyrighted by Omiya Games)
-    - Sound effects (public domain)
-    - Fonts (under SIL Open Font License by Google)
+    - Customizable settings to build to multiple platforms
+    - Framework for translations in texts
+    - Script that plays a random sound effect from a list, with a random pitch and/or volume
+    - Pre-made start and credits scene
+    - Pre-made level select, pause, options menu and more
+    - Fade-to-color transitions from one scene to another
+    - Encrypted host verification framework to protect WebGL builds
+    - Framework for saving data
   - heading: 
-    text: 'Note that this template utilizes the Lightweight Scriptable Render Pipeline,
-      which is an efficient single-pass forward renderer. Features and tools this
-      project provides:'
+    text: 'Almost all assets, such as code, scenes, prefabs, and GUI images, are under the MIT license. Exceptions includes:'
     linkText: 
     url: 
-    textList: []
+    textList:
+    - Omiya Games' logo (copyrighted by Omiya Games)
+    - All music (copyrighted by Omiya Games)
+    - Patreon logo (copyrighted by Patreon)
+    - Social media icons (Creative Commons v3.0 by PATHRPOL DAVIVONGSA)
+    - Web icon (Creative Commons v3.0 by Andrian Valeanu)
+    - Control icons (public domain by Kenney)
+    - Sound effects (public domain by Kenney)
+    - Fonts (SIL Open Font License by Google)
   - heading: 
-    text: (Documentation is still a work-in-progress)
+    text: Please check each code/folder for more info on licensing. Note that documentation for this project is still a work-in-progress.
     linkText: 
     url: 
     textList: []

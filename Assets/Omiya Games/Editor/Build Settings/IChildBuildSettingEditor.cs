@@ -84,38 +84,7 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.DelayedTextField(nameProperty);
         }
 
-        protected void DrawBackButton()
-        {
-            EditorUiUtility.DrawBoldFoldout(backAnimation, "Return To Parent");
-
-            using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(backAnimation.faded))
-            {
-                if (scope.visible == true)
-                {
-                    using (EditorGUILayout.VerticalScope vScope = new EditorGUILayout.VerticalScope(ReturnToParentStyle))
-                    using (EditorGUILayout.ScrollViewScope sScope = new EditorGUILayout.ScrollViewScope(scrollPos, true, false, GUI.skin.horizontalScrollbar, GUIStyle.none, GUIStyle.none, GUILayout.MinHeight(BackHeight)))
-                    using (EditorGUILayout.HorizontalScope hScope = new EditorGUILayout.HorizontalScope(GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true)))
-                    {
-                        // Starting with a list of size of 3 (latter number is arbitrary)
-                        List<IBuildSetting> parentSettings = GetAllParentSettings(3);
-
-                        // Go through the parent settings in reverse order
-                        for (int index = (parentSettings.Count - 1); index >= 0; --index)
-                        {
-                            // Draw the button
-                            IBuildSetting parentSetting = parentSettings[index];
-                            if (GUILayout.Button(parentSetting.name, EditorStyles.foldout, GUILayout.ExpandWidth(false)) == true)
-                            {
-                                Selection.activeObject = parentSetting;
-                            }
-                        }
-                        scrollPos = sScope.scrollPosition;
-                    }
-                }
-            }
-        }
-
-        private List<IBuildSetting> GetAllParentSettings(int initialCapacity)
+        protected override List<IBuildSetting> GetAllParentSettings(int initialCapacity)
         {
             List<IBuildSetting> parentSettings = new List<IBuildSetting>(initialCapacity);
             IBuildSetting parentSetting = parentProperty.objectReferenceValue as IBuildSetting;

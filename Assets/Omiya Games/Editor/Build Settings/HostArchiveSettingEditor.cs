@@ -90,9 +90,6 @@ namespace OmiyaGames.UI.Builds
         {
             serializedObject.Update();
 
-            // Draw back buttons
-            DrawBackButton();
-
             // Draw enable buttons
             EditorGUILayout.Space();
             archiveEnable.boolValue = EditorGUILayout.ToggleLeft("Build with Parent WebGL Setting", archiveEnable.boolValue);
