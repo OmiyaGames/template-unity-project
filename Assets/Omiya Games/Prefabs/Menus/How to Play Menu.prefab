@@ -899,7 +899,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224108319287577864}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1127,25 +1127,22 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: '<b>Objective:</b>
-
-    To score as high as possible before the blocks stack to the top of the screen.
+  m_text: 'The game''s objective is to travel as far as possible without falling off
+    of the course. Please note that this game is still in development stages.
 
 
     <b>Controls:</b>
 
-    First, click on the 2x2 blocks on the right side of the screen to pick it. While
-    dragging this piece, right-click or press space to rotate this block. Click anywhere
-    (yes, <i>anywhere</i>; even on top of existing blocks) on the grid of blocks to
-    drop the piece.
+    Left or right arrow keys to steer. Hold the down arrow key to slow down <i>and</i>
+    charge the vehicle''s turbo.  When the meter is full, let go of the down arrow
+    key to boost.
 
 
-    When {0} or more same-colored blocks are matched vertically or horizontally, those
-    blocks will be eliminated, and points will be awarded.
+    For those used to WASD, A and D also steers left and right respectively as well.
 
 
-    Remember that each move will cause more blocks to drop from the top of the screen.
-    If any blocks remain on the top of the grid, it''s game over!'
+    The S-key, space bar, and left mouse button also slows down the vehicle and charges
+    the boost meter, much like the down arrow key.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5a0a9b0a47e21b7478dd51583ce7edd4, type: 2}
   m_sharedMaterial: {fileID: 21687855418224584, guid: 5a0a9b0a47e21b7478dd51583ce7edd4,
@@ -1214,12 +1211,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 114314465861554582}
-    characterCount: 639
+    characterCount: 539
     spriteCount: 0
-    spaceCount: 117
-    wordCount: 115
+    spaceCount: 104
+    wordCount: 101
     linkCount: 0
-    lineCount: 14
+    lineCount: 12
     pageCount: 1
     materialCount: 3
   m_havePropertiesChanged: 1
@@ -1832,7 +1829,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -1161.0599}
+  m_AnchoredPosition: {x: 346, y: -1107.7965}
   m_SizeDelta: {x: 126.41, y: 81.68001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224098667846750676
@@ -1867,7 +1864,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.9999999}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2036,8 +2033,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -621.33997}
-  m_SizeDelta: {x: 1600, y: 905.76}
+  m_AnchoredPosition: {x: 346, y: -594.70825}
+  m_SizeDelta: {x: 1600, y: 852.4966}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224542248950280274
 RectTransform:
@@ -2077,7 +2074,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 346, y: -145.46}
-  m_SizeDelta: {x: 692, y: 6}
+  m_SizeDelta: {x: 0, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224567072981574802
 RectTransform:
@@ -2115,8 +2112,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 346, y: -1097.22}
-  m_SizeDelta: {x: 692, y: 6}
+  m_AnchoredPosition: {x: 346, y: -1043.9565}
+  m_SizeDelta: {x: 0, y: 6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224730527033357542
 RectTransform:
@@ -2134,8 +2131,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000030517578}
-  m_SizeDelta: {x: 0, y: 905.76}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 780.66}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224842608979016190
 RectTransform:
@@ -2194,7 +2191,7 @@ RectTransform:
   m_AnchorMin: {x: 0.45, y: 0}
   m_AnchorMax: {x: 0.55, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.00024414062}
-  m_SizeDelta: {x: 500, y: -335.78052}
+  m_SizeDelta: {x: 500, y: -63.859985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224897882036691942
 RectTransform:
@@ -2249,8 +2246,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 800, y: -449.88}
-  m_SizeDelta: {x: 1600, y: 875.76}
+  m_AnchoredPosition: {x: 800, y: -387.33}
+  m_SizeDelta: {x: 1600, y: 750.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &225309066166705526
 CanvasGroup:

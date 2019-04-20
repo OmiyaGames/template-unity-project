@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Project
+namespace OmiyaGames
 {
     [RequireComponent(typeof(Renderer))]
     public class ScrollTexture : MonoBehaviour

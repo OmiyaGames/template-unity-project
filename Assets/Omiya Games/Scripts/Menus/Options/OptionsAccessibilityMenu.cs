@@ -4,7 +4,7 @@ using OmiyaGames.Audio;
 using OmiyaGames.Settings;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsAccessibilityMenu.cs" company="Omiya Games">
@@ -36,7 +36,7 @@ namespace OmiyaGames.Menu
     /// <summary>
     /// Menu that provides accessibility options.
     /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
+    /// <seealso cref="MenuManager"/>.
     /// </summary>
     /// <seealso cref="MenuManager"/>
     [RequireComponent(typeof(Animator))]
@@ -218,6 +218,7 @@ namespace OmiyaGames.Menu
 
                 // Update timescale
                 TimeManager.RevertToCustomTimeScale();
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(isChecked, timeScaleSlider.Slider.value);
@@ -241,7 +242,8 @@ namespace OmiyaGames.Menu
                 }
 
                 // Update timescale
-                TimeManager.RevertToCustomTimeScale();
+                TimeManager.TimeScale = Settings.CustomTimeScaleOption;
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);

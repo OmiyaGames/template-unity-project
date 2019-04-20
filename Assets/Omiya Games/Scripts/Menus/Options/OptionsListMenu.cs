@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OptionsListMenu.cs" company="Omiya Games">
@@ -40,29 +40,29 @@ namespace OmiyaGames.Menu
     [DisallowMultipleComponent]
     public class OptionsListMenu : IOptionsMenu
     {
-        const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
+        private const BackgroundMenu.BackgroundType DefaultBackground = BackgroundMenu.BackgroundType.GradientRightToLeft;
 
         [Header("Options List")]
         [SerializeField]
-        Button backButton;
+        private Button backButton;
         [SerializeField]
-        PlatformSpecificButton audioButton;
+        private PlatformSpecificButton audioButton;
         [SerializeField]
-        PlatformSpecificButton controlsButton;
+        private PlatformSpecificButton controlsButton;
         [SerializeField]
-        PlatformSpecificButton graphicsButton;
+        private PlatformSpecificButton graphicsButton;
         [SerializeField]
-        PlatformSpecificButton accessibilityButton;
+        private PlatformSpecificButton accessibilityButton;
         [SerializeField]
-        PlatformSpecificButton languageButton;
+        private PlatformSpecificButton languageButton;
         [SerializeField]
-        PlatformSpecificButton resetDataButton;
+        private PlatformSpecificButton resetDataButton;
         [SerializeField]
-        string resetDataMessage = "Options Reset Message";
+        private string resetDataMessage = "Options Reset Message";
 
-        Selectable cachedDefaultButton = null;
-        PlatformSpecificButton[] cachedAllButtons = null;
-        BackgroundSettings background = new BackgroundSettings();
+        private Selectable cachedDefaultButton = null;
+        private PlatformSpecificButton[] cachedAllButtons = null;
+        private BackgroundSettings background = new BackgroundSettings();
 
         #region Overridden Properties
         public override Type MenuType

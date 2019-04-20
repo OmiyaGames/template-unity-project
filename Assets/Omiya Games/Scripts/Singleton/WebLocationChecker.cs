@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -61,10 +62,14 @@ namespace OmiyaGames.Web
     /// <description>>5/15/2016</description>
     /// <description>Taro</description>
     /// <description>Initial verison.</description>
-    /// 
-    /// <description>>6/5/2018</description>
+    /// </item><item>
+    /// <description>6/5/2018</description>
     /// <description>Taro</description>
     /// <description>Removed plain-text support.</description>
+    /// </item><item>
+    /// <description>2/12/2019</description>
+    /// <description>Taro</description>
+    /// <description>Adding encryption support of the binary <see cref="DomainList"/>.</description>
     /// </item>
     /// </list>
     /// </remarks>
@@ -72,6 +77,7 @@ namespace OmiyaGames.Web
     public class WebLocationChecker : Global.ISingletonScript
     {
         public const string RemoteDomainListHeader = "Remote Domain List";
+
         public enum State
         {
             NotUsed = -1,
@@ -98,7 +104,7 @@ namespace OmiyaGames.Web
         /// This array is ignored if empty (i.e. no redirect will occur).
         ///</summary>
         [SerializeField]
-        string[] domainMustContain;
+        private string[] domainMustContain;
 
         ///<summary>
         /// [optional] The URL to fetch a list of domains
@@ -106,13 +112,16 @@ namespace OmiyaGames.Web
         [Header(RemoteDomainListHeader)]
         [SerializeField]
         [Tooltip("[optional] The URL to fetch a list of domains")]
-        string remoteDomainListUrl;
+        private string remoteDomainListUrl;
+        [SerializeField]
+        [Tooltip("[optional] The cryptographer that decrypts the encrypted strings in the list of domains")]
+        private StringCryptographer domainDecrypter;
         ///<summary>
         /// [Optional] GameObjects to deactivate while the domain checking is happening
         ///</summary>
         [SerializeField]
         [Tooltip("[Optional] GameObjects to deactivate while the domain checking is happening")]
-        GameObject[] waitObjects;
+        private GameObject[] waitObjects;
 
         ///<summary>
         /// If true, the game will force the webplayer to redirect to
@@ -120,14 +129,15 @@ namespace OmiyaGames.Web
         ///</summary>
         [Header("Redirect Options")]
         [SerializeField]
-        bool forceRedirectIfDomainDoesntMatch = true;
+        private bool forceRedirectIfDomainDoesntMatch = true;
         ///<summary>
         /// This is where to redirect the webplayer page if none of
         /// the strings in domainMustContain are found.
         ///</summary>
         [SerializeField]
-        string redirectURL;
-        string retrievedHostName = null;
+        private string redirectURL;
+
+        private string retrievedHostName = null;
 
         #region Properties
         public State CurrentState
@@ -177,7 +187,13 @@ namespace OmiyaGames.Web
             get;
         } = new Dictionary<string, Regex>();
 
-        public string DownloadErrorMessage { get; private set; } = null;
+        public string DownloadErrorMessage
+        {
+            get;
+            private set;
+        } = null;
+
+        public string RemoteDomainListUrl => remoteDomainListUrl;
         #endregion
 
         internal override void SingletonAwake()
@@ -230,18 +246,18 @@ namespace OmiyaGames.Web
             // Clear the dictionary
             allUniqueDomains.Clear();
 
-            if(allDomains != null)
+            if (allDomains != null)
             {
                 // Go through all the domains
                 for (; listIndex < allDomains.Length; ++listIndex)
                 {
-                    if(allDomains[listIndex] != null)
+                    if (allDomains[listIndex] != null)
                     {
                         // Go through all strings in the list
                         for (stringIndex = 0; stringIndex < allDomains[listIndex].Length; ++stringIndex)
                         {
                             // Add the entry and its regular expression equivalent
-                            if(string.IsNullOrEmpty(allDomains[listIndex][stringIndex]) == false)
+                            if (string.IsNullOrEmpty(allDomains[listIndex][stringIndex]) == false)
                             {
                                 allUniqueDomains.Add(allDomains[listIndex][stringIndex], ConvertToWildCardAcceptingRegex(buf, allDomains[listIndex][stringIndex]));
                             }
@@ -316,20 +332,13 @@ namespace OmiyaGames.Web
             return returnDomainList;
         }
 
-        static string[] ConvertToDomainList(DomainList domainList)
+        static string[] ConvertToDomainList(DomainList domainList, StringCryptographer decrypter)
         {
             string[] returnDomainList = null;
             if ((domainList != null) && (domainList.Count > 0))
             {
                 // Create a new string array
-                returnDomainList = new string[domainList.Count];
-
-                // Copy each element from the domainList
-                for (int index = 0; index < returnDomainList.Length; ++index)
-                {
-                    // Trim out any empty spaces in each string
-                    returnDomainList[index] = domainList[index].Trim();
-                }
+                returnDomainList = DomainList.Decrypt(domainList, decrypter);
             }
             return returnDomainList;
         }
@@ -369,16 +378,35 @@ namespace OmiyaGames.Web
         IEnumerator DownloadRemoteDomainList(StringBuilder buf, string remoteDomainUrl)
         {
             // Start downloading the remote file (never cache this file)
-            using (WWW www = new WWW(remoteDomainListUrl))
+            using (UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(RemoteDomainListUrl))
             {
-                yield return www;
+                // Wait until the asset is fully received
+                yield return www.SendWebRequest();
 
                 // Check if there were any errors
-                DownloadErrorMessage = www.error;
-                if ((www.assetBundle != null) && (string.IsNullOrEmpty(DownloadErrorMessage) == true))
+                if ((www.isNetworkError == true) || (www.isHttpError == true))
+                {
+                    DownloadErrorMessage = www.error;
+                }
+                else
                 {
                     // If asset bundle, convert it into a list
-                    DownloadedDomainList = ConvertToDomainList(Utility.GetDomainList(www.assetBundle));
+                    try
+                    {
+                        AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
+                        if (bundle != null)
+                        {
+                            DownloadedDomainList = ConvertToDomainList(Utility.GetDomainList(bundle), domainDecrypter);
+                        }
+                        else
+                        {
+                            DownloadErrorMessage = "No domain list found";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DownloadErrorMessage = ex.Message;
+                    }
                 }
             }
         }
@@ -398,7 +426,7 @@ namespace OmiyaGames.Web
             SetWaitObjectActive(false);
 
             // Grab a domain list remotely
-            if (string.IsNullOrEmpty(remoteDomainListUrl) == false)
+            if (string.IsNullOrEmpty(RemoteDomainListUrl) == false)
             {
                 // Grab remote domain list
                 DownloadDomainsUrl = GenerateRemoteDomainList(buf);
@@ -434,7 +462,7 @@ namespace OmiyaGames.Web
         string GenerateRemoteDomainList(StringBuilder buf)
         {
             buf.Length = 0;
-            buf.Append(remoteDomainListUrl);
+            buf.Append(RemoteDomainListUrl);
             buf.Append("?r=");
             buf.Append(UnityEngine.Random.Range(0, int.MaxValue));
             return buf.ToString();

@@ -4,7 +4,7 @@ using System.Collections;
 using OmiyaGames.Translations;
 using OmiyaGames.Global;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelIntroMenu.cs" company="Omiya Games">
@@ -58,17 +58,16 @@ namespace OmiyaGames.Menu
         public class PlatformSettings
         {
             [SerializeField]
-            bool showCustomMessage;
+            private bool showCustomMessage;
             [SerializeField]
-            bool showMouseLockMessageLabel;
+            private bool showMouseLockMessageLabel;
             [SerializeField]
-            BackgroundMenu.BackgroundType background;
+            private BackgroundMenu.BackgroundType background;
             [SerializeField]
-            [UnityEngine.Serialization.FormerlySerializedAs("startState")]
-            StateOnStart startState;
+            private StateOnStart startState;
             [SerializeField]
             [Range(0.1f, 20f)]
-            float displayDuration;
+            private float displayDuration;
 
             public StateOnStart StartState
             {
@@ -139,27 +138,24 @@ namespace OmiyaGames.Menu
 
         [Header("Components")]
         [SerializeField]
-        TranslatedTextMeshPro levelNameLabel = null;
+        private TranslatedTextMeshPro levelNameLabel = null;
         //[SerializeField]
         //GameObject divider = null;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("messageLabel")]
-        TranslatedTextMeshPro customMessageLabel = null;
+        private TranslatedTextMeshPro customMessageLabel = null;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("WebGlNoteLabel")]
-        TranslatedTextMeshPro mouseLockMessageLabel = null;
+        private TranslatedTextMeshPro mouseLockMessageLabel = null;
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("defaultButton")]
-        Button startButton = null;
+        private Button startButton = null;
 
         [Header("Platform Settings")]
         [SerializeField]
-        PlatformSettings defaultSettings;
+        private PlatformSettings defaultSettings;
         [SerializeField]
-        CustomPlatformSettings[] otherPlatformSettings;
+        private CustomPlatformSettings[] otherPlatformSettings;
 
-        System.Action<float> checkAnyKey = null;
-        PlatformSettings cachedSettings = null;
+        private System.Action<float> checkAnyKey = null;
+        private PlatformSettings cachedSettings = null;
 
         #region Properties
         public override Type MenuType

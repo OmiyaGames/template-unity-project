@@ -63,7 +63,7 @@ namespace OmiyaGames
         public static void Display(OnCredentialsEntered onEnter = null)
         {
             // Retrieve window
-            AndroidKeystoreCredentialsWindow window = DisplayWizard<AndroidKeystoreCredentialsWindow>("Android Keystore Credentials", "Derp", "Cancel");
+            AndroidKeystoreCredentialsWindow window = DisplayWizard<AndroidKeystoreCredentialsWindow>("Android Keystore Credentials", "Create", "Cancel");
 
             // Setup window
             window.errors = Error.None;
@@ -115,10 +115,7 @@ namespace OmiyaGames
                 ClearInformation();
 
                 // Run success
-                if (afterSuccess != null)
-                {
-                    afterSuccess(this);
-                }
+                afterSuccess?.Invoke(this);
             }
             else if (GUILayout.Button("Cancel") == true)
             {

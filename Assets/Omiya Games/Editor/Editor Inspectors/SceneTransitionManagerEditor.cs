@@ -39,18 +39,14 @@ namespace OmiyaGames.UI.Scenes
     [CustomPropertyDrawer(typeof(SceneInfo))]
     public class SceneInfoDrawer : PropertyDrawer
     {
-        const int FileNameLabelWidth = 96;
-        const float RevertTimeLabelWidth = 120;
-        const float RevertTimeFieldTotalMargin = 14;
-        const int CursorModeLabelWidth = 160;
-        const int VerticalMargin = 2;
+        const float RevertTimeWidth = 140;
 
         static GUIContent revertTimeScaleContent = null;
         public GUIContent RevertTimeScaleContent
         {
             get
             {
-                if(revertTimeScaleContent == null)
+                if (revertTimeScaleContent == null)
                 {
                     revertTimeScaleContent = new GUIContent("Reset TimeScale?", "See TimeManager script to set the scene's timescale.");
                 }
@@ -63,7 +59,7 @@ namespace OmiyaGames.UI.Scenes
         {
             get
             {
-                if(rightAlignStyleCache == null)
+                if (rightAlignStyleCache == null)
                 {
                     rightAlignStyleCache = new GUIStyle();
                     rightAlignStyleCache.alignment = TextAnchor.MiddleRight;
@@ -74,7 +70,7 @@ namespace OmiyaGames.UI.Scenes
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return GetHeight(label);
+            return GetHeight(property.FindPropertyRelative("displayName"), label);
         }
 
         // Draw the property inside the given rect
@@ -92,48 +88,34 @@ namespace OmiyaGames.UI.Scenes
             Rect labelRect = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
             if (string.IsNullOrEmpty(label.text) == false)
             {
-                position.y += (EditorGUIUtility.singleLineHeight + VerticalMargin);
+                position.y += (EditorGUIUtility.singleLineHeight + EditorUiUtility.VerticalMargin);
                 EditorGUI.indentLevel = 1;
             }
 
             // Draw the File Name label
             position.height = base.GetPropertyHeight(property, label);
-            DrawTextField(position, property, "Scene Path", "scenePath");
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("scenePath"));
 
             // Dock the rest of the fields down a bit
-            position.y += (position.height + VerticalMargin);
-
-            // We're going through this from right to left
-            // Draw Revert Time field
+            position.y += (position.height + EditorUiUtility.VerticalMargin);
             Rect fieldRect = position;
-            fieldRect.width = EditorGUIUtility.singleLineHeight;
-            fieldRect.x = (position.xMax - fieldRect.width);
-            if (string.IsNullOrEmpty(label.text) == false)
-            {
-                fieldRect.x -= RevertTimeFieldTotalMargin;
-            }
-            EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("revertTimeScale"), GUIContent.none);
-
-            // Draw Revert Time label
-            labelRect = position;
-            labelRect.width = RevertTimeLabelWidth;
-            labelRect.x = (fieldRect.x - labelRect.width);
-            if (string.IsNullOrEmpty(label.text) == true)
-            {
-                labelRect.x -= RevertTimeFieldTotalMargin;
-            }
-            EditorGUI.LabelField(labelRect, RevertTimeScaleContent, RightAlignStyle);
-
-            // Draw the Display Name label
-            fieldRect.x = position.x;
-            fieldRect.width = (labelRect.x - position.x);
-            DrawTextField(fieldRect, property, "Display Name", "displayName");
-
-            // Dock the rest of the fields down a bit
-            position.y += (position.height + VerticalMargin);
+            fieldRect.width -= RevertTimeWidth - EditorUiUtility.VerticalSpace;
 
             // Draw Cursor label
-            DrawTextField(position, property, "Cursor Lock Mode", "cursorMode", CursorModeLabelWidth);
+            EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("cursorMode"));
+
+            fieldRect.width = RevertTimeWidth;
+            fieldRect.x = position.xMax - fieldRect.width;
+
+            // Draw Revert Time field
+            SerializedProperty childProperty = property.FindPropertyRelative("revertTimeScale");
+            childProperty.boolValue = EditorGUI.ToggleLeft(fieldRect, "Reset Time Scale", childProperty.boolValue);
+
+            // Dock the rest of the fields down a bit
+            position.y += (position.height + EditorUiUtility.VerticalMargin);
+
+            // Draw Display Name label
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("displayName"));
 
             // Set indent back to what it was
             EditorGUI.indentLevel = indent;
@@ -141,22 +123,15 @@ namespace OmiyaGames.UI.Scenes
             EditorGUI.EndProperty();
         }
 
-        static void DrawTextField(Rect position, SerializedProperty property, string label, string variableName, float labelWidth = FileNameLabelWidth)
+        internal static float GetHeight(SerializedProperty translatedDisplayNameProperty, GUIContent label = null)
         {
-            Rect labelRect = position;
-            labelRect.width = labelWidth;
-            EditorGUI.LabelField(labelRect, label, GUIStyle.none);
-
-            // Draw the Scene Name field
-            Rect fieldRect = position;
-            fieldRect.x += labelRect.width;
-            fieldRect.width -= labelRect.width;
-            EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative(variableName), GUIContent.none);
-        }
-
-        internal static float GetHeight(GUIContent label = null)
-        {
-            return EditorUtility.GetHeight(label, 3, VerticalMargin);
+            float returnHeight = EditorUiUtility.GetHeight(label, 2, EditorUiUtility.VerticalMargin);
+            if (translatedDisplayNameProperty != null)
+            {
+                returnHeight += EditorUiUtility.VerticalMargin;
+                returnHeight += EditorGUI.GetPropertyHeight(translatedDisplayNameProperty);
+            }
+            return returnHeight;
         }
     }
 
@@ -196,10 +171,11 @@ namespace OmiyaGames.UI.Scenes
     {
         const float VerticalMargin = 2;
 
+        SerializedProperty debugLockMode;
         SerializedProperty soundEffect;
-        SerializedProperty splash;
         SerializedProperty mainMenu;
         SerializedProperty credits;
+        SerializedProperty loading;
         SerializedProperty levels;
         ReorderableList levelList;
 
@@ -221,26 +197,28 @@ namespace OmiyaGames.UI.Scenes
         public void OnEnable()
         {
             // Grab all serialized properties
+            debugLockMode = serializedObject.FindProperty("debugLockMode");
             soundEffect = serializedObject.FindProperty("soundEffect");
-            splash = serializedObject.FindProperty("splash");
             mainMenu = serializedObject.FindProperty("mainMenu");
             credits = serializedObject.FindProperty("credits");
+            loading = serializedObject.FindProperty("loading");
             levels = serializedObject.FindProperty("levels");
 
             // Setup level list
             levelList = new ReorderableList(serializedObject, levels, true, true, true, true);
             levelList.drawHeaderCallback = DrawLevelListHeader;
             levelList.drawElementCallback = DrawLevelListElement;
-            levelList.elementHeight = SceneInfoDrawer.GetHeight() + VerticalMargin;
+            levelList.elementHeightCallback = GetLeverListElementHeight;
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
+            EditorGUILayout.PropertyField(debugLockMode, true);
             EditorGUILayout.PropertyField(soundEffect, true);
-            EditorGUILayout.PropertyField(splash, true);
             EditorGUILayout.PropertyField(mainMenu, true);
             EditorGUILayout.PropertyField(credits, true);
+            EditorGUILayout.PropertyField(loading, true);
             levelList.DoLayoutList();
 
             // Display the scene appending stuff
@@ -266,7 +244,7 @@ namespace OmiyaGames.UI.Scenes
         {
             SerializedProperty element = levels.GetArrayElementAtIndex(index);
             rect.y += VerticalMargin;
-            rect.height = SceneInfoDrawer.GetHeight();
+            rect.height = SceneInfoDrawer.GetHeight(element.FindPropertyRelative("displayName"));
             EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
 
@@ -326,6 +304,12 @@ namespace OmiyaGames.UI.Scenes
             }
 
             EditorGUILayout.Space();
+        }
+
+        float GetLeverListElementHeight(int index)
+        {
+            SerializedProperty element = levels.GetArrayElementAtIndex(index);
+            return SceneInfoDrawer.GetHeight(element.FindPropertyRelative("displayName")) + VerticalMargin;
         }
     }
 }

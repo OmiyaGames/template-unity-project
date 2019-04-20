@@ -62,6 +62,7 @@ namespace OmiyaGames.UI
         Object testAsset = null, lastTestAsset = null;
         List<string> allDomains = new List<string> { "localhost", "build.cloud.unity3d.com" };
         ReorderableList allDomainsField = null;
+        StringCryptographer encrypter = null;
         readonly StringBuilder builder = new StringBuilder();
 
         GUIStyle FoldOutstyle
@@ -79,11 +80,25 @@ namespace OmiyaGames.UI
             window.Show();
         }
 
+        public static DomainList GenerateDomainList(string nameOfFolder, string nameOfFile, IList<string> allDomains, StringCryptographer encrypter, bool relativeToProject = true, bool overwriteFile = false)
+        {
+            DomainList newAsset = DomainList.Generate(nameOfFile, allDomains, encrypter);
+
+            // Generate the asset bundle
+            AssetUtility.SaveAsAssetBundle(newAsset, nameOfFolder, nameOfFile, BundleId, new StringBuilder(), relativeToProject, overwriteFile);
+            return newAsset;
+        }
+
         #region Unity Events
         void OnGUI()
         {
             // Explain what this dialog does
             EditorGUILayout.HelpBox(HelpMessage, MessageType.None);
+
+            // Draw the encrypter
+            EditorGUILayout.Space();
+            encrypter = (StringCryptographer)EditorGUILayout.ObjectField("Encrypter", encrypter, typeof(StringCryptographer), false);
+            EditorGUILayout.Space();
 
             // Draw the area for testing an asset bundle
             DrawTestAssetArea();
@@ -106,7 +121,7 @@ namespace OmiyaGames.UI
             allDomainsField.drawHeaderCallback = DrawLevelListHeader;
             allDomainsField.drawElementCallback = DrawLevelListElement;
             allDomainsField.onAddCallback = OnAddDomain;
-            allDomainsField.elementHeight = EditorUtility.SingleLineHeight(VerticalMargin);
+            allDomainsField.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
         }
         #endregion
 
@@ -167,13 +182,7 @@ namespace OmiyaGames.UI
                     string pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
                     if (AssetUtility.ConfirmFileIsWriteable(pathOfAsset, nameOfFile) == true)
                     {
-                        // Setup asset
-                        DomainList newAsset = ScriptableObject.CreateInstance<DomainList>();
-                        newAsset.name = nameOfFile;
-                        newAsset.Domains = allDomains.ToArray();
-
-                        // Generate the asset bundle
-                        AssetUtility.SaveAsAssetBundle(newAsset, nameOfFolder, nameOfFile, BundleId, builder);
+                        GenerateDomainList(nameOfFolder, nameOfFile, allDomains, encrypter);
                     }
                 }
             }
@@ -200,13 +209,13 @@ namespace OmiyaGames.UI
                 // Create a generate button
                 if (GUILayout.Button("Read Domain List Asset") == true)
                 {
-                    TestDomainAsset(testAsset, builder, out testResult, out testResultType);
+                    TestDomainAsset(testAsset, builder, encrypter, out testResult, out testResultType);
                 }
 
                 // Create a generate button
                 if (GUILayout.Button("Edit Domain List Asset") == true)
                 {
-                    EditDomainAsset(testAsset, out testResult, out testResultType);
+                    EditDomainAsset(testAsset, encrypter, out testResult, out testResultType);
                 }
 
                 // Print out results, if there are any
@@ -218,7 +227,7 @@ namespace OmiyaGames.UI
             EditorGUILayout.EndVertical();
         }
 
-        static void TestDomainAsset(Object testAsset, StringBuilder builder, out string testResult, out MessageType testResultType)
+        static void TestDomainAsset(Object testAsset, StringBuilder builder, StringCryptographer decrypter, out string testResult, out MessageType testResultType)
         {
             // Setup variables
             AssetBundle bundle = null;
@@ -252,16 +261,20 @@ namespace OmiyaGames.UI
                     {
                         // list out all the domains in the list
                         builder.Clear();
-                        builder.AppendLine(TestInfoMessage);
-                        for(int index = 0; index < domainList.Count; ++index)
+                        builder.Append(TestInfoMessage);
+                        for (int index = 0; index < domainList.Count; ++index)
                         {
+                            builder.AppendLine();
                             builder.Append("* \"");
-                            builder.Append(domainList[index]);
-                            builder.Append("\"");
-                            if (index < (domainList.Count - 1))
+                            if (decrypter != null)
                             {
-                                builder.AppendLine();
+                                builder.Append(decrypter.Decrypt(domainList[index]));
                             }
+                            else
+                            {
+                                builder.Append(domainList[index]);
+                            }
+                            builder.Append("\"");
                         }
                         testResult = builder.ToString();
                         testResultType = MessageType.Info;
@@ -270,7 +283,7 @@ namespace OmiyaGames.UI
             }
             finally
             {
-                if(bundle != null)
+                if (bundle != null)
                 {
                     // Clean-up
                     bundle.Unload(true);
@@ -278,7 +291,7 @@ namespace OmiyaGames.UI
             }
         }
 
-        void EditDomainAsset(Object testAsset, out string testResult, out MessageType testResultType)
+        void EditDomainAsset(Object testAsset, StringCryptographer decrypter, out string testResult, out MessageType testResultType)
         {
             // Setup variables
             AssetBundle bundle = null;
@@ -321,8 +334,7 @@ namespace OmiyaGames.UI
                         nameOfFolder = localAssetPath.Substring(0, stringLengthOfFolder);
 
                         // Replace the domain list
-                        allDomains.Clear();
-                        allDomains.AddRange(domainList);
+                        DomainList.Decrypt(domainList, decrypter, allDomains);
 
                         testResult = EditMessage;
                         testResultType = MessageType.Info;

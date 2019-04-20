@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     public static class ScrollingHelper
     {
