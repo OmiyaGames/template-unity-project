@@ -2,7 +2,7 @@
 using OmiyaGames;
 using OmiyaGames.Audio;
 
-namespace Project
+namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="BackgroundMusicChanger.cs" company="Omiya Games">

@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using OmiyaGames.Translations;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="LevelSelectMenu.cs" company="Omiya Games">

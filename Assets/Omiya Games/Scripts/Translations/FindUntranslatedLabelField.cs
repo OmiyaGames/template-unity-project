@@ -46,17 +46,17 @@ namespace OmiyaGames.Translations
     {
         [Header("Search through...")]
         [SerializeField]
-        GameObject[] searchThrough;
+        private GameObject[] searchThrough;
         [SerializeField]
-        bool recursivelyCheckChildren = true;
+        private bool recursivelyCheckChildren = true;
 
         [Header("Text Components")]
         [SerializeField]
-        List<TranslatedText> labels1 = new List<TranslatedText>();
+        private List<TranslatedText> labels1 = new List<TranslatedText>();
         [SerializeField]
-        List<TranslatedTextMesh> labels2 = new List<TranslatedTextMesh>();
+        private List<TranslatedTextMesh> labels2 = new List<TranslatedTextMesh>();
         [SerializeField]
-        List<TranslatedTextMeshPro> labels3 = new List<TranslatedTextMeshPro>();
+        private List<TranslatedTextMeshPro> labels3 = new List<TranslatedTextMeshPro>();
 
         [ContextMenu("Find all texts")]
         void FindAllOldText()

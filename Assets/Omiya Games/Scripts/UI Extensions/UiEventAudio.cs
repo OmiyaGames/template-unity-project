@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using OmiyaGames.Audio;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="UiEventAudio.cs" company="Omiya Games">

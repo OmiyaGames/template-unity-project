@@ -81,22 +81,22 @@ namespace OmiyaGames.UI
 
         static void DisplayFloatSlider(SerializedProperty property, DefaultRangeAttribute range, Rect position, ref float value)
         {
-            value = EditorGUI.Slider(position, value, range.min, range.max);
+            value = EditorGUI.Slider(position, value, range.Min, range.Max);
         }
 
         static void DisplayIntSlider(SerializedProperty property, DefaultRangeAttribute range, Rect position, ref float value)
         {
-            value = EditorGUI.IntSlider(position, Mathf.RoundToInt(value), Mathf.RoundToInt(range.min), Mathf.RoundToInt(range.max));
+            value = EditorGUI.IntSlider(position, Mathf.RoundToInt(value), Mathf.RoundToInt(range.Min), Mathf.RoundToInt(range.Max));
         }
 
         static void SetToDefaultFloat(SerializedProperty property, DefaultRangeAttribute range)
         {
-            property.floatValue = range.defaultNumber;
+            property.floatValue = range.DefaultNumber;
         }
 
         static void SetToDefaultInt(SerializedProperty property, DefaultRangeAttribute range)
         {
-            property.floatValue = Mathf.RoundToInt(range.defaultNumber);
+            property.floatValue = Mathf.RoundToInt(range.DefaultNumber);
         }
     }
 }

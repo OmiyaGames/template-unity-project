@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using OmiyaGames;
 using OmiyaGames.Audio;
-using OmiyaGames.Menu;
+using OmiyaGames.Menus;
 
 namespace Project
 {
@@ -108,7 +108,7 @@ namespace Project
 
         public void OnPauseClicked()
         {
-            Singleton.Get<MenuManager>().Show<PauseMenu>();
+            Singleton.Get<MenuManager>().Show<OmiyaGames.Menus.PauseMenu>();
         }
 
         public void OnFailedClicked()

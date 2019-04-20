@@ -56,6 +56,7 @@ namespace OmiyaGames.UI.Web
 
         SerializedProperty domainMustContain;
         SerializedProperty remoteDomainListUrl;
+        SerializedProperty domainDecrypter;
         SerializedProperty waitObjects;
         SerializedProperty forceRedirectIfDomainDoesntMatch;
         SerializedProperty redirectURL;
@@ -68,6 +69,7 @@ namespace OmiyaGames.UI.Web
             // Grab all serialized properties
             domainMustContain = serializedObject.FindProperty("domainMustContain");
             remoteDomainListUrl = serializedObject.FindProperty("remoteDomainListUrl");
+            domainDecrypter = serializedObject.FindProperty("domainDecrypter");
             waitObjects = serializedObject.FindProperty("waitObjects");
             forceRedirectIfDomainDoesntMatch = serializedObject.FindProperty("forceRedirectIfDomainDoesntMatch");
             redirectURL = serializedObject.FindProperty("redirectURL");
@@ -76,13 +78,13 @@ namespace OmiyaGames.UI.Web
             domainMustContainList = new ReorderableList(serializedObject, domainMustContain, true, true, true, true);
             domainMustContainList.drawHeaderCallback = DrawDomainHeader;
             domainMustContainList.drawElementCallback = DrawDomainElement;
-            domainMustContainList.elementHeight = EditorUtility.SingleLineHeight(VerticalMargin);
+            domainMustContainList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
 
             // Setup waitObjects list
             waitObjectsList = new ReorderableList(serializedObject, waitObjects, true, true, true, true);
             waitObjectsList.drawHeaderCallback = DrawWaitHeader;
             waitObjectsList.drawElementCallback = DrawWaitElement;
-            waitObjectsList.elementHeight = EditorUtility.SingleLineHeight(VerticalMargin);
+            waitObjectsList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
         }
 
         public override void OnInspectorGUI()
@@ -98,6 +100,9 @@ namespace OmiyaGames.UI.Web
             EditorGUILayout.PropertyField(remoteDomainListUrl, true);
             if (string.IsNullOrEmpty(remoteDomainListUrl.stringValue) == false)
             {
+                // Display the decrypter
+                EditorGUILayout.PropertyField(domainDecrypter, true);
+
                 // Display list of objects to disable
                 waitObjectsList.DoLayoutList();
             }
@@ -110,7 +115,7 @@ namespace OmiyaGames.UI.Web
 
             // Display option to force redirecting the web application to a specific website
             EditorGUILayout.PropertyField(forceRedirectIfDomainDoesntMatch, true);
-            if(forceRedirectIfDomainDoesntMatch.boolValue == true)
+            if (forceRedirectIfDomainDoesntMatch.boolValue == true)
             {
                 // If the player wants to force redirect, show the URL field to redirect to.
                 EditorGUILayout.PropertyField(redirectURL, true);

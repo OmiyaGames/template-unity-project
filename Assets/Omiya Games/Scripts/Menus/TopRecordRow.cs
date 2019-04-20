@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Settings;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     public class TopRecordRow : MonoBehaviour
     {

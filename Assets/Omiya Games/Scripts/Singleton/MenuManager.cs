@@ -8,7 +8,7 @@ using OmiyaGames.Global;
 using OmiyaGames.Translations;
 using OmiyaGames.Scenes;
 
-namespace OmiyaGames.Menu
+namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="MenuManager.cs" company="Omiya Games">
@@ -455,7 +455,7 @@ namespace OmiyaGames.Menu
             {
                 yield return delaySelection;
 
-                if (Events.currentSelectedGameObject == null)
+                if ((Events.currentSelectedGameObject == null) && (guiElement != null))
                 {
                     guiElement.Select();
                     guiElement.OnSelect(null);

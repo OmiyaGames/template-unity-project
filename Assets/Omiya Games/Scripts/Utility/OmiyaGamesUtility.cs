@@ -56,6 +56,7 @@ namespace OmiyaGames
     /// </remarks>
     public static class Utility
     {
+        public const char PathDivider = '/';
         public const float SnapToThreshold = 0.01f;
         public const string FileExtensionScriptableObject = ".asset";
         public const string FileExtensionText = ".txt";
@@ -367,7 +368,8 @@ namespace OmiyaGames
                 {
                     ++bulletNumber;
                     builder.Append(bulletNumber);
-                    builder.AppendLine(") downloading that list failed, however.");
+                    builder.AppendLine(") downloading that list failed, however. The reason:");
+                    builder.AppendLine(webChecker.DownloadErrorMessage);
                 }
             }
 
@@ -392,6 +394,85 @@ namespace OmiyaGames
 
             // Return URL
             return builder.ToString();
+        }
+
+        public static ENUM ConvertToEnum<ENUM>(int value) where ENUM : System.Enum
+        {
+            return (ENUM)System.Enum.ToObject(typeof(ENUM), value);
+        }
+
+        public static int ConvertToInt<ENUM>(ENUM value) where ENUM : System.Enum
+        {
+            return System.Convert.ToInt32(value);
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of setting a Vector3 than assignment.
+        /// </summary>
+        public static void SetVector(ref Vector3 toSet, ref Vector3 toCopy)
+        {
+            toSet.x = toCopy.x;
+            toSet.y = toCopy.y;
+            toSet.z = toCopy.z;
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of setting a Vector3 than assignment.
+        /// </summary>
+        public static void SetVector(ref Vector2 toSet, ref Vector2 copy)
+        {
+            toSet.x = copy.x;
+            toSet.y = copy.y;
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of incrementing a Vector3 than assignment.
+        /// </summary>
+        public static void IncrementVector(ref Vector3 toSet, ref Vector3 add)
+        {
+            toSet.x += add.x;
+            toSet.y += add.y;
+            toSet.z += add.z;
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of incrementing a Vector3 than assignment.
+        /// </summary>
+        public static void IncrementVector(ref Vector2 toSet, ref Vector2 add)
+        {
+            toSet.x = add.x;
+            toSet.y = add.y;
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of decrementing a Vector3 than assignment.
+        /// </summary>
+        public static void DecrementVector(ref Vector3 toSet, ref Vector3 subtract)
+        {
+            toSet.x -= subtract.x;
+            toSet.y -= subtract.y;
+            toSet.z -= subtract.z;
+        }
+
+        /// <summary>
+        /// A slightly more efficient way of decrementing a Vector3 than assignment.
+        /// </summary>
+        public static void DecrementVector(ref Vector2 toSet, ref Vector2 subtract)
+        {
+            toSet.x -= subtract.x;
+            toSet.y -= subtract.y;
+        }
+
+        /// <summary>
+        /// Grabs a component, and sets it to cache, unless the cache isn't null.
+        /// </summary>
+        public static T GetComponentCached<T>(MonoBehaviour script, ref T cache) where T : Component
+        {
+            if(cache == null)
+            {
+                cache = script.GetComponent<T>();
+            }
+            return cache;
         }
     }
 }
