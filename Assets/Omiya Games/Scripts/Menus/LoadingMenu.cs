@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 using OmiyaGames.Web;
 using OmiyaGames.Scenes;
 
@@ -42,111 +43,175 @@ namespace OmiyaGames.Menus
     [RequireComponent(typeof(Animator))]
     public class LoadingMenu : IMenu
     {
-        public class LoadingInfo
+        private const float MaxLoadingPercentage = 0.9f;
+
+        [SerializeField]
+        private float showLoadingBarAfterSeconds = 0.8f;
+        [SerializeField]
+        private float speedToCatchUpToTargetProgress = 10f;
+
+        // TODO: take out this variable
+        [SerializeField]
+        [Range(0f, MaxLoadingPercentage)]
+        private float testProgress = 0f;
+
+        [Header("Required Components")]
+        [SerializeField]
+        private Translations.TranslatedTextMeshPro loadingLabel = null;
+        [SerializeField]
+        private TMPro.TextMeshProUGUI progressPercentLabel = null;
+        [SerializeField]
+        private RectTransform progressBar = null;
+        [SerializeField]
+        private Translations.TranslatedString verifyingWebBuildText = null;
+
+        [Header("Animation Info")]
+        [SerializeField]
+        private string fieldVisible = "Visible";
+
+        private bool isProgressVisible = false, isLoadingNextScene = false;
+        private float loadingProgress = 0f, startTime;
+        private int currentlyDisplayedProgress = 0, lastDisplayedProgress = 0;
+        private Vector2 progressBarDimensions = new Vector2(0, 1);
+        private MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
+        private readonly StringBuilder builder = new StringBuilder();
+
+        #region Properties
+        public static SceneInfo NextScene
         {
-            bool isFinished = false;
-            float ratio = 0;
-
-            public bool IsFinished
-            {
-                get
-                {
-                    return isFinished;
-                }
-                set
-                {
-                    isFinished = value;
-                    if(isFinished == true)
-                    {
-                        Ratio = 1f;
-                    }
-                }
-            }
-
-            public float Ratio
-            {
-                get
-                {
-                    return ratio;
-                }
-                set
-                {
-                    ratio = Mathf.Clamp01(value);
-                }
-            }
+            get;
+            private set;
         }
-
-        [Header("Logo Only settings")]
-        [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("logoDisplayDuration")]
-        float minimumLogoDisplayDuration = 3f;
-        [SerializeField]
-        GameObject logoOnlySet = null;
-
-        [Header("Loading Bar Included settings")]
-        [SerializeField]
-        RectTransform loadingBar = null;
-        [SerializeField]
-        GameObject loadingBarIncludedSet = null;
-
-        MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
 
         public override Type MenuType
         {
-            get
-            {
-                return Type.UnmanagedMenu;
-            }
+            get => Type.UnmanagedMenu;
         }
 
         public override UnityEngine.UI.Selectable DefaultUi
         {
-            get
+            get => null;
+        }
+
+        public float LoadingProgress
+        {
+            get => loadingProgress;
+            set
             {
-                return null;
+                // Update loading progress
+                loadingProgress = Mathf.Clamp01(value);
+
+                // Check to see if progress bar exists
+                if (progressBar != null)
+                {
+                    // Update progress bar
+                    progressBarDimensions.x = loadingProgress / MaxLoadingPercentage;
+                    progressBar.anchorMax = progressBarDimensions;
+                }
+
+                // Check what's displayed, and see if it's different from the last displayed value
+                currentlyDisplayedProgress = GetDisplayedLoadingPercentage(loadingProgress);
+                if (currentlyDisplayedProgress != lastDisplayedProgress)
+                {
+                    // Check to see if label exists
+                    if (progressPercentLabel != null)
+                    {
+                        // Setup the string to percentage
+                        builder.Clear();
+                        builder.Append(currentlyDisplayedProgress);
+                        builder.Append('%');
+
+                        // Display the percentage
+                        progressPercentLabel.SetText(builder.ToString());
+                    }
+
+                    // Update the last displayed progress
+                    lastDisplayedProgress = currentlyDisplayedProgress;
+                }
             }
         }
 
-        /// <summary>
-        /// Override this property to display the loading bar in the splash menu
-        /// </summary>
-        public bool IsLoading
+        private bool IsProgressVisible
         {
-            get
+            get => isProgressVisible;
+            set
             {
-                return (LoadingStatus != null);
+                if (isProgressVisible != value)
+                {
+                    isProgressVisible = value;
+                    Animator.SetBool(fieldVisible, isProgressVisible);
+                }
             }
         }
+        #endregion
 
-        /// <summary>
-        /// Override this property to let the splash menu know
-        /// whether it needs to display the loading bar (don't
-        /// return null), and if so, how much the game loaded.
-        /// </summary>
-        public virtual LoadingInfo LoadingStatus
+        public static int GetDisplayedLoadingPercentage(float loadingProgress)
         {
-            get
-            {
-                return null;
-            }
+            return Mathf.RoundToInt((loadingProgress * 100f) / MaxLoadingPercentage);
         }
 
         // Use this for initialization
         void Start()
         {
-            if(IsLoading == false)
+            startTime = Time.time;
+            //if (IsLoading == false)
+            //{
+            //    // Start the fadeout
+            //    logoOnlySet.SetActive(true);
+            //    loadingBarIncludedSet.SetActive(false);
+            //    StartCoroutine(DelayedFadeOut());
+            //}
+            //else
+            //{
+            //    // Start the loading screen
+            //    loadingBarIncludedSet.SetActive(true);
+            //    logoOnlySet.SetActive(false);
+            //    StartCoroutine(ShowLoadingScreen());
+            //}
+        }
+
+        private void Update()
+        {
+            // Check if the progress bar is visible
+            if (IsProgressVisible == true)
             {
-                // Start the fadeout
-                logoOnlySet.SetActive(true);
-                loadingBarIncludedSet.SetActive(false);
-                StartCoroutine(DelayedFadeOut());
+                // Animate the progress increasing
+                // FIXME: remove "testProgress," and insert proper scene loading progress
+                LoadingProgress = Mathf.Lerp(LoadingProgress, testProgress, (Time.deltaTime * speedToCatchUpToTargetProgress));
             }
-            else
+
+            // Check if we're NOT loading the next scene
+            if (isLoadingNextScene == false)
             {
-                // Start the loading screen
-                loadingBarIncludedSet.SetActive(true);
-                logoOnlySet.SetActive(false);
-                StartCoroutine(ShowLoadingScreen());
+                // Check if the progress is complete
+                // FIXME: remove "testProgress," and insert proper scene loading progress
+                if (Mathf.Approximately(testProgress, MaxLoadingPercentage) == true)
+                {
+                    // If next scene is null, load the main menu scene
+                    if (NextScene == null)
+                    {
+                        NextScene = Singleton.Get<SceneTransitionManager>().MainMenu;
+                    }
+
+                    // Load the proper scene
+                    Singleton.Get<SceneTransitionManager>().LoadScene(NextScene);
+
+                    // Indicate we're loading the next scene
+                    isLoadingNextScene = true;
+                }
+                else if ((IsProgressVisible == false) && ((Time.time - startTime) > showLoadingBarAfterSeconds))
+                {
+                    // If progress bar isn't visible, check how much time has passed
+                    // If enough time has passed, check if this is a web-build, and we're loading the first scene (NextScene would be null, in that case)
+                    if ((NextScene == null) && (Singleton.Instance.IsWebApp == true))
+                    {
+                        // Update the loading text to verifying, instead
+                        loadingLabel.SetTranslationKey(verifyingWebBuildText);
+                    }
+
+                    // Make the progress bar visible
+                    IsProgressVisible = true;
+                }
             }
         }
 
@@ -155,6 +220,7 @@ namespace OmiyaGames.Menus
             // Do nothing
         }
 
+        /*
         IEnumerator DelayedFadeOut()
         {
             float startTime = Time.realtimeSinceStartup;
@@ -165,7 +231,7 @@ namespace OmiyaGames.Menus
 
             // Check how much time has passed
             float logoDisplayDuration = minimumLogoDisplayDuration - (Time.realtimeSinceStartup - startTime);
-            if(logoDisplayDuration > 0)
+            if (logoDisplayDuration > 0)
             {
                 // Wait for the designated time
                 yield return new WaitForSeconds(logoDisplayDuration);
@@ -267,5 +333,6 @@ namespace OmiyaGames.Menus
                 menu.UpdateReason(state);
             }
         }
+        */
     }
 }
