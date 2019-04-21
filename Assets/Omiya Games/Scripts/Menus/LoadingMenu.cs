@@ -6,7 +6,7 @@ using OmiyaGames.Scenes;
 namespace OmiyaGames.Menus
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="SplashMenu.cs" company="Omiya Games">
+    /// <copyright file="LoadingMenu.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
     /// Copyright (c) 2014-2018 Omiya Games
@@ -40,7 +40,7 @@ namespace OmiyaGames.Menus
     // FIXME: convert to Loading Screen.  Consider taking in the MalformedGameMenu as a way to verify whether game has loaded or not.
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Animator))]
-    public class SplashMenu : IMenu
+    public class LoadingMenu : IMenu
     {
         public class LoadingInfo
         {
