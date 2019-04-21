@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Text;
 using OmiyaGames.Web;
 using OmiyaGames.Scenes;
+using OmiyaGames.Translations;
 
 namespace OmiyaGames.Menus
 {
@@ -43,37 +45,38 @@ namespace OmiyaGames.Menus
     [RequireComponent(typeof(Animator))]
     public class LoadingMenu : IMenu
     {
+        private enum AnimatorState
+        {
+            Start = 0,
+            ShowVerifying = 1,
+            ShowLoading = 2,
+            NextSceneFromStart = 3,
+            NextSceneFromVerifying = 4,
+            NextSceneFromLoading = 5
+        }
+
         private const float MaxLoadingPercentage = 0.9f;
 
+        [Header("Progress Bar Timing")]
         [SerializeField]
         private float showLoadingBarAfterSeconds = 0.8f;
         [SerializeField]
         private float speedToCatchUpToTargetProgress = 10f;
 
-        // TODO: take out this variable
-        [SerializeField]
-        [Range(0f, MaxLoadingPercentage)]
-        private float testProgress = 0f;
-
         [Header("Required Components")]
         [SerializeField]
-        private Translations.TranslatedTextMeshPro loadingLabel = null;
+        private TranslatedTextMeshPro loadingLabel = null;
         [SerializeField]
         private TMPro.TextMeshProUGUI progressPercentLabel = null;
         [SerializeField]
         private RectTransform progressBar = null;
-        [SerializeField]
-        private Translations.TranslatedString verifyingWebBuildText = null;
 
-        [Header("Animation Info")]
-        [SerializeField]
-        private string fieldVisible = "Visible";
-
-        private bool isProgressVisible = false, isLoadingNextScene = false;
         private float loadingProgress = 0f, startTime;
         private int currentlyDisplayedProgress = 0, lastDisplayedProgress = 0;
+        private AnimatorState currentState = AnimatorState.Start;
         private Vector2 progressBarDimensions = new Vector2(0, 1);
-        private MalformedGameMenu.Reason buildState = MalformedGameMenu.Reason.None;
+        private AsyncOperation sceneLoadingInfo = null;
+        private MalformedGameMenu checkBuildStatusMenu = null;
         private readonly StringBuilder builder = new StringBuilder();
 
         #region Properties
@@ -131,16 +134,51 @@ namespace OmiyaGames.Menus
             }
         }
 
-        private bool IsProgressVisible
+        private AnimatorState CurrentState
         {
-            get => isProgressVisible;
+            get => currentState;
             set
             {
-                if (isProgressVisible != value)
+                if (currentState != value)
                 {
-                    isProgressVisible = value;
-                    Animator.SetBool(fieldVisible, isProgressVisible);
+                    currentState = value;
+                    Animator.SetInteger(StateField, ((int)currentState));
                 }
+            }
+        }
+
+        private bool IsNextSceneReady
+        {
+            get => Mathf.Approximately(sceneLoadingInfo.progress, MaxLoadingPercentage);
+        }
+
+        private bool IsVerificationFinished
+        {
+            get
+            {
+                // By default, return true
+                bool returnFlag = true;
+
+                // Check if we're running the verification process at all
+                if (checkBuildStatusMenu != null)
+                {
+                    // Switch to returning false
+                    returnFlag = false;
+
+                    // Check the build state
+                    if (checkBuildStatusMenu.BuildState == MalformedGameMenu.Reason.None)
+                    {
+                        // If this build is genuine, return true
+                        returnFlag = true;
+                    }
+                    else if (checkBuildStatusMenu.BuildState != MalformedGameMenu.Reason.InProgress)
+                    {
+                        // If verification is finished, and build is not found to be genuine,
+                        // wait until the user prompts that they would like to continue playing
+                        returnFlag = checkBuildStatusMenu.IsUserAcceptingRisk;
+                    }
+                }
+                return returnFlag;
             }
         }
         #endregion
@@ -150,189 +188,129 @@ namespace OmiyaGames.Menus
             return Mathf.RoundToInt((loadingProgress * 100f) / MaxLoadingPercentage);
         }
 
-        // Use this for initialization
-        void Start()
-        {
-            startTime = Time.time;
-            //if (IsLoading == false)
-            //{
-            //    // Start the fadeout
-            //    logoOnlySet.SetActive(true);
-            //    loadingBarIncludedSet.SetActive(false);
-            //    StartCoroutine(DelayedFadeOut());
-            //}
-            //else
-            //{
-            //    // Start the loading screen
-            //    loadingBarIncludedSet.SetActive(true);
-            //    logoOnlySet.SetActive(false);
-            //    StartCoroutine(ShowLoadingScreen());
-            //}
-        }
-
-        private void Update()
-        {
-            // Check if the progress bar is visible
-            if (IsProgressVisible == true)
-            {
-                // Animate the progress increasing
-                // FIXME: remove "testProgress," and insert proper scene loading progress
-                LoadingProgress = Mathf.Lerp(LoadingProgress, testProgress, (Time.deltaTime * speedToCatchUpToTargetProgress));
-            }
-
-            // Check if we're NOT loading the next scene
-            if (isLoadingNextScene == false)
-            {
-                // Check if the progress is complete
-                // FIXME: remove "testProgress," and insert proper scene loading progress
-                if (Mathf.Approximately(testProgress, MaxLoadingPercentage) == true)
-                {
-                    // If next scene is null, load the main menu scene
-                    if (NextScene == null)
-                    {
-                        NextScene = Singleton.Get<SceneTransitionManager>().MainMenu;
-                    }
-
-                    // Load the proper scene
-                    Singleton.Get<SceneTransitionManager>().LoadScene(NextScene);
-
-                    // Indicate we're loading the next scene
-                    isLoadingNextScene = true;
-                }
-                else if ((IsProgressVisible == false) && ((Time.time - startTime) > showLoadingBarAfterSeconds))
-                {
-                    // If progress bar isn't visible, check how much time has passed
-                    // If enough time has passed, check if this is a web-build, and we're loading the first scene (NextScene would be null, in that case)
-                    if ((NextScene == null) && (Singleton.Instance.IsWebApp == true))
-                    {
-                        // Update the loading text to verifying, instead
-                        loadingLabel.SetTranslationKey(verifyingWebBuildText);
-                    }
-
-                    // Make the progress bar visible
-                    IsProgressVisible = true;
-                }
-            }
-        }
-
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Do nothing
         }
 
-        /*
-        IEnumerator DelayedFadeOut()
+        #region Unity Events
+        // Use this for initialization
+        private void Start()
         {
-            float startTime = Time.realtimeSinceStartup;
-            buildState = MalformedGameMenu.Reason.None;
+            // Setup initial member variables
+            startTime = Time.time;
 
-            // Show the Malformed game menu if there's any problems
-            yield return StartCoroutine(VerifyBuild());
-
-            // Check how much time has passed
-            float logoDisplayDuration = minimumLogoDisplayDuration - (Time.realtimeSinceStartup - startTime);
-            if (logoDisplayDuration > 0)
+            // If next scene is null, this is the first scene to load
+            if (NextScene == null)
             {
-                // Wait for the designated time
-                yield return new WaitForSeconds(logoDisplayDuration);
+                // Indicate the next scene to load is the main menu
+                NextScene = Singleton.Get<SceneTransitionManager>().MainMenu;
+
+                // Indicate we're working on verifying the build
+                checkBuildStatusMenu = Singleton.Get<MenuManager>().GetMenu<MalformedGameMenu>();
+                CurrentState = AnimatorState.ShowVerifying;
             }
 
-            // Check the build state
-            LoadNextMenu(buildState);
+            // Start asynchronously loading the next scene
+            sceneLoadingInfo = SceneManager.LoadSceneAsync(NextScene.ScenePath);
+
+            // Prevent the scene from loading automatically
+            sceneLoadingInfo.allowSceneActivation = false;
         }
 
-        IEnumerator ShowLoadingScreen()
+        private void Update()
         {
-            // Reset the loading bar
-            Vector2 max = loadingBar.anchorMax;
-            max.x = 0;
-            loadingBar.anchorMax = max;
-            buildState = MalformedGameMenu.Reason.None;
+            UpdateCurrentState();
+            AnimateProgressBar();
+        }
+        #endregion
 
-            // Show the Malformed game menu if there's any problems
-            yield return StartCoroutine(VerifyBuild());
+        #region Animation Events
+        private void OnVerificationDismissed()
+        {
+            OnLoadingDismissed();
+        }
 
-            // Wait until the loading status is finished
-            while (LoadingStatus.IsFinished == false)
+        private void OnLoadingDismissed()
+        {
+            switch (CurrentState)
             {
-                // Update the loading bar
-                max.x = LoadingStatus.Ratio;
-                loadingBar.anchorMax = max;
-
-                // Wait for a frame
-                yield return null;
+                case AnimatorState.NextSceneFromStart:
+                case AnimatorState.NextSceneFromVerifying:
+                case AnimatorState.NextSceneFromLoading:
+                    LoadNextScene();
+                    break;
             }
-
-            // Wait for a frame
-            yield return null;
-
-            // Make the loading bar full
-            max.x = 1;
-            loadingBar.anchorMax = max;
-
-            // Wait for a frame
-            yield return null;
-
-            // Get the scene manager to change scenes
-            LoadNextMenu(buildState);
         }
+        #endregion
 
-        IEnumerator VerifyBuild()
+        #region Helper Methods
+        private void UpdateCurrentState()
         {
-            if (Singleton.Instance.IsWebApp == true)
+            // Check if we're NOT loading the next scene
+            switch (CurrentState)
             {
-                // Grab the web checker
-                WebLocationChecker webChecker = Singleton.Get<WebLocationChecker>();
-                if (webChecker != null)
-                {
-                    // Wait until the webchecker is done
-                    while (webChecker.CurrentState == WebLocationChecker.State.InProgress)
+                case AnimatorState.Start:
+                    // Check if the progress is complete
+                    if (IsNextSceneReady == true)
                     {
-                        yield return null;
+                        // Indicate we're loading the next scene
+                        CurrentState = AnimatorState.NextSceneFromStart;
+                        LoadNextScene();
                     }
-
-                    // Check the state
-                    switch (webChecker.CurrentState)
+                    else if ((Time.time - startTime) > showLoadingBarAfterSeconds)
                     {
-                        case WebLocationChecker.State.EncounteredError:
-                            buildState = MalformedGameMenu.Reason.CannotConfirmDomain;
-                            break;
-                        case WebLocationChecker.State.DomainDidntMatch:
-                            buildState = MalformedGameMenu.Reason.IsIncorrectDomain;
-                            break;
+                        // If progress bar isn't visible, check how much time has passed
+                        // Make the progress bar visible
+                        CurrentState = AnimatorState.ShowLoading;
                     }
-                }
-            }
-            else if ((Application.genuineCheckAvailable == true) && (Application.genuine == false))
-            {
-                buildState = MalformedGameMenu.Reason.IsNotGenuine;
-            }
-
-            // Check if we're simulating failure
-            if (Singleton.Instance.IsSimulatingMalformedGame == true)
-            {
-                // Indicate as such
-                buildState = MalformedGameMenu.Reason.JustTesting;
+                    break;
+                case AnimatorState.ShowVerifying:
+                    // Check if verification has progressed
+                    if (IsVerificationFinished == true)
+                    {
+                        // If no problems were found, check if we want to load immediately, or switch to the loading screen
+                        if (IsNextSceneReady == true)
+                        {
+                            // Indicate we're loading the next scene
+                            CurrentState = AnimatorState.NextSceneFromVerifying;
+                        }
+                        else
+                        {
+                            // Indicate we're showing the progress bar
+                            CurrentState = AnimatorState.ShowLoading;
+                        }
+                    }
+                    break;
+                case AnimatorState.ShowLoading:
+                    // Check if the progress is complete
+                    if (IsNextSceneReady == true)
+                    {
+                        // Indicate we're loading the next scene
+                        CurrentState = AnimatorState.NextSceneFromLoading;
+                    }
+                    break;
             }
         }
 
-        static void LoadNextMenu(MalformedGameMenu.Reason state)
+        private void AnimateProgressBar()
         {
-            // Check the build state
-            if (state == MalformedGameMenu.Reason.None)
+            // Check if the progress bar is visible
+            switch (CurrentState)
             {
-                // Get the scene manager to change scenes
-                Singleton.Get<SceneTransitionManager>().LoadMainMenu();
-            }
-            else
-            {
-                // Show the malformed menu
-                MalformedGameMenu menu = Singleton.Get<MenuManager>().Show<MalformedGameMenu>();
-
-                // Update the reasoning
-                menu.UpdateReason(state);
+                case AnimatorState.ShowLoading:
+                case AnimatorState.NextSceneFromLoading:
+                    // Animate the progress increasing
+                    LoadingProgress = Mathf.Lerp(LoadingProgress, sceneLoadingInfo.progress, (Time.deltaTime * speedToCatchUpToTargetProgress));
+                    break;
             }
         }
-        */
+
+        private void LoadNextScene()
+        {
+            // Allow the next scene to activate
+            sceneLoadingInfo.allowSceneActivation = true;
+        }
+        #endregion
     }
 }
