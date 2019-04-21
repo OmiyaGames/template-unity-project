@@ -164,8 +164,7 @@ namespace OmiyaGames.Scenes
             }
         }
 
-        // FIXME: poorly named.  Come up with something better, like "next upcoming scene"
-        public SceneInfo NextScene
+        public SceneInfo UpcomingScene
         {
             get
             {
@@ -304,7 +303,7 @@ namespace OmiyaGames.Scenes
         /// </summary>
         public void LoadNextLevel()
         {
-            LoadScene(NextScene);
+            LoadScene(UpcomingScene);
         }
 
         public void LoadScene(SceneInfo scene)
@@ -343,7 +342,7 @@ namespace OmiyaGames.Scenes
 
             // Check which level to unlock
             int nextLevelUnlocked = CurrentScene.Ordinal;
-            if (NextScene != null)
+            if (UpcomingScene != null)
             {
                 // Unlock the next level
                 nextLevelUnlocked += 1;
@@ -362,16 +361,12 @@ namespace OmiyaGames.Scenes
 
         void TransitionToScene(SceneInfo sceneToLoad)
         {
-            // Indicate the next scene was loaded
-            // FIXME: move the destroy All line to after the transition animation has made the screen unviewable.
-            Singleton.Get<PoolingManager>().DestroyAll();
-
             // Grab the last cursor mode
             LastCursorMode = CursorMode;
 
-            // Load the next scene asynchronously
-            // FIXME: once loading scene is in here, load that instead
-            sceneLoadingInfo = SceneManager.LoadSceneAsync(sceneToLoad.ScenePath);
+            // Load the loading scene asynchronously
+            Menus.LoadingMenu.NextScene = sceneToLoad;
+            sceneLoadingInfo = SceneManager.LoadSceneAsync(Loading.ScenePath);
 
             // Prevent the scene from loading automatically
             sceneLoadingInfo.allowSceneActivation = false;
@@ -399,7 +394,10 @@ namespace OmiyaGames.Scenes
 
             if (sceneLoadingInfo != null)
             {
-                // Once all that is done, activate the scene
+                // Destroy all pooled objects.
+                Singleton.Get<PoolingManager>().DestroyAll();
+
+                // Activate the scene
                 sceneLoadingInfo.allowSceneActivation = true;
 
                 // Discard the scene loading information

@@ -55,8 +55,6 @@ namespace OmiyaGames.Menus
             NextSceneFromLoading = 5
         }
 
-        private const float MaxLoadingPercentage = 0.9f;
-
         [Header("Progress Bar Timing")]
         [SerializeField]
         private float showLoadingBarAfterSeconds = 0.8f;
@@ -73,7 +71,7 @@ namespace OmiyaGames.Menus
 
         private float loadingProgress = 0f, startTime;
         private int currentlyDisplayedProgress = 0, lastDisplayedProgress = 0;
-        private AnimatorState currentState = AnimatorState.Start;
+        private AnimatorState currentAnimationState = AnimatorState.Start;
         private Vector2 progressBarDimensions = new Vector2(0, 1);
         private AsyncOperation sceneLoadingInfo = null;
         private MalformedGameMenu checkBuildStatusMenu = null;
@@ -83,7 +81,7 @@ namespace OmiyaGames.Menus
         public static SceneInfo NextScene
         {
             get;
-            private set;
+            set;
         }
 
         public override Type MenuType
@@ -108,7 +106,7 @@ namespace OmiyaGames.Menus
                 if (progressBar != null)
                 {
                     // Update progress bar
-                    progressBarDimensions.x = loadingProgress / MaxLoadingPercentage;
+                    progressBarDimensions.x = loadingProgress / SceneTransitionManager.SceneLoadingProgressComplete;
                     progressBar.anchorMax = progressBarDimensions;
                 }
 
@@ -136,20 +134,20 @@ namespace OmiyaGames.Menus
 
         private AnimatorState CurrentState
         {
-            get => currentState;
+            get => currentAnimationState;
             set
             {
-                if (currentState != value)
+                if (currentAnimationState != value)
                 {
-                    currentState = value;
-                    Animator.SetInteger(StateField, ((int)currentState));
+                    currentAnimationState = value;
+                    Animator.SetInteger(StateField, ((int)currentAnimationState));
                 }
             }
         }
 
         private bool IsNextSceneReady
         {
-            get => Mathf.Approximately(sceneLoadingInfo.progress, MaxLoadingPercentage);
+            get => Mathf.Approximately(sceneLoadingInfo.progress, SceneTransitionManager.SceneLoadingProgressComplete);
         }
 
         private bool IsVerificationFinished
@@ -185,7 +183,7 @@ namespace OmiyaGames.Menus
 
         public static int GetDisplayedLoadingPercentage(float loadingProgress)
         {
-            return Mathf.RoundToInt((loadingProgress * 100f) / MaxLoadingPercentage);
+            return Mathf.RoundToInt((loadingProgress * 100f) / SceneTransitionManager.SceneLoadingProgressComplete);
         }
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
