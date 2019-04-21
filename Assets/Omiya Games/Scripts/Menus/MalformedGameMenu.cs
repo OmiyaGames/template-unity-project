@@ -138,6 +138,12 @@ namespace OmiyaGames.Menus
             private set;
         } = Reason.None;
 
+        public bool IsUserAcceptingRisk
+        {
+            get;
+            private set;
+        } = false;
+
         WebLocationChecker WebChecker
         {
             get
@@ -223,6 +229,12 @@ namespace OmiyaGames.Menus
             {
                 Application.OpenURL(Singleton.Instance.WebsiteLink);
             }
+        }
+
+        public void OnAcceptClicked()
+        {
+            IsUserAcceptingRisk = true;
+            Hide();
         }
 
         IEnumerator VerifyBuild()
