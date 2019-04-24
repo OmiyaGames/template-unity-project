@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 22498224}
   m_Layer: 5
-  m_Name: Options Menus
+  m_Name: Options Menu Collection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,11 +224,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 1074799791811568118, guid: e65988d77263fff4bacc0c94c9f7958b,
-        type: 3}
-      propertyPath: m_Name
-      value: Accessibility Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 1005335676769496536, guid: e65988d77263fff4bacc0c94c9f7958b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -334,6 +329,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1074799791811568118, guid: e65988d77263fff4bacc0c94c9f7958b,
+        type: 3}
+      propertyPath: m_Name
+      value: Accessibility Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 1115639290927619212, guid: e65988d77263fff4bacc0c94c9f7958b,
         type: 3}
       propertyPath: m_PreferredWidthElement
@@ -359,6 +359,11 @@ PrefabInstance:
       propertyPath: m_PreferredWidthElement
       value: 
       objectReference: {fileID: 224549267081817120}
+    - target: {fileID: 1113572808678176460, guid: e65988d77263fff4bacc0c94c9f7958b,
+        type: 3}
+      propertyPath: enableInvincibility
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e65988d77263fff4bacc0c94c9f7958b, type: 3}
 --- !u!224 &224924462773647010 stripped
@@ -374,11 +379,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 1382423133308990734, guid: 3aedf8a106da82246a46bbcb514954ef,
-        type: 3}
-      propertyPath: m_Name
-      value: Language Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 1167765743903491780, guid: 3aedf8a106da82246a46bbcb514954ef,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -484,6 +484,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1382423133308990734, guid: 3aedf8a106da82246a46bbcb514954ef,
+        type: 3}
+      propertyPath: m_Name
+      value: Language Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 1350998539481647076, guid: 3aedf8a106da82246a46bbcb514954ef,
         type: 3}
       propertyPath: m_PreferredWidthElement
@@ -509,11 +514,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 1391801950621759966, guid: a0b1cc590b408954b8fabaa532dd6f38,
-        type: 3}
-      propertyPath: m_Name
-      value: List Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 1173435413263553146, guid: a0b1cc590b408954b8fabaa532dd6f38,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -619,6 +619,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1391801950621759966, guid: a0b1cc590b408954b8fabaa532dd6f38,
+        type: 3}
+      propertyPath: m_Name
+      value: List Menu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0b1cc590b408954b8fabaa532dd6f38, type: 3}
 --- !u!224 &224046238009838442 stripped
@@ -634,11 +639,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 2351556732124803833, guid: 4a60fae0e6324a34993a90a681703024,
-        type: 3}
-      propertyPath: m_Name
-      value: Audio Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 2574218105854286911, guid: 4a60fae0e6324a34993a90a681703024,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -744,6 +744,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2351556732124803833, guid: 4a60fae0e6324a34993a90a681703024,
+        type: 3}
+      propertyPath: m_Name
+      value: Audio Menu
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4a60fae0e6324a34993a90a681703024, type: 3}
 --- !u!224 &224549267081817120 stripped
@@ -759,11 +764,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 5366098686781460650, guid: f29051de87ff6994ab417fd2a3a1f8d1,
-        type: 3}
-      propertyPath: m_Name
-      value: Graphics Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 5287388457235685262, guid: f29051de87ff6994ab417fd2a3a1f8d1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -869,6 +869,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5366098686781460650, guid: f29051de87ff6994ab417fd2a3a1f8d1,
+        type: 3}
+      propertyPath: m_Name
+      value: Graphics Menu
+      objectReference: {fileID: 0}
     - target: {fileID: 5470635362774520278, guid: f29051de87ff6994ab417fd2a3a1f8d1,
         type: 3}
       propertyPath: m_PreferredWidthElement
@@ -906,11 +911,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 22498224}
     m_Modifications:
-    - target: {fileID: 8000926927087762909, guid: 6cdc34b960e15924fbfee4b0073175c7,
-        type: 3}
-      propertyPath: m_Name
-      value: Confirm Menu
-      objectReference: {fileID: 0}
     - target: {fileID: 7788495933559457893, guid: 6cdc34b960e15924fbfee4b0073175c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1015,6 +1015,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8000926927087762909, guid: 6cdc34b960e15924fbfee4b0073175c7,
+        type: 3}
+      propertyPath: m_Name
+      value: Confirm Menu
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6cdc34b960e15924fbfee4b0073175c7, type: 3}
