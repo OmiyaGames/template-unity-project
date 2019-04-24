@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using OmiyaGames.Settings;
 
 namespace OmiyaGames
 {
@@ -63,28 +62,43 @@ namespace OmiyaGames
 
         public void ShakeOnce(float maxShakeIntensity = DefaultShakeIntensity, float maxTiltIntensity = DefaultTiltIntensity)
         {
-            float shakeIntensity = Mathf.Clamp01(maxShakeIntensity);
-            if (Mathf.Approximately(shakeIntensity, 0f) == false)
+            // First, check if the settings allow screen shakes
+            if (Singleton.Get<GameSettings>().IsCameraShakesEnabled == true)
             {
-                Vector2 position = Random.insideUnitCircle * shakeIntensity;
-                Animator.SetFloat(XOffset, position.x);
-                Animator.SetFloat(YOffset, position.y);
-                Animator.SetTrigger(ShakeOnceTrigger);
-            }
+                // Calculate the shake intensity for position
+                float shakeIntensity = Mathf.Clamp01(maxShakeIntensity);
+                if (Mathf.Approximately(shakeIntensity, 0f) == false)
+                {
+                    Vector2 position = Random.insideUnitCircle * shakeIntensity;
+                    Animator.SetFloat(XOffset, position.x);
+                    Animator.SetFloat(YOffset, position.y);
+                    Animator.SetTrigger(ShakeOnceTrigger);
+                }
 
-            shakeIntensity = Mathf.Clamp01(maxTiltIntensity);
-            if (Mathf.Approximately(shakeIntensity, 0f) == false)
-            {
-                shakeIntensity = Random.Range(-shakeIntensity, shakeIntensity);
-                Animator.SetFloat(TiltOffset, shakeIntensity);
-                Animator.SetTrigger(TiltOnceTrigger);
+                // Calculate the shake intensity for rotation
+                shakeIntensity = Mathf.Clamp01(maxTiltIntensity);
+                if (Mathf.Approximately(shakeIntensity, 0f) == false)
+                {
+                    shakeIntensity = Random.Range(-shakeIntensity, shakeIntensity);
+                    Animator.SetFloat(TiltOffset, shakeIntensity);
+                    Animator.SetTrigger(TiltOnceTrigger);
+                }
             }
         }
 
         public void FlashOnce(Color flashColor)
         {
-            flashImage.color = flashColor;
-            Animator.SetTrigger(FlashOnceTrigger);
+            // First, check if the settings allow screen shakes
+            if (Singleton.Get<GameSettings>().IsScreenFlashesEnabled == true)
+            {
+                flashImage.color = flashColor;
+                Animator.SetTrigger(FlashOnceTrigger);
+            }
+        }
+
+        private void Start()
+        {
+            //Singleton.Get<OmiyaGames.Translations.LanguageTextPair>().
         }
     }
 }
