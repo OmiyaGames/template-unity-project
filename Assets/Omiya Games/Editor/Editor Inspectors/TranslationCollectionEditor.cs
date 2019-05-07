@@ -272,7 +272,22 @@ namespace OmiyaGames.UI.Translations
                 AddKeyToFrequencyDictionary(frequencyInKeyAppearance, KeyProperty.stringValue);
 
                 // Indicate this dictionary needs to be updated
-                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
+                if (Element == null)
+                {
+                    // Do something
+                }
+                else if(Element.serializedObject == null)
+                {
+                    // Do something
+                }
+                else if(Element.serializedObject.context == null)
+                {
+                    // Do something
+                }
+                else
+                {
+                    UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
+                }
             }
 
             // Re-adjust the rectangle, full-width for the next part

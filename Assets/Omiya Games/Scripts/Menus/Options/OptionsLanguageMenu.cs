@@ -115,7 +115,7 @@ namespace OmiyaGames.Menus
 
         private void LanguageCheckbox_OnChecked(LanguageToggle obj)
         {
-            if((obj != null) && (IsListeningToEvents == true))
+            if ((obj != null) && (IsListeningToEvents == true))
             {
                 // Update the toggle to select
                 currentSelectedCheckbox = obj;
@@ -147,12 +147,6 @@ namespace OmiyaGames.Menus
                 returnToggles[index] = clonedToggle.Navigation;
             }
 
-            // Setup the currently selected toggle
-            if(languageToControlMap.TryGetValue(Translations.CurrentLanguage, out currentSelectedCheckbox) == true)
-            {
-                // Setup the last selected toggle
-                currentSelectedCheckbox.Checkbox.isOn = true;
-            }
             return returnToggles;
         }
 
@@ -185,6 +179,9 @@ namespace OmiyaGames.Menus
 
             // Add the toggle to the dictionary
             languageToControlMap.Add(languageName, clonedToggle);
+
+            // Check the language, and whether it's current or not
+            clonedToggle.Checkbox.isOn = (languageName == Translations.CurrentLanguage);
         }
     }
 }
