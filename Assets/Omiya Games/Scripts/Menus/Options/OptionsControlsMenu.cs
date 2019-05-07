@@ -293,7 +293,7 @@ namespace OmiyaGames.Menus
         void SetupScrollWheelControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableCameraSensitivityControls.IsThisBuildSupported();
+            bool enabled = enableScrollWheelControls.IsThisBuildSupported();
 
             // Check if enabled
             if (enabled == true)
