@@ -791,7 +791,11 @@ Error message and password prompt
 
 <li>$:/state/tag-manager/task</li>
 
+<li>$:/state/toc/Table of Contents-About--1252283409</li>
+
 <li>$:/state/toc/Table of Contents-About--1876907615</li>
+
+<li>$:/state/toc/Table of Contents-Roadmap--1252283409</li>
 
 <li>$:/state/toc/Table of Contents-Roadmap--1876907615</li>
 
@@ -11257,7 +11261,13 @@ $:/config/PageControlButtons/Visibility/$(listItem)$
 <div created="20190507070918875" modified="20190507070923585" title="$:/state/tag-manager/task">
 <pre>closed</pre>
 </div>
+<div created="20190508083546792" modified="20190508083546792" title="$:/state/toc/Table of Contents-About--1252283409">
+<pre>open</pre>
+</div>
 <div created="20190507075524286" modified="20190507075615371" title="$:/state/toc/Table of Contents-About--1876907615">
+<pre>open</pre>
+</div>
+<div created="20190508083548175" modified="20190508083548175" title="$:/state/toc/Table of Contents-Roadmap--1252283409">
 <pre>open</pre>
 </div>
 <div created="20190507071721050" modified="20190507075616716" title="$:/state/toc/Table of Contents-Roadmap--1876907615">
@@ -11275,7 +11285,7 @@ $:/config/PageControlButtons/Visibility/$(listItem)$
 <div created="20190506225026483" modified="20190506225026483" title="$:/state/toc/TableOfContents-Roadmap-842329646">
 <pre>open</pre>
 </div>
-<div created="20190508083118631" list="About [[Table of Contents]]" modified="20190508083428064" title="$:/StoryList">
+<div list="About [[Table of Contents]]" title="$:/StoryList">
 <pre></pre>
 </div>
 <div created="20190508051301171" modified="20190508075051359" title="$:/temp/advancedsearch">
@@ -12401,20 +12411,20 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20190506220937314" list="" modified="20190508053707662" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
+<div created="20190506220937314" modified="20190508083627747" order="0" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
 <pre>This is a template game design document for a prototype game.  Feel free to add a description to the game below.</pre>
 </div>
-<div created="20190506223010949" modified="20190508074933108" tags="Roadmap" title="All Bugs">
+<div created="20190506223010949" modified="20190508083939879" order="3" tags="Roadmap" title="All Bugs">
 <pre>&lt;&lt;checklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190506222845908" modified="20190508015859874" tags="Roadmap" title="All Features">
+<div created="20190506222845908" modified="20190508083911294" order="1" tags="Roadmap" title="All Features">
 <pre>&lt;&lt;checklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190506222424287" modified="20190508015941083" tags="Roadmap" title="All Milestones">
+<div created="20190506222424287" modified="20190508083857188" order="0" tags="Roadmap" title="All Milestones">
 <pre>&lt;&lt;checklist &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
@@ -12433,7 +12443,7 @@ Create a New Status
 &lt;/$list&gt;
 &lt;/ol&gt;</pre>
 </div>
-<div created="20190508083227153" modified="20190508083251246" tags="Roadmap" title="All Tasks">
+<div created="20190508083227153" modified="20190508083924546" order="2" tags="Roadmap" title="All Tasks">
 <pre>&lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
@@ -12494,7 +12504,7 @@ Create a $template$
 
 &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
 </div>
-<div created="20190507000946970" modified="20190508082514384" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
+<div created="20190507000946970" modified="20190508083714594" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
 <pre>A quick list of shortcuts on places to customize this wiki.
 
 &lt;ul&gt;
@@ -12532,7 +12542,7 @@ Create a $template$
 &lt;/ul&gt;
 &lt;/ul&gt;</pre>
 </div>
-<div created="20190506223036682" modified="20190507075607533" tags="[[Table of Contents]]" title="Design" type="text/x-markdown">
+<div created="20190506223036682" modified="20190508083747346" order="1" tags="[[Table of Contents]]" title="Design" type="text/x-markdown">
 <pre>The content about the design of the game.</pre>
 </div>
 <div created="20190507070909611" icon="$:/core/images/done-button" modified="20190507070909611" title="done">
@@ -12557,7 +12567,7 @@ Create a $template$
 ! Test taskHeader
 &lt;&lt;taskHeader&gt;&gt;</pre>
 </div>
-<div created="20190507001538577" modified="20190507075834053" tags="[[Wiki Customization]] About" title="Help" type="text/x-markdown">
+<div created="20190507001538577" modified="20190508083700083" order="0" tags="[[Wiki Customization]] About" title="Help" type="text/x-markdown">
 <pre># Things that can be down with Markdown enabled:
 
 For simplicity, the new pages created in this wiki by default uses the markdown parser to generate text.  These are things that can be done without changing this setting.
@@ -12584,7 +12594,7 @@ Sometimes, [TiddlyWiki](https://tiddlywiki.com/)-specific features may need to b
 
 By using TiddlyWiki's transclusion: enter the name of the page between `{{}}` (e.g. `{{Name Of Page}}`) to embed!</pre>
 </div>
-<div created="20190506222206036" modified="20190507071520598" tags="[[Table of Contents]]" title="Market" type="text/x-markdown">
+<div created="20190506222206036" modified="20190508083802555" order="2" tags="[[Table of Contents]]" title="Market" type="text/x-markdown">
 <pre>Describe the target audience and marketing strategies here.
 
 # Target Audience
@@ -12704,7 +12714,7 @@ Provide description of this task here.
 
 よろしく!</pre>
 </div>
-<div created="20190506222348671" modified="20190507071520999" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
+<div created="20190506222348671" modified="20190508083838171" order="5" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
 <pre>Put together a roadmap below....somehow.
 
 {{Roadmap Footer}}</pre>
@@ -12776,10 +12786,10 @@ Provide description of this task here.
 <div created="20190508064329855" modified="20190508072458145" order="5" tags="Done Status" title="Status: Won't Fix">
 <pre>Won't Fix</pre>
 </div>
-<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190507071718918" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
+<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190508083602266" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
 <pre>&lt;div class=&quot;tc-table-of-contents&quot;&gt;
 
-&lt;&lt;toc-selective-expandable 'Table of Contents'  &quot;sort[title]&quot;&gt;&gt;
+&lt;&lt;toc-selective-expandable 'Table of Contents'  &quot;sort[order]&quot;&gt;&gt;
 
 &lt;/div&gt;</pre>
 </div>
@@ -12811,7 +12821,7 @@ Provide description of this task here.
 <div created="20190508042746598" list="[[Test Closed Task]] [[New Task]]" modified="20190508042746598" title="Task">
 <pre></pre>
 </div>
-<div created="20190508073315948" modified="20190508074754436" tags="[[Table of Contents]] Dev [[Wiki Customization]]" title="Team Members">
+<div created="20190508073315948" modified="20190508083822562" order="3" tags="[[Table of Contents]] Dev [[Wiki Customization]]" title="Team Members">
 <pre>&lt;$set name=&quot;numTeamMembers&quot; filter=&quot;[tag[Team Members]count[]]&quot;&gt;
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; title=&quot;Name&quot; tags=&quot;[[Team Member]]&quot; text=&quot;Bio goes here.&quot; order=&lt;&lt;numTeamMembers&gt;&gt;/&gt;
