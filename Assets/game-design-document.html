@@ -1053,10 +1053,6 @@ Error message and password prompt
 
 <li>Checklist - Milestones</li>
 
-<li>Checklist Done Template</li>
-
-<li>Checklist Template</li>
-
 <li>Customize Wiki</li>
 
 <li>Design</li>
@@ -1071,15 +1067,15 @@ Error message and password prompt
 
 <li>Market</li>
 
-<li>Milestone Row</li>
+<li>Milestone - Active</li>
+
+<li>Milestone - Done</li>
 
 <li>New Bug</li>
 
 <li>New Feature</li>
 
 <li>New Milestone</li>
-
-<li>New Milestone 1</li>
 
 <li>New Task</li>
 
@@ -11266,8 +11262,8 @@ Roadmap</pre>
 <div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/About">
 <pre>show</pre>
 </div>
-<div created="20190509015916755" modified="20190509015916755" title="$:/state/folded/All Milestones">
-<pre>hide</pre>
+<div created="20190509015916755" modified="20190509064154994" title="$:/state/folded/All Milestones">
+<pre>show</pre>
 </div>
 <div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Design">
 <pre>show</pre>
@@ -11281,7 +11277,7 @@ Roadmap</pre>
 <div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/Table of Contents">
 <pre>show</pre>
 </div>
-<div created="20190508051253685" modified="20190509062218883" title="$:/state/header-searchbar">
+<div created="20190508051253685" modified="20190509064024795" title="$:/state/header-searchbar">
 <pre>close</pre>
 </div>
 <div created="20190508084632553" modified="20190508084651024" title="$:/state/Link/-181365032/search">
@@ -11299,7 +11295,7 @@ Roadmap</pre>
 <div created="20190506222313424" modified="20190509055618823" title="$:/state/showeditpreview">
 <pre>yes</pre>
 </div>
-<div created="20190506225334733" modified="20190509062218883" title="$:/state/sidebar">
+<div created="20190506225334733" modified="20190509065144061" title="$:/state/sidebar">
 <pre>no</pre>
 </div>
 <div created="20190506232020097" modified="20190508050801335" title="$:/state/tab--1963855381">
@@ -11326,7 +11322,7 @@ Roadmap</pre>
 <div created="20190506213818980" modified="20190506224838500" title="$:/state/tab/sidebar--595412856">
 <pre>$:/core/ui/SideBar/More</pre>
 </div>
-<div created="20190506224912331" modified="20190508185645092" title="$:/state/tab/sidebar-1845994331">
+<div created="20190506224912331" modified="20190509065142960" title="$:/state/tab/sidebar-1845994331">
 <pre>Table of Contents</pre>
 </div>
 <div created="20190507070918875" modified="20190507070923585" title="$:/state/tag-manager/task">
@@ -11365,7 +11361,7 @@ Roadmap</pre>
 <div list="About [[Table of Contents]] Design Market Roadmap" title="$:/StoryList">
 <pre></pre>
 </div>
-<div created="20190508051301171" modified="20190509062218883" title="$:/temp/advancedsearch">
+<div created="20190508051301171" modified="20190509064024795" title="$:/temp/advancedsearch">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -12232,7 +12228,7 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20180327133017293" creator="jd" modified="20190509020008174" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
+<div created="20180327133017293" creator="jd" modified="20190509065144061" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
 <pre>{
     &quot;fabmargin&quot;: &quot;5px&quot;,
     &quot;fabsize&quot;: &quot;56px&quot;,
@@ -12501,8 +12497,11 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190506222424287" modified="20190508083857188" order="0" tags="Roadmap" title="All Milestones">
-<pre>&lt;&lt;checklist &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
+<div created="20190506222424287" modified="20190509065049066" order="0" tags="Roadmap" title="All Milestones">
+<pre>&lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;New Milestone&quot;&gt;Create a New Milestone&lt;/$button&gt;
+
+&lt;&lt;list-tagged-draggable tag:&quot;Milestone&quot; subFilter:&quot;!has[draft.of]!tag[Done]!title[New Milestone]&quot; itemTemplate:&quot;Milestone - Active&quot; emptyMessage:&quot;No active milestones found.&quot;&gt;&gt;
+&lt;&lt;list-tagged-draggable tag:&quot;Milestone&quot; subFilter:&quot;!has[draft.of]tag[Done]!title[New Milestone]&quot; itemTemplate:&quot;Milestone - Done&quot; emptyMessage:&quot;No completed milestones found.&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
 </div>
@@ -12649,12 +12648,6 @@ Create a $template$
 &lt;&lt;checklistMilestones &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190507024228102" modified="20190509021925906" tags="Template" title="Checklist Done Template" type="text/vnd.tiddlywiki">
-<pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; ~~&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~&lt;/$checkbox&gt;&lt;/div&gt;</pre>
-</div>
-<div created="20190507003044976" modified="20190509020047882" tags="Template" title="Checklist Template" type="text/vnd.tiddlywiki">
-<pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;&lt;/$checkbox&gt;&lt;/div&gt;</pre>
-</div>
 <div created="20190507000946970" modified="20190509010747320" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
 <pre>A quick list of shortcuts on places to customize this wiki.
 
@@ -12722,9 +12715,9 @@ This section may be better off on it's own page, to be honest.
 <div created="20190507071434336" icon="$:/core/images/done-button" modified="20190507071434336" title="Done">
 <pre></pre>
 </div>
-<div created="20190508075449444" modified="20190509024010022" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Headers">
+<div created="20190508075449444" modified="20190509064731660" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Headers">
 <pre>\define milestoneHeader()
-| Status: &lt;&lt;selectStatus&gt;&gt; |
+| &lt;$checkbox tag=&quot;Done&quot;&gt; Completed&lt;/$checkbox&gt; |
 \end
 
 \define taskHeader()
@@ -12778,16 +12771,11 @@ This section may be better off on it's own page, to be honest.
 
 This section may be better off on it's own page, to be honest.</pre>
 </div>
-<div created="20190508232123386" modified="20190509062846671" tags="Template" title="Milestone Row">
-<pre>&lt;tr&gt;
-  &lt;td&gt;
-	&lt;$link to={{!!title}}&gt;
-      &lt;$view field=&quot;title&quot;/&gt;
-    &lt;/$link&gt;
-  &lt;/td&gt;&lt;td&gt;
-	&lt;&lt;selectStatus&gt;&gt;
-  &lt;/td&gt;
-&lt;/tr&gt;</pre>
+<div created="20190507003044976" modified="20190509065012809" tags="Template" title="Milestone - Active" type="text/vnd.tiddlywiki">
+<pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;&lt;/$checkbox&gt;&lt;/div&gt;</pre>
+</div>
+<div created="20190507024228102" modified="20190509065035681" tags="Template" title="Milestone - Done" type="text/vnd.tiddlywiki">
+<pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; ~~&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~&lt;/$checkbox&gt;&lt;/div&gt;</pre>
 </div>
 <div assigned-to="" created="20190508020310974" modified="20190509025412315" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;taskHeader&gt;&gt;
@@ -12860,27 +12848,8 @@ Provide description of this feature here.
 !! Child Bugs
 &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
 </div>
-<div created="20190508044445509" modified="20190509025642260" status="Status: New" tags="Milestone" title="New Milestone">
+<div created="20190508044445509" modified="20190509064824481" tags="Milestone" title="New Milestone">
 <pre>&lt;&lt;milestoneHeader&gt;&gt;
----
-
-! Description
-
-Provide description of this milestone here.
-
----
-!! Child Features
-&lt;&lt;childChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
----
-!! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
----
-!! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
-</div>
-<div created="20190509062146311" modified="20190509062149828" status="Status: New" tags="Milestone" title="New Milestone 1">
-<pre>&lt;&lt;milestoneHeader&gt;&gt;
----
 
 ! Description
 
@@ -12934,22 +12903,18 @@ Provide description of this task here.
 <div created="20190508233449381" modified="20190509053639535" order="5" tags="Priority" title="Priority: Trivial">
 <pre>Trivial</pre>
 </div>
-<div created="20190506222348671" modified="20190508181838817" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
+<div created="20190506222348671" modified="20190509065051446" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
 <pre>Roadmap info goes here.
 
-! Milestones
+! Active Milestones
 
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;New Milestone&quot;&gt;Create a New Milestone&lt;/$button&gt;
 
-&lt;$set name=&quot;tip&quot; filter=&quot;[!has[draft.of]tag[Milestone]!tag[Done]!title[New Milestone]]&quot; value=&quot;&quot; emptyValue=&quot;No milestones found.&quot;&gt;
-&lt;&lt;tip&gt;&gt;
-&lt;/$set&gt;
-
-&lt;&lt;list-tagged-draggable tag:&quot;Milestone&quot; subFilter:&quot;!has[draft.of]!tag[Done]!title[New Milestone]&quot; itemTemplate:&quot;Checklist Template&quot;&gt;&gt;
+&lt;&lt;list-tagged-draggable tag:&quot;Milestone&quot; subFilter:&quot;!has[draft.of]!tag[Done]!title[New Milestone]&quot; itemTemplate:&quot;Milestone - Active&quot; emptyMessage:&quot;No milestones found.&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190507000901449" modified="20190508075045274" tags="Transclusion" title="Roadmap Footer">
+<div created="20190507000901449" modified="20190509063955913" tags="Transclusion" title="Roadmap Footer">
 <pre>! References
 * [[Roadmap]]
 * [[All Milestones]]
