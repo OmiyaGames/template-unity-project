@@ -1047,6 +1047,12 @@ Error message and password prompt
 
 <li>All Tasks</li>
 
+<li>Checklist - Child Task</li>
+
+<li>Checklist - Main Task</li>
+
+<li>Checklist - Milestones</li>
+
 <li>Checklist Done Template</li>
 
 <li>Checklist Template</li>
@@ -1065,8 +1071,6 @@ Error message and password prompt
 
 <li>Market</li>
 
-<li>Milestone Done Row</li>
-
 <li>Milestone Row</li>
 
 <li>New Bug</li>
@@ -1074,6 +1078,8 @@ Error message and password prompt
 <li>New Feature</li>
 
 <li>New Milestone</li>
+
+<li>New Milestone 1</li>
 
 <li>New Task</li>
 
@@ -1119,19 +1125,9 @@ Error message and password prompt
 
 <li>Task</li>
 
-<li>Task Checklist - Child</li>
-
-<li>Task Checklist - Main</li>
-
-<li>Task Done Row</li>
-
 <li>Task Row</li>
 
 <li>Team Members</li>
-
-<li>Test Task 1</li>
-
-<li>Test Task 2</li>
 
 </ul>
 </p>
@@ -11261,31 +11257,31 @@ Roadmap</pre>
 <div created="20190508074953285" modified="20190508074953285" title="$:/state/edit/references-614350653">
 <pre>show</pre>
 </div>
-<div created="20190506225252048" modified="20190509020152822" title="$:/state/FABs">
+<div created="20190506225252048" modified="20190509061959727" title="$:/state/FABs">
 <pre>no</pre>
 </div>
 <div created="20190506225122121" modified="20190506225123282" title="$:/state/folded/$:/About">
 <pre>show</pre>
 </div>
-<div created="20190506225013656" modified="20190509015916755" title="$:/state/folded/About">
-<pre>hide</pre>
+<div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/About">
+<pre>show</pre>
 </div>
 <div created="20190509015916755" modified="20190509015916755" title="$:/state/folded/All Milestones">
 <pre>hide</pre>
 </div>
-<div created="20190509015916755" modified="20190509015916755" title="$:/state/folded/Design">
-<pre>hide</pre>
-</div>
-<div created="20190509015916755" modified="20190509015916755" title="$:/state/folded/Market">
-<pre>hide</pre>
-</div>
-<div created="20190509015916755" modified="20190509015916755" title="$:/state/folded/Roadmap">
-<pre>hide</pre>
-</div>
-<div created="20190506225013656" modified="20190509015936282" title="$:/state/folded/Table of Contents">
+<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Design">
 <pre>show</pre>
 </div>
-<div created="20190508051253685" modified="20190509025306026" title="$:/state/header-searchbar">
+<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Market">
+<pre>show</pre>
+</div>
+<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Roadmap">
+<pre>show</pre>
+</div>
+<div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/Table of Contents">
+<pre>show</pre>
+</div>
+<div created="20190508051253685" modified="20190509062218883" title="$:/state/header-searchbar">
 <pre>close</pre>
 </div>
 <div created="20190508084632553" modified="20190508084651024" title="$:/state/Link/-181365032/search">
@@ -11300,10 +11296,10 @@ Roadmap</pre>
 <div created="20190508051305290" modified="20190508074941191" title="$:/state/searchtab-1845994331">
 <pre>$:/core/ui/AdvancedSearch/Standard</pre>
 </div>
-<div created="20190506222313424" modified="20190507002024532" title="$:/state/showeditpreview">
+<div created="20190506222313424" modified="20190509055618823" title="$:/state/showeditpreview">
 <pre>yes</pre>
 </div>
-<div created="20190506225334733" modified="20190509025306026" title="$:/state/sidebar">
+<div created="20190506225334733" modified="20190509062218883" title="$:/state/sidebar">
 <pre>no</pre>
 </div>
 <div created="20190506232020097" modified="20190508050801335" title="$:/state/tab--1963855381">
@@ -11366,10 +11362,10 @@ Roadmap</pre>
 <div created="20190506225026483" modified="20190506225026483" title="$:/state/toc/TableOfContents-Roadmap-842329646">
 <pre>open</pre>
 </div>
-<div created="20190509015940638" list="About [[Task Checklist - Main]] [[Customize Wiki]] [[Table of Contents]] Design Market Roadmap" modified="20190509025651831" title="$:/StoryList">
+<div list="About [[Table of Contents]] Design Market Roadmap" title="$:/StoryList">
 <pre></pre>
 </div>
-<div created="20190508051301171" modified="20190509025306026" title="$:/temp/advancedsearch">
+<div created="20190508051301171" modified="20190509062218883" title="$:/temp/advancedsearch">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -12510,7 +12506,7 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190508233000255" modified="20190509013934075" tags="[[Wiki Customization]] Dev" title="All Priorities">
+<div created="20190508233000255" modified="20190509053610436" tags="[[Wiki Customization]] Dev" title="All Priorities">
 <pre>&lt;$set name=&quot;numPriorities&quot; filter=&quot;[tag[Priority]count[]]&quot;&gt;
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;Priority: Critical&quot; text=&quot;Don't forget to edit this page!  The text here is displayed in the select options; the order field at the bottom of the page affects the order this status appears in.&quot; order=&lt;&lt;numPriorities&gt;&gt;/&gt;
@@ -12548,6 +12544,110 @@ Create a New Status
 <pre>&lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
+</div>
+<div created="20190508080730530" modified="20190509062414270" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
+<pre>\define childChecklistTags(tag) $tag$ [[$(currentTiddler)$]]
+
+\define childChecklist(tag, tagPlural, template)
+&lt;$button&gt;
+&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; tags=&lt;&lt;childChecklistTags $tag$&gt;&gt;/&gt;
+Create a $template$
+&lt;/$button&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+  	&lt;th&gt;$tag$&lt;/th&gt;
+  	&lt;th&gt;Status&lt;/th&gt;
+  	&lt;th&gt;Priority&lt;/th&gt;
+  	&lt;th&gt;Assigned To&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;$set name=&quot;parent&quot; value={{!!title}}&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+      {{!!text}} $tagPlural$
+    &lt;/th&gt;&lt;/tr&gt;
+    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
+      &lt;/$list&gt;
+    &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$list&gt;
+  &lt;/$set&gt;
+&lt;/table&gt;
+\end
+
+---
+
+! Testing child checklist:
+
+&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
+</div>
+<div created="20190506235424467" modified="20190509061906791" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Main Task" type="text/vnd.tiddlywiki">
+<pre>\define checklist(tag, tagPlural, template)
+&lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+  	&lt;th&gt;$tag$&lt;/th&gt;
+  	&lt;th&gt;Status&lt;/th&gt;
+  	&lt;th&gt;Priority&lt;/th&gt;
+  	&lt;th&gt;Assigned To&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+      {{!!text}} $tagPlural$
+    &lt;/th&gt;&lt;/tr&gt;
+    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
+      &lt;/$list&gt;
+    &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$list&gt;
+&lt;/table&gt;
+\end
+
+---
+
+! Testing Checklist:
+
+&lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+</pre>
+</div>
+<div created="20190509061959729" modified="20190509062737408" tags="" title="Checklist - Milestones">
+<pre>\define checklistMilestones(tag, tagPlural, template)
+&lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+  	&lt;th&gt;$tag$&lt;/th&gt;
+  	&lt;th&gt;Status&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+      {{!!text}} $tagPlural$
+    &lt;/th&gt;&lt;/tr&gt;
+    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+      &lt;&lt;emptyRow&gt;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;sort[created]]&quot; template=&quot;Milestone Row&quot;/&gt;
+    &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$list&gt;
+&lt;/table&gt;
+\end
+
+---
+
+! Testing checklistMilestones:
+
+&lt;&lt;checklistMilestones &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
+</pre>
 </div>
 <div created="20190507024228102" modified="20190509021925906" tags="Template" title="Checklist Done Template" type="text/vnd.tiddlywiki">
 <pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; ~~&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~&lt;/$checkbox&gt;&lt;/div&gt;</pre>
@@ -12678,11 +12778,16 @@ This section may be better off on it's own page, to be honest.
 
 This section may be better off on it's own page, to be honest.</pre>
 </div>
-<div created="20190508233623349" modified="20190509020055808" tags="Template" title="Milestone Done Row">
-<pre>| ~~&lt;&lt;selectStatus&gt;&gt; | &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~ |</pre>
-</div>
-<div created="20190508232123386" modified="20190509020124815" tags="Template" title="Milestone Row">
-<pre>| &lt;&lt;selectStatus&gt;&gt; | &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt; |</pre>
+<div created="20190508232123386" modified="20190509062846671" tags="Template" title="Milestone Row">
+<pre>&lt;tr&gt;
+  &lt;td&gt;
+	&lt;$link to={{!!title}}&gt;
+      &lt;$view field=&quot;title&quot;/&gt;
+    &lt;/$link&gt;
+  &lt;/td&gt;&lt;td&gt;
+	&lt;&lt;selectStatus&gt;&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;</pre>
 </div>
 <div assigned-to="" created="20190508020310974" modified="20190509025412315" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;taskHeader&gt;&gt;
@@ -12773,7 +12878,25 @@ Provide description of this milestone here.
 !! Child Bugs
 &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
 </div>
-<div assigned-to="" created="20190508025712742" modified="20190509025338014" priority="Priority: Medium" status="Status: New" tags="Task" title="New Task">
+<div created="20190509062146311" modified="20190509062149828" status="Status: New" tags="Milestone" title="New Milestone 1">
+<pre>&lt;&lt;milestoneHeader&gt;&gt;
+---
+
+! Description
+
+Provide description of this milestone here.
+
+---
+!! Child Features
+&lt;&lt;childChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
+---
+!! Child Tasks
+&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+---
+!! Child Bugs
+&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
+</div>
+<div assigned-to="" created="20190508025712742" modified="20190509025906895" priority="Priority: Medium" status="Status: New" tags="Task" title="New Task">
 <pre>&lt;&lt;taskHeader&gt;&gt;
 ---
 
@@ -12796,19 +12919,19 @@ Provide description of this task here.
 <div created="20190508233225782" modified="20190509021725893" order="0" tags="Priority" title="Priority: Blocker">
 <pre>Blocker</pre>
 </div>
-<div created="20190508233108626" modified="20190509021734831" order="1" tags="Priority" title="Priority: Critical">
+<div created="20190508233108626" modified="20190509053458826" order="1" tags="Priority" title="Priority: Critical">
 <pre>Critical</pre>
 </div>
 <div created="20190508233253868" modified="20190508233403121" order="2" tags="Priority" title="Priority: High">
 <pre>High</pre>
 </div>
-<div created="20190508233418690" modified="20190508233426594" order="4" tags="Priority" title="Priority: Low">
+<div created="20190508233418690" modified="20190509053545357" order="4" tags="Priority" title="Priority: Low">
 <pre>Low</pre>
 </div>
 <div created="20190508233406098" modified="20190509010814625" order="3" tags="Default Priority" title="Priority: Medium">
 <pre>Medium</pre>
 </div>
-<div created="20190508233449381" modified="20190508233501277" order="5" tags="Priority" title="Priority: Trivial">
+<div created="20190508233449381" modified="20190509053639535" order="5" tags="Priority" title="Priority: Trivial">
 <pre>Trivial</pre>
 </div>
 <div created="20190506222348671" modified="20190508181838817" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
@@ -12974,75 +13097,19 @@ Provide description of this task here.
 <div created="20190508042746598" list="[[New Task]] [[&lt;div class=&quot;tc-menu-list-item&quot; style=&quot;box-sizing: border-box; white-space: normal; padding-left: 5px; text-indent: -5px; overflow-wrap: break-word; word-break: break-all; color: rgba(0, 0, 0, 0.87); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(250, 250, 250); text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span class=&quot; tc-droppable&quot; style=&quot;box-sizing: border-box;&quot;&gt;&lt;div style=&quot;box-sizing: border-box;&quot;&gt;&lt;tr style=&quot;box-sizing: border-box;&quot;&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;a class=&quot;tc-tiddlylink tc-tiddlylink-resolves&quot; href=&quot;#Test%20Task%201&quot; style=&quot;box-sizing: border-box; background: transparent; outline: 0px; text-decoration: underline; font-weight: 500; color: rgb(1, 87, 155); user-select: inherit;&quot;&gt;&lt;br class=&quot;Apple-interchange-newline&quot;&gt;Test Task 1&lt;/a&gt;&lt;/td&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;&quot; style=&quot;box-sizing: border-box;&quot;&gt;(None)&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option style=&quot;box-sizing: border-box;&quot;&gt;Omiya Games&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tc-menu-list-item&quot; style=&quot;box-sizing: border-box; white-space: normal; padding-left: 5px; text-indent: -5px; overflow-wrap: break-word; word-break: break-all; color: rgba(0, 0, 0, 0.87); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(250, 250, 250); text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span class=&quot; tc-droppable&quot; style=&quot;box-sizing: border-box;&quot;&gt;&lt;div style=&quot;box-sizing: border-box;&quot;&gt;&lt;tr style=&quot;box-sizing: border-box;&quot;&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: New&quot; style=&quot;box-sizing: border-box;&quot;&gt;New&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: In Progress&quot; style=&quot;box-sizing: border-box;&quot;&gt;In Progress&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Handover&quot; style=&quot;box-sizing: border-box;&quot;&gt;Notify to Assignee&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: QA&quot; style=&quot;box-sizing: border-box;&quot;&gt;Needs Verification&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Done&quot; style=&quot;box-sizing: border-box;&quot;&gt;Done&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Won't Fix&quot; style=&quot;box-sizing: border-box;&quot;&gt;Won't Fix&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Blocker&quot; style=&quot;box-sizing: border-box;&quot;&gt;Blocker&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Critical&quot; style=&quot;box-sizing: border-box;&quot;&gt;Critical&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: High&quot; style=&quot;box-sizing: border-box;&quot;&gt;High&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Medium&quot; style=&quot;box-sizing: border-box;&quot;&gt;Medium&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Low&quot; style=&quot;box-sizing: border-box;&quot;&gt;Low&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Trivial&quot; style=&quot;box-sizing: border-box;&quot;&gt;Trivial&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;]] [[Test Task 2]] [[Test Task 1]]" modified="20190509022255902" title="Task">
 <pre></pre>
 </div>
-<div created="20190508080730530" modified="20190509020422362" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Task Checklist - Child">
-<pre>\define childChecklistTags(tag) $tag$ [[$(currentTiddler)$]]
-
-\define childChecklist(tag, tagPlural, template)
-
-&lt;$button&gt;
-&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; tags=&lt;&lt;childChecklistTags $tag$&gt;&gt;/&gt;
-Create a $template$
-&lt;/$button&gt;
-
-&lt;$set name=&quot;tip&quot; filter=&quot;[!has[draft.of]tag[$tag$]tag[$(currentTiddler)$]!title[$template$]]&quot; value=&quot;&quot; emptyValue=&quot;No $tagPlural$ found.&quot;&gt;
-&lt;&lt;tip&gt;&gt;
-&lt;/$set&gt;
-
-&lt;&lt;list-tagged-draggable tag:$tag$ subFilter:&quot;!has[draft.of]!tag[Done]tag[$(currentTiddler)$]!title[$template$]&quot; itemTemplate:&quot;Checklist Template&quot;&gt;&gt;
-&lt;&lt;list-tagged-draggable tag:$tag$ subFilter:&quot;!has[draft.of]tag[Done]tag[$(currentTiddler)$]!title[$template$]&quot; itemTemplate:&quot;Checklist Done Template&quot;&gt;&gt;
-\end
-
----
-
-! Testing child checklist:
-
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
-</div>
-<div created="20190506235424467" modified="20190509025553471" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Task Checklist - Main" type="text/vnd.tiddlywiki">
-<pre>\define checklist(tag, tagPlural, template)
-&lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-  	&lt;th&gt;Status&lt;/th&gt;
-  	&lt;th&gt;Priority&lt;/th&gt;
-  	&lt;th&gt;$tag$&lt;/th&gt;
-  	&lt;th&gt;Assigned To&lt;/th&gt;
-  &lt;/tr&gt;
-&lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
-  &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
-  	{{!!text}} $tagPlural$
-  &lt;/th&gt;&lt;/tr&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[$tag$]status[{{!!title}}]sort[priority]]&quot; template=&quot;Task Row&quot; emptyMessage='&lt;tr&gt;&lt;td colspan=&quot;4&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'/&gt;
-  &lt;/$list&gt;
-&lt;/table&gt;
-
-// Doing a nested list test here: //
-
-&lt;$list filter=&quot;[!has[draft.of]tag[$tag$]status[Status: New]sort[order]]&quot; template=&quot;Task Row&quot;/&gt;
-\end
-
----
-
-! Testing Checklist:
-
-&lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
-</pre>
-</div>
-<div created="20190509014233132" modified="20190509020116731" tags="Template" title="Task Done Row">
-<pre>| ~~&lt;&lt;selectStatus&gt;&gt; | &lt;&lt;selectPriority&gt;&gt; | &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt; | &lt;&lt;selectTeamMember 'Assigned To'&gt;&gt;~~ |</pre>
-</div>
-<div created="20190509013541716" modified="20190509024240698" tags="Template" title="Task Row">
+<div created="20190509013541716" modified="20190509061154288" tags="Template" title="Task Row">
 <pre>&lt;tr&gt;
-	&lt;td&gt;
-    	&lt;&lt;selectStatus&gt;&gt;
-    &lt;/td&gt;&lt;td&gt;
-    	&lt;&lt;selectPriority&gt;&gt;
-    &lt;/td&gt;&lt;td&gt;
-    	&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;
-    &lt;/td&gt;&lt;td&gt;
-    	&lt;&lt;selectTeamMember 'Assigned To'&gt;&gt;
-    &lt;/td&gt;
+  &lt;td&gt;
+    &lt;$link to={{!!title}}&gt;
+      &lt;$view field=&quot;title&quot;/&gt;
+    &lt;/$link&gt;
+  &lt;/td&gt;&lt;td&gt;
+  	&lt;&lt;selectStatus&gt;&gt;
+  &lt;/td&gt;&lt;td&gt;
+  	&lt;&lt;selectPriority&gt;&gt;
+  &lt;/td&gt;&lt;td&gt;
+  	&lt;&lt;selectTeamMember 'Assigned To'&gt;&gt;
+  &lt;/td&gt;
 &lt;/tr&gt;</pre>
 </div>
 <div created="20190508073315948" modified="20190508085158096" order="4" tags="[[Table of Contents]] Dev [[Wiki Customization]]" title="Team Members">
@@ -13058,36 +13125,6 @@ Create a New Team Member
 &lt;li&gt;&lt;$link to=&lt;&lt;currentTiddler&gt;&gt;&gt;&lt;&lt;currentTiddler&gt;&gt;&lt;/$link&gt;&lt;/li&gt;
 &lt;/$list&gt;
 &lt;/ol&gt;</pre>
-</div>
-<div Assigned To="" Priority="Priority: Medium" Status="Status: New" created="20190509022005581" modified="20190509022013621" tags="Task" title="Test Task 1">
-<pre>&lt;&lt;taskHeader&gt;&gt;
----
-
-! Description
-
-Provide description of this task here.
-
----
-!! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
----
-!! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
-</div>
-<div Priority="Priority: Medium" Status="Status: New" assigned-to="" created="20190509022233822" modified="20190509024200361" tags="Task" title="Test Task 2">
-<pre>&lt;&lt;taskHeader&gt;&gt;
----
-
-! Description
-
-Provide description of this task here.
-
----
-!! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
----
-!! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
 </div>
 
 </div>
