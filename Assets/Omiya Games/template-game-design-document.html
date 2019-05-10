@@ -533,6 +533,71 @@ if (typeof module === 'object' && typeof module.exports === 'object') {
 </head>
 <body class="tc-body">
 <!--~~ Raw markup for the top of the body section ~~-->
+<div class="tc-remove-when-wiki-loaded">
+<style scoped>.tc-splash-text {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+	margin: 20px auto 0;
+	width: 200px;
+	text-align: center;
+	color: rgba(0, 0, 0, 0.87);
+	fill: rgba(0, 0, 0, 0.87);
+}html body.tc-body {
+	background: #E0E0E0;
+}/*
+Spinner from https://github.com/tobiasahlin/SpinKit/ by Tobias AhlinThe MIT License (MIT)Copyright (c) 2015 Tobias AhlinPermission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/.tc-splash-spinner {
+	margin: 20px auto 0;
+	width: 70px;
+	text-align: center;
+}.tc-splash-spinner > div {
+	width: 18px;
+	height: 18px;
+	border-radius: 100%;
+	display: inline-block;
+	-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+	animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+	background-color: #f88;
+}.tc-splash-spinner .tc-splash-bounce-1 {
+	-webkit-animation-delay: -0.32s;
+	animation-delay: -0.32s;
+	background-color: #8f8;
+}.tc-splash-spinner .tc-splash-bounce-2 {
+	-webkit-animation-delay: -0.16s;
+	animation-delay: -0.16s;
+	background-color: #88f;
+}@-webkit-keyframes sk-bouncedelay {
+	0%, 80%, 100% { -webkit-transform: scale(0) }
+	40% { -webkit-transform: scale(1.0) }
+}@keyframes sk-bouncedelay {
+	0%, 80%, 100% { 
+	-webkit-transform: scale(0);
+	transform: scale(0);
+	} 40% { 
+	-webkit-transform: scale(1.0);
+	transform: scale(1.0);
+	}
+}
+</style><div class="tc-splash-text">
+Please wait while Template Game Design Document is loading
+</div><div class="tc-splash-spinner">
+  <div class="tc-splash-bounce-1"></div>
+  <div class="tc-splash-bounce-2"></div>
+  <div class="tc-splash-bounce-3"></div>
+</div></div>
 
 <!--~~ Static styles ~~-->
 <div id="styleArea">
@@ -701,6 +766,8 @@ Error message and password prompt
 
 <li>$:/DefaultTiddlers</li>
 
+<li>$:/favicon.ico</li>
+
 <li>$:/Import</li>
 
 <li>$:/isEncrypted</li>
@@ -735,11 +802,15 @@ Error message and password prompt
 
 <li>$:/SiteTitle</li>
 
+<li>$:/SplashScreen</li>
+
 <li>$:/state/add-plugin-info/$:/temp/ServerConnection/https://tiddlywiki.com/library/v5.1.19/index.html/$:/temp/RemoteAssetInfo/https://tiddlywiki.com/library/v5.1.19/index.html/$:/plugins/tiddlywiki/markdown</li>
 
 <li>$:/state/add-plugin-info/$:/temp/ServerConnection/https://tiddlywiki.com/library/v5.1.19/index.html/$:/temp/RemoteAssetInfo/https://tiddlywiki.com/library/v5.1.19/index.html/$:/themes/tiddlywiki/tight</li>
 
 <li>$:/state/edit/MaterialPalette</li>
+
+<li>$:/state/edit/references--1209744655</li>
 
 <li>$:/state/edit/references--1957495631</li>
 
@@ -770,6 +841,8 @@ Error message and password prompt
 <li>$:/state/FABs</li>
 
 <li>$:/state/folded/$:/About</li>
+
+<li>$:/state/folded/$:/themes/jd/Material/Stylesheet</li>
 
 <li>$:/state/folded/About</li>
 
@@ -846,6 +919,8 @@ Error message and password prompt
 <li>$:/state/toc/Table of Contents-Roadmap--1876907615</li>
 
 <li>$:/state/toc/Table of Contents-Roadmap-842329646</li>
+
+<li>$:/state/toc/Table of Contents/About-May 10th 2019--1252283409</li>
 
 <li>$:/state/toc/TableOfContents-About-842329646</li>
 
@@ -1083,11 +1158,15 @@ Error message and password prompt
 
 <li>Checklist - Milestones</li>
 
+<li>Comments Stylesheet</li>
+
 <li>Customize Wiki</li>
 
 <li>Design</li>
 
 <li>Flex Stylesheet</li>
+
+<li>Footers</li>
 
 <li>Headers</li>
 
@@ -1161,6 +1240,8 @@ Error message and password prompt
 
 <li>Unassigned Tasks</li>
 
+<li>Untitled</li>
+
 </ul>
 </p>
 
@@ -1189,11 +1270,11 @@ Error message and password prompt
 <div created="20190506215343889" modified="20190506215343889" title="$:/config/Navigation/UpdateHistory">
 <pre>yes</pre>
 </div>
-<div created="20190510054838445" modified="20190510055115469" title="$:/config/NewJournal/Tags">
+<div created="20190510054838445" modified="20190510081719258" title="$:/config/NewJournal/Tags">
 <pre>Comment</pre>
 </div>
-<div created="20190508072408331" modified="20190508072409262" title="$:/config/NewJournal/Title">
-<pre>MMM DDth YYYY</pre>
+<div created="20190508072408331" modified="20190510084009189" title="$:/config/NewJournal/Title">
+<pre>DDD, MMM DDth, YYYY at hh12:0mm:0ss.0XXX AM (UTC TZD)</pre>
 </div>
 <div created="20190506220516776" modified="20190510055412972" title="$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/close-all">
 <pre>hide</pre>
@@ -10286,16 +10367,13 @@ Market
 Roadmap
 [[Team Members]]</pre>
 </div>
-<div plugin-type="import" status="pending" title="$:/Import" type="application/json">
-<pre>{
-    &quot;tiddlers&quot;: {
-        &quot;Untitled&quot;: {
-            &quot;title&quot;: &quot;Untitled&quot;,
-            &quot;text&quot;: &quot;&lt;html&gt;\r\n&lt;body&gt;\r\n&lt;!--StartFragment--&gt;&lt;pre class=\&quot;default prettyprint prettyprinted\&quot; style=\&quot;margin: 0px 0px 1em; padding: 12px 8px; border: 0px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-weight: 400; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; width: auto; max-height: 600px; overflow: auto; background-color: rgb(239, 240, 241); border-radius: 3px; display: block; color: rgb(57, 51, 24); overflow-wrap: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;\&quot;&gt;&lt;code style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; background-color: rgb(239, 240, 241); white-space: inherit;\&quot;&gt;&lt;span class=\&quot;pln\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;position&lt;/span&gt;&lt;span class=\&quot;pun\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;:&lt;/span&gt;&lt;span class=\&quot;pln\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;relative&lt;/span&gt;&lt;span class=\&quot;pun\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;!--EndFragment--&gt;\r\n&lt;/body&gt;\r\n&lt;/html&gt;&quot;,
-            &quot;type&quot;: &quot;text/html&quot;
-        }
-    }
-}</pre>
+<div created="20190510064544000" modified="20190510064602034" title="$:/favicon.ico" type="image/x-icon">
+<pre>AAABAAEAQ0UCAAEAAQCoBgAAFgAAACgAAABDAAAAigAAAAEAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8AAAAAANVX////////4AAAAIAP////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAIAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH4AK/////4AAAAAAHgAAH////4AAAAIAHgAAA////4AAAAAAHgAAAH///4AAAAIAHgAAAA///4AAAAAAHgAAAAf//4AAAAIAHgAAAAP//4AAAAAAHgAAAAB//4AAAAIAHgAAAAA//4AAAAAAHgAAAAAP/4AAAAIAHgAAAAAP/4AAAAAAHgAAAAAB/4AAAAIAHgAAAAAA/4AAAAAAHgAAAAAAf4AAAAIAHgAAAAAAP4AAAAIAHgAAAAAAH4AAAAIAHgAAAAAAD4AAAAAAHgAAAAAAB4AAAAIAHgAAAAAAA4AAAAAAHgAAAAAAAYAAAAIAHgAAAAAAAYAAAAAAHgAAAAAAAIAAAAIAHgAAAAAAAAAAAAAAHgAAAAAAAAAAAAIAHgAAAAAAAAAAAAAAHgAAAAAAAAAAAAIAHgAAAAAAK4AAAAAAHgAAAAABf4AAAAIAHgAAAAAv/4AAAAAAHgAAAAH//4AAAAIAHgAAAC///4AAAAAAHgAAAH///4AAAAIAHgAAA////4AAAAAAHgAAB////4AAAAIAHgAAP////4AAAAAAHgAB/////4AAAAIAHgAD/////4AAAAAAHgAP/////4AAAAIAHgA//////4AAAAAAHgB//////4AAAAIAHgP//////4AAAAAAHgf//////4AAAAIAHh///////4AAAAAAH3///////4AAAAIAH////////4AAAAMAH////////4AAAANVX////////4AAAAIAP////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAIAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH////////4AAAAAAH////////4AAAAIAH4AK/////4AAAAAAHgAAH////4AAAAIAHgAAA////4AAAAAAHgAAAH///4AAAAIAHgAAAA///4AAAAAAHgAAAAf//4AAAAIAHgAAAAP//4AAAAAAHgAAAAB//4AAAAIAHgAAAAA//4AAAAAAHgAAAAAP/4AAAAIAHgAAAAAP/4AAAAAAHgAAAAAB/4AAAAIAHgAAAAAA/4AAAAAAHgAAAAAAf4AAAAIAHgAAAAAAP4AAAAIAHgAAAAAAH4AAAAIAHgAAAAAAD4AAAAAAHgAAAAAAB4AAAAIAHgAAAAAAA4AAAAAAHgAAAAAAAYAAAAIAHgAAAAAAAYAAAAAAHgAAAAAAAIAAAAIAHgAAAAAAAAAAAAAAHgAAAAAAAAAAAAIAHgAAAAAAAAAAAAAAHgAAAAAAAAAAAAIAHgAAAAAAK4AAAAAAHgAAAAABf4AAAAIAHgAAAAAv/4AAAAAAHgAAAAH//4AAAAIAHgAAAC///4AAAAAAHgAAAH///4AAAAIAHgAAA////4AAAAAAHgAAB////4AAAAIAHgAAP////4AAAAAAHgAB/////4AAAAIAHgAD/////4AAAAAAHgAP/////4AAAAIAHgA//////4AAAAAAHgB//////4AAAAIAHgP//////4AAAAAAHgf//////4AAAAIAHh///////4AAAAAAH3///////4AAAAIAH////////4AAAAMAH////////4AAAAA==</pre>
+</div>
+<div status="complete" title="$:/Import">
+<pre>The following tiddlers were imported:
+
+# [[favicon.ico]]</pre>
 </div>
 <div title="$:/isEncrypted">
 <pre>no</pre>
@@ -11147,6 +11225,110 @@ Roadmap
 <div created="20190506215129943" modified="20190508072331716" title="$:/SiteTitle">
 <pre>Template Game Design Document</pre>
 </div>
+<div created="20180927082601825" modified="20190510062025932" tags="$:/tags/RawMarkupWikified/TopBody" title="$:/SplashScreen" type="text/vnd.tiddlywiki">
+<pre>\import [[$:/core/ui/PageMacros]] [all[shadows+tiddlers]tag[$:/tags/Macro]!has[draft.of]]
+\rules only filteredtranscludeinline transcludeinline macrocallinline
+&lt;div class=&quot;tc-remove-when-wiki-loaded&quot;&gt;
+&lt;style scoped&gt;
+
+.tc-splash-text {
+    font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;;
+    font-size: 16px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+	margin: 20px auto 0;
+	width: 200px;
+	text-align: center;
+	color: &lt;&lt;colour foreground&gt;&gt;;
+	fill: &lt;&lt;colour foreground&gt;&gt;;
+}
+
+html body.tc-body {
+	background: &lt;&lt;colour page-background&gt;&gt;;
+}
+
+/*
+Spinner from https://github.com/tobiasahlin/SpinKit/ by Tobias Ahlin
+
+The MIT License (MIT)
+
+Copyright (c) 2015 Tobias Ahlin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the &quot;Software&quot;), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+.tc-splash-spinner {
+	margin: 20px auto 0;
+	width: 70px;
+	text-align: center;
+}
+
+.tc-splash-spinner &gt; div {
+	width: 18px;
+	height: 18px;
+	border-radius: 100%;
+	display: inline-block;
+	-webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+	animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+	background-color: #f88;
+}
+
+.tc-splash-spinner .tc-splash-bounce-1 {
+	-webkit-animation-delay: -0.32s;
+	animation-delay: -0.32s;
+	background-color: #8f8;
+}
+
+.tc-splash-spinner .tc-splash-bounce-2 {
+	-webkit-animation-delay: -0.16s;
+	animation-delay: -0.16s;
+	background-color: #88f;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+	0%, 80%, 100% { -webkit-transform: scale(0) }
+	40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+	0%, 80%, 100% { 
+	-webkit-transform: scale(0);
+	transform: scale(0);
+	} 40% { 
+	-webkit-transform: scale(1.0);
+	transform: scale(1.0);
+	}
+}
+&lt;/style&gt;
+
+&lt;div class=&quot;tc-splash-text&quot;&gt;
+Please wait while {{$:/SiteTitle}} is loading
+&lt;/div&gt;
+
+&lt;div class=&quot;tc-splash-spinner&quot;&gt;
+  &lt;div class=&quot;tc-splash-bounce-1&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;tc-splash-bounce-2&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;tc-splash-bounce-3&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;/div&gt;
+</pre>
+</div>
 <div created="20190506220837835" modified="20190506220837835" title="$:/state/add-plugin-info/$:/temp/ServerConnection/https://tiddlywiki.com/library/v5.1.19/index.html/$:/temp/RemoteAssetInfo/https://tiddlywiki.com/library/v5.1.19/index.html/$:/plugins/tiddlywiki/markdown">
 <pre>yes</pre>
 </div>
@@ -11155,6 +11337,9 @@ Roadmap
 </div>
 <div created="20190508185501633" modified="20190508185501633" title="$:/state/edit/MaterialPalette">
 <pre>yes</pre>
+</div>
+<div created="20190510084051158" modified="20190510084051158" title="$:/state/edit/references--1209744655">
+<pre>show</pre>
 </div>
 <div created="20190506222726617" modified="20190506222726617" title="$:/state/edit/references--1957495631">
 <pre>show</pre>
@@ -11195,11 +11380,14 @@ Roadmap
 <div created="20190508074953285" modified="20190508074953285" title="$:/state/edit/references-614350653">
 <pre>show</pre>
 </div>
-<div created="20190506225252048" modified="20190510052102724" title="$:/state/FABs">
+<div created="20190506225252048" modified="20190510092232720" title="$:/state/FABs">
 <pre>no</pre>
 </div>
 <div created="20190506225122121" modified="20190506225123282" title="$:/state/folded/$:/About">
 <pre>show</pre>
+</div>
+<div created="20190510094438526" modified="20190510094438526" title="$:/state/folded/$:/themes/jd/Material/Stylesheet">
+<pre>hide</pre>
 </div>
 <div created="20190506225013656" modified="20190510034048461" title="$:/state/folded/About">
 <pre>show</pre>
@@ -11231,7 +11419,7 @@ Roadmap
 <div created="20190510034048461" modified="20190510034048461" title="$:/state/folded/Team Members">
 <pre>show</pre>
 </div>
-<div created="20190508051253685" modified="20190510055707835" title="$:/state/header-searchbar">
+<div created="20190508051253685" modified="20190510101011563" title="$:/state/header-searchbar">
 <pre>close</pre>
 </div>
 <div created="20190508084632553" modified="20190508084651024" title="$:/state/Link/-181365032/search">
@@ -11243,19 +11431,19 @@ Roadmap
 <div created="20190508051138293" modified="20190508051144086" title="$:/state/plugin-info-896098052-$:/plugins/tiddlywiki/markdown--436478829">
 <pre>contents</pre>
 </div>
-<div created="20190508051305290" modified="20190508074941191" title="$:/state/searchtab-1845994331">
+<div created="20190508051305290" modified="20190510100121833" title="$:/state/searchtab-1845994331">
 <pre>$:/core/ui/AdvancedSearch/Standard</pre>
 </div>
 <div created="20190506222313424" modified="20190509055618823" title="$:/state/showeditpreview">
 <pre>yes</pre>
 </div>
-<div created="20190506225334733" modified="20190510061118720" title="$:/state/sidebar">
+<div created="20190506225334733" modified="20190510101114410" title="$:/state/sidebar">
 <pre>no</pre>
 </div>
 <div created="20190510055311840" modified="20190510055320477" title="$:/state/tab--1498284803">
 <pre>$:/core/ui/AdvancedSearch/Filter</pre>
 </div>
-<div created="20190506232020097" modified="20190508050801335" title="$:/state/tab--1963855381">
+<div created="20190506232020097" modified="20190510092837811" title="$:/state/tab--1963855381">
 <pre>$:/themes/jd/Material/Tweaks</pre>
 </div>
 <div created="20190510040002707" modified="20190510060743921" title="$:/state/tab--2112689675">
@@ -11273,7 +11461,7 @@ Roadmap
 <div created="20190506220755396" modified="20190510040128981" title="$:/state/tab-1342078386">
 <pre>$:/core/ui/ControlPanel/Plugins/Add/Themes</pre>
 </div>
-<div created="20190506213632490" modified="20190510060748170" title="$:/state/tab-1749438307">
+<div created="20190506213632490" modified="20190510092900520" title="$:/state/tab-1749438307">
 <pre>$:/core/ui/ControlPanel/Info</pre>
 </div>
 <div created="20190506220727618" modified="20190510055209465" title="$:/state/tab-2065006209">
@@ -11315,6 +11503,9 @@ Roadmap
 <div created="20190509013142637" modified="20190509013144489" title="$:/state/toc/Table of Contents-Roadmap-842329646">
 <pre>open</pre>
 </div>
+<div created="20190510074245217" modified="20190510074245217" title="$:/state/toc/Table of Contents/About-May 10th 2019--1252283409">
+<pre>open</pre>
+</div>
 <div created="20190506225224149" modified="20190506225227269" title="$:/state/toc/TableOfContents-About-842329646">
 <pre>close</pre>
 </div>
@@ -11330,7 +11521,7 @@ Roadmap
 <div list="About [[Table of Contents]] Design Market Roadmap [[Team Members]]" title="$:/StoryList">
 <pre></pre>
 </div>
-<div created="20190508051301171" modified="20190510055707834" title="$:/temp/advancedsearch">
+<div created="20190508051301171" modified="20190510101011563" title="$:/temp/advancedsearch">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -12197,7 +12388,7 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20180327133017293" creator="jd" modified="20190510061118719" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
+<div created="20180327133017293" creator="jd" modified="20190510101114410" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
 <pre>{
     &quot;fabmargin&quot;: &quot;5px&quot;,
     &quot;fabsize&quot;: &quot;56px&quot;,
@@ -12453,7 +12644,7 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20190506220937314" modified="20190510054711045" order="0" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
+<div created="20190506220937314" modified="20190510071251826" order="0" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;createSubPageHeader&gt;&gt;
 
 This is a template game design document for a prototype game.  Feel free to replace this text with a description about your project here.  Don't forget to edit the title and subtitle of this wiki by clicking on the [[gear icon|$:/ControlPanel]] on the upper-right hand corner.
@@ -12462,7 +12653,9 @@ Clicking on the three-lined &quot;hamburger&quot; button on the upper-left hand 
 
 To add a new wiki pages, click on the [[plus icon|New Page]] on the lower-right hand corner.  Remember to add the tag, [[Table of Contents]], on the new page so that it will appear under the sidebar. Alternatively, you can click on the &quot;Create a New Sub-Page&quot; button above this text.  This convenience feature will create a sub-page to this page, and update the sidebar accordingly.
 
-See the [[Help]] page for more details.</pre>
+See the [[Help]] page for more details.
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
 <div created="20190506223010949" modified="20190510053510731" order="5" tags="Roadmap" title="All Bugs">
 <pre>&lt;&lt;checklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
@@ -12521,7 +12714,7 @@ Create a New Status
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190509212040709" list-after="Checklist - Main Task" modified="20190510030052927" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Assigned Task">
+<div created="20190509212040709" list-after="Checklist - Main Task" modified="20190510062858806" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Assigned Task">
 <pre>\define assignedChecklist(tag, tagPlural, template, assignedTo:&quot;&quot;)
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to=&quot;$assignedTo$&quot;/&gt;
@@ -12540,12 +12733,12 @@ Create a $template$
       {{!!text}} $tagPlural$
     &lt;/th&gt;&lt;/tr&gt;
     &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
-    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to[$assignedTo$]]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
-      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to[$assignedTo$]]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+        &lt;&lt;emptyRow&gt;&gt;
+      &lt;/$set&gt;
       &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to[$assignedTo$]]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
-    &lt;/$set&gt;
     &lt;/$set&gt;
   &lt;/$list&gt;
 &lt;/table&gt;
@@ -12553,8 +12746,8 @@ Create a $template$
 
 \define assignedToPageChecklist(tag, tagPlural, template)
 &lt;$button&gt;
-&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to={{!!title}}/&gt;
-Create a $template$
+  &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to={{!!title}}/&gt;
+  Create a $template$
 &lt;/$button&gt;
 
 &lt;table&gt;
@@ -12565,17 +12758,17 @@ Create a $template$
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
   &lt;$set name=&quot;pageTitle&quot; value={{!!title}}&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
-    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
-      {{!!text}} $tagPlural$
-    &lt;/th&gt;&lt;/tr&gt;
-    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
-    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to&lt;pageTitle&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
-      &lt;&lt;emptyRow&gt;&gt;
+    &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+      &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+        {{!!text}} $tagPlural$
+      &lt;/th&gt;&lt;/tr&gt;
+      &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+      &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to&lt;pageTitle&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+        &lt;&lt;emptyRow&gt;&gt;
+      &lt;/$set&gt;
       &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to&lt;pageTitle&gt;]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
-    &lt;/$set&gt;
     &lt;/$set&gt;
   &lt;/$list&gt;
   &lt;/$set&gt;
@@ -12596,13 +12789,13 @@ Create a $template$
 &lt;&lt;assignedToPageChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190508080730530" modified="20190509062414270" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
+<div created="20190508080730530" modified="20190510062746831" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
 <pre>\define childChecklistTags(tag) $tag$ [[$(currentTiddler)$]]
 
 \define childChecklist(tag, tagPlural, template)
 &lt;$button&gt;
-&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; tags=&lt;&lt;childChecklistTags $tag$&gt;&gt;/&gt;
-Create a $template$
+  &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; tags=&lt;&lt;childChecklistTags $tag$&gt;&gt;/&gt;
+  Create a $template$
 &lt;/$button&gt;
 
 &lt;table&gt;
@@ -12613,19 +12806,19 @@ Create a $template$
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
   &lt;$set name=&quot;parent&quot; value={{!!title}}&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
-    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
-      {{!!text}} $tagPlural$
-    &lt;/th&gt;&lt;/tr&gt;
-    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
-    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
-      &lt;&lt;emptyRow&gt;&gt;
-      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
-        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
-      &lt;/$list&gt;
-    &lt;/$set&gt;
-    &lt;/$set&gt;
-  &lt;/$list&gt;
+    &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+      &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+        {{!!text}} $tagPlural$
+      &lt;/th&gt;&lt;/tr&gt;
+      &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+        &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+          &lt;&lt;emptyRow&gt;&gt;
+        &lt;/$set&gt;
+        &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+          &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
+        &lt;/$list&gt;
+      &lt;/$set&gt;
+    &lt;/$list&gt;
   &lt;/$set&gt;
 &lt;/table&gt;
 \end
@@ -12636,7 +12829,7 @@ Create a $template$
 
 &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
 </div>
-<div created="20190506235424467" modified="20190509061906791" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Main Task" type="text/vnd.tiddlywiki">
+<div created="20190506235424467" modified="20190510062926827" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Main Task" type="text/vnd.tiddlywiki">
 <pre>\define checklist(tag, tagPlural, template)
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
 
@@ -12652,12 +12845,12 @@ Create a $template$
       {{!!text}} $tagPlural$
     &lt;/th&gt;&lt;/tr&gt;
     &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
-    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
-      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+        &lt;&lt;emptyRow&gt;&gt;
+      &lt;/$set&gt;
       &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
-    &lt;/$set&gt;
     &lt;/$set&gt;
   &lt;/$list&gt;
 &lt;/table&gt;
@@ -12700,7 +12893,56 @@ Create a $template$
 &lt;&lt;checklistMilestones &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190507000946970" modified="20190510051133701" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
+<div created="20190510092232722" modified="20190510100821372" tags="$:/tags/Stylesheet" title="Comments Stylesheet" type="text/css">
+<pre>.comments {
+}
+
+.comments &gt; summary {
+  padding: 10px 0px;
+  border-top: #dadada solid 1px;
+}
+
+.comments button {
+  margin-top: 10px;
+}
+
+.all-comments {
+  border-bottom: #dadada solid 1px;
+}
+
+.comment {
+  padding: 5px;
+  border-top: #dadada solid 1px;
+}
+
+.comment .header {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.comment .title {
+  margin-right: 6px;
+}
+
+.comment .details {
+  margin-right: 6px;
+}
+
+.comment .text {
+  margin-top: 10px;
+}</pre>
+</div>
+<div created="20190507000946970" modified="20190510073824630" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
 <pre>A quick list of shortcuts on places to customize this wiki.
 
 &lt;ul&gt;
@@ -12744,9 +12986,11 @@ Create a $template$
 &lt;ul&gt;
 &lt;li&gt;[[Roadmap Footer]]&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/ul&gt;</pre>
+&lt;/ul&gt;
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190506223036682" modified="20190510055555926" order="1" tags="[[Table of Contents]]" title="Design" type="text/vnd.tiddlywiki">
+<div created="20190506223036682" modified="20190510071053762" order="1" tags="[[Table of Contents]]" title="Design" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;createSubPageHeader&gt;&gt;
 
 The content about the design of the game.
@@ -12769,9 +13013,11 @@ This section may be better off on it's own page, to be honest.
 
 ! Economy
 
-This section may be better off on it's own page, to be honest.</pre>
+This section may be better off on it's own page, to be honest.
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190510030702147" modified="20190510035859652" tags="$:/tags/Stylesheet" title="Flex Stylesheet" type="text/css">
+<div created="20190510030702147" modified="20190510092247313" tags="$:/tags/Stylesheet" title="Flex Stylesheet" type="text/css">
 <pre>.flex-container {
   padding: 0;
   margin: 0;
@@ -12795,6 +13041,71 @@ This section may be better off on it's own page, to be honest.</pre>
 .checklist table {
     width: 100%;
 }</pre>
+</div>
+<div created="20190510082701039" modified="20190510100629582" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Footers">
+<pre>\define commentButtonTags()
+  [[$(currentTiddlerTag)$]] $(commentTags)$
+\end
+
+\define commentButtonSetup()
+  &lt;$button aria-label={{$:/language/Buttons/NewJournalHere/Caption}}&gt;
+    &lt;$wikify name=&quot;journalTitle&quot; text=&quot;&quot;&quot;&lt;$macrocall $name=&quot;now&quot; format=&lt;&lt;commentTitleTemplate&gt;&gt;/&gt;&quot;&quot;&quot;&gt;
+      &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; title=&lt;&lt;journalTitle&gt;&gt; tags=&lt;&lt;commentButtonTags&gt;&gt;/&gt;
+      Add a New Comment
+    &lt;/$wikify&gt;
+  &lt;/$button&gt;
+\end
+
+\define commentButton()
+  &lt;$set name=&quot;commentTitleTemplate&quot; value={{$:/config/NewJournal/Title}}&gt;
+    &lt;$set name=&quot;commentTags&quot; value={{$:/config/NewJournal/Tags}}&gt;
+      &lt;$set name=&quot;currentTiddlerTag&quot; value=&lt;&lt;currentTiddler&gt;&gt;&gt;
+        &lt;&lt;commentButtonSetup&gt;&gt;
+      &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$set&gt;
+\end
+
+\define commentLink()
+  [[$(currentTiddler)$]]
+\end
+
+\define authorLink()
+  [[$(commentAuthor)$]]
+\end
+
+\define commentsFooter()
+&lt;details class=&quot;tc-details comments&quot;&gt;
+  &lt;summary&gt;Comments&lt;/summary&gt;
+  &lt;div class=&quot;all-comments&quot;&gt;
+    &lt;$list filter=&quot;[!has[draft.of]tag{$:/config/NewJournal/Tags}tag&lt;currentTiddler&gt;sort[created]]&quot; emptyMessage='&lt;div class=&quot;tc-subtitle comment&quot;&gt;(No comments posted yet)&lt;/div&gt;'&gt;
+      &lt;div class=&quot;comment&quot;&gt;
+        &lt;div class=&quot;header&quot;&gt;
+          &lt;div class=&quot;title&quot;&gt;&lt;&lt;commentLink&gt;&gt;&lt;/div&gt;
+          &lt;$list filter=&quot;[title{!!title}has[author]]&quot;&gt;
+            &lt;$set name=&quot;commentAuthor&quot; value={{!!author}}&gt;
+              &lt;div class=&quot;tc-subtitle details&quot;&gt;
+                By &lt;&lt;authorLink&gt;&gt;
+              &lt;/div&gt;
+            &lt;/$set&gt;
+          &lt;/$list&gt;
+          &lt;div class=&quot;tc-subtitle details&quot;&gt;
+            On {{!!created}}
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;text&quot;&gt;{{!!text}}&lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/$list&gt;
+  &lt;/div&gt;
+  &lt;div&gt;&lt;&lt;commentButton&gt;&gt;&lt;/div&gt;
+&lt;/details&gt;
+\end
+
+---
+
+! test commentsFooter
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
 <div created="20190508075449444" modified="20190510054702308" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Headers">
 <pre>\define subPageTags() [[$(currentTiddler)$]]
@@ -12826,8 +13137,8 @@ Create a New Sub-Page
 ! Test taskHeader
 &lt;&lt;taskHeader&gt;&gt;</pre>
 </div>
-<div created="20190507001538577" modified="20190510043100740" order="0" tags="About" title="Help" type="text/vnd.tiddlywiki">
-<pre>&lt;&lt;parentToPageHeader&gt;&gt;
+<div created="20190507001538577" modified="20190510073803848" order="0" tags="About" title="Help" type="text/vnd.tiddlywiki">
+<pre>&lt;&lt;createSubPageHeader&gt;&gt;
 
 !! How does one add something to the Table of Contents?
 
@@ -12847,9 +13158,11 @@ Oddly enough, the [[Tag Manager|$:/TagManager]] does ''not'' let you rename tags
 
 !! How do I embed a page into another?
 
-By using TiddlyWiki's transclusion: enter the name of the page between `{{}}` (e.g. `{{Name Of Page}}`) to embed!</pre>
+By using TiddlyWiki's transclusion: enter the name of the page between `{{}}` (e.g. `{{Name Of Page}}`) to embed!
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190506222206036" modified="20190510055634451" order="2" tags="[[Table of Contents]]" title="Market" type="text/vnd.tiddlywiki">
+<div created="20190506222206036" modified="20190510071102307" order="2" tags="[[Table of Contents]]" title="Market" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;createSubPageHeader&gt;&gt;
 
 Describe the target audience and marketing strategies here.
@@ -12868,7 +13181,9 @@ This section may be better off on it's own page, to be honest.
 
 !! Social Media
 
-This section may be better off on it's own page, to be honest.</pre>
+This section may be better off on it's own page, to be honest.
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
 <div created="20190507003044976" modified="20190509065012809" tags="Template" title="Milestone - Active" type="text/vnd.tiddlywiki">
 <pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; &lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;&lt;/$checkbox&gt;&lt;/div&gt;</pre>
@@ -12876,7 +13191,7 @@ This section may be better off on it's own page, to be honest.</pre>
 <div created="20190507024228102" modified="20190509065035681" tags="Template" title="Milestone - Done" type="text/vnd.tiddlywiki">
 <pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; ~~&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~&lt;/$checkbox&gt;&lt;/div&gt;</pre>
 </div>
-<div assigned-to="" created="20190508020310974" modified="20190510034820715" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
+<div assigned-to="" created="20190508020310974" modified="20190510071515449" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;taskHeader&gt;&gt;
 ! Description
 Summarize the effect of the bug here.
@@ -12934,9 +13249,9 @@ Indicate what actually happens if you've followed the steps above.  Here are som
     &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-</pre>
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div assigned-to="" created="20190508044150837" modified="20190510035041958" priority="Priority: Medium" status="Status: New" tags="Feature" title="New Feature">
+<div assigned-to="" created="20190508044150837" modified="20190510071329316" priority="Priority: Medium" status="Status: New" tags="Feature" title="New Feature">
 <pre>&lt;&lt;taskHeader&gt;&gt;
 ! Description
 
@@ -12952,9 +13267,10 @@ Provide description of this feature here.
     &lt;h2&gt;Child Bugs&lt;/h2&gt;
     &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
   &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190508044445509" modified="20190510034514585" tags="Milestone" title="New Milestone">
+<div created="20190508044445509" modified="20190510071340401" tags="Milestone" title="New Milestone">
 <pre>&lt;&lt;milestoneHeader&gt;&gt;
 
 ! Description
@@ -12974,14 +13290,17 @@ Provide description of this milestone here.
     &lt;h2&gt;Child Bugs&lt;/h2&gt;
     &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
   &lt;/div&gt;
-&lt;/div&gt;</pre>
+&lt;/div&gt;
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190510042930104" creator="Omiya Games" modified="20190510055714645" title="New Sub-Page">
+<div created="20190510042930104" creator="Omiya Games" modified="20190510101015308" title="New Sub-Page">
 <pre>&lt;&lt;createSubPageHeader&gt;&gt;
 
-//Add content here.//</pre>
+//Add content here.//
+
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div assigned-to="" created="20190508025712742" modified="20190509025906895" priority="Priority: Medium" status="Status: New" tags="Task" title="New Task">
+<div assigned-to="" created="20190508025712742" modified="20190510071447230" priority="Priority: Medium" status="Status: New" tags="Task" title="New Task">
 <pre>&lt;&lt;taskHeader&gt;&gt;
 ---
 
@@ -12994,9 +13313,10 @@ Provide description of this task here.
 &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 ---
 !! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
+&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190509211037902" modified="20190510034911359" order="0" tags="[[Team Member]]" title="New Team Member">
+<div created="20190509211037902" modified="20190510101043621" order="0" tags="[[Team Member]]" title="New Team Member">
 <pre>! About {{!!title}}
 
 Fill out the bio of this team member here.  Note that the text, `{{!!title}}` will automatically be replaced with the title of this page.
@@ -13016,7 +13336,7 @@ Fill out the bio of this team member here.  Note that the text, `{{!!title}}` wi
   &lt;/div&gt;
 &lt;/div&gt;</pre>
 </div>
-<div created="20190508073809015" modified="20190510035827705" order="0" tags="[[Team Member]]" title="Omiya Games" type="text/vnd.tiddlywiki">
+<div created="20190508073809015" modified="20190510100949668" order="0" tags="[[Team Member]]" title="Omiya Games" type="text/vnd.tiddlywiki">
 <pre>! About {{!!title}}
 A prolific, award-winning experimental game studio lead by [[one person|https://www.taroomiya.com/]], ''[[Omiya Games|https://www.omiyagames.com/]]'' strives to push the boundaries of what’s possible with games by challenging the player with strange and memorable experiences.
 
@@ -13055,7 +13375,7 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 <div created="20190508233449381" modified="20190509053639535" order="5" tags="Priority" title="Priority: Trivial">
 <pre>Trivial</pre>
 </div>
-<div created="20190506222348671" modified="20190510055640102" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
+<div created="20190506222348671" modified="20190510071706106" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
 <pre>Expand the table with more details below:
 
 |!Date |!Name |!Description |
@@ -13065,18 +13385,18 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 |??/??/???? |Release Candidate of v1.0 |A product where in theory, all critical and high priority bugs has been fixed. A slightly uncertain build that, provided the feedback is positive, may upgrade to a full release |
 |??/??/???? |Full Release of v1.0 |A product where it's confirmed most reported critical and high priority bugs has been fixed. A list of known bugs will be provided. |
 
----
 ! Active Milestones
 
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;New Milestone&quot;&gt;Create a New Milestone&lt;/$button&gt;
 
 &lt;&lt;list-tagged-draggable tag:&quot;Milestone&quot; subFilter:&quot;!has[draft.of]!tag[Done]!title[New Milestone]&quot; itemTemplate:&quot;Milestone - Active&quot; emptyMessage:&quot;No milestones found.&quot;&gt;&gt;
 
-{{Roadmap Footer}}</pre>
+{{Roadmap Footer}}
+&lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190507000901449" modified="20190510053052058" tags="Transclusion" title="Roadmap Footer">
+<div created="20190507000901449" modified="20190510062123007" tags="Transclusion" title="Roadmap Footer">
 <pre>! References
-&lt;&lt;list-links filter:&quot;[tag[Roadmap]sort[order]]&quot;&gt;&gt;</pre>
+&lt;&lt;list-links filter:&quot;[!has[draft.of]tag[Roadmap]sort[order]]&quot;&gt;&gt;</pre>
 </div>
 <div created="20190508233802609" modified="20190509024225720" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Select Priority">
 <pre>\define getPriority(index:0)
@@ -13183,9 +13503,9 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 <div created="20190508064329855" modified="20190509011839702" order="5" tags="Status" title="Status: Won't Fix">
 <pre>Won't Fix</pre>
 </div>
-<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190510055623683" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
+<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190510074656109" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
 <pre>&lt;div class=&quot;tc-table-of-contents&quot;&gt;
-&lt;&lt;toc-selective-expandable 'Table of Contents'  &quot;sort[order]&quot;&gt;&gt;
+&lt;&lt;toc-selective-expandable 'Table of Contents' &quot;!tag{$:/config/NewJournal/Tags}sort[order]&quot;&gt;&gt;
 &lt;/div&gt;</pre>
 </div>
 <div created="20190507071340754" modified="20190507071646184" tags="Dev" title="Tag Renamer" type="text/vnd.tiddlywiki">
@@ -13256,6 +13576,13 @@ Create a New Team Member
 <pre>&lt;&lt;assignedChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
+</div>
+<div title="Untitled" type="text/html">
+<pre>&lt;html&gt;
+&lt;body&gt;
+&lt;!--StartFragment--&gt;&lt;pre class=&quot;default prettyprint prettyprinted&quot; style=&quot;margin: 0px 0px 1em; padding: 12px 8px; border: 0px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-weight: 400; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; width: auto; max-height: 600px; overflow: auto; background-color: rgb(239, 240, 241); border-radius: 3px; display: block; color: rgb(57, 51, 24); overflow-wrap: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;code style=&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; background-color: rgb(239, 240, 241); white-space: inherit;&quot;&gt;&lt;span class=&quot;pln&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);&quot;&gt;position&lt;/span&gt;&lt;span class=&quot;pun&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;pln&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);&quot;&gt;relative&lt;/span&gt;&lt;span class=&quot;pun&quot; style=&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;!--EndFragment--&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
 </div>
 
 </div>
