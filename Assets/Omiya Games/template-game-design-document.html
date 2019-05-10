@@ -46,7 +46,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." />
 <link id="faviconLink" rel="shortcut icon" href="favicon.ico">
-<title>Template Game Design Document — A template for a game design document for a solo developer.</title>
+<title>Template Game Design Document — A game design document template for small teams.</title>
 <!--~~ This is a Tiddlywiki file. The points of interest in the file are marked with this pattern ~~--><!--~~ Raw markup ~~-->
 
 <script>
@@ -617,6 +617,8 @@ Error message and password prompt
 
 <p>This <a class="tc-tiddlylink-external" href="https://tiddlywiki.com" rel="noopener noreferrer" target="_blank">TiddlyWiki</a> contains the following tiddlers:</p><p><ul>
 
+<li>$:/config/AnimationDuration</li>
+
 <li>$:/config/DefaultMoreSidebarTab</li>
 
 <li>$:/config/DefaultSidebarTab</li>
@@ -626,6 +628,8 @@ Error message and password prompt
 <li>$:/config/Navigation/UpdateAddressBar</li>
 
 <li>$:/config/Navigation/UpdateHistory</li>
+
+<li>$:/config/NewJournal/Tags</li>
 
 <li>$:/config/NewJournal/Title</li>
 
@@ -647,7 +651,11 @@ Error message and password prompt
 
 <li>$:/config/PageControlButtons/Visibility/$:/plugins/tiddlywiki/markdown/new-markdown-button</li>
 
+<li>$:/config/Plugins/Disabled/$:/plugins/tiddlywiki/qrcode</li>
+
 <li>$:/config/RelinkOnRename</li>
+
+<li>$:/config/Toolbar/ButtonClass</li>
 
 <li>$:/config/Toolbar/Text</li>
 
@@ -723,8 +731,6 @@ Error message and password prompt
 
 <li>$:/plugins/tiddlywiki/mobiledragdrop</li>
 
-<li>$:/plugins/tiddlywiki/qrcode</li>
-
 <li>$:/SiteSubtitle</li>
 
 <li>$:/SiteTitle</li>
@@ -753,7 +759,11 @@ Error message and password prompt
 
 <li>$:/state/edit/references-1148772433</li>
 
+<li>$:/state/edit/references-1449901469</li>
+
 <li>$:/state/edit/references-278622001</li>
+
+<li>$:/state/edit/references-427221883</li>
 
 <li>$:/state/edit/references-614350653</li>
 
@@ -765,13 +775,21 @@ Error message and password prompt
 
 <li>$:/state/folded/All Milestones</li>
 
+<li>$:/state/folded/Customize Wiki</li>
+
 <li>$:/state/folded/Design</li>
 
 <li>$:/state/folded/Market</li>
 
+<li>$:/state/folded/Omiya Games</li>
+
+<li>$:/state/folded/Reactive DIVs</li>
+
 <li>$:/state/folded/Roadmap</li>
 
 <li>$:/state/folded/Table of Contents</li>
+
+<li>$:/state/folded/Team Members</li>
 
 <li>$:/state/header-searchbar</li>
 
@@ -787,17 +805,25 @@ Error message and password prompt
 
 <li>$:/state/sidebar</li>
 
+<li>$:/state/tab--1498284803</li>
+
 <li>$:/state/tab--1963855381</li>
+
+<li>$:/state/tab--2112689675</li>
 
 <li>$:/state/tab--697582678</li>
 
 <li>$:/state/tab--86143343</li>
+
+<li>$:/state/tab--959111941</li>
 
 <li>$:/state/tab-1342078386</li>
 
 <li>$:/state/tab-1749438307</li>
 
 <li>$:/state/tab-2065006209</li>
+
+<li>$:/state/tab/moresidebar-1203681481</li>
 
 <li>$:/state/tab/moresidebar-1850697562</li>
 
@@ -812,6 +838,8 @@ Error message and password prompt
 <li>$:/state/toc/Table of Contents-About--1876907615</li>
 
 <li>$:/state/toc/Table of Contents-About-842329646</li>
+
+<li>$:/state/toc/Table of Contents-Design--1876907615</li>
 
 <li>$:/state/toc/Table of Contents-Roadmap--1252283409</li>
 
@@ -1047,6 +1075,8 @@ Error message and password prompt
 
 <li>All Tasks</li>
 
+<li>Checklist - Assigned Task</li>
+
 <li>Checklist - Child Task</li>
 
 <li>Checklist - Main Task</li>
@@ -1057,9 +1087,7 @@ Error message and password prompt
 
 <li>Design</li>
 
-<li>done</li>
-
-<li>Done</li>
+<li>Flex Stylesheet</li>
 
 <li>Headers</li>
 
@@ -1077,7 +1105,11 @@ Error message and password prompt
 
 <li>New Milestone</li>
 
+<li>New Sub-Page</li>
+
 <li>New Task</li>
+
+<li>New Team Member</li>
 
 <li>Omiya Games</li>
 
@@ -1119,11 +1151,15 @@ Error message and password prompt
 
 <li>Tag Renamer</li>
 
-<li>Task</li>
-
 <li>Task Row</li>
 
 <li>Team Members</li>
+
+<li>Unassigned Bugs</li>
+
+<li>Unassigned Features</li>
+
+<li>Unassigned Tasks</li>
 
 </ul>
 </p>
@@ -1135,6 +1171,9 @@ Error message and password prompt
 <!--~~ Ordinary tiddlers ~~-->
 
 <div id="storeArea" style="display:none;">
+<div created="20190509210833271" modified="20190509210833271" title="$:/config/AnimationDuration">
+<pre>200</pre>
+</div>
 <div created="20190506213657566" modified="20190506213657566" title="$:/config/DefaultMoreSidebarTab">
 <pre>$:/core/ui/MoreSideBar/All</pre>
 </div>
@@ -1144,16 +1183,19 @@ Error message and password prompt
 <div created="20190506215307207" modified="20190506215307207" title="$:/config/Navigation/openLinkFromInsideRiver">
 <pre>above</pre>
 </div>
-<div created="20190506215328321" modified="20190506215334479" title="$:/config/Navigation/UpdateAddressBar">
-<pre>permalink</pre>
+<div created="20190506215328321" modified="20190510060615719" title="$:/config/Navigation/UpdateAddressBar">
+<pre>permaview</pre>
 </div>
 <div created="20190506215343889" modified="20190506215343889" title="$:/config/Navigation/UpdateHistory">
 <pre>yes</pre>
 </div>
+<div created="20190510054838445" modified="20190510055115469" title="$:/config/NewJournal/Tags">
+<pre>Comment</pre>
+</div>
 <div created="20190508072408331" modified="20190508072409262" title="$:/config/NewJournal/Title">
 <pre>MMM DDth YYYY</pre>
 </div>
-<div created="20190506220516776" modified="20190507074353779" title="$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/close-all">
+<div created="20190506220516776" modified="20190510055412972" title="$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/close-all">
 <pre>hide</pre>
 </div>
 <div created="20190506220519655" modified="20190507074437637" title="$:/config/PageControlButtons/Visibility/$:/core/ui/Buttons/fold-all">
@@ -1180,8 +1222,14 @@ Error message and password prompt
 <div created="20190506225304522" modified="20190506225304522" title="$:/config/PageControlButtons/Visibility/$:/plugins/tiddlywiki/markdown/new-markdown-button">
 <pre>hide</pre>
 </div>
+<div created="20190510055438991" modified="20190510055438991" title="$:/config/Plugins/Disabled/$:/plugins/tiddlywiki/qrcode">
+<pre>yes</pre>
+</div>
 <div created="20190506222716490" modified="20190506222716490" title="$:/config/RelinkOnRename">
 <pre>yes</pre>
+</div>
+<div created="20190510060642094" modified="20190510060706631" title="$:/config/Toolbar/ButtonClass">
+<pre>tc-btn-boxed</pre>
 </div>
 <div created="20190506215415857" modified="20190506224924330" title="$:/config/Toolbar/Text">
 <pre>no</pre>
@@ -10230,43 +10278,24 @@ $:/config/PageControlButtons/Visibility/$(listItem)$
 
 &lt;/$reveal&gt;</pre>
 </div>
-<div created="20190506220604283" modified="20190508085057080" title="$:/DefaultTiddlers">
+<div created="20190506220604283" modified="20190509211009439" title="$:/DefaultTiddlers">
 <pre>About
 [[Table of Contents]]
 Design
 Market
-Roadmap</pre>
+Roadmap
+[[Team Members]]</pre>
 </div>
-<div status="complete" title="$:/Import">
-<pre>The following tiddlers were imported:
-
-# [[$:/palette]]
-# [[$:/theme]]
-# [[$:/core/ui/Buttons/more-page-actions]]
-# [[$:/core/images/advanced-search-button]]
-# [[$:/core/images/cancel-button]]
-# [[$:/core/images/close-button]]
-# [[$:/core/images/delete-button]]
-# [[$:/core/images/done-button]]
-# [[$:/core/images/down-arrow]]
-# [[$:/core/images/edit-button]]
-# [[$:/core/images/export-button]]
-# [[$:/core/images/info-button]]
-# [[$:/core/images/left-arrow]]
-# [[$:/core/images/menu-button]]
-# [[$:/core/images/new-button]]
-# [[$:/core/images/new-image-button]]
-# [[$:/core/images/new-journal-button]]
-# [[$:/core/images/options-button]]
-# [[$:/core/images/right-arrow]]
-# [[$:/core/images/save-button]]
-# [[$:/core/images/up-arrow]]
-# [[$:/themes/jd/Material]]
-# [[$:/themes/jd/Material/images/overflow-button]]
-# [[$:/themes/jd/Material/Template/Header-Sidebar]]
-# [[$:/themes/jd/Material/ConfigDB]]
-# [[$:/plugins/BurningTree/hammerwidgets]]
-# [[$:/plugins/tiddlywiki/hammerjs]]</pre>
+<div plugin-type="import" status="pending" title="$:/Import" type="application/json">
+<pre>{
+    &quot;tiddlers&quot;: {
+        &quot;Untitled&quot;: {
+            &quot;title&quot;: &quot;Untitled&quot;,
+            &quot;text&quot;: &quot;&lt;html&gt;\r\n&lt;body&gt;\r\n&lt;!--StartFragment--&gt;&lt;pre class=\&quot;default prettyprint prettyprinted\&quot; style=\&quot;margin: 0px 0px 1em; padding: 12px 8px; border: 0px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-weight: 400; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; width: auto; max-height: 600px; overflow: auto; background-color: rgb(239, 240, 241); border-radius: 3px; display: block; color: rgb(57, 51, 24); overflow-wrap: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial;\&quot;&gt;&lt;code style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: Consolas, Menlo, Monaco, &amp;quot;Lucida Console&amp;quot;, &amp;quot;Liberation Mono&amp;quot;, &amp;quot;DejaVu Sans Mono&amp;quot;, &amp;quot;Bitstream Vera Sans Mono&amp;quot;, &amp;quot;Courier New&amp;quot;, monospace, sans-serif; font-size: 13px; vertical-align: baseline; box-sizing: inherit; background-color: rgb(239, 240, 241); white-space: inherit;\&quot;&gt;&lt;span class=\&quot;pln\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;position&lt;/span&gt;&lt;span class=\&quot;pun\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;:&lt;/span&gt;&lt;span class=\&quot;pln\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;relative&lt;/span&gt;&lt;span class=\&quot;pun\&quot; style=\&quot;margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; font-size: 13px; vertical-align: baseline; box-sizing: inherit; color: rgb(48, 51, 54);\&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;!--EndFragment--&gt;\r\n&lt;/body&gt;\r\n&lt;/html&gt;&quot;,
+            &quot;type&quot;: &quot;text/html&quot;
+        }
+    }
+}</pre>
 </div>
 <div title="$:/isEncrypted">
 <pre>no</pre>
@@ -11112,101 +11141,8 @@ Roadmap</pre>
     }
 }</pre>
 </div>
-<div author="Zeno Zeng, adapted by Jeremy Ruston" dependents="" description="QR Code generator" list="readme usage examples license" plugin-type="plugin" title="$:/plugins/tiddlywiki/qrcode" type="application/json" version="5.1.19">
-<pre>{
-    &quot;tiddlers&quot;: {
-        &quot;$:/plugins/tiddlywiki/qrcode/MakeContactQR&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/MakeContactQR&quot;,
-            &quot;tags&quot;: &quot;$:/tags/MakeQR&quot;,
-            &quot;caption&quot;: &quot;Contact&quot;,
-            &quot;text&quot;: &quot;\\define wifi-url()\nWIFI:wifi name;T:WPA;S:SSID;P:password;\n\\end\n\n\\define image(firstname,lastname,address,tel,email)\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;MECARD:N:$lastname$,$firstname$;ADR:$address$;TEL:$tel$;EMAIL:$email$;;\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n! Enter the contact details\n\nFirst name: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/contact/firstname\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\nLast name: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/contact/lastname\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\nAddress: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/contact/address\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\nTelephone: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/contact/tel\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\nEmail: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/contact/email\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\n! Here is your QR code\n\n&lt;$macrocall $name=\&quot;image\&quot; firstname={{$:/config/plugins/tiddlywiki/qrcode/contact/firstname}} lastname={{$:/config/plugins/tiddlywiki/qrcode/contact/lastname}} address={{$:/config/plugins/tiddlywiki/qrcode/contact/address}} tel={{$:/config/plugins/tiddlywiki/qrcode/contact/tel}} email={{$:/config/plugins/tiddlywiki/qrcode/contact/email}}/&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/MakeGenericQR&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/MakeGenericQR&quot;,
-            &quot;tags&quot;: &quot;$:/tags/MakeQR&quot;,
-            &quot;caption&quot;: &quot;Generic&quot;,
-            &quot;text&quot;: &quot;\\define image(content)\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;$content$\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n! Enter the details\n\nYou can also use this form to encode URLs.\n\n&lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/generic\&quot; default=\&quot;\&quot; class=\&quot;tc-edit-texteditor\&quot;/&gt;\n\n! Here is your QR code\n\n&lt;$macrocall $name=\&quot;image\&quot; content={{$:/config/plugins/tiddlywiki/qrcode/generic}}/&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/MakeWifiQR&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/MakeWifiQR&quot;,
-            &quot;tags&quot;: &quot;$:/tags/MakeQR&quot;,
-            &quot;caption&quot;: &quot;Wifi&quot;,
-            &quot;text&quot;: &quot;\\define wifi-url()\nWIFI:T:WPA;S:SSID;P:password;;\n\\end\n\n\\define image(network,encryption,ssid,password)\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;WIFI:T:$encryption$;S:$ssid$;P:$password$;;\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n! Enter the details of your wifi network\n\nEncryption: &lt;$select tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/wifi/encryption\&quot; default=\&quot;none\&quot;&gt;\n&lt;option value=\&quot;none\&quot;&gt;None&lt;/option&gt;\n&lt;option value=\&quot;WEP\&quot;&gt;WEP&lt;/option&gt;\n&lt;option value=\&quot;WPA\&quot;&gt;WPA&lt;/option&gt;\n&lt;option value=\&quot;WPA2\&quot;&gt;WPA2&lt;/option&gt;\n&lt;/$select&gt;\n\nSSID: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/wifi/ssid\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\nPassword: &lt;$edit-text tiddler=\&quot;$:/config/plugins/tiddlywiki/qrcode/wifi/password\&quot; tag=\&quot;input\&quot; default=\&quot;\&quot;/&gt;\n\n! Here is your QR code\n\n&lt;$macrocall $name=\&quot;image\&quot; network={{$:/config/plugins/tiddlywiki/qrcode/wifi/network}} encryption={{$:/config/plugins/tiddlywiki/qrcode/wifi/encryption}} ssid={{$:/config/plugins/tiddlywiki/qrcode/wifi/ssid}} password={{$:/config/plugins/tiddlywiki/qrcode/wifi/password}}/&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton&quot;,
-            &quot;tags&quot;: &quot;$:/tags/ViewToolbar&quot;,
-            &quot;list-before&quot;: &quot;$:/core/ui/Buttons/close&quot;,
-            &quot;caption&quot;: &quot;{{$:/plugins/tiddlywiki/qrcode/icon}}&quot;,
-            &quot;short-caption&quot;: &quot;QR code&quot;,
-            &quot;description&quot;: &quot;Generate QR code for this tiddler&quot;,
-            &quot;text&quot;: &quot;\\whitespace trim\n&lt;span class=\&quot;tc-popup-keep\&quot;&gt;\n&lt;$button popup=&lt;&lt;qualify \&quot;$:/state/popup/qrcode\&quot;&gt;&gt; tooltip={{$:/plugins/tiddlywiki/qrcode/ViewToolbarButton!!description}} aria-label={{$:/plugins/tiddlywiki/qrcode/ViewToolbarButton!!short-caption}} class=&lt;&lt;tv-config-toolbar-class&gt;&gt; class=&lt;&lt;tv-config-toolbar-class&gt;&gt; selectedClass=\&quot;tc-selected\&quot;&gt;\n&lt;$list filter=\&quot;[&lt;tv-config-toolbar-icons&gt;prefix[yes]]\&quot;&gt;\n{{$:/plugins/tiddlywiki/qrcode/icon}}\n&lt;/$list&gt;\n&lt;$list filter=\&quot;[&lt;tv-config-toolbar-text&gt;prefix[yes]]\&quot;&gt;\n&lt;span class=\&quot;tc-btn-text\&quot;&gt;\n&lt;$text text=\&quot; \&quot;/&gt;\n&lt;$text text={{$:/plugins/tiddlywiki/qrcode/ViewToolbarButton!!short-caption}}/&gt;\n&lt;/span&gt;\n&lt;/$list&gt;\n&lt;/$button&gt;\n&lt;/span&gt;\n&lt;$reveal state=&lt;&lt;qualify \&quot;$:/state/popup/qrcode\&quot;&gt;&gt; type=\&quot;popup\&quot; position=\&quot;below\&quot; animate=\&quot;yes\&quot;&gt;\n\n&lt;div class=\&quot;tc-drop-down\&quot;&gt;\n\n{{$:/plugins/tiddlywiki/qrcode/ViewToolbarButton||description}}\n\n&lt;$set name=\&quot;tv-config-toolbar-icons\&quot; value=\&quot;yes\&quot;&gt;\n\n&lt;$set name=\&quot;tv-config-toolbar-text\&quot; value=\&quot;yes\&quot;&gt;\n\n&lt;$set name=\&quot;tv-config-toolbar-class\&quot; value=\&quot;tc-btn-invisible\&quot;&gt;\n\n&lt;$set name=\&quot;targetTiddler\&quot; value=&lt;&lt;currentTiddler&gt;&gt;&gt;\n\n&lt;$list filter=\&quot;[all[shadows+tiddlers]tag[$:/tags/ViewToolbarButton/QRcode]!has[draft.of]]\&quot;&gt;\n\n&lt;$button popup=&lt;&lt;qualify \&quot;$:/state/popup/qrcode/type\&quot;&gt;&gt; class=\&quot;tc-btn-invisible\&quot; selectedClass=\&quot;tc-selected\&quot;&gt;\n\n&lt;$action-sendmessage $message=\&quot;tm-modal\&quot; $param=&lt;&lt;currentTiddler&gt;&gt; currentTiddler=&lt;&lt;targetTiddler&gt;&gt;/&gt;\n\n&lt;$transclude field=\&quot;caption\&quot; mode=\&quot;inline\&quot;/&gt;\n\n&lt;/$button&gt;\n\n&lt;/$list&gt;\n\n&lt;/$set&gt;\n\n&lt;/$set&gt;\n\n&lt;/$set&gt;\n\n&lt;/$set&gt;\n\n&lt;/div&gt;\n\n&lt;/$reveal&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/Raw&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/Raw&quot;,
-            &quot;tags&quot;: &quot;$:/tags/ViewToolbarButton/QRcode&quot;,
-            &quot;caption&quot;: &quot;Raw content of this tiddler&quot;,
-            &quot;subtitle&quot;: &quot;QR code of raw tiddler content&quot;,
-            &quot;text&quot;: &quot;\\define image()\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;$(content)$\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n&lt;$set name=\&quot;content\&quot; value={{!!text}}&gt;\n&lt;&lt;image&gt;&gt;\n&lt;/$set&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/Rendered&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/Rendered&quot;,
-            &quot;tags&quot;: &quot;$:/tags/ViewToolbarButton/QRcode&quot;,
-            &quot;caption&quot;: &quot;Rendered content of this tiddler&quot;,
-            &quot;subtitle&quot;: &quot;QR code of rendered tiddler content&quot;,
-            &quot;text&quot;: &quot;\\define image()\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;$(content)$\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n&lt;$wikify name=\&quot;content\&quot; text={{!!text}} type=\&quot;text\&quot; mode=\&quot;block\&quot; output=\&quot;formattedtext\&quot;&gt;\n&lt;&lt;image&gt;&gt;\n&lt;/$wikify&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/URL&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/ViewToolbarButton/URL&quot;,
-            &quot;tags&quot;: &quot;$:/tags/ViewToolbarButton/QRcode&quot;,
-            &quot;caption&quot;: &quot;URL of this tiddler&quot;,
-            &quot;subtitle&quot;: &quot;QR code of URL of this tiddler&quot;,
-            &quot;text&quot;: &quot;\\define image()\n&lt;img src=&lt;&lt;makeqr text:\&quot;\&quot;\&quot;$(url)$#$(hash)$\&quot;\&quot;\&quot; size:\&quot;350\&quot;&gt;&gt;/&gt;\n\\end\n\n&lt;$set name=\&quot;url\&quot; value={{$:/info/url/full}}&gt;\n&lt;$set name=\&quot;hash\&quot; filter=\&quot;[&lt;currentTiddler&gt;encodeuricomponent[]]\&quot; select=\&quot;0\&quot;&gt;\n&lt;&lt;image&gt;&gt;\n&lt;/$set&gt;\n&lt;/$set&gt;\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/styles&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/styles&quot;,
-            &quot;tags&quot;: &quot;[[$:/tags/Stylesheet]]&quot;,
-            &quot;text&quot;: &quot;\\rules only filteredtranscludeinline transcludeinline macrodef macrocallinline\n\n.tc-drop-down .tc-qrcode-drop-down img {\n\twidth: 100%;\n\theight: 100%;\n}\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/examples&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/examples&quot;,
-            &quot;text&quot;: &quot;&lt;&lt;tabs \&quot;[all[shadows+tiddlers]tag[$:/tags/MakeQR]!has[draft.of]]\&quot; \&quot;$:/plugins/tiddlywiki/qrcode/MakeGenericQR\&quot;&gt;&gt;&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/readme&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/readme&quot;,
-            &quot;text&quot;: &quot;The QR code plugin provides a macro that enables any text to be rendered as a [[QR code|https://en.wikipedia.org/wiki/QR_code]]. QR codes are a type of 2-dimensional bar code that encodes arbitrary data: text, numbers, links. QR code readers are available or built-in for smartphones, making them a convenient means to transfer information between devices\n\nThe QR code plugin adds the following features to TiddlyWiki:\n\n* A new [[makeqr Macro]] that renders specified text as a QR code image that can be displayed or printed\n* A new toolbar button that can display several QR code renderings of the content of a tiddler:\n** Raw content\n** Rendered, formatted content\n** URL of tiddler\n\nThe QR code plugin is based on the library [[qrcode.js by Zeno Zeng|https://github.com/zenozeng/node-yaqrcode]].&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/usage&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/usage&quot;,
-            &quot;text&quot;: &quot;! `makeqr` Macro\n\nThe &lt;&lt;.def makeqr&gt;&gt; [[macro|Macros]] converts text data into an image of the corresponding QR code. The image is returned as [[base64-encoded data URI|https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs]].\n\n!! Parameters\n\n;text\n: The text to encode\n;size\n: The size of the image in pixels (defaults to 500)\n;errorCorrectLevel\n: Determines the amount of error correction applied to the image; see below (defaults to \&quot;M\&quot;).\n;fallback\n: The fallback image to be returned in case of an error (see below)\n\nThe conversion will fail if the text is too long and/or complex and the macro will return the provided fallback image. If no fallback image is provided then an error image is generated.\n\nThe error correction level is a [[QR code feature|http://www.qrcode.com/en/about/error_correction.html]]:\n\n&lt;&lt;&lt;\nQR Code has error correction capability to restore data if the code is dirty or damaged. ... Level Q or H may be selected for factory environment where QR Code get dirty, whereas Level L may be selected for clean environment with the large amount of data. Typically, Level M (15%) is most frequently selected.\n&lt;&lt;&lt;\n\n!! Examples\n\nMaking a QR code for a simple string of text:\n\n```\n&lt;&lt;makeqr \&quot;Hello there!\&quot;&gt;&gt;\n```\n\nMaking a QR code for the URL field of the current tiddler:\n\n```\n&lt;$macrocall $name=\&quot;makeqr\&quot; text={{!!url}}/&gt;\n```\n\nMaking a QR code for the URL of the current wiki:\n\n```\n&lt;$macrocall $name=\&quot;makeqr\&quot; text={{$:/info/url/full}}/&gt;\n```\n&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/qrcode.js&quot;: {
-            &quot;text&quot;: &quot;//---------------------------------------------------------------------\n//\n// QR Code Generator for JavaScript\n//\n// Copyright (c) 2009 Kazuhiko Arase\n//\n// URL: http://www.d-project.com/\n//\n// Licensed under the MIT license:\n//\thttp://www.opensource.org/licenses/mit-license.php\n//\n// The word 'QR Code' is registered trademark of\n// DENSO WAVE INCORPORATED\n//\thttp://www.denso-wave.com/qrcode/faqpatent-e.html\n//\n//---------------------------------------------------------------------\n\n//---------------------------------------------------------------------\n// qrcode\n//---------------------------------------------------------------------\n\n/**\n * qrcode\n * @param typeNumber 1 to 40\n * @param errorCorrectLevel 'L','M','Q','H'\n */\nvar qrcode = function(typeNumber, errorCorrectLevel) {\n\n    var PAD0 = 0xEC;\n    var PAD1 = 0x11;\n\n    var _typeNumber = typeNumber;\n    var _errorCorrectLevel = QRErrorCorrectLevel[errorCorrectLevel];\n    var _modules = null;\n    var _moduleCount = 0;\n    var _dataCache = null;\n    var _dataList = new Array();\n\n    var _this = {};\n\n    var makeImpl = function(test, maskPattern) {\n\n\t_moduleCount = _typeNumber * 4 + 17;\n\t_modules = function(moduleCount) {\n\t    var modules = new Array(moduleCount);\n\t    for (var row = 0; row &lt; moduleCount; row += 1) {\n\t\tmodules[row] = new Array(moduleCount);\n\t\tfor (var col = 0; col &lt; moduleCount; col += 1) {\n\t\t    modules[row][col] = null;\n\t\t}\n\t    }\n\t    return modules;\n\t}(_moduleCount);\n\n\tsetupPositionProbePattern(0, 0);\n\tsetupPositionProbePattern(_moduleCount - 7, 0);\n\tsetupPositionProbePattern(0, _moduleCount - 7);\n\tsetupPositionAdjustPattern();\n\tsetupTimingPattern();\n\tsetupTypeInfo(test, maskPattern);\n\n\tif (_typeNumber &gt;= 7) {\n\t    setupTypeNumber(test);\n\t}\n\n\tif (_dataCache == null) {\n\t    _dataCache = createData(_typeNumber, _errorCorrectLevel, _dataList);\n\t}\n\n\tmapData(_dataCache, maskPattern);\n    };\n\n    var setupPositionProbePattern = function(row, col) {\n\n\tfor (var r = -1; r &lt;= 7; r += 1) {\n\n\t    if (row + r &lt;= -1 || _moduleCount &lt;= row + r) continue;\n\n\t    for (var c = -1; c &lt;= 7; c += 1) {\n\n\t\tif (col + c &lt;= -1 || _moduleCount &lt;= col + c) continue;\n\n\t\tif ( (0 &lt;= r &amp;&amp; r &lt;= 6 &amp;&amp; (c == 0 || c == 6) )\n\t\t     || (0 &lt;= c &amp;&amp; c &lt;= 6 &amp;&amp; (r == 0 || r == 6) )\n\t\t     || (2 &lt;= r &amp;&amp; r &lt;= 4 &amp;&amp; 2 &lt;= c &amp;&amp; c &lt;= 4) ) {\n\t\t    _modules[row + r][col + c] = true;\n\t\t} else {\n\t\t    _modules[row + r][col + c] = false;\n\t\t}\n\t    }\n\t}\n    };\n\n    var getBestMaskPattern = function() {\n\n\tvar minLostPoint = 0;\n\tvar pattern = 0;\n\n\tfor (var i = 0; i &lt; 8; i += 1) {\n\n\t    makeImpl(true, i);\n\n\t    var lostPoint = QRUtil.getLostPoint(_this);\n\n\t    if (i == 0 || minLostPoint &gt; lostPoint) {\n\t\tminLostPoint = lostPoint;\n\t\tpattern = i;\n\t    }\n\t}\n\n\treturn pattern;\n    };\n\n    var setupTimingPattern = function() {\n\n\tfor (var r = 8; r &lt; _moduleCount - 8; r += 1) {\n\t    if (_modules[r][6] != null) {\n\t\tcontinue;\n\t    }\n\t    _modules[r][6] = (r % 2 == 0);\n\t}\n\n\tfor (var c = 8; c &lt; _moduleCount - 8; c += 1) {\n\t    if (_modules[6][c] != null) {\n\t\tcontinue;\n\t    }\n\t    _modules[6][c] = (c % 2 == 0);\n\t}\n    };\n\n    var setupPositionAdjustPattern = function() {\n\n\tvar pos = QRUtil.getPatternPosition(_typeNumber);\n\n\tfor (var i = 0; i &lt; pos.length; i += 1) {\n\n\t    for (var j = 0; j &lt; pos.length; j += 1) {\n\n\t\tvar row = pos[i];\n\t\tvar col = pos[j];\n\n\t\tif (_modules[row][col] != null) {\n\t\t    continue;\n\t\t}\n\n\t\tfor (var r = -2; r &lt;= 2; r += 1) {\n\n\t\t    for (var c = -2; c &lt;= 2; c += 1) {\n\n\t\t\tif (r == -2 || r == 2 || c == -2 || c == 2\n\t\t\t    || (r == 0 &amp;&amp; c == 0) ) {\n\t\t\t    _modules[row + r][col + c] = true;\n\t\t\t} else {\n\t\t\t    _modules[row + r][col + c] = false;\n\t\t\t}\n\t\t    }\n\t\t}\n\t    }\n\t}\n    };\n\n    var setupTypeNumber = function(test) {\n\n\tvar bits = QRUtil.getBCHTypeNumber(_typeNumber);\n\n\tfor (var i = 0; i &lt; 18; i += 1) {\n\t    var mod = (!test &amp;&amp; ( (bits &gt;&gt; i) &amp; 1) == 1);\n\t    _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;\n\t}\n\n\tfor (var i = 0; i &lt; 18; i += 1) {\n\t    var mod = (!test &amp;&amp; ( (bits &gt;&gt; i) &amp; 1) == 1);\n\t    _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;\n\t}\n    };\n\n    var setupTypeInfo = function(test, maskPattern) {\n\n\tvar data = (_errorCorrectLevel &lt;&lt; 3) | maskPattern;\n\tvar bits = QRUtil.getBCHTypeInfo(data);\n\n\t// vertical\n\tfor (var i = 0; i &lt; 15; i += 1) {\n\n\t    var mod = (!test &amp;&amp; ( (bits &gt;&gt; i) &amp; 1) == 1);\n\n\t    if (i &lt; 6) {\n\t\t_modules[i][8] = mod;\n\t    } else if (i &lt; 8) {\n\t\t_modules[i + 1][8] = mod;\n\t    } else {\n\t\t_modules[_moduleCount - 15 + i][8] = mod;\n\t    }\n\t}\n\n\t// horizontal\n\tfor (var i = 0; i &lt; 15; i += 1) {\n\n\t    var mod = (!test &amp;&amp; ( (bits &gt;&gt; i) &amp; 1) == 1);\n\n\t    if (i &lt; 8) {\n\t\t_modules[8][_moduleCount - i - 1] = mod;\n\t    } else if (i &lt; 9) {\n\t\t_modules[8][15 - i - 1 + 1] = mod;\n\t    } else {\n\t\t_modules[8][15 - i - 1] = mod;\n\t    }\n\t}\n\n\t// fixed module\n\t_modules[_moduleCount - 8][8] = (!test);\n    };\n\n    var mapData = function(data, maskPattern) {\n\n\tvar inc = -1;\n\tvar row = _moduleCount - 1;\n\tvar bitIndex = 7;\n\tvar byteIndex = 0;\n\tvar maskFunc = QRUtil.getMaskFunction(maskPattern);\n\n\tfor (var col = _moduleCount - 1; col &gt; 0; col -= 2) {\n\n\t    if (col == 6) col -= 1;\n\n\t    while (true) {\n\n\t\tfor (var c = 0; c &lt; 2; c += 1) {\n\n\t\t    if (_modules[row][col - c] == null) {\n\n\t\t\tvar dark = false;\n\n\t\t\tif (byteIndex &lt; data.length) {\n\t\t\t    dark = ( ( (data[byteIndex] &gt;&gt;&gt; bitIndex) &amp; 1) == 1);\n\t\t\t}\n\n\t\t\tvar mask = maskFunc(row, col - c);\n\n\t\t\tif (mask) {\n\t\t\t    dark = !dark;\n\t\t\t}\n\n\t\t\t_modules[row][col - c] = dark;\n\t\t\tbitIndex -= 1;\n\n\t\t\tif (bitIndex == -1) {\n\t\t\t    byteIndex += 1;\n\t\t\t    bitIndex = 7;\n\t\t\t}\n\t\t    }\n\t\t}\n\n\t\trow += inc;\n\n\t\tif (row &lt; 0 || _moduleCount &lt;= row) {\n\t\t    row -= inc;\n\t\t    inc = -inc;\n\t\t    break;\n\t\t}\n\t    }\n\t}\n    };\n\n    var createBytes = function(buffer, rsBlocks) {\n\n\tvar offset = 0;\n\n\tvar maxDcCount = 0;\n\tvar maxEcCount = 0;\n\n\tvar dcdata = new Array(rsBlocks.length);\n\tvar ecdata = new Array(rsBlocks.length);\n\n\tfor (var r = 0; r &lt; rsBlocks.length; r += 1) {\n\n\t    var dcCount = rsBlocks[r].dataCount;\n\t    var ecCount = rsBlocks[r].totalCount - dcCount;\n\n\t    maxDcCount = Math.max(maxDcCount, dcCount);\n\t    maxEcCount = Math.max(maxEcCount, ecCount);\n\n\t    dcdata[r] = new Array(dcCount);\n\n\t    for (var i = 0; i &lt; dcdata[r].length; i += 1) {\n\t\tdcdata[r][i] = 0xff &amp; buffer.getBuffer()[i + offset];\n\t    }\n\t    offset += dcCount;\n\n\t    var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);\n\t    var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);\n\n\t    var modPoly = rawPoly.mod(rsPoly);\n\t    ecdata[r] = new Array(rsPoly.getLength() - 1);\n\t    for (var i = 0; i &lt; ecdata[r].length; i += 1) {\n\t\tvar modIndex = i + modPoly.getLength() - ecdata[r].length;\n\t\tecdata[r][i] = (modIndex &gt;= 0)? modPoly.getAt(modIndex) : 0;\n\t    }\n\t}\n\n\tvar totalCodeCount = 0;\n\tfor (var i = 0; i &lt; rsBlocks.length; i += 1) {\n\t    totalCodeCount += rsBlocks[i].totalCount;\n\t}\n\n\tvar data = new Array(totalCodeCount);\n\tvar index = 0;\n\n\tfor (var i = 0; i &lt; maxDcCount; i += 1) {\n\t    for (var r = 0; r &lt; rsBlocks.length; r += 1) {\n\t\tif (i &lt; dcdata[r].length) {\n\t\t    data[index] = dcdata[r][i];\n\t\t    index += 1;\n\t\t}\n\t    }\n\t}\n\n\tfor (var i = 0; i &lt; maxEcCount; i += 1) {\n\t    for (var r = 0; r &lt; rsBlocks.length; r += 1) {\n\t\tif (i &lt; ecdata[r].length) {\n\t\t    data[index] = ecdata[r][i];\n\t\t    index += 1;\n\t\t}\n\t    }\n\t}\n\n\treturn data;\n    };\n\n    var createData = function(typeNumber, errorCorrectLevel, dataList) {\n\n\tvar rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);\n\n\tvar buffer = qrBitBuffer();\n\n\tfor (var i = 0; i &lt; dataList.length; i += 1) {\n\t    var data = dataList[i];\n\t    buffer.put(data.getMode(), 4);\n\t    buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );\n\t    data.write(buffer);\n\t}\n\n\t// calc num max data.\n\tvar totalDataCount = 0;\n\tfor (var i = 0; i &lt; rsBlocks.length; i += 1) {\n\t    totalDataCount += rsBlocks[i].dataCount;\n\t}\n\n\tif (buffer.getLengthInBits() &gt; totalDataCount * 8) {\n\t    throw new Error('code length overflow. ('\n\t\t\t    + buffer.getLengthInBits()\n\t\t\t    + '&gt;'\n\t\t\t    + totalDataCount * 8\n\t\t\t    + ')');\n\t}\n\n\t// end code\n\tif (buffer.getLengthInBits() + 4 &lt;= totalDataCount * 8) {\n\t    buffer.put(0, 4);\n\t}\n\n\t// padding\n\twhile (buffer.getLengthInBits() % 8 != 0) {\n\t    buffer.putBit(false);\n\t}\n\n\t// padding\n\twhile (true) {\n\n\t    if (buffer.getLengthInBits() &gt;= totalDataCount * 8) {\n\t\tbreak;\n\t    }\n\t    buffer.put(PAD0, 8);\n\n\t    if (buffer.getLengthInBits() &gt;= totalDataCount * 8) {\n\t\tbreak;\n\t    }\n\t    buffer.put(PAD1, 8);\n\t}\n\n\treturn createBytes(buffer, rsBlocks);\n    };\n\n    _this.addData = function(data) {\n\tvar newData = qr8BitByte(data);\n\t_dataList.push(newData);\n\t_dataCache = null;\n    };\n\n    _this.isDark = function(row, col) {\n\tif (row &lt; 0 || _moduleCount &lt;= row || col &lt; 0 || _moduleCount &lt;= col) {\n\t    throw new Error(row + ',' + col);\n\t}\n\treturn _modules[row][col];\n    };\n\n    _this.getModuleCount = function() {\n\treturn _moduleCount;\n    };\n\n    _this.make = function() {\n\tmakeImpl(false, getBestMaskPattern() );\n    };\n\n    _this.createTableTag = function(cellSize, margin) {\n\n\tcellSize = cellSize || 2;\n\tmargin = (typeof margin == 'undefined')? cellSize * 4 : margin;\n\n\tvar qrHtml = '';\n\n\tqrHtml += '&lt;table style=\&quot;';\n\tqrHtml += ' border-width: 0px; border-style: none;';\n\tqrHtml += ' border-collapse: collapse;';\n\tqrHtml += ' padding: 0px; margin: ' + margin + 'px;';\n\tqrHtml += '\&quot;&gt;';\n\tqrHtml += '&lt;tbody&gt;';\n\n\tfor (var r = 0; r &lt; _this.getModuleCount(); r += 1) {\n\n\t    qrHtml += '&lt;tr&gt;';\n\n\t    for (var c = 0; c &lt; _this.getModuleCount(); c += 1) {\n\t\tqrHtml += '&lt;td style=\&quot;';\n\t\tqrHtml += ' border-width: 0px; border-style: none;';\n\t\tqrHtml += ' border-collapse: collapse;';\n\t\tqrHtml += ' padding: 0px; margin: 0px;';\n\t\tqrHtml += ' width: ' + cellSize + 'px;';\n\t\tqrHtml += ' height: ' + cellSize + 'px;';\n\t\tqrHtml += ' background-color: ';\n\t\tqrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';\n\t\tqrHtml += ';';\n\t\tqrHtml += '\&quot;/&gt;';\n\t    }\n\n\t    qrHtml += '&lt;/tr&gt;';\n\t}\n\n\tqrHtml += '&lt;/tbody&gt;';\n\tqrHtml += '&lt;/table&gt;';\n\n\treturn qrHtml;\n    };\n\n    _this.createImgTag = function(cellSize, margin, size) {\n\n\tcellSize = cellSize || 2;\n\tmargin = (typeof margin == 'undefined')? cellSize * 4 : margin;\n\n\tvar min = margin;\n\tvar max = _this.getModuleCount() * cellSize + margin;\n\n\treturn createImgTag(size, size, function(x, y) {\n\t    if (min &lt;= x &amp;&amp; x &lt; max &amp;&amp; min &lt;= y &amp;&amp; y &lt; max) {\n\t\tvar c = Math.floor( (x - min) / cellSize);\n\t\tvar r = Math.floor( (y - min) / cellSize);\n\t\treturn _this.isDark(r, c)? 0 : 1;\n\t    } else {\n\t\treturn 1;\n\t    }\n\t} );\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// qrcode.stringToBytes\n//---------------------------------------------------------------------\n\nqrcode.stringToBytes = function(s) {\n    var bytes = new Array();\n    for (var i = 0; i &lt; s.length; i += 1) {\n\tvar c = s.charCodeAt(i);\n\tbytes.push(c &amp; 0xff);\n    }\n    return bytes;\n};\n\n//---------------------------------------------------------------------\n// qrcode.createStringToBytes\n//---------------------------------------------------------------------\n\n/**\n * @param unicodeData base64 string of byte array.\n * [16bit Unicode],[16bit Bytes], ...\n * @param numChars\n */\nqrcode.createStringToBytes = function(unicodeData, numChars) {\n\n    // create conversion map.\n\n    var unicodeMap = function() {\n\n\tvar bin = base64DecodeInputStream(unicodeData);\n\tvar read = function() {\n\t    var b = bin.read();\n\t    if (b == -1) throw new Error();\n\t    return b;\n\t};\n\n\tvar count = 0;\n\tvar unicodeMap = {};\n\twhile (true) {\n\t    var b0 = bin.read();\n\t    if (b0 == -1) break;\n\t    var b1 = read();\n\t    var b2 = read();\n\t    var b3 = read();\n\t    var k = String.fromCharCode( (b0 &lt;&lt; 8) | b1);\n\t    var v = (b2 &lt;&lt; 8) | b3;\n\t    unicodeMap[k] = v;\n\t    count += 1;\n\t}\n\tif (count != numChars) {\n\t    throw new Error(count + ' != ' + numChars);\n\t}\n\n\treturn unicodeMap;\n    }();\n\n    var unknownChar = '?'.charCodeAt(0);\n\n    return function(s) {\n\tvar bytes = new Array();\n\tfor (var i = 0; i &lt; s.length; i += 1) {\n\t    var c = s.charCodeAt(i);\n\t    if (c &lt; 128) {\n\t\tbytes.push(c);\n\t    } else {\n\t\tvar b = unicodeMap[s.charAt(i)];\n\t\tif (typeof b == 'number') {\n\t\t    if ( (b &amp; 0xff) == b) {\n\t\t\t// 1byte\n\t\t\tbytes.push(b);\n\t\t    } else {\n\t\t\t// 2bytes\n\t\t\tbytes.push(b &gt;&gt;&gt; 8);\n\t\t\tbytes.push(b &amp; 0xff);\n\t\t    }\n\t\t} else {\n\t\t    bytes.push(unknownChar);\n\t\t}\n\t    }\n\t}\n\treturn bytes;\n    };\n};\n\n//---------------------------------------------------------------------\n// QRMode\n//---------------------------------------------------------------------\n\nvar QRMode = {\n    MODE_NUMBER :\t\t1 &lt;&lt; 0,\n    MODE_ALPHA_NUM : \t1 &lt;&lt; 1,\n    MODE_8BIT_BYTE : \t1 &lt;&lt; 2,\n    MODE_KANJI :\t\t1 &lt;&lt; 3\n};\n\n//---------------------------------------------------------------------\n// QRErrorCorrectLevel\n//---------------------------------------------------------------------\n\nvar QRErrorCorrectLevel = {\n    L : 1,\n    M : 0,\n    Q : 3,\n    H : 2\n};\n\n//---------------------------------------------------------------------\n// QRMaskPattern\n//---------------------------------------------------------------------\n\nvar QRMaskPattern = {\n    PATTERN000 : 0,\n    PATTERN001 : 1,\n    PATTERN010 : 2,\n    PATTERN011 : 3,\n    PATTERN100 : 4,\n    PATTERN101 : 5,\n    PATTERN110 : 6,\n    PATTERN111 : 7\n};\n\n//---------------------------------------------------------------------\n// QRUtil\n//---------------------------------------------------------------------\n\nvar QRUtil = function() {\n\n    var PATTERN_POSITION_TABLE = [\n\t[],\n\t[6, 18],\n\t[6, 22],\n\t[6, 26],\n\t[6, 30],\n\t[6, 34],\n\t[6, 22, 38],\n\t[6, 24, 42],\n\t[6, 26, 46],\n\t[6, 28, 50],\n\t[6, 30, 54],\n\t[6, 32, 58],\n\t[6, 34, 62],\n\t[6, 26, 46, 66],\n\t[6, 26, 48, 70],\n\t[6, 26, 50, 74],\n\t[6, 30, 54, 78],\n\t[6, 30, 56, 82],\n\t[6, 30, 58, 86],\n\t[6, 34, 62, 90],\n\t[6, 28, 50, 72, 94],\n\t[6, 26, 50, 74, 98],\n\t[6, 30, 54, 78, 102],\n\t[6, 28, 54, 80, 106],\n\t[6, 32, 58, 84, 110],\n\t[6, 30, 58, 86, 114],\n\t[6, 34, 62, 90, 118],\n\t[6, 26, 50, 74, 98, 122],\n\t[6, 30, 54, 78, 102, 126],\n\t[6, 26, 52, 78, 104, 130],\n\t[6, 30, 56, 82, 108, 134],\n\t[6, 34, 60, 86, 112, 138],\n\t[6, 30, 58, 86, 114, 142],\n\t[6, 34, 62, 90, 118, 146],\n\t[6, 30, 54, 78, 102, 126, 150],\n\t[6, 24, 50, 76, 102, 128, 154],\n\t[6, 28, 54, 80, 106, 132, 158],\n\t[6, 32, 58, 84, 110, 136, 162],\n\t[6, 26, 54, 82, 110, 138, 166],\n\t[6, 30, 58, 86, 114, 142, 170]\n    ];\n    var G15 = (1 &lt;&lt; 10) | (1 &lt;&lt; 8) | (1 &lt;&lt; 5) | (1 &lt;&lt; 4) | (1 &lt;&lt; 2) | (1 &lt;&lt; 1) | (1 &lt;&lt; 0);\n    var G18 = (1 &lt;&lt; 12) | (1 &lt;&lt; 11) | (1 &lt;&lt; 10) | (1 &lt;&lt; 9) | (1 &lt;&lt; 8) | (1 &lt;&lt; 5) | (1 &lt;&lt; 2) | (1 &lt;&lt; 0);\n    var G15_MASK = (1 &lt;&lt; 14) | (1 &lt;&lt; 12) | (1 &lt;&lt; 10) | (1 &lt;&lt; 4) | (1 &lt;&lt; 1);\n\n    var _this = {};\n\n    var getBCHDigit = function(data) {\n\tvar digit = 0;\n\twhile (data != 0) {\n\t    digit += 1;\n\t    data &gt;&gt;&gt;= 1;\n\t}\n\treturn digit;\n    };\n\n    _this.getBCHTypeInfo = function(data) {\n\tvar d = data &lt;&lt; 10;\n\twhile (getBCHDigit(d) - getBCHDigit(G15) &gt;= 0) {\n\t    d ^= (G15 &lt;&lt; (getBCHDigit(d) - getBCHDigit(G15) ) );\n\t}\n\treturn ( (data &lt;&lt; 10) | d) ^ G15_MASK;\n    };\n\n    _this.getBCHTypeNumber = function(data) {\n\tvar d = data &lt;&lt; 12;\n\twhile (getBCHDigit(d) - getBCHDigit(G18) &gt;= 0) {\n\t    d ^= (G18 &lt;&lt; (getBCHDigit(d) - getBCHDigit(G18) ) );\n\t}\n\treturn (data &lt;&lt; 12) | d;\n    };\n\n    _this.getPatternPosition = function(typeNumber) {\n\treturn PATTERN_POSITION_TABLE[typeNumber - 1];\n    };\n\n    _this.getMaskFunction = function(maskPattern) {\n\n\tswitch (maskPattern) {\n\n\t    case QRMaskPattern.PATTERN000 :\n\t\treturn function(i, j) { return (i + j) % 2 == 0; };\n\t    case QRMaskPattern.PATTERN001 :\n\t\treturn function(i, j) { return i % 2 == 0; };\n\t    case QRMaskPattern.PATTERN010 :\n\t\treturn function(i, j) { return j % 3 == 0; };\n\t    case QRMaskPattern.PATTERN011 :\n\t\treturn function(i, j) { return (i + j) % 3 == 0; };\n\t    case QRMaskPattern.PATTERN100 :\n\t\treturn function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };\n\t    case QRMaskPattern.PATTERN101 :\n\t\treturn function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };\n\t    case QRMaskPattern.PATTERN110 :\n\t\treturn function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };\n\t    case QRMaskPattern.PATTERN111 :\n\t\treturn function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };\n\n\t\tdefault :\n\t\tthrow new Error('bad maskPattern:' + maskPattern);\n\t}\n    };\n\n    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {\n\tvar a = qrPolynomial([1], 0);\n\tfor (var i = 0; i &lt; errorCorrectLength; i += 1) {\n\t    a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );\n\t}\n\treturn a;\n    };\n\n    _this.getLengthInBits = function(mode, type) {\n\n\tif (1 &lt;= type &amp;&amp; type &lt; 10) {\n\n\t    // 1 - 9\n\n\t    switch(mode) {\n\t\tcase QRMode.MODE_NUMBER \t: return 10;\n\t\tcase QRMode.MODE_ALPHA_NUM \t: return 9;\n\t\tcase QRMode.MODE_8BIT_BYTE\t: return 8;\n\t\tcase QRMode.MODE_KANJI\t\t: return 8;\n\t\t    default :\n\t\t    throw new Error('mode:' + mode);\n\t    }\n\n\t} else if (type &lt; 27) {\n\n\t    // 10 - 26\n\n\t    switch(mode) {\n\t\tcase QRMode.MODE_NUMBER \t: return 12;\n\t\tcase QRMode.MODE_ALPHA_NUM \t: return 11;\n\t\tcase QRMode.MODE_8BIT_BYTE\t: return 16;\n\t\tcase QRMode.MODE_KANJI\t\t: return 10;\n\t\t    default :\n\t\t    throw new Error('mode:' + mode);\n\t    }\n\n\t} else if (type &lt; 41) {\n\n\t    // 27 - 40\n\n\t    switch(mode) {\n\t\tcase QRMode.MODE_NUMBER \t: return 14;\n\t\tcase QRMode.MODE_ALPHA_NUM\t: return 13;\n\t\tcase QRMode.MODE_8BIT_BYTE\t: return 16;\n\t\tcase QRMode.MODE_KANJI\t\t: return 12;\n\t\t    default :\n\t\t    throw new Error('mode:' + mode);\n\t    }\n\n\t} else {\n\t    throw new Error('type:' + type);\n\t}\n    };\n\n    _this.getLostPoint = function(qrcode) {\n\n\tvar moduleCount = qrcode.getModuleCount();\n\n\tvar lostPoint = 0;\n\n\t// LEVEL1\n\n\tfor (var row = 0; row &lt; moduleCount; row += 1) {\n\t    for (var col = 0; col &lt; moduleCount; col += 1) {\n\n\t\tvar sameCount = 0;\n\t\tvar dark = qrcode.isDark(row, col);\n\n\t\tfor (var r = -1; r &lt;= 1; r += 1) {\n\n\t\t    if (row + r &lt; 0 || moduleCount &lt;= row + r) {\n\t\t\tcontinue;\n\t\t    }\n\n\t\t    for (var c = -1; c &lt;= 1; c += 1) {\n\n\t\t\tif (col + c &lt; 0 || moduleCount &lt;= col + c) {\n\t\t\t    continue;\n\t\t\t}\n\n\t\t\tif (r == 0 &amp;&amp; c == 0) {\n\t\t\t    continue;\n\t\t\t}\n\n\t\t\tif (dark == qrcode.isDark(row + r, col + c) ) {\n\t\t\t    sameCount += 1;\n\t\t\t}\n\t\t    }\n\t\t}\n\n\t\tif (sameCount &gt; 5) {\n\t\t    lostPoint += (3 + sameCount - 5);\n\t\t}\n\t    }\n\t};\n\n\t// LEVEL2\n\n\tfor (var row = 0; row &lt; moduleCount - 1; row += 1) {\n\t    for (var col = 0; col &lt; moduleCount - 1; col += 1) {\n\t\tvar count = 0;\n\t\tif (qrcode.isDark(row, col) ) count += 1;\n\t\tif (qrcode.isDark(row + 1, col) ) count += 1;\n\t\tif (qrcode.isDark(row, col + 1) ) count += 1;\n\t\tif (qrcode.isDark(row + 1, col + 1) ) count += 1;\n\t\tif (count == 0 || count == 4) {\n\t\t    lostPoint += 3;\n\t\t}\n\t    }\n\t}\n\n\t// LEVEL3\n\n\tfor (var row = 0; row &lt; moduleCount; row += 1) {\n\t    for (var col = 0; col &lt; moduleCount - 6; col += 1) {\n\t\tif (qrcode.isDark(row, col)\n\t\t    &amp;&amp; !qrcode.isDark(row, col + 1)\n\t\t    &amp;&amp;  qrcode.isDark(row, col + 2)\n\t\t    &amp;&amp;  qrcode.isDark(row, col + 3)\n\t\t    &amp;&amp;  qrcode.isDark(row, col + 4)\n\t\t    &amp;&amp; !qrcode.isDark(row, col + 5)\n\t\t    &amp;&amp;  qrcode.isDark(row, col + 6) ) {\n\t\t    lostPoint += 40;\n\t\t}\n\t    }\n\t}\n\n\tfor (var col = 0; col &lt; moduleCount; col += 1) {\n\t    for (var row = 0; row &lt; moduleCount - 6; row += 1) {\n\t\tif (qrcode.isDark(row, col)\n\t\t    &amp;&amp; !qrcode.isDark(row + 1, col)\n\t\t    &amp;&amp;  qrcode.isDark(row + 2, col)\n\t\t    &amp;&amp;  qrcode.isDark(row + 3, col)\n\t\t    &amp;&amp;  qrcode.isDark(row + 4, col)\n\t\t    &amp;&amp; !qrcode.isDark(row + 5, col)\n\t\t    &amp;&amp;  qrcode.isDark(row + 6, col) ) {\n\t\t    lostPoint += 40;\n\t\t}\n\t    }\n\t}\n\n\t// LEVEL4\n\n\tvar darkCount = 0;\n\n\tfor (var col = 0; col &lt; moduleCount; col += 1) {\n\t    for (var row = 0; row &lt; moduleCount; row += 1) {\n\t\tif (qrcode.isDark(row, col) ) {\n\t\t    darkCount += 1;\n\t\t}\n\t    }\n\t}\n\n\tvar ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;\n\tlostPoint += ratio * 10;\n\n\treturn lostPoint;\n    };\n\n    return _this;\n}();\n\n//---------------------------------------------------------------------\n// QRMath\n//---------------------------------------------------------------------\n\nvar QRMath = function() {\n\n    var EXP_TABLE = new Array(256);\n    var LOG_TABLE = new Array(256);\n\n    // initialize tables\n    for (var i = 0; i &lt; 8; i += 1) {\n\tEXP_TABLE[i] = 1 &lt;&lt; i;\n    }\n    for (var i = 8; i &lt; 256; i += 1) {\n\tEXP_TABLE[i] = EXP_TABLE[i - 4]\n\t    ^ EXP_TABLE[i - 5]\n\t    ^ EXP_TABLE[i - 6]\n\t    ^ EXP_TABLE[i - 8];\n    }\n    for (var i = 0; i &lt; 255; i += 1) {\n\tLOG_TABLE[EXP_TABLE[i] ] = i;\n    }\n\n    var _this = {};\n\n    _this.glog = function(n) {\n\n\tif (n &lt; 1) {\n\t    throw new Error('glog(' + n + ')');\n\t}\n\n\treturn LOG_TABLE[n];\n    };\n\n    _this.gexp = function(n) {\n\n\twhile (n &lt; 0) {\n\t    n += 255;\n\t}\n\n\twhile (n &gt;= 256) {\n\t    n -= 255;\n\t}\n\n\treturn EXP_TABLE[n];\n    };\n\n    return _this;\n}();\n\n//---------------------------------------------------------------------\n// qrPolynomial\n//---------------------------------------------------------------------\n\nfunction qrPolynomial(num, shift) {\n\n    if (typeof num.length == 'undefined') {\n\tthrow new Error(num.length + '/' + shift);\n    }\n\n    var _num = function() {\n\tvar offset = 0;\n\twhile (offset &lt; num.length &amp;&amp; num[offset] == 0) {\n\t    offset += 1;\n\t}\n\tvar _num = new Array(num.length - offset + shift);\n\tfor (var i = 0; i &lt; num.length - offset; i += 1) {\n\t    _num[i] = num[i + offset];\n\t}\n\treturn _num;\n    }();\n\n    var _this = {};\n\n    _this.getAt = function(index) {\n\treturn _num[index];\n    };\n\n    _this.getLength = function() {\n\treturn _num.length;\n    };\n\n    _this.multiply = function(e) {\n\n\tvar num = new Array(_this.getLength() + e.getLength() - 1);\n\n\tfor (var i = 0; i &lt; _this.getLength(); i += 1) {\n\t    for (var j = 0; j &lt; e.getLength(); j += 1) {\n\t\tnum[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );\n\t    }\n\t}\n\n\treturn qrPolynomial(num, 0);\n    };\n\n    _this.mod = function(e) {\n\n\tif (_this.getLength() - e.getLength() &lt; 0) {\n\t    return _this;\n\t}\n\n\tvar ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );\n\n\tvar num = new Array(_this.getLength() );\n\tfor (var i = 0; i &lt; _this.getLength(); i += 1) {\n\t    num[i] = _this.getAt(i);\n\t}\n\n\tfor (var i = 0; i &lt; e.getLength(); i += 1) {\n\t    num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);\n\t}\n\n\t// recursive call\n\treturn qrPolynomial(num, 0).mod(e);\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// QRRSBlock\n//---------------------------------------------------------------------\n\nvar QRRSBlock = function() {\n\n\n    // [1: [L, M, Q, H], ..]\n    var RS_BLOCK_TABLE=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]];\n\n    var qrRSBlock = function(totalCount, dataCount) {\n\tvar _this = {};\n\t_this.totalCount = totalCount;\n\t_this.dataCount = dataCount;\n\treturn _this;\n    };\n\n    var _this = {};\n\n    var getRsBlockTable = function(typeNumber, errorCorrectLevel) {\n\n\tswitch(errorCorrectLevel) {\n\t    case QRErrorCorrectLevel.L :\n\t\treturn RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];\n\t    case QRErrorCorrectLevel.M :\n\t\treturn RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];\n\t    case QRErrorCorrectLevel.Q :\n\t\treturn RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];\n\t    case QRErrorCorrectLevel.H :\n\t\treturn RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];\n\t\tdefault :\n\t\treturn undefined;\n\t}\n    };\n\n    _this.getRSBlocks = function(typeNumber, errorCorrectLevel) {\n\n\tvar rsBlock = getRsBlockTable(typeNumber, errorCorrectLevel);\n\n\tif (typeof rsBlock == 'undefined') {\n\t    throw new Error('bad rs block @ typeNumber:' + typeNumber +\n\t\t\t    '/errorCorrectLevel:' + errorCorrectLevel);\n\t}\n\n\tvar length = rsBlock.length / 3;\n\n\tvar list = new Array();\n\n\tfor (var i = 0; i &lt; length; i += 1) {\n\n\t    var count = rsBlock[i * 3 + 0];\n\t    var totalCount = rsBlock[i * 3 + 1];\n\t    var dataCount = rsBlock[i * 3 + 2];\n\n\t    for (var j = 0; j &lt; count; j += 1) {\n\t\tlist.push(qrRSBlock(totalCount, dataCount) );\n\t    }\n\t}\n\n\treturn list;\n    };\n\n    return _this;\n}();\n\n//---------------------------------------------------------------------\n// qrBitBuffer\n//---------------------------------------------------------------------\n\nvar qrBitBuffer = function() {\n\n    var _buffer = new Array();\n    var _length = 0;\n\n    var _this = {};\n\n    _this.getBuffer = function() {\n\treturn _buffer;\n    };\n\n    _this.getAt = function(index) {\n\tvar bufIndex = Math.floor(index / 8);\n\treturn ( (_buffer[bufIndex] &gt;&gt;&gt; (7 - index % 8) ) &amp; 1) == 1;\n    };\n\n    _this.put = function(num, length) {\n\tfor (var i = 0; i &lt; length; i += 1) {\n\t    _this.putBit( ( (num &gt;&gt;&gt; (length - i - 1) ) &amp; 1) == 1);\n\t}\n    };\n\n    _this.getLengthInBits = function() {\n\treturn _length;\n    };\n\n    _this.putBit = function(bit) {\n\n\tvar bufIndex = Math.floor(_length / 8);\n\tif (_buffer.length &lt;= bufIndex) {\n\t    _buffer.push(0);\n\t}\n\n\tif (bit) {\n\t    _buffer[bufIndex] |= (0x80 &gt;&gt;&gt; (_length % 8) );\n\t}\n\n\t_length += 1;\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// qr8BitByte\n//---------------------------------------------------------------------\n\nvar qr8BitByte = function(data) {\n\n    var _mode = QRMode.MODE_8BIT_BYTE;\n    var _data = data;\n    var _parsedData = [];\n\n    var _this = {};\n\n\n    // Added to support UTF-8 Characters\n    for (var i = 0, l = _data.length; i &lt; l; i++) {\n\tvar byteArray = [];\n\tvar code = _data.charCodeAt(i);\n\n\tif (code &gt; 0x10000) {\n\t    byteArray[0] = 0xF0 | ((code &amp; 0x1C0000) &gt;&gt;&gt; 18);\n\t    byteArray[1] = 0x80 | ((code &amp; 0x3F000) &gt;&gt;&gt; 12);\n\t    byteArray[2] = 0x80 | ((code &amp; 0xFC0) &gt;&gt;&gt; 6);\n\t    byteArray[3] = 0x80 | (code &amp; 0x3F);\n\t} else if (code &gt; 0x800) {\n\t    byteArray[0] = 0xE0 | ((code &amp; 0xF000) &gt;&gt;&gt; 12);\n\t    byteArray[1] = 0x80 | ((code &amp; 0xFC0) &gt;&gt;&gt; 6);\n\t    byteArray[2] = 0x80 | (code &amp; 0x3F);\n\t} else if (code &gt; 0x80) {\n\t    byteArray[0] = 0xC0 | ((code &amp; 0x7C0) &gt;&gt;&gt; 6);\n\t    byteArray[1] = 0x80 | (code &amp; 0x3F);\n\t} else {\n\t    byteArray[0] = code;\n\t}\n\n        // Fix Unicode corruption bug\n        _parsedData.push(byteArray);\n    }\n\n    _parsedData = Array.prototype.concat.apply([], _parsedData);\n\n    if (_parsedData.length != _data.length) {\n\t_parsedData.unshift(191);\n\t_parsedData.unshift(187);\n\t_parsedData.unshift(239);\n    }\n\n    var _bytes = _parsedData;\n\n    _this.getMode = function() {\n\treturn _mode;\n    };\n\n    _this.getLength = function(buffer) {\n\treturn _bytes.length;\n    };\n\n    _this.write = function(buffer) {\n\tfor (var i = 0; i &lt; _bytes.length; i += 1) {\n\t    buffer.put(_bytes[i], 8);\n\t}\n    };\n\n    return _this;\n};\n\n//=====================================================================\n// GIF Support etc.\n//\n\n//---------------------------------------------------------------------\n// byteArrayOutputStream\n//---------------------------------------------------------------------\n\nvar byteArrayOutputStream = function() {\n\n    var _bytes = new Array();\n\n    var _this = {};\n\n    _this.writeByte = function(b) {\n\t_bytes.push(b &amp; 0xff);\n    };\n\n    _this.writeShort = function(i) {\n\t_this.writeByte(i);\n\t_this.writeByte(i &gt;&gt;&gt; 8);\n    };\n\n    _this.writeBytes = function(b, off, len) {\n\toff = off || 0;\n\tlen = len || b.length;\n\tfor (var i = 0; i &lt; len; i += 1) {\n\t    _this.writeByte(b[i + off]);\n\t}\n    };\n\n    _this.writeString = function(s) {\n\tfor (var i = 0; i &lt; s.length; i += 1) {\n\t    _this.writeByte(s.charCodeAt(i) );\n\t}\n    };\n\n    _this.toByteArray = function() {\n\treturn _bytes;\n    };\n\n    _this.toString = function() {\n\tvar s = '';\n\ts += '[';\n\tfor (var i = 0; i &lt; _bytes.length; i += 1) {\n\t    if (i &gt; 0) {\n\t\ts += ',';\n\t    }\n\t    s += _bytes[i];\n\t}\n\ts += ']';\n\treturn s;\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// base64EncodeOutputStream\n//---------------------------------------------------------------------\n\nvar base64EncodeOutputStream = function() {\n\n    var _buffer = 0;\n    var _buflen = 0;\n    var _length = 0;\n    var _base64 = '';\n\n    var _this = {};\n\n    var writeEncoded = function(b) {\n\t_base64 += String.fromCharCode(encode(b &amp; 0x3f) );\n    };\n\n    var encode = function(n) {\n\tif (n &lt; 0) {\n\t    // error.\n\t} else if (n &lt; 26) {\n\t    return 0x41 + n;\n\t} else if (n &lt; 52) {\n\t    return 0x61 + (n - 26);\n\t} else if (n &lt; 62) {\n\t    return 0x30 + (n - 52);\n\t} else if (n == 62) {\n\t    return 0x2b;\n\t} else if (n == 63) {\n\t    return 0x2f;\n\t}\n\tthrow new Error('n:' + n);\n    };\n\n    _this.writeByte = function(n) {\n\n\t_buffer = (_buffer &lt;&lt; 8) | (n &amp; 0xff);\n\t_buflen += 8;\n\t_length += 1;\n\n\twhile (_buflen &gt;= 6) {\n\t    writeEncoded(_buffer &gt;&gt;&gt; (_buflen - 6) );\n\t    _buflen -= 6;\n\t}\n    };\n\n    _this.flush = function() {\n\n\tif (_buflen &gt; 0) {\n\t    writeEncoded(_buffer &lt;&lt; (6 - _buflen) );\n\t    _buffer = 0;\n\t    _buflen = 0;\n\t}\n\n\tif (_length % 3 != 0) {\n\t    // padding\n\t    var padlen = 3 - _length % 3;\n\t    for (var i = 0; i &lt; padlen; i += 1) {\n\t\t_base64 += '=';\n\t    }\n\t}\n    };\n\n    _this.toString = function() {\n\treturn _base64;\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// base64DecodeInputStream\n//---------------------------------------------------------------------\n\nvar base64DecodeInputStream = function(str) {\n\n    var _str = str;\n    var _pos = 0;\n    var _buffer = 0;\n    var _buflen = 0;\n\n    var _this = {};\n\n    _this.read = function() {\n\n\twhile (_buflen &lt; 8) {\n\n\t    if (_pos &gt;= _str.length) {\n\t\tif (_buflen == 0) {\n\t\t    return -1;\n\t\t}\n\t\tthrow new Error('unexpected end of file./' + _buflen);\n\t    }\n\n\t    var c = _str.charAt(_pos);\n\t    _pos += 1;\n\n\t    if (c == '=') {\n\t\t_buflen = 0;\n\t\treturn -1;\n\t    } else if (c.match(/^\\s$/) ) {\n\t\t// ignore if whitespace.\n\t\tcontinue;\n\t    }\n\n\t    _buffer = (_buffer &lt;&lt; 6) | decode(c.charCodeAt(0) );\n\t    _buflen += 6;\n\t}\n\n\tvar n = (_buffer &gt;&gt;&gt; (_buflen - 8) ) &amp; 0xff;\n\t_buflen -= 8;\n\treturn n;\n    };\n\n    var decode = function(c) {\n\tif (0x41 &lt;= c &amp;&amp; c &lt;= 0x5a) {\n\t    return c - 0x41;\n\t} else if (0x61 &lt;= c &amp;&amp; c &lt;= 0x7a) {\n\t    return c - 0x61 + 26;\n\t} else if (0x30 &lt;= c &amp;&amp; c &lt;= 0x39) {\n\t    return c - 0x30 + 52;\n\t} else if (c == 0x2b) {\n\t    return 62;\n\t} else if (c == 0x2f) {\n\t    return 63;\n\t} else {\n\t    throw new Error('c:' + c);\n\t}\n    };\n\n    return _this;\n};\n\n//---------------------------------------------------------------------\n// gifImage (B/W)\n//---------------------------------------------------------------------\n\nvar gifImage = function(width, height) {\n\n    var _width = width;\n    var _height = height;\n    var _data = new Array(width * height);\n\n    var _this = {};\n\n    _this.setPixel = function(x, y, pixel) {\n\t_data[y * _width + x] = pixel;\n    };\n\n    _this.write = function(out) {\n\n\t//---------------------------------\n\t// GIF Signature\n\n\tout.writeString('GIF87a');\n\n\t//---------------------------------\n\t// Screen Descriptor\n\n\tout.writeShort(_width);\n\tout.writeShort(_height);\n\n\tout.writeByte(0x80); // 2bit\n\tout.writeByte(0);\n\tout.writeByte(0);\n\n\t//---------------------------------\n\t// Global Color Map\n\n\t// black\n\tout.writeByte(0x00);\n\tout.writeByte(0x00);\n\tout.writeByte(0x00);\n\n\t// white\n\tout.writeByte(0xff);\n\tout.writeByte(0xff);\n\tout.writeByte(0xff);\n\n\t//---------------------------------\n\t// Image Descriptor\n\n\tout.writeString(',');\n\tout.writeShort(0);\n\tout.writeShort(0);\n\tout.writeShort(_width);\n\tout.writeShort(_height);\n\tout.writeByte(0);\n\n\t//---------------------------------\n\t// Local Color Map\n\n\t//---------------------------------\n\t// Raster Data\n\n\tvar lzwMinCodeSize = 2;\n\tvar raster = getLZWRaster(lzwMinCodeSize);\n\n\tout.writeByte(lzwMinCodeSize);\n\n\tvar offset = 0;\n\n\twhile (raster.length - offset &gt; 255) {\n\t    out.writeByte(255);\n\t    out.writeBytes(raster, offset, 255);\n\t    offset += 255;\n\t}\n\n\tout.writeByte(raster.length - offset);\n\tout.writeBytes(raster, offset, raster.length - offset);\n\tout.writeByte(0x00);\n\n\t//---------------------------------\n\t// GIF Terminator\n\tout.writeString(';');\n    };\n\n    var bitOutputStream = function(out) {\n\n\tvar _out = out;\n\tvar _bitLength = 0;\n\tvar _bitBuffer = 0;\n\n\tvar _this = {};\n\n\t_this.write = function(data, length) {\n\n\t    if ( (data &gt;&gt;&gt; length) != 0) {\n\t\tthrow new Error('length over');\n\t    }\n\n\t    while (_bitLength + length &gt;= 8) {\n\t\t_out.writeByte(0xff &amp; ( (data &lt;&lt; _bitLength) | _bitBuffer) );\n\t\tlength -= (8 - _bitLength);\n\t\tdata &gt;&gt;&gt;= (8 - _bitLength);\n\t\t_bitBuffer = 0;\n\t\t_bitLength = 0;\n\t    }\n\n\t    _bitBuffer = (data &lt;&lt; _bitLength) | _bitBuffer;\n\t    _bitLength = _bitLength + length;\n\t};\n\n\t_this.flush = function() {\n\t    if (_bitLength &gt; 0) {\n\t\t_out.writeByte(_bitBuffer);\n\t    }\n\t};\n\n\treturn _this;\n    };\n\n    var getLZWRaster = function(lzwMinCodeSize) {\n\n\tvar clearCode = 1 &lt;&lt; lzwMinCodeSize;\n\tvar endCode = (1 &lt;&lt; lzwMinCodeSize) + 1;\n\tvar bitLength = lzwMinCodeSize + 1;\n\n\t// Setup LZWTable\n\tvar table = lzwTable();\n\n\tfor (var i = 0; i &lt; clearCode; i += 1) {\n\t    table.add(String.fromCharCode(i) );\n\t}\n\ttable.add(String.fromCharCode(clearCode) );\n\ttable.add(String.fromCharCode(endCode) );\n\n\tvar byteOut = byteArrayOutputStream();\n\tvar bitOut = bitOutputStream(byteOut);\n\n\t// clear code\n\tbitOut.write(clearCode, bitLength);\n\n\tvar dataIndex = 0;\n\n\tvar s = String.fromCharCode(_data[dataIndex]);\n\tdataIndex += 1;\n\n\twhile (dataIndex &lt; _data.length) {\n\n\t    var c = String.fromCharCode(_data[dataIndex]);\n\t    dataIndex += 1;\n\n\t    if (table.contains(s + c) ) {\n\n\t\ts = s + c;\n\n\t    } else {\n\n\t\tbitOut.write(table.indexOf(s), bitLength);\n\n\t\tif (table.size() &lt; 0xfff) {\n\n\t\t    if (table.size() == (1 &lt;&lt; bitLength) ) {\n\t\t\tbitLength += 1;\n\t\t    }\n\n\t\t    table.add(s + c);\n\t\t}\n\n\t\ts = c;\n\t    }\n\t}\n\n\tbitOut.write(table.indexOf(s), bitLength);\n\n\t// end code\n\tbitOut.write(endCode, bitLength);\n\n\tbitOut.flush();\n\n\treturn byteOut.toByteArray();\n    };\n\n    var lzwTable = function() {\n\n\tvar _map = {};\n\tvar _size = 0;\n\n\tvar _this = {};\n\n\t_this.add = function(key) {\n\t    if (_this.contains(key) ) {\n\t\tthrow new Error('dup key:' + key);\n\t    }\n\t    _map[key] = _size;\n\t    _size += 1;\n\t};\n\n\t_this.size = function() {\n\t    return _size;\n\t};\n\n\t_this.indexOf = function(key) {\n\t    return _map[key];\n\t};\n\n\t_this.contains = function(key) {\n\t    return typeof _map[key] != 'undefined';\n\t};\n\n\treturn _this;\n    };\n\n    return _this;\n};\n\nvar createImgTag = function(width, height, getPixel, alt) {\n\n    var gif = gifImage(width, height);\n    for (var y = 0; y &lt; height; y += 1) {\n\tfor (var x = 0; x &lt; width; x += 1) {\n\t    gif.setPixel(x, y, getPixel(x, y) );\n\t}\n    }\n\n    var b = byteArrayOutputStream();\n    gif.write(b);\n\n    var base64 = base64EncodeOutputStream();\n    var bytes = b.toByteArray();\n    for (var i = 0; i &lt; bytes.length; i += 1) {\n\tbase64.writeByte(bytes[i]);\n    }\n    base64.flush();\n\n    var img = '';\n    img += 'data:image/gif;base64,';\n    img += base64;\n\n    return img;\n};\n\n//---------------------------------------------------------------------\n// returns qrcode function.\n\nmodule.exports = qrcode;\n&quot;,
-            &quot;type&quot;: &quot;application/javascript&quot;,
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/qrcode.js&quot;,
-            &quot;module-type&quot;: &quot;library&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/license&quot;: {
-            &quot;text&quot;: &quot;The MIT License (MIT)\n\nCopyright (c) 2013 Zeno Zeng\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \&quot;Software\&quot;), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \&quot;AS IS\&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n&quot;,
-            &quot;type&quot;: &quot;text/plain&quot;,
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/license&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/icon&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/icon&quot;,
-            &quot;tags&quot;: &quot;$:/tags/Image&quot;,
-            &quot;text&quot;: &quot;&lt;svg class=\&quot;tc-image-qrcode tc-image-button\&quot; viewBox=\&quot;0 0 128 128\&quot; width=\&quot;22pt\&quot; height=\&quot;22pt\&quot;&gt;\n    &lt;g fill-rule=\&quot;evenodd\&quot;&gt;\n        &lt;path d=\&quot;M0,15.9969199 C0,7.16206498 7.16987059,0 15.9969199,0 L64.0030801,0 C72.837935,0 80,7.16987059 80,15.9969199 L80,64.0030801 C80,72.837935 72.8301294,80 64.0030801,80 L15.9969199,80 C7.16206498,80 0,72.8301294 0,64.0030801 L0,15.9969199 Z M16,22.0063866 C16,18.6891509 18.6835413,16 22.0063866,16 L57.9936134,16 C61.3108491,16 64,18.6835413 64,22.0063866 L64,57.9936134 C64,61.3108491 61.3164587,64 57.9936134,64 L22.0063866,64 C18.6891509,64 16,61.3164587 16,57.9936134 L16,22.0063866 Z M28,31.990053 C28,29.7864076 29.7842933,28 31.990053,28 L48.009947,28 C50.2135924,28 52,29.7842933 52,31.990053 L52,48.009947 C52,50.2135924 50.2157067,52 48.009947,52 L31.990053,52 C29.7864076,52 28,50.2157067 28,48.009947 L28,31.990053 Z\&quot;&gt;&lt;/path&gt;\n        &lt;path d=\&quot;M112,16 L112,8.49833453 L112,6.00333095 C112,2.68778282 114.67804,0 118.003331,0 L121.996669,0 C125.312217,0 128,2.67804027 128,6.00333095 L128,8.49833453 L128,23.0016655 L128,25.9966691 C128,29.3122172 125.32196,32 121.996669,32 L119.001665,32 L104.998335,32 L102.003331,32 C98.6877828,32 96,29.3219597 96,25.9966691 L96,22.0033309 C96,18.6877828 98.6780403,16 102.003331,16 L104.998335,16 L112,16 Z\&quot;&gt;&lt;/path&gt;\n        &lt;path d=\&quot;M96,56.9983345 L96,54.0033309 C96,50.6877828 98.6780403,48 102.003331,48 L104.998335,48 L119.001665,48 L121.996669,48 C125.312217,48 128,50.6780403 128,54.0033309 L128,57.9966691 C128,61.3122172 125.32196,64 121.996669,64 L119.001665,64 L112,64 L112,71.0016655 L112,73.9966691 C112,77.3122172 109.32196,80 105.996669,80 L102.003331,80 C98.6877828,80 96,77.3219597 96,73.9966691 L96,71.0016655 L96,56.9983345 Z\&quot;&gt;&lt;/path&gt;\n        &lt;path d=\&quot;M16,112 L23.0016655,112 L24.9983345,112 L32,112 L32,104.998335 L32,102.003331 C32,98.6877828 34.6780403,96 38.0033309,96 L40.9983345,96 L55.0016655,96 L57.9966691,96 C61.3122172,96 64,98.6780403 64,102.003331 L64,105.996669 C64,109.312217 61.3219597,112 57.9966691,112 L55.0016655,112 L48,112 L48,119.001665 L48,121.996669 C48,125.312217 45.3219597,128 41.9966691,128 L39.0016655,128 L24.9983345,128 L23.0016655,128 L8.99833453,128 L6.00333095,128 C2.68778282,128 0,125.32196 0,121.996669 L0,119.001665 L0,104.998335 L0,102.003331 C0,98.6877828 2.67804027,96 6.00333095,96 L9.99666905,96 C13.3122172,96 16,98.6780403 16,102.003331 L16,104.998335 L16,112 Z\&quot;&gt;&lt;/path&gt;\n        &lt;path d=\&quot;M103.001665,96 L105.996669,96 C109.312217,96 112,98.6780403 112,102.003331 L112,105.996669 C112,109.312217 109.32196,112 105.996669,112 L103.001665,112 L88.9983345,112 L86.0033309,112 C82.6877828,112 80,109.32196 80,105.996669 L80,102.003331 C80,98.6877828 82.6780403,96 86.0033309,96 L88.9983345,96 L103.001665,96 Z\&quot;&gt;&lt;/path&gt;\n        &lt;path d=\&quot;M72.9983345,112 L70.0033309,112 C66.6780403,112 64,114.687783 64,118.003331 L64,121.996669 C64,125.32196 66.6877828,128 70.0033309,128 L72.9983345,128 L87.0016655,128 L89.9966691,128 C93.3219597,128 96,125.312217 96,121.996669 L96,118.003331 C96,114.67804 93.3122172,112 89.9966691,112 L87.0016655,112 L72.9983345,112 Z\&quot;&gt;&lt;/path&gt;\n        &lt;rect x=\&quot;112\&quot; y=\&quot;80\&quot; width=\&quot;16\&quot; height=\&quot;16\&quot; rx=\&quot;6\&quot;&gt;&lt;/rect&gt;\n        &lt;rect x=\&quot;112\&quot; y=\&quot;112\&quot; width=\&quot;16\&quot; height=\&quot;16\&quot; rx=\&quot;6\&quot;&gt;&lt;/rect&gt;\n    &lt;/g&gt;\n&lt;/svg&gt;&quot;
-        },
-        &quot;$:/plugins/tiddlywiki/qrcode/makeqr.js&quot;: {
-            &quot;title&quot;: &quot;$:/plugins/tiddlywiki/qrcode/makeqr.js&quot;,
-            &quot;text&quot;: &quot;/*\\\ntitle: $:/plugins/tiddlywiki/qrcode/makeqr.js\ntype: application/javascript\nmodule-type: macro\n\nMacro to convert a string into a QR Code\n\n\\*/\n(function(){\n\n/*jslint node: true, browser: true */\n/*global $tw: false */\n\&quot;use strict\&quot;;\n\n/*\nInformation about this macro\n*/\n\nvar qrcode = require(\&quot;$:/plugins/tiddlywiki/qrcode/qrcode.js\&quot;);\n\nvar QRCODE_GENERATION_ERROR_PREFIX = '&lt;svg xmlns=\&quot;http://www.w3.org/2000/svg\&quot; viewBox=\&quot;0 0 300 300\&quot;&gt;&lt;text x=\&quot;0\&quot; y=\&quot;30\&quot; fill=\&quot;red\&quot; font-family=\&quot;Helvetica, sans-serif\&quot; font-size=\&quot;18\&quot;&gt;',\n\tQRCODE_GENERATION_ERROR_SUFFIX = '&lt;/text&gt;&lt;/svg&gt;';\n\nexports.name = \&quot;makeqr\&quot;;\n\nexports.params = [\n\t{name: \&quot;text\&quot;},\n\t{name: \&quot;size\&quot;},\n\t{name: \&quot;errorCorrectLevel\&quot;},\n\t{name: \&quot;fallback\&quot;}\n];\n\n/*\nRun the macro\n*/\nexports.run = function(text,size,errorCorrectLevel,fallback) {\n\tvar result;\n\ttry {\n\t\tresult = generateQrCode(text,{size: size, errorCorrectLevel: errorCorrectLevel});\n\t} catch (ex) {\n\t\tconsole.log(\&quot;makeqr error: \&quot; + ex);\n\t\tresult = fallback || (\&quot;data:image/svg+xml,\&quot; + encodeURI(QRCODE_GENERATION_ERROR_PREFIX + ex + QRCODE_GENERATION_ERROR_SUFFIX));\n\t}\n\treturn result || \&quot;\&quot;;\n};\n\nfunction generateQrCode(text,options) {\n\toptions = options || {};\n\tvar typeNumber = options.typeNumber || 4,\n\t\terrorCorrectLevel = options.errorCorrectLevel || \&quot;M\&quot;,\n\t\tsize = options.size || 500,\n\t\tqr;\n\ttry {\n\t\tqr = qrcode(typeNumber,errorCorrectLevel);\n\t\tqr.addData(text);\n\t\tqr.make();\n\t} catch (e) {\n\t\tif(typeNumber &gt;= 40) {\n\t\t\tthrow new Error(\&quot;Text too long to encode\&quot;);\n\t\t} else {\n\t\t\treturn generateQrCode(text, {\n\t\t\t\tsize: size,\n\t\t\t\terrorCorrectLevel: errorCorrectLevel,\n\t\t\t\ttypeNumber: typeNumber + 1\n\t\t\t});\n\t\t}\n\t}\n\tvar cellsize = parseInt(size / qr.getModuleCount()),\n\t\tmargin = parseInt((size - qr.getModuleCount() * cellsize) / 2);\n\treturn qr.createImgTag(cellsize, margin, size);\n}\n\n\n})();\n&quot;,
-            &quot;type&quot;: &quot;application/javascript&quot;,
-            &quot;module-type&quot;: &quot;macro&quot;
-        }
-    }
-}</pre>
-</div>
-<div created="20190506215155544" modified="20190508072356987" title="$:/SiteSubtitle">
-<pre>A template for a game design document for a solo developer.</pre>
+<div created="20190506215155544" modified="20190510055301909" title="$:/SiteSubtitle">
+<pre>A game design document template for small teams.</pre>
 </div>
 <div created="20190506215129943" modified="20190508072331716" title="$:/SiteTitle">
 <pre>Template Game Design Document</pre>
@@ -11247,37 +11183,55 @@ Roadmap</pre>
 <div created="20190507075605797" modified="20190507075605797" title="$:/state/edit/references-1148772433">
 <pre>show</pre>
 </div>
+<div created="20190510051102815" modified="20190510051102815" title="$:/state/edit/references-1449901469">
+<pre>show</pre>
+</div>
 <div created="20190506224256786" modified="20190506224257863" title="$:/state/edit/references-278622001">
 <pre>hide</pre>
+</div>
+<div created="20190510051904456" modified="20190510051904456" title="$:/state/edit/references-427221883">
+<pre>show</pre>
 </div>
 <div created="20190508074953285" modified="20190508074953285" title="$:/state/edit/references-614350653">
 <pre>show</pre>
 </div>
-<div created="20190506225252048" modified="20190509061959727" title="$:/state/FABs">
+<div created="20190506225252048" modified="20190510052102724" title="$:/state/FABs">
 <pre>no</pre>
 </div>
 <div created="20190506225122121" modified="20190506225123282" title="$:/state/folded/$:/About">
 <pre>show</pre>
 </div>
-<div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/About">
+<div created="20190506225013656" modified="20190510034048461" title="$:/state/folded/About">
 <pre>show</pre>
 </div>
 <div created="20190509015916755" modified="20190509064154994" title="$:/state/folded/All Milestones">
 <pre>show</pre>
 </div>
-<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Design">
+<div created="20190510030909427" modified="20190510031705821" title="$:/state/folded/Customize Wiki">
 <pre>show</pre>
 </div>
-<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Market">
+<div created="20190509015916755" modified="20190510034048461" title="$:/state/folded/Design">
 <pre>show</pre>
 </div>
-<div created="20190509015916755" modified="20190509061332085" title="$:/state/folded/Roadmap">
+<div created="20190509015916755" modified="20190510034048461" title="$:/state/folded/Market">
 <pre>show</pre>
 </div>
-<div created="20190506225013656" modified="20190509061332085" title="$:/state/folded/Table of Contents">
+<div created="20190510030909427" modified="20190510030931938" title="$:/state/folded/Omiya Games">
 <pre>show</pre>
 </div>
-<div created="20190508051253685" modified="20190509064024795" title="$:/state/header-searchbar">
+<div created="20190510030909427" modified="20190510031026822" title="$:/state/folded/Reactive DIVs">
+<pre>show</pre>
+</div>
+<div created="20190509015916755" modified="20190510034048461" title="$:/state/folded/Roadmap">
+<pre>show</pre>
+</div>
+<div created="20190506225013656" modified="20190510034048461" title="$:/state/folded/Table of Contents">
+<pre>show</pre>
+</div>
+<div created="20190510034048461" modified="20190510034048461" title="$:/state/folded/Team Members">
+<pre>show</pre>
+</div>
+<div created="20190508051253685" modified="20190510055707835" title="$:/state/header-searchbar">
 <pre>close</pre>
 </div>
 <div created="20190508084632553" modified="20190508084651024" title="$:/state/Link/-181365032/search">
@@ -11295,26 +11249,38 @@ Roadmap</pre>
 <div created="20190506222313424" modified="20190509055618823" title="$:/state/showeditpreview">
 <pre>yes</pre>
 </div>
-<div created="20190506225334733" modified="20190509065144061" title="$:/state/sidebar">
+<div created="20190506225334733" modified="20190510061118720" title="$:/state/sidebar">
 <pre>no</pre>
+</div>
+<div created="20190510055311840" modified="20190510055320477" title="$:/state/tab--1498284803">
+<pre>$:/core/ui/AdvancedSearch/Filter</pre>
 </div>
 <div created="20190506232020097" modified="20190508050801335" title="$:/state/tab--1963855381">
 <pre>$:/themes/jd/Material/Tweaks</pre>
 </div>
-<div created="20190506232003246" modified="20190506232003246" title="$:/state/tab--697582678">
-<pre>$:/core/ui/ControlPanel/Settings/CodeMirror</pre>
+<div created="20190510040002707" modified="20190510060743921" title="$:/state/tab--2112689675">
+<pre>$:/core/ui/ControlPanel/Basics</pre>
+</div>
+<div created="20190506232003246" modified="20190510060532737" title="$:/state/tab--697582678">
+<pre>$:/core/ui/ControlPanel/Settings/TiddlyWiki</pre>
 </div>
 <div created="20190506220749745" modified="20190506231933602" title="$:/state/tab--86143343">
 <pre>$:/core/ui/ControlPanel/Plugins/Installed/Plugins</pre>
 </div>
-<div created="20190506220755396" modified="20190506220819171" title="$:/state/tab-1342078386">
-<pre>$:/core/ui/ControlPanel/Plugins/Add/Plugins</pre>
+<div created="20190510040011851" modified="20190510060743093" title="$:/state/tab--959111941">
+<pre>$:/core/ui/ControlPanel/EditorTypes</pre>
 </div>
-<div created="20190506213632490" modified="20190509071051499" title="$:/state/tab-1749438307">
+<div created="20190506220755396" modified="20190510040128981" title="$:/state/tab-1342078386">
+<pre>$:/core/ui/ControlPanel/Plugins/Add/Themes</pre>
+</div>
+<div created="20190506213632490" modified="20190510060748170" title="$:/state/tab-1749438307">
 <pre>$:/core/ui/ControlPanel/Info</pre>
 </div>
-<div created="20190506220727618" modified="20190506231946766" title="$:/state/tab-2065006209">
+<div created="20190506220727618" modified="20190510055209465" title="$:/state/tab-2065006209">
 <pre>$:/core/ui/ControlPanel/Saving/General</pre>
+</div>
+<div created="20190510060846851" modified="20190510061058784" title="$:/state/tab/moresidebar-1203681481">
+<pre>$:/core/ui/MoreSideBar/All</pre>
 </div>
 <div created="20190506213831035" modified="20190506224210243" title="$:/state/tab/moresidebar-1850697562">
 <pre>$:/core/ui/MoreSideBar/Shadows</pre>
@@ -11322,7 +11288,7 @@ Roadmap</pre>
 <div created="20190506213818980" modified="20190506224838500" title="$:/state/tab/sidebar--595412856">
 <pre>$:/core/ui/SideBar/More</pre>
 </div>
-<div created="20190506224912331" modified="20190509065142960" title="$:/state/tab/sidebar-1845994331">
+<div created="20190506224912331" modified="20190510061111559" title="$:/state/tab/sidebar-1845994331">
 <pre>Table of Contents</pre>
 </div>
 <div created="20190507070918875" modified="20190507070923585" title="$:/state/tag-manager/task">
@@ -11335,6 +11301,9 @@ Roadmap</pre>
 <pre>open</pre>
 </div>
 <div created="20190509013145482" modified="20190509013145482" title="$:/state/toc/Table of Contents-About-842329646">
+<pre>open</pre>
+</div>
+<div created="20190510044551050" modified="20190510044558269" title="$:/state/toc/Table of Contents-Design--1876907615">
 <pre>open</pre>
 </div>
 <div created="20190508083548175" modified="20190508083548175" title="$:/state/toc/Table of Contents-Roadmap--1252283409">
@@ -11358,10 +11327,10 @@ Roadmap</pre>
 <div created="20190506225026483" modified="20190506225026483" title="$:/state/toc/TableOfContents-Roadmap-842329646">
 <pre>open</pre>
 </div>
-<div created="20190509071049642" list="About [[Table of Contents]] Design Market Roadmap" modified="20190509071049642" title="$:/StoryList">
+<div list="About [[Table of Contents]] Design Market Roadmap [[Team Members]]" title="$:/StoryList">
 <pre></pre>
 </div>
-<div created="20190508051301171" modified="20190509064024795" title="$:/temp/advancedsearch">
+<div created="20190508051301171" modified="20190510055707834" title="$:/temp/advancedsearch">
 <pre></pre>
 </div>
 <div plugin-type="info" title="$:/temp/info-plugin" type="application/json">
@@ -12093,8 +12062,8 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
 <div author="JeremyRuston" core-version="&gt;=5.0.0" created="20190506220753710" dependents="" description="Basic theme" modified="20190506220753710" name="Vanilla" original-plugin-type="theme" original-tags="" original-title="$:/themes/tiddlywiki/vanilla" original-type="application/json" plugin-priority="0" server-url="https://tiddlywiki.com/library/v5.1.19/index.html" tags="$:/tags/RemoteAssetInfo" title="$:/temp/RemoteAssetInfo/https://tiddlywiki.com/library/v5.1.19/index.html/$:/themes/tiddlywiki/vanilla" type="text/vnd.tiddlywiki" version="5.1.19">
 <pre></pre>
 </div>
-<div created="20190506220831514" modified="20190506223929674" title="$:/temp/RemoteAssetSearch/$:/config/OfficialPluginLibrary">
-<pre>highli</pre>
+<div created="20190506220831514" modified="20190510040107853" title="$:/temp/RemoteAssetSearch/$:/config/OfficialPluginLibrary">
+<pre></pre>
 </div>
 <div created="20190507071409491" modified="20190507075920120" title="$:/temp/RenameTags/replace">
 <pre>New Tag</pre>
@@ -12228,7 +12197,7 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20180327133017293" creator="jd" modified="20190509065144061" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
+<div created="20180327133017293" creator="jd" modified="20190510061118719" modifier="jd" tags="" title="$:/themes/jd/Material/ConfigDB" type="application/json">
 <pre>{
     &quot;fabmargin&quot;: &quot;5px&quot;,
     &quot;fabsize&quot;: &quot;56px&quot;,
@@ -12484,15 +12453,23 @@ This plugin also requires the JSZip plugin ([[$:/plugins/tiddlywiki/jszip]]) to 
     }
 }</pre>
 </div>
-<div created="20190506220937314" modified="20190508225539709" order="0" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
-<pre>This is a template game design document for a prototype game.  Feel free to add a description to the game below.  Don't forget to edit the title of this wiki by clicking on the [[gear icon|$:/ControlPanel]] on the upper-right hand corner.  Lastly, new wiki pages can be made by clicking on the [[plus icon|New Page]] on the lower-right hand corner.  Remember to add the tag, [[Table of Contents|Table of Contents]], on the new page so that it will appear under the table of contents.  See the [[Help]] page for more details.</pre>
+<div created="20190506220937314" modified="20190510054711045" order="0" tags="[[Table of Contents]]" title="About" type="text/vnd.tiddlywiki">
+<pre>&lt;&lt;createSubPageHeader&gt;&gt;
+
+This is a template game design document for a prototype game.  Feel free to replace this text with a description about your project here.  Don't forget to edit the title and subtitle of this wiki by clicking on the [[gear icon|$:/ControlPanel]] on the upper-right hand corner.
+
+Clicking on the three-lined &quot;hamburger&quot; button on the upper-left hand corner expands the sidebar, revealing the [[Table of Contents]].  The table of contents also appears below this page by default.  To revert this wiki back to the default pages of this wiki, simply click on the home button on the upper-right hand corner.
+
+To add a new wiki pages, click on the [[plus icon|New Page]] on the lower-right hand corner.  Remember to add the tag, [[Table of Contents]], on the new page so that it will appear under the sidebar. Alternatively, you can click on the &quot;Create a New Sub-Page&quot; button above this text.  This convenience feature will create a sub-page to this page, and update the sidebar accordingly.
+
+See the [[Help]] page for more details.</pre>
 </div>
-<div created="20190506223010949" modified="20190508083939879" order="3" tags="Roadmap" title="All Bugs">
+<div created="20190506223010949" modified="20190510053510731" order="5" tags="Roadmap" title="All Bugs">
 <pre>&lt;&lt;checklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190506222845908" modified="20190508083911294" order="1" tags="Roadmap" title="All Features">
+<div created="20190506222845908" modified="20190510053427814" order="1" tags="Roadmap" title="All Features">
 <pre>&lt;&lt;checklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
@@ -12539,10 +12516,85 @@ Create a New Status
   &lt;/$list&gt;
 &lt;/ol&gt;</pre>
 </div>
-<div created="20190508083227153" modified="20190508083924546" order="2" tags="Roadmap" title="All Tasks">
+<div created="20190508083227153" modified="20190510053440557" order="3" tags="Roadmap" title="All Tasks">
 <pre>&lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 
 {{Roadmap Footer}}</pre>
+</div>
+<div created="20190509212040709" list-after="Checklist - Main Task" modified="20190510030052927" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Assigned Task">
+<pre>\define assignedChecklist(tag, tagPlural, template, assignedTo:&quot;&quot;)
+&lt;$button&gt;
+&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to=&quot;$assignedTo$&quot;/&gt;
+Create a $template$
+&lt;/$button&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+  	&lt;th&gt;$tag$&lt;/th&gt;
+  	&lt;th&gt;Status&lt;/th&gt;
+  	&lt;th&gt;Priority&lt;/th&gt;
+  	&lt;th&gt;Assigned To&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+      {{!!text}} $tagPlural$
+    &lt;/th&gt;&lt;/tr&gt;
+    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to[$assignedTo$]]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to[$assignedTo$]]&quot; template=&quot;Task Row&quot;/&gt;
+      &lt;/$list&gt;
+    &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$list&gt;
+&lt;/table&gt;
+\end
+
+\define assignedToPageChecklist(tag, tagPlural, template)
+&lt;$button&gt;
+&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to={{!!title}}/&gt;
+Create a $template$
+&lt;/$button&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+  	&lt;th&gt;$tag$&lt;/th&gt;
+  	&lt;th&gt;Status&lt;/th&gt;
+  	&lt;th&gt;Priority&lt;/th&gt;
+  	&lt;th&gt;Assigned To&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;$set name=&quot;pageTitle&quot; value={{!!title}}&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
+      {{!!text}} $tagPlural$
+    &lt;/th&gt;&lt;/tr&gt;
+    &lt;$set name=&quot;currentStatus&quot; value={{!!title}}&gt;
+    &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to&lt;pageTitle&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
+      &lt;&lt;emptyRow&gt;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to&lt;pageTitle&gt;]&quot; template=&quot;Task Row&quot;/&gt;
+      &lt;/$list&gt;
+    &lt;/$set&gt;
+    &lt;/$set&gt;
+  &lt;/$list&gt;
+  &lt;/$set&gt;
+&lt;/table&gt;
+\end
+---
+
+! Testing assignedChecklist for unassigned tasks:
+
+&lt;&lt;assignedChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+
+! Testing assignedChecklist for Omiya Games:
+
+&lt;&lt;assignedChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot; &quot;Omiya Games&quot;&gt;&gt;
+
+! Testing assignedToPageChecklist:
+
+&lt;&lt;assignedToPageChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+</pre>
 </div>
 <div created="20190508080730530" modified="20190509062414270" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
 <pre>\define childChecklistTags(tag) $tag$ [[$(currentTiddler)$]]
@@ -12618,7 +12670,7 @@ Create a $template$
 &lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190509061959729" modified="20190509062737408" tags="" title="Checklist - Milestones">
+<div created="20190509061959729" modified="20190510061007769" tags="Template" title="Checklist - Milestones">
 <pre>\define checklistMilestones(tag, tagPlural, template)
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
 
@@ -12648,11 +12700,18 @@ Create a $template$
 &lt;&lt;checklistMilestones &quot;Milestone&quot; &quot;milestones&quot; &quot;New Milestone&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190507000946970" modified="20190509010747320" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
+<div created="20190507000946970" modified="20190510051133701" order="1" tags="About [[Wiki Customization]] Dev" title="Customize Wiki" type="text/vnd.tiddlywiki">
 <pre>A quick list of shortcuts on places to customize this wiki.
 
 &lt;ul&gt;
 &lt;li&gt;[[Tag Renamer]]&lt;/li&gt;
+
+&lt;li&gt;Global Stylesheets:&lt;/li&gt;
+&lt;ul&gt;
+&lt;$list filter=&quot;[tag[$:/tags/Stylesheet]]&quot;&gt;
+&lt;li&gt;&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;&lt;/li&gt;
+&lt;/$list&gt;
+&lt;/ul&gt;
 
 &lt;li&gt;Global Macros:&lt;/li&gt;
 &lt;ul&gt;
@@ -12663,6 +12722,12 @@ Create a $template$
 
 &lt;li&gt;Templates:&lt;/li&gt;
 &lt;ul&gt;
+&lt;li&gt;[[New Sub-Page]]&lt;/li&gt;
+&lt;li&gt;[[New Team Member]]&lt;/li&gt;
+&lt;li&gt;[[New Milestone]]&lt;/li&gt;
+&lt;li&gt;[[New Feature]]&lt;/li&gt;
+&lt;li&gt;[[New Task]]&lt;/li&gt;
+&lt;li&gt;[[New Bug]]&lt;/li&gt;
 &lt;$list filter=&quot;[tag[Template]]&quot;&gt;
 &lt;li&gt;&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;&lt;/li&gt;
 &lt;/$list&gt;
@@ -12677,16 +12742,14 @@ Create a $template$
 
 &lt;li&gt;Roadmap-related:&lt;/li&gt;
 &lt;ul&gt;
-&lt;li&gt;[[New Milestone]]&lt;/li&gt;
-&lt;li&gt;[[New Feature]]&lt;/li&gt;
-&lt;li&gt;[[New Task]]&lt;/li&gt;
-&lt;li&gt;[[New Bug]]&lt;/li&gt;
 &lt;li&gt;[[Roadmap Footer]]&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/ul&gt;</pre>
 </div>
-<div created="20190506223036682" modified="20190508085605686" order="1" tags="[[Table of Contents]]" title="Design" type="text/vnd.tiddlywiki">
-<pre>The content about the design of the game.
+<div created="20190506223036682" modified="20190510055555926" order="1" tags="[[Table of Contents]]" title="Design" type="text/vnd.tiddlywiki">
+<pre>&lt;&lt;createSubPageHeader&gt;&gt;
+
+The content about the design of the game.
 
 ! Objective
 
@@ -12700,23 +12763,52 @@ This section may be better off on it's own page, to be honest.
 
 This section may be better off on it's own page, to be honest.
 
-!! Systems
+! Systems
 
 This section may be better off on it's own page, to be honest.
 
 ! Economy
 
-This section may be better off on it's own page, to be honest.
-</pre>
+This section may be better off on it's own page, to be honest.</pre>
 </div>
-<div created="20190507070909611" icon="$:/core/images/done-button" modified="20190507070909611" title="done">
-<pre></pre>
+<div created="20190510030702147" modified="20190510035859652" tags="$:/tags/Stylesheet" title="Flex Stylesheet" type="text/css">
+<pre>.flex-container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  
+  -webkit-flex-flow: row wrap;
+  justify-content: flex-start;
+}
+
+.flex-item {
+  margin-right: 5px;
+  padding: 0;
+}
+
+.checklist table {
+    width: 100%;
+}</pre>
 </div>
-<div created="20190507071434336" icon="$:/core/images/done-button" modified="20190507071434336" title="Done">
-<pre></pre>
-</div>
-<div created="20190508075449444" modified="20190509064731660" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Headers">
-<pre>\define milestoneHeader()
+<div created="20190508075449444" modified="20190510054702308" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Headers">
+<pre>\define subPageTags() [[$(currentTiddler)$]]
+
+\define createSubPageHeader()
+&lt;$button&gt;
+&lt;$set name=&quot;numSubPages&quot; filter=&quot;[tag{!!title}count[]]&quot;&gt;
+&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;New Sub-Page&quot; tags=&lt;&lt;subPageTags&gt;&gt; order=&lt;&lt;numSubPages&gt;&gt;/&gt;
+&lt;/$set&gt;
+Create a New Sub-Page
+&lt;/$button&gt;
+\end
+
+\define milestoneHeader()
 | &lt;$checkbox tag=&quot;Done&quot;&gt; Completed&lt;/$checkbox&gt; |
 \end
 
@@ -12725,14 +12817,19 @@ This section may be better off on it's own page, to be honest.
 \end
 
 ---
+! Test createPageHeader
+&lt;&lt;createPageHeader&gt;&gt;
+---
 ! Test milestoneHeader
 &lt;&lt;milestoneHeader&gt;&gt;
 ---
 ! Test taskHeader
 &lt;&lt;taskHeader&gt;&gt;</pre>
 </div>
-<div created="20190507001538577" modified="20190508230248237" order="0" tags="[[Wiki Customization]] About" title="Help" type="text/vnd.tiddlywiki">
-<pre>!! How does one add something to the Table of Contents?
+<div created="20190507001538577" modified="20190510043100740" order="0" tags="About" title="Help" type="text/vnd.tiddlywiki">
+<pre>&lt;&lt;parentToPageHeader&gt;&gt;
+
+!! How does one add something to the Table of Contents?
 
 To add to the sidebar's table of content, simply add the tag `Table of Contents` to a page.  If the item should appear as a child to a pre-existing entry in the table of contents, tag it with the name of that page, e.g. `Design` to put a page under the [[Design]] page.
 
@@ -12752,8 +12849,10 @@ Oddly enough, the [[Tag Manager|$:/TagManager]] does ''not'' let you rename tags
 
 By using TiddlyWiki's transclusion: enter the name of the page between `{{}}` (e.g. `{{Name Of Page}}`) to embed!</pre>
 </div>
-<div created="20190506222206036" modified="20190508085530317" order="2" tags="[[Table of Contents]]" title="Market" type="text/vnd.tiddlywiki">
-<pre>Describe the target audience and marketing strategies here.
+<div created="20190506222206036" modified="20190510055634451" order="2" tags="[[Table of Contents]]" title="Market" type="text/vnd.tiddlywiki">
+<pre>&lt;&lt;createSubPageHeader&gt;&gt;
+
+Describe the target audience and marketing strategies here.
 
 ! Target Audience
 
@@ -12777,10 +12876,8 @@ This section may be better off on it's own page, to be honest.</pre>
 <div created="20190507024228102" modified="20190509065035681" tags="Template" title="Milestone - Done" type="text/vnd.tiddlywiki">
 <pre>&lt;div&gt;&lt;$checkbox tag=&quot;Done&quot;&gt; ~~&lt;$link to={{!!title}}&gt;&lt;$view field=&quot;title&quot;/&gt;&lt;/$link&gt;~~&lt;/$checkbox&gt;&lt;/div&gt;</pre>
 </div>
-<div assigned-to="" created="20190508020310974" modified="20190509025412315" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
+<div assigned-to="" created="20190508020310974" modified="20190510034820715" priority="Priority: Medium" status="Status: New" tags="Bug" title="New Bug" type="text/vnd.tiddlywiki">
 <pre>&lt;&lt;taskHeader&gt;&gt;
----
-
 ! Description
 Summarize the effect of the bug here.
 
@@ -12830,25 +12927,34 @@ Indicate what actually happens if you've followed the steps above.  Here are som
 * I don't get the achievement
 
 ---
-! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
-</div>
-<div assigned-to="" created="20190508044150837" modified="20190509025456497" priority="Priority: Medium" status="Status: New" tags="Feature" title="New Feature">
-<pre>&lt;&lt;taskHeader&gt;&gt;
----
 
+&lt;div class=&quot;flex-container&quot;&gt;
+  &lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Tasks&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+</div>
+<div assigned-to="" created="20190508044150837" modified="20190510035041958" priority="Priority: Medium" status="Status: New" tags="Feature" title="New Feature">
+<pre>&lt;&lt;taskHeader&gt;&gt;
 ! Description
 
 Provide description of this feature here.
 
 ---
-!! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
----
-!! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
+
+&lt;div class=&quot;flex-container&quot;&gt;
+  &lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Tasks&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Bugs&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 </div>
-<div created="20190508044445509" modified="20190509064824481" tags="Milestone" title="New Milestone">
+<div created="20190508044445509" modified="20190510034514585" tags="Milestone" title="New Milestone">
 <pre>&lt;&lt;milestoneHeader&gt;&gt;
 
 ! Description
@@ -12856,14 +12962,24 @@ Provide description of this feature here.
 Provide description of this milestone here.
 
 ---
-!! Child Features
-&lt;&lt;childChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
----
-!! Child Tasks
-&lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
----
-!! Child Bugs
-&lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
+
+&lt;div class=&quot;flex-container&quot;&gt;
+  &lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Features&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Tasks&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Child Bugs&lt;/h2&gt;
+    &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</div>
+<div created="20190510042930104" creator="Omiya Games" modified="20190510055714645" title="New Sub-Page">
+<pre>&lt;&lt;createSubPageHeader&gt;&gt;
+
+//Add content here.//</pre>
 </div>
 <div assigned-to="" created="20190508025712742" modified="20190509025906895" priority="Priority: Medium" status="Status: New" tags="Task" title="New Task">
 <pre>&lt;&lt;taskHeader&gt;&gt;
@@ -12880,10 +12996,46 @@ Provide description of this task here.
 !! Child Bugs
 &lt;&lt;childChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;</pre>
 </div>
-<div created="20190508073809015" modified="20190508073949736" order="0" tags="[[Team Member]]" title="Omiya Games" type="text/x-markdown">
-<pre>A prolific, award-winning experimental game studio lead by [one person](https://www.taroomiya.com/), **[Omiya Games](https://www.omiyagames.com/)** strives to push the boundaries of what’s possible with games by challenging the player with strange and memorable experiences.
+<div created="20190509211037902" modified="20190510034911359" order="0" tags="[[Team Member]]" title="New Team Member">
+<pre>! About {{!!title}}
 
-よろしく!</pre>
+Fill out the bio of this team member here.  Note that the text, `{{!!title}}` will automatically be replaced with the title of this page.
+
+---
+
+&lt;div class=&quot;flex-container&quot;&gt;
+  &lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Features&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Tasks&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Bugs&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</div>
+<div created="20190508073809015" modified="20190510035827705" order="0" tags="[[Team Member]]" title="Omiya Games" type="text/vnd.tiddlywiki">
+<pre>! About {{!!title}}
+A prolific, award-winning experimental game studio lead by [[one person|https://www.taroomiya.com/]], ''[[Omiya Games|https://www.omiyagames.com/]]'' strives to push the boundaries of what’s possible with games by challenging the player with strange and memorable experiences.
+
+よろしく!
+
+---
+
+&lt;div class=&quot;flex-container&quot;&gt;
+  &lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Features&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Tasks&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+  &lt;/div&gt;&lt;div class=&quot;flex-item checklist&quot;&gt;
+    &lt;h2&gt;Assigned Bugs&lt;/h2&gt;
+    &lt;&lt;assignedToPageChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
 </div>
 <div created="20190508233225782" modified="20190509021725893" order="0" tags="Priority" title="Priority: Blocker">
 <pre>Blocker</pre>
@@ -12903,9 +13055,17 @@ Provide description of this task here.
 <div created="20190508233449381" modified="20190509053639535" order="5" tags="Priority" title="Priority: Trivial">
 <pre>Trivial</pre>
 </div>
-<div created="20190506222348671" modified="20190509065051446" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
-<pre>Roadmap info goes here.
+<div created="20190506222348671" modified="20190510055640102" order="3" tags="[[Table of Contents]]" title="Roadmap" type="text/vnd.tiddlywiki">
+<pre>Expand the table with more details below:
 
+|!Date |!Name |!Description |
+|??/??/???? |Prototype |A minimum-viable product that demonstrates the idea of the project. |
+|??/??/???? |Alpha |A product that contains enough features that demonstrates to the public the direction the project is going. |
+|??/??/???? |Beta |A product with all features implemented to a certain degree. May contain bugs. |
+|??/??/???? |Release Candidate of v1.0 |A product where in theory, all critical and high priority bugs has been fixed. A slightly uncertain build that, provided the feedback is positive, may upgrade to a full release |
+|??/??/???? |Full Release of v1.0 |A product where it's confirmed most reported critical and high priority bugs has been fixed. A list of known bugs will be provided. |
+
+---
 ! Active Milestones
 
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;New Milestone&quot;&gt;Create a New Milestone&lt;/$button&gt;
@@ -12914,13 +13074,9 @@ Provide description of this task here.
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190507000901449" modified="20190509063955913" tags="Transclusion" title="Roadmap Footer">
+<div created="20190507000901449" modified="20190510053052058" tags="Transclusion" title="Roadmap Footer">
 <pre>! References
-* [[Roadmap]]
-* [[All Milestones]]
-* [[All Features]]
-* [[All Tasks]]
-* [[All Bugs]]</pre>
+&lt;&lt;list-links filter:&quot;[tag[Roadmap]sort[order]]&quot;&gt;&gt;</pre>
 </div>
 <div created="20190508233802609" modified="20190509024225720" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Select Priority">
 <pre>\define getPriority(index:0)
@@ -12994,11 +13150,11 @@ Provide description of this task here.
 
 &lt;&lt;selectStatus&gt;&gt;</pre>
 </div>
-<div created="20190508074114091" modified="20190509004450850" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Team Member">
+<div created="20190508074114091" modified="20190509211844023" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Team Member">
 <pre>\define selectTeamMember(setField:'Team Member')
 &lt;$select tiddler={{!!title}} field='$setField$' default=''&gt;
 &lt;option value=&quot;&quot;&gt;(None)&lt;/option&gt;
-&lt;$list filter='[!has[draft.of]tag[Team Member]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]![New Team Member]tag[Team Member]sort[order]]'&gt;
 &lt;option&gt;{{!!title}}&lt;/option&gt;
 &lt;/$list&gt;
 &lt;/$select&gt;
@@ -13027,11 +13183,9 @@ Provide description of this task here.
 <div created="20190508064329855" modified="20190509011839702" order="5" tags="Status" title="Status: Won't Fix">
 <pre>Won't Fix</pre>
 </div>
-<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190508083602266" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
+<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190510055623683" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
 <pre>&lt;div class=&quot;tc-table-of-contents&quot;&gt;
-
 &lt;&lt;toc-selective-expandable 'Table of Contents'  &quot;sort[order]&quot;&gt;&gt;
-
 &lt;/div&gt;</pre>
 </div>
 <div created="20190507071340754" modified="20190507071646184" tags="Dev" title="Tag Renamer" type="text/vnd.tiddlywiki">
@@ -13059,10 +13213,7 @@ Provide description of this task here.
 &lt;/$list&gt;
 &lt;/$reveal&gt;</pre>
 </div>
-<div created="20190508042746598" list="[[New Task]] [[&lt;div class=&quot;tc-menu-list-item&quot; style=&quot;box-sizing: border-box; white-space: normal; padding-left: 5px; text-indent: -5px; overflow-wrap: break-word; word-break: break-all; color: rgba(0, 0, 0, 0.87); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(250, 250, 250); text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span class=&quot; tc-droppable&quot; style=&quot;box-sizing: border-box;&quot;&gt;&lt;div style=&quot;box-sizing: border-box;&quot;&gt;&lt;tr style=&quot;box-sizing: border-box;&quot;&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;a class=&quot;tc-tiddlylink tc-tiddlylink-resolves&quot; href=&quot;#Test%20Task%201&quot; style=&quot;box-sizing: border-box; background: transparent; outline: 0px; text-decoration: underline; font-weight: 500; color: rgb(1, 87, 155); user-select: inherit;&quot;&gt;&lt;br class=&quot;Apple-interchange-newline&quot;&gt;Test Task 1&lt;/a&gt;&lt;/td&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;&quot; style=&quot;box-sizing: border-box;&quot;&gt;(None)&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option style=&quot;box-sizing: border-box;&quot;&gt;Omiya Games&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;&lt;div class=&quot;tc-menu-list-item&quot; style=&quot;box-sizing: border-box; white-space: normal; padding-left: 5px; text-indent: -5px; overflow-wrap: break-word; word-break: break-all; color: rgba(0, 0, 0, 0.87); font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Helvetica, Arial, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;, &amp;quot;Segoe UI Symbol&amp;quot;; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(250, 250, 250); text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&lt;span class=&quot; tc-droppable&quot; style=&quot;box-sizing: border-box;&quot;&gt;&lt;div style=&quot;box-sizing: border-box;&quot;&gt;&lt;tr style=&quot;box-sizing: border-box;&quot;&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: New&quot; style=&quot;box-sizing: border-box;&quot;&gt;New&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: In Progress&quot; style=&quot;box-sizing: border-box;&quot;&gt;In Progress&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Handover&quot; style=&quot;box-sizing: border-box;&quot;&gt;Notify to Assignee&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: QA&quot; style=&quot;box-sizing: border-box;&quot;&gt;Needs Verification&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Done&quot; style=&quot;box-sizing: border-box;&quot;&gt;Done&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Status: Won't Fix&quot; style=&quot;box-sizing: border-box;&quot;&gt;Won't Fix&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;td style=&quot;box-sizing: border-box; padding: 0px 7px; border-top: 1px solid rgb(218, 218, 218); border-left: 1px solid rgb(218, 218, 218);&quot;&gt;&lt;select style=&quot;box-sizing: border-box; color: inherit; font: inherit; margin: 0px; text-transform: none; max-width: 100%; background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.12);&quot;&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Blocker&quot; style=&quot;box-sizing: border-box;&quot;&gt;Blocker&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Critical&quot; style=&quot;box-sizing: border-box;&quot;&gt;Critical&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: High&quot; style=&quot;box-sizing: border-box;&quot;&gt;High&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Medium&quot; style=&quot;box-sizing: border-box;&quot;&gt;Medium&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Low&quot; style=&quot;box-sizing: border-box;&quot;&gt;Low&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;option value=&quot;Priority: Trivial&quot; style=&quot;box-sizing: border-box;&quot;&gt;Trivial&lt;/option&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/div&gt;&lt;/span&gt;&lt;/div&gt;]] [[Test Task 2]] [[Test Task 1]]" modified="20190509022255902" title="Task">
-<pre></pre>
-</div>
-<div created="20190509013541716" modified="20190509061154288" tags="Template" title="Task Row">
+<div created="20190509013541716" modified="20190509214329454" tags="Template" title="Task Row">
 <pre>&lt;tr&gt;
   &lt;td&gt;
     &lt;$link to={{!!title}}&gt;
@@ -13073,23 +13224,38 @@ Provide description of this task here.
   &lt;/td&gt;&lt;td&gt;
   	&lt;&lt;selectPriority&gt;&gt;
   &lt;/td&gt;&lt;td&gt;
-  	&lt;&lt;selectTeamMember 'Assigned To'&gt;&gt;
+  	&lt;&lt;selectTeamMember 'assigned-to'&gt;&gt;
   &lt;/td&gt;
 &lt;/tr&gt;</pre>
 </div>
-<div created="20190508073315948" modified="20190508085158096" order="4" tags="[[Table of Contents]] Dev [[Wiki Customization]]" title="Team Members">
+<div created="20190508073315948" modified="20190510045505715" order="4" tags="[[Table of Contents]]" title="Team Members">
 <pre>&lt;$set name=&quot;numTeamMembers&quot; filter=&quot;[tag[Team Members]count[]]&quot;&gt;
 &lt;$button&gt;
-&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; title=&quot;Name&quot; tags=&quot;[[Team Member]]&quot; text=&quot;Bio goes here.&quot; order=&lt;&lt;numTeamMembers&gt;&gt;/&gt;
+&lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;New Team Member&quot; order=&lt;&lt;numTeamMembers&gt;&gt;/&gt;
 Create a New Team Member
 &lt;/$button&gt;
 &lt;/$set&gt;
 
 &lt;ol&gt;
-&lt;$list filter='[!has[draft.of]tag[Team Member]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]!title[New Team Member]tag[Team Member]sort[order]]'&gt;
 &lt;li&gt;&lt;$link to=&lt;&lt;currentTiddler&gt;&gt;&gt;&lt;&lt;currentTiddler&gt;&gt;&lt;/$link&gt;&lt;/li&gt;
 &lt;/$list&gt;
 &lt;/ol&gt;</pre>
+</div>
+<div created="20190510052102725" modified="20190510053502807" order="6" tags="Roadmap" title="Unassigned Bugs">
+<pre>&lt;&lt;assignedChecklist &quot;Bug&quot; &quot;bugs&quot; &quot;New Bug&quot;&gt;&gt;
+
+{{Roadmap Footer}}</pre>
+</div>
+<div created="20190510051256937" modified="20190510053417461" order="2" tags="Roadmap" title="Unassigned Features">
+<pre>&lt;&lt;assignedChecklist &quot;Feature&quot; &quot;features&quot; &quot;New Feature&quot;&gt;&gt;
+
+{{Roadmap Footer}}</pre>
+</div>
+<div created="20190510052000595" modified="20190510053449392" order="4" tags="Roadmap" title="Unassigned Tasks">
+<pre>&lt;&lt;assignedChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
+
+{{Roadmap Footer}}</pre>
 </div>
 
 </div>
