@@ -127,7 +127,7 @@ namespace OmiyaGames.UI.Translations
             set
             {
                 // Not sure why we need this, but it fixes a lot of problems.
-                if(value > 0)
+                if (value > 0)
                 {
                     width = value;
                     //Debug.Log("Width: " + width + ", vs Utility: " + EditorGUIUtility.currentViewWidth);
@@ -277,7 +277,17 @@ namespace OmiyaGames.UI.Translations
                 AddLanguageToFrequencyDictionary(frequencyInLanguageAppearance, LanguageIndexProperty.intValue);
 
                 // Indicate this dictionary needs to be updated
-                UnityEditor.EditorUtility.SetDirty(Element.serializedObject.context);
+                if ((Element != null) && (Element.serializedObject != null))
+                {
+                    if (Element.serializedObject.context != null)
+                    {
+                        EditorUtility.SetDirty(Element.serializedObject.context);
+                    }
+                    else if (Element.serializedObject.targetObject != null)
+                    {
+                        EditorUtility.SetDirty(Element.serializedObject.targetObject);
+                    }
+                }
             }
 
             // Re-adjust the rectangle, full-width for the next part
@@ -349,7 +359,7 @@ namespace OmiyaGames.UI.Translations
             // Draw the translations list
             EditorGUI.BeginChangeCheck();
             TextProperty.stringValue = EditorGUI.TextArea(rect, oldText, WrappedTextArea);
-            if((EditorGUI.EndChangeCheck() == true) && (Element != null) && (Element.serializedObject != null) && (Element.serializedObject.context != null))
+            if ((EditorGUI.EndChangeCheck() == true) && (Element != null) && (Element.serializedObject != null) && (Element.serializedObject.context != null))
             {
                 // Indicate this dictionary needs to be updated
                 EditorUtility.SetDirty(Element.serializedObject.context);

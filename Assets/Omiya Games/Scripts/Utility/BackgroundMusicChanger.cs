@@ -37,6 +37,8 @@ namespace OmiyaGames
     {
         [SerializeField]
         AudioClip backgroundMusic;
+        [SerializeField]
+        bool randomizeStartPoint = false;
 
         // Use this for initialization
         void Start()
@@ -44,6 +46,10 @@ namespace OmiyaGames
             if (backgroundMusic != null)
             {
                 Singleton.Get<BackgroundMusic>().CurrentMusic = backgroundMusic;
+                if(randomizeStartPoint)
+                {
+                    Singleton.Get<BackgroundMusic>().Audio.time = Random.Range(0f, backgroundMusic.length);
+                }
             }
         }
     }

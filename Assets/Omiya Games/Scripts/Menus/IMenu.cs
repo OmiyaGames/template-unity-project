@@ -323,6 +323,14 @@ namespace OmiyaGames.Menus
         }
 
         /// <summary>
+        /// Name of the animator's state field
+        /// </summary>
+        protected string StateField
+        {
+            get => stateField;
+        }
+
+        /// <summary>
         /// Sets up the Menu.
         /// </summary>
         public void Setup()
@@ -394,7 +402,7 @@ namespace OmiyaGames.Menus
         protected virtual void OnStateChanged(VisibilityState from, VisibilityState to)
         {
             // Update the animator
-            Animator.SetInteger(stateField, (int)to);
+            Animator.SetInteger(StateField, (int)to);
 
             // Check to see if we're visible
             if (to == VisibilityState.Visible)
