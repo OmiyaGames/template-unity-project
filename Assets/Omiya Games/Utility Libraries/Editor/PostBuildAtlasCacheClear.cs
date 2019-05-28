@@ -1,4 +1,6 @@
-﻿#if UNITY_EDITOR
+﻿//#define CLEAR_AFTER_BUILD
+
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
@@ -12,8 +14,15 @@ namespace Community.UI
     /// </summary>
     public class PostBuildAtlasCacheClear : MonoBehaviour
     {
+#if CLEAR_AFTER_BUILD
         [PostProcessBuild]
         private static void DeleteAtlasCache(BuildTarget target, string pathToBuiltProject)
+        {
+            DeleteAtlasCache();
+        }
+#endif
+        [MenuItem("Tools/Omiya Games/Delete Sprite Packing Cache")]
+        public static void DeleteAtlasCache()
         {
             string projectPath = Application.dataPath; //Asset path
             string atlasCachePath = Path.GetFullPath(Path.Combine(projectPath, Path.DirectorySeparatorChar + ".." + Path.DirectorySeparatorChar + "Library" + Path.DirectorySeparatorChar + "AtlasCache"));
@@ -22,12 +31,6 @@ namespace Community.UI
                 Directory.Delete(atlasCachePath, true);
                 Debug.Log("Deleted atlas cache folder.");
             }
-        }
-
-        [MenuItem("Tools/Omiya Games/Delete Sprite Packing Cache")]
-        public static void DeleteAtlasCache()
-        {
-            DeleteAtlasCache(EditorUserBuildSettings.activeBuildTarget, null);
         }
     }
 }

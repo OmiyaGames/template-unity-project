@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.AnimatedValues;
 using System.Text;
 
-namespace OmiyaGames
+namespace OmiyaGames.UI
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="OmiyaGamesBuildScript.cs" company="Omiya Games">
