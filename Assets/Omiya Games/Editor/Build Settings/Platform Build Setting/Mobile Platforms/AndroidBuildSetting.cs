@@ -104,7 +104,7 @@ namespace OmiyaGames.Builds
             {
                 // If not, prompt the user to fill in the Android credentials
                 message = "Please fill out the Android Keystore credentials first, before building again.";
-                AndroidKeystoreCredentialsWindow.Display(null);
+                UI.AndroidKeystoreCredentialsWindow.Display(null);
             }
             return returnFlag;
         }
