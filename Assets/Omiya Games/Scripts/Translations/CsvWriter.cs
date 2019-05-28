@@ -76,11 +76,14 @@ namespace OmiyaGames
                     // Go through all the languages
                     for (int index = 0; index < languages.Count; ++index)
                     {
-                        // Write the divider
-                        writer.Write(Divider);
+                        if (translation.Value.SupportedLanguages.Contains(index) == true)
+                        {
+                            // Write the divider
+                            writer.Write(Divider);
 
-                        // Write the text
-                        WriteString(writer, translation.Value[index]);
+                            // Write the text
+                            WriteString(writer, translation.Value[index]);
+                        }
                     }
                 }
             }
