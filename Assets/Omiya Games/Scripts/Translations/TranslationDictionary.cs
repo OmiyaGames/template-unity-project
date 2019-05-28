@@ -7,7 +7,7 @@ namespace OmiyaGames.Translations
     /// <copyright file="LanguageTextPairEditor.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2018 Omiya Games
+    /// Copyright (c) 2014-2019 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -303,7 +303,11 @@ namespace OmiyaGames.Translations
                     // Add all the pairs
                     foreach (LanguageTextPair pair in collection.AllTranslations)
                     {
-                        toAdd[pair.LanguageIndex] = pair.Text;
+                        // Make sure the language is supported before adding to the map
+                        if (SupportedLanguages.Contains(pair.LanguageIndex) == true)
+                        {
+                            toAdd[pair.LanguageIndex] = pair.Text;
+                        }
                     }
                 }
             }
@@ -320,12 +324,7 @@ namespace OmiyaGames.Translations
 
         public bool HasTranslation(string key, int languageIndex)
         {
-            bool returnFlag = HasKey(key);
-            if ((returnFlag == true) && (AllTranslations[key][languageIndex] != null))
-            {
-                returnFlag = true;
-            }
-            return returnFlag;
+            return ((HasKey(key) == true) && (SupportedLanguages.Contains(languageIndex) == true) && (AllTranslations[key][languageIndex] != null));
         }
 
         public bool HasTranslation(string key, string language)
