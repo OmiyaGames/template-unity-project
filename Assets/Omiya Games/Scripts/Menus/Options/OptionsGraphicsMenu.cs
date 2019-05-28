@@ -105,9 +105,9 @@ namespace OmiyaGames.Menus
         [SerializeField]
         ToggleSet bobbingCameraControls;
         [SerializeField]
-        ToggleSet motionBlursControls;
-        [SerializeField]
         ToggleSet screenFlashesControls;
+        [SerializeField]
+        ToggleSet motionBlursControls;
         [SerializeField]
         ToggleSet bloomControls;
         #endregion

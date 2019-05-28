@@ -66,7 +66,7 @@ namespace OmiyaGames.Menus
             Manager.SetLabelTextToReturnToMenu(mReturnToMenuLabel);
 
             // Check if we need to disable the next level button
-            if ((defaultButton != null) && (SceneChanger.NextScene == null))
+            if ((defaultButton != null) && (SceneChanger.UpcomingScene == null))
             {
                 defaultButton.interactable = false;
             }
