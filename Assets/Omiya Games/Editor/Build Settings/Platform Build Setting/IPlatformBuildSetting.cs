@@ -394,6 +394,9 @@ namespace OmiyaGames.Builds
                 // Update player settings
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(TargetGroup, customScriptDefineSymbols.CustomValue);
             }
+
+            // Force the WebGL linker to be WASM
+            UI.SettingsConfigurator.ForceWebGlLinkerToWasm();
             return returnSettings;
         }
 
