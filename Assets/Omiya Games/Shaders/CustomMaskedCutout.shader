@@ -5,7 +5,7 @@
 // - no lightmap support
 // - no per-material color
 
-Shader "Omiya Games/Unlit Cutout (Using Grayscale Cutoff)" {
+Shader "Omiya Games/Masking/Unlit Cutout (Using Grayscale Cutoff)" {
 Properties {
 	_MainTex ("Base (RGB)", 2D) = "white" {}
 	_MaskTex ("Mask (grayscale)", 2D) = "white" {}

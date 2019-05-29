@@ -1,6 +1,6 @@
 // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
-Shader "Omiya Games/UI Cutout (Using Grayscale Cutoff)"
+Shader "Omiya Games/Masking/UI Cutout (Using Grayscale Cutoff)"
 {
 	Properties
 	{
