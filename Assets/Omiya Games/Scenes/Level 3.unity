@@ -287,6 +287,12 @@ MonoBehaviour:
     objectMaterial: {fileID: 2100000, guid: b42e57158c8877a44ba0a948fde2a5e1, type: 2}
     floorMaterial: {fileID: 2100000, guid: b42e57158c8877a44ba0a948fde2a5e1, type: 2}
   - shaderName:
+      key: Shader Camera Distance
+      dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
+    ethanMaterial: {fileID: 2100000, guid: 3bd62f53699f8284e807ecb430d85296, type: 2}
+    objectMaterial: {fileID: 2100000, guid: 3bd62f53699f8284e807ecb430d85296, type: 2}
+    floorMaterial: {fileID: 2100000, guid: 3bd62f53699f8284e807ecb430d85296, type: 2}
+  - shaderName:
       key: Shader Lit Blinn-Phong
       dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
     ethanMaterial: {fileID: 2100000, guid: dd7a7ab72ac5b124684d494945854c4d, type: 2}
@@ -316,6 +322,12 @@ MonoBehaviour:
     ethanMaterial: {fileID: 2100000, guid: 6c77b4fc39a79a844a710a1587fdcc78, type: 2}
     objectMaterial: {fileID: 2100000, guid: df9f55c9c047b6549af533d55b12e4f5, type: 2}
     floorMaterial: {fileID: 2100000, guid: 316596c0e8a4dff44aaaadea839d3c07, type: 2}
+  - shaderName:
+      key: Shader Lit Toon Faded
+      dictionary: {fileID: 11400000, guid: 0c75d05586af1ab4ab8e59ba091e1195, type: 2}
+    ethanMaterial: {fileID: 2100000, guid: 81252ba56edb068438b47c8743bcc398, type: 2}
+    objectMaterial: {fileID: 2100000, guid: 93d877260fc1be8438da1a542ee1455e, type: 2}
+    floorMaterial: {fileID: 2100000, guid: ee4d1ee25ef7c8246b1a0a6c2b134627, type: 2}
   floorRenderer: {fileID: 490882706}
   objectRenderers:
   - {fileID: 2060819558}
@@ -595,7 +607,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 529331178}
-  m_LocalRotation: {x: -0.14362632, y: -0.0681951, z: 0.009921386, w: -0.9872297}
+  m_LocalRotation: {x: -0.14362633, y: -0.068195105, z: 0.009921388, w: -0.9872297}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2555,11 +2567,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.13104428
+      value: 0.1310443
       objectReference: {fileID: 0}
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.06831591
+      value: 0.06831589
       objectReference: {fileID: 0}
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
       propertyPath: m_LocalRotation.z
@@ -2567,7 +2579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9889785
+      value: 0.98897845
       objectReference: {fileID: 0}
     - target: {fileID: 4878912538111896, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
       propertyPath: m_RootOrder
