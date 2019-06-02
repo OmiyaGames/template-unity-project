@@ -45,6 +45,8 @@ namespace Project
             [SerializeField]
             private Material ethanMaterial;
             [SerializeField]
+            private Material objectMaterial;
+            [SerializeField]
             private Material floorMaterial;
 
             public TranslatedString ShaderName
@@ -55,6 +57,11 @@ namespace Project
             public Material EthanMaterial
             {
                 get => ethanMaterial;
+            }
+
+            public Material ObjectMaterial
+            {
+                get => objectMaterial;
             }
 
             public Material FloorMaterial
@@ -70,6 +77,8 @@ namespace Project
         [Header("Renderers")]
         [SerializeField]
         private Renderer floorRenderer;
+        [SerializeField]
+        private Renderer[] objectRenderers;
         [SerializeField]
         private Renderer[] ethanRenderers;
 
@@ -118,6 +127,13 @@ namespace Project
             if (floorRenderer != null)
             {
                 floorRenderer.sharedMaterial = allMaterials[index].FloorMaterial;
+            }
+            foreach (Renderer renderer in objectRenderers)
+            {
+                if (renderer != null)
+                {
+                    renderer.sharedMaterial = allMaterials[index].ObjectMaterial;
+                }
             }
             foreach (Renderer renderer in ethanRenderers)
             {
