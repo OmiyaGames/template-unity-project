@@ -69,16 +69,62 @@ namespace Project
 
         [Header("Renderers")]
         [SerializeField]
-        private Renderer[] ethanRenderers;
-        [SerializeField]
         private Renderer floorRenderer;
+        [SerializeField]
+        private Renderer[] ethanRenderers;
+
+        [Header("UI")]
+        [SerializeField]
+        private UnityEngine.UI.Toggle shaderCheckbox;
+
+        private void Start()
+        {
+            Transform parent = shaderCheckbox.transform.parent;
+            UnityEngine.UI.Toggle currentCheckbox = shaderCheckbox;
+            for (int index = 0; index < allMaterials.Length; ++index)
+            {
+                // Setup the checkbox's label
+                TranslatedTextMeshPro label = currentCheckbox.GetComponentInChildren<TranslatedTextMeshPro>();
+                label.SetTranslationKey(allMaterials[index].ShaderName);
+
+                // Setup the checkbox's name
+                currentCheckbox.name = allMaterials[index].ShaderName.ToString();
+                int materialIndex = index;
+                currentCheckbox.onValueChanged.AddListener((bool toggle) =>
+                {
+                    if (toggle == true)
+                    {
+                        OnChangeMaterialToggled(materialIndex);
+                    }
+                });
+
+                // Check if this is NOT the last element
+                if (index < (allMaterials.Length - 1))
+                {
+                    // Clone the element
+                    GameObject clone = Instantiate(shaderCheckbox.gameObject, parent);
+                    clone.transform.localRotation = Quaternion.identity;
+                    clone.transform.localScale = Vector3.one;
+
+                    // Grab the checkbox
+                    currentCheckbox = clone.GetComponent<UnityEngine.UI.Toggle>();
+                }
+                shaderCheckbox.isOn = true;
+            }
+        }
 
         public void OnChangeMaterialToggled(int index)
         {
-            floorRenderer.sharedMaterial = allMaterials[index].FloorMaterial;
-            foreach(Renderer renderer in ethanRenderers)
+            if (floorRenderer != null)
             {
-                renderer.sharedMaterial = allMaterials[index].EthanMaterial;
+                floorRenderer.sharedMaterial = allMaterials[index].FloorMaterial;
+            }
+            foreach (Renderer renderer in ethanRenderers)
+            {
+                if (renderer != null)
+                {
+                    renderer.sharedMaterial = allMaterials[index].EthanMaterial;
+                }
             }
         }
     }
