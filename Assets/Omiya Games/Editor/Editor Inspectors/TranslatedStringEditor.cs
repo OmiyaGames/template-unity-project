@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections.Generic;
 using OmiyaGames.Translations;
 
 namespace OmiyaGames.UI.Translations
@@ -59,12 +58,6 @@ namespace OmiyaGames.UI.Translations
             set;
         } = 0;
 
-        bool IsExpanded
-        {
-            get;
-            set;
-        } = true;
-
         string Message
         {
             get;
@@ -111,7 +104,7 @@ namespace OmiyaGames.UI.Translations
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float height = EditorGUIUtility.singleLineHeight;
-            if (IsExpanded == true)
+            if (property.isExpanded == true)
             {
                 // Grab every field
                 SerializedProperty key = property.FindPropertyRelative("key");
@@ -168,8 +161,8 @@ namespace OmiyaGames.UI.Translations
                 Width = rect.width;
 
                 // Draw label of object
-                IsExpanded = EditorGUI.Foldout(rect, IsExpanded, scope.content);
-                if (IsExpanded == true)
+                property.isExpanded = EditorGUI.Foldout(rect, property.isExpanded, scope.content);
+                if (property.isExpanded == true)
                 {
                     // Indent
                     using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
@@ -180,7 +173,7 @@ namespace OmiyaGames.UI.Translations
                 }
             }
 
-            if (IsExpanded == true)
+            if (property.isExpanded == true)
             {
                 // Indent
                 using (EditorGUI.IndentLevelScope indent = new EditorGUI.IndentLevelScope())
