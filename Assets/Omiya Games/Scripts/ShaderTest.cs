@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using OmiyaGames;
+using UnityEngine.UI;
 using OmiyaGames.Translations;
 
 namespace Project
@@ -32,6 +32,7 @@ namespace Project
     /// <date>6/1/2019</date>
     ///-----------------------------------------------------------------------
     /// <summary>A simple test script: swaps the materials on various models</summary>
+    [ExecuteInEditMode]
     public class ShaderTest : MonoBehaviour
     {
         /// <summary>
@@ -84,12 +85,41 @@ namespace Project
 
         [Header("UI")]
         [SerializeField]
-        private UnityEngine.UI.Toggle shaderCheckbox;
+        private Toggle shaderCheckbox;
+
+#if UNITY_EDITOR
+        [Header("Test Material")]
+        [SerializeField]
+        private int testMaterial = 0;
+        private int lastMaterial = 0;
+
+        private void Update()
+        {
+            // First, clamp the test material
+            testMaterial = Mathf.Clamp(testMaterial, 0, (allMaterials.Length - 1));
+
+            // Check if this is a different index than the last frame
+            if (testMaterial != lastMaterial)
+            {
+                // Switch to the new material
+                OnChangeMaterialToggled(testMaterial);
+
+                // Update the latest index
+                lastMaterial = testMaterial;
+            }
+        }
+#endif
 
         private void Start()
         {
+            // DON'T run the start function if we're not playing
+            if (Application.isPlaying == false)
+            {
+                return;
+            }
+
             Transform parent = shaderCheckbox.transform.parent;
-            UnityEngine.UI.Toggle currentCheckbox = shaderCheckbox;
+            Toggle currentCheckbox = shaderCheckbox;
             for (int index = 0; index < allMaterials.Length; ++index)
             {
                 // Setup the checkbox's label
@@ -116,10 +146,12 @@ namespace Project
                     clone.transform.localScale = Vector3.one;
 
                     // Grab the checkbox
-                    currentCheckbox = clone.GetComponent<UnityEngine.UI.Toggle>();
+                    currentCheckbox = clone.GetComponent<Toggle>();
                 }
-                shaderCheckbox.isOn = true;
             }
+
+            // Turn on the first checkbox
+            shaderCheckbox.isOn = true;
         }
 
         public void OnChangeMaterialToggled(int index)
