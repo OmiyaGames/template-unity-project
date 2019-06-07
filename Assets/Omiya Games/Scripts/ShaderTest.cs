@@ -71,7 +71,12 @@ namespace Project
             }
         }
 
-        [Header("Materials")]
+#if UNITY_EDITOR
+        [Header("Test Material")]
+        [SerializeField]
+        private int testMaterialIndex = 0;
+        private int lastMaterialIndex = 0;
+#endif
         [SerializeField]
         private SwapMaterials[] allMaterials;
 
@@ -88,24 +93,25 @@ namespace Project
         private Toggle shaderCheckbox;
 
 #if UNITY_EDITOR
-        [Header("Test Material")]
-        [SerializeField]
-        private int testMaterial = 0;
-        private int lastMaterial = 0;
-
         private void Update()
         {
+            // DON'T run the update function if we're playing
+            if (Application.isPlaying == true)
+            {
+                return;
+            }
+
             // First, clamp the test material
-            testMaterial = Mathf.Clamp(testMaterial, 0, (allMaterials.Length - 1));
+            testMaterialIndex = Mathf.Clamp(testMaterialIndex, 0, (allMaterials.Length - 1));
 
             // Check if this is a different index than the last frame
-            if (testMaterial != lastMaterial)
+            if (testMaterialIndex != lastMaterialIndex)
             {
                 // Switch to the new material
-                OnChangeMaterialToggled(testMaterial);
+                OnChangeMaterialToggled(testMaterialIndex);
 
                 // Update the latest index
-                lastMaterial = testMaterial;
+                lastMaterialIndex = testMaterialIndex;
             }
         }
 #endif
