@@ -4,10 +4,10 @@ using UnityEngine.UI;
 namespace OmiyaGames
 {
     ///-----------------------------------------------------------------------
-    /// <copyright file="GuiRectBounds.cs" company="Omiya Games">
+    /// <copyright file="InvisibleGraphic.cs" company="Omiya Games">
     /// The MIT License (MIT)
     /// 
-    /// Copyright (c) 2014-2018 Omiya Games
+    /// Copyright (c) 2014-2019 Omiya Games
     /// 
     /// Permission is hereby granted, free of charge, to any person obtaining a copy
     /// of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,8 @@ namespace OmiyaGames
     /// <date>4/5/2016</date>
     ///-----------------------------------------------------------------------
     /// <summary>
-    /// A helper script to handle increasing the interactive bounding box of certain
-    /// <code>UnityEngine.UI</code> elements, such as <code>Button</code>.
+    /// A helper script to handle increasing the interactive bounding box of
+    /// <see cref="Button">s and other UI elements.
     /// 
     /// Borrowed code from http://answers.unity3d.com/questions/844524/ugui-how-to-increase-hitzone-click-area-button-rec.html.
     /// </summary>

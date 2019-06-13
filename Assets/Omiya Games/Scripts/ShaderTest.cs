@@ -91,11 +91,13 @@ namespace Project
         [Header("UI")]
         [SerializeField]
         private Toggle shaderCheckbox;
+        [SerializeField]
+        private Cinemachine.CinemachineFreeLook freeLookCamera;
 
 #if UNITY_EDITOR
         private void Update()
         {
-            // DON'T run the update function if we're playing
+            // DON'T run the update function if we are playing
             if (Application.isPlaying == true)
             {
                 return;
@@ -124,6 +126,7 @@ namespace Project
                 return;
             }
 
+            // Create the list of shaders
             Transform parent = shaderCheckbox.transform.parent;
             Toggle currentCheckbox = shaderCheckbox;
             for (int index = 0; index < allMaterials.Length; ++index)
@@ -158,6 +161,9 @@ namespace Project
 
             // Turn on the first checkbox
             shaderCheckbox.isOn = true;
+
+            // Disable the camera rotation
+            freeLookCamera.enabled = false;
         }
 
         public void OnChangeMaterialToggled(int index)
@@ -180,6 +186,11 @@ namespace Project
                     renderer.sharedMaterial = allMaterials[index].EthanMaterial;
                 }
             }
+        }
+
+        public void SetFreeLookCameraEnabled(bool isEnabled)
+        {
+            freeLookCamera.enabled = isEnabled;
         }
     }
 }
