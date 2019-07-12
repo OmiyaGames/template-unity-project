@@ -864,6 +864,8 @@ Error message and password prompt
 
 <li>$:/state/folded/Roadmap</li>
 
+<li>$:/state/folded/Select Team Member</li>
+
 <li>$:/state/folded/Table of Contents</li>
 
 <li>$:/state/folded/Team Members</li>
@@ -11423,6 +11425,9 @@ Please wait while {{$:/SiteTitle}} is loading
 <div created="20190509015916755" modified="20190510034048461" title="$:/state/folded/Roadmap">
 <pre>show</pre>
 </div>
+<div created="20190712141820882" modified="20190712141821839" title="$:/state/folded/Select Team Member">
+<pre>show</pre>
+</div>
 <div created="20190506225013656" modified="20190510034048461" title="$:/state/folded/Table of Contents">
 <pre>show</pre>
 </div>
@@ -11528,7 +11533,7 @@ Please wait while {{$:/SiteTitle}} is loading
 <div created="20190506225026483" modified="20190506225026483" title="$:/state/toc/TableOfContents-Roadmap-842329646">
 <pre>open</pre>
 </div>
-<div list="About [[Table of Contents]] Design Market Roadmap [[Team Members]]" title="$:/StoryList">
+<div created="20190712142226904" list="About [[Customize Wiki]] [[Table of Contents]] Design Market Roadmap [[Team Members]]" modified="20190712142240679" title="$:/StoryList">
 <pre></pre>
 </div>
 <div created="20190508051301171" modified="20190511222056602" title="$:/temp/advancedsearch">
@@ -12685,7 +12690,7 @@ For more details on how to configure this wiki, check [[TiddlyWiki|https://tiddl
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190508233000255" modified="20190509053610436" tags="[[Wiki Customization]] Dev" title="All Priorities">
+<div created="20190508233000255" modified="20190712141936277" tags="[[Wiki Customization]] Dev" title="All Priorities">
 <pre>&lt;$set name=&quot;numPriorities&quot; filter=&quot;[tag[Priority]count[]]&quot;&gt;
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;Priority: Critical&quot; text=&quot;Don't forget to edit this page!  The text here is displayed in the select options; the order field at the bottom of the page affects the order this status appears in.&quot; order=&lt;&lt;numPriorities&gt;&gt;/&gt;
@@ -12694,7 +12699,7 @@ Create a New Priority
 &lt;/$set&gt;
 
 &lt;ol&gt;
-  &lt;$list filter='[!has[draft.of]tag[Priority]sort[order]]'&gt;
+  &lt;$list filter='[!has[draft.of]tag[Priority]nsort[order]]'&gt;
   	&lt;li&gt;
     	&lt;$link to=&lt;&lt;currentTiddler&gt;&gt;&gt;&lt;&lt;currentTiddler&gt;&gt;&lt;/$link&gt; -&gt; {{!!text}}
 		{{||$:/core/ui/ViewTemplate/tags}}
@@ -12702,7 +12707,7 @@ Create a New Priority
   &lt;/$list&gt;
 &lt;/ol&gt;</pre>
 </div>
-<div created="20190508060522141" modified="20190509013922939" tags="[[Wiki Customization]] Dev" title="All Statuses">
+<div created="20190508060522141" modified="20190712141918960" tags="[[Wiki Customization]] Dev" title="All Statuses">
 <pre>&lt;$set name=&quot;numStatuses&quot; filter=&quot;[tag[Status]count[]]&quot;&gt;
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;Status: New&quot; text=&quot;Don't forget to edit this page!  The text here is displayed in the select options; the order field at the bottom of the page affects the order this status appears in.&quot; order=&lt;&lt;numStatuses&gt;&gt;/&gt;
@@ -12711,7 +12716,7 @@ Create a New Status
 &lt;/$set&gt;
 
 &lt;ol&gt;
-  &lt;$list filter='[!has[draft.of]tag[Status]sort[order]]'&gt;
+  &lt;$list filter='[!has[draft.of]tag[Status]nsort[order]]'&gt;
   	&lt;li&gt;
     	&lt;$link to=&lt;&lt;currentTiddler&gt;&gt;&gt;&lt;&lt;currentTiddler&gt;&gt;&lt;/$link&gt; -&gt; {{!!text}}
 		{{||$:/core/ui/ViewTemplate/tags}}
@@ -12724,7 +12729,7 @@ Create a New Status
 
 {{Roadmap Footer}}</pre>
 </div>
-<div created="20190509212040709" list-after="Checklist - Main Task" modified="20190510062858806" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Assigned Task">
+<div created="20190509212040709" list-after="Checklist - Main Task" modified="20190712141540947" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Assigned Task">
 <pre>\define assignedChecklist(tag, tagPlural, template, assignedTo:&quot;&quot;)
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;$template$&quot; assigned-to=&quot;$assignedTo$&quot;/&gt;
@@ -12738,7 +12743,7 @@ Create a $template$
   	&lt;th&gt;Priority&lt;/th&gt;
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]nsort[order]]&quot;&gt;
     &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
       {{!!text}} $tagPlural$
     &lt;/th&gt;&lt;/tr&gt;
@@ -12746,7 +12751,7 @@ Create a $template$
       &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to[$assignedTo$]]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
         &lt;&lt;emptyRow&gt;&gt;
       &lt;/$set&gt;
-      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]nsort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to[$assignedTo$]]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
     &lt;/$set&gt;
@@ -12768,7 +12773,7 @@ Create a $template$
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
   &lt;$set name=&quot;pageTitle&quot; value={{!!title}}&gt;
-    &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;$list filter=&quot;[!has[draft.of]tag[Status]nsort[order]]&quot;&gt;
       &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
         {{!!text}} $tagPlural$
       &lt;/th&gt;&lt;/tr&gt;
@@ -12776,7 +12781,7 @@ Create a $template$
       &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;assigned-to&lt;pageTitle&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
         &lt;&lt;emptyRow&gt;&gt;
       &lt;/$set&gt;
-      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]nsort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}assigned-to&lt;pageTitle&gt;]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
     &lt;/$set&gt;
@@ -12799,7 +12804,7 @@ Create a $template$
 &lt;&lt;assignedToPageChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190508080730530" modified="20190510062746831" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
+<div created="20190508080730530" modified="20190712141421559" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Child Task">
 <pre>\define childChecklistTags(tag) $tag$ [[$(currentTiddler)$]]
 
 \define childChecklist(tag, tagPlural, template)
@@ -12816,7 +12821,7 @@ Create a $template$
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
   &lt;$set name=&quot;parent&quot; value={{!!title}}&gt;
-    &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+    &lt;$list filter=&quot;[!has[draft.of]tag[Status]nsort[order]]&quot;&gt;
       &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
         {{!!text}} $tagPlural$
       &lt;/th&gt;&lt;/tr&gt;
@@ -12824,7 +12829,7 @@ Create a $template$
         &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
           &lt;&lt;emptyRow&gt;&gt;
         &lt;/$set&gt;
-        &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+        &lt;$list filter=&quot;[!has[draft.of]tag[Priority]nsort[order]]&quot;&gt;
           &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]tag&lt;parent&gt;status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
         &lt;/$list&gt;
       &lt;/$set&gt;
@@ -12839,7 +12844,7 @@ Create a $template$
 
 &lt;&lt;childChecklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;</pre>
 </div>
-<div created="20190506235424467" modified="20190510062926827" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Main Task" type="text/vnd.tiddlywiki">
+<div created="20190506235424467" modified="20190712141505324" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Checklist - Main Task" type="text/vnd.tiddlywiki">
 <pre>\define checklist(tag, tagPlural, template)
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
 
@@ -12850,7 +12855,7 @@ Create a $template$
   	&lt;th&gt;Priority&lt;/th&gt;
   	&lt;th&gt;Assigned To&lt;/th&gt;
   &lt;/tr&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]nsort[order]]&quot;&gt;
     &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
       {{!!text}} $tagPlural$
     &lt;/th&gt;&lt;/tr&gt;
@@ -12858,7 +12863,7 @@ Create a $template$
       &lt;$set name=&quot;emptyRow&quot; filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;]&quot; value='' emptyValue='&lt;tr&gt;&lt;td colspan=&quot;4&quot; style=&quot;text-align:center;&quot;&gt;No $tagPlural$ found...&lt;/td&gt;&lt;/tr&gt;'&gt;
         &lt;&lt;emptyRow&gt;&gt;
       &lt;/$set&gt;
-      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]sort[order]]&quot;&gt;
+      &lt;$list filter=&quot;[!has[draft.of]tag[Priority]nsort[order]]&quot;&gt;
         &lt;$list filter=&quot;[!has[draft.of]!title[$template$]tag[$tag$]status&lt;currentStatus&gt;priority{!!title}sort[assigned-to]]&quot; template=&quot;Task Row&quot;/&gt;
       &lt;/$list&gt;
     &lt;/$set&gt;
@@ -12873,7 +12878,7 @@ Create a $template$
 &lt;&lt;checklist &quot;Task&quot; &quot;tasks&quot; &quot;New Task&quot;&gt;&gt;
 </pre>
 </div>
-<div created="20190509061959729" modified="20190510061007769" tags="Template" title="Checklist - Milestones">
+<div created="20190509061959729" modified="20190712141850884" tags="Template" title="Checklist - Milestones">
 <pre>\define checklistMilestones(tag, tagPlural, template)
 &lt;$button message=&quot;tm-new-tiddler&quot; param=&quot;$template$&quot;&gt;Create a $template$&lt;/$button&gt;
 
@@ -12882,7 +12887,7 @@ Create a $template$
   	&lt;th&gt;$tag$&lt;/th&gt;
   	&lt;th&gt;Status&lt;/th&gt;
   &lt;/tr&gt;
-  &lt;$list filter=&quot;[!has[draft.of]tag[Status]sort[order]]&quot;&gt;
+  &lt;$list filter=&quot;[!has[draft.of]tag[Status]nsort[order]]&quot;&gt;
     &lt;tr&gt;&lt;th colspan=&quot;4&quot;&gt;
       {{!!text}} $tagPlural$
     &lt;/th&gt;&lt;/tr&gt;
@@ -13077,7 +13082,7 @@ This document covers the general design philosophy of &lt;&lt;projectTitle&gt;&g
     width: 100%;
 }</pre>
 </div>
-<div created="20190510082701039" creator="Taro Omiya" modified="20190511000637957" modifier="Taro Omiya" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Footers" type="application/x-tiddler">
+<div created="20190510082701039" creator="Taro Omiya" modified="20190712141640406" modifier="Taro Omiya" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Footers" type="application/x-tiddler">
 <pre>\define seeAlsoLink()
   [[$(currentTiddler)$]]
 \end
@@ -13086,9 +13091,9 @@ This document covers the general design philosophy of &lt;&lt;projectTitle&gt;&g
 ---
 ! See Also
 
-&lt;$list filter=&quot;[!has[draft.of]tag{!!title}sort[order]]&quot;&gt;
+&lt;$list filter=&quot;[!has[draft.of]tag{!!title}nsort[order]]&quot;&gt;
   &lt;h2&gt;&lt;&lt;seeAlsoLink&gt;&gt;&lt;/h2&gt;
-  &lt;&lt;list-links &quot;[!has[draft.of]tag{!!title}sort[order]]&quot;&gt;&gt;
+  &lt;&lt;list-links &quot;[!has[draft.of]tag{!!title}nsort[order]]&quot;&gt;&gt;
 &lt;/$list&gt;
 \end
 
@@ -13455,27 +13460,27 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 {{Roadmap Footer}}
 &lt;&lt;commentsFooter&gt;&gt;</pre>
 </div>
-<div created="20190507000901449" modified="20190510062123007" tags="Transclusion" title="Roadmap Footer">
+<div created="20190507000901449" modified="20190712142234764" tags="Transclusion" title="Roadmap Footer">
 <pre>! References
-&lt;&lt;list-links filter:&quot;[!has[draft.of]tag[Roadmap]sort[order]]&quot;&gt;&gt;</pre>
+&lt;&lt;list-links filter:&quot;[!has[draft.of]tag[Roadmap]nsort[order]]&quot;&gt;&gt;</pre>
 </div>
-<div created="20190508233802609" modified="20190509024225720" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Select Priority">
+<div created="20190508233802609" modified="20190712141736033" tags="[[Wiki Customization]] Dev $:/tags/Macro" title="Select Priority">
 <pre>\define getPriority(index:0)
-&lt;$set name=&quot;priority&quot; filter='[!has[draft.of]tag[Priority]sort[order]]' select='$index$'&gt;
+&lt;$set name=&quot;priority&quot; filter='[!has[draft.of]tag[Priority]nsort[order]]' select='$index$'&gt;
 &lt;$text text=&lt;&lt;priority&gt;&gt;/&gt;
 &lt;/$set&gt;
 \end
 
 \define getDefaultPriority(index:0)
-&lt;$set name=&quot;priority&quot; filter='[!has[draft.of]tag[Priority]tag[Default]sort[order]]' select='$index$'&gt;
+&lt;$set name=&quot;priority&quot; filter='[!has[draft.of]tag[Priority]tag[Default]nsort[order]]' select='$index$'&gt;
 &lt;$text text=&lt;&lt;priority&gt;&gt;/&gt;
 &lt;/$set&gt;
 \end
 
 \define selectPriority(setField:'priority')
-&lt;$set name=&quot;default&quot; filter='[!has[draft.of]tag[Priority]tag[Default]sort[order]]' select='0'&gt;
+&lt;$set name=&quot;default&quot; filter='[!has[draft.of]tag[Priority]tag[Default]nsort[order]]' select='0'&gt;
 &lt;$select tiddler={{!!title}} field='$setField$' default=&lt;&lt;default&gt;&gt;&gt;
-&lt;$list filter='[!has[draft.of]tag[Priority]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]tag[Priority]nsort[order]]'&gt;
 &lt;option value={{!!title}}&gt;{{!!text}}&lt;/option&gt;
 &lt;/$list&gt;
 &lt;/$select&gt;
@@ -13495,23 +13500,23 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 
 &lt;&lt;selectPriority&gt;&gt;</pre>
 </div>
-<div created="20190508053813136" modified="20190509024213309" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Status" type="text/vnd.tiddlywiki">
+<div created="20190508053813136" modified="20190712141806082" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Status" type="text/vnd.tiddlywiki">
 <pre>\define getStatus(index:0)
-&lt;$set name=&quot;status&quot; filter='[!has[draft.of]tag[Status]sort[order]]' select='$index$'&gt;
+&lt;$set name=&quot;status&quot; filter='[!has[draft.of]tag[Status]nsort[order]]' select='$index$'&gt;
 &lt;$text text=&lt;&lt;status&gt;&gt;/&gt;
 &lt;/$set&gt;
 \end
 
 \define getDefaultStatus(index:0)
-&lt;$set name=&quot;status&quot; filter='[!has[draft.of]tag[Status]tag[Default]sort[order]]' select='$index$'&gt;
+&lt;$set name=&quot;status&quot; filter='[!has[draft.of]tag[Status]tag[Default]nsort[order]]' select='$index$'&gt;
 &lt;$text text=&lt;&lt;status&gt;&gt;/&gt;
 &lt;/$set&gt;
 \end
 
 \define selectStatus(setField:'status')
-&lt;$set name=&quot;default&quot; filter='[!has[draft.of]tag[Status]tag[Default]sort[order]]' select='0'&gt;
+&lt;$set name=&quot;default&quot; filter='[!has[draft.of]tag[Status]tag[Default]nsort[order]]' select='0'&gt;
 &lt;$select tiddler={{!!title}} field='$setField$' default=&lt;&lt;default&gt;&gt;&gt;
-&lt;$list filter='[!has[draft.of]tag[Status]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]tag[Status]nsort[order]]'&gt;
 &lt;option value={{!!title}}&gt;{{!!text}}&lt;/option&gt;
 &lt;/$list&gt;
 &lt;/$select&gt;
@@ -13531,11 +13536,11 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 
 &lt;&lt;selectStatus&gt;&gt;</pre>
 </div>
-<div created="20190508074114091" modified="20190509211844023" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Team Member">
+<div created="20190508074114091" modified="20190712141820001" tags="$:/tags/Macro [[Wiki Customization]] Dev" title="Select Team Member">
 <pre>\define selectTeamMember(setField:'Team Member')
 &lt;$select tiddler={{!!title}} field='$setField$' default=''&gt;
 &lt;option value=&quot;&quot;&gt;(None)&lt;/option&gt;
-&lt;$list filter='[!has[draft.of]![New Team Member]tag[Team Member]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]![New Team Member]tag[Team Member]nsort[order]]'&gt;
 &lt;option&gt;{{!!title}}&lt;/option&gt;
 &lt;/$list&gt;
 &lt;/$select&gt;
@@ -13564,9 +13569,9 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
 <div created="20190508064329855" modified="20190509011839702" order="5" tags="Status" title="Status: Won't Fix">
 <pre>Won't Fix</pre>
 </div>
-<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190510074656109" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
+<div caption="Contents" created="20190506221130678" list-after="$:/core/ui/SideBar/Open" modified="20190712141236674" tags="$:/tags/SideBar" title="Table of Contents" type="text/vnd.tiddlywiki">
 <pre>&lt;div class=&quot;tc-table-of-contents&quot;&gt;
-&lt;&lt;toc-selective-expandable 'Table of Contents' &quot;!tag{$:/config/NewJournal/Tags}sort[order]&quot;&gt;&gt;
+&lt;&lt;toc-selective-expandable 'Table of Contents' &quot;!tag{$:/config/NewJournal/Tags}nsort[order]&quot;&gt;&gt;
 &lt;/div&gt;</pre>
 </div>
 <div created="20190507071340754" modified="20190507071646184" tags="Dev" title="Tag Renamer" type="text/vnd.tiddlywiki">
@@ -13609,7 +13614,7 @@ A prolific, award-winning experimental game studio lead by [[one person|https://
   &lt;/td&gt;
 &lt;/tr&gt;</pre>
 </div>
-<div created="20190508073315948" modified="20190510045505715" order="4" tags="[[Table of Contents]]" title="Team Members">
+<div created="20190508073315948" modified="20190712141950648" order="4" tags="[[Table of Contents]]" title="Team Members">
 <pre>&lt;$set name=&quot;numTeamMembers&quot; filter=&quot;[tag[Team Members]count[]]&quot;&gt;
 &lt;$button&gt;
 &lt;$action-sendmessage $message=&quot;tm-new-tiddler&quot; $param=&quot;New Team Member&quot; order=&lt;&lt;numTeamMembers&gt;&gt;/&gt;
@@ -13618,7 +13623,7 @@ Create a New Team Member
 &lt;/$set&gt;
 
 &lt;ol&gt;
-&lt;$list filter='[!has[draft.of]!title[New Team Member]tag[Team Member]sort[order]]'&gt;
+&lt;$list filter='[!has[draft.of]!title[New Team Member]tag[Team Member]nsort[order]]'&gt;
 &lt;li&gt;&lt;$link to=&lt;&lt;currentTiddler&gt;&gt;&gt;&lt;&lt;currentTiddler&gt;&gt;&lt;/$link&gt;&lt;/li&gt;
 &lt;/$list&gt;
 &lt;/ol&gt;</pre>
