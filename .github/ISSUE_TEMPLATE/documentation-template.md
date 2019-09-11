@@ -2,19 +2,19 @@
 name: Documentation template
 about: Indicate what needs clarification on this project
 title: "[DOC] "
-labels: documentation
+labels: documentation, needs-priority
 assignees: ''
 
 ---
 
-**Is your request related to a feature? Please describe.**
+### Is your request related to a feature? Please describe.
+
 A clear and concise description of what needs documentation.
 
-**Describe the solution you'd like**
+### Describe what changes in documentation you'd like.
+
 A clear and concise description of what you want to happen.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+### Tasklist
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+* [ ] Task #1
