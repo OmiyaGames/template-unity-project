@@ -1,5 +1,3 @@
-syntax: glob
-
 # ====== #
 # Unity generated files
 # ====== #
@@ -79,8 +77,10 @@ Assets/VSCode/*
 # ====== #
 # Others #
 # ====== #
-Builds/
+Builds/**
+Builds/!README.md
 Assets/.~lock.*
 .vs/
 *_backup
 *_backup.meta
+*.~*#*

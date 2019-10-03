@@ -72,10 +72,6 @@ namespace OmiyaGames.Menus
         [Header("Labels")]
         [SerializeField]
         TranslatedTextMeshPro titleLabel = null;
-        [SerializeField]
-        VersionLabel versionLabel = null;
-        [SerializeField]
-        GameObject divider = null;
 
         [Header("Animations")]
         [SerializeField]
@@ -108,7 +104,6 @@ namespace OmiyaGames.Menus
         {
             // Update labels
             nextState.TitleTranslationKey = titleLabel.TranslationKey;
-            UpdateVersionLabelVisibility();
 
             // Grab the Menu manager and update the background visibility
             MenuManager manager = Singleton.Get<MenuManager>();
@@ -185,23 +180,6 @@ namespace OmiyaGames.Menus
 
             // Set the current state
             CurrentVisibility = currentState;
-        }
-
-        void UpdateVersionLabelVisibility()
-        {
-            // Update the visibility of the version label
-            if ((versionLabel != null) && (versionLabel.IsVisible == true))
-            {
-                versionLabel.gameObject.SetActive(true);
-                if(divider != null)
-                {
-                    divider.SetActive(true);
-                }
-            }
-            else if (divider != null)
-            {
-                divider.SetActive(false);
-            }
         }
 
         void AnimateTitleVisibility()
