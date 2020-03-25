@@ -3,7 +3,7 @@ using UnityEditor.AnimatedValues;
 using UnityEngine;
 using System.Collections.Generic;
 using OmiyaGames.Builds;
-using OmiyaGames.Editor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {

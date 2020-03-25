@@ -4,7 +4,7 @@ using UnityEditorInternal;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using OmiyaGames.Editor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI
 {

@@ -1,11 +1,10 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using OmiyaGames.Translations;
-using OmiyaGames.Editor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Translations
 {

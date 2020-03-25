@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using OmiyaGames.Builds;
-using OmiyaGames.Editor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {

@@ -1,13 +1,8 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
 using UnityEngine;
 using System.IO;
-using System.Text;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using OmiyaGames.Translations;
-using OmiyaGames.Editor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
