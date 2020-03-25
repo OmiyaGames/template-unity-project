@@ -4,6 +4,7 @@ using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -46,7 +47,7 @@ namespace OmiyaGames.UI.Translations
         const float KeyLength = 30f;
         const float ExpandTranslationsLeft = 14f;
 
-        readonly Editor editor;
+        readonly UnityEditor.Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
         readonly AnimBool showAllTranslationsList;
@@ -56,7 +57,7 @@ namespace OmiyaGames.UI.Translations
         readonly List<LanguageTextPairEditor> allTranslationsEditors = new List<LanguageTextPairEditor>();
         SupportedLanguages supportedLanguages;
 
-        public TranslationCollectionEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
+        public TranslationCollectionEditor(UnityEditor.Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;

@@ -396,7 +396,7 @@ namespace OmiyaGames.Web
                         AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
                         if (bundle != null)
                         {
-                            DownloadedDomainList = ConvertToDomainList(Utility.GetDomainList(bundle), domainDecrypter);
+                            DownloadedDomainList = ConvertToDomainList(DomainList.Get(bundle), domainDecrypter);
                         }
                         else
                         {

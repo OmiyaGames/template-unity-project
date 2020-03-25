@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using OmiyaGames.Translations;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {

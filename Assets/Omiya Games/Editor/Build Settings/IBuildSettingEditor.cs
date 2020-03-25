@@ -3,6 +3,7 @@ using UnityEditor.AnimatedValues;
 using UnityEngine;
 using System.Collections.Generic;
 using OmiyaGames.Builds;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -38,7 +39,7 @@ namespace OmiyaGames.UI.Builds
     /// </summary>
     /// <seealso cref="IBuildSetting"/>
     [CustomEditor(typeof(IBuildSetting))]
-    public abstract class IBuildSettingEditor : Editor
+    public abstract class IBuildSettingEditor : UnityEditor.Editor
     {
         private string previewPath = null;
         private AnimBool folderAnimation;

@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Web;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Web
 {
@@ -34,7 +35,7 @@ namespace OmiyaGames.UI.Web
     ///-----------------------------------------------------------------------
     /// Editor script for <code>WebLocationChecker</code>
     [CustomEditor(typeof(WebLocationChecker))]
-    public class WebLocationCheckerEditor : Editor
+    public class WebLocationCheckerEditor : UnityEditor.Editor
     {
         const string AcceptedDomainsFieldName = "Domain Names To Accept By Default";
         const string DescriptionMessage = "Any domain string received from any" +

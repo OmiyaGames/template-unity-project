@@ -2,9 +2,10 @@
 using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
-using OmiyaGames.Builds;
 using System;
 using System.Text;
+using OmiyaGames.Builds;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -169,7 +170,7 @@ namespace OmiyaGames.UI.Builds
                         {
                             // Load the bundle, and convert it to a domain list
                             bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
-                            DomainList domainList = Utility.GetDomainList(bundle);
+                            DomainList domainList = DomainList.Get(bundle);
 
                             // Decrypt the domain list
                             HostArchiveSetting setting = ((HostArchiveSetting)target);

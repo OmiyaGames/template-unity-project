@@ -5,8 +5,9 @@ using UnityEngine;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using OmiyaGames.Translations;
 using System.Security.Cryptography;
+using OmiyaGames.Translations;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -42,7 +43,7 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="StringCryptographer"/>
     [CustomEditor(typeof(StringCryptographer), true)]
-    public class StringCryptographyEditor : Editor
+    public class StringCryptographyEditor : UnityEditor.Editor
     {
         public const string DefaultFileName = "New Cryptographer" + Utility.FileExtensionScriptableObject;
         public const int RandomPasswordLength = 32;

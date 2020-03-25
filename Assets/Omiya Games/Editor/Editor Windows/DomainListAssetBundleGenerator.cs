@@ -4,6 +4,7 @@ using UnityEditorInternal;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI
 {
@@ -245,7 +246,7 @@ namespace OmiyaGames.UI
             {
                 // Load the bundle, and convert it to a domain list
                 bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
-                DomainList domainList = Utility.GetDomainList(bundle);
+                DomainList domainList = DomainList.Get(bundle);
 
                 // By default, indicate the bundle doesn't contain DomainList
                 testResult = TestErrorInvalidAssetMessage;
@@ -312,7 +313,7 @@ namespace OmiyaGames.UI
 
                 // Load the bundle, and convert it to a domain list
                 bundle = AssetBundle.LoadFromFile(localAssetPath);
-                DomainList domainList = Utility.GetDomainList(bundle);
+                DomainList domainList = DomainList.Get(bundle);
 
                 // By default, indicate the bundle doesn't contain DomainList
                 testResult = TestErrorInvalidAssetMessage;

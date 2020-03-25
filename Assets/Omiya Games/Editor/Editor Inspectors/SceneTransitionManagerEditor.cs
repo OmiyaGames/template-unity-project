@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Scenes;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Scenes
 {
@@ -167,7 +168,7 @@ namespace OmiyaGames.UI.Scenes
     /// </summary>
     /// <seealso cref="SceneTransitionManager"/>
     [CustomEditor(typeof(SceneTransitionManager))]
-    public class SceneTransitionManagerEditor : Editor
+    public class SceneTransitionManagerEditor : UnityEditor.Editor
     {
         const float VerticalMargin = 2;
 

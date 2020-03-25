@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI
 {
@@ -57,7 +58,7 @@ namespace OmiyaGames.UI
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return OmiyaGames.EditorUiUtility.GetHeight(label, 1, VerticalMargin);
+            return EditorUiUtility.GetHeight(label, 1, VerticalMargin);
         }
 
         // Draw the property inside the given rect

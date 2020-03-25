@@ -207,7 +207,7 @@ namespace OmiyaGames.Menus
                     // Overwrite the text: it's a test
                     StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
-                    Utility.BuildTestMessage(builder, WebChecker);
+                    WebLocationInfo.BuildTestMessage(builder, WebChecker);
                     reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:

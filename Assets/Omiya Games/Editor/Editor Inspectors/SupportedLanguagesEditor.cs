@@ -1,10 +1,11 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using OmiyaGames.Translations;
-using System.Collections.Generic;
-using System;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -40,7 +41,7 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="SupportedLanguages"/>
     [CustomEditor(typeof(SupportedLanguages), true)]
-    public class SupportedLanguagesEditor : Editor
+    public class SupportedLanguagesEditor : UnityEditor.Editor
     {
         public const string DefaultFileName = "New Supported Languages" + Utility.FileExtensionScriptableObject;
 

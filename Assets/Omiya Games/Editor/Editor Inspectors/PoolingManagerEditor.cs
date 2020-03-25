@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Global;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI
 {
@@ -37,7 +38,7 @@ namespace OmiyaGames.UI
     /// </summary>
     /// <seealso cref="PoolingManager"/>
     [CustomEditor(typeof(PoolingManager))]
-    public class PoolingManagerEditor : Editor
+    public class PoolingManagerEditor : UnityEditor.Editor
     {
         const float VerticalMargin = 2;
 

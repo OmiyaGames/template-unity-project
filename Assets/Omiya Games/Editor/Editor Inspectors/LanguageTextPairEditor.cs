@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.AnimatedValues;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -51,13 +52,13 @@ namespace OmiyaGames.UI.Translations
         const bool WordWrapEnabledDefault = false;
         static GUIStyle wrappedTextArea = null;
 
-        readonly Editor editor;
+        readonly UnityEditor.Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
         readonly AnimBool expandToggle;
         float width;
 
-        public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
+        public LanguageTextPairEditor(UnityEditor.Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;

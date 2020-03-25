@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
+using OmiyaGames.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -40,7 +41,7 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="TranslationDictionary"/>
     [CustomEditor(typeof(TranslationDictionary), true)]
-    public class TranslationDictionaryEditor : Editor
+    public class TranslationDictionaryEditor : UnityEditor.Editor
     {
         public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
 
