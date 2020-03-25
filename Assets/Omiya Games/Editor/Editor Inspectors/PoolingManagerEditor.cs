@@ -38,7 +38,7 @@ namespace OmiyaGames.UI
     /// </summary>
     /// <seealso cref="PoolingManager"/>
     [CustomEditor(typeof(PoolingManager))]
-    public class PoolingManagerEditor : UnityEditor.Editor
+    public class PoolingManagerEditor : Editor
     {
         const float VerticalMargin = 2;
 

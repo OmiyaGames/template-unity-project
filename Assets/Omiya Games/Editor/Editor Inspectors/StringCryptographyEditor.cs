@@ -38,7 +38,7 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="StringCryptographer"/>
     [CustomEditor(typeof(StringCryptographer), true)]
-    public class StringCryptographyEditor : UnityEditor.Editor
+    public class StringCryptographyEditor : Editor
     {
         public const string DefaultFileName = "New Cryptographer" + Utility.FileExtensionScriptableObject;
         public const int RandomPasswordLength = 32;

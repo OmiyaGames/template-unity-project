@@ -38,7 +38,7 @@ namespace OmiyaGames.UI.Audio
     /// <seealso cref="SoundEffect"/>
     [CustomEditor(typeof(SoundEffect), true)]
     [CanEditMultipleObjects]
-    public class SoundEffectEditor : UnityEditor.Editor
+    public class SoundEffectEditor : Editor
     {
         const float VerticalMargin = 2;
         static readonly GUILayoutOption SliderLabelWidth = GUILayout.MinWidth(90);

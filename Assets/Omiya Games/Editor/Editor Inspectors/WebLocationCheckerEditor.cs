@@ -35,7 +35,7 @@ namespace OmiyaGames.UI.Web
     ///-----------------------------------------------------------------------
     /// Editor script for <code>WebLocationChecker</code>
     [CustomEditor(typeof(WebLocationChecker))]
-    public class WebLocationCheckerEditor : UnityEditor.Editor
+    public class WebLocationCheckerEditor : Editor
     {
         const string AcceptedDomainsFieldName = "Domain Names To Accept By Default";
         const string DescriptionMessage = "Any domain string received from any" +

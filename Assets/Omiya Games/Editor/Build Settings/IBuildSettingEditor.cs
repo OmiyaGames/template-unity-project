@@ -39,7 +39,7 @@ namespace OmiyaGames.UI.Builds
     /// </summary>
     /// <seealso cref="IBuildSetting"/>
     [CustomEditor(typeof(IBuildSetting))]
-    public abstract class IBuildSettingEditor : UnityEditor.Editor
+    public abstract class IBuildSettingEditor : Editor
     {
         private string previewPath = null;
         private AnimBool folderAnimation;

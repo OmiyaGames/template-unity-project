@@ -36,7 +36,7 @@ namespace OmiyaGames.UI
     /// <seealso cref="ResizableGridLayoutGroup"/>
     [CustomEditor(typeof(ResizableGridLayoutGroup), true)]
     [CanEditMultipleObjects]
-    public class ResizableGridLayoutGroupEditor : UnityEditor.Editor
+    public class ResizableGridLayoutGroupEditor : Editor
     {
         SerializedProperty padding;
         SerializedProperty spacing;

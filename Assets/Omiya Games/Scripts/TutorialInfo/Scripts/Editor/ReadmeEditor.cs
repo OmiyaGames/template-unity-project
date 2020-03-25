@@ -39,7 +39,7 @@ namespace OmiyaGames
     /// <seealso cref="Readme"/>
     [CustomEditor(typeof(Readme))]
     [InitializeOnLoad]
-    public class ReadmeEditor : UnityEditor.Editor
+    public class ReadmeEditor : Editor
     {
         private const int BodyTextSize = 13;
         private const int TitleTextSize = 26;

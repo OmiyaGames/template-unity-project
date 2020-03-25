@@ -40,7 +40,7 @@ namespace OmiyaGames.UI.Translations
     /// </summary>
     /// <seealso cref="SupportedLanguages"/>
     [CustomEditor(typeof(SupportedLanguages), true)]
-    public class SupportedLanguagesEditor : UnityEditor.Editor
+    public class SupportedLanguagesEditor : Editor
     {
         public const string DefaultFileName = "New Supported Languages" + Utility.FileExtensionScriptableObject;
 

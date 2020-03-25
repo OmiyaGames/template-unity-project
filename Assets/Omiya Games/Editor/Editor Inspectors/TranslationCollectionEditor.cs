@@ -47,7 +47,7 @@ namespace OmiyaGames.UI.Translations
         const float KeyLength = 30f;
         const float ExpandTranslationsLeft = 14f;
 
-        readonly UnityEditor.Editor editor;
+        readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
         readonly AnimBool showAllTranslationsList;
@@ -57,7 +57,7 @@ namespace OmiyaGames.UI.Translations
         readonly List<LanguageTextPairEditor> allTranslationsEditors = new List<LanguageTextPairEditor>();
         SupportedLanguages supportedLanguages;
 
-        public TranslationCollectionEditor(UnityEditor.Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
+        public TranslationCollectionEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;

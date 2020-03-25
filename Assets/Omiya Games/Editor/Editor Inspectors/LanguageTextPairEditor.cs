@@ -52,13 +52,13 @@ namespace OmiyaGames.UI.Translations
         const bool WordWrapEnabledDefault = false;
         static GUIStyle wrappedTextArea = null;
 
-        readonly UnityEditor.Editor editor;
+        readonly Editor editor;
         SerializedProperty element;
         readonly AnimBool showHelpBox;
         readonly AnimBool expandToggle;
         float width;
 
-        public LanguageTextPairEditor(UnityEditor.Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
+        public LanguageTextPairEditor(Editor editor, SerializedProperty element, SupportedLanguages supportedLanguages)
         {
             // Setup member variables
             this.editor = editor;

@@ -168,7 +168,7 @@ namespace OmiyaGames.UI.Scenes
     /// </summary>
     /// <seealso cref="SceneTransitionManager"/>
     [CustomEditor(typeof(SceneTransitionManager))]
-    public class SceneTransitionManagerEditor : UnityEditor.Editor
+    public class SceneTransitionManagerEditor : Editor
     {
         const float VerticalMargin = 2;
 
