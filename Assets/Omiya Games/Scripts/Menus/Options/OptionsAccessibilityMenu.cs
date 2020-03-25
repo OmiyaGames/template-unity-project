@@ -94,11 +94,11 @@ namespace OmiyaGames.Menus
             get
             {
                 Selectable returnUi = null;
-                if (enableTextSize.IsThisBuildSupported() == true)
+                if (enableTextSize.IsSupported() == true)
                 {
                     returnUi = textSizeSlider;
                 }
-                else if (enableTimeScale.IsThisBuildSupported() == true)
+                else if (enableTimeScale.IsSupported() == true)
                 {
                     returnUi = timeScaleSlider.Checkbox;
                 }
@@ -153,7 +153,7 @@ namespace OmiyaGames.Menus
 
         private static void UpdateControlVisibility(GameObject[] controls, SupportedPlatforms support)
         {
-            bool active = support.IsThisBuildSupported();
+            bool active = support.IsSupported();
             foreach (GameObject control in controls)
             {
                 control.SetActive(active);

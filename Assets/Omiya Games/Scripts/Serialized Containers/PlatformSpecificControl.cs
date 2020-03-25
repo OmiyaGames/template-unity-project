@@ -82,7 +82,7 @@ namespace OmiyaGames
         /// </summary>
         public void Setup()
         {
-            Component.gameObject.SetActive(EnabledFor.IsThisBuildSupported());
+            Component.gameObject.SetActive(EnabledFor.IsSupported());
         }
     }
 

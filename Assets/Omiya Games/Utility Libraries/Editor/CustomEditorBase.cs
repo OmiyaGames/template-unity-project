@@ -18,7 +18,7 @@ namespace Community.UI
     /// </summary>
     [CustomEditor(typeof(UnityEngine.Object), true, isFallback = true)]
     [CanEditMultipleObjects]
-    public class CustomEditorBase : Editor
+    public class CustomEditorBase : UnityEditor.Editor
     {
         private Dictionary<string, ReorderableListProperty> reorderableLists;
 
