@@ -215,7 +215,7 @@ namespace OmiyaGames
                 for (int index = 0; index < allAssets.Length; ++index)
                 {
                     if ((string.IsNullOrEmpty(allAssets[index]) == false) &&
-                        (Path.GetExtension(allAssets[index]) == OmiyaGames.Utility.FileExtensionScriptableObject) &&
+                        (Path.GetExtension(allAssets[index]) == OmiyaGames.Helpers.FileExtensionScriptableObject) &&
                         ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
                     {
                         firstAsset = allAssets[index];

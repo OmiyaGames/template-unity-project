@@ -40,8 +40,8 @@ namespace OmiyaGames.UI.Builds
     {
         protected static void Indent(ref Rect position)
         {
-            position.x += EditorUiUtility.IndentSpace;
-            position.width -= EditorUiUtility.IndentSpace;
+            position.x += EditorHelpers.IndentSpace;
+            position.width -= EditorHelpers.IndentSpace;
         }
 
         protected abstract float CustomValueHeight(SerializedProperty property, GUIContent label);
@@ -85,7 +85,7 @@ namespace OmiyaGames.UI.Builds
                 // Setup next control's position
                 childProperty = property.FindPropertyRelative("customValue");
                 childPosition.y += childPosition.height;
-                childPosition.y += EditorUiUtility.VerticalMargin;
+                childPosition.y += EditorHelpers.VerticalMargin;
                 childPosition.height = CustomValueHeight(childProperty, label);
 
                 // Draw custom control
@@ -121,9 +121,9 @@ namespace OmiyaGames.UI.Builds
             {
                 this.property = property;
                 list = new UnityEditorInternal.ReorderableList(property.serializedObject, property);
-                list.headerHeight = EditorUiUtility.VerticalMargin;
+                list.headerHeight = EditorHelpers.VerticalMargin;
                 list.drawElementCallback += DrawScene;
-                list.elementHeight = EditorUiUtility.SingleLineHeight(EditorUiUtility.VerticalMargin);
+                list.elementHeight = EditorHelpers.SingleLineHeight(EditorHelpers.VerticalMargin);
             }
         }
 
@@ -132,7 +132,7 @@ namespace OmiyaGames.UI.Builds
             if (property != null)
             {
                 SerializedProperty element = property.GetArrayElementAtIndex(index);
-                rect.y += EditorUiUtility.VerticalMargin;
+                rect.y += EditorHelpers.VerticalMargin;
                 rect.height = EditorGUIUtility.singleLineHeight;
 
                 // Draw the scene field

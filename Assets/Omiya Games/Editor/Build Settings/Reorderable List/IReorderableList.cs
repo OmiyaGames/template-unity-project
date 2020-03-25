@@ -81,15 +81,15 @@ namespace OmiyaGames.UI.Builds
         {
             // Unindent
             bool originalEnabled = GUI.enabled;
-            rect.x -= EditorUiUtility.IndentSpace;
-            rect.width += EditorUiUtility.IndentSpace;
+            rect.x -= EditorHelpers.IndentSpace;
+            rect.width += EditorHelpers.IndentSpace;
 
             // Update enabled stuff
             IBuildSetting setting = serializedObject as IBuildSetting;
             GUI.enabled = (setting != null);
 
             // Draw Edit Button
-            rect.width -= (EditorUiUtility.VerticalMargin * 2);
+            rect.width -= (EditorHelpers.VerticalMargin * 2);
             rect.width /= 3f;
             if (GUI.Button(rect, "Edit") == true)
             {
@@ -98,7 +98,7 @@ namespace OmiyaGames.UI.Builds
             }
 
             // Draw Duplicate Button
-            rect.x += EditorUiUtility.VerticalMargin;
+            rect.x += EditorHelpers.VerticalMargin;
             rect.x += rect.width;
             if (GUI.Button(rect, "Duplicate") == true)
             {
@@ -107,7 +107,7 @@ namespace OmiyaGames.UI.Builds
             }
 
             // Draw build button
-            rect.x += EditorUiUtility.VerticalMargin;
+            rect.x += EditorHelpers.VerticalMargin;
             rect.x += rect.width;
             if (GUI.Button(rect, "Build") == true)
             {

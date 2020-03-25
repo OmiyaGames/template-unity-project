@@ -158,7 +158,7 @@ namespace OmiyaGames.Builds
             // Append the file path (local to parent)
             builder.Clear();
             builder.Append(folderName);
-            AppendFilePath(builder, Utility.PathDivider, WebLocationChecker.RemoteDomainListUrl);
+            AppendFilePath(builder, Helpers.PathDivider, WebLocationChecker.RemoteDomainListUrl);
 
             // Remove the filename from string builder
             string fileName = Path.GetFileName(WebLocationChecker.RemoteDomainListUrl);

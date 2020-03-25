@@ -86,7 +86,7 @@ namespace OmiyaGames.UI
             DomainList newAsset = DomainList.Generate(nameOfFile, allDomains, encrypter);
 
             // Generate the asset bundle
-            AssetUtility.SaveAsAssetBundle(newAsset, nameOfFolder, nameOfFile, BundleId, new StringBuilder(), relativeToProject, overwriteFile);
+            AssetHelpers.SaveAsAssetBundle(newAsset, nameOfFolder, nameOfFile, BundleId, new StringBuilder(), relativeToProject, overwriteFile);
             return newAsset;
         }
 
@@ -122,7 +122,7 @@ namespace OmiyaGames.UI
             allDomainsField.drawHeaderCallback = DrawLevelListHeader;
             allDomainsField.drawElementCallback = DrawLevelListElement;
             allDomainsField.onAddCallback = OnAddDomain;
-            allDomainsField.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
+            allDomainsField.elementHeight = EditorHelpers.SingleLineHeight(VerticalMargin);
         }
         #endregion
 
@@ -181,7 +181,7 @@ namespace OmiyaGames.UI
                 {
                     // Check if file already exists
                     string pathOfAsset = Path.Combine(nameOfFolder, nameOfFile);
-                    if (AssetUtility.ConfirmFileIsWriteable(pathOfAsset, nameOfFile) == true)
+                    if (AssetHelpers.ConfirmFileIsWriteable(pathOfAsset, nameOfFile) == true)
                     {
                         GenerateDomainList(nameOfFolder, nameOfFile, allDomains, encrypter);
                     }

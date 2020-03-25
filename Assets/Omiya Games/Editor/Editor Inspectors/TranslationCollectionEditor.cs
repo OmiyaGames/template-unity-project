@@ -65,8 +65,8 @@ namespace OmiyaGames.UI.Translations
             this.supportedLanguages = supportedLanguages;
 
             // Setup the bools
-            EditorUiUtility.CreateBool(editor, ref showHelpBox);
-            EditorUiUtility.CreateBool(editor, ref showAllTranslationsList);
+            EditorHelpers.CreateBool(editor, ref showHelpBox);
+            EditorHelpers.CreateBool(editor, ref showAllTranslationsList);
         }
 
         #region Properties
@@ -163,7 +163,7 @@ namespace OmiyaGames.UI.Translations
             if ((ShowHelpBox.target == true) || (ShowHelpBox.isAnimating == true))
             {
                 // If so, calculate the height of this warning
-                height += EditorUiUtility.GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
+                height += EditorHelpers.GetHelpBoxHeight(LastMessage, Width) * ShowHelpBox.faded;
                 height += VerticalSpace;
             }
 
@@ -308,7 +308,7 @@ namespace OmiyaGames.UI.Translations
             if (isShown == true)
             {
                 // Calculate range of warning
-                float helpBoxHeight = EditorUiUtility.GetHelpBoxHeight(LastMessage, rect.width);
+                float helpBoxHeight = EditorHelpers.GetHelpBoxHeight(LastMessage, rect.width);
                 rect.height = helpBoxHeight * ShowHelpBox.faded;
 
                 // Show warning

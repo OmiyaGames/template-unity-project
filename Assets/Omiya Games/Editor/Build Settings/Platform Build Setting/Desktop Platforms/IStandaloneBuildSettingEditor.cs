@@ -55,9 +55,9 @@ namespace OmiyaGames.UI.Builds
         protected override void DrawPlatformSpecificSettings()
         {
             IStandaloneBuildSetting targetSetting = (IStandaloneBuildSetting)target;
-            EditorUiUtility.DrawEnum(architecture, targetSetting.SupportedArchitectures, targetSetting.DefaultArchitecture, targetSetting.ArchitectureToBuild, "\"{0}\" is not supported for this build platform; \"{1}\" will be used instead.");
+            EditorHelpers.DrawEnum(architecture, targetSetting.SupportedArchitectures, targetSetting.DefaultArchitecture, targetSetting.ArchitectureToBuild, "\"{0}\" is not supported for this build platform; \"{1}\" will be used instead.");
             EditorGUILayout.PropertyField(compression);
-            EditorUiUtility.DrawEnum(scriptingBackend, targetSetting.SupportedScriptingBackends, targetSetting.DefaultScriptingBackend, targetSetting.ScriptingBackend, "\"{0}\" is not supported for this build platform, on this editor; \"{1}\" will be used instead.");
+            EditorHelpers.DrawEnum(scriptingBackend, targetSetting.SupportedScriptingBackends, targetSetting.DefaultScriptingBackend, targetSetting.ScriptingBackend, "\"{0}\" is not supported for this build platform, on this editor; \"{1}\" will be used instead.");
         }
     }
 }

@@ -126,7 +126,7 @@ namespace OmiyaGames.Menus
         [ContextMenu("Set Parent Canvas")]
         void SetParentCanvas()
         {
-            parentCanvas = Utility.GetParentCanvas(transform);
+            parentCanvas = Helpers.GetParentCanvas(transform);
         }
     }
 }

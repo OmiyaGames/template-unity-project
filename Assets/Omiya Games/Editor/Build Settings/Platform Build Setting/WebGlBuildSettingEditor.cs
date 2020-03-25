@@ -84,7 +84,7 @@ namespace OmiyaGames.UI.Builds
             EditorGUILayout.Space();
 
             // Draw foldout
-            EditorUiUtility.DrawBoldFoldout(allArchivesAnimation, "Host Specific Archive Settings");
+            EditorHelpers.DrawBoldFoldout(allArchivesAnimation, "Host Specific Archive Settings");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(allArchivesAnimation.faded))

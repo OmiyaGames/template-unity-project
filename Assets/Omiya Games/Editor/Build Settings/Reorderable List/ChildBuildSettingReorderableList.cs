@@ -67,7 +67,7 @@ namespace OmiyaGames.UI.Builds
         {
             // Setup List
             List.onAddDropdownCallback = DrawBuildSettingListDropdown;
-            List.elementHeight = EditorUiUtility.GetHeight(2, 4f);
+            List.elementHeight = EditorHelpers.GetHeight(2, 4f);
 
             // Setup all Methods
             AllMethods = new BuildSettingCreator[]
@@ -118,7 +118,7 @@ namespace OmiyaGames.UI.Builds
 
             // Calculate position
             rect.height = EditorGUIUtility.singleLineHeight;
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
 
             // Draw the object field
             bool originalEnabled = GUI.enabled;
@@ -130,7 +130,7 @@ namespace OmiyaGames.UI.Builds
 
             // Calculate position
             rect.y += rect.height;
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
 
             // Draw Edit buttons
             DrawButtons(rect, element.objectReferenceValue);

@@ -40,7 +40,7 @@ namespace OmiyaGames.UI.Translations
     [CustomEditor(typeof(StringCryptographer), true)]
     public class StringCryptographyEditor : Editor
     {
-        public const string DefaultFileName = "New Cryptographer" + Utility.FileExtensionScriptableObject;
+        public const string DefaultFileName = "New Cryptographer" + Helpers.FileExtensionScriptableObject;
         public const int RandomPasswordLength = 32;
 
         // Member variables
@@ -63,7 +63,7 @@ namespace OmiyaGames.UI.Translations
             newAsset.ViKey = StringCryptographer.GetRandomPassword(StringCryptographer.ViKeyBlockSize);
 
             // Setup path to file
-            string folderName = AssetUtility.GetSelectedFolder();
+            string folderName = AssetHelpers.GetSelectedFolder();
             string pathOfAsset = Path.Combine(folderName, DefaultFileName);
             pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
 
@@ -92,7 +92,7 @@ namespace OmiyaGames.UI.Translations
 
             // Display test encryption
             EditorGUILayout.Space();
-            EditorUiUtility.DrawBoldFoldout(encryptionGroup, "Test Encryption");
+            EditorHelpers.DrawBoldFoldout(encryptionGroup, "Test Encryption");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(encryptionGroup.faded))
             {
                 if (scope.visible == true)
@@ -109,7 +109,7 @@ namespace OmiyaGames.UI.Translations
 
             // Display test decryption
             EditorGUILayout.Space();
-            EditorUiUtility.DrawBoldFoldout(decryptionGroup, "Test Decryption");
+            EditorHelpers.DrawBoldFoldout(decryptionGroup, "Test Decryption");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(decryptionGroup.faded))
             {
                 if (scope.visible == true)

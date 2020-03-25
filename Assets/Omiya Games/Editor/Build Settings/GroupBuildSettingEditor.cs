@@ -102,7 +102,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawBuildSettingList()
         {
             // Draw foldout
-            EditorUiUtility.DrawBoldFoldout(allSettingsAnimation, "Platforms");
+            EditorHelpers.DrawBoldFoldout(allSettingsAnimation, "Platforms");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(allSettingsAnimation.faded))

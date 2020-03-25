@@ -112,7 +112,7 @@ namespace OmiyaGames.UI.Translations
                 SerializedProperty dictionary = property.FindPropertyRelative("dictionary");
 
                 // Allocate key field
-                height += EditorUiUtility.GetHeight(2);
+                height += EditorHelpers.GetHeight(2);
 
                 // Update status
                 TranslationDictionary translationDictionary = dictionary.objectReferenceValue as TranslationDictionary;
@@ -123,15 +123,15 @@ namespace OmiyaGames.UI.Translations
                 if (string.IsNullOrEmpty(Message) == false)
                 {
                     // Allocate help box
-                    height += EditorUiUtility.VerticalMargin;
-                    height += EditorUiUtility.GetHelpBoxHeight(Message, Width);
+                    height += EditorHelpers.VerticalMargin;
+                    height += EditorHelpers.GetHelpBoxHeight(Message, Width);
                 }
 
                 // Check button
                 if (IsButtonDrawn(status) == true)
                 {
                     // Allocate button
-                    height += EditorUiUtility.VerticalMargin;
+                    height += EditorHelpers.VerticalMargin;
                     height += ButtonHeight;
                 }
 
@@ -139,7 +139,7 @@ namespace OmiyaGames.UI.Translations
                 if (IsTextPreviewDrawn(status) == true)
                 {
                     // Allocate preview
-                    height += EditorUiUtility.VerticalSpace;
+                    height += EditorHelpers.VerticalSpace;
                     height += EditorGUIUtility.singleLineHeight;
                     height += TextPreview.CalculateHeight(null, !translationDictionary.IsAllTranslationsSerialized);
                 }
@@ -202,10 +202,10 @@ namespace OmiyaGames.UI.Translations
         #region Helper Methods
         private static Rect DrawFields(Rect rect, SerializedProperty key, SerializedProperty dictionary)
         {
-            rect.y += EditorUiUtility.VerticalMargin + rect.height;
+            rect.y += EditorHelpers.VerticalMargin + rect.height;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.DelayedTextField(rect, key);
-            rect.y += EditorUiUtility.VerticalMargin + rect.height;
+            rect.y += EditorHelpers.VerticalMargin + rect.height;
             EditorGUI.PropertyField(rect, dictionary);
             return rect;
         }
@@ -215,7 +215,7 @@ namespace OmiyaGames.UI.Translations
             if (IsButtonDrawn(status) == true)
             {
                 // Adjust height
-                rect.y += EditorUiUtility.VerticalMargin + rect.height;
+                rect.y += EditorHelpers.VerticalMargin + rect.height;
                 rect.height = ButtonHeight;
 
                 // Add indentation
@@ -251,7 +251,7 @@ namespace OmiyaGames.UI.Translations
             using (EditorGUI.DisabledGroupScope scope = new EditorGUI.DisabledGroupScope(translationDictionary.IsAllTranslationsSerialized))
             {
                 // Draw update button
-                rect.width += EditorUiUtility.VerticalMargin;
+                rect.width += EditorHelpers.VerticalMargin;
                 rect.width /= 2f;
                 GUI.SetNextControlName("Apply");
                 if (GUI.Button(rect, "Apply Changes") == true)
@@ -268,7 +268,7 @@ namespace OmiyaGames.UI.Translations
                 }
 
                 // Draw revert button
-                rect.x += EditorUiUtility.VerticalMargin;
+                rect.x += EditorHelpers.VerticalMargin;
                 rect.x += rect.width;
                 GUI.SetNextControlName("Revert");
                 if (GUI.Button(rect, "Revert Changes") == true)
@@ -292,8 +292,8 @@ namespace OmiyaGames.UI.Translations
                 rect.width -= IndentLeft;
 
                 // Draw a header message
-                rect.y += EditorUiUtility.VerticalMargin + rect.height;
-                rect.height = EditorUiUtility.GetHelpBoxHeight(Message, rect.width);
+                rect.y += EditorHelpers.VerticalMargin + rect.height;
+                rect.height = EditorHelpers.GetHelpBoxHeight(Message, rect.width);
                 EditorGUI.HelpBox(rect, Message, MessageType);
 
                 // Remove indentation
@@ -308,7 +308,7 @@ namespace OmiyaGames.UI.Translations
             if (IsTextPreviewDrawn(status) == true)
             {
                 // Draw header
-                rect.y += EditorUiUtility.VerticalSpace + rect.height;
+                rect.y += EditorHelpers.VerticalSpace + rect.height;
                 rect.height = EditorGUIUtility.singleLineHeight;
                 EditorGUI.LabelField(rect, "Preview", EditorStyles.boldLabel);
             }

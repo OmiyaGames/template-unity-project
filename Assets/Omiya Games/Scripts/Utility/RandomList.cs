@@ -111,13 +111,13 @@ namespace OmiyaGames
                     if ((randomizedIndexes == null) || (randomizedIndexes.Count != Count))
                     {
                         SetupList();
-                        Utility.ShuffleList<int>(randomizedIndexes);
+                        Helpers.ShuffleList<int>(randomizedIndexes);
                         index = 0;
                     }
                     else if ((index >= randomizedIndexes.Count) || (index < 0))
                     {
                         // Shuffle the list if we got to the last element
-                        Utility.ShuffleList<int>(randomizedIndexes);
+                        Helpers.ShuffleList<int>(randomizedIndexes);
                         index = 0;
                     }
 

@@ -208,7 +208,7 @@ namespace OmiyaGames.Builds
                     builder.Append(rootFolderName);
                     foreach (GroupBuildSetting setting in allEmbeddedGroups)
                     {
-                        builder.Append(Utility.PathDivider);
+                        builder.Append(Helpers.PathDivider);
                         builder.Append(setting.FolderName);
                     }
                     folderNameCache = builder.ToString();
@@ -257,7 +257,7 @@ namespace OmiyaGames.Builds
             {
                 OnBuildCancelled = root.OnBuildCancelled;
                 OnBuildFailed = root.OnBuildFailed;
-                rootFolderName = root.GetPathPreview(builder, Utility.PathDivider);
+                rootFolderName = root.GetPathPreview(builder, Helpers.PathDivider);
             }
         }
 
@@ -329,7 +329,7 @@ namespace OmiyaGames.Builds
                 {
                     if (string.IsNullOrEmpty(folder) == false)
                     {
-                        builder.Append(Utility.PathDivider);
+                        builder.Append(Helpers.PathDivider);
                         builder.Append(folder);
                     }
                 }
