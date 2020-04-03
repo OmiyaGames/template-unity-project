@@ -45,7 +45,7 @@ namespace OmiyaGames.Scenes
     /// <item>
     /// <description>5/18/2015</description>
     /// <description>Taro</description>
-    /// <description>Initial verison.</description>
+    /// <description>Initial version.</description>
     /// 
     /// <description>6/13/2018</description>
     /// <description>Taro</description>
