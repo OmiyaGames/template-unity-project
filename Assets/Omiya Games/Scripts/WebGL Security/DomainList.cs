@@ -5,6 +5,7 @@ using System.Collections;
 using System.Text;
 using System.IO;
 using OmiyaGames.Web;
+using OmiyaGames.Cryptography;
 
 namespace OmiyaGames
 {

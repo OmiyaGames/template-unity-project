@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using OmiyaGames.Common.Editor;
+using OmiyaGames.Cryptography;
 
 namespace OmiyaGames.UI
 {

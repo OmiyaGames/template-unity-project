@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using Community.UI;
 using OmiyaGames.Web;
+using OmiyaGames.Cryptography;
 
 namespace OmiyaGames.Builds
 {
