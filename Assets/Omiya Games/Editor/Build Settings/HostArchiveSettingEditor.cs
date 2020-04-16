@@ -2,9 +2,9 @@
 using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
-using OmiyaGames.Builds;
-using System;
 using System.Text;
+using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -116,7 +116,7 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawDomainListLocation()
         {
-            EditorUiUtility.DrawBoldFoldout(domainListLocationAnimation, "Domain List Location");
+            EditorHelpers.DrawBoldFoldout(domainListLocationAnimation, "Domain List Location");
 
             // Draw the rest of the controls
             using (EditorGUILayout.FadeGroupScope fadeScope = new EditorGUILayout.FadeGroupScope(domainListLocationAnimation.faded))
@@ -131,7 +131,7 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawArchiveSettings()
         {
-            EditorUiUtility.DrawBoldFoldout(archiveAnimation, "Archive File Name");
+            EditorHelpers.DrawBoldFoldout(archiveAnimation, "Archive File Name");
 
             // Draw the rest of the controls
             using (EditorGUILayout.FadeGroupScope fadeScope = new EditorGUILayout.FadeGroupScope(archiveAnimation.faded))
@@ -146,7 +146,7 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawArchiveContents()
         {
-            EditorUiUtility.DrawBoldFoldout(contentAnimation, "Archive Contents");
+            EditorHelpers.DrawBoldFoldout(contentAnimation, "Archive Contents");
 
             // Draw the rest of the controls
             using (EditorGUILayout.FadeGroupScope fadeScope = new EditorGUILayout.FadeGroupScope(contentAnimation.faded))
@@ -169,7 +169,7 @@ namespace OmiyaGames.UI.Builds
                         {
                             // Load the bundle, and convert it to a domain list
                             bundle = AssetBundle.LoadFromFile(AssetDatabase.GetAssetPath(testAsset));
-                            DomainList domainList = Utility.GetDomainList(bundle);
+                            DomainList domainList = DomainList.Get(bundle);
 
                             // Decrypt the domain list
                             HostArchiveSetting setting = ((HostArchiveSetting)target);
@@ -192,7 +192,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawDomainListElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty element = domainList.serializedProperty.GetArrayElementAtIndex(index);
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
             rect.height = EditorGUIUtility.singleLineHeight;
             EditorGUI.PropertyField(rect, element, GUIContent.none);
         }
@@ -214,9 +214,9 @@ namespace OmiyaGames.UI.Builds
         private string AppendArchiveFileName(string originalString, System.Text.StringBuilder builder)
         {
             builder.Clear();
-            int endIndex = originalString.LastIndexOf(Utility.PathDivider);
+            int endIndex = originalString.LastIndexOf(Helpers.PathDivider);
             builder.Append(originalString.Substring(0, endIndex));
-            builder.Append(Utility.PathDivider);
+            builder.Append(Helpers.PathDivider);
 
             CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
             builder.Append(name.ToString((IBuildSetting)target));
@@ -231,14 +231,14 @@ namespace OmiyaGames.UI.Builds
             if ((webLocationChecker.objectReferenceValue != null) && (parentProperty.objectReferenceValue is WebGlBuildSetting))
             {
                 // Get folder name
-                int endIndex = originalString.LastIndexOf(Utility.PathDivider);
+                int endIndex = originalString.LastIndexOf(Helpers.PathDivider);
                 builder.Append(originalString.Substring(0, endIndex));
-                builder.Append(Utility.PathDivider);
+                builder.Append(Helpers.PathDivider);
 
                 // Get parent name
                 WebGlBuildSetting setting = (WebGlBuildSetting)parentProperty.objectReferenceValue;
                 builder.Append(setting.FileName.ToString(setting));
-                builder.Append(Utility.PathDivider);
+                builder.Append(Helpers.PathDivider);
 
                 // Get Web Location Checker's Domain Name location
                 OmiyaGames.Web.WebLocationChecker checker = (OmiyaGames.Web.WebLocationChecker)webLocationChecker.objectReferenceValue;

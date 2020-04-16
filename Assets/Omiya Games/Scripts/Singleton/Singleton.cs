@@ -172,7 +172,7 @@ namespace OmiyaGames
         {
             get
             {
-                return Utility.ShortenUrl(PlatformSpecificStoreLink);
+                return Helpers.ShortenUrl(PlatformSpecificStoreLink);
             }
         }
 
@@ -188,7 +188,7 @@ namespace OmiyaGames
         {
             get
             {
-                return Utility.ShortenUrl(WebsiteLink);
+                return Helpers.ShortenUrl(WebsiteLink);
             }
         }
 

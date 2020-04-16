@@ -50,7 +50,7 @@ namespace OmiyaGames.Translations
     /// <item>
     /// <description>3/23/2015</description>
     /// <description>Dylan</description>
-    /// <description>Initial verison</description>
+    /// <description>Initial version</description>
     /// 
     /// <description>3/24/2015</description>
     /// <description>Taro</description>

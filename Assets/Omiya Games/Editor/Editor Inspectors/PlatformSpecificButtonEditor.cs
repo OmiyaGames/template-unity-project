@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI
 {
@@ -45,7 +46,7 @@ namespace OmiyaGames.UI
     /// <item>
     /// <description>6/15/2018</description>
     /// <description>Taro</description>
-    /// <description>Initial verison</description>
+    /// <description>Initial version</description>
     /// </item>
     /// </list>
     /// </remarks>
@@ -57,7 +58,7 @@ namespace OmiyaGames.UI
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return OmiyaGames.EditorUiUtility.GetHeight(label, 1, VerticalMargin);
+            return EditorHelpers.GetHeight(label, 1, VerticalMargin);
         }
 
         // Draw the property inside the given rect

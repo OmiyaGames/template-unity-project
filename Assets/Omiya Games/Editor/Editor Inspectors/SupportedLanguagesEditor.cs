@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using System.Collections.Generic;
 using System.IO;
 using OmiyaGames.Translations;
-using System.Collections.Generic;
-using System;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -42,7 +42,7 @@ namespace OmiyaGames.UI.Translations
     [CustomEditor(typeof(SupportedLanguages), true)]
     public class SupportedLanguagesEditor : Editor
     {
-        public const string DefaultFileName = "New Supported Languages" + Utility.FileExtensionScriptableObject;
+        public const string DefaultFileName = "New Supported Languages" + Helpers.FileExtensionScriptableObject;
 
         // Member variables
         SerializedProperty previewLanguageInIndex;
@@ -57,7 +57,7 @@ namespace OmiyaGames.UI.Translations
             SupportedLanguages newAsset = CreateInstance<SupportedLanguages>();
 
             // Setup path to file
-            string folderName = AssetUtility.GetSelectedFolder();
+            string folderName = AssetHelpers.GetSelectedFolder();
             string pathOfAsset = Path.Combine(folderName, DefaultFileName);
             pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
 
@@ -167,7 +167,7 @@ namespace OmiyaGames.UI.Translations
                 {
                     DrawFontsListElement(property.GetArrayElementAtIndex(index), rect);
                 };
-                fontsList.elementHeight = EditorUiUtility.SingleLineHeight(EditorUiUtility.VerticalMargin);
+                fontsList.elementHeight = EditorHelpers.SingleLineHeight(EditorHelpers.VerticalMargin);
                 fonts.Add(property, fontsList);
             }
             return fontsList;
@@ -195,7 +195,7 @@ namespace OmiyaGames.UI.Translations
             SerializedProperty element = supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
 
             // Adjust rect to the first line
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
             rect.height = EditorGUIUtility.singleLineHeight;
 
             // Display language name
@@ -203,19 +203,19 @@ namespace OmiyaGames.UI.Translations
             EditorGUI.PropertyField(rect, property);
 
             // Adjust rect to the second line
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
             rect.y += rect.height;
 
             // Expand the left side of the indent
-            rect.x -= EditorUiUtility.IndentSpace;
-            rect.width += EditorUiUtility.IndentSpace;
+            rect.x -= EditorHelpers.IndentSpace;
+            rect.width += EditorHelpers.IndentSpace;
 
             // Draw checkbox
             property = element.FindPropertyRelative("isSystemDefault");
             DrawSystemDefaultPopUp(ref rect, element, ref property);
 
             // Adjust rect to the last line
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
             rect.y += rect.height;
 
             // Draw fonts
@@ -229,14 +229,14 @@ namespace OmiyaGames.UI.Translations
             SerializedProperty element = supportedLanguagesList.serializedProperty.GetArrayElementAtIndex(index);
 
             // Calculate base height
-            float returnHeight = EditorUiUtility.GetHeight(null, 2, EditorUiUtility.VerticalMargin) + EditorUiUtility.VerticalMargin;
+            float returnHeight = EditorHelpers.GetHeight(null, 2, EditorHelpers.VerticalMargin) + EditorHelpers.VerticalMargin;
 
             // Grab the relevant list
             ReorderableList list = GetFontsList(element.FindPropertyRelative("fonts"));
 
             // Calculate list height
             returnHeight += list.GetHeight();
-            returnHeight += EditorUiUtility.VerticalMargin;
+            returnHeight += EditorHelpers.VerticalMargin;
             return returnHeight;
         }
 
@@ -298,7 +298,7 @@ namespace OmiyaGames.UI.Translations
         private static void DrawFontsListElement(SerializedProperty element, Rect rect)
         {
             // Adjust rect to the first line
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
             rect.height = EditorGUIUtility.singleLineHeight;
 
             // Grab the relevant element

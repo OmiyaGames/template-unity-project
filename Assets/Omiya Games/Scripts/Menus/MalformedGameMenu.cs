@@ -51,7 +51,7 @@ namespace OmiyaGames.Menus
     /// <item>
     /// <description>5/11/2016</description>
     /// <description>Taro</description>
-    /// <description>Initial verison.</description>
+    /// <description>Initial version.</description>
     /// 
     /// <description>6/5/2018</description>
     /// <description>Taro</description>
@@ -207,7 +207,7 @@ namespace OmiyaGames.Menus
                     // Overwrite the text: it's a test
                     StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
-                    Utility.BuildTestMessage(builder, WebChecker);
+                    WebLocationInfo.BuildTestMessage(builder, WebChecker);
                     reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:

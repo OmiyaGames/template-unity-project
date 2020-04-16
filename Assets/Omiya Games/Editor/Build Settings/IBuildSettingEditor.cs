@@ -3,6 +3,7 @@ using UnityEditor.AnimatedValues;
 using UnityEngine;
 using System.Collections.Generic;
 using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -60,7 +61,7 @@ namespace OmiyaGames.UI.Builds
             if (target is IBuildSetting)
             {
                 // Calculate the path from the target
-                returnPath = ((IBuildSetting)target).GetPathPreview(builder, Utility.PathDivider);
+                returnPath = ((IBuildSetting)target).GetPathPreview(builder, Helpers.PathDivider);
 
                 // Prepend "Preview"
                 builder.Clear();
@@ -130,7 +131,7 @@ namespace OmiyaGames.UI.Builds
         protected void DrawBuildFile(System.Action drawPath, AdjustText adjustPreviewPath, string foldoutLabel)
         {
             // Draw the build folder
-            EditorUiUtility.DrawBoldFoldout(folderAnimation, foldoutLabel);
+            EditorHelpers.DrawBoldFoldout(folderAnimation, foldoutLabel);
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(folderAnimation.faded))
             {
                 if (scope.visible == true)

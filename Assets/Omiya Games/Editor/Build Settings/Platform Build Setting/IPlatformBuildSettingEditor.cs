@@ -1,8 +1,9 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
 using UnityEngine;
-using OmiyaGames.Builds;
 using System;
+using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -162,7 +163,7 @@ namespace OmiyaGames.UI.Builds
         protected void DrawCustomSettings()
         {
             // Draw foldout
-            EditorUiUtility.DrawBoldFoldout(customSettingsAnimation, "Custom Build Settings");
+            EditorHelpers.DrawBoldFoldout(customSettingsAnimation, "Custom Build Settings");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(customSettingsAnimation.faded))
             {
                 if (scope.visible == true)
@@ -176,7 +177,7 @@ namespace OmiyaGames.UI.Builds
 
         protected void DrawDevelopmentSettings()
         {
-            EditorUiUtility.DrawBoldFoldout(developmentAnimation, "Development Settings");
+            EditorHelpers.DrawBoldFoldout(developmentAnimation, "Development Settings");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(developmentAnimation.faded))
             {
                 if (scope.visible == true)
@@ -207,8 +208,8 @@ namespace OmiyaGames.UI.Builds
         {
             // Show the enabled bool
             Rect indentLeft = EditorGUILayout.GetControlRect();
-            indentLeft.x -= EditorUiUtility.IndentSpace;
-            indentLeft.x += EditorUiUtility.VerticalMargin;
+            indentLeft.x -= EditorHelpers.IndentSpace;
+            indentLeft.x += EditorHelpers.VerticalMargin;
             archiveEnable.boolValue = EditorGUI.ToggleLeft(indentLeft, "Zip The Build", archiveEnable.boolValue, EditorStyles.boldLabel);
             archiveAnimation.target = archiveEnable.boolValue;
 
@@ -232,9 +233,9 @@ namespace OmiyaGames.UI.Builds
         private string AppendArchiveFileName(string originalString, System.Text.StringBuilder builder)
         {
             builder.Clear();
-            int endIndex = originalString.LastIndexOf(Utility.PathDivider);
+            int endIndex = originalString.LastIndexOf(Helpers.PathDivider);
             builder.Append(originalString.Substring(0, endIndex));
-            builder.Append(Utility.PathDivider);
+            builder.Append(Helpers.PathDivider);
 
             CustomFileName name = CustomFileNameDrawer.GetTarget(archiveFileName);
             builder.Append(name.ToString((IBuildSetting)target));
@@ -258,7 +259,7 @@ namespace OmiyaGames.UI.Builds
         {
             builder.Clear();
             builder.Append(originalString);
-            builder.Append(Utility.PathDivider);
+            builder.Append(Helpers.PathDivider);
 
             // Add file name
             CustomFileName name = CustomFileNameDrawer.GetTarget(fileName);

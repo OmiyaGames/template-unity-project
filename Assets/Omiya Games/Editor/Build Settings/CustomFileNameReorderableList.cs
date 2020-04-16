@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
-using OmiyaGames.Builds;
 using System;
+using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -70,7 +71,7 @@ namespace OmiyaGames.UI.Builds
             List.drawHeaderCallback = DrawNamesListHeader;
             List.drawElementCallback = DrawNamesListElement;
             List.onAddDropdownCallback = DrawNameListDropdown;
-            List.elementHeight = EditorUiUtility.SingleLineHeight(EditorUiUtility.VerticalMargin);
+            List.elementHeight = EditorHelpers.SingleLineHeight(EditorHelpers.VerticalMargin);
         }
 
         #region Properties
@@ -102,11 +103,11 @@ namespace OmiyaGames.UI.Builds
 
             // Draw name of the variable
             float originalWidth = rect.width;
-            rect.width -= SlugWidth + EditorUiUtility.VerticalMargin;
+            rect.width -= SlugWidth + EditorHelpers.VerticalMargin;
             EditorGUI.LabelField(rect, Label);
 
             // Draw the checkbox
-            rect.x += rect.width + EditorUiUtility.VerticalMargin;
+            rect.x += rect.width + EditorHelpers.VerticalMargin;
             rect.width = SlugWidth;
             AsSlugProperty.boolValue = EditorGUI.ToggleLeft(rect, "Convert As Slug", AsSlugProperty.boolValue);
 
@@ -123,20 +124,20 @@ namespace OmiyaGames.UI.Builds
             // Draw the text
             float originalWidth = rect.width;
             rect.width = TypeWidth;
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
 
             // Draw enumerator
             type.enumValueIndex = EditorGUI.IntPopup(rect, type.enumValueIndex, type.enumDisplayNames, PrefillTypeValues);
 
             // Draw the text field (if necessary)
-            rect.x += (EditorUiUtility.VerticalMargin + TypeWidth);
-            rect.width = (originalWidth - (TypeWidth + EditorUiUtility.VerticalMargin));
+            rect.x += (EditorHelpers.VerticalMargin + TypeWidth);
+            rect.width = (originalWidth - (TypeWidth + EditorHelpers.VerticalMargin));
 
             // Draw text field
             bool originalEnabled = GUI.enabled;
             if (CustomFileName.CanEditText(type.enumValueIndex) == true)
             {
-                rect.y -= EditorUiUtility.VerticalMargin / 2f;
+                rect.y -= EditorHelpers.VerticalMargin / 2f;
                 rect.height = EditorGUIUtility.singleLineHeight;
                 text.stringValue = EditorGUI.TextField(rect, text.stringValue);
             }

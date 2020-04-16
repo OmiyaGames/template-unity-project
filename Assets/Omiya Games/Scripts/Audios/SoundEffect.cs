@@ -266,7 +266,7 @@ namespace OmiyaGames.Audio
                 // Apply mutation
                 if (ClipRandomizer.Count > 1)
                 {
-                    Audio.clip = ClipRandomizer.RandomElement;
+                    Audio.clip = ClipRandomizer.NextRandomElement;
                 }
                 if (mutatePitch == true)
                 {

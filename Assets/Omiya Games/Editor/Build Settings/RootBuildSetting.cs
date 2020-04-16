@@ -115,7 +115,7 @@ namespace OmiyaGames.Builds
             }
         }
 
-        public override string GetPathPreview(System.Text.StringBuilder builder, char pathDivider = Utility.PathDivider)
+        public override string GetPathPreview(System.Text.StringBuilder builder, char pathDivider = Helpers.PathDivider)
         {
             // Setup variables
             builder.Clear();

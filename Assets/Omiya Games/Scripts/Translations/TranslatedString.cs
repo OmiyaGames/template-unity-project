@@ -45,7 +45,7 @@ namespace OmiyaGames.Translations
     /// <item>
     /// <description>3/23/2017</description>
     /// <description>Taro Omiya</description>
-    /// <description>Initial verison</description>
+    /// <description>Initial version</description>
     /// 
     /// <description>10/3/2018</description>
     /// <description>Taro</description>

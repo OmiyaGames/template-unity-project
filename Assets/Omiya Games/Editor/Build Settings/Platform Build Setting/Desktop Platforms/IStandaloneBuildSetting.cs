@@ -36,7 +36,7 @@ namespace OmiyaGames.Builds
     public abstract class IStandaloneBuildSetting : IPlatformBuildSetting
     {
         [SerializeField]
-        protected Architecture architecture = Architecture.BuildUniversal;
+        protected Architecture architecture = Architecture.Build64Bit;
         [SerializeField]
         protected CompressionType compression = CompressionType.Default;
         [SerializeField]

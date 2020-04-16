@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEditor.AnimatedValues;
-using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -102,7 +102,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawBuildSettingList()
         {
             // Draw foldout
-            EditorUiUtility.DrawBoldFoldout(allSettingsAnimation, "Platforms");
+            EditorHelpers.DrawBoldFoldout(allSettingsAnimation, "Platforms");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(allSettingsAnimation.faded))

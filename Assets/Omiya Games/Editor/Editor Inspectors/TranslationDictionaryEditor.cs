@@ -5,6 +5,7 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Translations
 {
@@ -42,7 +43,7 @@ namespace OmiyaGames.UI.Translations
     [CustomEditor(typeof(TranslationDictionary), true)]
     public class TranslationDictionaryEditor : Editor
     {
-        public const string DefaultFileName = "New Translation Dictionary" + Utility.FileExtensionScriptableObject;
+        public const string DefaultFileName = "New Translation Dictionary" + Helpers.FileExtensionScriptableObject;
 
         static readonly GUIContent DefaultTextToLabel = new GUIContent("Default Text To");
         static readonly GUIContent PresetMessageLabel = new GUIContent("Preset Message");
@@ -89,7 +90,7 @@ namespace OmiyaGames.UI.Translations
             TranslationDictionary newAsset = CreateInstance<TranslationDictionary>();
 
             // Setup path to file
-            string folderName = AssetUtility.GetSelectedFolder();
+            string folderName = AssetHelpers.GetSelectedFolder();
             string pathOfAsset = Path.Combine(folderName, DefaultFileName);
             pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
 
@@ -111,11 +112,11 @@ namespace OmiyaGames.UI.Translations
             replaceEmptyStringWithDefaultText = serializedObject.FindProperty("replaceEmptyStringWithDefaultText");
 
             // Setup animations
-            EditorUiUtility.CreateBool(this, ref showErrorMessage);
-            EditorUiUtility.CreateBool(this, ref showDefaultConfigurations);
-            EditorUiUtility.CreateBool(this, ref showPresetMessageForKeyNotFound);
-            EditorUiUtility.CreateBool(this, ref showDefaultLanguageForTranslationNotFound);
-            EditorUiUtility.CreateBool(this, ref showPresetMessageForTranslationNotFound);
+            EditorHelpers.CreateBool(this, ref showErrorMessage);
+            EditorHelpers.CreateBool(this, ref showDefaultConfigurations);
+            EditorHelpers.CreateBool(this, ref showPresetMessageForKeyNotFound);
+            EditorHelpers.CreateBool(this, ref showDefaultLanguageForTranslationNotFound);
+            EditorHelpers.CreateBool(this, ref showPresetMessageForTranslationNotFound);
 
             // Setup transations list
             translations = serializedObject.FindProperty("translations");
@@ -143,11 +144,11 @@ namespace OmiyaGames.UI.Translations
 
         private void OnDisable()
         {
-            EditorUiUtility.DestroyBool(this, ref showErrorMessage);
-            EditorUiUtility.DestroyBool(this, ref showDefaultConfigurations);
-            EditorUiUtility.DestroyBool(this, ref showPresetMessageForKeyNotFound);
-            EditorUiUtility.DestroyBool(this, ref showDefaultLanguageForTranslationNotFound);
-            EditorUiUtility.DestroyBool(this, ref showPresetMessageForTranslationNotFound);
+            EditorHelpers.DestroyBool(this, ref showErrorMessage);
+            EditorHelpers.DestroyBool(this, ref showDefaultConfigurations);
+            EditorHelpers.DestroyBool(this, ref showPresetMessageForKeyNotFound);
+            EditorHelpers.DestroyBool(this, ref showDefaultLanguageForTranslationNotFound);
+            EditorHelpers.DestroyBool(this, ref showPresetMessageForTranslationNotFound);
             translationStatus.Clear();
             frequencyInKeyAppearance.Clear();
         }

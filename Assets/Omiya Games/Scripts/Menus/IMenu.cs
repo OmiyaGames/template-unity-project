@@ -204,7 +204,7 @@ namespace OmiyaGames.Menus
             }
         }
 
-        public Animator Animator => Utility.GetComponentCached(this, ref animatorCache);
+        public Animator Animator => Helpers.GetComponentCached(this, ref animatorCache);
 
         /// <summary>
         /// Setting this ScrollRect will make the menu center to the default UI when the Show() method is called.

@@ -45,7 +45,7 @@ namespace OmiyaGames
     /// <item>
     /// <description>6/15/2018</description>
     /// <description>Taro</description>
-    /// <description>Initial verison</description>
+    /// <description>Initial version</description>
     /// </item>
     /// </list>
     /// </remarks>
@@ -82,7 +82,7 @@ namespace OmiyaGames
         /// </summary>
         public void Setup()
         {
-            Component.gameObject.SetActive(EnabledFor.IsThisBuildSupported());
+            Component.gameObject.SetActive(EnabledFor.IsSupported());
         }
     }
 

@@ -37,7 +37,7 @@ namespace OmiyaGames.Builds
     {
         private static readonly Architecture[] supportedArchitectures = new Architecture[]
         {
-            Architecture.BuildUniversal
+            Architecture.Build64Bit
         };
         private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
         {

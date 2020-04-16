@@ -161,7 +161,7 @@ namespace OmiyaGames.Menus
             if((targetAnchorPosition.HasValue == true) && (panel.gameObject.activeInHierarchy == true))
             {
                 // Check if we're close enough to the target position
-                if(Vector2.Distance(CachedTransform.anchoredPosition, targetAnchorPosition.Value) < Utility.SnapToThreshold)
+                if(Vector2.Distance(CachedTransform.anchoredPosition, targetAnchorPosition.Value) < Helpers.SnapToThreshold)
                 {
                     // Snap to this position
                     CachedTransform.anchoredPosition = targetAnchorPosition.Value;

@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Scenes;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Scenes
 {
@@ -88,7 +89,7 @@ namespace OmiyaGames.UI.Scenes
             Rect labelRect = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
             if (string.IsNullOrEmpty(label.text) == false)
             {
-                position.y += (EditorGUIUtility.singleLineHeight + EditorUiUtility.VerticalMargin);
+                position.y += (EditorGUIUtility.singleLineHeight + EditorHelpers.VerticalMargin);
                 EditorGUI.indentLevel = 1;
             }
 
@@ -97,9 +98,9 @@ namespace OmiyaGames.UI.Scenes
             EditorGUI.PropertyField(position, property.FindPropertyRelative("scenePath"));
 
             // Dock the rest of the fields down a bit
-            position.y += (position.height + EditorUiUtility.VerticalMargin);
+            position.y += (position.height + EditorHelpers.VerticalMargin);
             Rect fieldRect = position;
-            fieldRect.width -= RevertTimeWidth - EditorUiUtility.VerticalSpace;
+            fieldRect.width -= RevertTimeWidth - EditorHelpers.VerticalSpace;
 
             // Draw Cursor label
             EditorGUI.PropertyField(fieldRect, property.FindPropertyRelative("cursorMode"));
@@ -112,7 +113,7 @@ namespace OmiyaGames.UI.Scenes
             childProperty.boolValue = EditorGUI.ToggleLeft(fieldRect, "Reset Time Scale", childProperty.boolValue);
 
             // Dock the rest of the fields down a bit
-            position.y += (position.height + EditorUiUtility.VerticalMargin);
+            position.y += (position.height + EditorHelpers.VerticalMargin);
 
             // Draw Display Name label
             EditorGUI.PropertyField(position, property.FindPropertyRelative("displayName"));
@@ -125,10 +126,10 @@ namespace OmiyaGames.UI.Scenes
 
         internal static float GetHeight(SerializedProperty translatedDisplayNameProperty, GUIContent label = null)
         {
-            float returnHeight = EditorUiUtility.GetHeight(label, 2, EditorUiUtility.VerticalMargin);
+            float returnHeight = EditorHelpers.GetHeight(label, 2, EditorHelpers.VerticalMargin);
             if (translatedDisplayNameProperty != null)
             {
-                returnHeight += EditorUiUtility.VerticalMargin;
+                returnHeight += EditorHelpers.VerticalMargin;
                 returnHeight += EditorGUI.GetPropertyHeight(translatedDisplayNameProperty);
             }
             return returnHeight;

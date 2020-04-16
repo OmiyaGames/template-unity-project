@@ -88,11 +88,11 @@ namespace OmiyaGames.Menus
         {
             get
             {
-                if (enableKeyboardControls.IsThisBuildSupported() == true)
+                if (enableKeyboardControls.IsSupported() == true)
                 {
                     return keyboardSensitivitySet.DefaultSelectable;
                 }
-                else if (enableCameraSensitivityControls.IsThisBuildSupported() == true)
+                else if (enableCameraSensitivityControls.IsSupported() == true)
                 {
                     return cameraSensitivitySet.DefaultSelectable;
                 }
@@ -247,7 +247,7 @@ namespace OmiyaGames.Menus
         void SetupKeyboardSensitivityControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableKeyboardControls.IsThisBuildSupported();
+            bool enabled = enableKeyboardControls.IsSupported();
 
             // Toggle the display of the controls
             keyboardSensitivitySet.gameObject.SetActive(enabled);
@@ -270,7 +270,7 @@ namespace OmiyaGames.Menus
         void SetupCameraSensitivityControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableCameraSensitivityControls.IsThisBuildSupported();
+            bool enabled = enableCameraSensitivityControls.IsSupported();
 
             // Toggle the display of the controls
             cameraSensitivitySet.gameObject.SetActive(enabled);
@@ -293,7 +293,7 @@ namespace OmiyaGames.Menus
         void SetupScrollWheelControls()
         {
             // Check whether to show the keyboard controls set or not
-            bool enabled = enableScrollWheelControls.IsThisBuildSupported();
+            bool enabled = enableScrollWheelControls.IsSupported();
 
             // Check if enabled
             if (enabled == true)
@@ -313,7 +313,7 @@ namespace OmiyaGames.Menus
         void SetupCameraSmoothing()
         {
             // Check to see if we want to show camera smoothing controls
-            bool enable = enableCameraSmoothingControls.IsThisBuildSupported();
+            bool enable = enableCameraSmoothingControls.IsSupported();
 
             // Update the controls active state
             foreach (GameObject controls in cameraSmoothingControls)

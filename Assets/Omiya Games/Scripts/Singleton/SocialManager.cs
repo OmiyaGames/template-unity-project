@@ -220,7 +220,7 @@ namespace OmiyaGames.SocialOnline
                 CurrentLogInState = LogInState.MiddleOfAuthenticating;
 
                 // Start authentication process
-                Utility.Log("Starting authentication!");
+                Helpers.Log("Starting authentication!");
                 Social.localUser.Authenticate(OnAuthenticationComplete);
             }
             return returnIsAttemptingAuthentication;
@@ -286,7 +286,7 @@ namespace OmiyaGames.SocialOnline
                         warningBuilder.Append(achievementKey);
                         warningBuilder.Append(" and progress ");
                         warningBuilder.Append(record);
-                        Utility.Log(warningBuilder.ToString());
+                        Helpers.Log(warningBuilder.ToString());
                     }
                 }
             }
@@ -341,7 +341,7 @@ namespace OmiyaGames.SocialOnline
                         warningBuilder.Append(leaderboardKey);
                         warningBuilder.Append(" and score ");
                         warningBuilder.Append(record);
-                        Utility.Log(warningBuilder.ToString());
+                        Helpers.Log(warningBuilder.ToString());
                     }
                 }
             }
@@ -464,13 +464,13 @@ namespace OmiyaGames.SocialOnline
 
                 // Indicate success
                 CurrentLogInState = LogInState.AuthenticationSuccess;
-                Utility.Log("Authentication success!");
+                Helpers.Log("Authentication success!");
             }
             else
             {
                 // Indicate failure
                 CurrentLogInState = LogInState.NotConnected;
-                Utility.Log("Failed to authenticate");
+                Helpers.Log("Failed to authenticate");
             }
         }
 
@@ -479,11 +479,11 @@ namespace OmiyaGames.SocialOnline
             // Check if report succeeded
             if (success == true)
             {
-                Utility.Log("Successfully recorded to a leaderboard!");
+                Helpers.Log("Successfully recorded to a leaderboard!");
             }
             else
             {
-                Utility.Log("Failed to record to a leaderboard...");
+                Helpers.Log("Failed to record to a leaderboard...");
             }
         }
 
@@ -492,11 +492,11 @@ namespace OmiyaGames.SocialOnline
             // Check if report succeeded
             if (success == true)
             {
-                Utility.Log("Successfully recorded to an achivement!");
+                Helpers.Log("Successfully recorded to an achivement!");
             }
             else
             {
-                Utility.Log("Failed to record to an achievement...");
+                Helpers.Log("Failed to record to an achievement...");
             }
         }
         #endregion
@@ -610,7 +610,7 @@ namespace OmiyaGames.SocialOnline
                     warningBuilder.Append(record);
                     warningBuilder.Append(" and success ");
                     warningBuilder.Append(reportSuccess);
-                    Utility.Log(warningBuilder.ToString());
+                    Helpers.Log(warningBuilder.ToString());
                 }
             }
             if (debug != null)

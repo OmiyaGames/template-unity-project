@@ -90,7 +90,7 @@ namespace OmiyaGames.Menus
         {
             get
             {
-                if(enableMusicVolumeControls.IsThisBuildSupported())
+                if(enableMusicVolumeControls.IsSupported())
                 {
                     return musicVolumeControls.Slider;
                 }
@@ -173,7 +173,7 @@ namespace OmiyaGames.Menus
         private void SetupMusicControls()
         {
             // Setup enabling the music controls
-            bool enableControl = enableMusicVolumeControls.IsThisBuildSupported();
+            bool enableControl = enableMusicVolumeControls.IsSupported();
             foreach (GameObject controls in musicVolumeSection)
             {
                 controls.SetActive(enableControl);
@@ -193,7 +193,7 @@ namespace OmiyaGames.Menus
 
         private bool SetupSoundEffectControls()
         {
-            bool enableControl = enableSoundEffectVolumeControls.IsThisBuildSupported();
+            bool enableControl = enableSoundEffectVolumeControls.IsSupported();
             foreach (GameObject controls in soundEffectsSection)
             {
                 controls.SetActive(enableControl);

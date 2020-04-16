@@ -46,7 +46,7 @@ namespace OmiyaGames.Menus
     /// <item>
     /// <description>6/4/2018</description>
     /// <description>Taro</description>
-    /// <description>Initial verison</description>
+    /// <description>Initial version</description>
     /// </item>
     /// </list>
     /// </remarks>
@@ -126,7 +126,7 @@ namespace OmiyaGames.Menus
         [ContextMenu("Set Parent Canvas")]
         void SetParentCanvas()
         {
-            parentCanvas = Utility.GetParentCanvas(transform);
+            parentCanvas = Helpers.GetParentCanvas(transform);
         }
     }
 }

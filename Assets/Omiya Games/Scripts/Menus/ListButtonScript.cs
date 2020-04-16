@@ -46,7 +46,7 @@ namespace OmiyaGames.Menus
     /// <item>
     /// <description>3/14/2017</description>
     /// <description>Taro</description>
-    /// <description>Initial verison.</description>
+    /// <description>Initial version.</description>
     /// 
     /// <description>3/14/2017</description>
     /// <description>Taro</description>

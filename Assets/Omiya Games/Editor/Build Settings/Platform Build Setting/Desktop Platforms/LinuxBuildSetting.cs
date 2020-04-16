@@ -37,9 +37,7 @@ namespace OmiyaGames.Builds
     {
         private static readonly Architecture[] supportedArchitectures = new Architecture[]
         {
-            Architecture.BuildUniversal,
-            Architecture.Build64Bit,
-            Architecture.Build32Bit
+            Architecture.Build64Bit
         };
         private static readonly ScriptingImplementation[] supportedScriptingBackends = new ScriptingImplementation[]
         {
@@ -87,15 +85,7 @@ namespace OmiyaGames.Builds
         {
             get
             {
-                switch(ArchitectureToBuild)
-                {
-                    case Architecture.Build64Bit:
-                        return BuildTarget.StandaloneLinux64;
-                    case Architecture.Build32Bit:
-                        return BuildTarget.StandaloneLinux;
-                    default:
-                        return BuildTarget.StandaloneLinuxUniversal;
-                }
+                return BuildTarget.StandaloneLinux64;
             }
         }
 

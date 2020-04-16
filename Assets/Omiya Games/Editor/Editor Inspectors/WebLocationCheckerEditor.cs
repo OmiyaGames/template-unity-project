@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Web;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Web
 {
@@ -78,13 +79,13 @@ namespace OmiyaGames.UI.Web
             domainMustContainList = new ReorderableList(serializedObject, domainMustContain, true, true, true, true);
             domainMustContainList.drawHeaderCallback = DrawDomainHeader;
             domainMustContainList.drawElementCallback = DrawDomainElement;
-            domainMustContainList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
+            domainMustContainList.elementHeight = EditorHelpers.SingleLineHeight(VerticalMargin);
 
             // Setup waitObjects list
             waitObjectsList = new ReorderableList(serializedObject, waitObjects, true, true, true, true);
             waitObjectsList.drawHeaderCallback = DrawWaitHeader;
             waitObjectsList.drawElementCallback = DrawWaitElement;
-            waitObjectsList.elementHeight = EditorUiUtility.SingleLineHeight(VerticalMargin);
+            waitObjectsList.elementHeight = EditorHelpers.SingleLineHeight(VerticalMargin);
         }
 
         public override void OnInspectorGUI()
