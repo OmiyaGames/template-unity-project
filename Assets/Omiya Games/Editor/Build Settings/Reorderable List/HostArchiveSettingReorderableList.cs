@@ -2,6 +2,7 @@
 using UnityEditorInternal;
 using UnityEngine;
 using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -41,7 +42,7 @@ namespace OmiyaGames.UI.Builds
         {
             // Setup List
             List.onAddCallback = OnBuildSettingListAdd;
-            List.elementHeight = EditorUiUtility.GetHeight(2, 4f);
+            List.elementHeight = EditorHelpers.GetHeight(2, 4f);
         }
 
         protected override void DrawBuildSettingListElement(Rect rect, int index, bool isActive, bool isFocused)
@@ -51,11 +52,11 @@ namespace OmiyaGames.UI.Builds
 
             // Calculate position
             rect.height = EditorGUIUtility.singleLineHeight;
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
 
             // Draw a toggle
             Rect fieldRect = rect;
-            fieldRect.width = rect.height + EditorUiUtility.VerticalMargin;
+            fieldRect.width = rect.height + EditorHelpers.VerticalMargin;
             HostArchiveSetting setting = (HostArchiveSetting)element.objectReferenceValue;
             setting.IsEnabled = EditorGUI.Toggle(fieldRect, setting.IsEnabled);
 
@@ -71,7 +72,7 @@ namespace OmiyaGames.UI.Builds
 
             // Calculate position
             rect.y += rect.height;
-            rect.y += EditorUiUtility.VerticalMargin;
+            rect.y += EditorHelpers.VerticalMargin;
 
             // Draw Edit buttons
             DrawButtons(rect, element.objectReferenceValue);

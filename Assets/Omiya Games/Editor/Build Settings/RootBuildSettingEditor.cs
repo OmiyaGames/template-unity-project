@@ -2,6 +2,7 @@
 using UnityEditor.AnimatedValues;
 using UnityEngine;
 using OmiyaGames.Builds;
+using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Builds
 {
@@ -39,7 +40,7 @@ namespace OmiyaGames.UI.Builds
     [CustomEditor(typeof(RootBuildSetting))]
     public class RootBuildSettingEditor : IBuildSettingEditor
     {
-        public const string DefaultFileName = "New Build Settings" + Utility.FileExtensionScriptableObject;
+        public const string DefaultFileName = "New Build Settings" + Helpers.FileExtensionScriptableObject;
 
         SerializedProperty rootBuildFolder;
         SerializedProperty newBuildFolderName;
@@ -59,7 +60,7 @@ namespace OmiyaGames.UI.Builds
             RootBuildSetting newAsset = CreateInstance<RootBuildSetting>();
 
             // Setup path to file
-            string folderName = AssetUtility.GetSelectedFolder();
+            string folderName = AssetHelpers.GetSelectedFolder();
             string pathOfAsset = System.IO.Path.Combine(folderName, DefaultFileName);
             pathOfAsset = AssetDatabase.GenerateUniqueAssetPath(pathOfAsset);
 
@@ -112,7 +113,7 @@ namespace OmiyaGames.UI.Builds
 
         private void DrawInterruptions()
         {
-            EditorUiUtility.DrawBoldFoldout(interruptionsAnimation, "Interruptions");
+            EditorHelpers.DrawBoldFoldout(interruptionsAnimation, "Interruptions");
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(interruptionsAnimation.faded))
             {
                 if (scope.visible == true)
@@ -126,7 +127,7 @@ namespace OmiyaGames.UI.Builds
         private void DrawBuildSettingList()
         {
             // Draw foldout
-            EditorUiUtility.DrawBoldFoldout(buildSettingsAnimation, "Platforms");
+            EditorHelpers.DrawBoldFoldout(buildSettingsAnimation, "Platforms");
 
             // Draw the list
             using (EditorGUILayout.FadeGroupScope scope = new EditorGUILayout.FadeGroupScope(buildSettingsAnimation.faded))

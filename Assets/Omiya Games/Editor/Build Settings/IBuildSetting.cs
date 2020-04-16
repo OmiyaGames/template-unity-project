@@ -83,7 +83,7 @@ namespace OmiyaGames.Builds
         /// <returns></returns>
         public string GetPathPreview(System.Text.StringBuilder builder)
         {
-            return GetPathPreview(builder, Utility.PathDivider);
+            return GetPathPreview(builder, Helpers.PathDivider);
         }
 
         /// <summary>

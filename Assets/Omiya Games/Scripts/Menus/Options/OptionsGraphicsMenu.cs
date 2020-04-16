@@ -77,7 +77,7 @@ namespace OmiyaGames.Menus
             {
                 get
                 {
-                    return EnableFor.IsThisBuildSupported();
+                    return EnableFor.IsSupported();
                 }
             }
 

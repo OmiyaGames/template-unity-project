@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using OmiyaGames.Cryptography;
 
 namespace OmiyaGames.Web
 {
@@ -61,7 +62,7 @@ namespace OmiyaGames.Web
     /// <item>
     /// <description>>5/15/2016</description>
     /// <description>Taro</description>
-    /// <description>Initial verison.</description>
+    /// <description>Initial version.</description>
     /// </item><item>
     /// <description>6/5/2018</description>
     /// <description>Taro</description>
@@ -396,7 +397,7 @@ namespace OmiyaGames.Web
                         AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(www);
                         if (bundle != null)
                         {
-                            DownloadedDomainList = ConvertToDomainList(Utility.GetDomainList(bundle), domainDecrypter);
+                            DownloadedDomainList = ConvertToDomainList(DomainList.Get(bundle), domainDecrypter);
                         }
                         else
                         {

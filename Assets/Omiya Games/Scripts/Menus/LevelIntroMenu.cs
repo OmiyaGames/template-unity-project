@@ -333,7 +333,7 @@ namespace OmiyaGames.Menus
         {
             // Check setting is not null, and supported
             bool returnFlag = false;
-            if ((settings != null) && (settings.Platform.IsThisBuildSupported() == true))
+            if ((settings != null) && (settings.Platform.IsSupported() == true))
             {
                 if (settings.MouseLockState == MouseState.Both)
                 {

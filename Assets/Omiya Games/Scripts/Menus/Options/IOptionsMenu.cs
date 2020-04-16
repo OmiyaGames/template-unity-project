@@ -44,7 +44,7 @@ namespace OmiyaGames.Menus
     /// <item>
     /// <description>6/29/2018</description>
     /// <description>Taro</description>
-    /// <description>Initial verison.</description>
+    /// <description>Initial version.</description>
     /// </item>
     /// </list>
     /// </remarks>
@@ -77,7 +77,7 @@ namespace OmiyaGames.Menus
                 for (int index = 0; ((index < allSupportFlags.Length) && ((index - 1) < allDividers.Length)); ++index)
                 {
                     // Check if this control set should be made visible
-                    if (allSupportFlags[index].IsThisBuildSupported() == true)
+                    if (allSupportFlags[index].IsSupported() == true)
                     {
                         // Increment the number of visible controls
                         ++numVisibleControlSets;

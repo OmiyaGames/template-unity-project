@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using System.Text;
+using System.IO;
 using OmiyaGames.Web;
+using OmiyaGames.Cryptography;
 
 namespace OmiyaGames
 {
@@ -200,5 +203,42 @@ namespace OmiyaGames
             throw new NotImplementedException();
         }
         #endregion
+
+        public static DomainList Get(AssetBundle bundle, string assetNameNoExtension = null)
+        {
+            DomainList returnDomain = null;
+
+            // Search for an *.asset file
+            string[] allAssets = bundle.GetAllAssetNames();
+            string firstAsset = null;
+            if (allAssets != null)
+            {
+                for (int index = 0; index < allAssets.Length; ++index)
+                {
+                    if ((string.IsNullOrEmpty(allAssets[index]) == false) &&
+                        (Path.GetExtension(allAssets[index]) == OmiyaGames.Helpers.FileExtensionScriptableObject) &&
+                        ((string.IsNullOrEmpty(assetNameNoExtension) == true) || (Path.GetFileNameWithoutExtension(allAssets[index]) == assetNameNoExtension)))
+                    {
+                        firstAsset = allAssets[index];
+                        break;
+                    }
+                }
+            }
+
+            // Check if an asset is found
+            if (string.IsNullOrEmpty(firstAsset) == false)
+            {
+                try
+                {
+                    // Convert it to an AcceptedDomainList
+                    returnDomain = bundle.LoadAsset<DomainList>(firstAsset);
+                }
+                catch (System.Exception)
+                {
+                    returnDomain = null;
+                }
+            }
+            return returnDomain;
+        }
     }
 }

@@ -85,7 +85,7 @@ namespace OmiyaGames.Menus
                 {
                     foreach(PlatformSpecificButton button in AllButtons)
                     {
-                        if(button.EnabledFor.IsThisBuildSupported() == true)
+                        if(button.EnabledFor.IsSupported() == true)
                         {
                             cachedDefaultButton = button.Component;
                             break;
