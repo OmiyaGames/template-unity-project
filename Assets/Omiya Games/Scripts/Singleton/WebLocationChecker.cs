@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OmiyaGames.Cryptography;
-using OmiyaGames.Domain;
 
 namespace OmiyaGames.Web
 {

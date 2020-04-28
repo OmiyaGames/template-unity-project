@@ -2,8 +2,8 @@
 using System.IO;
 using UnityEngine;
 using OmiyaGames.Web;
-using OmiyaGames.Domain.Editor;
 using OmiyaGames.Cryptography;
+using OmiyaGames.Cryptography.Editor;
 
 namespace OmiyaGames.Builds
 {
