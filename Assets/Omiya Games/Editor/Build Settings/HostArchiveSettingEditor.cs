@@ -3,6 +3,7 @@ using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
 using System.Text;
+using OmiyaGames.Domain;
 using OmiyaGames.Builds;
 using OmiyaGames.Common.Editor;
 
