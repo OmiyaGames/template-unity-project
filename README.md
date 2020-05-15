@@ -1,6 +1,6 @@
 # [Omiya Games](https://www.omiyagames.com/) - Template Unity Project
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I51KS8F)
+[![Mirroring](https://github.com/OmiyaGames/template-unity-project/workflows/Mirroring/badge.svg)](https://bitbucket.org/OmiyaGames/template-unity-project) [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I51KS8F)
 
 This is a template Unity project [Omiya Games](https://www.omiyagames.com/)' uses to start their game project.
 In this Unity project, the following folders has the following roles:
