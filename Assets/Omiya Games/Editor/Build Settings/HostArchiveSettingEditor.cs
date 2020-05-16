@@ -3,6 +3,7 @@ using UnityEditor.AnimatedValues;
 using UnityEditorInternal;
 using UnityEngine;
 using System.Text;
+using OmiyaGames.Cryptography;
 using OmiyaGames.Builds;
 using OmiyaGames.Common.Editor;
 

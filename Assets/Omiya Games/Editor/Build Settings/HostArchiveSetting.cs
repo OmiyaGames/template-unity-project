@@ -1,10 +1,9 @@
 ﻿using System.Text;
 using System.IO;
 using UnityEngine;
-using UnityEditor;
-using Community.UI;
 using OmiyaGames.Web;
 using OmiyaGames.Cryptography;
+using OmiyaGames.Cryptography.Editor;
 
 namespace OmiyaGames.Builds
 {
@@ -169,7 +168,7 @@ namespace OmiyaGames.Builds
             try
             {
                 // Save this asset
-                UI.DomainListAssetBundleGenerator.GenerateDomainList(folderName, fileName, AcceptedDomains, DomainEncrypter, false, true);
+                DomainListAssetBundleGenerator.GenerateDomainList(folderName, fileName, AcceptedDomains, DomainEncrypter, false, true);
 
                 // Indicate success
                 results.AddPostBuildReport(BuildPlayersResult.Status.Success, "Creating domain list for " + name, this);

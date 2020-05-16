@@ -260,7 +260,7 @@ namespace OmiyaGames.Web
                             // Add the entry and its regular expression equivalent
                             if (string.IsNullOrEmpty(allDomains[listIndex][stringIndex]) == false)
                             {
-                                allUniqueDomains.Add(allDomains[listIndex][stringIndex], ConvertToWildCardAcceptingRegex(buf, allDomains[listIndex][stringIndex]));
+                                allUniqueDomains.Add(allDomains[listIndex][stringIndex], DomainList.ConvertToRegex(allDomains[listIndex][stringIndex], buf));
                             }
                         }
                     }
@@ -301,38 +301,6 @@ namespace OmiyaGames.Web
             return isTheCorrectHost;
         }
 
-        static Regex ConvertToWildCardAcceptingRegex(StringBuilder buf, string domainString)
-        {
-            // Reset StringBuilder
-            buf.Length = 0;
-
-            // Add forced start characters
-            buf.Append('^');
-
-            // Escape all Regex Expression
-            domainString = Regex.Escape(domainString);
-
-            // Replace ? and * with equivalent symbols
-            buf.Append(domainString.Replace("\\?", ".").Replace("\\*", ".*"));
-
-            // Add forced end characters
-            buf.Append('$');
-
-            // Create a new Regex
-            return new Regex(buf.ToString(), RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        }
-
-        static string[] ConvertToDomainList(string text, string[] splitBy)
-        {
-            string[] returnDomainList = text.Split(splitBy, StringSplitOptions.RemoveEmptyEntries);
-            for (int index = 0; index < returnDomainList.Length; ++index)
-            {
-                // Trim out any empty spaces in each string
-                returnDomainList[index] = returnDomainList[index].Trim();
-            }
-            return returnDomainList;
-        }
-
         static string[] ConvertToDomainList(DomainList domainList, StringCryptographer decrypter)
         {
             string[] returnDomainList = null;
@@ -355,23 +323,6 @@ namespace OmiyaGames.Web
                     break;
             }
             return returnState;
-        }
-
-        static void AddString(string[] toAddArray, List<string> listToAddTo, HashSet<string> setToAddTo)
-        {
-            if (toAddArray != null)
-            {
-                string toAdd;
-                for (int index = 0; index < toAddArray.Length; ++index)
-                {
-                    toAdd = toAddArray[index];
-                    if ((string.IsNullOrEmpty(toAdd) == false) && (setToAddTo.Contains(toAdd) == false))
-                    {
-                        listToAddTo.Add(toAdd);
-                        setToAddTo.Add(toAdd);
-                    }
-                }
-            }
         }
         #endregion
 
