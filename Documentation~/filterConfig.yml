@@ -1,0 +1,12 @@
+apiRules:
+- include:
+    # Including the OmiyaGames namespace
+    uidRegex: ^OmiyaGames
+    type: Namespace
+- include:
+    uidRegex: ^Global
+    type: Namespace
+- exclude:
+    # Taro Omiya: note that I'm ignoring namespaces containing unit tests on purpooses
+    uidRegex: .*
+    type: Namespace
