@@ -963,6 +963,14 @@
       <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Global.csproj">
+      <Project>{4A6C2374-5060-672C-2BDE-F62EC18BC01E}</Project>
+      <Name>OmiyaGames.Global</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Global.Editor.csproj">
+      <Project>{C6B567DE-19E0-0E89-5A83-5D4774F87082}</Project>
+      <Name>OmiyaGames.Global.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
