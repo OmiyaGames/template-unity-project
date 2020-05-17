@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections;
 using OmiyaGames.Web;
 using OmiyaGames.Translations;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {

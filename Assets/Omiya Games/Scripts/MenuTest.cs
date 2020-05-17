@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using OmiyaGames;
 using OmiyaGames.Audio;
 using OmiyaGames.Menus;
+using OmiyaGames.Global;
 
 namespace Project
 {

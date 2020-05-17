@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using OmiyaGames.Scenes;
 using OmiyaGames.Translations;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {

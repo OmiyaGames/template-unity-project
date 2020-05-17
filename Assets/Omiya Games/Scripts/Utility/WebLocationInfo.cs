@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Text;
 using System.Collections;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Web
 {

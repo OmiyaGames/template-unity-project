@@ -43,11 +43,11 @@ namespace OmiyaGames.Global
             private set;
         } = null;
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             Effects = FindObjectOfType<ScreenEffects>();
         }

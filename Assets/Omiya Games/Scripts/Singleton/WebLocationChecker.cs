@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OmiyaGames.Cryptography;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Web
 {
@@ -197,7 +198,7 @@ namespace OmiyaGames.Web
         public string RemoteDomainListUrl => remoteDomainListUrl;
         #endregion
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             if (Singleton.Instance.IsWebApp == true)
             {
@@ -206,7 +207,7 @@ namespace OmiyaGames.Web
             }
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Do nothing
         }
