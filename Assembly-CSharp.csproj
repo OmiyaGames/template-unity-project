@@ -116,13 +116,11 @@
     <Compile Include="Assets\Omiya Games\Scripts\Resizer\TextMeshProResizer.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Resizer\TextResizer.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Serialized Containers\PlatformSpecificControl.cs" />
-    <Compile Include="Assets\Omiya Games\Scripts\Serialized Containers\PlatformSpecificLink.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Serialized Containers\SceneInfo.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\ShaderTest.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\AudioMixerReference.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\BackgroundMusic.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\CameraManager.cs" />
-    <Compile Include="Assets\Omiya Games\Scripts\Singleton\ISingletonScript.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\MenuManager.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\PoolSet.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\PoolingManager.cs" />
@@ -168,7 +166,6 @@
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\Settings\SettingsVersions\ISettingsVersion.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\Settings\SettingsVersions\ISettingsVersionGenerator.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\Settings\SettingsVersions\SettingsVersionGeneratorDecorator.cs" />
-    <Compile Include="Assets\Omiya Games\Scripts\Singleton\Singleton.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\SocialManager.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\SocialWrappers.cs" />
     <Compile Include="Assets\Omiya Games\Scripts\Singleton\TimeManager.cs" />
@@ -966,6 +963,10 @@
       <Project>{F32E78BB-19AE-3175-851D-E0AA7986226D}</Project>
       <Name>OmiyaGames</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Global.Editor.csproj">
+      <Project>{C6B567DE-19E0-0E89-5A83-5D4774F87082}</Project>
+      <Name>OmiyaGames.Global.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Cryptography.csproj">
       <Project>{A47E344F-A927-94FD-4B19-9C90C821CA73}</Project>
       <Name>OmiyaGames.Cryptography</Name>
@@ -974,17 +975,21 @@
       <Project>{CFE183A3-138A-6699-5D02-CA9233BFC45D}</Project>
       <Name>OmiyaGames.Common.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
-      <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
-      <Name>OmiyaGames.Cryptography.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Global.csproj">
       <Project>{4A6C2374-5060-672C-2BDE-F62EC18BC01E}</Project>
       <Name>OmiyaGames.Global</Name>
     </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Global.Editor.csproj">
-      <Project>{C6B567DE-19E0-0E89-5A83-5D4774F87082}</Project>
-      <Name>OmiyaGames.Global.Editor</Name>
+    <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
+      <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
+      <Name>OmiyaGames.Cryptography.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Web.csproj">
+      <Project>{D0392F6B-FCDE-F9E7-5324-91AB8842AB3C}</Project>
+      <Name>OmiyaGames.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Web.Editor.csproj">
+      <Project>{B6A10D2F-9A87-2F7A-AA24-B6218F9A5E50}</Project>
+      <Name>OmiyaGames.Web.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
