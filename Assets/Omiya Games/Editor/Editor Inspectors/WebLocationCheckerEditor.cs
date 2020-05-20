@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using OmiyaGames.Web;
+using OmiyaGames.Web.Security;
 using OmiyaGames.Common.Editor;
 
 namespace OmiyaGames.UI.Web

@@ -242,7 +242,7 @@ namespace OmiyaGames.UI.Builds
                 builder.Append(Helpers.PathDivider);
 
                 // Get Web Location Checker's Domain Name location
-                OmiyaGames.Web.WebLocationChecker checker = (OmiyaGames.Web.WebLocationChecker)webLocationChecker.objectReferenceValue;
+                OmiyaGames.Web.Security.WebLocationChecker checker = (OmiyaGames.Web.Security.WebLocationChecker)webLocationChecker.objectReferenceValue;
                 builder.Append(checker.RemoteDomainListUrl);
             }
             else

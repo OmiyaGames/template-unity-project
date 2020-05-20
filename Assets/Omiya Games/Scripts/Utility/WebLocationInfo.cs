@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections;
 using OmiyaGames.Global;
 
-namespace OmiyaGames.Web
+namespace OmiyaGames.Web.Security
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebLocationInfo.cs" company="Omiya Games">

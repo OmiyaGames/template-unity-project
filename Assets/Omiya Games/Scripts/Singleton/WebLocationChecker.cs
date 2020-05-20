@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 using OmiyaGames.Cryptography;
 using OmiyaGames.Global;
 
-namespace OmiyaGames.Web
+namespace OmiyaGames.Web.Security
 {
     ///-----------------------------------------------------------------------
     /// <copyright file="WebLocationChecker.cs" company="Omiya Games">

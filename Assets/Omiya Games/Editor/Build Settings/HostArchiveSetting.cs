@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.IO;
 using UnityEngine;
-using OmiyaGames.Web;
+using OmiyaGames.Web.Security;
 using OmiyaGames.Cryptography;
 using OmiyaGames.Cryptography.Editor;
 
