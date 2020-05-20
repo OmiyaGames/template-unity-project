@@ -963,13 +963,21 @@
       <Project>{F32E78BB-19AE-3175-851D-E0AA7986226D}</Project>
       <Name>OmiyaGames</Name>
     </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Global.Editor.csproj">
-      <Project>{C6B567DE-19E0-0E89-5A83-5D4774F87082}</Project>
-      <Name>OmiyaGames.Global.Editor</Name>
+    <ProjectReference Include="OmiyaGames.Web.Security.csproj">
+      <Project>{B0B97BF5-17D1-C8B6-C99F-4A5835342AB6}</Project>
+      <Name>OmiyaGames.Web.Security</Name>
     </ProjectReference>
     <ProjectReference Include="OmiyaGames.Cryptography.csproj">
       <Project>{A47E344F-A927-94FD-4B19-9C90C821CA73}</Project>
       <Name>OmiyaGames.Cryptography</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Web.csproj">
+      <Project>{D0392F6B-FCDE-F9E7-5324-91AB8842AB3C}</Project>
+      <Name>OmiyaGames.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Web.Security.Editor.csproj">
+      <Project>{F55A514F-3B2C-0127-48DE-773B21165B8D}</Project>
+      <Name>OmiyaGames.Web.Security.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="OmiyaGames.Common.Editor.csproj">
       <Project>{CFE183A3-138A-6699-5D02-CA9233BFC45D}</Project>
@@ -982,14 +990,6 @@
     <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
       <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.csproj">
-      <Project>{D0392F6B-FCDE-F9E7-5324-91AB8842AB3C}</Project>
-      <Name>OmiyaGames.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.Editor.csproj">
-      <Project>{B6A10D2F-9A87-2F7A-AA24-B6218F9A5E50}</Project>
-      <Name>OmiyaGames.Web.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
