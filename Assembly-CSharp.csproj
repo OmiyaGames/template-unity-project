@@ -960,6 +960,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
+      <Project>{4751F28A-4420-53BF-EC02-5D82C6E2BE74}</Project>
+      <Name>OmiyaGames.Builds.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.csproj">
       <Project>{F32E78BB-19AE-3175-851D-E0AA7986226D}</Project>
       <Name>OmiyaGames</Name>
@@ -995,10 +999,6 @@
     <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
       <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
-      <Project>{4751F28A-4420-53BF-EC02-5D82C6E2BE74}</Project>
-      <Name>OmiyaGames.Builds.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
