@@ -63,43 +63,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\BuildPlayersResult.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\CustomFileName.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\CustomFileNameDrawer.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\CustomFileNameReorderableList.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\CustomSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\CustomSettingDrawer.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\GroupBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\GroupBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\HostArchiveSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\HostArchiveSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\IBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\IBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\IChildBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\IChildBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\IStandaloneBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\IStandaloneBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\LinuxBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\LinuxBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\MacBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\MacBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\WindowsBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Desktop Platforms\WindowsBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\IPlatformBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\IPlatformBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Mobile Platforms\AndroidBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Mobile Platforms\AndroidBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Mobile Platforms\IosBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Mobile Platforms\IosBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\Mobile Platforms\UwpBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\WebGlBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Platform Build Setting\WebGlBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Reorderable List\ChildBuildSettingReorderableList.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Reorderable List\HostArchiveSettingReorderableList.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\Reorderable List\IReorderableList.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\RootBuildSetting.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Build Settings\RootBuildSettingEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Context Menus\SettingsConfigurator.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\ISerializedContainerEditor.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\IntroMenuCustomPlatformSettingsEditor.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\IntroMenuPlatformSettingsEditor.cs" />
@@ -116,7 +79,6 @@
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\TranslationCollectionEditor.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\TranslationDictionaryEditor.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Inspectors\TranslationPreviewEditor.cs" />
-    <Compile Include="Assets\Omiya Games\Editor\Editor Windows\AndroidKeystoreCredentialsWindow.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Windows\ImportCsvPopUp.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Windows\UpdateFontAssets.FoldoutSets.cs" />
     <Compile Include="Assets\Omiya Games\Editor\Editor Windows\UpdateFontAssets.cs" />
@@ -902,6 +864,10 @@
       <Project>{CFE183A3-138A-6699-5D02-CA9233BFC45D}</Project>
       <Name>OmiyaGames.Common.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Web.Editor.csproj">
+      <Project>{B6A10D2F-9A87-2F7A-AA24-B6218F9A5E50}</Project>
+      <Name>OmiyaGames.Web.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Global.csproj">
       <Project>{4A6C2374-5060-672C-2BDE-F62EC18BC01E}</Project>
       <Name>OmiyaGames.Global</Name>
@@ -909,6 +875,10 @@
     <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
       <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
+      <Project>{4751F28A-4420-53BF-EC02-5D82C6E2BE74}</Project>
+      <Name>OmiyaGames.Builds.Editor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
