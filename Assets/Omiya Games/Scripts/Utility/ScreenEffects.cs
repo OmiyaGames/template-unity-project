@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using OmiyaGames.Settings;
+using OmiyaGames.Global;
 
 namespace OmiyaGames
 {

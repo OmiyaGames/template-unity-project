@@ -3,7 +3,9 @@ using System;
 using System.Text;
 using System.Collections;
 using OmiyaGames.Web;
+using OmiyaGames.Web.Security;
 using OmiyaGames.Translations;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {
@@ -207,7 +209,7 @@ namespace OmiyaGames.Menus
                     // Overwrite the text: it's a test
                     StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
-                    WebLocationInfo.BuildTestMessage(builder, WebChecker);
+                    DebugWebLocation.GetDebugMessage(builder, WebChecker);
                     reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:

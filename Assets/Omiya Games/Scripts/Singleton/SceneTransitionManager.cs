@@ -222,7 +222,7 @@ namespace OmiyaGames.Scenes
         }
         #endregion
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Reset scene name to info dictionary
             sceneNameToInfo.Clear();
@@ -243,7 +243,7 @@ namespace OmiyaGames.Scenes
             }
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             if (CurrentScene == null)
             {

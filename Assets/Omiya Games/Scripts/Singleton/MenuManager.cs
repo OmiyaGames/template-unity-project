@@ -182,7 +182,7 @@ namespace OmiyaGames.Menus
         }
         #endregion
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Enable events
             Events.enabled = true;
@@ -195,7 +195,7 @@ namespace OmiyaGames.Menus
             delaySelection = new WaitForSecondsRealtime(delaySelectingDefaultUiBy);
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Clear out all the menus
             managedMenusStack.Clear();
