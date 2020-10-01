@@ -90,6 +90,9 @@ namespace OmiyaGames.Menus
             set;
         } = false;
 
+        [SerializeField]
+        WebDomainVerifier domainVerifier;
+
         [Header("UI")]
         [SerializeField]
         [Tooltip("Update the Website field to populate this label's website URL.")]
@@ -145,14 +148,6 @@ namespace OmiyaGames.Menus
             get;
             private set;
         } = false;
-
-        WebLocationChecker WebChecker
-        {
-            get
-            {
-                return Singleton.Get<WebLocationChecker>();
-            }
-        }
         #endregion
 
         IEnumerator Start()
@@ -194,10 +189,10 @@ namespace OmiyaGames.Menus
                     reasonMessage.TranslationKey = cannotConfirmDomainMessageTranslationKey;
                     break;
                 case Reason.IsIncorrectDomain:
-                    if (WebChecker != null)
+                    if (domainVerifier != null)
                     {
                         // Setup translation key, with proper population of fields
-                        reasonMessage.SetTranslationKey(domainDoesNotMatchMessageTranslationKey, WebChecker.RetrievedHostName);
+                        reasonMessage.SetTranslationKey(domainDoesNotMatchMessageTranslationKey, domainVerifier.RetrievedHostName);
                     }
                     else
                     {
@@ -209,7 +204,7 @@ namespace OmiyaGames.Menus
                     // Overwrite the text: it's a test
                     StringBuilder builder = new StringBuilder();
                     builder.Append("This menu is just a test. ");
-                    DebugWebLocation.GetDebugMessage(builder, WebChecker);
+                    DebugWebDomainInfo.GetDebugMessage(domainVerifier, builder);
                     reasonMessage.CurrentText = builder.ToString();
                     break;
                 default:
@@ -245,25 +240,22 @@ namespace OmiyaGames.Menus
             if (Singleton.Instance.IsWebApp == true)
             {
                 // Grab the web checker
-                if (WebChecker != null)
+                if (domainVerifier != null)
                 {
                     // Wait until the webchecker is done
-                    while (WebChecker.CurrentState == WebLocationChecker.State.InProgress)
-                    {
-                        yield return null;
-                    }
+                    yield return StartCoroutine(domainVerifier.VerifyWebDomain());
 
                     // Check the state
-                    switch (WebChecker.CurrentState)
+                    switch (domainVerifier.CurrentState)
                     {
-                        case WebLocationChecker.State.DomainMatched:
-                        case WebLocationChecker.State.NotUsed:
+                        case WebDomainVerifier.State.DomainMatched:
+                        case WebDomainVerifier.State.NotUsed:
                             BuildState = Reason.None;
                             break;
-                        case WebLocationChecker.State.DomainDidntMatch:
+                        case WebDomainVerifier.State.DomainDidntMatch:
                             BuildState = Reason.IsIncorrectDomain;
                             break;
-                        case WebLocationChecker.State.EncounteredError:
+                        case WebDomainVerifier.State.EncounteredError:
                         default:
                             BuildState = Reason.CannotConfirmDomain;
                             break;
