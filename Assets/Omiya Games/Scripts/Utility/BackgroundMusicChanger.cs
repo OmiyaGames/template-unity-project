@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using OmiyaGames;
 using OmiyaGames.Audio;
+using OmiyaGames.Global;
 
 namespace OmiyaGames
 {

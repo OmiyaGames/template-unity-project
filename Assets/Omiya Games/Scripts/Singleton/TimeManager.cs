@@ -96,13 +96,13 @@ namespace OmiyaGames.Global
             }
         }
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             timeScale = Time.timeScale;
             Singleton.Instance.OnRealTimeUpdate += UpdateRealtime;
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Do nothing
         }

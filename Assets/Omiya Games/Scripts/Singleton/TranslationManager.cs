@@ -278,7 +278,7 @@ namespace OmiyaGames.Translations
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Do nothing
         }
@@ -286,7 +286,7 @@ namespace OmiyaGames.Translations
         /// <summary>
         /// Called when any scene after the first one is loaded.
         /// </summary>
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Check if we've populated any translations
             if (IsReady == false)

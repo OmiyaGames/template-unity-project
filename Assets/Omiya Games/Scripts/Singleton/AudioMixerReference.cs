@@ -257,12 +257,12 @@ namespace OmiyaGames.Audio
             }
         }
 
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Do nothing
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Do nothing
         }

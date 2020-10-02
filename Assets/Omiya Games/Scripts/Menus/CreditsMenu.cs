@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {
@@ -109,7 +110,7 @@ namespace OmiyaGames.Menus
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
                 Singleton.Instance.OnUpdate += checkAnyKey;
             }
-            else if(to == VisibilityState.Hidden)
+            else if (to == VisibilityState.Hidden)
             {
                 // If menu is hidden
                 // Remove the binding to Singleton's update function
@@ -159,7 +160,7 @@ namespace OmiyaGames.Menus
 
         void CheckForAnyKey(float deltaTime)
         {
-            if((IsListeningToEvents == true) && (Input.anyKeyDown == true))
+            if ((IsListeningToEvents == true) && (Input.anyKeyDown == true))
             {
                 Hide();
             }
@@ -168,7 +169,7 @@ namespace OmiyaGames.Menus
         void StopListeningToUpdate()
         {
             // Check if the action is not null
-            if(checkAnyKey != null)
+            if (checkAnyKey != null)
             {
                 // Remove the binding to Singleton's update function
                 Singleton.Instance.OnUpdate -= checkAnyKey;

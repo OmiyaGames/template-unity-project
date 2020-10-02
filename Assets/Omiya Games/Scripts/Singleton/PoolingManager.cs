@@ -98,7 +98,7 @@ namespace OmiyaGames.Global
         /// <summary>
         /// Called when the first scene is loaded.
         /// </summary>
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Cache the transform everything will be pooled to
             poolingParent = transform;
@@ -115,7 +115,7 @@ namespace OmiyaGames.Global
         /// <summary>
         /// Called when any scene after the first one is loaded.
         /// </summary>
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
             // Do nothing
         }

@@ -3,6 +3,7 @@ using UnityEngine.Audio;
 using System.Collections;
 using System;
 using OmiyaGames.Settings;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Audio
 {

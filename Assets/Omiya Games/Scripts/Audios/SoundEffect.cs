@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using OmiyaGames.Global;
+using OmiyaGames.Settings;
 
 namespace OmiyaGames.Audio
 {
-    using Settings;
-
     ///-----------------------------------------------------------------------
     /// <copyright file="SoundEffect.cs" company="Omiya Games">
     /// The MIT License (MIT)
