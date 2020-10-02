@@ -4,6 +4,9 @@ on: [push, delete]
 
 jobs:
   to_bitbucket:
+    if:    # Adding if-statement to prevent this job from running on packages using this template.
+           # If you want to run this mirror job, just take out the if-field and value below.
+      github.repository == 'OmiyaGames/template-unity-project'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
