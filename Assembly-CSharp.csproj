@@ -788,6 +788,9 @@
     <Reference Include="Cinemachine">
       <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
+    <Reference Include="OmiyaGames.Builds.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Builds.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.PixelPerfect.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.Editor.dll</HintPath>
     </Reference>
@@ -833,6 +836,9 @@
     <Reference Include="Unity.2D.SpriteShape.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="OmiyaGames.Web.Security">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Web.Security.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ProGrids.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ProGrids.Editor.dll</HintPath>
     </Reference>
@@ -841,6 +847,9 @@
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.003">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.003.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Global.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Global.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
@@ -866,11 +875,20 @@
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
+    <Reference Include="OmiyaGames.Cryptography">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Cryptography.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Web">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VectorGraphics.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VectorGraphics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Web.Security.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Web.Security.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
@@ -901,6 +919,9 @@
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Web.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Web.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
@@ -938,8 +959,14 @@
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
+    <Reference Include="OmiyaGames.Global">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Global.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Formats.Fbx.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Formats.Fbx.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Cryptography.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Cryptography.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
@@ -947,52 +974,14 @@
     <Reference Include="com.unity.quicksearch">
       <HintPath>Library\ScriptAssemblies\com.unity.quicksearch.dll</HintPath>
     </Reference>
+    <Reference Include="OmiyaGames">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.dll</HintPath>
+    </Reference>
+    <Reference Include="OmiyaGames.Common.Editor">
+      <HintPath>Library\ScriptAssemblies\OmiyaGames.Common.Editor.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
-      <Project>{4751F28A-4420-53BF-EC02-5D82C6E2BE74}</Project>
-      <Name>OmiyaGames.Builds.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.csproj">
-      <Project>{F32E78BB-19AE-3175-851D-E0AA7986226D}</Project>
-      <Name>OmiyaGames</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.Security.csproj">
-      <Project>{B0B97BF5-17D1-C8B6-C99F-4A5835342AB6}</Project>
-      <Name>OmiyaGames.Web.Security</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Global.Editor.csproj">
-      <Project>{C6B567DE-19E0-0E89-5A83-5D4774F87082}</Project>
-      <Name>OmiyaGames.Global.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Cryptography.csproj">
-      <Project>{A47E344F-A927-94FD-4B19-9C90C821CA73}</Project>
-      <Name>OmiyaGames.Cryptography</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.csproj">
-      <Project>{D0392F6B-FCDE-F9E7-5324-91AB8842AB3C}</Project>
-      <Name>OmiyaGames.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.Security.Editor.csproj">
-      <Project>{F55A514F-3B2C-0127-48DE-773B21165B8D}</Project>
-      <Name>OmiyaGames.Web.Security.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Common.Editor.csproj">
-      <Project>{CFE183A3-138A-6699-5D02-CA9233BFC45D}</Project>
-      <Name>OmiyaGames.Common.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Web.Editor.csproj">
-      <Project>{B6A10D2F-9A87-2F7A-AA24-B6218F9A5E50}</Project>
-      <Name>OmiyaGames.Web.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Global.csproj">
-      <Project>{4A6C2374-5060-672C-2BDE-F62EC18BC01E}</Project>
-      <Name>OmiyaGames.Global</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
-      <Project>{E9C851B4-1F07-44DF-3C6E-38491772919D}</Project>
-      <Name>OmiyaGames.Cryptography.Editor</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
