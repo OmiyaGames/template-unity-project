@@ -43,7 +43,7 @@ RenderSettings:
 --- !u!157 &4
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 11
+  serializedVersion: 12
   m_GIWorkflowMode: 0
   m_GISettings:
     serializedVersion: 2
@@ -98,7 +98,8 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_LightingSettings: {fileID: 4890085278179872738, guid: cebc7b8d6b03569418783ca8b53fa610,
+    type: 2}
 --- !u!196 &5
 NavMeshSettings:
   serializedVersion: 2
@@ -118,6 +119,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    maxJobWorkers: 0
+    preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
@@ -131,7 +134,6 @@ GameObject:
   m_Component:
   - component: {fileID: 105592118}
   - component: {fileID: 105592120}
-  - component: {fileID: 105592119}
   m_Layer: 5
   m_Name: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-JA-Regular
     Atlas]
@@ -159,33 +161,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &105592119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105592117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_fontAsset: {fileID: 11400000, guid: 4d23f47c718024a16a10327033a872e1, type: 2}
-  m_spriteAsset: {fileID: 0}
-  m_material: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
-  m_isDefaultMaterial: 0
-  m_padding: 1.25
-  m_canvasRenderer: {fileID: 105592120}
-  m_TextComponent: {fileID: 859846857}
-  m_materialReferenceIndex: 1
 --- !u!222 &105592120
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -394,14 +369,20 @@ PrefabInstance:
     - target: {fileID: 1818485646238973546, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
       propertyPath: m_Name
-      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-Bold
-        SDF Atlas]
+      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-AsciiExtend-Bold
+        Atlas]
       objectReference: {fileID: 0}
     - target: {fileID: 1818864577077623903, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
       propertyPath: m_Name
-      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-Bold
-        SDF Atlas]
+      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-AsciiExtend-Bold
+        Atlas]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1819030900968064822, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_Name
+      value: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-AsciiExtend-Bold
+        Atlas]
       objectReference: {fileID: 0}
     - target: {fileID: 1883376961749068147, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
@@ -482,6 +463,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1883747831641761564, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1883769112031150361, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
@@ -803,6 +789,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1884116399285189518, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1884163019268854285, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -838,6 +829,36 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884187513591064712, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1884230368889727229, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -867,6 +888,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884248002434467430, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1884269508837592589, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
@@ -997,6 +1023,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1884361257881634260, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1884361710435434771, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
         type: 3}
@@ -1201,18 +1232,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 859846855}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &859846857 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1778158608827282381, guid: 5ab4cdd15c81bd44c8af39c74e8f9387,
-    type: 3}
-  m_PrefabInstance: {fileID: 859846855}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &912075020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1305,7 +1324,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1022573720}
   - component: {fileID: 1022573722}
-  - component: {fileID: 1022573721}
   m_Layer: 5
   m_Name: TMP SubMeshUI [NotoSansDisplay-Regular SDF Material + NotoSansDisplay-JA-Regular
     Atlas]
@@ -1333,33 +1351,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1022573721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1022573719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_fontAsset: {fileID: 11400000, guid: 4d23f47c718024a16a10327033a872e1, type: 2}
-  m_spriteAsset: {fileID: 0}
-  m_material: {fileID: 0}
-  m_sharedMaterial: {fileID: 0}
-  m_isDefaultMaterial: 0
-  m_padding: 1.25
-  m_canvasRenderer: {fileID: 1022573722}
-  m_TextComponent: {fileID: 859846857}
-  m_materialReferenceIndex: 1
 --- !u!222 &1022573722
 CanvasRenderer:
   m_ObjectHideFlags: 0
