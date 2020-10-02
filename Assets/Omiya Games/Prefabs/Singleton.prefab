@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 400000}
   - component: {fileID: 11400000}
   - component: {fileID: 11428526}
-  - component: {fileID: 11449788}
   m_Layer: 0
   m_Name: Singleton
   m_TagString: Untagged
@@ -56,16 +55,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   simulateMalformedGame: 0
-  simulateWebplayer: 0
+  simulateWebGl: 0
   storeUrls:
     defaultWebLink: https://omiyagames.com
     iosWebLink: 
     androidWebLink: 
-    amazonWebLink: 
     windows10WebLink: 
     iosNativeLink: 
     androidNativeLink: 
-    amazonNativeLink: 
     windows10NativeLink: 
 --- !u!114 &11428526
 MonoBehaviour:
@@ -121,26 +118,6 @@ MonoBehaviour:
     cursorMode: 0
     revertTimeScale: 1
   debugLockMode: 0
---- !u!114 &11449788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 100000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66323afbd69e1904f8df75431dfad808, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  domainMustContain:
-  - localhost
-  - developer.cloud.unity3d.com
-  remoteDomainListUrl: TemplateData/domains
-  domainDecrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
-  waitObjects: []
-  forceRedirectIfDomainDoesntMatch: 0
-  redirectURL: 
 --- !u!1 &104202
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +637,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 129462}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
@@ -675,7 +652,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 129462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1077351063, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalAxis: Horizontal
