@@ -4,9 +4,9 @@ All Images licensed under their respective owners:
 
 The Omiya Games logo is copyrighted by Omiya Games, 2018.  All rights reserved by Omiya Games.
 
-# "Patreon_White.png"
+# "Ko-fi_Logo_RGB_ColorBg.png"
 
-The Patreon logo in this file is copyrighted by Patreon, 2018.  All rights reserved by Patreon.
+The Ko-fi logo in this file is copyrighted by Ko-fi Labs, 2020.  All rights reserved by Ko-fi Labs.
 
 # "Social Media Icons.svg" and it's exported file, "Social Media Icons.png"
 

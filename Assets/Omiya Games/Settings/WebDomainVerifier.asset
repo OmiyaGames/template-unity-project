@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b225e1214f99b5f47b0ec055ffe740b4, type: 3}
+  m_Name: WebDomainVerifier
+  m_EditorClassIdentifier: 
+  domainMustContain:
+  - localhost
+  - developer.cloud.unity3d.com
+  downloadRemoteDomainList: 1
+  remoteDomainListUrl: TemplateData/domains
+  domainDecrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  forceRedirectIfDomainDoesntMatch: 0
+  redirectURL: https://
