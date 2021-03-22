@@ -164,7 +164,6 @@ namespace OmiyaGames.Menus
         #endregion
 
         ToggleSet[] allControls = null;
-		Resolution[] allUniqueResolutions = null;
 		readonly List<string> allWindowModeOptions = new List<string>(4);
 
         #region Properties
@@ -231,16 +230,6 @@ namespace OmiyaGames.Menus
             }
         }
 
-		Resolution[] AllUniqueResolutions
-		{
-			get
-			{
-				// FIXME: implement this properly!
-				//Screen.resolutions
-				return null;
-			}
-		}
-
 		List<string> AllWindowModeOptions
 		{
 			get
@@ -298,9 +287,9 @@ namespace OmiyaGames.Menus
 
 			// Setup screen resolution drop-down
 			var screenResolutions = new List<string>();
-			foreach(var resolution in AllUniqueResolutions)
+			foreach(var resolution in Screen.resolutions)
 			{
-				screenResolutions.Add($"{resolution.width} x {resolution.height}");
+				screenResolutions.Add($"{resolution.width,4} x{resolution.height,5}, {resolution.refreshRate,3}Hz");
 			}
 			screenResolutionControls.Dropdown.ClearOptions();
 			screenResolutionControls.Dropdown.AddOptions(screenResolutions);
