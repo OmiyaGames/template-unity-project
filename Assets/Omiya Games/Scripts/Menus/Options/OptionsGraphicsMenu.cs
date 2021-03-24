@@ -113,7 +113,12 @@ namespace OmiyaGames.Menus
 
 			public void Setup()
 			{
-				fullSet.SetActive(IsEnabled);
+				SetActive(IsEnabled);
+			}
+
+			public void SetActive(bool active)
+			{
+				fullSet.SetActive(active);
 			}
 		}
 
@@ -145,6 +150,8 @@ namespace OmiyaGames.Menus
 		[Header("Screen Controls")]
 		[SerializeField]
 		DropdownSet screenResolutionControls;
+		[SerializeField]
+		DropdownSet displayControls;
 		[SerializeField]
 		DropdownSet windowModeControls;
 		[SerializeField]
@@ -230,6 +237,22 @@ namespace OmiyaGames.Menus
             }
         }
 
+		WindowModeOptions SupportedOption
+		{
+			get
+			{
+				// Look for the first supported platform
+				foreach(var options in windowModeOptions)
+				{
+					if(options.Platforms.IsSupported() == true)
+					{
+						return options;
+					}
+				}
+				return windowModeOptions[0];
+			}
+		}
+
 		List<string> AllWindowModeOptions
 		{
 			get
@@ -237,15 +260,7 @@ namespace OmiyaGames.Menus
 				if(allWindowModeOptions.Count == 0)
 				{
 					// Look for the first supported platform
-					WindowModeOptions supportedOptions = windowModeOptions[0];
-					foreach(var options in windowModeOptions)
-					{
-						if(options.Platforms.IsSupported() == true)
-						{
-							supportedOptions = options;
-							break;
-						}
-					}
+					WindowModeOptions supportedOptions = SupportedOption;
 
 					// Populate the list
 					allWindowModeOptions.Clear();
@@ -260,57 +275,37 @@ namespace OmiyaGames.Menus
 		#endregion
 
 		protected override void OnSetup()
-        {
-            // Call base method
-            base.OnSetup();
+		{
+			// Call base method
+			base.OnSetup();
 
 			// Call setup on all controls
-			screenResolutionControls.Setup();
-			windowModeControls.Setup();
-            foreach (ToggleSet controls in AllControls)
-            {
-                controls.Setup();
-            }
+			foreach(ToggleSet controls in AllControls)
+			{
+				controls.Setup();
+			}
 
-            // Setup checkbox isOn state
-            cameraShakeControls.Checkbox.isOn = Settings.IsCameraShakesEnabled;
-            bobbingCameraControls.Checkbox.isOn = Settings.IsHeadBobbingOptionEnabled;
-            motionBlursControls.Checkbox.isOn = Settings.IsMotionBlursEnabled;
-            screenFlashesControls.Checkbox.isOn = Settings.IsScreenFlashesEnabled;
-            bloomControls.Checkbox.isOn = Settings.IsBloomEffectEnabled;
+			// Setup checkbox isOn state
+			cameraShakeControls.Checkbox.isOn = Settings.IsCameraShakesEnabled;
+			bobbingCameraControls.Checkbox.isOn = Settings.IsHeadBobbingOptionEnabled;
+			motionBlursControls.Checkbox.isOn = Settings.IsMotionBlursEnabled;
+			screenFlashesControls.Checkbox.isOn = Settings.IsScreenFlashesEnabled;
+			bloomControls.Checkbox.isOn = Settings.IsBloomEffectEnabled;
 
-            // Setup checkbox interactable state
-            bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
+			// Setup checkbox interactable state
+			bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
 
-            // Setup whether to disable bobbing camera or not
-            bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
+			// Setup whether to disable bobbing camera or not
+			bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
 
 			// Setup screen resolution drop-down
-			var screenResolutions = new List<string>();
-			foreach(var resolution in Screen.resolutions)
-			{
-				screenResolutions.Add($"{resolution.width,4} x{resolution.height,5}, {resolution.refreshRate,3}Hz");
-			}
-			screenResolutionControls.Dropdown.ClearOptions();
-			screenResolutionControls.Dropdown.AddOptions(screenResolutions);
+			SetupScreenResolutionDropdown();
 
 			// Setup window mode drop-down
-			windowModeControls.Dropdown.ClearOptions();
-			windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
+			SetupWindowModeDropdown();
 
-			// Bind to the event where the localization language changes
-			TranslationManager translationManager = Singleton.Get<TranslationManager>();
-			translationManager.OnAfterLanguageChanged += TranslationManager_OnAfterLanguageChanged;
-		}
-
-		private void TranslationManager_OnAfterLanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage)
-		{
-			// Reset the list of window mode options (they need to be re-localized)
-			AllWindowModeOptions.Clear();
-
-			// Update the drop down again
-			windowModeControls.Dropdown.ClearOptions();
-			windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
+			// Setup display drop-down
+			SetupDisplayDropdown();
 		}
 
 		#region UI Events
@@ -377,6 +372,137 @@ namespace OmiyaGames.Menus
 			{
 				// FIXME: DO SOMETHING!
 				// FIXME: Also bring up the confirmation window, with a 10 second timeout
+				// FIXME: Also enable or disable the display index dropdown
+			}
+		}
+
+		public void OnDisplayOptionSelected(int index)
+		{
+			if(IsListeningToEvents == true)
+			{
+				// FIXME: DO SOMETHING!
+				// FIXME: Also bring up the confirmation window, with a 10 second timeout
+				// FIXME: Also update the screen resolution dropdown
+			}
+		}
+		#endregion
+
+		#region Helper Methods
+		private void SetupScreenResolutionDropdown()
+		{
+			// Setup screen resolution drop-down
+			screenResolutionControls.Setup();
+
+			// Verify if this feature is enabled
+			if(screenResolutionControls.IsEnabled == true)
+			{
+				// Go through all supported screen resolutions
+				int selectedIndex = 0;
+				var screenResolutions = new List<string>();
+				foreach(var resolution in Screen.resolutions)
+				{
+					// Check if this resolution is the current resolution being set
+					if(Screen.currentResolution.Equals(resolution) == true)
+					{
+						// Grab the index
+						selectedIndex = screenResolutions.Count;
+					}
+
+					// Add a new resolution option
+					screenResolutions.Add($"{resolution.width,4} x{resolution.height,5}, {resolution.refreshRate,3}Hz");
+				}
+
+				// Add all the options
+				IsListeningToEvents = false;
+				screenResolutionControls.Dropdown.ClearOptions();
+				screenResolutionControls.Dropdown.AddOptions(screenResolutions);
+
+				// Select the current resolution's dropdown item
+				screenResolutionControls.Dropdown.value = selectedIndex;
+				IsListeningToEvents = true;
+			}
+		}
+
+		private void SetupWindowModeDropdown()
+		{
+			// Setup window mode drop-down
+			windowModeControls.Setup();
+
+			// Verify if this feature is enabled
+			if(windowModeControls.IsEnabled == true)
+			{
+				// Add all the options
+				IsListeningToEvents = false;
+				windowModeControls.Dropdown.ClearOptions();
+				windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
+
+				// Check what the current window mode is
+				WindowModeOptions supportedOptions = SupportedOption;
+				for(int i = 0; i < supportedOptions.Options.Length; ++i)
+				{
+					if(supportedOptions.Options[i].Mode == Screen.fullScreenMode)
+					{
+						// Select said option
+						windowModeControls.Dropdown.value = i;
+						break;
+					}
+				}
+				IsListeningToEvents = true;
+
+				// Bind to the event where the localization language changes
+				TranslationManager translationManager = Singleton.Get<TranslationManager>();
+				translationManager.OnAfterLanguageChanged += TranslationManager_OnAfterLanguageChanged;
+				void TranslationManager_OnAfterLanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage)
+				{
+					// Reset the list of window mode options (they need to be re-localized)
+					AllWindowModeOptions.Clear();
+
+					// Grab the old selected option
+					int lastValue = windowModeControls.Dropdown.value;
+
+					// Update the drop down again
+					IsListeningToEvents = false;
+					windowModeControls.Dropdown.ClearOptions();
+					windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
+					windowModeControls.Dropdown.value = lastValue;
+					IsListeningToEvents = true;
+				}
+			}
+		}
+
+		private void SetupDisplayDropdown()
+		{
+			// Setup screen resolution drop-down
+			bool isEnabled = (displayControls.IsEnabled && (Display.displays.Length > 1));
+			displayControls.SetActive(isEnabled);
+
+			// Verify if this feature is enabled
+			if(isEnabled == true)
+			{
+				// Go through all supported screen resolutions
+				int selectedIndex = 0;
+				var displayIndexes = new List<string>(Display.displays.Length);
+				for(int i = 0; i < Display.displays.Length; ++i)
+				{
+					// Check if this resolution is the current resolution being set
+					if(Display.displays[i].active == true)
+					{
+						// Grab the index
+						selectedIndex = i;
+					}
+
+					// Add a new resolution option
+					displayIndexes.Add((i + 1).ToString());
+				}
+
+				// Add all the options
+				IsListeningToEvents = false;
+				displayControls.Dropdown.ClearOptions();
+				displayControls.Dropdown.AddOptions(displayIndexes);
+
+				// Select the current resolution's dropdown item
+				displayControls.Dropdown.value = selectedIndex;
+				IsListeningToEvents = true;
 			}
 		}
 		#endregion
