@@ -330,50 +330,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateField: State
   navigator: {fileID: 5468687030855911036}
+  confirmationTitle:
+    key: 
+    dictionary: {fileID: 0}
   screenResolutionControls:
     enableFor: 7
     dropdown: {fileID: 8673811799719526989}
     fullSet: {fileID: 3385481622442370498}
+  setScreenResolutionMessage:
+    key: Confirm Screen Resolution Changes
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   displayControls:
     enableFor: 7
     dropdown: {fileID: 3147807233664017690}
     fullSet: {fileID: 9010425742460666517}
+  setDisplayMessage:
+    key: Confirm Display Changes
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   windowModeControls:
     enableFor: 7
     dropdown: {fileID: 4308178948651057434}
     fullSet: {fileID: 7885114193395590805}
+  setWindowModeMessage:
+    key: Confirm Graphics Changes
+    dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   windowModeOptions:
   - platforms: 1
     options:
-    - mode: 0
-      name:
-        key: Fullscreen Option
-        dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     - mode: 3
+      isFullscreen: 0
       name:
         key: Windowed Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     - mode: 1
+      isFullscreen: 0
       name:
-        key: Virtual Fullscreen Option
+        key: Fullscreen Option
+        dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
+    - mode: 0
+      isFullscreen: 0
+      name:
+        key: Exclusive Fullscreen Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   - platforms: 2
     options:
     - mode: 2
+      isFullscreen: 0
       name:
         key: Fullscreen Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     - mode: 3
+      isFullscreen: 0
       name:
         key: Windowed Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
   - platforms: 4
     options:
-    - mode: 0
+    - mode: 1
+      isFullscreen: 0
       name:
         key: Fullscreen Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
     - mode: 3
+      isFullscreen: 0
       name:
         key: Windowed Option
         dictionary: {fileID: 11400000, guid: c3ca07e6811f27b4d82bb14629e8450c, type: 2}
