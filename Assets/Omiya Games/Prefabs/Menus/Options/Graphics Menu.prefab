@@ -1,5 +1,34 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7673325596434263821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6288542550055115902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5470214417333070200}
+          m_TargetAssemblyTypeName: OmiyaGames.Menus.OptionsGraphicsMenu, Assembly-CSharp
+          m_MethodName: UpdateScreenResolutionControls
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5366080251276519596
 GameObject:
   m_ObjectHideFlags: 0
@@ -5342,6 +5371,64 @@ MonoBehaviour:
   m_PreferredWidthElement: {fileID: 0}
   m_MaxHeightElement: {fileID: 0}
   m_MaxWidthElement: {fileID: 0}
+--- !u!114 &4081937022932568719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500626853898002217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5470214417333070200}
+          m_TargetAssemblyTypeName: OmiyaGames.Menus.OptionsGraphicsMenu, Assembly-CSharp
+          m_MethodName: UpdateWindowModeControls
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &7210496597876983803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339379389174905641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5470214417333070200}
+          m_TargetAssemblyTypeName: OmiyaGames.Menus.OptionsGraphicsMenu, Assembly-CSharp
+          m_MethodName: UpdateDisplayControls
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7478809068153670735
 GameObject:
   m_ObjectHideFlags: 0
@@ -5871,13 +5958,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcb489d817dd58e4196995cc16f9b223, type: 3}
+--- !u!1 &6288542550055115902 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6523523079259237800, guid: bcb489d817dd58e4196995cc16f9b223,
+    type: 3}
+  m_PrefabInstance: {fileID: 994540758712840662}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8673811799719526989 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8472045422337471387, guid: bcb489d817dd58e4196995cc16f9b223,
     type: 3}
   m_PrefabInstance: {fileID: 994540758712840662}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 6288542550055115902}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
@@ -6364,19 +6457,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcb489d817dd58e4196995cc16f9b223, type: 3}
---- !u!224 &6242266426017898632 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1800179522799882761, guid: bcb489d817dd58e4196995cc16f9b223,
-    type: 3}
-  m_PrefabInstance: {fileID: 5646240153473102465}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4308178948651057434 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8472045422337471387, guid: bcb489d817dd58e4196995cc16f9b223,
     type: 3}
   m_PrefabInstance: {fileID: 5646240153473102465}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1500626853898002217}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
@@ -6385,6 +6472,18 @@ MonoBehaviour:
 --- !u!1 &7885114193395590805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2537483814439195668, guid: bcb489d817dd58e4196995cc16f9b223,
+    type: 3}
+  m_PrefabInstance: {fileID: 5646240153473102465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &6242266426017898632 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1800179522799882761, guid: bcb489d817dd58e4196995cc16f9b223,
+    type: 3}
+  m_PrefabInstance: {fileID: 5646240153473102465}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1500626853898002217 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6523523079259237800, guid: bcb489d817dd58e4196995cc16f9b223,
     type: 3}
   m_PrefabInstance: {fileID: 5646240153473102465}
   m_PrefabAsset: {fileID: 0}
@@ -6692,9 +6791,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcb489d817dd58e4196995cc16f9b223, type: 3}
---- !u!1 &9010425742460666517 stripped
+--- !u!114 &3147807233664017690 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8472045422337471387, guid: bcb489d817dd58e4196995cc16f9b223,
+    type: 3}
+  m_PrefabInstance: {fileID: 6790727217548940929}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339379389174905641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &339379389174905641 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 2537483814439195668, guid: bcb489d817dd58e4196995cc16f9b223,
+  m_CorrespondingSourceObject: {fileID: 6523523079259237800, guid: bcb489d817dd58e4196995cc16f9b223,
     type: 3}
   m_PrefabInstance: {fileID: 6790727217548940929}
   m_PrefabAsset: {fileID: 0}
@@ -6704,15 +6815,9 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 6790727217548940929}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3147807233664017690 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8472045422337471387, guid: bcb489d817dd58e4196995cc16f9b223,
+--- !u!1 &9010425742460666517 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2537483814439195668, guid: bcb489d817dd58e4196995cc16f9b223,
     type: 3}
   m_PrefabInstance: {fileID: 6790727217548940929}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

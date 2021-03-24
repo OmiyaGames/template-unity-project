@@ -112,6 +112,7 @@ namespace OmiyaGames.Menus
 			public SupportedPlatforms EnableFor => enableFor;
 			public TMPro.TMP_Dropdown Dropdown => dropdown;
 			public bool IsEnabled => EnableFor.IsSupported();
+			public GameObject gameObject => fullSet;
 
 			public void Setup()
 			{
@@ -185,6 +186,7 @@ namespace OmiyaGames.Menus
 
 		ToggleSet[] allControls = null;
 		readonly List<string> allWindowModeOptions = new List<string>(4);
+		readonly Dictionary<TMPro.TMP_Dropdown, Scrollbar> dropdownScrollbarMap = new Dictionary<TMPro.TMP_Dropdown, Scrollbar>(3);
 		WindowModeOptions? supportedWindowOption = null;
 		Selectable currentDefaultUi = null;
 		int lastSelectedResolution = 0, lastSelectedMode = 0, lastSelectedDisplay = 0;
@@ -506,6 +508,31 @@ namespace OmiyaGames.Menus
 				}
 			}
 		}
+
+
+		public void UpdateScreenResolutionControls()
+		{
+			if((IsListeningToEvents == true) && (screenResolutionControls.Dropdown.IsExpanded == true))
+			{
+				ScrollDropDown(screenResolutionControls.gameObject, screenResolutionControls.Dropdown);
+			}
+		}
+
+		public void UpdateWindowModeControls()
+		{
+			if((IsListeningToEvents == true) && (windowModeControls.Dropdown.IsExpanded == true))
+			{
+				ScrollDropDown(windowModeControls.gameObject, windowModeControls.Dropdown);
+			}
+		}
+
+		public void UpdateDisplayControls()
+		{
+			if((IsListeningToEvents == true) && (displayControls.Dropdown.IsExpanded == true))
+			{
+				ScrollDropDown(displayControls.gameObject, displayControls.Dropdown);
+			}
+		}
 		#endregion
 
 		#region Helper Methods
@@ -623,7 +650,7 @@ namespace OmiyaGames.Menus
 			if(isEnabled == true)
 			{
 				// Go through all supported screen resolutions
-				int selectedIndex = 0;
+				lastSelectedDisplay = 0;
 				var displayIndexes = new List<string>(Display.displays.Length);
 				for(int i = 0; i < Display.displays.Length; ++i)
 				{
@@ -631,7 +658,7 @@ namespace OmiyaGames.Menus
 					if(Display.displays[i].active == true)
 					{
 						// Grab the index
-						selectedIndex = i;
+						lastSelectedDisplay = i;
 					}
 
 					// Add a new resolution option
@@ -644,8 +671,7 @@ namespace OmiyaGames.Menus
 				displayControls.Dropdown.AddOptions(displayIndexes);
 
 				// Select the current display's dropdown item
-				displayControls.Dropdown.value = selectedIndex;
-				lastSelectedDisplay = selectedIndex;
+				displayControls.Dropdown.value = lastSelectedDisplay;
 				IsListeningToEvents = true;
 			}
 		}
@@ -676,6 +702,32 @@ namespace OmiyaGames.Menus
 						}
 					}
 				}
+			}
+		}
+
+		private void ScrollDropDown(GameObject fullDropdownSet, TMPro.TMP_Dropdown dropdown)
+		{
+			// Attempt to grab a scrollbar from the gameobject
+			Scrollbar scrollbar = null;
+			Scrollbar[] scrollbars = fullDropdownSet.GetComponentsInChildren<Scrollbar>(true);
+			foreach(var checkScrollbar in scrollbars)
+			{
+				// Check if this isn't the template's scrollbar
+				if(dropdown.template != checkScrollbar.transform.parent)
+				{
+					// Cache this scrollbar
+					scrollbar = checkScrollbar;
+					break;
+				}
+			}
+
+			// Check if a scrollbar is found
+			if(scrollbar != null)
+			{
+				// Scroll to the selection
+				float fraction = dropdown.value;
+				fraction /= (dropdown.options.Count - 1);
+				scrollbar.value = (1f - fraction);
 			}
 		}
 		#endregion
