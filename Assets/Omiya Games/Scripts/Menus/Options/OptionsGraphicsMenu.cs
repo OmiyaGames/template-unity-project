@@ -65,7 +65,7 @@ namespace OmiyaGames.Menus
 	[RequireComponent(typeof(Animator))]
 	public class OptionsGraphicsMenu : IOptionsMenu
 	{
-		public const float ConfirmationDuration = 20f;
+		public const float ConfirmationDuration = 15f;
 
 		[System.Serializable]
 		public struct ToggleSet
@@ -193,6 +193,55 @@ namespace OmiyaGames.Menus
 			}
 		}
 
+		private struct ResolutionOption : System.IEquatable<ResolutionOption>, System.IEquatable<Resolution>
+		{
+			public ResolutionOption(Resolution resolution)
+			{
+				Width = resolution.width;
+				Height = resolution.height;
+			}
+
+			public int Width
+			{
+				get;
+			}
+			public int Height
+			{
+				get;
+			}
+
+			public bool Equals(ResolutionOption other)
+			{
+				return (Width == other.Width) && (Height == other.Height);
+			}
+
+			public bool Equals(Resolution other)
+			{
+				return (Width == other.width) && (Height == other.height);
+			}
+
+			public override bool Equals(object obj)
+			{
+				if(obj is ResolutionOption)
+				{
+					return Equals((ResolutionOption)obj);
+				}
+				else if(obj is Resolution)
+				{
+					return Equals((Resolution)obj);
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			public override int GetHashCode()
+			{
+				return Width.GetHashCode() ^ Height.GetHashCode();
+			}
+		}
+
 		#region Serialized Fields
 		[Header("Screen Controls")]
 		[SerializeField]
@@ -226,13 +275,13 @@ namespace OmiyaGames.Menus
 		#endregion
 
 		ToggleSet[] allControls = null;
-		readonly List<string> allWindowModeOptions = new List<string>(4);
-		readonly Dictionary<TMPro.TMP_Dropdown, Scrollbar> dropdownScrollbarMap = new Dictionary<TMPro.TMP_Dropdown, Scrollbar>(3);
 		WindowModeOptions? supportedWindowOption = null;
 		Selectable currentDefaultUi = null;
 		System.Action<float> updateAction = null;
 		TranslationManager.LanguageChanged updateWindowModeDropDown = null;
 		int lastSelectedResolution = 0, lastSelectedMode = 0, lastSelectedDisplay = 0;
+		readonly List<string> allWindowModeOptions = new List<string>(4);
+		readonly List<ResolutionOption> allResolutionOptions = new List<ResolutionOption>();
 		readonly ScreenInfo lastFrameMonitorData = new ScreenInfo();
 
 		#region Properties
@@ -494,12 +543,11 @@ namespace OmiyaGames.Menus
 				// Indicate this dropdown was clicked
 				CurrentDefaultUi = screenResolutionControls.Dropdown;
 
-				// FIXME: check a different list entirely
 				// Get selected screen resolution
-				Resolution selectedResolution = Screen.resolutions[index];
+				var selectedResolution = allResolutionOptions[index];
 
 				// Apply said resolution
-				Screen.SetResolution(selectedResolution.width, selectedResolution.height, Screen.fullScreenMode, 0);
+				Screen.SetResolution(selectedResolution.Width, selectedResolution.Height, Screen.fullScreenMode);
 
 				// Bring up the confirmation window with a timeout
 				DisplayConfirmation(setScreenResolutionMessage, ApplyScreenResolution, ResetScreenResolution);
@@ -512,8 +560,8 @@ namespace OmiyaGames.Menus
 				{
 					// Reset the screen resolution back to the old value
 					IsListeningToEvents = false;
-					selectedResolution = Screen.resolutions[lastSelectedResolution];
-					Screen.SetResolution(selectedResolution.width, selectedResolution.height, Screen.fullScreenMode, selectedResolution.refreshRate);
+					selectedResolution = allResolutionOptions[lastSelectedResolution];
+					Screen.SetResolution(selectedResolution.Width, selectedResolution.Height, Screen.fullScreenMode);
 
 					// Revert the drop down to the old value
 					screenResolutionControls.Dropdown.value = lastSelectedResolution;
@@ -625,21 +673,31 @@ namespace OmiyaGames.Menus
 			// Verify if this feature is enabled
 			if(screenResolutionControls.IsEnabled == true)
 			{
-				// FIXME: create a different list, using only screen resolutions
-				// Go through all supported screen resolutions
-				lastSelectedResolution = 0;
+				// Setup lists
+				var uniqueOptions = new HashSet<ResolutionOption>();
 				var screenResolutions = new List<string>();
+				lastSelectedResolution = 0;
+				allResolutionOptions.Clear();
+
+				// Go through all supported screen resolutions
 				foreach(var resolution in Screen.resolutions)
 				{
-					// Check if this resolution is the current resolution being set
-					if(Screen.currentResolution.Equals(resolution) == true)
+					// Convert resolution to an option; check if it conflicts with another option
+					var newOption = new ResolutionOption(resolution);
+					if(uniqueOptions.Contains(newOption) == false)
 					{
-						// Grab the index
-						lastSelectedResolution = screenResolutions.Count;
-					}
+						// Check if this resolution is the current resolution being set
+						if(Screen.currentResolution.Equals(resolution) == true)
+						{
+							// Grab the index
+							lastSelectedResolution = allResolutionOptions.Count;
+						}
 
-					// Add a new resolution option
-					screenResolutions.Add($"{resolution.width,4} x{resolution.height,5}, {resolution.refreshRate,3}Hz");
+						// Add a new resolution option
+						allResolutionOptions.Add(newOption);
+						screenResolutions.Add($"{newOption.Width, 4} x{newOption.Height,5}");
+						uniqueOptions.Add(newOption);
+					}
 				}
 
 				// Add all the options
@@ -837,13 +895,11 @@ namespace OmiyaGames.Menus
 
 		private void UpdateDropdownValue()
 		{
-			// FIXME: check a different list entirely
 			// Check which screen resolution is selected
-			int i;
-			for(i = 0; i < Screen.resolutions.Length; ++i)
+			for(int i = 0; i < allResolutionOptions.Count; ++i)
 			{
 				// Check if this resolution is the current resolution being set
-				if(Screen.currentResolution.Equals(Screen.resolutions[i]) == true)
+				if(allResolutionOptions[i].Equals(Screen.currentResolution) == true)
 				{
 					// Grab the index
 					lastSelectedResolution = i;
@@ -852,7 +908,7 @@ namespace OmiyaGames.Menus
 			}
 
 			// Check which display is active
-			for(i = 0; i < Display.displays.Length; ++i)
+			for(int i = 0; i < Display.displays.Length; ++i)
 			{
 				// Check if this resolution is the current resolution being set
 				if(Display.displays[i].active == true)
