@@ -671,7 +671,7 @@ namespace OmiyaGames.Menus
 					if(supportedOptions.Options[i].Mode == Screen.fullScreenMode)
 					{
 						// Select said option
-						lastSelectedMode = 1;
+						lastSelectedMode = i;
 						break;
 					}
 				}
