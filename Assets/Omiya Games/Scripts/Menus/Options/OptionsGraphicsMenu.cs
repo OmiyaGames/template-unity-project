@@ -494,11 +494,12 @@ namespace OmiyaGames.Menus
 				// Indicate this dropdown was clicked
 				CurrentDefaultUi = screenResolutionControls.Dropdown;
 
+				// FIXME: check a different list entirely
 				// Get selected screen resolution
 				Resolution selectedResolution = Screen.resolutions[index];
 
 				// Apply said resolution
-				Screen.SetResolution(selectedResolution.width, selectedResolution.height, Screen.fullScreenMode, selectedResolution.refreshRate);
+				Screen.SetResolution(selectedResolution.width, selectedResolution.height, Screen.fullScreenMode, 0);
 
 				// Bring up the confirmation window with a timeout
 				DisplayConfirmation(setScreenResolutionMessage, ApplyScreenResolution, ResetScreenResolution);
@@ -539,8 +540,9 @@ namespace OmiyaGames.Menus
 					// Update the last selected window mode
 					lastSelectedMode = index;
 
-					// Update dropdown being enabled
+					// Update all the other dropdowns
 					UpdateDropdownEnabled();
+					UpdateDropdownValue();
 				}
 				void ResetWindowMode()
 				{
@@ -623,6 +625,7 @@ namespace OmiyaGames.Menus
 			// Verify if this feature is enabled
 			if(screenResolutionControls.IsEnabled == true)
 			{
+				// FIXME: create a different list, using only screen resolutions
 				// Go through all supported screen resolutions
 				lastSelectedResolution = 0;
 				var screenResolutions = new List<string>();
@@ -832,6 +835,41 @@ namespace OmiyaGames.Menus
 			}
 		}
 
+		private void UpdateDropdownValue()
+		{
+			// FIXME: check a different list entirely
+			// Check which screen resolution is selected
+			int i;
+			for(i = 0; i < Screen.resolutions.Length; ++i)
+			{
+				// Check if this resolution is the current resolution being set
+				if(Screen.currentResolution.Equals(Screen.resolutions[i]) == true)
+				{
+					// Grab the index
+					lastSelectedResolution = i;
+					break;
+				}
+			}
+
+			// Check which display is active
+			for(i = 0; i < Display.displays.Length; ++i)
+			{
+				// Check if this resolution is the current resolution being set
+				if(Display.displays[i].active == true)
+				{
+					// Grab the index
+					lastSelectedDisplay = i;
+					break;
+				}
+			}
+
+			// Update the drop down values
+			IsListeningToEvents = false;
+			screenResolutionControls.Dropdown.value = lastSelectedResolution;
+			displayControls.Dropdown.value = lastSelectedDisplay;
+			IsListeningToEvents = true;
+		}
+
 		private void CheckDisplayChange(float obj)
 		{
 			if(lastFrameMonitorData.IsSameScreen() == false)
@@ -842,7 +880,7 @@ namespace OmiyaGames.Menus
 				// Update the display drop down with the latest connected monitor info
 				SetupDisplayDropdown();
 
-				// Update dropdown being enabled
+				// Update all the other dropdowns
 				UpdateDropdownEnabled();
 
 				// Update the screen data
