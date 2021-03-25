@@ -152,6 +152,47 @@ namespace OmiyaGames.Menus
 			public WindowModeOption[] Options => options;
 		}
 
+		private class ScreenInfo
+		{
+			public Resolution Resolution
+			{
+				get;
+				private set;
+			}
+			public float Dpi
+			{
+				get;
+				private set;
+			}
+			public ScreenOrientation Orientation
+			{
+				get;
+				private set;
+			}
+
+			/// <summary>
+			/// Checks if the current monitor contains the same
+			/// stats as the data held within this class.
+			/// </summary>
+			/// <returns></returns>
+			public bool IsSameScreen()
+			{
+				return Resolution.Equals(Screen.currentResolution)
+					|| Mathf.Approximately(Dpi, Screen.dpi)
+					|| (Orientation == Screen.orientation);
+			}
+
+			/// <summary>
+			/// Updates all properties to the latest info.
+			/// </summary>
+			public void UpdateInfo()
+			{
+				Resolution = Screen.currentResolution;
+				Dpi = Screen.dpi;
+				Orientation = Screen.orientation;
+			}
+		}
+
 		#region Serialized Fields
 		[Header("Screen Controls")]
 		[SerializeField]
@@ -189,7 +230,10 @@ namespace OmiyaGames.Menus
 		readonly Dictionary<TMPro.TMP_Dropdown, Scrollbar> dropdownScrollbarMap = new Dictionary<TMPro.TMP_Dropdown, Scrollbar>(3);
 		WindowModeOptions? supportedWindowOption = null;
 		Selectable currentDefaultUi = null;
+		System.Action<float> updateAction = null;
+		TranslationManager.LanguageChanged updateWindowModeDropDown = null;
 		int lastSelectedResolution = 0, lastSelectedMode = 0, lastSelectedDisplay = 0;
+		readonly ScreenInfo lastFrameMonitorData = new ScreenInfo();
 
 		#region Properties
 		/// <inheritdoc/>
@@ -207,6 +251,7 @@ namespace OmiyaGames.Menus
 			get => CurrentDefaultUi;
 		}
 
+		/// <inheritdoc/>
 		public override BackgroundMenu.BackgroundType Background
 		{
 			get
@@ -308,6 +353,22 @@ namespace OmiyaGames.Menus
 		}
 		#endregion
 
+		public virtual void OnDestroy()
+		{
+			// Make sure to clean up any events we're listening to
+			if(updateWindowModeDropDown != null)
+			{
+				Singleton.Get<TranslationManager>().OnAfterLanguageChanged -= updateWindowModeDropDown;
+				updateWindowModeDropDown = null;
+			}
+			if(updateAction != null)
+			{
+				Singleton.Instance.OnUpdate -= updateAction;
+				updateAction = null;
+			}
+		}
+
+		/// <inheritdoc/>
 		protected override void OnSetup()
 		{
 			// Call base method
@@ -331,17 +392,9 @@ namespace OmiyaGames.Menus
 
 			// Setup whether to disable bobbing camera or not
 			bobbingCameraControls.Checkbox.interactable = cameraShakeControls.Checkbox.isOn;
-
-			// Setup screen resolution drop-down
-			SetupScreenResolutionDropdown();
-
-			// Setup window mode drop-down
-			SetupWindowModeDropdown();
-
-			// Setup display drop-down
-			SetupDisplayDropdown();
 		}
 
+		/// <inheritdoc/>
 		protected override void OnStateChanged(VisibilityState from, VisibilityState to)
 		{
 			base.OnStateChanged(from, to);
@@ -349,7 +402,34 @@ namespace OmiyaGames.Menus
 			// Check if this 
 			if((from == VisibilityState.Hidden) && (to == VisibilityState.Visible))
 			{
+				// Setup screen resolution drop-down
+				SetupScreenResolutionDropdown();
+
+				// Setup window mode drop-down
+				SetupWindowModeDropdown();
+
+				// Setup display drop-down
 				SetupDisplayDropdown();
+
+				// Update dropdown being enabled
+				UpdateDropdownEnabled();
+
+				// Update this current frame's monitor data
+				lastFrameMonitorData.UpdateInfo();
+
+				// Cache delegate reference
+				if(updateAction == null)
+				{
+					updateAction = new System.Action<float>(CheckDisplayChange);
+				}
+
+				// Bind to update function
+				Singleton.Instance.OnUpdate += updateAction;
+			}
+			else if((from == VisibilityState.Visible) && (to == VisibilityState.Hidden) && (updateAction != null))
+			{
+				// Unbind to update function
+				Singleton.Instance.OnUpdate -= updateAction;
 			}
 		}
 
@@ -456,11 +536,11 @@ namespace OmiyaGames.Menus
 				DisplayConfirmation(setWindowModeMessage, ApplyWindowMode, ResetWindowMode);
 				void ApplyWindowMode()
 				{
-					// Update the last selected resolution
+					// Update the last selected window mode
 					lastSelectedMode = index;
 
-					// Enable or disable the dropdown
-					displayControls.Dropdown.interactable = (selectedMode != FullScreenMode.Windowed);
+					// Update dropdown being enabled
+					UpdateDropdownEnabled();
 				}
 				void ResetWindowMode()
 				{
@@ -508,7 +588,6 @@ namespace OmiyaGames.Menus
 				}
 			}
 		}
-
 
 		public void UpdateScreenResolutionControls()
 		{
@@ -620,22 +699,27 @@ namespace OmiyaGames.Menus
 				IsListeningToEvents = true;
 
 				// Bind to the event where the localization language changes
-				TranslationManager translationManager = Singleton.Get<TranslationManager>();
-				translationManager.OnAfterLanguageChanged += TranslationManager_OnAfterLanguageChanged;
-				void TranslationManager_OnAfterLanguageChanged(TranslationManager source, string lastLanguage, string currentLanguage)
+				if(updateWindowModeDropDown == null)
 				{
-					// Reset the list of window mode options (they need to be re-localized)
-					AllWindowModeOptions.Clear();
+					// Setup the translation changed event
+					updateWindowModeDropDown = (TranslationManager source, string lastLanguage, string currentLanguage) =>
+					{
+						// Reset the list of window mode options (they need to be re-localized)
+						AllWindowModeOptions.Clear();
 
-					// Grab the old selected option
-					int lastValue = windowModeControls.Dropdown.value;
+						// Grab the old selected option
+						int lastValue = windowModeControls.Dropdown.value;
 
-					// Update the drop down again
-					IsListeningToEvents = false;
-					windowModeControls.Dropdown.ClearOptions();
-					windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
-					windowModeControls.Dropdown.value = lastValue;
-					IsListeningToEvents = true;
+						// Update the drop down again
+						IsListeningToEvents = false;
+						windowModeControls.Dropdown.ClearOptions();
+						windowModeControls.Dropdown.AddOptions(AllWindowModeOptions);
+						windowModeControls.Dropdown.value = lastValue;
+						IsListeningToEvents = true;
+					};
+
+					// Bind to the translation changed event
+					Singleton.Get<TranslationManager>().OnAfterLanguageChanged += updateWindowModeDropDown;
 				}
 			}
 		}
@@ -643,11 +727,10 @@ namespace OmiyaGames.Menus
 		private void SetupDisplayDropdown()
 		{
 			// Setup screen resolution drop-down
-			bool isEnabled = (displayControls.IsEnabled && (Display.displays.Length > 1));
-			displayControls.SetActive(isEnabled);
+			displayControls.Setup();
 
 			// Verify if this feature is enabled
-			if(isEnabled == true)
+			if(displayControls.IsEnabled == true)
 			{
 				// Go through all supported screen resolutions
 				lastSelectedDisplay = 0;
@@ -728,6 +811,42 @@ namespace OmiyaGames.Menus
 				float fraction = dropdown.value;
 				fraction /= (dropdown.options.Count - 1);
 				scrollbar.value = (1f - fraction);
+			}
+		}
+
+		private void UpdateDropdownEnabled()
+		{
+			// Disable display controls if not in full screen
+			displayControls.Dropdown.interactable = (Screen.fullScreenMode != FullScreenMode.Windowed);
+
+			// Disable screen resolution control if in "windowed" fullscreen mode
+			switch(Screen.fullScreenMode)
+			{
+				case FullScreenMode.ExclusiveFullScreen:
+				case FullScreenMode.Windowed:
+					screenResolutionControls.Dropdown.interactable = true;
+					break;
+				default:
+					screenResolutionControls.Dropdown.interactable = false;
+					break;
+			}
+		}
+
+		private void CheckDisplayChange(float obj)
+		{
+			if(lastFrameMonitorData.IsSameScreen() == false)
+			{
+				// Update the screen resolution drop down with latest screen resolutions list
+				SetupScreenResolutionDropdown();
+
+				// Update the display drop down with the latest connected monitor info
+				SetupDisplayDropdown();
+
+				// Update dropdown being enabled
+				UpdateDropdownEnabled();
+
+				// Update the screen data
+				lastFrameMonitorData.UpdateInfo();
 			}
 		}
 		#endregion
