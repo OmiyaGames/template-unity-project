@@ -220,6 +220,11 @@ namespace OmiyaGames.Menus
 				return (Width == other.width) && (Height == other.height);
 			}
 
+			public bool Equals(int width, int height)
+			{
+				return (Width == width) && (Height == height);
+			}
+
 			public override bool Equals(object obj)
 			{
 				if(obj is ResolutionOption)
@@ -687,7 +692,7 @@ namespace OmiyaGames.Menus
 					if(uniqueOptions.Contains(newOption) == false)
 					{
 						// Check if this resolution is the current resolution being set
-						if(Screen.currentResolution.Equals(resolution) == true)
+						if(newOption.Equals(Screen.width, Screen.height) == true)
 						{
 							// Grab the index
 							lastSelectedResolution = allResolutionOptions.Count;
@@ -881,16 +886,7 @@ namespace OmiyaGames.Menus
 			displayControls.Dropdown.interactable = (Screen.fullScreenMode != FullScreenMode.Windowed);
 
 			// Disable screen resolution control if in "windowed" fullscreen mode
-			switch(Screen.fullScreenMode)
-			{
-				case FullScreenMode.ExclusiveFullScreen:
-				case FullScreenMode.Windowed:
-					screenResolutionControls.Dropdown.interactable = true;
-					break;
-				default:
-					screenResolutionControls.Dropdown.interactable = false;
-					break;
-			}
+			screenResolutionControls.Dropdown.interactable = (Screen.fullScreenMode != FullScreenMode.MaximizedWindow);
 		}
 
 		private void UpdateDropdownValue()
@@ -899,7 +895,7 @@ namespace OmiyaGames.Menus
 			for(int i = 0; i < allResolutionOptions.Count; ++i)
 			{
 				// Check if this resolution is the current resolution being set
-				if(allResolutionOptions[i].Equals(Screen.currentResolution) == true)
+				if(allResolutionOptions[i].Equals(Screen.width, Screen.height) == true)
 				{
 					// Grab the index
 					lastSelectedResolution = i;
