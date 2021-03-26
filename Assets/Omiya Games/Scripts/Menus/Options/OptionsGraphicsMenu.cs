@@ -169,6 +169,16 @@ namespace OmiyaGames.Menus
 				get;
 				private set;
 			}
+			public int ScreenWidth
+			{
+				get;
+				private set;
+			}
+			public int ScreenHeight
+			{
+				get;
+				private set;
+			}
 
 			/// <summary>
 			/// Checks if the current monitor contains the same
@@ -177,7 +187,9 @@ namespace OmiyaGames.Menus
 			/// <returns></returns>
 			public bool IsSameScreen()
 			{
-				return Resolution.Equals(Screen.currentResolution)
+				return ScreenWidth == Screen.width
+					|| ScreenHeight == Screen.height
+					|| Resolution.Equals(Screen.currentResolution)
 					|| Mathf.Approximately(Dpi, Screen.dpi)
 					|| (Orientation == Screen.orientation);
 			}
@@ -190,6 +202,8 @@ namespace OmiyaGames.Menus
 				Resolution = Screen.currentResolution;
 				Dpi = Screen.dpi;
 				Orientation = Screen.orientation;
+				ScreenWidth = Screen.width;
+				ScreenHeight = Screen.height;
 			}
 		}
 
@@ -595,7 +609,8 @@ namespace OmiyaGames.Menus
 
 					// Update all the other dropdowns
 					UpdateDropdownEnabled();
-					UpdateDropdownValue();
+					UpdateScreenResolutionDropdownValue();
+					UpdateDisplayDropdownValue();
 				}
 				void ResetWindowMode()
 				{
@@ -681,7 +696,6 @@ namespace OmiyaGames.Menus
 				// Setup lists
 				var uniqueOptions = new HashSet<ResolutionOption>();
 				var screenResolutions = new List<string>();
-				lastSelectedResolution = 0;
 				allResolutionOptions.Clear();
 
 				// Go through all supported screen resolutions
@@ -691,13 +705,6 @@ namespace OmiyaGames.Menus
 					var newOption = new ResolutionOption(resolution);
 					if(uniqueOptions.Contains(newOption) == false)
 					{
-						// Check if this resolution is the current resolution being set
-						if(newOption.Equals(Screen.width, Screen.height) == true)
-						{
-							// Grab the index
-							lastSelectedResolution = allResolutionOptions.Count;
-						}
-
 						// Add a new resolution option
 						allResolutionOptions.Add(newOption);
 						screenResolutions.Add($"{newOption.Width, 4} x{newOption.Height,5}");
@@ -706,13 +713,11 @@ namespace OmiyaGames.Menus
 				}
 
 				// Add all the options
-				IsListeningToEvents = false;
 				screenResolutionControls.Dropdown.ClearOptions();
 				screenResolutionControls.Dropdown.AddOptions(screenResolutions);
 
 				// Select the current resolution's dropdown item
-				screenResolutionControls.Dropdown.value = lastSelectedResolution;
-				IsListeningToEvents = true;
+				UpdateScreenResolutionDropdownValue();
 			}
 		}
 
@@ -799,29 +804,19 @@ namespace OmiyaGames.Menus
 			if(displayControls.IsEnabled == true)
 			{
 				// Go through all supported screen resolutions
-				lastSelectedDisplay = 0;
 				var displayIndexes = new List<string>(Display.displays.Length);
 				for(int i = 0; i < Display.displays.Length; ++i)
 				{
-					// Check if this resolution is the current resolution being set
-					if(Display.displays[i].active == true)
-					{
-						// Grab the index
-						lastSelectedDisplay = i;
-					}
-
 					// Add a new resolution option
 					displayIndexes.Add((i + 1).ToString());
 				}
 
 				// Add all the options
-				IsListeningToEvents = false;
 				displayControls.Dropdown.ClearOptions();
 				displayControls.Dropdown.AddOptions(displayIndexes);
 
 				// Select the current display's dropdown item
-				displayControls.Dropdown.value = lastSelectedDisplay;
-				IsListeningToEvents = true;
+				UpdateDisplayDropdownValue();
 			}
 		}
 
@@ -884,12 +879,9 @@ namespace OmiyaGames.Menus
 		{
 			// Disable display controls if not in full screen
 			displayControls.Dropdown.interactable = (Screen.fullScreenMode != FullScreenMode.Windowed);
-
-			// Disable screen resolution control if in "windowed" fullscreen mode
-			screenResolutionControls.Dropdown.interactable = (Screen.fullScreenMode != FullScreenMode.MaximizedWindow);
 		}
 
-		private void UpdateDropdownValue()
+		private void UpdateScreenResolutionDropdownValue()
 		{
 			// Check which screen resolution is selected
 			for(int i = 0; i < allResolutionOptions.Count; ++i)
@@ -903,6 +895,14 @@ namespace OmiyaGames.Menus
 				}
 			}
 
+			// Update the drop down values
+			IsListeningToEvents = false;
+			screenResolutionControls.Dropdown.value = lastSelectedResolution;
+			IsListeningToEvents = true;
+		}
+
+		private void UpdateDisplayDropdownValue()
+		{
 			// Check which display is active
 			for(int i = 0; i < Display.displays.Length; ++i)
 			{
@@ -917,7 +917,6 @@ namespace OmiyaGames.Menus
 
 			// Update the drop down values
 			IsListeningToEvents = false;
-			screenResolutionControls.Dropdown.value = lastSelectedResolution;
 			displayControls.Dropdown.value = lastSelectedDisplay;
 			IsListeningToEvents = true;
 		}
