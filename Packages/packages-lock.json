@@ -8,9 +8,9 @@
       "url": "https://packages.unity.com"
     },
     "com.omiyagames.builds": {
-      "version": "file:Omiya Games - Builds",
+      "version": "0.1.1-preview.1",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "io.github.icsharpcode.sharpziplib": "1.2.0",
@@ -19,65 +19,72 @@
         "com.omiyagames.global": "0.1.2-preview.1",
         "com.omiyagames.web": "0.3.0-preview.2",
         "com.omiyagames.web.security": "0.2.0-preview.2"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.common": {
-      "version": "file:Omiya Games - Common",
+      "version": "0.2.0-preview.1",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.cryptography": {
-      "version": "file:Omiya Games - Cryptography",
+      "version": "0.3.0-preview.2",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "com.omiyagames.common": "0.2.0-preview.1"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.embedwebgltemplate": {
-      "version": "file:Omiya Games - Embed WebGL Template",
+      "version": "1.1.0",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.global": {
-      "version": "file:Omiya Games - Global",
+      "version": "0.1.2-preview.1",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "com.omiyagames.common": "0.2.0-preview.1",
         "com.omiyagames.web": "0.3.0-preview.2"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.web": {
-      "version": "file:Omiya Games - Web",
+      "version": "0.3.0-preview.2",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "com.omiyagames.common": "0.2.0-preview.1"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.omiyagames.web.security": {
-      "version": "file:Omiya Games - Web Security",
+      "version": "0.2.0-preview.2",
       "depth": 0,
-      "source": "embedded",
+      "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "com.omiyagames.common": "0.2.0-preview.1",
         "com.omiyagames.global": "0.1.2-preview.1",
         "com.omiyagames.cryptography": "0.3.0-preview.2"
-      }
+      },
+      "url": "https://package.openupm.com"
     },
     "com.unity.2d.common": {
-      "version": "3.0.1",
+      "version": "4.0.3",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -87,14 +94,14 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.path": {
-      "version": "3.0.2",
+      "version": "4.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.pixel-perfect": {
-      "version": "3.0.2",
+      "version": "4.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -107,13 +114,13 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "4.1.4",
+      "version": "5.1.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.1.0",
-        "com.unity.2d.common": "3.0.1",
-        "com.unity.2d.path": "3.0.2",
+        "com.unity.2d.common": "4.0.3",
+        "com.unity.2d.path": "4.0.1",
         "com.unity.modules.physics2d": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -125,7 +132,7 @@
       "dependencies": {}
     },
     "com.unity.analytics": {
-      "version": "3.4.0",
+      "version": "3.5.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -141,7 +148,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -159,21 +166,23 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.3",
+      "version": "2.0.7",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.test-framework": "1.1.9"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.0.0",
+      "version": "1.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -237,7 +246,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "8.2.0",
+      "version": "10.3.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -246,17 +255,18 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.universal": {
-      "version": "8.2.0",
+      "version": "10.3.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.render-pipelines.core": "8.2.0",
-        "com.unity.shadergraph": "8.2.0"
+        "com.unity.mathematics": "1.1.0",
+        "com.unity.render-pipelines.core": "10.3.2",
+        "com.unity.shadergraph": "10.3.2"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
-      "version": "4.0.9",
+      "version": "4.3.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -270,12 +280,28 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "8.2.0",
+      "version": "10.3.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.render-pipelines.core": "8.2.0",
-        "com.unity.searcher": "4.0.9"
+        "com.unity.render-pipelines.core": "10.3.2",
+        "com.unity.searcher": "4.3.1"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot": {
+      "version": "0.1.19-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.sysroot.linux-x86_64": {
+      "version": "0.1.14-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "0.1.18-preview"
       },
       "url": "https://packages.unity.com"
     },
@@ -287,11 +313,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.16",
+      "version": "1.1.22",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.ext.nunit": "1.0.0",
+        "com.unity.ext.nunit": "1.0.6",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
       },
@@ -307,7 +333,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.4.3",
+      "version": "1.4.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -315,6 +341,16 @@
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.win-x86_64-linux-x86_64": {
+      "version": "0.1.19-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot": "0.1.19-preview",
+        "com.unity.sysroot.linux-x86_64": "0.1.14-preview"
       },
       "url": "https://packages.unity.com"
     },
