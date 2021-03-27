@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using OmiyaGames.Translations;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {

@@ -395,7 +395,7 @@ namespace OmiyaGames.SocialOnline
         }
 
         #region Singleton Overrides
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Setup flag
             CurrentLogInState = LogInState.NotConnected;
@@ -413,7 +413,7 @@ namespace OmiyaGames.SocialOnline
             }
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
         }
         #endregion

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b371f27b6856fc24e8698e03c3e7fec1, type: 3}
   m_Name: Standalone Build Settings
   m_EditorClassIdentifier: 
-  rootBuildFolder: Builds
+  rootBuildFolder: Builds~
   newBuildFolderName:
     names:
     - type: 0
@@ -60,9 +60,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - gamejolt.com
   - '*.gamejolt.com'
@@ -169,7 +169,7 @@ MonoBehaviour:
     - type: 0
       text: )
     asSlug: 0
-  buildNumber: 1
+  buildNumber: 2
   enableStrictMode: 0
   enableAssertions: 0
   customScenes:
@@ -202,11 +202,11 @@ MonoBehaviour:
     customValue: 
   templatePath: PROJECT:Embedded Build
   hostSpecificArchiveSettings:
-  - {fileID: 114039085258769664}
+  - {fileID: 114273511369747482}
   - {fileID: 114626522699302408}
   - {fileID: 114467363336220628}
   - {fileID: 114400312719135446}
-  - {fileID: 114273511369747482}
+  - {fileID: 114039085258769664}
   - {fileID: 114768752662382562}
   - {fileID: 114756114676759958}
 --- !u!114 &114273511369747482
@@ -231,8 +231,8 @@ MonoBehaviour:
         text: 
       - type: 0
         text: '-'
-      - type: 2
-        text: 
+      - type: 0
+        text: itchio
       - type: 0
         text: -v
       - type: 5
@@ -240,9 +240,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - itch.io
   - '*.itch.io'
@@ -338,8 +338,8 @@ MonoBehaviour:
         text: 
       - type: 0
         text: '-'
-      - type: 2
-        text: 
+      - type: 0
+        text: itchio
       - type: 0
         text: -v
       - type: 5
@@ -347,9 +347,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - itch.io
   - '*.itch.io'
@@ -383,8 +383,8 @@ MonoBehaviour:
         text: 
       - type: 0
         text: '-'
-      - type: 2
-        text: 
+      - type: 0
+        text: itchio
       - type: 0
         text: -v
       - type: 5
@@ -392,9 +392,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - itch.io
   - '*.itch.io'
@@ -424,8 +424,8 @@ MonoBehaviour:
         text: 
       - type: 0
         text: '-'
-      - type: 2
-        text: 
+      - type: 0
+        text: itchio
       - type: 0
         text: -v
       - type: 5
@@ -433,9 +433,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - itch.io
   - '*.itch.io'
@@ -476,9 +476,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 0
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - konggames.com
   - '*.konggames.com'
@@ -515,9 +515,9 @@ MonoBehaviour:
       - type: 0
         text: .zip
       asSlug: 1
-  webLocationChecker: {fileID: 11449788, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
   includeIndexHtml: 1
-  domainEncrypter: {fileID: 11400000, guid: 88784d9c0ac4dba4bbd9dd00105c10d4, type: 2}
+  webDomainVerifier: {fileID: 11400000, guid: 61bf6603ef415814892e33f6f1f1fbb1, type: 2}
+  localDomainListPath: domains
   acceptedDomains:
   - uploads.ungrounded.net
   - newgrounds.com
@@ -579,7 +579,7 @@ MonoBehaviour:
     - type: 0
       text: )
     asSlug: 0
-  buildNumber: 1
+  buildNumber: 3
   enableStrictMode: 0
   enableAssertions: 0
   customScenes:

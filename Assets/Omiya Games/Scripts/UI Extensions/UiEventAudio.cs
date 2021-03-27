@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using OmiyaGames.Audio;
+using OmiyaGames.Global;
 
 namespace OmiyaGames.Menus
 {

@@ -86,13 +86,13 @@ namespace OmiyaGames.Settings
         #endregion
 
         #region Singleton Overrides
-        internal override void SingletonAwake()
+        public override void SingletonAwake()
         {
             // Load settings
             RetrieveFromSettings();
         }
 
-        internal override void SceneAwake()
+        public override void SceneAwake()
         {
         }
         #endregion
