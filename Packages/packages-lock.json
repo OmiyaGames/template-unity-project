@@ -14,11 +14,11 @@
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "io.github.icsharpcode.sharpziplib": "1.2.0",
-        "com.omiyagames.common": "0.2.0-preview.1",
-        "com.omiyagames.cryptography": "0.3.0-preview.2",
-        "com.omiyagames.global": "0.1.2-preview.1",
-        "com.omiyagames.web": "0.3.0-preview.2",
-        "com.omiyagames.web.security": "0.2.0-preview.2"
+        "com.omiyagames.common": "0.2.0-preview.2",
+        "com.omiyagames.cryptography": "0.3.0-preview.3",
+        "com.omiyagames.global": "0.1.2-preview.2",
+        "com.omiyagames.web": "0.3.0-preview.3",
+        "com.omiyagames.web.security": "0.2.0-preview.3"
       }
     },
     "com.omiyagames.common": {
@@ -35,7 +35,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "0.2.0-preview.1"
+        "com.omiyagames.common": "0.2.0-preview.2"
       }
     },
     "com.omiyagames.embedwebgltemplate": {
@@ -52,8 +52,19 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "0.2.0-preview.1",
-        "com.omiyagames.web": "0.3.0-preview.2"
+        "com.omiyagames.common": "0.2.0-preview.2",
+        "com.omiyagames.web": "0.3.0-preview.3"
+      }
+    },
+    "com.omiyagames.saves": {
+      "version": "file:Omiya Games - Saves",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ext.nunit": "1.0.0",
+        "com.omiyagames.common": "0.2.0-preview.2",
+        "com.omiyagames.cryptography": "0.3.0-preview.3",
+        "com.omiyagames.global": "0.1.2-preview.2"
       }
     },
     "com.omiyagames.web": {
@@ -62,7 +73,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "0.2.0-preview.1"
+        "com.omiyagames.common": "0.2.0-preview.2"
       }
     },
     "com.omiyagames.web.security": {
@@ -71,9 +82,9 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "0.2.0-preview.1",
-        "com.omiyagames.global": "0.1.2-preview.1",
-        "com.omiyagames.cryptography": "0.3.0-preview.2"
+        "com.omiyagames.common": "0.2.0-preview.2",
+        "com.omiyagames.global": "0.1.2-preview.2",
+        "com.omiyagames.cryptography": "0.3.0-preview.3"
       }
     },
     "com.unity.2d.common": {
@@ -282,7 +293,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.terrain-tools": {
-      "version": "3.0.1-preview",
+      "version": "3.0.2-preview.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
