@@ -354,6 +354,12 @@
     <Reference Include="Unity.VisualScripting.IonicZip">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.6.1\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
+    <Reference Include="iBoxDB.NET2">
+      <HintPath>Packages\Omiya Games - Countly\Runtime\iBoxDB\iBoxDB.NET2.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
@@ -973,9 +979,25 @@
       <Project>{B0B97BF5-17D1-C8B6-C99F-4A5835342AB6}</Project>
       <Name>OmiyaGames.Web.Security</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Saves.csproj">
+      <Project>{613C6E3F-E1AD-4F83-B84C-594574379580}</Project>
+      <Name>OmiyaGames.Saves</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Web.Security.Editor.csproj">
       <Project>{F55A514F-3B2C-0127-48DE-773B21165B8D}</Project>
       <Name>OmiyaGames.Web.Security.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Plugins.CountlySDK.csproj">
+      <Project>{200155C7-FFC0-B912-74B7-EB1ACED4FD30}</Project>
+      <Name>Plugins.CountlySDK</Name>
+    </ProjectReference>
+    <ProjectReference Include="Plugins.CountlySDK.Editor.csproj">
+      <Project>{4BA8ECB8-90F5-5427-BC9A-98396D5862E8}</Project>
+      <Name>Plugins.CountlySDK.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Plugins.iBoxDB.csproj">
+      <Project>{248FD1F2-D8BA-AEC2-257D-19CA5936E038}</Project>
+      <Name>Plugins.iBoxDB</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
