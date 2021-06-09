@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OmiyaGames.Audio;
 using OmiyaGames.Global;
-using OmiyaGames.Settings;
+using OmiyaGames.Saves;
 
 namespace OmiyaGames.Scenes
 {
