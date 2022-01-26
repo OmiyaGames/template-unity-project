@@ -864,6 +864,9 @@
     <Reference Include="Autodesk.Fbx">
       <HintPath>Library\ScriptAssemblies\Autodesk.Fbx.dll</HintPath>
     </Reference>
+    <Reference Include="DevLocker.Utils.SceneReference">
+      <HintPath>Library\ScriptAssemblies\DevLocker.Utils.SceneReference.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
@@ -885,14 +888,14 @@
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Localization">
-      <HintPath>Library\ScriptAssemblies\Unity.Localization.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Autodesk.Fbx.Editor">
       <HintPath>Library\ScriptAssemblies\Autodesk.Fbx.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Localization">
+      <HintPath>Library\ScriptAssemblies\Unity.Localization.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
@@ -1008,6 +1011,9 @@
     <Reference Include="Unity.VisualScripting.Flow.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Beetlecircus.SerializableDictionary">
+      <HintPath>Library\ScriptAssemblies\Beetlecircus.SerializableDictionary.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
@@ -1065,6 +1071,9 @@
     <Reference Include="Unity.ScriptableBuildPipeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Beetlecircus.SerializableDictionary.Editor">
+      <HintPath>Library\ScriptAssemblies\Beetlecircus.SerializableDictionary.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
@@ -1113,6 +1122,10 @@
       <Project>{1A6FA810-225C-CD15-4A7E-BA7C2974812F}</Project>
       <Name>OmiyaGames.Global.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.MVC.csproj">
+      <Project>{A84554EA-D393-B9D3-30FC-50271A570015}</Project>
+      <Name>OmiyaGames.MVC</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
       <Project>{D736A5C9-92EE-1C93-6BD0-80D795DB4CB1}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
@@ -1120,6 +1133,10 @@
     <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
       <Project>{93571AA8-182E-9B64-E728-2F75F6DBD1BA}</Project>
       <Name>OmiyaGames.Builds.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.MVC.Editor.csproj">
+      <Project>{5CF8AAEC-0EB7-7AD0-0FC9-AEAC87C4190C}</Project>
+      <Name>OmiyaGames.MVC.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="OmiyaGames.Saves.csproj">
       <Project>{40523791-9EDB-1373-AAD8-E394351A43A3}</Project>
