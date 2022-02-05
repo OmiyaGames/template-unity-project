@@ -2,6 +2,7 @@
 using UnityEngine.Audio;
 using OmiyaGames.Global;
 using OmiyaGames.Saves;
+using OmiyaGames.TimeSettings;
 
 namespace OmiyaGames.Audio
 {

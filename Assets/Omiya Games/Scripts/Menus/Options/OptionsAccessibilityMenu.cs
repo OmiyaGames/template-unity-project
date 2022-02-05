@@ -112,11 +112,11 @@ namespace OmiyaGames.Menus
             }
         }
 
-        public Global.TimeManager TimeManager
+        public OmiyaGames.TimeSettings.TimeManager TimeManager
         {
             get
             {
-                return Singleton.Get<Global.TimeManager>();
+                return Singleton.Get<OmiyaGames.TimeSettings.TimeManager>();
             }
         }
         #endregion

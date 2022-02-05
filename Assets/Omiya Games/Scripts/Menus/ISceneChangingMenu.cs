@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Global;
+using OmiyaGames.TimeSettings;
 
 namespace OmiyaGames.Menus
 {
