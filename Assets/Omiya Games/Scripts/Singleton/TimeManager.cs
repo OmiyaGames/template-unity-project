@@ -110,7 +110,7 @@ namespace OmiyaGames.Global
         public void RevertToCustomTimeScale()
         {
             IsManuallyPaused = false;
-            TimeScale = Singleton.Get<Settings.GameSettings>().CustomTimeScale;
+            TimeScale = Singleton.Get<Saves.GameSettings>().CustomTimeScale;
         }
 
         public void HitPause()

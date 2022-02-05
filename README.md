@@ -1,6 +1,6 @@
 # [Omiya Games](https://www.omiyagames.com/) - Template Unity Project
 
-[![Documentation](https://github.com/OmiyaGames/omiya-games-common/workflows/Host%20DocFX%20Documentation/badge.svg)](https://omiyagames.github.io/template-unity-project/api) [![Mirroring](https://github.com/OmiyaGames/template-unity-project/workflows/Mirroring/badge.svg)](https://bitbucket.org/OmiyaGames/template-unity-project) [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I51KS8F)
+[![Documentation](https://github.com/OmiyaGames/omiya-games-common/workflows/Host%20DocFX%20Documentation/badge.svg)](https://omiyagames.github.io/template-unity-project/api) [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/I3I51KS8F)
 
 This is a template Unity project [Omiya Games](https://www.omiyagames.com/)' uses to start their game project.
 
