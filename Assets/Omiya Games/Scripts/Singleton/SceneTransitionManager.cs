@@ -393,9 +393,6 @@ namespace OmiyaGames.Scenes
 
             if (sceneLoadingInfo != null)
             {
-                // Destroy all pooled objects.
-                Singleton.Get<PoolingManager>().DestroyAll();
-
                 // Activate the scene
                 sceneLoadingInfo.allowSceneActivation = true;
 
