@@ -43,6 +43,8 @@ namespace OmiyaGames.Menus
         protected BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
         [SerializeField]
         MenuNavigator navigator;
+        [SerializeField]
+        TimeManager timeManager;
 
         [Header("Buttons")]
         [SerializeField]
@@ -60,6 +62,11 @@ namespace OmiyaGames.Menus
         {
             get;
         }
+
+				public virtual void Reset()
+				{
+					navigator = GetComponent<MenuNavigator>();
+				}
 
         #region Non-abstract Properties
         public override BackgroundMenu.BackgroundType Background
@@ -108,6 +115,8 @@ namespace OmiyaGames.Menus
             get;
             set;
         }
+
+        protected TimeManager TimeManager => timeManager;
         #endregion
 
         protected override void OnStateChanged(VisibilityState from, VisibilityState to)
@@ -127,12 +136,12 @@ namespace OmiyaGames.Menus
                 if (to == VisibilityState.Visible)
                 {
                     // Stop time
-                    Singleton.Get<TimeManager>().IsManuallyPaused = true;
+                    timeManager.IsManuallyPaused = true;
                 }
                 else if (to == VisibilityState.Hidden)
                 {
                     // Resume the time
-                    Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                    timeManager.IsManuallyPaused = false;
                 }
             }
         }

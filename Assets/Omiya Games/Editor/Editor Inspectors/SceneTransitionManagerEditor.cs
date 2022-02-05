@@ -173,6 +173,7 @@ namespace OmiyaGames.UI.Scenes
         const float VerticalMargin = 2;
 
         SerializedProperty debugLockMode;
+        SerializedProperty timeManager;
         SerializedProperty soundEffect;
         SerializedProperty mainMenu;
         SerializedProperty credits;
@@ -199,6 +200,7 @@ namespace OmiyaGames.UI.Scenes
         {
             // Grab all serialized properties
             debugLockMode = serializedObject.FindProperty("debugLockMode");
+            timeManager = serializedObject.FindProperty("timeManager");
             soundEffect = serializedObject.FindProperty("soundEffect");
             mainMenu = serializedObject.FindProperty("mainMenu");
             credits = serializedObject.FindProperty("credits");
@@ -216,6 +218,7 @@ namespace OmiyaGames.UI.Scenes
         {
             serializedObject.Update();
             EditorGUILayout.PropertyField(debugLockMode, true);
+            EditorGUILayout.PropertyField(timeManager, true);
             EditorGUILayout.PropertyField(soundEffect, true);
             EditorGUILayout.PropertyField(mainMenu, true);
             EditorGUILayout.PropertyField(credits, true);

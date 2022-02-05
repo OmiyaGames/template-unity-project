@@ -48,6 +48,8 @@ namespace OmiyaGames.Audio
         float muteVolumeDb = -80;
         [SerializeField]
         AudioMixer mixer = null;
+				[SerializeField]
+				TimeManager timeManager;
 
         [Header("Volume Settings")]
         [SerializeField]
@@ -250,11 +252,7 @@ namespace OmiyaGames.Audio
                 }
 
                 // Check the TimeManager event
-                TimeManager manager = Singleton.Get<TimeManager>();
-                if (manager != null)
-                {
-                    manager.OnManuallyPausedChanged += OnPauseChanged;
-                }
+								timeManager.OnManuallyPausedChanged += OnPauseChanged;
             }
         }
 

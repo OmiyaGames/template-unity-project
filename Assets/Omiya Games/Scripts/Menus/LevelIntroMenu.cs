@@ -137,6 +137,9 @@ namespace OmiyaGames.Menus
         }
         #endregion
 
+				[SerializeField]
+				TimeManager timeManager;
+
         [Header("Components")]
         [SerializeField]
         private TranslatedTextMeshPro levelNameLabel = null;
@@ -280,7 +283,7 @@ namespace OmiyaGames.Menus
             if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Stop time
-                Singleton.Get<TimeManager>().IsManuallyPaused = true;
+                timeManager.IsManuallyPaused = true;
 
                 // Bind to Singleton's update function
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
@@ -305,7 +308,7 @@ namespace OmiyaGames.Menus
             if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Resume the time
-                Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                timeManager.IsManuallyPaused = false;
             }
         }
 

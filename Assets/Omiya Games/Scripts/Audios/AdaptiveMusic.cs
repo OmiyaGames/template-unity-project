@@ -61,6 +61,8 @@ namespace OmiyaGames.Audio
         string duckLevelFieldName = "Duck Level";
         [SerializeField]
         float muteVolume = -80f;
+        [SerializeField]
+        TimeManager timeManager;
 
         float volumeDb = 0f;
         float pitchPercent = 1f;
@@ -242,14 +244,6 @@ namespace OmiyaGames.Audio
         }
 
         #region Helper Methods and Events
-        private TimeManager TimeManager
-        {
-            get
-            {
-                return Singleton.Get<TimeManager>();
-            }
-        }
-
         private void UpdateBindingToOptions()
         {
             if (IsBoundToOptions == true)
@@ -278,13 +272,13 @@ namespace OmiyaGames.Audio
             if (IsBoundToTimeManager == true)
             {
                 // Bind to TimeManager
-                TimeManager.OnManuallyPausedChanged += ToggleDuckLevel;
-                ToggleDuckLevel(TimeManager);
+                timeManager.OnManuallyPausedChanged += ToggleDuckLevel;
+                ToggleDuckLevel(timeManager);
             }
             else
             {
                 // Unbind to TimeManager
-                TimeManager.OnManuallyPausedChanged -= ToggleDuckLevel;
+                timeManager.OnManuallyPausedChanged -= ToggleDuckLevel;
             }
         }
 

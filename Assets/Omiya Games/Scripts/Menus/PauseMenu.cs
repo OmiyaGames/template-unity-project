@@ -74,7 +74,7 @@ namespace OmiyaGames.Menus
 
         void OnApplicationPause(bool isPaused)
         {
-            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (Singleton.Get<TimeManager>().IsManuallyPaused == false))
+            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (TimeManager.IsManuallyPaused == false))
             {
                 Show();
             }

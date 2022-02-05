@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Global;
+using OmiyaGames.TimeSettings;
 
 namespace OmiyaGames.Menus
 {
@@ -40,6 +40,9 @@ namespace OmiyaGames.Menus
     [RequireComponent(typeof(Animator))]
     public class OptionsAccessibilityMenu : IOptionsMenu
     {
+			[SerializeField]
+			TimeManager timeManager;
+
         #region Serialized Fields
         [Header("Features to Enable")]
         [SerializeField]
@@ -109,14 +112,6 @@ namespace OmiyaGames.Menus
             get
             {
                 return BackgroundMenu.BackgroundType.SolidColor;
-            }
-        }
-
-        public OmiyaGames.TimeSettings.TimeManager TimeManager
-        {
-            get
-            {
-                return Singleton.Get<OmiyaGames.TimeSettings.TimeManager>();
             }
         }
         #endregion
@@ -215,8 +210,8 @@ namespace OmiyaGames.Menus
                 Settings.IsCustomTimeScaleEnabled = isChecked;
 
                 // Update timescale
-                TimeManager.RevertToCustomTimeScale();
-                TimeManager.IsManuallyPaused = true;
+                timeManager.RevertToCustomTimeScale();
+                timeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(isChecked, timeScaleSlider.Slider.value);
@@ -240,8 +235,8 @@ namespace OmiyaGames.Menus
                 }
 
                 // Update timescale
-                TimeManager.TimeScale = Settings.CustomTimeScaleOption;
-                TimeManager.IsManuallyPaused = true;
+                timeManager.TimeScale = Settings.CustomTimeScaleOption;
+                timeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);

@@ -49,19 +49,15 @@ namespace OmiyaGames.Scenes
     {
         public const float SceneLoadingProgressComplete = 0.9f;
 
-        // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
-        //[SerializeField]
-        //SceneInfo splash;
         [SerializeField]
         SceneInfo mainMenu;
         [SerializeField]
         SceneInfo credits;
-        // TODO: consider adding a loading scene
         [SerializeField]
         SceneInfo loading;
         [SerializeField]
@@ -70,6 +66,8 @@ namespace OmiyaGames.Scenes
         [Header("Debugging")]
         [SerializeField]
         CursorLockMode debugLockMode = CursorLockMode.Locked;
+        [SerializeField]
+        TimeManager timeManager;
 
         SceneInfo sceneToLoad = null;
         AsyncOperation sceneLoadingInfo = null;
@@ -258,7 +256,7 @@ namespace OmiyaGames.Scenes
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
-                Singleton.Get<TimeManager>().RevertToCustomTimeScale();
+                timeManager.RevertToCustomTimeScale();
             }
 
             // Remove the async operation
