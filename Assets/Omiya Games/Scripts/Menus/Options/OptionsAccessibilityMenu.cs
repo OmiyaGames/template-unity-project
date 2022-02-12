@@ -40,9 +40,6 @@ namespace OmiyaGames.Menus
     [RequireComponent(typeof(Animator))]
     public class OptionsAccessibilityMenu : IOptionsMenu
     {
-			[SerializeField]
-			TimeManager timeManager;
-
         #region Serialized Fields
         [Header("Features to Enable")]
         [SerializeField]
@@ -210,8 +207,8 @@ namespace OmiyaGames.Menus
                 Settings.IsCustomTimeScaleEnabled = isChecked;
 
                 // Update timescale
-                timeManager.RevertToCustomTimeScale();
-                timeManager.IsManuallyPaused = true;
+                TimeManager.RevertToCustomTimeScale();
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(isChecked, timeScaleSlider.Slider.value);
@@ -235,8 +232,8 @@ namespace OmiyaGames.Menus
                 }
 
                 // Update timescale
-                timeManager.TimeScale = Settings.CustomTimeScaleOption;
-                timeManager.IsManuallyPaused = true;
+                TimeManager.TimeScale = Settings.CustomTimeScaleOption;
+                TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button
                 UpdateResetTimeScaleButton(timeScaleSlider.Checkbox.isOn, percent);

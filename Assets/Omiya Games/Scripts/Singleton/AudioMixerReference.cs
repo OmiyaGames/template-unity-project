@@ -48,8 +48,6 @@ namespace OmiyaGames.Audio
         float muteVolumeDb = -80;
         [SerializeField]
         AudioMixer mixer = null;
-				[SerializeField]
-				TimeManager timeManager;
 
         [Header("Volume Settings")]
         [SerializeField]
@@ -252,7 +250,7 @@ namespace OmiyaGames.Audio
                 }
 
                 // Check the TimeManager event
-								timeManager.OnManuallyPausedChanged += OnPauseChanged;
+								TimeManager.OnAfterManualPauseChanged += OnPauseChanged;
             }
         }
 
@@ -332,7 +330,7 @@ namespace OmiyaGames.Audio
         {
             if (string.IsNullOrEmpty(musicDuckField) == false)
             {
-                if (pauseCheck.IsManuallyPaused == true)
+                if (TimeManager.IsManuallyPaused == true)
                 {
                     mixer.SetFloat(musicDuckField, 0f);
                 }

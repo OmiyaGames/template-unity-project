@@ -66,8 +66,6 @@ namespace OmiyaGames.Scenes
         [Header("Debugging")]
         [SerializeField]
         CursorLockMode debugLockMode = CursorLockMode.Locked;
-        [SerializeField]
-        TimeManager timeManager;
 
         SceneInfo sceneToLoad = null;
         AsyncOperation sceneLoadingInfo = null;
@@ -256,7 +254,7 @@ namespace OmiyaGames.Scenes
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
-                timeManager.RevertToCustomTimeScale();
+                TimeManager.RevertToCustomTimeScale();
             }
 
             // Remove the async operation

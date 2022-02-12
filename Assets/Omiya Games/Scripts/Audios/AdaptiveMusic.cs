@@ -272,13 +272,13 @@ namespace OmiyaGames.Audio
             if (IsBoundToTimeManager == true)
             {
                 // Bind to TimeManager
-                timeManager.OnManuallyPausedChanged += ToggleDuckLevel;
+                TimeManager.OnAfterManualPauseChanged += ToggleDuckLevel;
                 ToggleDuckLevel(timeManager);
             }
             else
             {
                 // Unbind to TimeManager
-                timeManager.OnManuallyPausedChanged -= ToggleDuckLevel;
+                TimeManager.OnAfterManualPauseChanged -= ToggleDuckLevel;
             }
         }
 
@@ -317,7 +317,7 @@ namespace OmiyaGames.Audio
 
         private void ToggleDuckLevel(TimeManager obj)
         {
-            if(obj.IsManuallyPaused == true)
+            if(TimeManager.IsManuallyPaused == true)
             {
                 Mixer.SetFloat(duckLevelFieldName, 0f);
             }
