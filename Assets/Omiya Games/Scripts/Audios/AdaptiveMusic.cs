@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 using OmiyaGames.Global;
-using OmiyaGames.GameFeel;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Audio
 {
@@ -61,8 +61,6 @@ namespace OmiyaGames.Audio
         string duckLevelFieldName = "Duck Level";
         [SerializeField]
         float muteVolume = -80f;
-        [SerializeField]
-        TimeManager timeManager;
 
         float volumeDb = 0f;
         float pitchPercent = 1f;
@@ -273,7 +271,7 @@ namespace OmiyaGames.Audio
             {
                 // Bind to TimeManager
                 TimeManager.OnAfterManualPauseChanged += ToggleDuckLevel;
-                ToggleDuckLevel(timeManager);
+                ToggleDuckLevel(null);
             }
             else
             {
@@ -315,7 +313,7 @@ namespace OmiyaGames.Audio
             }
         }
 
-        private void ToggleDuckLevel(TimeManager obj)
+        private void ToggleDuckLevel(TimeManager source)
         {
             if(TimeManager.IsManuallyPaused == true)
             {

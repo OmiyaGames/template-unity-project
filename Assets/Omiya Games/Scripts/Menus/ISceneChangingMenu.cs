@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Global;
-using OmiyaGames.GameFeel;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {

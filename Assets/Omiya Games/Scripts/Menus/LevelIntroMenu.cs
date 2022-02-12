@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using OmiyaGames.Translations;
 using OmiyaGames.Global;
-using OmiyaGames.GameFeel;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {

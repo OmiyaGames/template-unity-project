@@ -2,7 +2,7 @@
 using UnityEngine.Audio;
 using OmiyaGames.Global;
 using OmiyaGames.Saves;
-using OmiyaGames.GameFeel;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Audio
 {

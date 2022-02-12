@@ -1142,6 +1142,10 @@
       <Project>{65F0E7CA-6CA4-0E12-963E-B9FF725C0B8A}</Project>
       <Name>OmiyaGames.GameFeel.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Managers.csproj">
+      <Project>{304A1CE5-47B6-1077-71A9-1CD9F3A61E96}</Project>
+      <Name>OmiyaGames.Managers</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
