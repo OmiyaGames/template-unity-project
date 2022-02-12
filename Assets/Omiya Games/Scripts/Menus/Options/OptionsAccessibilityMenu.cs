@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.TimeSettings;
+using OmiyaGames.GameFeel;
 
 namespace OmiyaGames.Menus
 {
@@ -207,7 +207,7 @@ namespace OmiyaGames.Menus
                 Settings.IsCustomTimeScaleEnabled = isChecked;
 
                 // Update timescale
-                TimeManager.RevertToCustomTimeScale();
+                TimeManager.RevertTimeScale();
                 TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button

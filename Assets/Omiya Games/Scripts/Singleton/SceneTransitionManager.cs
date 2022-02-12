@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using OmiyaGames.Audio;
 using OmiyaGames.Global;
 using OmiyaGames.Saves;
-using OmiyaGames.TimeSettings;
+using OmiyaGames.GameFeel;
 
 namespace OmiyaGames.Scenes
 {
@@ -254,7 +254,7 @@ namespace OmiyaGames.Scenes
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
-                TimeManager.RevertToCustomTimeScale();
+                TimeManager.RevertTimeScale();
             }
 
             // Remove the async operation
