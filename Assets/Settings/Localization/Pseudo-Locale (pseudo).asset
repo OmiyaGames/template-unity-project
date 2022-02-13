@@ -1,0 +1,252 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c5a772734ff534ead78dbde7f49b97, type: 3}
+  m_Name: Pseudo-Locale (pseudo)
+  m_EditorClassIdentifier: 
+  m_Identifier:
+    m_Code: en
+  m_Metadata:
+    m_Items: []
+  m_LocaleName: Pseudo-Locale(pseudo)
+  m_CustomFormatCultureCode: 
+  m_UseCustomFormatter: 0
+  m_SortOrder: 10000
+  m_Methods:
+  - rid: 180070503271104582
+  - rid: 180070503271104583
+  - rid: 180070503271104584
+  - rid: 180070503271104585
+  references:
+    version: 2
+    RefIds:
+    - rid: 180070503271104582
+      type: {class: PreserveTags, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}
+      data:
+        m_Opening: 60
+        m_Closing: 62
+    - rid: 180070503271104583
+      type: {class: Expander, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}
+      data:
+        m_ExpansionRules:
+        - m_MinCharacters: 0
+          m_MaxCharacters: 10
+          m_ExpansionAmount: 2
+        - m_MinCharacters: 10
+          m_MaxCharacters: 20
+          m_ExpansionAmount: 1
+        - m_MinCharacters: 20
+          m_MaxCharacters: 30
+          m_ExpansionAmount: 0.8
+        - m_MinCharacters: 30
+          m_MaxCharacters: 50
+          m_ExpansionAmount: 0.6
+        - m_MinCharacters: 50
+          m_MaxCharacters: 70
+          m_ExpansionAmount: 0.7
+        - m_MinCharacters: 70
+          m_MaxCharacters: 2147483647
+          m_ExpansionAmount: 0.3
+        m_Location: 1
+        m_MinimumStringLength: 1
+        m_PaddingCharacters: 2100220023002400250026002700280029002a002b002c002d002e002f0030003100320033003400350036003700380039003a003b003c003d003e003f0040004100420043004400450046004700480049004a004b004c004d004e004f0050005100520053005400550056005700580059005a005b005c005d005e005f0060006100620063006400650066006700680069006a006b006c006d006e006f0070007100720073007400750076007700780079007a007b007c007d00
+    - rid: 180070503271104584
+      type: {class: Accenter, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}
+      data:
+        m_SubstitutionMethod: 3
+        m_ListMode: 0
+        m_ReplacementsMap:
+        - original: 32
+          replacement: 8195
+        - original: 33
+          replacement: 161
+        - original: 34
+          replacement: 8243
+        - original: 35
+          replacement: 9839
+        - original: 36
+          replacement: 8364
+        - original: 37
+          replacement: 8240
+        - original: 38
+          replacement: 8523
+        - original: 39
+          replacement: 180
+        - original: 42
+          replacement: 8270
+        - original: 43
+          replacement: 8314
+        - original: 93
+          replacement: 8262
+        - original: 45
+          replacement: 8208
+        - original: 46
+          replacement: 183
+        - original: 47
+          replacement: 8260
+        - original: 48
+          replacement: 9450
+        - original: 49
+          replacement: 9312
+        - original: 50
+          replacement: 9313
+        - original: 51
+          replacement: 9314
+        - original: 52
+          replacement: 9315
+        - original: 53
+          replacement: 9316
+        - original: 54
+          replacement: 9317
+        - original: 55
+          replacement: 9318
+        - original: 56
+          replacement: 9319
+        - original: 57
+          replacement: 9320
+        - original: 58
+          replacement: 8758
+        - original: 59
+          replacement: 8271
+        - original: 60
+          replacement: 8804
+        - original: 61
+          replacement: 8770
+        - original: 62
+          replacement: 8805
+        - original: 63
+          replacement: 191
+        - original: 64
+          replacement: 1374
+        - original: 65
+          replacement: 197
+        - original: 66
+          replacement: 385
+        - original: 67
+          replacement: 199
+        - original: 68
+          replacement: 208
+        - original: 69
+          replacement: 201
+        - original: 70
+          replacement: 401
+        - original: 71
+          replacement: 284
+        - original: 72
+          replacement: 292
+        - original: 73
+          replacement: 206
+        - original: 74
+          replacement: 308
+        - original: 75
+          replacement: 310
+        - original: 76
+          replacement: 315
+        - original: 77
+          replacement: 7744
+        - original: 78
+          replacement: 209
+        - original: 79
+          replacement: 214
+        - original: 80
+          replacement: 222
+        - original: 81
+          replacement: 490
+        - original: 82
+          replacement: 340
+        - original: 83
+          replacement: 352
+        - original: 84
+          replacement: 354
+        - original: 85
+          replacement: 219
+        - original: 86
+          replacement: 7804
+        - original: 87
+          replacement: 372
+        - original: 88
+          replacement: 7818
+        - original: 89
+          replacement: 221
+        - original: 90
+          replacement: 381
+        - original: 91
+          replacement: 8261
+        - original: 92
+          replacement: 8726
+        - original: 94
+          replacement: 708
+        - original: 95
+          replacement: 8255
+        - original: 96
+          replacement: 8245
+        - original: 97
+          replacement: 229
+        - original: 98
+          replacement: 384
+        - original: 99
+          replacement: 231
+        - original: 100
+          replacement: 240
+        - original: 101
+          replacement: 233
+        - original: 102
+          replacement: 402
+        - original: 103
+          replacement: 285
+        - original: 104
+          replacement: 293
+        - original: 105
+          replacement: 238
+        - original: 106
+          replacement: 309
+        - original: 107
+          replacement: 311
+        - original: 108
+          replacement: 316
+        - original: 109
+          replacement: 625
+        - original: 110
+          replacement: 241
+        - original: 111
+          replacement: 246
+        - original: 112
+          replacement: 254
+        - original: 113
+          replacement: 491
+        - original: 114
+          replacement: 341
+        - original: 115
+          replacement: 353
+        - original: 116
+          replacement: 355
+        - original: 117
+          replacement: 251
+        - original: 118
+          replacement: 7805
+        - original: 119
+          replacement: 373
+        - original: 120
+          replacement: 7819
+        - original: 121
+          replacement: 253
+        - original: 122
+          replacement: 382
+        - original: 124
+          replacement: 166
+        - original: 126
+          replacement: 734
+        m_ReplacementList: 5f00
+    - rid: 180070503271104585
+      type: {class: Encapsulator, ns: UnityEngine.Localization.Pseudo, asm: Unity.Localization}
+      data:
+        m_Start: '['
+        m_End: ']'

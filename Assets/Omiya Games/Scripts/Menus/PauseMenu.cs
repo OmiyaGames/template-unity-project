@@ -1,6 +1,7 @@
 using UnityEngine;
 using OmiyaGames.Global;
 using OmiyaGames.Translations;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {
@@ -73,7 +74,7 @@ namespace OmiyaGames.Menus
 
         void OnApplicationPause(bool isPaused)
         {
-            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (Singleton.Get<TimeManager>().IsManuallyPaused == false))
+            if ((isPaused == true) && (CurrentVisibility == VisibilityState.Hidden) && (TimeManager.IsManuallyPaused == false))
             {
                 Show();
             }

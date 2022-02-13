@@ -2,6 +2,7 @@
 using UnityEngine.Audio;
 using OmiyaGames.Global;
 using OmiyaGames.Saves;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Audio
 {
@@ -249,11 +250,7 @@ namespace OmiyaGames.Audio
                 }
 
                 // Check the TimeManager event
-                TimeManager manager = Singleton.Get<TimeManager>();
-                if (manager != null)
-                {
-                    manager.OnManuallyPausedChanged += OnPauseChanged;
-                }
+								TimeManager.OnAfterManualPauseChanged += OnPauseChanged;
             }
         }
 
@@ -333,7 +330,7 @@ namespace OmiyaGames.Audio
         {
             if (string.IsNullOrEmpty(musicDuckField) == false)
             {
-                if (pauseCheck.IsManuallyPaused == true)
+                if (TimeManager.IsManuallyPaused == true)
                 {
                     mixer.SetFloat(musicDuckField, 0f);
                 }

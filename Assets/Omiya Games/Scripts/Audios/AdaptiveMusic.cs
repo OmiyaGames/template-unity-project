@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 using OmiyaGames.Global;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Audio
 {
@@ -241,14 +242,6 @@ namespace OmiyaGames.Audio
         }
 
         #region Helper Methods and Events
-        private TimeManager TimeManager
-        {
-            get
-            {
-                return Singleton.Get<TimeManager>();
-            }
-        }
-
         private void UpdateBindingToOptions()
         {
             if (IsBoundToOptions == true)
@@ -277,13 +270,13 @@ namespace OmiyaGames.Audio
             if (IsBoundToTimeManager == true)
             {
                 // Bind to TimeManager
-                TimeManager.OnManuallyPausedChanged += ToggleDuckLevel;
-                ToggleDuckLevel(TimeManager);
+                TimeManager.OnAfterManualPauseChanged += ToggleDuckLevel;
+                ToggleDuckLevel(null);
             }
             else
             {
                 // Unbind to TimeManager
-                TimeManager.OnManuallyPausedChanged -= ToggleDuckLevel;
+                TimeManager.OnAfterManualPauseChanged -= ToggleDuckLevel;
             }
         }
 
@@ -320,9 +313,9 @@ namespace OmiyaGames.Audio
             }
         }
 
-        private void ToggleDuckLevel(TimeManager obj)
+        private void ToggleDuckLevel(TimeManager source)
         {
-            if(obj.IsManuallyPaused == true)
+            if(TimeManager.IsManuallyPaused == true)
             {
                 Mixer.SetFloat(duckLevelFieldName, 0f);
             }
