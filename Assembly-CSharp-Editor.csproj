@@ -797,11 +797,11 @@
     <Reference Include="Unity.2D.IK.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
       <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="com.unity.cinemachine.editor">
       <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
@@ -1070,6 +1070,10 @@
       <Project>{A0A735D7-C2AF-4E5F-1A32-FA55F42E3FFB}</Project>
       <Name>OmiyaGames.Global</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Managers.csproj">
+      <Project>{304A1CE5-47B6-1077-71A9-1CD9F3A61E96}</Project>
+      <Name>OmiyaGames.Managers</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Web.Editor.csproj">
       <Project>{0026019F-5628-A6C0-D675-C4BA5A39E0E2}</Project>
       <Name>OmiyaGames.Web.Editor</Name>
@@ -1090,6 +1094,10 @@
       <Project>{5CD79AD7-1CDF-A2DD-97DE-9E5EFFC01CB9}</Project>
       <Name>Plugins.CountlySDK.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Audio.Editor.csproj">
+      <Project>{1394B5DB-0AE9-499B-2765-B52D6EF81394}</Project>
+      <Name>OmiyaGames.Audio.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Web.csproj">
       <Project>{4E0E47DE-B2D0-687C-702A-D1E03DD12924}</Project>
       <Name>OmiyaGames.Web</Name>
@@ -1102,6 +1110,10 @@
       <Project>{1A6FA810-225C-CD15-4A7E-BA7C2974812F}</Project>
       <Name>OmiyaGames.Global.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.Audio.csproj">
+      <Project>{1A596FB2-4631-66B1-48DB-E038BDA3BF17}</Project>
+      <Name>OmiyaGames.Audio</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.MVC.csproj">
       <Project>{A84554EA-D393-B9D3-30FC-50271A570015}</Project>
       <Name>OmiyaGames.MVC</Name>
@@ -1110,9 +1122,17 @@
       <Project>{8BA840A9-4EF8-8464-E1EC-F9F2C5487D64}</Project>
       <Name>OmiyaGames.Global.Settings.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="OmiyaGames.GameFeel.Editor.csproj">
+      <Project>{65F0E7CA-6CA4-0E12-963E-B9FF725C0B8A}</Project>
+      <Name>OmiyaGames.GameFeel.Editor</Name>
+    </ProjectReference>
     <ProjectReference Include="OmiyaGames.Cryptography.Editor.csproj">
       <Project>{D736A5C9-92EE-1C93-6BD0-80D795DB4CB1}</Project>
       <Name>OmiyaGames.Cryptography.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="OmiyaGames.GameFeel.csproj">
+      <Project>{FB5E8E8E-6D1A-8E68-1D5B-A2F51086D749}</Project>
+      <Name>OmiyaGames.GameFeel</Name>
     </ProjectReference>
     <ProjectReference Include="OmiyaGames.Builds.Editor.csproj">
       <Project>{93571AA8-182E-9B64-E728-2F75F6DBD1BA}</Project>
@@ -1133,18 +1153,6 @@
     <ProjectReference Include="Plugins.iBoxDB.csproj">
       <Project>{A0A924D2-F54D-28EC-DFBC-5E199B161449}</Project>
       <Name>Plugins.iBoxDB</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.GameFeel.csproj">
-      <Project>{FB5E8E8E-6D1A-8E68-1D5B-A2F51086D749}</Project>
-      <Name>OmiyaGames.GameFeel</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.GameFeel.Editor.csproj">
-      <Project>{65F0E7CA-6CA4-0E12-963E-B9FF725C0B8A}</Project>
-      <Name>OmiyaGames.GameFeel.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OmiyaGames.Managers.csproj">
-      <Project>{304A1CE5-47B6-1077-71A9-1CD9F3A61E96}</Project>
-      <Name>OmiyaGames.Managers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
