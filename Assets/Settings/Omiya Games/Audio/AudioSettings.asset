@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296e4596f63e35b46b7e78a147c31d95, type: 3}
+  m_Name: AudioSettings
+  m_EditorClassIdentifier: 
+  serializedVersion: 0
+  mixer: {fileID: 24100000, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+  muteVolumeDb: -80
+  timeToVolumeDbCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -40
+      inSlope: 106.4
+      outSlope: 106.4
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  mainVolume: Main Volume
+  musicVolume: Music Volume
+  soundEffectsVolume: Sound Effects Volume
+  voiceVolume: Voice Volume
+  ambienceVolume: Ambience Volume
+  mainPitch: Main Pitch
+  musicPitch: Music Pitch
+  soundEffectsPitch: Sound Effects Pitch
+  voicePitch: Voice Pitch
+  ambiencePitch: Ambience Pitch
+  duckLevel: Duck Level
+  mainVolumeSettings: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
+  mainMuteSettings: {fileID: 11400000, guid: f4758611d8ceb694faba9e407dca5e9c, type: 2}
+  musicVolumeSettings: {fileID: 11400000, guid: 5f6b6fbfb61c3344393efc47726490c9,
+    type: 2}
+  musicMuteSettings: {fileID: 11400000, guid: 0828616d8c26a9943a1f145988ebfd28, type: 2}
+  soundEffectsVolumeSettings: {fileID: 11400000, guid: 29e11e04eb2fc0044ad7a91ef1e44cec,
+    type: 2}
+  soundEffectsMuteSettings: {fileID: 11400000, guid: 8e4f155929f8be4449662297ce1f472e,
+    type: 2}
+  voiceVolumeSettings: {fileID: 11400000, guid: 3e850c5c4b426b448be3d44de9b69a9c,
+    type: 2}
+  voiceMuteSettings: {fileID: 11400000, guid: 725c058c01401c741a1b046cc5ab98fb, type: 2}
+  ambienceVolumeSettings: {fileID: 11400000, guid: ce149409e244d0e4bb757c2abd8b8b42,
+    type: 2}
+  ambienceMuteSettings: {fileID: 11400000, guid: 8f332ef7ce7adac4eac68dc725f84bfb,
+    type: 2}
