@@ -189,14 +189,6 @@ namespace OmiyaGames.Audio
                 ChangeCurrentMusic(value, false);
             }
         }
-
-        public override AudioSource Audio
-        {
-            get
-            {
-                return CurrentAudioSource.Source;
-            }
-        }
         #endregion
 
         public void ChangeCurrentMusic(AudioClip newClip, bool forceChange)

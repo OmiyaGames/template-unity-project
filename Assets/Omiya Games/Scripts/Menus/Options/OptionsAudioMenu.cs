@@ -140,13 +140,13 @@ namespace OmiyaGames.Menus
         private void OnSoundEffectsSliderValueUpdated(float volume)
         {
             // Adjust the volume
-            SoundEffect.GlobalVolume = volume;
+            AudioManager.SoundEffectsVolumePercent.Value = volume;
         }
 
         private void OnSoundEffectsCheckboxUpdated(bool enableMute)
         {
             // Adjust mute setting
-            SoundEffect.GlobalMute = enableMute;
+            AudioManager.IsSoundEffectsMuted.Value = enableMute;
 
             // Check if we're unmuted
             if(enableMute == false)
@@ -202,7 +202,7 @@ namespace OmiyaGames.Menus
             if (enableControl == true)
             {
                 // Setup controls
-                soundEffectsVolumeControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
+                soundEffectsVolumeControls.Setup(AudioManager.SoundEffectsVolumePercent.Value, AudioManager.IsSoundEffectsMuted.Value);
 
                 // Bind to the control events
                 soundEffectsVolumeControls.OnCheckboxUpdated += OnSoundEffectsCheckboxUpdated;
