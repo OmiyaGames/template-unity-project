@@ -39,6 +39,40 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  duckLevel: Duck Level
+  main:
+    volumeParamName: Main Volume
+    pitchParamName: Main Pitch
+    volumeSaver: {fileID: 0}
+    isMuteSaver: {fileID: 0}
+  music:
+    volumeParamName: Music Volume
+    pitchParamName: Music Pitch
+    volumeSaver: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
+    isMuteSaver: {fileID: 0}
+    defaultWorldGroup: {fileID: 0}
+    defaultFadeDuration: 0.25
+    fadeGroups: []
+  soundEffects:
+    volumeParamName: Sound Effects Volume
+    pitchParamName: Sound Effects Pitch
+    volumeSaver: {fileID: 0}
+    isMuteSaver: {fileID: 0}
+    defaultWorldGroup: {fileID: 0}
+  voices:
+    volumeParamName: Music Volume
+    pitchParamName: Music Pitch
+    volumeSaver: {fileID: 0}
+    isMuteSaver: {fileID: 0}
+    defaultWorldGroup: {fileID: 0}
+  ambience:
+    volumeParamName: Ambience Volume
+    pitchParamName: Ambience Pitch
+    volumeSaver: {fileID: 0}
+    isMuteSaver: {fileID: 0}
+    defaultWorldGroup: {fileID: 0}
+    defaultFadeDuration: 0.25
+    fadeGroups: []
   mainVolume: Main Volume
   musicVolume: Music Volume
   soundEffectsVolume: Sound Effects Volume
@@ -49,7 +83,6 @@ MonoBehaviour:
   soundEffectsPitch: Sound Effects Pitch
   voicesPitch: Voices Pitch
   ambiencePitch: Ambience Pitch
-  duckLevel: Duck Level
   mainVolumeSettings: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
   mainMuteSettings: {fileID: 11400000, guid: f4758611d8ceb694faba9e407dca5e9c, type: 2}
   musicVolumeSettings: {fileID: 11400000, guid: 5f6b6fbfb61c3344393efc47726490c9,
