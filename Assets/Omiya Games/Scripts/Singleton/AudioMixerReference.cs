@@ -281,9 +281,9 @@ namespace OmiyaGames.Audio
                 {
                     BackgroundMusicVolumeNormalized = BackgroundMusic.GlobalVolume;
                 }
-                if(AudioManager.IsSoundEffectsMuted.Value == false)
+                if(AudioManager.SoundEffects.IsMuted == false)
                 {
-                    SoundEffectsVolumeNormalized = AudioManager.SoundEffectsVolumePercent.Value;
+                    SoundEffectsVolumeNormalized = AudioManager.SoundEffects.VolumePercent;
                 }
             }
         }

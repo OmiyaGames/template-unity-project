@@ -15,91 +15,147 @@ MonoBehaviour:
   serializedVersion: 0
   mixer: {fileID: 24100000, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
   muteVolumeDb: -80
-  timeToVolumeDbCurve:
+  percentToDbCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: -40
-      inSlope: 106.4
-      outSlope: 106.4
-      tangentMode: 0
+      value: -80
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.00390625
+      value: -48.164803
+      inSlope: 3082.5486
+      outSlope: 3082.5486
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0078125
+      value: -42.1442
+      inSlope: 1027.516
+      outSlope: 1027.516
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.015625
+      value: -36.1236
+      inSlope: 513.7579
+      outSlope: 513.7579
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.03125
+      value: -30.102999
+      inSlope: 256.8789
+      outSlope: 256.8789
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0625
+      value: -24.082401
+      inSlope: 128.43945
+      outSlope: 128.43945
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.125
+      value: -18.0618
+      inSlope: 64.219734
+      outSlope: 64.219734
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.25
+      value: -12.041201
+      inSlope: 32.109867
+      outSlope: 32.109867
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: -6.0206003
+      inSlope: 16.054934
+      outSlope: 16.054934
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 136
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  duckLevel: Duck Level
+  duckParam: Duck Level
   main:
-    volumeParamName: Main Volume
-    pitchParamName: Main Pitch
-    volumeSaver: {fileID: 0}
-    isMuteSaver: {fileID: 0}
-  music:
-    volumeParamName: Music Volume
-    pitchParamName: Music Pitch
+    volumeParam: Main Volume
+    pitchParam: Main Pitch
     volumeSaver: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
-    isMuteSaver: {fileID: 0}
-    defaultWorldGroup: {fileID: -3554993151468984194, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    isMutedSaver: {fileID: 11400000, guid: f4758611d8ceb694faba9e407dca5e9c, type: 2}
+  music:
+    volumeParam: Music Volume
+    pitchParam: Music Pitch
+    volumeSaver: {fileID: 11400000, guid: 5f6b6fbfb61c3344393efc47726490c9, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 0828616d8c26a9943a1f145988ebfd28, type: 2}
+    defaultGroup: {fileID: -3554993151468984194, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
       type: 2}
     defaultFadeDuration: 0.25
-    fadeGroups: []
+    fadeGroups:
+    - {fileID: 24392076, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: 24397760, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: -6391479308386628390, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
   soundEffects:
-    volumeParamName: Sound Effects Volume
-    pitchParamName: Sound Effects Pitch
-    volumeSaver: {fileID: 0}
-    isMuteSaver: {fileID: 0}
-    defaultWorldGroup: {fileID: -8247839761791358478, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    volumeParam: Sound Effects Volume
+    pitchParam: Sound Effects Pitch
+    volumeSaver: {fileID: 11400000, guid: 29e11e04eb2fc0044ad7a91ef1e44cec, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 8e4f155929f8be4449662297ce1f472e, type: 2}
+    defaultGroup: {fileID: -8247839761791358478, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+      type: 2}
+    defaultUiGroup: {fileID: -7288787046693745064, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
       type: 2}
   voices:
-    volumeParamName: Music Volume
-    pitchParamName: Music Pitch
-    volumeSaver: {fileID: 0}
-    isMuteSaver: {fileID: 0}
-    defaultWorldGroup: {fileID: -7358532479564502392, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    volumeParam: Voices Volume
+    pitchParam: Voices Pitch
+    volumeSaver: {fileID: 11400000, guid: 3e850c5c4b426b448be3d44de9b69a9c, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 725c058c01401c741a1b046cc5ab98fb, type: 2}
+    defaultGroup: {fileID: -7358532479564502392, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+      type: 2}
+    defaultUiGroup: {fileID: -1024769734605103380, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
       type: 2}
   ambience:
-    volumeParamName: Ambience Volume
-    pitchParamName: Ambience Pitch
-    volumeSaver: {fileID: 0}
-    isMuteSaver: {fileID: 0}
-    defaultWorldGroup: {fileID: 4901600072254744840, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    volumeParam: Ambience Volume
+    pitchParam: Ambience Pitch
+    volumeSaver: {fileID: 11400000, guid: ce149409e244d0e4bb757c2abd8b8b42, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 8f332ef7ce7adac4eac68dc725f84bfb, type: 2}
+    defaultGroup: {fileID: 4901600072254744840, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
       type: 2}
     defaultFadeDuration: 0.25
-    fadeGroups: []
-  mainVolume: Main Volume
-  musicVolume: Music Volume
-  soundEffectsVolume: Sound Effects Volume
-  voicesVolume: Voices Volume
-  ambienceVolume: Ambience Volume
-  mainPitch: Main Pitch
-  musicPitch: Music Pitch
-  soundEffectsPitch: Sound Effects Pitch
-  voicesPitch: Voices Pitch
-  ambiencePitch: Ambience Pitch
-  mainVolumeSettings: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
-  mainMuteSettings: {fileID: 11400000, guid: f4758611d8ceb694faba9e407dca5e9c, type: 2}
-  musicVolumeSettings: {fileID: 11400000, guid: 5f6b6fbfb61c3344393efc47726490c9,
-    type: 2}
-  musicMuteSettings: {fileID: 11400000, guid: 0828616d8c26a9943a1f145988ebfd28, type: 2}
-  soundEffectsVolumeSettings: {fileID: 11400000, guid: 29e11e04eb2fc0044ad7a91ef1e44cec,
-    type: 2}
-  soundEffectsMuteSettings: {fileID: 11400000, guid: 8e4f155929f8be4449662297ce1f472e,
-    type: 2}
-  voicesVolumeSettings: {fileID: 11400000, guid: 3e850c5c4b426b448be3d44de9b69a9c,
-    type: 2}
-  voicesMuteSettings: {fileID: 11400000, guid: 725c058c01401c741a1b046cc5ab98fb, type: 2}
-  ambienceVolumeSettings: {fileID: 11400000, guid: ce149409e244d0e4bb757c2abd8b8b42,
-    type: 2}
-  ambienceMuteSettings: {fileID: 11400000, guid: 8f332ef7ce7adac4eac68dc725f84bfb,
-    type: 2}
+    fadeGroups:
+    - {fileID: -3782822659594943893, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: 284820087614726871, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: -2253115075788515170, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
