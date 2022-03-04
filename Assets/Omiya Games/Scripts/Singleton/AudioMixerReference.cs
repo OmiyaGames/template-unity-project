@@ -40,6 +40,7 @@ namespace OmiyaGames.Audio
     /// <seealso cref="SoundEffect"/>
     /// <seealso cref="AmbientMusic"/>
     /// <seealso cref="BackgroundMusic"/>
+		[System.Obsolete("Use AudioManager instead")]
     public class AudioMixerReference : ISingletonScript
     {
         [SerializeField]
@@ -248,9 +249,6 @@ namespace OmiyaGames.Audio
                 {
                     SetupVolumeAndMute(settings);
                 }
-
-                // Check the TimeManager event
-								TimeManager.OnAfterManualPauseChanged += OnPauseChanged;
             }
         }
 
@@ -323,21 +321,6 @@ namespace OmiyaGames.Audio
             {
                 // Set the background music volume based on settings
                 SoundEffectsVolumeNormalized = settings.SoundVolume;
-            }
-        }
-
-        void OnPauseChanged(TimeManager pauseCheck)
-        {
-            if (string.IsNullOrEmpty(musicDuckField) == false)
-            {
-                if (TimeManager.IsManuallyPaused == true)
-                {
-                    mixer.SetFloat(musicDuckField, 0f);
-                }
-                else
-                {
-                    mixer.SetFloat(musicDuckField, MuteVolumeDb);
-                }
             }
         }
         #endregion
