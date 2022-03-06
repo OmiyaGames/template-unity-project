@@ -4,247 +4,203 @@ using System.Collections;
 using System;
 using OmiyaGames.Saves;
 using OmiyaGames.Global;
+using OmiyaGames.Audio;
 
 namespace OmiyaGames.Audio
 {
-    ///-----------------------------------------------------------------------
-    /// <copyright file="BackgroundMusic.cs" company="Omiya Games">
-    /// The MIT License (MIT)
-    /// 
-    /// Copyright (c) 2014-2018 Omiya Games
-    /// 
-    /// Permission is hereby granted, free of charge, to any person obtaining a copy
-    /// of this software and associated documentation files (the "Software"), to deal
-    /// in the Software without restriction, including without limitation the rights
-    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    /// copies of the Software, and to permit persons to whom the Software is
-    /// furnished to do so, subject to the following conditions:
-    /// 
-    /// The above copyright notice and this permission notice shall be included in
-    /// all copies or substantial portions of the Software.
-    /// 
-    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    /// THE SOFTWARE.
-    /// </copyright>
-    /// <author>Taro Omiya</author>
-    /// <date>8/18/2015</date>
-    ///-----------------------------------------------------------------------
-    /// <summary>
-    /// A singleton script that allows smooth transitions between 2 background musics.
-    /// </summary>
-    /// <seealso cref="Singleton"/>
-    /// <seealso cref="AudioSource"/>
-    /// <seealso cref="SoundEffect"/>
-    /// <seealso cref="AmbientMusic"/>
-    /// <seealso cref="OptionsMenu"/>
-    public class BackgroundMusic : IAudio
-    {
-        [System.Serializable]
-        public class MusicInfo
-        {
-            [SerializeField]
-            AudioSource source = null;
-            [SerializeField]
-            AudioMixerSnapshot snapshot = null;
+	///-----------------------------------------------------------------------
+	/// <copyright file="BackgroundMusic.cs" company="Omiya Games">
+	/// The MIT License (MIT)
+	/// 
+	/// Copyright (c) 2014-2018 Omiya Games
+	/// 
+	/// Permission is hereby granted, free of charge, to any person obtaining a copy
+	/// of this software and associated documentation files (the "Software"), to deal
+	/// in the Software without restriction, including without limitation the rights
+	/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	/// copies of the Software, and to permit persons to whom the Software is
+	/// furnished to do so, subject to the following conditions:
+	/// 
+	/// The above copyright notice and this permission notice shall be included in
+	/// all copies or substantial portions of the Software.
+	/// 
+	/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	/// THE SOFTWARE.
+	/// </copyright>
+	/// <author>Taro Omiya</author>
+	/// <date>8/18/2015</date>
+	///-----------------------------------------------------------------------
+	/// <summary>
+	/// A singleton script that allows smooth transitions between 2 background musics.
+	/// </summary>
+	/// <seealso cref="Singleton"/>
+	/// <seealso cref="AudioSource"/>
+	/// <seealso cref="SoundEffect"/>
+	/// <seealso cref="AmbientMusic"/>
+	/// <seealso cref="OptionsMenu"/>
+	public class BackgroundMusic : IAudio
+	{
+		[System.Serializable]
+		public class MusicInfo
+		{
+			[SerializeField]
+			AudioSource source = null;
+			[SerializeField]
+			AudioMixerSnapshot snapshot = null;
 
-            public AudioSource Source
-            {
-                get
-                {
-                    return source;
-                }
-            }
+			public AudioSource Source
+			{
+				get
+				{
+					return source;
+				}
+			}
 
-            public AudioClip Clip
-            {
-                get
-                {
-                    return source.clip;
-                }
-            }
+			public AudioClip Clip
+			{
+				get
+				{
+					return source.clip;
+				}
+			}
 
-            public AudioMixerSnapshot Snapshot
-            {
-                get
-                {
-                    return snapshot;
-                }
-            }
+			public AudioMixerSnapshot Snapshot
+			{
+				get
+				{
+					return snapshot;
+				}
+			}
 
-            public void ChangeClip(AudioClip clip, float transitionTime)
-            {
-                if(Source.clip != null)
-                {
-                    Source.Stop();
-                }
-                source.clip = clip;
-                if(clip != null)
-                {
-                    Source.Play();
-                }
-                Snapshot.TransitionTo(transitionTime);
-            }
-        }
+			public void ChangeClip(AudioClip clip, float transitionTime)
+			{
+				if (Source.clip != null)
+				{
+					Source.Stop();
+				}
+				source.clip = clip;
+				if (clip != null)
+				{
+					Source.Play();
+				}
+				Snapshot.TransitionTo(transitionTime);
+			}
+		}
 
-        [Tooltip("The transition length (in seconds) between 2 background musics. Set to -1 if you want no transition.")]
-        [SerializeField]
-        float transitionDuration = 1;
-        [SerializeField]
-        MusicInfo music1 = null;
-        [SerializeField]
-        MusicInfo music2 = null;
+		[Tooltip("The transition length (in seconds) between 2 background musics. Set to -1 if you want no transition.")]
+		[SerializeField]
+		float transitionDuration = 1;
+		[SerializeField]
+		MusicInfo music1 = null;
+		[SerializeField]
+		MusicInfo music2 = null;
 
-        bool isPlayingMusic1 = true;
-        public static event Action<float> OnGlobalVolumePercentChange;
-        public static event Action<bool> OnGlobalMuteChange;
-        public static event Action<float> OnGlobalPitchPercentChange;
+		bool isPlayingMusic1 = true;
+		public static event Action<float> OnGlobalVolumePercentChange;
+		public static event Action<bool> OnGlobalMuteChange;
+		public static event Action<float> OnGlobalPitchPercentChange;
 
-        #region Static Properties
-        /// <summary>
-        /// Gets or sets the volume of the background music, which is a value between 0 and 1.
-        /// </summary>
-        /// <value>The background music's volume.</value>
-        public static float GlobalVolume
-        {
-            get
-            {
-                return Mathf.Clamp01(Singleton.Get<GameSettings>().MusicVolume);
-            }
-            set
-            {
-                // Set volume
-                GameSettings settings = Singleton.Get<GameSettings>();
-                settings.MusicVolume = Mathf.Clamp01(value);
+		#region Static Properties
+		/// <summary>
+		/// Gets or sets the volume of the background music, which is a value between 0 and 1.
+		/// </summary>
+		/// <value>The background music's volume.</value>
+		[Obsolete("Use AudioManager.Music.VolumePercent instead")]
+		public static float GlobalVolume
+		{
+			get => AudioManager.Music.VolumePercent;
+			set => AudioManager.Music.VolumePercent = Mathf.Clamp01(value);
+		}
 
-                // Update the AudioMixerReference, if NOT muted
-                if (settings.IsMusicMuted == false)
-                {
-                    Singleton.Get<AudioMixerReference>().BackgroundMusicVolumeNormalized = settings.MusicVolume;
-                }
-                if(OnGlobalVolumePercentChange != null)
-                {
-                    OnGlobalVolumePercentChange(settings.MusicVolume);
-                }
-            }
-        }
+		[Obsolete("Use AudioManager.Music.IsMuted instead")]
+		public static bool GlobalMute
+		{
+			get => AudioManager.Music.IsMuted;
+			set => AudioManager.Music.IsMuted = value;
+		}
 
-        public static bool GlobalMute
-        {
-            get
-            {
-                return Singleton.Get<GameSettings>().IsMusicMuted;
-            }
-            set
-            {
-                // Set mute
-                GameSettings settings = Singleton.Get<GameSettings>();
-                settings.IsMusicMuted = value;
+		[Obsolete("Use AudioManager.Music.Pitch instead")]
+		public static float GlobalPitch
+		{
+			get => AudioManager.Music.Pitch;
+			set => AudioManager.Music.Pitch = value;
+		}
+		#endregion
 
-                // Update the AudioMixerReference to either mute or revert the volume back to settings
-                AudioMixerReference audioMixer = Singleton.Get<AudioMixerReference>();
-                if (settings.IsMusicMuted == true)
-                {
-                    audioMixer.BackgroundMusicVolumeDb = audioMixer.MuteVolumeDb;
-                }
-                else
-                {
-                    audioMixer.BackgroundMusicVolumeNormalized = settings.MusicVolume;
-                }
-                OnGlobalMuteChange?.Invoke(settings.IsMusicMuted);
-            }
-        }
+		#region Properties
+		public AudioClip CurrentMusic
+		{
+			get
+			{
+				return CurrentAudioSource.Clip;
+			}
+			set
+			{
+				// Check if this is a different clip
+				ChangeCurrentMusic(value, false);
+			}
+		}
+		#endregion
 
-        public static float GlobalPitch
-        {
-            get
-            {
-                return Singleton.Get<AudioMixerReference>().BackgroundMusicPitch;
-            }
-            set
-            {
-                Singleton.Get<AudioMixerReference>().BackgroundMusicPitch = value;
-                if(OnGlobalPitchPercentChange != null)
-                {
-                    OnGlobalPitchPercentChange(value);
-                }
-            }
-        }
-        #endregion
+		public void ChangeCurrentMusic(AudioClip newClip, bool forceChange)
+		{
+			// Check if this is a different clip
+			if ((forceChange == true) || (CurrentAudioSource.Clip != newClip))
+			{
+				// Swap to the next audio source
+				isPlayingMusic1 = !isPlayingMusic1;
+				if (isPlayingMusic1 == true)
+				{
+					music1.ChangeClip(newClip, transitionDuration);
+				}
+				else
+				{
+					music2.ChangeClip(newClip, transitionDuration);
+				}
+			}
+		}
 
-        #region Properties
-        public AudioClip CurrentMusic
-        {
-            get
-            {
-                return CurrentAudioSource.Clip;
-            }
-            set
-            {
-                // Check if this is a different clip
-                ChangeCurrentMusic(value, false);
-            }
-        }
-        #endregion
+		#region Helper Properties & Methods
+		MusicInfo CurrentAudioSource
+		{
+			get
+			{
+				if (isPlayingMusic1 == true)
+				{
+					return music1;
+				}
+				else
+				{
+					return music2;
+				}
+			}
+		}
 
-        public void ChangeCurrentMusic(AudioClip newClip, bool forceChange)
-        {
-            // Check if this is a different clip
-            if ((forceChange == true) || (CurrentAudioSource.Clip != newClip))
-            {
-                // Swap to the next audio source
-                isPlayingMusic1 = !isPlayingMusic1;
-                if (isPlayingMusic1 == true)
-                {
-                    music1.ChangeClip(newClip, transitionDuration);
-                }
-                else
-                {
-                    music2.ChangeClip(newClip, transitionDuration);
-                }
-            }
-        }
+		MusicInfo TransitionAudioSource
+		{
+			get
+			{
+				if (isPlayingMusic1 == true)
+				{
+					return music2;
+				}
+				else
+				{
+					return music1;
+				}
+			}
+		}
 
-        #region Helper Properties & Methods
-        MusicInfo CurrentAudioSource
-        {
-            get
-            {
-                if (isPlayingMusic1 == true)
-                {
-                    return music1;
-                }
-                else
-                {
-                    return music2;
-                }
-            }
-        }
-
-        MusicInfo TransitionAudioSource
-        {
-            get
-            {
-                if (isPlayingMusic1 == true)
-                {
-                    return music2;
-                }
-                else
-                {
-                    return music1;
-                }
-            }
-        }
-
-        IEnumerator DelayPlay(float delaySeconds)
-        {
-            yield return new WaitForSeconds(delaySeconds);
-            Play();
-        }
-        #endregion
-    }
+		IEnumerator DelayPlay(float delaySeconds)
+		{
+			yield return new WaitForSeconds(delaySeconds);
+			Play();
+		}
+		#endregion
+	}
 }
