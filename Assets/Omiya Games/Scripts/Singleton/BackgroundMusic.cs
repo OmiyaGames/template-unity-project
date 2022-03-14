@@ -43,7 +43,7 @@ namespace OmiyaGames.Audio
 	/// <seealso cref="SoundEffect"/>
 	/// <seealso cref="AmbientMusic"/>
 	/// <seealso cref="OptionsMenu"/>
-	public class BackgroundMusic : IAudio
+	public class BackgroundMusic : MonoBehaviour
 	{
 		[System.Serializable]
 		public class MusicInfo
@@ -92,6 +92,9 @@ namespace OmiyaGames.Audio
 			}
 		}
 
+		[HideInInspector]
+		AudioSource audioCache = null;
+
 		[Tooltip("The transition length (in seconds) between 2 background musics. Set to -1 if you want no transition.")]
 		[SerializeField]
 		float transitionDuration = 1;
@@ -133,6 +136,12 @@ namespace OmiyaGames.Audio
 		#endregion
 
 		#region Properties
+		//public override bool IsPausedOnTimeStop
+		//{
+		//	get => throw new NotImplementedException();
+		//	set => throw new NotImplementedException();
+		//}
+		public AudioSource CurrentAudio => Helpers.GetComponentCached(this, ref audioCache);
 		public AudioClip CurrentMusic
 		{
 			get
@@ -196,11 +205,11 @@ namespace OmiyaGames.Audio
 			}
 		}
 
-		IEnumerator DelayPlay(float delaySeconds)
-		{
-			yield return new WaitForSeconds(delaySeconds);
-			Play();
-		}
+		//IEnumerator DelayPlay(float delaySeconds)
+		//{
+		//	yield return new WaitForSeconds(delaySeconds);
+		//	Play();
+		//}
 		#endregion
 	}
 }

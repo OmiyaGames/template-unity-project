@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AudioSettings
   m_EditorClassIdentifier: 
   serializedVersion: 0
-  mixer: {fileID: 24100000, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+  mixer: {fileID: 24100000, guid: a27101d6a9911c642abcf0457f27aa0b, type: 2}
   muteVolumeDb: -80
   percentToDbCurve:
     serializedVersion: 2
@@ -156,51 +156,115 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  duckParam: Duck Level
   main:
-    volumeSaver: {fileID: 11400000, guid: 46a1a0e1f9d2e774f984e58e6fcb1259, type: 2}
-    isMutedSaver: {fileID: 11400000, guid: f4758611d8ceb694faba9e407dca5e9c, type: 2}
+    volumeSaver: {fileID: 11400000, guid: f3048048ea1f8ab4cbd255e88ecde974, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 90b8a2d6acdb65449b1af035765d5bb4, type: 2}
     volumeParam: Main Volume
     pitchParam: Main Pitch
   music:
-    volumeSaver: {fileID: 11400000, guid: 5f6b6fbfb61c3344393efc47726490c9, type: 2}
-    isMutedSaver: {fileID: 11400000, guid: 0828616d8c26a9943a1f145988ebfd28, type: 2}
+    volumeSaver: {fileID: 11400000, guid: 0b6c63499599777488f16bc869b99c49, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 7e636b2a6e3d380469cd019b9d329174, type: 2}
     volumeParam: Music Volume
     pitchParam: Music Pitch
-    defaultGroup: {fileID: -3554993151468984194, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultGroup: {fileID: 3286772865204972398, guid: 3d9802391df641d40a9bcb10e898d974,
       type: 2}
     defaultFadeDuration: 0.25
     fadeGroups:
-    - {fileID: 24392076, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
-    - {fileID: 24397760, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
-    - {fileID: -6391479308386628390, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: -8558441678866494280, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
+    - {fileID: 2068805176508917942, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
+    - {fileID: -3380059979980416576, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
   soundEffects:
-    volumeSaver: {fileID: 11400000, guid: 29e11e04eb2fc0044ad7a91ef1e44cec, type: 2}
-    isMutedSaver: {fileID: 11400000, guid: 8e4f155929f8be4449662297ce1f472e, type: 2}
+    volumeSaver: {fileID: 11400000, guid: 89c8c87171f56594e954152af1beefd1, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: cb0a9a7d577ff4d4ba627dc19922e456, type: 2}
     volumeParam: Sound Effects Volume
     pitchParam: Sound Effects Pitch
-    defaultGroup: {fileID: -8247839761791358478, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultGroup: {fileID: -8247839761791358478, guid: 5b825116d1e62944dbb890d12be39c2a,
       type: 2}
-    defaultUiGroup: {fileID: -7288787046693745064, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultUiGroup: {fileID: -7288787046693745064, guid: 5b825116d1e62944dbb890d12be39c2a,
       type: 2}
   voices:
-    volumeSaver: {fileID: 11400000, guid: 3e850c5c4b426b448be3d44de9b69a9c, type: 2}
-    isMutedSaver: {fileID: 11400000, guid: 725c058c01401c741a1b046cc5ab98fb, type: 2}
+    volumeSaver: {fileID: 11400000, guid: 436cd6bf9aeadec49b0139cb6a16bb7e, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 9cdd600442a4f2a429a6be985f9c2a3f, type: 2}
     volumeParam: Voices Volume
     pitchParam: Voices Pitch
-    defaultGroup: {fileID: -7358532479564502392, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultGroup: {fileID: -8247839761791358478, guid: d1223490504d1ae4a9ecf5d67c7d1400,
       type: 2}
-    defaultUiGroup: {fileID: -1024769734605103380, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultUiGroup: {fileID: -7288787046693745064, guid: d1223490504d1ae4a9ecf5d67c7d1400,
       type: 2}
   ambience:
-    volumeSaver: {fileID: 11400000, guid: ce149409e244d0e4bb757c2abd8b8b42, type: 2}
-    isMutedSaver: {fileID: 11400000, guid: 8f332ef7ce7adac4eac68dc725f84bfb, type: 2}
+    volumeSaver: {fileID: 11400000, guid: d70d4867145e5bd498a1ddd18ed6b87d, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 93c939324f0c0ba4f81d8916ff660cb7, type: 2}
     volumeParam: Ambience Volume
     pitchParam: Ambience Pitch
-    defaultGroup: {fileID: 4901600072254744840, guid: 63a239bdfb2dd4519b121d21aa1ed3fb,
+    defaultGroup: {fileID: 3286772865204972398, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
       type: 2}
     defaultFadeDuration: 0.25
     fadeGroups:
-    - {fileID: -3782822659594943893, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
-    - {fileID: 284820087614726871, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
-    - {fileID: -2253115075788515170, guid: 63a239bdfb2dd4519b121d21aa1ed3fb, type: 2}
+    - {fileID: -8558441678866494280, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+    - {fileID: 2068805176508917942, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+    - {fileID: -3380059979980416576, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+  timeScaleSnapshots:
+  - mixer: {fileID: 24100000, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: 5b825116d1e62944dbb890d12be39c2a, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 5b825116d1e62944dbb890d12be39c2a, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: d1223490504d1ae4a9ecf5d67c7d1400, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: d1223490504d1ae4a9ecf5d67c7d1400, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: 4ef7e734f56bd254ab434ad350eaf229, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 4ef7e734f56bd254ab434ad350eaf229, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
