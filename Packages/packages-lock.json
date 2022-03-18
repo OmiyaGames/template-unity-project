@@ -38,11 +38,8 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "1.2.0",
-        "com.omiyagames.global": "1.3.0",
-        "com.omiyagames.global.settings": "1.0.0-pre.1",
-        "com.omiyagames.saves": "0.1.1-exp",
-        "com.omiyagames.managers": "1.0.0-pre.1"
+        "com.omiyagames.managers": "1.0.1-pre.4",
+        "com.omiyagames.common": "1.3.0"
       }
     },
     "com.omiyagames.builds": {
@@ -91,9 +88,7 @@
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
         "com.omiyagames.common": "1.2.0",
-        "com.omiyagames.global": "1.3.0",
-        "com.omiyagames.global.settings": "1.0.0-pre.1",
-        "com.omiyagames.managers": "1.0.0-pre.1"
+        "com.omiyagames.managers": "1.0.1-pre.3"
       }
     },
     "com.omiyagames.global": {
@@ -102,7 +97,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "1.2.0",
+        "com.omiyagames.common": "1.2.3",
         "com.omiyagames.web": "1.0.0"
       }
     },
@@ -112,9 +107,8 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "1.2.0",
-        "com.omiyagames.global": "1.3.0",
-        "com.unity.addressables": "1.19.15"
+        "com.omiyagames.global": "1.4.1",
+        "com.unity.addressables": "1.19.17"
       }
     },
     "com.omiyagames.managers": {
@@ -123,9 +117,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "1.2.0",
-        "com.omiyagames.global": "1.3.0",
-        "com.omiyagames.saves": "0.2.0-exp"
+        "com.omiyagames.saves": "0.2.3-exp.1"
       }
     },
     "com.omiyagames.mvc": {
@@ -136,8 +128,7 @@
         "com.unity.ext.nunit": "1.0.0",
         "com.unity.ugui": "1.0.0",
         "com.unity.textmeshpro": "3.0.6",
-        "com.omiyagames.global": "1.1.0",
-        "com.omiyagames.common": "1.1.0"
+        "com.omiyagames.global": "1.4.1"
       }
     },
     "com.omiyagames.saves": {
@@ -146,9 +137,7 @@
       "source": "embedded",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.0",
-        "com.omiyagames.common": "1.2.0",
-        "com.omiyagames.global": "1.3.0",
-        "com.omiyagames.global.settings": "1.0.1-pre.1"
+        "com.omiyagames.global.settings": "1.2.0-pre.1"
       }
     },
     "com.omiyagames.web": {
@@ -258,11 +247,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.addressables": {
-      "version": "1.19.17",
+      "version": "1.19.18",
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.19.5",
+        "com.unity.scriptablebuildpipeline": "1.19.6",
         "com.unity.modules.assetbundle": "1.0.0",
         "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
@@ -340,7 +329,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.animation.rigging": "1.1.1",
-        "com.unity.timeline": "1.6.3",
+        "com.unity.timeline": "1.6.4",
         "com.unity.cinemachine": "2.8.4",
         "com.unity.formats.fbx": "4.1.2"
       }
@@ -351,11 +340,11 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.ide.visualstudio": "2.0.14",
-        "com.unity.ide.rider": "3.0.9",
-        "com.unity.ide.vscode": "1.2.4",
+        "com.unity.ide.rider": "3.0.12",
+        "com.unity.ide.vscode": "1.2.5",
         "com.unity.editorcoroutines": "1.0.0",
         "com.unity.performance.profile-analyzer": "1.1.1",
-        "com.unity.test-framework": "1.1.29",
+        "com.unity.test-framework": "1.1.31",
         "com.unity.testtools.codecoverage": "1.0.1"
       }
     },
@@ -365,7 +354,7 @@
       "source": "builtin",
       "dependencies": {
         "com.unity.cinemachine": "2.8.4",
-        "com.unity.timeline": "1.6.3",
+        "com.unity.timeline": "1.6.4",
         "com.unity.visualscripting": "1.7.6"
       }
     },
@@ -391,7 +380,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.9",
+      "version": "3.0.12",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -409,7 +398,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
@@ -492,7 +481,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
-      "version": "12.1.4",
+      "version": "12.1.5",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
@@ -502,18 +491,18 @@
       }
     },
     "com.unity.render-pipelines.universal": {
-      "version": "12.1.4",
+      "version": "12.1.5",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
         "com.unity.mathematics": "1.2.1",
         "com.unity.burst": "1.5.0",
-        "com.unity.render-pipelines.core": "12.1.4",
-        "com.unity.shadergraph": "12.1.4"
+        "com.unity.render-pipelines.core": "12.1.5",
+        "com.unity.shadergraph": "12.1.5"
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "1.19.5",
+      "version": "1.19.6",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -534,11 +523,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
-      "version": "12.1.4",
+      "version": "12.1.5",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "12.1.4",
+        "com.unity.render-pipelines.core": "12.1.5",
         "com.unity.searcher": "4.9.1"
       }
     },
@@ -599,7 +588,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.6.3",
+      "version": "1.6.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -659,12 +648,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.visualeffectgraph": {
-      "version": "12.1.4",
+      "version": "12.1.5",
       "depth": 0,
       "source": "builtin",
       "dependencies": {
-        "com.unity.shadergraph": "12.1.4",
-        "com.unity.render-pipelines.core": "12.1.4"
+        "com.unity.shadergraph": "12.1.5",
+        "com.unity.render-pipelines.core": "12.1.5"
       }
     },
     "com.unity.visualscripting": {

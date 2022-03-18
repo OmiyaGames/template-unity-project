@@ -1,0 +1,270 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 296e4596f63e35b46b7e78a147c31d95, type: 3}
+  m_Name: AudioSettings
+  m_EditorClassIdentifier: 
+  serializedVersion: 0
+  mixer: {fileID: 24100000, guid: a27101d6a9911c642abcf0457f27aa0b, type: 2}
+  muteVolumeDb: -80
+  percentToDbCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: -80
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0036972042
+      value: -48.642532
+      inSlope: 2631.3152
+      outSlope: 2631.3152
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.0056880065
+      value: -44.9008
+      inSlope: 1480.8263
+      outSlope: 1480.8263
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.00875078
+      value: -41.159065
+      inSlope: 962.53705
+      outSlope: 962.53705
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.013462738
+      value: -37.41733
+      inSlope: 625.649
+      outSlope: 625.649
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.020711906
+      value: -33.6756
+      inSlope: 406.67184
+      outSlope: 406.67184
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.03186447
+      value: -29.933865
+      inSlope: 264.33667
+      outSlope: 264.33667
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.04902227
+      value: -26.192131
+      inSlope: 171.8188
+      outSlope: 171.8188
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.075418875
+      value: -22.4504
+      inSlope: 111.68223
+      outSlope: 111.68223
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.11602904
+      value: -18.708666
+      inSlope: 72.59346
+      outSlope: 72.59346
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.17850623
+      value: -14.966932
+      inSlope: 47.185738
+      outSlope: 47.185738
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.27462497
+      value: -11.2252
+      inSlope: 30.670727
+      outSlope: 30.670727
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.42249995
+      value: -7.483467
+      inSlope: 19.935974
+      outSlope: 19.935974
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.65
+      value: -3.741733
+      inSlope: 12.958384
+      outSlope: 12.958384
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 137
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  main:
+    volumeSaver: {fileID: 11400000, guid: f3048048ea1f8ab4cbd255e88ecde974, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 90b8a2d6acdb65449b1af035765d5bb4, type: 2}
+    volumeParam: Main Volume
+    pitchParam: Main Pitch
+  music:
+    volumeSaver: {fileID: 11400000, guid: 0b6c63499599777488f16bc869b99c49, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 7e636b2a6e3d380469cd019b9d329174, type: 2}
+    volumeParam: Music Volume
+    pitchParam: Music Pitch
+    defaultGroup: {fileID: 3286772865204972398, guid: 3d9802391df641d40a9bcb10e898d974,
+      type: 2}
+    defaultFadeDuration: 0.25
+    fadeGroups:
+    - {fileID: -8558441678866494280, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
+    - {fileID: 2068805176508917942, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
+    - {fileID: -3380059979980416576, guid: 3d9802391df641d40a9bcb10e898d974, type: 2}
+  soundEffects:
+    volumeSaver: {fileID: 11400000, guid: 89c8c87171f56594e954152af1beefd1, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: cb0a9a7d577ff4d4ba627dc19922e456, type: 2}
+    volumeParam: Sound Effects Volume
+    pitchParam: Sound Effects Pitch
+    defaultGroup: {fileID: -8247839761791358478, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    defaultUiGroup: {fileID: -7288787046693745064, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+  voices:
+    volumeSaver: {fileID: 11400000, guid: 436cd6bf9aeadec49b0139cb6a16bb7e, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 9cdd600442a4f2a429a6be985f9c2a3f, type: 2}
+    volumeParam: Voices Volume
+    pitchParam: Voices Pitch
+    defaultGroup: {fileID: -8247839761791358478, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    defaultUiGroup: {fileID: -7288787046693745064, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+  ambience:
+    volumeSaver: {fileID: 11400000, guid: d70d4867145e5bd498a1ddd18ed6b87d, type: 2}
+    isMutedSaver: {fileID: 11400000, guid: 93c939324f0c0ba4f81d8916ff660cb7, type: 2}
+    volumeParam: Ambience Volume
+    pitchParam: Ambience Pitch
+    defaultGroup: {fileID: 3286772865204972398, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
+      type: 2}
+    defaultFadeDuration: 0.25
+    fadeGroups:
+    - {fileID: -8558441678866494280, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+    - {fileID: 2068805176508917942, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+    - {fileID: -3380059979980416576, guid: 7fb655fe33bbd3a48ac97c46a791f83c, type: 2}
+  timeScaleSnapshots:
+  - mixer: {fileID: 24100000, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: 5b825116d1e62944dbb890d12be39c2a, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 5b825116d1e62944dbb890d12be39c2a, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: d1223490504d1ae4a9ecf5d67c7d1400, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: d1223490504d1ae4a9ecf5d67c7d1400, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
+  - mixer: {fileID: 24100000, guid: 4ef7e734f56bd254ab434ad350eaf229, type: 2}
+    pitchParam: Pitch
+    defaultSnapshot: {fileID: 24508402, guid: 4ef7e734f56bd254ab434ad350eaf229, type: 2}
+    enablePause: 1
+    pausedSnapshot: {fileID: -3591923354945178783, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    enableSlow: 1
+    slowTimeSnapshot: {fileID: 4096218841482393047, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    slowTimeRange: {x: 0.5, y: 0.95}
+    lowestPitch: 0.5
+    enableQuicken: 1
+    quickenTimeSnapshot: {fileID: 7523168644321676117, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
+    quickenTimeRange: {x: 1, y: 5}
+    highestPitch: 5
