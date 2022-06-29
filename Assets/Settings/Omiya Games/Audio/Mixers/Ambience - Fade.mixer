@@ -95,8 +95,8 @@ AudioMixerController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mixer - Music - Fade
-  m_OutputGroup: {fileID: -8247839761791358478, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
+  m_Name: Ambience - Fade
+  m_OutputGroup: {fileID: -8247839761791358478, guid: 4ef7e734f56bd254ab434ad350eaf229, type: 2}
   m_MasterGroup: {fileID: 24300001}
   m_Snapshots:
   - {fileID: 24508402}
@@ -104,7 +104,13 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 1
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 35ab42b749a65e54ca1d2637bc2d4104
+    name: Fade 1 Volume
+  - guid: bac072d27abe81b4984679c9941163d6
+    name: Fade 2 Volume
+  - guid: c8ef680ab5f87b8419e5e96411495420
+    name: Fade 3 Volume
   m_AudioMixerGroupViews:
   - guids:
     - 85a3cd409246d4f4293755caae9e4fb8

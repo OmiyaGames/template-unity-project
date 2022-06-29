@@ -168,6 +168,17 @@ MonoBehaviour:
     pitchParam: Music Pitch
     defaultGroup: {fileID: 3286772865204972398, guid: 3d9802391df641d40a9bcb10e898d974,
       type: 2}
+    maxHistoryCapacity: 100
+    fadeLayers:
+    - group: {fileID: -8558441678866494280, guid: 3d9802391df641d40a9bcb10e898d974,
+        type: 2}
+      paramName: Fade 1 Volume
+    - group: {fileID: 2068805176508917942, guid: 3d9802391df641d40a9bcb10e898d974,
+        type: 2}
+      paramName: Fade 2 Volume
+    - group: {fileID: -3380059979980416576, guid: 3d9802391df641d40a9bcb10e898d974,
+        type: 2}
+      paramName: Fade 3 Volume
   soundEffects:
     volumeSaver: {fileID: 11400000, guid: 89c8c87171f56594e954152af1beefd1, type: 2}
     isMutedSaver: {fileID: 11400000, guid: cb0a9a7d577ff4d4ba627dc19922e456, type: 2}
@@ -193,6 +204,17 @@ MonoBehaviour:
     pitchParam: Ambience Pitch
     defaultGroup: {fileID: 3286772865204972398, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
       type: 2}
+    maxHistoryCapacity: 100
+    fadeLayers:
+    - group: {fileID: -8558441678866494280, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
+        type: 2}
+      paramName: Fade 1 Volume
+    - group: {fileID: 2068805176508917942, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
+        type: 2}
+      paramName: Fade 2 Volume
+    - group: {fileID: -3380059979980416576, guid: 7fb655fe33bbd3a48ac97c46a791f83c,
+        type: 2}
+      paramName: Fade 3 Volume
   timeScaleEffects:
   - mixer: {fileID: 24100000, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
     defaultSnapshot: {fileID: 24508402, guid: 6dbc8e9233eda2c4483e0f3d63315f90, type: 2}
@@ -202,10 +224,11 @@ MonoBehaviour:
     enableSlow: 1
     slowTimeSnapshot: {fileID: 4096218841482393047, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
       type: 2}
-    slowTimeRange: {x: 0.5, y: 0.95}
+    slowTimeRange: {x: 0.5, y: 1}
     slowPitchRange: {x: 0.5, y: 1}
     enableFast: 1
-    fastTimeSnapshot: {fileID: 0}
+    fastTimeSnapshot: {fileID: 7523168644321676117, guid: 6dbc8e9233eda2c4483e0f3d63315f90,
+      type: 2}
     fastTimeRange: {x: 1, y: 5}
     fastPitchRange: {x: 1, y: 5}
     pitchParam: Pitch
@@ -217,10 +240,11 @@ MonoBehaviour:
     enableSlow: 1
     slowTimeSnapshot: {fileID: 4096218841482393047, guid: 5b825116d1e62944dbb890d12be39c2a,
       type: 2}
-    slowTimeRange: {x: 0.5, y: 0.95}
+    slowTimeRange: {x: 0.5, y: 1}
     slowPitchRange: {x: 0.5, y: 1}
     enableFast: 1
-    fastTimeSnapshot: {fileID: 0}
+    fastTimeSnapshot: {fileID: 7523168644321676117, guid: 5b825116d1e62944dbb890d12be39c2a,
+      type: 2}
     fastTimeRange: {x: 1, y: 5}
     fastPitchRange: {x: 1, y: 5}
     pitchParam: Pitch
@@ -232,10 +256,11 @@ MonoBehaviour:
     enableSlow: 1
     slowTimeSnapshot: {fileID: 4096218841482393047, guid: d1223490504d1ae4a9ecf5d67c7d1400,
       type: 2}
-    slowTimeRange: {x: 0.5, y: 0.95}
+    slowTimeRange: {x: 0.5, y: 1}
     slowPitchRange: {x: 0.5, y: 1}
     enableFast: 1
-    fastTimeSnapshot: {fileID: 0}
+    fastTimeSnapshot: {fileID: 7523168644321676117, guid: d1223490504d1ae4a9ecf5d67c7d1400,
+      type: 2}
     fastTimeRange: {x: 1, y: 5}
     fastPitchRange: {x: 1, y: 5}
     pitchParam: Pitch
@@ -247,10 +272,11 @@ MonoBehaviour:
     enableSlow: 1
     slowTimeSnapshot: {fileID: 4096218841482393047, guid: 4ef7e734f56bd254ab434ad350eaf229,
       type: 2}
-    slowTimeRange: {x: 0.5, y: 0.95}
+    slowTimeRange: {x: 0.5, y: 1}
     slowPitchRange: {x: 0.5, y: 1}
     enableFast: 1
-    fastTimeSnapshot: {fileID: 0}
+    fastTimeSnapshot: {fileID: 7523168644321676117, guid: 4ef7e734f56bd254ab434ad350eaf229,
+      type: 2}
     fastTimeRange: {x: 1, y: 5}
     fastPitchRange: {x: 1, y: 5}
     pitchParam: Pitch
