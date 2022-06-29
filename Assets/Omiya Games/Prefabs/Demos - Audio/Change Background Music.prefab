@@ -3,12 +3,14 @@
 --- !u!1 &142338
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
   m_Component:
-  - 4: {fileID: 492372}
-  - 114: {fileID: 11491956}
+  - component: {fileID: 492372}
+  - component: {fileID: 11491956}
+  - component: {fileID: -6225986987569028067}
   m_Layer: 0
   m_Name: Change Background Music
   m_TagString: Untagged
@@ -18,44 +20,67 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &492372
 Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03252697, y: -4.050932, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11491956
 MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 142338}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d4f439ca9f4440d4a7068642b8952c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundMusic: {fileID: 8300000, guid: 82c4fbce6f653414694b131cb271532c, type: 3}
---- !u!1001 &100100000
-Prefab:
-  m_ObjectHideFlags: 1
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 142338}
-  m_IsPrefabParent: 1
+  backgroundMusic: {fileID: 8300000, guid: 1afa6f658ff902646b92130b721e47b6, type: 3}
+  randomizeStartPoint: 0
+--- !u!114 &-6225986987569028067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba39cf331941cdc44af0e9d151bbcd6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicBehavior:
+    behavior: 2
+    audioFile:
+      useAddressable: 0
+      asset: {fileID: 11400000, guid: 7480bd83d10d7f44fa8600e03a02f9d5, type: 2}
+      assetRef:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_EditorAssetChanged: 0
+    fadeDurationSeconds: 0.5
+    alwaysRestart: 0
+  ambienceBehavior:
+    behavior: 1
+    audioFile:
+      useAddressable: 0
+      asset: {fileID: 0}
+      assetRef:
+        m_AssetGUID: 
+        m_SubObjectName: 
+        m_SubObjectType: 
+        m_EditorAssetChanged: 0
+    fadeDurationSeconds: 0.5
+    alwaysRestart: 0
+  historyBehavior: 0
