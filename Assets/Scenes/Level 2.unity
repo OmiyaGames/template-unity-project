@@ -485,7 +485,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.2
+  m_fontSize: 39.25
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -617,6 +617,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 101165533758663297, guid: a359adaf9af143245b32331f63b41e6c,
@@ -680,6 +681,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: a359adaf9af143245b32331f63b41e6c, type: 3}
 --- !u!108 &321582025 stripped
 Light:
@@ -944,6 +946,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1476161023361285743, guid: 24d041632296858438041a032bf4bde5,
@@ -1088,6 +1091,15 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: a28eb3421ebc16d2eb69c43e1a551931,
         type: 2}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1253482211022899131, guid: 24d041632296858438041a032bf4bde5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 995186169}
+    - targetCorrespondingSourceObject: {fileID: 1253482211022899131, guid: 24d041632296858438041a032bf4bde5,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 458217014}
   m_SourcePrefab: {fileID: 100100000, guid: 24d041632296858438041a032bf4bde5, type: 3}
 --- !u!224 &638230048 stripped
 RectTransform:
@@ -1148,11 +1160,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae95aacedb290847a5af5f0a0223a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clipVariations: []
+  clipVariations:
+    elementsList: []
   mutatePitch: 1
   pitchMutationRange: {x: 0.5, y: 1.5}
   mutateVolume: 1
   volumeMutationRange: {x: 0.5, y: 1}
+  maxNumLayers: 3
+  isPausedOnTimeStop: 1
 --- !u!82 &704754988
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1827,7 +1842,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.65
+  m_fontSize: 38.7
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1963,7 +1978,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55.9
+  m_fontSize: 55.95
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2365,6 +2380,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 400000, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
@@ -2400,6 +2416,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: d1866c312731e0e438fcc928b4ee86fe, type: 3}
 --- !u!1 &1278604391
 GameObject:
@@ -2487,7 +2504,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.9
+  m_fontSize: 56.95
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2678,6 +2695,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1531348621268560, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
@@ -2722,6 +2740,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cb066fb0f0cf4a43a8d239b0f1b221e, type: 3}
 --- !u!1 &1459607902
 GameObject:
@@ -3211,8 +3230,20 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6225986987569028067, guid: e6de9bbfd0f4a40efae8b92c0481a228,
+        type: 3}
+      propertyPath: musicBehavior.alwaysRestart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6225986987569028067, guid: e6de9bbfd0f4a40efae8b92c0481a228,
+        type: 3}
+      propertyPath: musicBehavior.audioFile.asset
+      value: 
+      objectReference: {fileID: 11400000, guid: f63c9665183dcdb429e46867119afbb0,
+        type: 2}
     - target: {fileID: 492372, guid: e6de9bbfd0f4a40efae8b92c0481a228, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3250,6 +3281,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a837ff7ad86c35a47a7ab1605bd6af77, type: 3}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e6de9bbfd0f4a40efae8b92c0481a228, type: 3}
 --- !u!1 &1911552567
 GameObject:
@@ -4008,7 +4040,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 423.46725, y: 299.6}
+  m_CellSize: {x: 423.7745, y: 299.6}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3

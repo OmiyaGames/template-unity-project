@@ -43,6 +43,7 @@ namespace OmiyaGames.Audio
 	/// <seealso cref="SoundEffect"/>
 	/// <seealso cref="AmbientMusic"/>
 	/// <seealso cref="OptionsMenu"/>
+	[System.Obsolete("To be removed entirely")]
 	public class BackgroundMusic : MonoBehaviour
 	{
 		[System.Serializable]
