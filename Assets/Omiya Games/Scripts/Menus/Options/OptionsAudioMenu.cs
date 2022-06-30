@@ -74,7 +74,7 @@ namespace OmiyaGames.Menus
 			SoundEffect testAudio;
 
 			public SupportedPlatforms EnableFor => enableFor;
-			public UnityEngine.UI.Slider VolumeSlider => volumeControls.Slider;
+			public AudioVolumeControls VolumeControls => volumeControls;
 
 			public void SetupControls(AudioLayer layer)
 			{
@@ -138,23 +138,23 @@ namespace OmiyaGames.Menus
 			{
 				if (main.EnableFor.IsSupported())
 				{
-					return main.VolumeSlider;
+					return main.VolumeControls.Slider;
 				}
 				else if (music.EnableFor.IsSupported())
 				{
-					return music.VolumeSlider;
+					return music.VolumeControls.Slider;
 				}
 				else if (soundEffects.EnableFor.IsSupported())
 				{
-					return soundEffects.VolumeSlider;
+					return soundEffects.VolumeControls.Slider;
 				}
 				else if (voices.EnableFor.IsSupported())
 				{
-					return voices.VolumeSlider;
+					return voices.VolumeControls.Slider;
 				}
 				else if (ambience.EnableFor.IsSupported())
 				{
-					return ambience.VolumeSlider;
+					return ambience.VolumeControls.Slider;
 				}
 				return null;
 			}
@@ -181,6 +181,18 @@ namespace OmiyaGames.Menus
 				soundEffects.SetupControls(AudioManager.SoundEffects);
 				voices.SetupControls(AudioManager.Voices);
 				ambience.SetupControls(AudioManager.Ambience);
+
+				// If main is muted, disable all controls
+				if (main.EnableFor.IsSupported())
+				{
+					main.VolumeControls.OnCheckboxUpdated += (isMute) =>
+					{
+						music.VolumeControls.SetInteractable(!isMute);
+						soundEffects.VolumeControls.SetInteractable(!isMute);
+						voices.VolumeControls.SetInteractable(!isMute);
+						ambience.VolumeControls.SetInteractable(!isMute);
+					};
+				}
 
 				// Update how dividers appear
 				SetupDividers(allDividers, main.EnableFor, music.EnableFor, soundEffects.EnableFor, voices.EnableFor, ambience.EnableFor);

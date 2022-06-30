@@ -133,6 +133,7 @@ namespace OmiyaGames.Menus
 			IsListeningToEvents = true;
 		}
 
+		#region Unity UI Events
 		public void OnCheckboxChanged(bool isChecked)
 		{
 			if (IsListeningToEvents == true)
@@ -157,10 +158,24 @@ namespace OmiyaGames.Menus
 				OnSliderValueUpdated?.Invoke(newValue);
 			}
 		}
+		#endregion
 
-		private void UpdateSliderInteractable(bool isChecked)
+		public void SetInteractable(bool enabled)
 		{
-			Slider.interactable = (conditionToEnableSlider == isChecked);
+			// Update checkbox
+			Checkbox.interactable = enabled;
+
+			// Update slider
+			if (enabled)
+			{
+				UpdateSliderInteractable(Checkbox.isOn);
+			}
+			else
+			{
+				Slider.interactable = false;
+			}
 		}
+
+		void UpdateSliderInteractable(bool isChecked) => Slider.interactable = (conditionToEnableSlider == isChecked);
 	}
 }
