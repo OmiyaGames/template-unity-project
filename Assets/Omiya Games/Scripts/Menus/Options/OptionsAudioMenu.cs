@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using OmiyaGames.Audio;
 
 namespace OmiyaGames.Menus
@@ -54,9 +55,8 @@ namespace OmiyaGames.Menus
 	/// <summary>
 	/// Menu that provides audio options.
 	/// You can retrieve this menu from the singleton script,
-	/// <code>MenuManager</code>.
+	/// <seealso cref="MenuManager"/>.
 	/// </summary>
-	/// <seealso cref="MenuManager"/>
 	[RequireComponent(typeof(Animator))]
 	[DisallowMultipleComponent]
 	public class OptionsAudioMenu : IOptionsMenu
@@ -115,6 +115,8 @@ namespace OmiyaGames.Menus
 
 		[Header("Audio Controls")]
 		[SerializeField]
+		LayerControls main;
+		[SerializeField]
 		LayerControls music;
 		[SerializeField]
 		LayerControls soundEffects;
@@ -122,6 +124,8 @@ namespace OmiyaGames.Menus
 		LayerControls voices;
 		[SerializeField]
 		LayerControls ambience;
+
+		[Header("Other")]
 		[SerializeField]
 		GameObject[] allDividers;
 
@@ -132,7 +136,11 @@ namespace OmiyaGames.Menus
 		{
 			get
 			{
-				if (music.EnableFor.IsSupported())
+				if (main.EnableFor.IsSupported())
+				{
+					return main.VolumeSlider;
+				}
+				else if (music.EnableFor.IsSupported())
 				{
 					return music.VolumeSlider;
 				}
@@ -160,16 +168,23 @@ namespace OmiyaGames.Menus
 			// Call base method
 			base.OnSetup();
 
-			StartCoroutine(AudioManager.Setup());
+			StartCoroutine(SetupCoroutine());
 
-			// Setup enabling controls
-			music.SetupControls(AudioManager.Music);
-			soundEffects.SetupControls(AudioManager.SoundEffects);
-			voices.SetupControls(AudioManager.Voices);
-			ambience.SetupControls(AudioManager.Ambience);
+			IEnumerator SetupCoroutine()
+			{
+				// Make sure to setup the AudioManager first
+				yield return StartCoroutine(AudioManager.Setup());
 
-			// Update how dividers appear
-			SetupDividers(allDividers, music.EnableFor, soundEffects.EnableFor, voices.EnableFor, ambience.EnableFor);
+				// Setup enabling controls
+				main.SetupControls(AudioManager.Main);
+				music.SetupControls(AudioManager.Music);
+				soundEffects.SetupControls(AudioManager.SoundEffects);
+				voices.SetupControls(AudioManager.Voices);
+				ambience.SetupControls(AudioManager.Ambience);
+
+				// Update how dividers appear
+				SetupDividers(allDividers, main.EnableFor, music.EnableFor, soundEffects.EnableFor, voices.EnableFor, ambience.EnableFor);
+			}
 		}
 	}
 }
