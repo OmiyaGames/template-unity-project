@@ -5,7 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using OmiyaGames.Audio;
 using OmiyaGames.Global;
-using OmiyaGames.Settings;
+using OmiyaGames.Saves;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Scenes
 {
@@ -48,19 +49,15 @@ namespace OmiyaGames.Scenes
     {
         public const float SceneLoadingProgressComplete = 0.9f;
 
-        // TODO: Add a loading scene to transition asynchronously to, so that we can show a loading bar
         [Header("Scene Transition")]
         [SerializeField]
         SoundEffect soundEffect = null;
 
         [Header("Scene Information")]
-        //[SerializeField]
-        //SceneInfo splash;
         [SerializeField]
         SceneInfo mainMenu;
         [SerializeField]
         SceneInfo credits;
-        // TODO: consider adding a loading scene
         [SerializeField]
         SceneInfo loading;
         [SerializeField]
@@ -257,7 +254,7 @@ namespace OmiyaGames.Scenes
             // Revert the time scale
             if (CurrentScene.RevertTimeScale == true)
             {
-                Singleton.Get<TimeManager>().RevertToCustomTimeScale();
+                TimeManager.RevertTimeScale();
             }
 
             // Remove the async operation
@@ -394,9 +391,6 @@ namespace OmiyaGames.Scenes
 
             if (sceneLoadingInfo != null)
             {
-                // Destroy all pooled objects.
-                Singleton.Get<PoolingManager>().DestroyAll();
-
                 // Activate the scene
                 sceneLoadingInfo.allowSceneActivation = true;
 

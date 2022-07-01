@@ -55,10 +55,10 @@ namespace OmiyaGames
 
         static void SelectReadmeAutomatically()
         {
-            if (!SessionState.GetBool(kShowedReadmeSessionStateName, false))
+            if (!EditorPrefs.GetBool(kShowedReadmeSessionStateName, false))
             {
                 var readme = SelectReadme();
-                SessionState.SetBool(kShowedReadmeSessionStateName, true);
+                EditorPrefs.SetBool(kShowedReadmeSessionStateName, true);
 
                 if (readme && !readme.LoadedLayout)
                 {

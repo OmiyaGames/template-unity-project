@@ -1,217 +1,202 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using OmiyaGames.Audio;
 
 namespace OmiyaGames.Menus
 {
-    ///-----------------------------------------------------------------------
-    /// <copyright file="OptionsAudioMenu.cs" company="Omiya Games">
-    /// The MIT License (MIT)
-    /// 
-    /// Copyright (c) 2014-2018 Omiya Games
-    /// 
-    /// Permission is hereby granted, free of charge, to any person obtaining a copy
-    /// of this software and associated documentation files (the "Software"), to deal
-    /// in the Software without restriction, including without limitation the rights
-    /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    /// copies of the Software, and to permit persons to whom the Software is
-    /// furnished to do so, subject to the following conditions:
-    /// 
-    /// The above copyright notice and this permission notice shall be included in
-    /// all copies or substantial portions of the Software.
-    /// 
-    /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    /// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    /// THE SOFTWARE.
-    /// </copyright>
-    /// <author>Taro Omiya</author>
-    /// <date>6/11/2018</date>
-    ///-----------------------------------------------------------------------
-    /// <summary>
-    /// Menu that provides audio options.
-    /// You can retrieve this menu from the singleton script,
-    /// <code>MenuManager</code>.
-    /// </summary>
-    /// <seealso cref="MenuManager"/>
-    [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(SoundEffect))]
-    [DisallowMultipleComponent]
-    public class OptionsAudioMenu : IOptionsMenu
-    {
-        #region Serialized Fields
-        [Header("Features to Enable")]
-        [SerializeField]
-        private SupportedPlatforms enableMusicVolumeControls;
-        [SerializeField]
-        private SupportedPlatforms enableSoundEffectVolumeControls;
-        [SerializeField]
-        private GameObject[] allDividers;
+	///-----------------------------------------------------------------------
+	/// <remarks>
+	/// <copyright file="OptionsAudioMenu.cs" company="Omiya Games">
+	/// The MIT License (MIT)
+	/// 
+	/// Copyright (c) 2018-2022 Omiya Games
+	/// 
+	/// Permission is hereby granted, free of charge, to any person obtaining a copy
+	/// of this software and associated documentation files (the "Software"), to deal
+	/// in the Software without restriction, including without limitation the rights
+	/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	/// copies of the Software, and to permit persons to whom the Software is
+	/// furnished to do so, subject to the following conditions:
+	/// 
+	/// The above copyright notice and this permission notice shall be included in
+	/// all copies or substantial portions of the Software.
+	/// 
+	/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	/// THE SOFTWARE.
+	/// </copyright>
+	/// <list type="table">
+	/// <listheader>
+	/// <term>Revision</term>
+	/// <description>Description</description>
+	/// </listheader>
+	/// <item>
+	/// <term>
+	/// <strong>Date:</strong> 6/11/2018<br/>
+	/// <strong>Author:</strong> Taro Omiya
+	/// </term>
+	/// <description>Initial verison.</description>
+	/// </item><item>
+	/// <term>
+	/// <strong>Date:</strong> 6/29/2022<br/>
+	/// <strong>Author:</strong> Taro Omiya
+	/// </term>
+	/// <description>
+	/// Updated to support <seealso cref="AudioManager"/>.
+	/// </description>
+	/// </item>
+	/// </list>
+	/// </remarks>
+	///-----------------------------------------------------------------------
+	/// <summary>
+	/// Menu that provides audio options.
+	/// You can retrieve this menu from the singleton script,
+	/// <seealso cref="MenuManager"/>.
+	/// </summary>
+	[RequireComponent(typeof(Animator))]
+	[DisallowMultipleComponent]
+	public class OptionsAudioMenu : IOptionsMenu
+	{
+		[System.Serializable]
+		public struct LayerControls
+		{
+			[SerializeField]
+			SupportedPlatforms enableFor;
+			[SerializeField]
+			AudioVolumeControls volumeControls;
+			[SerializeField]
+			GameObject[] volumeSection;
+			[SerializeField]
+			SoundEffect testAudio;
 
-        [Header("Music Controls")]
-        [SerializeField]
-        private AudioVolumeControls musicVolumeControls;
-        [SerializeField]
-        private GameObject[] musicVolumeSection;
+			public SupportedPlatforms EnableFor => enableFor;
+			public AudioVolumeControls VolumeControls => volumeControls;
 
-        [Header("Sound Effects Controls")]
-        [SerializeField]
-        private AudioVolumeControls soundEffectsVolumeControls;
-        [SerializeField]
-        private GameObject[] soundEffectsSection;
-        #endregion
+			public void SetupControls(AudioLayer layer)
+			{
+				// Setup enabling the music controls
+				bool enableControl = EnableFor.IsSupported();
+				foreach (GameObject controls in volumeSection)
+				{
+					controls.SetActive(enableControl);
+				}
 
-        private SoundEffect audioCache;
+				if (enableControl == true)
+				{
+					// Setup controls
+					volumeControls.Setup(layer.VolumePercent, layer.IsMuted);
 
-        #region Properties
-        public SoundEffect TestSoundEffect
-        {
-            get
-            {
-                if (audioCache == null)
-                {
-                    audioCache = GetComponent<SoundEffect>();
-                }
-                return audioCache;
-            }
-        }
+					// Bind to the control events
+					volumeControls.OnCheckboxUpdated += enableMute => layer.IsMuted = enableMute;
+					volumeControls.OnSliderValueUpdated += volume => layer.VolumePercent = volume;
+					volumeControls.OnSliderReleaseUpdated += volume => layer.VolumePercent = volume;
 
-        public override Type MenuType
-        {
-            get
-            {
-                return Type.ManagedMenu;
-            }
-        }
+					// Check if test audio exists
+					if (testAudio != null)
+					{
+						// Play the sound effect
+						SoundEffect testClip = testAudio;
+						volumeControls.OnCheckboxUpdated += enableMute =>
+						{
+							if (enableMute == false)
+							{
+								testClip.Play();
+							}
+						};
+						volumeControls.OnSliderReleaseUpdated += volume => testClip.Play();
+					}
+				}
+			}
+		}
 
-        public override UnityEngine.UI.Selectable DefaultUi
-        {
-            get
-            {
-                if(enableMusicVolumeControls.IsSupported())
-                {
-                    return musicVolumeControls.Slider;
-                }
-                else
-                {
-                    return soundEffectsVolumeControls.Slider;
-                }
-            }
-        }
+		[Header("Audio Controls")]
+		[SerializeField]
+		LayerControls main;
+		[SerializeField]
+		LayerControls music;
+		[SerializeField]
+		LayerControls soundEffects;
+		[SerializeField]
+		LayerControls voices;
+		[SerializeField]
+		LayerControls ambience;
 
-        public override BackgroundMenu.BackgroundType Background
-        {
-            get
-            {
-                return BackgroundMenu.BackgroundType.SolidColor;
-            }
-        }
-        #endregion
+		[Header("Other")]
+		[SerializeField]
+		GameObject[] allDividers;
 
-        protected override void OnSetup()
-        {
-            // Call base method
-            base.OnSetup();
+		#region Properties
+		public override Type MenuType => Type.ManagedMenu;
 
-            // Setup enabling the music controls
-            SetupMusicControls();
+		public override UnityEngine.UI.Selectable DefaultUi
+		{
+			get
+			{
+				if (main.EnableFor.IsSupported())
+				{
+					return main.VolumeControls.Slider;
+				}
+				else if (music.EnableFor.IsSupported())
+				{
+					return music.VolumeControls.Slider;
+				}
+				else if (soundEffects.EnableFor.IsSupported())
+				{
+					return soundEffects.VolumeControls.Slider;
+				}
+				else if (voices.EnableFor.IsSupported())
+				{
+					return voices.VolumeControls.Slider;
+				}
+				else if (ambience.EnableFor.IsSupported())
+				{
+					return ambience.VolumeControls.Slider;
+				}
+				return null;
+			}
+		}
 
-            // Setup enabling the sound effect controls
-            SetupSoundEffectControls();
+		public override BackgroundMenu.BackgroundType Background => BackgroundMenu.BackgroundType.SolidColor;
+		#endregion
 
-            // Update how dividers appear
-            SetupDividers(allDividers,
-                enableMusicVolumeControls,
-                enableSoundEffectVolumeControls);
-        }
+		protected override void OnSetup()
+		{
+			// Call base method
+			base.OnSetup();
 
-        #region UI events
-        private void OnSoundEffectsSliderReleaseUpdated(float volume)
-        {
-            // Adjust the volume
-            OnSoundEffectsSliderValueUpdated(volume);
+			StartCoroutine(SetupCoroutine());
 
-            // Play the sound effect
-            TestSoundEffect.Play();
-        }
+			IEnumerator SetupCoroutine()
+			{
+				// Make sure to setup the AudioManager first
+				yield return StartCoroutine(AudioManager.Setup());
 
-        private void OnSoundEffectsSliderValueUpdated(float volume)
-        {
-            // Adjust the volume
-            SoundEffect.GlobalVolume = volume;
-        }
+				// Setup enabling controls
+				main.SetupControls(AudioManager.Main);
+				music.SetupControls(AudioManager.Music);
+				soundEffects.SetupControls(AudioManager.SoundEffects);
+				voices.SetupControls(AudioManager.Voices);
+				ambience.SetupControls(AudioManager.Ambience);
 
-        private void OnSoundEffectsCheckboxUpdated(bool enableMute)
-        {
-            // Adjust mute setting
-            SoundEffect.GlobalMute = enableMute;
+				// If main is muted, disable all controls
+				if (main.EnableFor.IsSupported())
+				{
+					main.VolumeControls.OnCheckboxUpdated += (isMute) =>
+					{
+						music.VolumeControls.SetInteractable(!isMute);
+						soundEffects.VolumeControls.SetInteractable(!isMute);
+						voices.VolumeControls.SetInteractable(!isMute);
+						ambience.VolumeControls.SetInteractable(!isMute);
+					};
+				}
 
-            // Check if we're unmuted
-            if(enableMute == false)
-            {
-                // Play the sound effect
-                TestSoundEffect.Play();
-            }
-        }
-
-        private void OnMusicSliderValueUpdated(float volume)
-        {
-            // Adjust the volume
-            BackgroundMusic.GlobalVolume = volume;
-        }
-
-        private void OnMusicCheckboxUpdated(bool enableMute)
-        {
-            // Adjust mute setting
-            BackgroundMusic.GlobalMute = enableMute;
-        }
-        #endregion
-
-        #region Helper Methods
-        private void SetupMusicControls()
-        {
-            // Setup enabling the music controls
-            bool enableControl = enableMusicVolumeControls.IsSupported();
-            foreach (GameObject controls in musicVolumeSection)
-            {
-                controls.SetActive(enableControl);
-            }
-
-            if (enableControl == true)
-            {
-                // Setup controls
-                musicVolumeControls.Setup(BackgroundMusic.GlobalVolume, BackgroundMusic.GlobalMute);
-
-                // Bind to the control events
-                musicVolumeControls.OnCheckboxUpdated += OnMusicCheckboxUpdated;
-                musicVolumeControls.OnSliderValueUpdated += OnMusicSliderValueUpdated;
-                musicVolumeControls.OnSliderReleaseUpdated += OnMusicSliderValueUpdated;
-            }
-        }
-
-        private bool SetupSoundEffectControls()
-        {
-            bool enableControl = enableSoundEffectVolumeControls.IsSupported();
-            foreach (GameObject controls in soundEffectsSection)
-            {
-                controls.SetActive(enableControl);
-            }
-
-            if (enableControl == true)
-            {
-                // Setup controls
-                soundEffectsVolumeControls.Setup(SoundEffect.GlobalVolume, SoundEffect.GlobalMute);
-
-                // Bind to the control events
-                soundEffectsVolumeControls.OnCheckboxUpdated += OnSoundEffectsCheckboxUpdated;
-                soundEffectsVolumeControls.OnSliderValueUpdated += OnSoundEffectsSliderValueUpdated;
-                soundEffectsVolumeControls.OnSliderReleaseUpdated += OnSoundEffectsSliderReleaseUpdated;
-            }
-
-            return enableControl;
-        }
-        #endregion
-    }
+				// Update how dividers appear
+				SetupDividers(allDividers, main.EnableFor, music.EnableFor, soundEffects.EnableFor, voices.EnableFor, ambience.EnableFor);
+			}
+		}
+	}
 }

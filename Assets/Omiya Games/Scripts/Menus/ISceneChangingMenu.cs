@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using OmiyaGames.Global;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {
@@ -42,7 +43,6 @@ namespace OmiyaGames.Menus
         protected BackgroundMenu.BackgroundType background = BackgroundMenu.BackgroundType.GradientRightToLeft;
         [SerializeField]
         MenuNavigator navigator;
-
         [Header("Buttons")]
         [SerializeField]
         protected Button defaultButton = null;
@@ -59,6 +59,11 @@ namespace OmiyaGames.Menus
         {
             get;
         }
+
+				public virtual void Reset()
+				{
+					navigator = GetComponent<MenuNavigator>();
+				}
 
         #region Non-abstract Properties
         public override BackgroundMenu.BackgroundType Background
@@ -126,12 +131,12 @@ namespace OmiyaGames.Menus
                 if (to == VisibilityState.Visible)
                 {
                     // Stop time
-                    Singleton.Get<TimeManager>().IsManuallyPaused = true;
+                    TimeManager.IsManuallyPaused = true;
                 }
                 else if (to == VisibilityState.Hidden)
                 {
                     // Resume the time
-                    Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                    TimeManager.IsManuallyPaused = false;
                 }
             }
         }

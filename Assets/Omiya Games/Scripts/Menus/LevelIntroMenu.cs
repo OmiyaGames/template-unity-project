@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using OmiyaGames.Translations;
 using OmiyaGames.Global;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {
@@ -279,7 +280,7 @@ namespace OmiyaGames.Menus
             if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Stop time
-                Singleton.Get<TimeManager>().IsManuallyPaused = true;
+                TimeManager.IsManuallyPaused = true;
 
                 // Bind to Singleton's update function
                 checkAnyKey = new System.Action<float>(CheckForAnyKey);
@@ -304,7 +305,7 @@ namespace OmiyaGames.Menus
             if (CurrentSettings.StartState == StateOnStart.PauseOnStart)
             {
                 // Resume the time
-                Singleton.Get<TimeManager>().IsManuallyPaused = false;
+                TimeManager.IsManuallyPaused = false;
             }
         }
 
