@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using OmiyaGames.Global;
+using OmiyaGames.Managers;
 
 namespace OmiyaGames.Menus
 {
@@ -111,14 +111,6 @@ namespace OmiyaGames.Menus
                 return BackgroundMenu.BackgroundType.SolidColor;
             }
         }
-
-        public Global.TimeManager TimeManager
-        {
-            get
-            {
-                return Singleton.Get<Global.TimeManager>();
-            }
-        }
         #endregion
 
         protected override void OnSetup()
@@ -215,7 +207,7 @@ namespace OmiyaGames.Menus
                 Settings.IsCustomTimeScaleEnabled = isChecked;
 
                 // Update timescale
-                TimeManager.RevertToCustomTimeScale();
+                TimeManager.RevertTimeScale();
                 TimeManager.IsManuallyPaused = true;
 
                 // Update the reset time scale button

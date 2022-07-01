@@ -155,7 +155,7 @@ namespace OmiyaGames.Menus
         #region Properties
         protected static MenuManager Manager => Singleton.Get<MenuManager>();
 
-        protected static Settings.GameSettings Settings => Singleton.Get<Settings.GameSettings>();
+        protected static Saves.GameSettings Settings => Singleton.Get<Saves.GameSettings>();
 
         protected static SceneTransitionManager SceneChanger => Singleton.Get<SceneTransitionManager>();
 

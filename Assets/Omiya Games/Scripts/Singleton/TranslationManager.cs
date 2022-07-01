@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
-using OmiyaGames.Settings;
+using OmiyaGames.Saves;
 using OmiyaGames.Global;
 
 namespace OmiyaGames.Translations
